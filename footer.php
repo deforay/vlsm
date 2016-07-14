@@ -19,6 +19,19 @@
 
 <!-- AdminLTE App -->
 <script src="dist/js/app.min.js"></script>
-
+<script src="assets/js/deforayValidation.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+  <?php
+  if(isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg'])!=""){
+  ?>
+  alert('<?php echo $_SESSION['alertMsg']; ?>');
+  <?php
+  $_SESSION['alertMsg']='';
+  unset($_SESSION['alertMsg']);
+  }
+  ?>
+  });
+</script>
 </body>
 </html>
