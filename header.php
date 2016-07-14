@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -115,6 +118,7 @@
           <ul class="treeview-menu">
             <li><a href="login.php"><i class="fa fa-circle-o"></i> Login</a></li>
             <li><a href="users.php"><i class="fa fa-circle-o"></i> Manage Users</a></li>
+            <li><a href="facilities.php"><i class="fa fa-circle-o"></i> Manage Facilities</a></li>
           </ul>
         </li>
         <li class="treeview">
