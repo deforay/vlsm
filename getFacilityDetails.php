@@ -1,13 +1,13 @@
 <?php
 include('./includes/MysqliDb.php');
-$tableName="user_details";
-$primaryKey="user_id";
+$tableName="facility_details";
+$primaryKey="facility_id";
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('ud.user_name','ud.email','ud.phone_number','r.role_name','ud.status');
+        $aColumns = array('facility_name','email','phone_number','r.role_name','ud.status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -85,7 +85,7 @@ $primaryKey="user_id";
          * Get data to display
         */
         
-       $sQuery="SELECT ud.user_id,ud.user_name,ud.email,ud.phone_number,ud.status,r.role_name FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id ";
+       $sQuery="SELECT * FROM facility_details ";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -106,11 +106,11 @@ $primaryKey="user_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id  $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM facility_details $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(user_id) as total FROM user_details");
+        $aResultTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -129,12 +129,12 @@ $primaryKey="user_id";
         
         foreach ($rResult as $aRow) {
             $row = array();
-			$row[] = ucwords($aRow['user_name']);
-            $row[] = $aRow['email'];
-            $row[] = $aRow['phone_number'];
-            $row[] = ucwords($aRow['role_name']);
+			$row[] = ucwords($aRow['facility_name']);
+            $row[] = $aRow['facility_code'];
+            $row[] = $aRow['hub_name'];
+            $row[] = ucwords($aRow['country']);
             $row[] = ucwords($aRow['status']);
-            $row[] = '<a href="editUser.php?id=' . base64_encode($aRow['user_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+            $row[] = '<a href="editFacility.php?id=' . base64_encode($aRow['facility_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
            
             $output['aaData'][] = $row;
         }

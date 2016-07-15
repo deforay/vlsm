@@ -33,12 +33,13 @@ include('header.php');
                   <th>Email</th>
                   <th>Mobile</th>
                   <th>Role</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="4" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="6" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
                 
@@ -73,6 +74,7 @@ include('header.php');
             
             "bRetrieve": true,                        
             "aoColumns": [
+                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
