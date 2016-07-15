@@ -9,7 +9,7 @@ include('header.php');
       <h1>Manage Facilities</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Facilites</li>
+        <li class="active">Manage Facilities</li>
       </ol>
     </section>
 
@@ -17,124 +17,27 @@ include('header.php');
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
-          
-
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Facility List</h3>
-              <a href="addUser.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility</a>
+              <a href="addFacilty.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="userDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>User Name</th>
-                  <th>Email</th>
-                  <th>Mobile</th>
+                  <th>Facility Name</th>
+                  <th>Facility Code</th>
+                  <th>Hub Name</th>
+                  <th>Country</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 4.0
-                  </td>
-                  <td>Win 95+</td>
-                  
+                  <tr>
+                    <td colspan="6" class="dataTables_empty">Loading data from server</td>
                 </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 5.0
-                  </td>
-                  <td>Win 95+</td>
-                 
-                </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 5.5
-                  </td>
-                  <td>Win 95+</td>
-                  
-                </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet
-                    Explorer 6
-                  </td>
-                  <td>Win 98+</td>
-                 
-                </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>Internet Explorer 7</td>
-                  <td>Win XP SP2+</td>
-                  
-                </tr>
-                <tr>
-                  <td>Trident</td>
-                  <td>AOL browser (AOL desktop)</td>
-                  <td>Win XP</td>
-                  
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Firefox 1.0</td>
-                  <td>Win 98+ / OSX.2+</td>
-                  
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Firefox 1.5</td>
-                  <td>Win 98+ / OSX.2+</td>
-                  
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Firefox 2.0</td>
-                  <td>Win 98+ / OSX.2+</td>
-                 
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Firefox 3.0</td>
-                  <td>Win 2k+ / OSX.3+</td>
-                 
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Camino 1.0</td>
-                  <td>OSX.2+</td>
-                  
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Camino 1.5</td>
-                  <td>OSX.3+</td>
-                  
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Netscape 7.2</td>
-                  <td>Win 95+ / Mac OS 8.6-9.2</td>
-                  
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Netscape Browser 8</td>
-                  <td>Win 98SE+</td>
-                  
-                </tr>
-                <tr>
-                  <td>Gecko</td>
-                  <td>Netscape Navigator 9</td>
-                  <td>Win 98+ / OSX.2+</td>
-                 
-                </tr>
-               
-                
                 </tbody>
                 
               </table>
@@ -150,10 +53,47 @@ include('header.php');
     <!-- /.content -->
   </div>
   <script>
+  var oTable = null;
   $(function () {
-    $("#example1").DataTable();
+    //$("#example1").DataTable();
    
   });
+  $(document).ready(function() {
+	
+        oTable = $('#userDataTable').dataTable({	
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page"
+            },
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            
+            "bRetrieve": true,                        
+            "aoColumns": [
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center","bSortable":false},
+            ],
+            "aaSorting": [[ 0, "asc" ]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "getFacilityDetails.php",
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+              $.ajax({
+                  "dataType": 'json',
+                  "type": "POST",
+                  "url": sSource,
+                  "data": aoData,
+                  "success": fnCallback
+              });
+            }
+        });
+       
+	} );
 </script>
  <?php
  include('footer.php');
