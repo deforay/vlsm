@@ -2289,7 +2289,7 @@ class MysqliDb
 
 $HOST = 'localhost';
 $USER = 'root';
-$PASSWORD = '';
+$PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
 $PORT = 3306;
 $db = new MysqliDb($HOST, $USER, $PASSWORD, $DBNAME, $PORT);
