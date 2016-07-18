@@ -7,7 +7,7 @@ $primaryKey="facility_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('facility_name','email','phone_number','r.role_name','ud.status');
+        $aColumns = array('facility_name','facility_code','hub_name','country','status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;

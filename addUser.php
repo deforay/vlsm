@@ -1,6 +1,5 @@
 <?php
 ob_start();
-session_start();
 include('header.php');
 include('./includes/MysqliDb.php');
 $query="SELECT * FROM roles where status='active'";

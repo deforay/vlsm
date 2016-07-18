@@ -2,10 +2,8 @@
 ob_start();
 include('./includes/MysqliDb.php');
 include('header.php');
-
-
 $tableName="facility_details";
-
+$facilityId=base64_decode($_POST['facilityId']);
 
 try {
     if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!=""){
@@ -17,11 +15,12 @@ try {
         'country'=>$_POST['country'],
         'state'=>$_POST['state'],
         'hub_name'=>$_POST['hubName'],
-        'status'=>'active'
+        'status'=>$_POST['status']
         );
         //print_r($data);die;
-        $db->insert($tableName,$data);    
-        $_SESSION['alertMsg']="Facility details added successfully";
+        $db=$db->where('facility_id',$facilityId);
+        $db->update($tableName,$data);    
+        $_SESSION['alertMsg']="Facility details updated successfully";
     }
     header("location:facilities.php");
   

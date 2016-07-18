@@ -1,6 +1,5 @@
 <?php
 ob_start();
-session_start();
 include('header.php');
 include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
@@ -37,6 +36,7 @@ $facilityInfo=$db->query($facilityQuery);
                         <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" value="<?php echo $facilityInfo[0]['facility_name']; ?>" />
+                        <input type="hidden" class="form-control isRequired" id="facilityId" name="facilityId" value="<?php echo base64_encode($facilityInfo[0]['facility_id']); ?>" />
                         </div>
                     </div>
                   </div>
@@ -96,8 +96,19 @@ $facilityInfo=$db->query($facilityQuery);
                         </div>
                     </div>
                   </div>
-                </div>
                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                          <select class="form-control isRequired" name='status' id='status' title="Please select the status">
+                            <option value="">--Select--</option>
+                            <option value="active" <?php echo ($facilityInfo[0]['status']=='active')?"selected='selected'":""?>>Active</option>
+                            <option value="inactive" <?php echo ($facilityInfo[0]['status']=='inactive')?"selected='selected'":""?>>Inactive</option>
+                          </select>
+                        </div>
+                    </div>
+                  </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">

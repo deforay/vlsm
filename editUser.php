@@ -1,6 +1,5 @@
 <?php
 ob_start();
-session_start();
 include('header.php');
 include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
@@ -120,7 +119,7 @@ $result = $db->rawQuery($query);
                           </select>
                         </div>
                     </div>
-                  </div>                  
+                  </div>
                 </div>
                
                
