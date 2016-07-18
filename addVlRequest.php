@@ -1,9 +1,14 @@
 <?php
 ob_start();
-session_start();
 include('header.php');
 include('./includes/MysqliDb.php');
+$facilityQuery="SELECT * from facility_details GROUP  BY facility_name";
+$facilityInfo=json_encode($db->query($facilityQuery));
+$sampleTypeQuery="SELECT * FROM r_sample_type";
+$sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 ?>
+<link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
+<script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -13,10 +18,10 @@ include('./includes/MysqliDb.php');
 }
    </style>
     <section class="content-header">
-      <h1>Add Facility</h1>
+      <h1>Add Vl Request</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Facility</li>
+        <li class="active">Vl Request</li>
       </ol>
     </section>
 
@@ -30,7 +35,7 @@ include('./includes/MysqliDb.php');
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addFacilityForm' id='addFacilityForm' autocomplete="off" action="addFacilityHelper.php">
+            <form class="form-horizontal" method='post'  name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="addVlRequestHelper.php">
               <div class="box-body">                 
               <div class="box box-default">
             <div class="box-header with-border">
@@ -43,7 +48,8 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="facilityName" class="col-lg-4 control-label">Health Facility Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Health Facility Name" title="Please enter facility name" />
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Health Facility Name" title="Please enter facility name" onkeypress="clearFacilityDatas()" onkeyup="clearFacilityDatas()"/>
+                        <input type='hidden' id="facilityId"  name="facilityId" class="facilityDatas" />
                         </div>
                     </div>
                   </div>
@@ -51,7 +57,7 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="facilityCode" class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code"/>
+                        <input type="text" class="form-control isRequired facilityDatas" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code"/>
                         </div>
                     </div>
                   </div>
@@ -61,7 +67,7 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="country" class="col-lg-4 control-label">Country</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="country" name="country" placeholder="Country"/>
+                        <input type="text" class="form-control facilityDatas" id="country" name="country" placeholder="Country"/>
                         </div>
                     </div>
                   </div>
@@ -69,7 +75,7 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="state" name="state" placeholder="State" />
+                        <input type="text" class="form-control facilityDatas" id="state" name="state" placeholder="State" />
                         </div>
                     </div>
                   </div>
@@ -80,7 +86,7 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Hub Name</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
+                        <input type="text" class="form-control facilityDatas" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
                         </div>
                     </div>
                   </div>                   
@@ -119,7 +125,7 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="dob" class="col-lg-4 control-label">Date of Birth</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
+                        <input type="text" class="form-control dateTime " readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
                         </div>
                     </div>
                   </div>
@@ -160,7 +166,7 @@ include('./includes/MysqliDb.php');
                         <label for="genderMale" class="col-lg-4 control-label">Gender</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="isRequired" id="genderMale" name="gender" value="male" title="Please check gender"> Male
+							<input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
 						</label>
 						<label class="radio-inline">
 							<input type="radio" id="genderFemale" name="gender" value="female" title="Please check gender"> Female
@@ -194,15 +200,26 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="sampleDate" class="col-lg-4 control-label">Sample Collected On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="fromDate" name="sampleDate" placeholder="Choose Sample Collection" title="Please enter hub name" />
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="fromDate" name="sampleDate" placeholder="Enter Sample Collection Date" title="Please enter hub name" />
                         </div>
                     </div>
                   </div>    
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="hubName" class="col-lg-4 control-label">Sample Type</label>
+                        <label for="hubName" class="col-lg-4 control-label">Sample Type <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
+                         
+                         <select class="form-control isRequired" name='sampleType' id='sampleType' title="Please select sample type">
+                        <option value="">--Select--</option>
+                        <?php
+                        foreach ($sampleTypeResult as $row) {
+                        ?>
+                        <option value="<?php echo $row['sample_id']; ?>"><?php echo $row['sample_name']; ?></option>
+                        <?php
+                        }
+                        ?>
+                        </select>
+                       
                         </div>
                     </div>
                   </div>                       
@@ -270,11 +287,12 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="pregYes" class="col-lg-4 control-label">Is Patient Pregnant ?</label>
                         <div class="col-lg-7">
-                        <label class="radio-inline">
-							<input type="radio" class="isRequired" id="pregYes" name="pregnant" value="yes" title="Is Patient Pregnant"> Yes
+                        
+      <label class="radio-inline">
+							<input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" onclick="arcNo(this.value);"> Yes
 						</label>
 						<label class="radio-inline">
-							<input type="radio" id="pregNo" name="pregnant" value="no" title="Is Patient Pregnant"> No
+							<input type="radio" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" onclick="arcNo(this.value);"> No
 						</label>
                         </div>
                     </div>
@@ -283,7 +301,7 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="ArcNo" class="col-lg-4 control-label">If Pregnant, ARC No.</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ArcNo" name="ArcNo" placeholder="Enter ARC no." title="Please enter arc no" />
+                        <input type="text" class="form-control" id="arcNo" name="arcNo" placeholder="Enter ARC no." title="Please enter arc no" />
                         </div>
                     </div>
                   </div>                       
@@ -295,10 +313,11 @@ include('./includes/MysqliDb.php');
                         <label for="breastfeeding" class="col-lg-4 control-label">Is Patient Breastfeeding?</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="isRequired" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding"> Yes
+							<input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="arvAdherence(this.value);"> Yes
+       
 						</label>
 						<label class="radio-inline">
-							<input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding"> No
+							<input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="arvAdherence(this.value);"> No
 						</label>
                         </div>
                     </div>
@@ -307,7 +326,7 @@ include('./includes/MysqliDb.php');
                     <div class="form-group">
                         <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ArvAdherence" name="ArvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />
+                        <input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />
                         </div>
                     </div>
                   </div>                       
@@ -327,16 +346,16 @@ include('./includes/MysqliDb.php');
              <div class="row">                
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="RmTesting" class="col-lg-1 control-label"></label>
-                            <div class="col-lg-7">
+                            <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="isRequired" id="RmTesting" name="viralTesting" value="Routine Monitoring" title="Please check routine monitoring" onclick="showTesting('RmTesting');"> <strong>Routine Monitoring</strong>
+                                <!--<input type="checkbox" class="isRequired" id="RmTesting" name="rmViralTesting" value="Routine Monitoring" title="Please check routine monitoring" onclick="showTesting('RmTesting');">-->
+                                <strong>Routine Monitoring</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row RmTesting hide">
+                <div class="row RmTesting ">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="RmTestingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
@@ -366,21 +385,21 @@ include('./includes/MysqliDb.php');
                 <div class="row">                
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="RepeatTesting" class="col-lg-1 control-label"></label>
-                            <div class="col-lg-11">
+                            <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="isRequired" id="RepeatTesting" name="viralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');"> <strong>Repeat VL test after suspected treatment failure adherence counseling</strong>
+                                <!--<input type="checkbox" class="isRequired" id="RepeatTesting" name="repeatViralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');">-->
+                                <strong>Repeat VL test after suspected treatment failure adherence counseling</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row RepeatTesting hide">
+                <div class="row RepeatTesting">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="RepeatTestingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="RepeatTestingLastVLDate" name="RmTestingLastVLDate" placeholder="Enter Last VL Date" title="Please enter Last VL Date"/>
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="RepeatTestingLastVLDate" name="RepeatTestingLastVLDate" placeholder="Enter Last VL Date" title="Please enter Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -405,16 +424,16 @@ include('./includes/MysqliDb.php');
                 <div class="row">                
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="suspendTreatment" class="col-lg-1 control-label"></label>
-                            <div class="col-lg-11">
+                            <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="isRequired" id="suspendTreatment" name="viralTesting" value="male" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');"> <strong>Suspect Treatment Failure</strong>
+                                <!--<input type="checkbox" class="isRequired" id="suspendTreatment" name="stViralTesting" value="male" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">-->
+                                <strong>Suspect Treatment Failure</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-               <div class="row suspendTreatment hide">
+               <div class="row suspendTreatment">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
@@ -522,7 +541,7 @@ include('./includes/MysqliDb.php');
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="rejection" class="col-lg-4 control-label">Rejection</label>
+                        <label for="rejection" class="col-lg-4 control-label">Rejection <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
 							<input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection"> Yes
@@ -552,14 +571,33 @@ include('./includes/MysqliDb.php');
     <!-- /.content -->
   </div>
   <script type="text/javascript">
+   
+var options = {
+	data: <?php echo $facilityInfo ?>,
+	getValue: "facility_name",
+	list: {
+		onSelectItemEvent: function() {
+   $("#facilityCode").val($("#facilityName").getSelectedItemData().facility_code);
+   $("#address").val($("#facilityName").getSelectedItemData().address);
+   $("#country").val($("#facilityName").getSelectedItemData().country);
+   $("#state").val($("#facilityName").getSelectedItemData().state);
+   $("#hubName").val($("#facilityName").getSelectedItemData().hub_name);
+   $("#facilityName").val($("#facilityName").getSelectedItemData().facility_name);
+   $("#facilityId").val($("#facilityName").getSelectedItemData().facility_id);
+   $('.facilityDatas').attr('readonly', true);
+		}
+	}
+};
+
+$("#facilityName").easyAutocomplete(options);
 
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'addFacilityForm'
+        formId: 'addVlRequestForm'
     });
     
     if(flag){
-      document.getElementById('addFacilityForm').submit();
+      document.getElementById('addVlRequestForm').submit();
     }
   }
   
@@ -573,57 +611,63 @@ include('./includes/MysqliDb.php');
         });
         
         
-         $('#ageInMtns').datepicker( {
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        onClose: function(dateText, inst) { 
-            
-            
-            
-            function isDonePressed(){
-                            return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
-                        }
-
-                        if (isDonePressed()){
-
-                            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-                            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                            $(this).datepicker('setDate', new Date(year, month, 1));
-                             console.log('Done is pressed')
-
-                        }
-            
-            
-          
-        },
-          beforeShow: function() { 
-            
-            
-           $('#ui-datepicker-div').addClass('hide-calendar');
-          
-        }
-        
-    });
+    //     $('#ageInMtns').datepicker( {
+    //    changeMonth: true,
+    //    changeYear: true,
+    //    showButtonPanel: true,
+    //    dateFormat: 'MM yy',
+    //    onClose: function(dateText, inst) { 
+    //        
+    //        
+    //        
+    //        function isDonePressed(){
+    //                        return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
+    //                    }
+    //
+    //                    if (isDonePressed()){
+    //
+    //                        var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+    //                        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+    //                        $(this).datepicker('setDate', new Date(year, month, 1));
+    //                         console.log('Done is pressed')
+    //
+    //                    }
+    //        
+    //        
+    //      
+    //    },
+    //      beforeShow: function() { 
+    //        
+    //        
+    //       $('#ui-datepicker-div').addClass('hide-calendar');
+    //      
+    //    }
+    //    
+    //});
        
        });
     
-    function showTesting(viralTestingClass){
-      $('.RmTesting').addClass('hide');
-       $('.RepeatTesting').addClass('hide');
-        $('.suspendTreatment').addClass('hide');
-      if(viralTestingClass=='RmTesting'){
-        $('.RmTesting').removeClass('hide');
-      }
-       if(viralTestingClass=='RepeatTesting'){
-        $('.RepeatTesting').removeClass('hide');
-      }
-       if(viralTestingClass=='suspendTreatment'){
-        $('.suspendTreatment').removeClass('hide');
-      }
+    function clearFacilityDatas(){
+   $('.facilityDatas').val('');
+   $('.facilityDatas').removeAttr('readonly', true);
     }
     
+    function arcNo(val){
+     if(val=='yes'){
+      $('#arcNo').addClass('isRequired');
+     }else{
+       $('#arcNo').removeClass('isRequired');
+     }
+    }
+    function arvAdherence(val){
+     alert(val);
+     if(val=='yes'){
+     alert(val);
+      $('#arvAdherence').addClass('isRequired');
+     }else{
+       $('#arvAdherence').removeClass('isRequired');
+     }
+    }
   </script>
  <?php
  include('footer.php');
