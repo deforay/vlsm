@@ -118,7 +118,7 @@ try {
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedOn'],
           'date_results_dispatched'=>$_POST['despachedOn'],
           'rejection'=>$_POST['rejection'],
-          'created_by'=>1,
+          'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime()
         );
         

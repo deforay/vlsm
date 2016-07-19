@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,10 +10,10 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   
   <!-- Theme style -->
-  <link rel="stylesheet" href="./dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- iCheck -->
  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -19,6 +22,7 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 </head>
 <body class="">
     <div class="container">    
@@ -33,16 +37,16 @@
 
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                             
-                        <form id="loginform" class="form-horizontal" role="form">
+                        <form id="loginForm" name="loginForm" class="form-horizontal" role="form" method="post" action="loginProcess.php">
                                     
                             <div style="margin-bottom: 25px" class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input id="login-username" type="text" class="form-control" name="username" value="" placeholder="username or email">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="login-username" type="text" class="form-control isRequired" name="username" value="" placeholder="User Name" title="Please enter the user name">
                             </div>
                                 
                             <div style="margin-bottom: 25px" class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                <input id="login-password" type="password" class="form-control" name="password" placeholder="password">
+                                <input id="login-password" type="password" class="form-control isRequired" name="password" placeholder="Password" title="Please enter the password">
                             </div>
                                 
                             <div class="input-group">
@@ -55,22 +59,38 @@
 
                             <div style="margin-top:10px" class="form-group">
                                 <!-- Button -->
-
                                 <div class="col-sm-12 controls">
-                                    <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
+                                    <a class="btn btn-lg btn-success btn-block" href="javascript:void(0);" onclick="validateNow();return false;">Login</a>
                                 </div>
                             </div>
-
-
-                            </form>     
-
-
-
+                            </form>
                         </div>                     
                     </div>  
         </div>
     </div>
-    
+    <script src="assets/js/deforayValidation.js"></script>
+    <script type="text/javascript">
 
+    function validateNow(){
+      flag = deforayValidator.init({
+          formId: 'loginForm'
+      });
+      
+      if(flag){
+        document.getElementById('loginForm').submit();
+      }
+    }
+    $(document).ready(function(){
+    <?php
+    if(isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg'])!=""){
+    ?>
+    alert('<?php echo $_SESSION['alertMsg']; ?>');
+    <?php
+    $_SESSION['alertMsg']='';
+    unset($_SESSION['alertMsg']);
+    }
+    ?>
+    });
+    </script>
 </body>
 </html>
