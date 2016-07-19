@@ -125,7 +125,7 @@ include('./includes/MysqliDb.php');
       document.getElementById('addFacilityForm').submit();
     }
   }
-</script>
+  </script>
   
  <?php
  include('footer.php');
