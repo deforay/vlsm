@@ -2,6 +2,73 @@
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
+include('General.php');
+$general=new Deforay_Commons_General();
+$id=base64_decode($_GET['id']);
+$fQuery="SELECT * from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
+$result=$db->query($fQuery);
+
+if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
+ $result[0]['patient_dob']=$general->humanDateFormat($result[0]['patient_dob']);
+}else{
+ $result[0]['patient_dob']='';
+}
+
+if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_collection_date']);
+ $result[0]['sample_collection_date']=$general->humanDateFormat($expStr[0]);
+}else{
+ $result[0]['sample_collection_date']='';
+}
+
+if(isset($result[0]['treatment_initiated_date']) && trim($result[0]['treatment_initiated_date'])!='' && trim($result[0]['treatment_initiated_date'])!='0000-00-00'){
+ $result[0]['treatment_initiated_date']=$general->humanDateFormat($result[0]['treatment_initiated_date']);
+}else{
+ $result[0]['treatment_initiated_date']='';
+}
+
+if(isset($result[0]['date_of_initiation_of_current_regimen']) && trim($result[0]['date_of_initiation_of_current_regimen'])!='' && trim($result[0]['date_of_initiation_of_current_regimen'])!='0000-00-00'){
+ $result[0]['date_of_initiation_of_current_regimen']=$general->humanDateFormat($result[0]['date_of_initiation_of_current_regimen']);
+}else{
+ $result[0]['date_of_initiation_of_current_regimen']='';
+}
+
+if(isset($result[0]['routine_monitoring_last_vl_date']) && trim($result[0]['routine_monitoring_last_vl_date'])!='' && trim($result[0]['routine_monitoring_last_vl_date'])!='0000-00-00'){
+ $result[0]['routine_monitoring_last_vl_date']=$general->humanDateFormat($result[0]['routine_monitoring_last_vl_date']);
+}else{
+ $result[0]['routine_monitoring_last_vl_date']='';
+}
+
+if(isset($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']) && trim($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'])!='' && trim($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'])!='0000-00-00'){
+ $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']=$general->humanDateFormat($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']);
+}else{
+ $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']='';
+}
+
+if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result[0]['suspected_treatment_failure_last_vl_date'])!='' && trim($result[0]['suspected_treatment_failure_last_vl_date'])!='0000-00-00'){
+ $result[0]['suspected_treatment_failure_last_vl_date']=$general->humanDateFormat($result[0]['suspected_treatment_failure_last_vl_date']);
+}else{
+ $result[0]['suspected_treatment_failure_last_vl_date']='';
+}
+
+if(isset($result[0]['request_date']) && trim($result[0]['request_date'])!='' && trim($result[0]['request_date'])!='0000-00-00'){
+ $result[0]['request_date']=$general->humanDateFormat($result[0]['request_date']);
+}else{
+ $result[0]['request_date']='';
+}
+
+if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
+ $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($result[0]['date_sample_received_at_testing_lab']);
+}else{
+ $result[0]['date_sample_received_at_testing_lab']='';
+}
+
+if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00'){
+ $result[0]['date_results_dispatched']=$general->humanDateFormat($result[0]['date_results_dispatched']);
+}else{
+ $result[0]['date_results_dispatched']='';
+}
+
 $query="SELECT * from r_art_code_details where parent_art=0";
 $qResult=$db->query($query);
 $artCode=[];
@@ -15,9 +82,7 @@ foreach($qResult as $val){
 $sampleTypeQuery="SELECT * FROM r_sample_type";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value="">--Select--</option>';
-foreach ($sampleTypeResult as $row) {
- $sampleType.='<option value="'.$row['sample_id'].'">'.ucwords($row['sample_name']).'</option>';
-}
+
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
@@ -32,7 +97,7 @@ foreach ($sampleTypeResult as $row) {
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
     <section class="content-header">
-      <h1>Add Vl Request</h1>
+      <h1>Edit Vl Request</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Vl Request</li>
@@ -49,7 +114,7 @@ foreach ($sampleTypeResult as $row) {
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="addVlRequestHelper.php">
+            <form class="form-horizontal" method='post' name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="editVlRequestHelper.php">
               <div class="box-body">                 
               <div class="box box-default">
             <div class="box-header with-border">
@@ -71,7 +136,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="facilityCode" class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired facilityDatas" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code"/>
+                        <input type="text" class="form-control isRequired facilityDatas" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $result[0]['facility_code']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -81,7 +146,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="country" class="col-lg-4 control-label">Country</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control facilityDatas" id="country" name="country" placeholder="Country"/>
+                        <input type="text" class="form-control facilityDatas" id="country" name="country" placeholder="Country" value="<?php echo $result[0]['country']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -89,7 +154,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control facilityDatas" id="state" name="state" placeholder="State" />
+                        <input type="text" class="form-control facilityDatas" id="state" name="state" placeholder="State" value="<?php echo $result[0]['state']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -100,7 +165,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Hub Name</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control facilityDatas" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
+                        <input type="text" class="form-control facilityDatas" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $result[0]['hub_name']; ?>"/>
                         </div>
                     </div>
                   </div>                   
@@ -130,7 +195,7 @@ foreach ($sampleTypeResult as $row) {
                          <?php
                          foreach($parentRow as $key=>$val){
                          ?>
-                          <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
+                          <option value="<?php echo $key; ?>" <?php echo ($result[0]['art_no']==$key)?"selected='selected'":""?>><?php echo $val; ?></option>
                          <?php
                          }
                          ?>
@@ -146,7 +211,8 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="patientName" class="col-lg-4 control-label">Patient's Name <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name"/>
+                        <input type="text" class="form-control isRequired" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_name']; ?>"/>
+                        <input type="hidden" class="form-control isRequired" id="treamentId" name="treamentId" placeholder="patient Name" title="" value="<?php echo base64_encode($result[0]['treament_id']); ?>"/>
                         </div>
                     </div>
                   </div>
@@ -156,7 +222,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Date of Birth</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime " readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
+                        <input type="text" class="form-control dateTime " readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth" value="<?php echo $result[0]['patient_dob']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -164,7 +230,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="otrId" class="col-lg-4 control-label">Other Id</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" />
+                        <input type="text" class="form-control" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" value="<?php echo $result[0]['other_id']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -176,7 +242,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ageInYrs" name="ageInYrs" placeholder="Enter age in years" title="Please enter age in years" />
+                        <input type="text" class="form-control" id="ageInYrs" name="ageInYrs" placeholder="Enter age in years" title="Please enter age in years" value="<?php echo $result[0]['age_in_yrs']; ?>"/>
                         <p class="help-block"><small>If DOB Unkown</small></p>
                         </div>
                     </div>
@@ -185,7 +251,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ageInMtns" data-calendar="false" name="ageInMtns" placeholder="Enter Age in months" title="Please enter age in" />
+                        <input type="text" class="form-control" id="ageInMtns" data-calendar="false" name="ageInMtns" placeholder="Enter Age in months" title="Please enter age in" value="<?php echo $result[0]['age_in_mnts']; ?>"/>
                         <p class="help-block"><small>If age < 2 years </small></p>
                         </div>
                     </div>
@@ -197,10 +263,10 @@ foreach ($sampleTypeResult as $row) {
                         <label for="genderMale" class="col-lg-4 control-label">Gender</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-                         <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
+                         <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($result[0]['gender']=='male')?"checked='checked'":""?>> Male
                         </label>
                         <label class="radio-inline">
-                         <input type="radio" id="genderFemale" name="gender" value="female" title="Please check gender"> Female
+                         <input type="radio" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($result[0]['gender']=='female')?"checked='checked'":""?>> Female
                         </label>
                         </div>
                     </div>
@@ -209,7 +275,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="patientPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" />
+                        <input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" value="<?php echo $result[0]['patient_phone_number']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -231,7 +297,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Sample Collected On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" readonly='readonly' id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter Sample Collection Date" title="Please enter hub name" />
+                        <input type="text" class="form-control" readonly='readonly' id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter Sample Collection Date" title="Please enter sample collection date" value="<?php echo $result[0]['sample_collection_date']; ?>" />
                         </div>
                     </div>
                   </div>    
@@ -240,7 +306,14 @@ foreach ($sampleTypeResult as $row) {
                         <label for="sampleType" class="col-lg-4 control-label">Sample Type <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                          <select class="form-control isRequired" name='sampleType' id='sampleType' title="Please select sample type">
-                           <?php echo $sampleType; ?>
+                           <option value="">--Select--</option>
+                           <?php
+                           foreach ($sampleTypeResult as $row) {
+                           ?>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['sample_id']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <?php
+                           }
+                           ?>
                          </select>
                         </div>
                     </div>
@@ -261,7 +334,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="treatPeriod" class="col-lg-4 control-label">How long has this patient been on treatment ?</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="treatPeriod" name="treatPeriod" placeholder="Enter Treatment Period" title="Please enter how long has this patient been on treatment" />
+                        <input type="text" class="form-control" id="treatPeriod" name="treatPeriod" placeholder="Enter Treatment Period" title="Please enter how long has this patient been on treatment" value="<?php echo $result[0]['treatment_initiation']; ?>"/>
                         </div>
                     </div>
                   </div>    
@@ -269,7 +342,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiatiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" />
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" value="<?php echo $result[0]['treatment_initiated_date']; ?>" />
                         </div>
                     </div>
                   </div>                       
@@ -280,7 +353,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="currentRegimen" class="col-lg-4 control-label">Current Regimen</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control " id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen" />
+                        <input type="text" class="form-control " id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen" value="<?php echo $result[0]['current_regimen']; ?>" />
                         </div>
                     </div>
                   </div>    
@@ -288,7 +361,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Current Regimen Initiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" />
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" value="<?php echo $result[0]['date_of_initiation_of_current_regimen']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -298,7 +371,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="treatmentDetails" class="col-lg-2 control-label">Which line of treatment is Patient on ?</label>
                         <div class="col-lg-10">
-                            <textarea class="form-control" id="treatmentDetails" name="treatmentDetails" placeholder="Enter treatment details" title="Please enter treatment details"></textarea>
+                            <textarea class="form-control" id="treatmentDetails" name="treatmentDetails" placeholder="Enter treatment details" title="Please enter treatment details"><?php echo $result[0]['treatment_details']; ?></textarea>
                         </div>
                     </div>
                   </div>    
@@ -310,10 +383,10 @@ foreach ($sampleTypeResult as $row) {
                         <label for="pregYes" class="col-lg-4 control-label">Is Patient Pregnant ?</label>
                         <div class="col-lg-7">                        
                           <label class="radio-inline">
-                           <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" onclick="checkPatientIsPregnant(this.value);"> Yes
+                           <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" onclick="checkPatientIsPregnant(this.value);" <?php echo ($result[0]['is_patient_pregnant']=='yes')?"checked='checked'":""?>> Yes
                           </label>
                           <label class="radio-inline">
-                           <input type="radio" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" onclick="checkPatientIsPregnant(this.value);"> No
+                           <input type="radio" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" onclick="checkPatientIsPregnant(this.value);" <?php echo ($result[0]['is_patient_pregnant']=='no')?"checked='checked'":""?>> No
                           </label>
                         </div>
                     </div>
@@ -322,7 +395,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="ArcNo" class="col-lg-4 control-label">If Pregnant, ARC No.</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="arcNo" name="arcNo" placeholder="Enter ARC no." title="Please enter arc no" />
+                        <input type="text" class="form-control" id="arcNo" name="arcNo" placeholder="Enter ARC no." title="Please enter arc no" value="<?php echo $result[0]['arc_no']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -334,11 +407,11 @@ foreach ($sampleTypeResult as $row) {
                         <label for="breastfeeding" class="col-lg-4 control-label">Is Patient Breastfeeding?</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> Yes
+							<input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);" <?php echo ($result[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>> Yes
        
 						</label>
 						<label class="radio-inline">
-							<input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> No
+							<input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);" <?php echo ($result[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>> No
 						</label>
                         </div>
                     </div>
@@ -347,7 +420,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />
+                        <input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" value="<?php echo $result[0]['arv_adherence']; ?>" />
                         </div>
                     </div>
                   </div>                       
@@ -381,7 +454,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['routine_monitoring_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -389,7 +462,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="rmTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        <input type="text" class="form-control" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['routine_monitoring_value']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -399,7 +472,14 @@ foreach ($sampleTypeResult as $row) {
                         <div class="col-lg-7">
                         <!--<input type="text" class="form-control" id="RmTestingSampleType" name="RmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" />-->
                         <select class="form-control" id="rmTestingSampleType" name="rmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                         <?php echo $sampleType; ?>
+                         <option value="">--Select--</option>
+                           <?php
+                           foreach ($sampleTypeResult as $row) {
+                           ?>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['routine_monitoring_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <?php
+                           }
+                           ?>
                         </select>
                         </div>
                     </div>
@@ -423,7 +503,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -431,7 +511,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="repeatTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        <input type="text" class="form-control" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_value']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -440,7 +520,14 @@ foreach ($sampleTypeResult as $row) {
                         <label for="repeatTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <select class="form-control" id="repeatTestingSampleType" name="repeatTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                          <?php echo $sampleType; ?>
+                          <option value="">--Select--</option>
+                           <?php
+                           foreach ($sampleTypeResult as $row) {
+                           ?>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['vl_treatment_failure_adherence_counseling_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <?php
+                           }
+                           ?>
                         </select>
                         </div>
                     </div>
@@ -464,7 +551,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['suspected_treatment_failure_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -472,7 +559,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="suspendTreatmentVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        <input type="text" class="form-control" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['suspected_treatment_failure_value']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -481,7 +568,14 @@ foreach ($sampleTypeResult as $row) {
                         <label for="suspendTreatmentSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <select class="form-control" id="suspendTreatmentSampleType" name="suspendTreatmentSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                          <?php echo $sampleType; ?>
+                          <option value="">--Select--</option>
+                           <?php
+                           foreach ($sampleTypeResult as $row) {
+                           ?>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['suspected_treatment_failure_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <?php
+                           }
+                           ?>
                         </select>
                         </div>
                     </div>
@@ -491,13 +585,12 @@ foreach ($sampleTypeResult as $row) {
             <!-- /.box-footer-->
           </div>
                 
-                
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="requestClinician" class="col-lg-4 control-label">Request Clinician</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name"/>                    
+                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name" value="<?php echo $result[0]['request_clinician']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -505,7 +598,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="clinicianPhone" class="col-lg-4 control-label">Phone No.</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." />                       
+                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." value="<?php echo $result[0]['clinician_ph_no']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -516,7 +609,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date"/>                    
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['request_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -524,7 +617,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="vlFocalPerson" class="col-lg-4 control-label">VL Focal Person</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter VL Focal Person" />                       
+                        <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter VL Focal Person" value="<?php echo $result[0]['vl_focal_person']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -534,7 +627,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="vlPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title=" Please enter vl focal person phone number" />                    
+                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title=" Please enter vl focal person phone number" value="<?php echo $result[0]['focal_person_phone_number']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -542,7 +635,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" />                       
+                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $result[0]['email_for_HF']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -552,7 +645,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="sampleReceivedOn" class="col-lg-4 control-label">Date sample received at testing Lab</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" />                    
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -560,7 +653,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="despachedOn" class="col-lg-4 control-label">Date Results Despatched</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" title="Please enter hub name" />                       
+                        <input type="text" class="form-control dateTime" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -572,10 +665,10 @@ foreach ($sampleTypeResult as $row) {
                         <label for="rejection" class="col-lg-4 control-label">Rejection <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection"> Yes
+							<input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
 						</label>
 						<label class="radio-inline">
-							<input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection"> No
+							<input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
 						</label>
                         </div>
                     </div>
@@ -698,6 +791,7 @@ foreach ($sampleTypeResult as $row) {
        $('#arcNo').removeClass('isRequired');
      }
     }
+    
     function checkPatientIsBreastfeeding(val){
      if(val=='yes'){
       $('#arvAdherence').addClass('isRequired');
