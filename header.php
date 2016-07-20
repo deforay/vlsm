@@ -30,7 +30,7 @@ if(!isset($_SESSION['userId'])){
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
   <!-- iCheck -->
-  
+  <link href="assets/css/select2.min.css" rel="stylesheet" />
  
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -45,9 +45,9 @@ if(!isset($_SESSION['userId'])){
 
  <!-- Latest compiled and minified JavaScript -->
     
-        <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-		<script type="text/javascript" src="assets/js/jquery-ui-timepicker-addon.js"></script>
-	
+    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+	<script type="text/javascript" src="assets/js/jquery-ui-timepicker-addon.js"></script>
+	<script src="assets/js/select2.js"></script>
 		
 		
 		
@@ -121,8 +121,8 @@ if(!isset($_SESSION['userId'])){
           <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+          <p><?php echo $_SESSION['userName']; ?></p>
+          <!--<a href="#"><i class="fa fa-circle text-success"></i> Online</a>-->
         </div>
       </div>
 
@@ -151,7 +151,7 @@ if(!isset($_SESSION['userId'])){
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/forms/general.html"><i class="fa fa-circle-o"></i> General Elements</a></li>
+            <li><a href="vlRequest.php"><i class="fa fa-circle-o"></i> Manage VL Request Form</a></li>
           </ul>
         </li>
         

@@ -9,13 +9,13 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 
 try {
-     // var_dump($_POST);die;
+     //var_dump($_POST);die;
      if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
           $_POST['dob']=$general->dateFormat($_POST['dob']);  
      }
      
-     if(isset($_POST['sampleDate']) && trim($_POST['sampleDate'])!=""){
-          $_POST['sampleDate']=$general->dateFormat($_POST['sampleDate']);  
+     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
+          $_POST['sampleCollectionDate']=$general->dateFormat($_POST['sampleCollectionDate']);  
      }
      
      if(isset($_POST['regimenInitiatedOn']) && trim($_POST['regimenInitiatedOn'])!=""){
@@ -26,12 +26,12 @@ try {
           $_POST['treatmentInitiatiatedOn']=$general->dateFormat($_POST['treatmentInitiatiatedOn']);  
      }
      
-     if(isset($_POST['RmTestingLastVLDate']) && trim($_POST['RmTestingLastVLDate'])!=""){
-          $_POST['RmTestingLastVLDate']=$general->dateFormat($_POST['RmTestingLastVLDate']);  
+     if(isset($_POST['rmTestingLastVLDate']) && trim($_POST['rmTestingLastVLDate'])!=""){
+          $_POST['rmTestingLastVLDate']=$general->dateFormat($_POST['rmTestingLastVLDate']);  
      }
      
-     if(isset($_POST['RepeatTestingLastVLDate']) && trim($_POST['RepeatTestingLastVLDate'])!=""){
-          $_POST['RepeatTestingLastVLDate']=$general->dateFormat($_POST['RepeatTestingLastVLDate']);  
+     if(isset($_POST['repeatTestingLastVLDate']) && trim($_POST['repeatTestingLastVLDate'])!=""){
+          $_POST['repeatTestingLastVLDate']=$general->dateFormat($_POST['repeatTestingLastVLDate']);  
      }
      
      if(isset($_POST['suspendTreatmentLastVLDate']) && trim($_POST['suspendTreatmentLastVLDate'])!=""){
@@ -55,57 +55,53 @@ try {
           $data=array(
             'facility_name'=>$_POST['facilityName'],
             'facility_code'=>$_POST['facilityCode'],
-            //'phone_number'=>$_POST['phoneNo'],
-            //'address'=>$_POST['address'],
             'country'=>$_POST['country'],
             'state'=>$_POST['state'],
             'hub_name'=>$_POST['hubName'],
             'status'=>'active'
           );
-          //print_r($data);die;
+          
           $_POST['facilityId']=$db->insert('facility_details',$data);
         
     }
     
-     if(!isset($_POST['patientPregnant']) || $_POST['patientPregnant']==''){
+     if(!isset($_POST['patientPregnant']) || trim($_POST['patientPregnant'])==''){
         $_POST['patientPregnant']='';
      }
-     if(!isset($_POST['breastfeeding']) || $_POST['breastfeeding']==''){
+     if(!isset($_POST['breastfeeding']) || trim($_POST['breastfeeding'])==''){
         $_POST['breastfeeding']='';
      }
-     if(!isset($_POST['gender']) || $_POST['gender']==''){
+     if(!isset($_POST['gender']) || trim($_POST['gender'])==''){
         $_POST['gender']='';
      }
      
      $vldata=array(
           'facility_id'=>$_POST['facilityId'],   
-          'art_no'=>'2',
+          'art_no'=>$_POST['artNo'],
           'patient_name'=>$_POST['patientName'],
-          //'phone_number'=>$_POST['phoneNo'],
-          //   'address'=>$_POST['address'],
           'patient_dob'=>$_POST['dob'],
           'other_id'=>$_POST['otrId'],
           'age_in_yrs'=>$_POST['ageInYrs'],
           'age_in_mnts'=>$_POST['ageInMtns'],
           'gender'=>$_POST['gender'],
           'patient_phone_number'=>$_POST['patientPhoneNumber'],
-          'sample_collection_date'=>$_POST['sampleDate'],
+          'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'sample_id'=>$_POST['sampleType'],
           'treatment_initiation'=>$_POST['treatPeriod'],
           'treatment_initiated_date'=>$_POST['treatmentInitiatiatedOn'],
           'current_regimen'=>$_POST['currentRegimen'],
           'date_of_initiation_of_current_regimen'=>$_POST['regimenInitiatedOn'],
-          'treatmentDetails'=>$_POST['treatmentDetails'],
+          'treatment_details'=>$_POST['treatmentDetails'],
           'is_patient_pregnant'=>$_POST['patientPregnant'],
           'arc_no'=>$_POST['arcNo'],
           'is_patient_breastfeeding'=>$_POST['breastfeeding'],
           'arv_adherence'=>$_POST['arvAdherence'],
-          'routine_monitoring_last_vl_date'=>$_POST['RmTestingLastVLDate'],
-          'routine_monitoring_value'=>$_POST['RmTestingLastValue'],
-          'routine_monitoring_sample_type'=>$_POST['RmTestingSampleType'],
-          'vl_treatment_failure_adherence_counseling_last_vl_date'=>$_POST['RepeatTestingLastVLDate'],
-          'vl_treatment_failure_adherence_counseling_value'=>$_POST['RepeatTestingVlValue'],
-          'vl_treatment_failure_adherence_counseling_sample_type'=>$_POST['RepeatTestingSampleType'],
+          'routine_monitoring_last_vl_date'=>$_POST['rmTestingLastVLDate'],
+          'routine_monitoring_value'=>$_POST['rmTestingVlValue'],
+          'routine_monitoring_sample_type'=>$_POST['rmTestingSampleType'],
+          'vl_treatment_failure_adherence_counseling_last_vl_date'=>$_POST['repeatTestingLastVLDate'],
+          'vl_treatment_failure_adherence_counseling_value'=>$_POST['repeatTestingVlValue'],
+          'vl_treatment_failure_adherence_counseling_sample_type'=>$_POST['repeatTestingSampleType'],
           'suspected_treatment_failure_last_vl_date'=>$_POST['suspendTreatmentLastVLDate'],
           'suspected_treatment_failure_value'=>$_POST['suspendTreatmentVlValue'],
           'suspected_treatment_failure_sample_type'=>$_POST['suspendTreatmentSampleType'],
@@ -113,7 +109,7 @@ try {
           'clinician_ph_no'=>$_POST['clinicianPhone'],
           'request_date'=>$_POST['requestDate'],
           'vl_focal_person'=>$_POST['vlFocalPerson'],
-          'focal_person_phone_number'=>$_POST['VLPhoneNumber'],
+          'focal_person_phone_number'=>$_POST['vlPhoneNumber'],
           'email_for_HF'=>$_POST['emailHf'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedOn'],
           'date_results_dispatched'=>$_POST['despachedOn'],
@@ -126,7 +122,7 @@ try {
           $_SESSION['alertMsg']="VL request added successfully";
     }
     
-    header("location:facilities.php");
+    header("location:vlRequest.php");
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());
