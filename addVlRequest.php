@@ -25,12 +25,30 @@ foreach ($sampleTypeResult as $row) {
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
    <style>
-    .hide-calendar .ui-datepicker-calendar {
+ /*   .hide-calendar .ui-datepicker-calendar {
     display: none;
-}
+}*/
+ .ui_tpicker_second_label {
+  display: none !important;
+ }.ui_tpicker_second_slider {
+  display: none !important;
+ }.ui_tpicker_millisec_label {
+  display: none !important;
+ }.ui_tpicker_millisec_slider {
+  display: none !important;
+ }.ui_tpicker_microsec_label {
+  display: none !important;
+ }.ui_tpicker_microsec_slider {
+  display: none !important;
+ }.ui_tpicker_timezone_label {
+  display: none !important;
+ }.ui_tpicker_timezone {
+  display: none !important;
+ }.ui_tpicker_time_input{
+  width:100%;
+ }
    </style>
-   <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
-<link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
+   
     <section class="content-header">
       <h1>Add Vl Request</h1>
       <ol class="breadcrumb">
@@ -63,6 +81,7 @@ foreach ($sampleTypeResult as $row) {
                         <label for="facilityName" class="col-lg-4 control-label">Health Facility Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type='hidden' id="facilityId"  name="facilityId" class="facilityDatas" />
+                        <input type='hidden' id="newfacilityName"  name="newfacilityName" />
                         <select class="form-control" id="facilityName" name="facilityName" placeholder="Health Facility Name"></select>
                         </div>
                     </div>
@@ -659,6 +678,7 @@ foreach ($sampleTypeResult as $row) {
       if (e.params.data.id==0) {
         $('.facilityDatas').val('');
         $('.facilityDatas').removeAttr('readonly', true);
+        $("#newfacilityName").val(e.params.data.text);
       }else{
        $("#facilityId").val(e.params.data.id);
        $("#facilityCode").val(e.params.data.facilityCode);
@@ -666,11 +686,13 @@ foreach ($sampleTypeResult as $row) {
        $("#state").val(e.params.data.state);
        $("#hubName").val(e.params.data.hubName);
        $('.facilityDatas').attr('readonly', true);
+       $("#newfacilityName").val('');
       }
      });
      $('#facilityName').on("select2:unselect", function(e) {
       $('.facilityDatas').val('');
       $('.facilityDatas').removeAttr('readonly', true);
+      $("#newfacilityName").val('');
      });
      
      $('.dateTime').datepicker({
@@ -684,7 +706,7 @@ foreach ($sampleTypeResult as $row) {
       changeMonth: true,
       changeYear: true,
       dateFormat: 'dd-M-yy',
-      timeFormat: "hh:mm TT",
+      timeFormat: "HH:mm",
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
       });
        
