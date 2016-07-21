@@ -1,4 +1,5 @@
 <?php
+//print_r($result);die;
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
@@ -16,7 +17,7 @@ if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $r
 
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$result[0]['sample_collection_date']);
- $result[0]['sample_collection_date']=$general->humanDateFormat($expStr[0]);
+ $result[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['sample_collection_date']='';
 }
@@ -90,9 +91,28 @@ $sampleType='<option value="">--Select--</option>';
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
    <style>
-    .hide-calendar .ui-datepicker-calendar {
+    /*.hide-calendar .ui-datepicker-calendar {
     display: none;
-}
+}*/
+.ui_tpicker_second_label {
+  display: none !important;
+ }.ui_tpicker_second_slider {
+  display: none !important;
+ }.ui_tpicker_millisec_label {
+  display: none !important;
+ }.ui_tpicker_millisec_slider {
+  display: none !important;
+ }.ui_tpicker_microsec_label {
+  display: none !important;
+ }.ui_tpicker_microsec_slider {
+  display: none !important;
+ }.ui_tpicker_timezone_label {
+  display: none !important;
+ }.ui_tpicker_timezone {
+  display: none !important;
+ }.ui_tpicker_time_input{
+  width:100%;
+ }
    </style>
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
@@ -127,7 +147,8 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="facilityName" class="col-lg-4 control-label">Health Facility Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type='hidden' id="facilityId"  name="facilityId" class="facilityDatas" />
+                        <input type='hidden' id="facilityId"  name="facilityId" class="facilityDatas" value="<?php echo $result[0]['facility_id']; ?>" />
+                        <input type='hidden' id="newfacilityName"  name="newfacilityName" />
                         <select class="form-control" id="facilityName" name="facilityName" placeholder="Health Facility Name"></select>
                         </div>
                     </div>
@@ -709,12 +730,17 @@ $sampleType='<option value="">--Select--</option>';
   }
   
   $(document).ready(function() {
-     
+     var data = [{ id: <?php echo $result[0]['facility_id']; ?>, text: '<?php echo $result[0]['facility_name']; ?>' }];
+
+  $("#facilityName").select2({
+    data: data
+  })
+  $('.facilityDatas').attr('readonly', true);
+
      $("#facilityName").select2({
       allowClear: true,
       placeholder: "Enter Facility Name",
       ajax: {
-      //url: "https://api.github.com/search/repositories",
       url: "getFacilitySearch.php",
       dataType: 'json',
       delay: 250,
@@ -738,20 +764,14 @@ $sampleType='<option value="">--Select--</option>';
       escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
       minimumInputLength: 1
      });
-    // $('#facilityName').on('change', function(e) {
-    //  console.log(e.val);
-    //  console.log(e.val.id);
-    //    if (e.val != "0") {
-    //    
-    //    }
-    //    
-    //    
-    //});
+   
     
      $('#facilityName').on("select2:select", function(e) {
+      //console.log(e.params.data);
       if (e.params.data.id==0) {
         $('.facilityDatas').val('');
         $('.facilityDatas').removeAttr('readonly', true);
+        $("#newfacilityName").val(e.params.data.text);
       }else{
        $("#facilityId").val(e.params.data.id);
        $("#facilityCode").val(e.params.data.facilityCode);
@@ -759,11 +779,13 @@ $sampleType='<option value="">--Select--</option>';
        $("#state").val(e.params.data.state);
        $("#hubName").val(e.params.data.hubName);
        $('.facilityDatas').attr('readonly', true);
+       $("#newfacilityName").val('');
       }
      });
      $('#facilityName').on("select2:unselect", function(e) {
       $('.facilityDatas').val('');
       $('.facilityDatas').removeAttr('readonly', true);
+      $("#newfacilityName").val('');
      });
      
      $('.dateTime').datepicker({
@@ -777,7 +799,7 @@ $sampleType='<option value="">--Select--</option>';
       changeMonth: true,
       changeYear: true,
       dateFormat: 'dd-M-yy',
-      timeFormat: "hh:mm TT",
+      timeFormat: "HH:mm:ss",
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
       });
        

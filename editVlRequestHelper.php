@@ -13,12 +13,27 @@ try {
      
 
      if(isset($_POST['artNo']) && trim($_POST['artNo'])!="" && $treamentId>0){
+          
+          if(!isset($_POST['facilityId']) || trim($_POST['facilityId'])==""){
+               $data=array(
+                 'facility_name'=>$_POST['newfacilityName'],
+                 'facility_code'=>$_POST['facilityCode'],
+                 'country'=>$_POST['country'],
+                 'state'=>$_POST['state'],
+                 'hub_name'=>$_POST['hubName'],
+                 'status'=>'active'
+               );
+          
+               $_POST['facilityId']=$db->insert('facility_details',$data);
+          }
+          
           if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
                $_POST['dob']=$general->dateFormat($_POST['dob']);  
           }
           
           if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
-               $_POST['sampleCollectionDate']=$general->dateFormat($_POST['sampleCollectionDate']);  
+               $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
+               $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1]; 
           }
           
           if(isset($_POST['regimenInitiatedOn']) && trim($_POST['regimenInitiatedOn'])!=""){
@@ -64,7 +79,7 @@ try {
           }
      
      $vldata=array(
-          //'facility_id'=>$_POST['facilityId'],   
+          'facility_id'=>$_POST['facilityId'],   
           'art_no'=>$_POST['artNo'],
           'patient_name'=>$_POST['patientName'],
           'patient_dob'=>$_POST['dob'],

@@ -15,7 +15,8 @@ try {
      }
      
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
-          $_POST['sampleCollectionDate']=$general->dateFormat($_POST['sampleCollectionDate']);  
+          $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
+          $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
      }
      
      if(isset($_POST['regimenInitiatedOn']) && trim($_POST['regimenInitiatedOn'])!=""){
@@ -53,7 +54,7 @@ try {
      if(isset($_POST['artNo']) && trim($_POST['artNo'])!=""){
          if(!isset($_POST['facilityId']) || trim($_POST['facilityId'])==""){
           $data=array(
-            'facility_name'=>$_POST['facilityName'],
+            'facility_name'=>$_POST['newfacilityName'],
             'facility_code'=>$_POST['facilityCode'],
             'country'=>$_POST['country'],
             'state'=>$_POST['state'],

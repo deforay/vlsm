@@ -15,7 +15,6 @@ if(!isset($_SESSION['userId'])){
 		<link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
 		<link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
 
-		
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -46,17 +45,8 @@ if(!isset($_SESSION['userId'])){
  <!-- Latest compiled and minified JavaScript -->
     
     <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-	<script type="text/javascript" src="assets/js/jquery-ui-timepicker-addon.js"></script>
-	<script src="assets/js/select2.js"></script>
-		
-		
-		
-		
+	
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
-
-
-
-
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
