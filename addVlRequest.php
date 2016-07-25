@@ -140,7 +140,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" />
+                        <select class="form-control" id="artNo" name="artNo" placeholder="ART Number"></select>
                         </div>
                     </div>
                   </div>
@@ -664,15 +664,35 @@ foreach ($sampleTypeResult as $row) {
       escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
       minimumInputLength: 1
      });
-    // $('#facilityName').on('change', function(e) {
-    //  console.log(e.val);
-    //  console.log(e.val.id);
-    //    if (e.val != "0") {
-    //    
-    //    }
-    //    
-    //    
-    //});
+     
+     $("#artNo").select2({
+      allowClear: true,
+      placeholder: "Enter ART Number",
+      ajax: {
+      //url: "https://api.github.com/search/repositories",
+      url: "getArtNumberSearch.php",
+      dataType: 'json',
+      delay: 250,
+      data: function (params) {
+        return {
+          q: params.term, // search term
+          page: 10
+        };
+      },
+       processResults: function (data, params) {
+        // parse the results into the format expected by Select2
+        // since we are using custom formatting functions we do not need to
+        // alter the remote JSON dsata, except to indicate that infinite
+        // scrolling can be used
+        params.page = 10;
+        return {
+          results: data.result,        
+        };
+       },
+      },
+      escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+      minimumInputLength: 1
+     });
     
      $('#facilityName').on("select2:select", function(e) {
       if (e.params.data.id==0) {
