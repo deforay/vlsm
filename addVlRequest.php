@@ -140,24 +140,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <select class="form-control isRequired" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number">
-                         <option>--Select--</option>
-                         <?php
-                         foreach($artCode as $pKey=>$parentRow){
-                         ?>
-                         <optgroup label="<?php echo $pKey ?>">
-                         <?php
-                         foreach($parentRow as $key=>$val){
-                         ?>
-                          <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
-                         <?php
-                         }
-                         ?>
-                         </optgroup>
-                         <?php
-                         }
-                         ?>
-                        </select>
+                        <input type="text" class="form-control isRequired" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" />
                         </div>
                     </div>
                   </div>
@@ -299,7 +282,24 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="currentRegimen" class="col-lg-4 control-label">Current Regimen</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control " id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen" />
+                        <select class="form-control " id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen">
+                         <option>--Select--</option>
+                         <?php
+                         foreach($artCode as $pKey=>$parentRow){
+                         ?>
+                         <optgroup label="<?php echo $pKey ?>">
+                         <?php
+                         foreach($parentRow as $key=>$val){
+                         ?>
+                          <option value="<?php echo $key; ?>"><?php echo $val; ?></option>
+                         <?php
+                         }
+                         ?>
+                         </optgroup>
+                         <?php
+                         }
+                         ?>
+                        </select>
                         </div>
                     </div>
                   </div>    
