@@ -1,7 +1,6 @@
  <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2016 <a href="http://deforay.com/">Deforay Technologies Pvt Ltd.</a>.</strong> All rights
-    reserved.
+    <a href="http://taskforce.org/">Funded by TaskForce</a>
   </footer>
 </div>
 <!-- ./wrapper -->
