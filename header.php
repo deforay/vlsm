@@ -12,15 +12,15 @@ if(!isset($_SESSION['userId'])){
   <title>VL Lab Request</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-		<link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
+		<link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
 		<link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
 
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">-->
   <!-- DataTables -->
   <link rel="stylesheet" href="./assets/plugins/datatables/dataTables.bootstrap.css">
   <!-- Theme style -->
@@ -31,7 +31,6 @@ if(!isset($_SESSION['userId'])){
   <!-- iCheck -->
   <link href="assets/css/select2.min.css" rel="stylesheet" />
  
-
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -40,11 +39,11 @@ if(!isset($_SESSION['userId'])){
   <![endif]-->
   <!-- jQuery 2.2.3 -->
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
 
  <!-- Latest compiled and minified JavaScript -->
     
-    <script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
 	
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 
