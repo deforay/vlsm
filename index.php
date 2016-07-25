@@ -1,5 +1,14 @@
 <?php
 include('header.php');
+include('./includes/MysqliDb.php');
+/* Total data set length */
+  $vlFormTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
+ // $aResultTotal = $countResult->fetch_row();
+ //print_r($aResultTotal);
+  $labCount = $vlFormTotal[0]['total'];
+  
+   $facilityTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details");
+   $facilityCount = $facilityTotal[0]['total'];
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -24,14 +33,14 @@ include('header.php');
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>150</h3>
+              <h3><?php echo $facilityCount;?></h3>
 
               <p>Facilities</p>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="facilities.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -39,14 +48,14 @@ include('header.php');
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3>53</h3>
+              <h3><?php echo $labCount; ?></h3>
 
               <p>Lab Requests</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="vlRequest.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
       </div>
