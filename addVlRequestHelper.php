@@ -51,7 +51,7 @@ try {
           $_POST['despachedOn']=$general->dateFormat($_POST['despachedOn']);  
      }
 
-     if(isset($_POST['artNo']) && trim($_POST['artNo'])!=""){
+     if(isset($_POST['artNo']) && isset($_POST['sampleCode']) && trim($_POST['artNo'])!=""){
          if(!isset($_POST['facilityId']) || trim($_POST['facilityId'])==""){
           $data=array(
             'facility_name'=>$_POST['newfacilityName'],
@@ -77,7 +77,8 @@ try {
      }
      
      $vldata=array(
-          'facility_id'=>$_POST['facilityId'],   
+          'facility_id'=>$_POST['facilityId'],
+          'sample_code'=>$_POST['sampleCode'],
           'art_no'=>$_POST['artNo'],
           'patient_name'=>$_POST['patientName'],
           'patient_dob'=>$_POST['dob'],

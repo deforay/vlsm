@@ -1,0 +1,6 @@
+.mandatory {
+    color: red;
+}
+.readonly {
+    background: #fff !important;
+}

@@ -7,7 +7,7 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name');
+        $aColumns = array('vl.sample_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -85,7 +85,7 @@ $primaryKey="treament_id";
          * Get data to display
         */
         //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-	$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,vl.art_no,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
+		$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,f.facility_name,f.facility_code,vl.art_no,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
 		
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -129,6 +129,7 @@ $primaryKey="treament_id";
         
         foreach ($rResult as $aRow) {
             $row = array();
+			$row[] = $aRow['sample_code'];
 			$row[] = $aRow['art_no'];
             $row[] = ucwords($aRow['patient_name']);
 			$row[] = ucwords($aRow['facility_name']);

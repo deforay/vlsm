@@ -79,7 +79,8 @@ try {
           }
      
      $vldata=array(
-          'facility_id'=>$_POST['facilityId'],   
+          'facility_id'=>$_POST['facilityId'],
+          'sample_code'=>$_POST['sampleCode'],
           'art_no'=>$_POST['artNo'],
           'patient_name'=>$_POST['patientName'],
           'patient_dob'=>$_POST['dob'],
