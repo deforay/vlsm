@@ -26,6 +26,7 @@ include('header.php');
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
+                  <th>Sample Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
 				  <th>Facility Name</th>
@@ -36,7 +37,7 @@ include('header.php');
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="6" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="7" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
                 
@@ -67,6 +68,7 @@ include('header.php');
             
             "bRetrieve": true,                        
             "aoColumns": [
+                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},

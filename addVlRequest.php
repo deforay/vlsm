@@ -2,6 +2,8 @@
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
+include('General.php');
+$general=new Deforay_Commons_General();
 $query="SELECT * from r_art_code_details where parent_art=0";
 $qResult=$db->query($query);
 $artCode=[];
@@ -68,6 +70,7 @@ foreach ($sampleTypeResult as $row) {
         <div class="box-body">
           <!-- form start -->
             <form class="form-horizontal" method='post'  name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="addVlRequestHelper.php">
+              
               <div class="box-body">                 
               <div class="box box-default">
             <div class="box-header with-border">
@@ -136,6 +139,15 @@ foreach ($sampleTypeResult as $row) {
             <!-- /.box-header -->
             <div class="box-body">
              <div class="row">
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleCode" class="col-lg-4 control-label">Sample Code <span class="mandatory">*</span> </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter the sample code" value="<?php echo  $general->generateRandomString(); ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
@@ -145,6 +157,9 @@ foreach ($sampleTypeResult as $row) {
                         </div>
                     </div>
                   </div>
+                  
+                </div>
+                <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="patientName" class="col-lg-4 control-label">Patient's Name <span class="mandatory">*</span> </label>
@@ -153,29 +168,18 @@ foreach ($sampleTypeResult as $row) {
                         </div>
                     </div>
                   </div>
-                </div>
-                <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Date of Birth</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
                         </div>
                     </div>
                   </div>
-                   <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="otrId" class="col-lg-4 control-label">Other Id</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control patientDatas" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" />
-                        </div>
-                    </div>
-                  </div>
-                   
                 </div>
-                
+              
                 <div class="row">
-                    <div class="col-md-6">
+                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
                         <div class="col-lg-7">
@@ -192,10 +196,19 @@ foreach ($sampleTypeResult as $row) {
                         <p class="help-block"><small>If age < 2 years </small></p>
                         </div>
                     </div>
-                  </div>                       
+                  </div>
                 </div>
+                
                 <div class="row">
-                    <div class="col-md-6">
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="otrId" class="col-lg-4 control-label">Other Id</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control patientDatas" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" />
+                        </div>
+                    </div>
+                   </div>
+                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="genderMale" class="col-lg-4 control-label">Gender</label>
                         <div class="col-lg-7">
@@ -208,16 +221,17 @@ foreach ($sampleTypeResult as $row) {
                         </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                </div>
+                <div class="row">
+                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="patientPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control patientDatas" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" />
                         </div>
                     </div>
-                  </div>                       
+                  </div>
                 </div>
-                 
                  
             </div>
             <!-- /.box-footer-->
@@ -234,7 +248,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Sample Collected On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control patientDatas" readonly='readonly' id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter Sample Collection Date" title="Please enter hub name" />
+                        <input type="text" class="form-control patientDatas readonly" readonly='readonly' id="sampleCollectionDate" name="sampleCollectionDate" placeholder="Enter Sample Collection Date" title="Please enter hub name" />
                         </div>
                     </div>
                   </div>    
@@ -272,7 +286,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiatiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" />
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" />
                         </div>
                     </div>
                   </div>                       
@@ -308,7 +322,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Current Regimen Initiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" />
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" />
                         </div>
                     </div>
                   </div>                       
@@ -401,7 +415,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -443,7 +457,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -484,7 +498,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -536,7 +550,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date"/>                    
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date"/>                    
                         </div>
                     </div>
                   </div>
@@ -572,7 +586,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="sampleReceivedOn" class="col-lg-4 control-label">Date sample received at testing Lab</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" />                    
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" />                    
                         </div>
                     </div>
                   </div>
@@ -580,7 +594,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="despachedOn" class="col-lg-4 control-label">Date Results Despatched</label>
                         <div class="col-lg-7"> 
-                        <input type="text" class="form-control dateTime patientDatas" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" title="Please enter hub name" />                       
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" title="Please enter hub name" />                       
                         </div>
                     </div>
                   </div>                       

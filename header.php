@@ -31,6 +31,7 @@ if(!isset($_SESSION['userId'])){
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
   <!-- iCheck -->
   <link href="assets/css/select2.min.css" rel="stylesheet" />
+  <link href="assets/css/style.css" rel="stylesheet" />
  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -110,6 +111,7 @@ if(!isset($_SESSION['userId'])){
           </ul>
         </li>
         <li><a href="vlRequest.php"><i class="fa fa-circle-o"></i> Manage VL Request Form</a></li>
+        <!--<li><a href="addBatch.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>-->
         
         
       </ul>
