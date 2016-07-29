@@ -16,7 +16,7 @@ $result = $db->rawQuery($query);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Create Batch</h1>
+      <h1>Edit Batch</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Batch</li>
