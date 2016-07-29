@@ -107,11 +107,11 @@ $primaryKey="batch_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("select b.batch_code, b.batch_id,group_concat(vl.sample_code separator ',') sample_code from vl_request_form vl join batch_details b on vl.batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("select b.batch_code, b.batch_id,group_concat(vl.sample_code separator ',') sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select b.batch_code, b.batch_id,group_concat(vl.sample_code separator ',') sample_code from vl_request_form vl join batch_details b on vl.batch_id = b.batch_id group by b.batch_id");
+        $aResultTotal =  $db->rawQuery("select b.batch_code, b.batch_id,group_concat(vl.sample_code separator ',') sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id group by b.batch_id");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);

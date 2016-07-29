@@ -403,14 +403,14 @@ foreach ($sampleTypeResult as $row) {
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <!--<input type="checkbox" class="isRequired" id="RmTesting" name="rmViralTesting" value="Routine Monitoring" title="Please check routine monitoring" onclick="showTesting('RmTesting');">-->
+                                <input type="radio" class="" id="RmTesting" name="stViralTesting" value="Routine Monitoring" title="Please check routine monitoring" onclick="showTesting('RmTesting');">
                                 <strong>Routine Monitoring</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row RmTesting ">
+                <div class="row RmTesting hideTestData" style="display: none;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
@@ -445,14 +445,14 @@ foreach ($sampleTypeResult as $row) {
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <!--<input type="checkbox" class="isRequired" id="RepeatTesting" name="repeatViralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');">-->
+                                <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');">
                                 <strong>Repeat VL test after suspected treatment failure adherence counseling</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row RepeatTesting">
+                <div class="row RepeatTesting hideTestData" style="display: none;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
@@ -486,14 +486,14 @@ foreach ($sampleTypeResult as $row) {
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <!--<input type="checkbox" class="isRequired" id="suspendTreatment" name="stViralTesting" value="male" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">-->
+                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="male" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
                                 <strong>Suspect Treatment Failure</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-               <div class="row suspendTreatment">
+               <div class="row suspendTreatment hideTestData" style="display: none;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
@@ -826,6 +826,11 @@ foreach ($sampleTypeResult as $row) {
      }else{
        $('#arvAdherence').removeClass('isRequired');
      }
+    }
+    function showTesting(chosenClass)
+    {
+     $(".hideTestData").hide(500);
+     $("."+chosenClass).show(1000);
     }
     
   </script>
