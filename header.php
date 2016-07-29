@@ -108,7 +108,7 @@ if(!isset($_SESSION['userId'])){
           <ul class="treeview-menu">
             <li><a href="users.php"><i class="fa fa-circle-o"></i> Manage Users</a></li>
             <li><a href="facilities.php"><i class="fa fa-circle-o"></i> Manage Facilities</a></li>
-	    <li><a href="addBatch.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+			<li><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
           </ul>
         </li>
         <li><a href="vlRequest.php"><i class="fa fa-circle-o"></i> Manage VL Request Form</a></li>
