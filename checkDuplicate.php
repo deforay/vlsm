@@ -1,13 +1,7 @@
 <?php
 ob_start();
 session_start();
-include('../includes/MysqliDb.php');
-
-
-
-//echo "<pre>";
-//print_r($_POST);die;
-
+include('./includes/MysqliDb.php');
 
         $tableName = $_POST['tableName'];
         $fieldName = $_POST['fieldName'];

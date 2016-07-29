@@ -2,10 +2,13 @@
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
-$query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id=''";
+$id=base64_decode($_GET['id']);
+$batchQuery="SELECT * from batch_details where batch_id=$id";
+$batchInfo=$db->query($batchQuery);
+$query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id='' OR batch_id=$id";
 $result = $db->rawQuery($query);
 ?>
-<link href="assets/css/multi-select.css" rel="stylesheet" />
+<link href="assets/css/multi-select.css" rel="stylesheet"/>
 <style>
   #ms-sampleCode{width: 110%;}
 </style>
@@ -30,14 +33,14 @@ $result = $db->rawQuery($query);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addBatchForm' id='addBatchForm' autocomplete="off" action="addBatchCodeHelper.php">
+            <form class="form-horizontal" method='post'  name='editBatchForm' id='editBatchForm' autocomplete="off" action="editBatchCodeHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already Exist.Try with another name',null)" />
+                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo $batchInfo[0]['batch_code'];?>" onblur="checkNameValidation('batch_details','batch_code',this,'<?php echo "batch_id##".$id;?>','This batch code already Exist.Try with another name',null)"/>
                         </div>
                     </div>
                   </div>
@@ -54,8 +57,12 @@ $result = $db->rawQuery($query);
 			    <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
 			    <?php
 			    foreach($result as $sample){
+			      $selected = '';
+			      if($sample['batch_id']==$id){
+				$selected = "selected=selected";
+			      }
 			      ?>
-			      <option value="<?php echo $sample['treament_id'];?>"><?php  echo ucwords($sample['sample_code']);?></option>
+			      <option value="<?php echo $sample['treament_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code']);?></option>
 			      <?php
 			    }
 			    ?>
@@ -69,6 +76,7 @@ $result = $db->rawQuery($query);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+		<input type="hidden" name="batchId" id="batchId" value="<?php echo $batchInfo[0]['batch_id'];?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -90,11 +98,11 @@ $result = $db->rawQuery($query);
 
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'addBatchForm'
+        formId: 'editBatchForm'
     });
     
     if(flag){
-      document.getElementById('addBatchForm').submit();
+      document.getElementById('editBatchForm').submit();
     }
   }
    //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
@@ -144,23 +152,23 @@ $('#deselect-all-samplecode').click(function(){
 });
    });
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
-    {
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
+  {
+      var removeDots=obj.value.replace(/\./g,"");
+      var removeDots=removeDots.replace(/\,/g,"");
+      //str=obj.value;
+      removeDots = removeDots.replace(/\s{2,}/g,' ');
 
-        $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
-        function(data){
-            if(data==='1')
-            {
-                alert(alrt);
-                duplicateName=false;
-                document.getElementById(obj.id).value="";
-            }
-            
-        });
-    }
+      $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+      function(data){
+	  if(data==='1')
+	  {
+	      alert(alrt);
+	      duplicateName=false;
+	      document.getElementById(obj.id).value="";
+	  }
+	  
+      });
+  }
   </script>
   
  <?php

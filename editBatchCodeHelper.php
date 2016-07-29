@@ -7,16 +7,20 @@ $tableName1="batch_details";
 $tableName2="vl_request_form";
 try {
         $data=array('batch_code'=>$_POST['batchCode']);
-        $db->insert($tableName1,$data);
-        $lastId = $db->getInsertId();
+        $db=$db->where('batch_id',$_POST['batchId']);
+        $db->update($tableName1,$data);
+        $lastId = $_POST['batchId'];
         if($lastId!=0 && $lastId!=''){
+                $value = array('batch_id'=>'');
+                $db=$db->where('batch_id',$lastId);
+                $db->update($tableName2,$value);
             for($j=0;$j<=count($_POST['sampleCode']);$j++){
                 $treamentId = $_POST['sampleCode'][$j];
                 $value = array('batch_id'=>$lastId);
                 $db=$db->where('treament_id',$treamentId);
-                $db->update($tableName2,$value); 
+                $db->update($tableName2,$value);
             }
-            $_SESSION['alertMsg']="Batch code added successfully";
+            $_SESSION['alertMsg']="Batch code updated successfully";
             header("location:batchcode.php");
         }
 } catch (Exception $exc) {
