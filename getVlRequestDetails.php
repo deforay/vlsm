@@ -7,7 +7,7 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -85,7 +85,7 @@ $primaryKey="treament_id";
          * Get data to display
         */
         //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-		$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,f.facility_name,f.facility_code,vl.art_no,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
+		$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 		
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -106,7 +106,7 @@ $primaryKey="treament_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,vl.art_no,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.treament_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -129,12 +129,14 @@ $primaryKey="treament_id";
         
         foreach ($rResult as $aRow) {
             $row = array();
-			$row[] = $aRow['sample_code'];
+	    $row[] = $aRow['sample_code'];
+			$row[] = $aRow['batch_code'];
 			$row[] = $aRow['art_no'];
             $row[] = ucwords($aRow['patient_name']);
 			$row[] = ucwords($aRow['facility_name']);
             $row[] = $aRow['facility_code'];
             $row[] = ucwords($aRow['sample_name']);
+            $row[] = ucwords($aRow['result']);
             $row[] = '<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
            
             $output['aaData'][] = $row;

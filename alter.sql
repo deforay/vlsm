@@ -17,3 +17,6 @@ CREATE TABLE IF NOT EXISTS `batch_details` (
   `batch_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`batch_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+ALTER TABLE  `vl_request_form` ADD  `result` VARCHAR( 255 ) NULL DEFAULT NULL ;
+
