@@ -6,10 +6,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Manage Batch Code</h1>
+      <h1>Manage Batch List</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Batch Code</li>
+        <li class="active">Manage Batch List</li>
       </ol>
     </section>
      <!-- Main content -->
@@ -20,7 +20,7 @@ include('header.php');
           <div class="box">
             <div class="box-header with-border">
               
-              <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Batch Code</a>
+              <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Batch</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
