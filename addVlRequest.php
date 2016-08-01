@@ -20,6 +20,15 @@ $sampleType='<option value="">--Select--</option>';
 foreach ($sampleTypeResult as $row) {
  $sampleType.='<option value="'.$row['sample_id'].'">'.ucwords($row['sample_name']).'</option>';
 }
+//sample code
+$sQuery="select MAX(treament_id) FROM vl_request_form";
+$sResult=$db->query($sQuery);
+//print_r($sResult[0]['MAX(treament_id)']);die;
+if($sResult[0]['MAX(treament_id)']!=''){
+ $maxId = $sResult[0]['MAX(treament_id)']+1;
+}else{
+ $maxId = 1;
+}
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
@@ -143,7 +152,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="sampleCode" class="col-lg-4 control-label">Sample Code <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter the sample code" value="<?php echo  $general->generateRandomString(); ?>"/>
+                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter the sample code" value="<?php echo "VL".date('dmY').$maxId; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -415,7 +424,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime patientDatas viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -423,7 +432,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="rmTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control patientDatas" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        <input type="text" class="form-control patientDatas viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
                         </div>
                     </div>
                   </div>
@@ -432,7 +441,7 @@ foreach ($sampleTypeResult as $row) {
                         <label for="rmTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <!--<input type="text" class="form-control" id="RmTestingSampleType" name="RmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" />-->
-                        <select class="form-control patientDatas" id="rmTestingSampleType" name="rmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                        <select class="form-control patientDatas viralTestData" id="rmTestingSampleType" name="rmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
                          <?php echo $sampleType; ?>
                         </select>
                         </div>
@@ -457,7 +466,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime patientDatas viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -465,7 +474,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="repeatTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control patientDatas" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        <input type="text" class="form-control patientDatas viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
                         </div>
                     </div>
                   </div>
@@ -473,7 +482,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="repeatTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
-                        <select class="form-control patientDatas" id="repeatTestingSampleType" name="repeatTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                        <select class="form-control patientDatas viralTestData" id="repeatTestingSampleType" name="repeatTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
                           <?php echo $sampleType; ?>
                         </select>
                         </div>
@@ -498,7 +507,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control dateTime patientDatas viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -506,7 +515,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="suspendTreatmentVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control patientDatas" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        <input type="text" class="form-control patientDatas viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
                         </div>
                     </div>
                   </div>
@@ -514,7 +523,7 @@ foreach ($sampleTypeResult as $row) {
                     <div class="form-group">
                         <label for="suspendTreatmentSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
-                        <select class="form-control patientDatas" id="suspendTreatmentSampleType" name="suspendTreatmentSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                        <select class="form-control patientDatas viralTestData" id="suspendTreatmentSampleType" name="suspendTreatmentSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
                           <?php echo $sampleType; ?>
                         </select>
                         </div>
@@ -829,8 +838,9 @@ foreach ($sampleTypeResult as $row) {
     }
     function showTesting(chosenClass)
     {
-     $(".hideTestData").hide(500);
-     $("."+chosenClass).show(1000);
+     $(".viralTestData").val('');
+     $(".hideTestData").hide();
+     $("."+chosenClass).show();
     }
     
   </script>

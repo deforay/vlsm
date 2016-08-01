@@ -477,19 +477,30 @@ $sampleType='<option value="">--Select--</option>';
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="" id="RmTesting" name="stViralTesting" value="Routine Monitoring" title="Please check routine monitoring" onclick="showTesting('RmTesting');">
+                             <?php
+                             $checked = '';
+                             $display = '';
+                             if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
+                              $checked = 'checked="checked"';
+                              $display = 'block';
+                             }else{
+                              $checked = '';
+                              $display = 'none';
+                             }
+                             ?>
+                               <input type="radio" class="" id="RmTesting" name="stViralTesting" value="Routine Monitoring" title="Please check routine monitoring" <?php echo $checked;?> onclick="showTesting('RmTesting');">
                                 <strong>Routine Monitoring</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row RmTesting hideTestData" style="display: none;">
+                <div class="row RmTesting hideTestData" style="display: <?php echo $display;?>;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['routine_monitoring_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control dateTime viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['routine_monitoring_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -497,7 +508,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="rmTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['routine_monitoring_value']; ?>" />
+                        <input type="text" class="form-control viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['routine_monitoring_value']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -506,7 +517,7 @@ $sampleType='<option value="">--Select--</option>';
                         <label for="rmTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <!--<input type="text" class="form-control" id="RmTestingSampleType" name="RmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" />-->
-                        <select class="form-control" id="rmTestingSampleType" name="rmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                        <select class="form-control viralTestData" id="rmTestingSampleType" name="rmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
                          <option value="">--Select--</option>
                            <?php
                            foreach ($sampleTypeResult as $row) {
@@ -526,19 +537,30 @@ $sampleType='<option value="">--Select--</option>';
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');">
+                             <?php
+                             $checked = '';
+                             $display = '';
+                             if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
+                              $checked = 'checked="checked"';
+                              $display = 'block';
+                             }else{
+                              $checked = '';
+                              $display = 'none';
+                             }
+                             ?>
+                                <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $checked;?> onclick="showTesting('RepeatTesting');">
                                 <strong>Repeat VL test after suspected treatment failure adherence counseling</strong>
-                            </label>						
+                            </label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row RepeatTesting hideTestData" style="display: none;">
+                <div class="row RepeatTesting hideTestData" style="display: <?php echo $display;?>;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control dateTime viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -546,7 +568,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="repeatTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_value']; ?>" />
+                        <input type="text" class="form-control viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_value']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -554,7 +576,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="repeatTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
-                        <select class="form-control" id="repeatTestingSampleType" name="repeatTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                        <select class="form-control viralTestData" id="repeatTestingSampleType" name="repeatTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
                           <option value="">--Select--</option>
                            <?php
                            foreach ($sampleTypeResult as $row) {
@@ -574,19 +596,30 @@ $sampleType='<option value="">--Select--</option>';
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="male" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
+                             <?php
+                             $checked = '';
+                             $display = '';
+                             if($result[0]['suspected_treatment_failure_last_vl_date']!='' || $result[0]['suspected_treatment_failure_value']!='' || $result[0]['suspected_treatment_failure_sample_type']!=''){
+                              $checked = 'checked="checked"';
+                              $display = 'block';
+                             }else{
+                              $checked = '';
+                              $display = 'none';
+                             }
+                             ?>
+                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="male" title="Suspect Treatment Failure" <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
                                 <strong>Suspect Treatment Failure</strong>
                             </label>						
                             </div>
                         </div>
                     </div>
                 </div>
-               <div class="row suspendTreatment hideTestData" style="display: none;">
+               <div class="row suspendTreatment hideTestData" style="display: <?php echo $display;?>;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['suspected_treatment_failure_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control dateTime viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['suspected_treatment_failure_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -594,7 +627,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="suspendTreatmentVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['suspected_treatment_failure_value']; ?>"/>
+                        <input type="text" class="form-control viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['suspected_treatment_failure_value']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -602,7 +635,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="suspendTreatmentSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
-                        <select class="form-control" id="suspendTreatmentSampleType" name="suspendTreatmentSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                        <select class="form-control viralTestData" id="suspendTreatmentSampleType" name="suspendTreatmentSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
                           <option value="">--Select--</option>
                            <?php
                            foreach ($sampleTypeResult as $row) {
@@ -870,8 +903,9 @@ $sampleType='<option value="">--Select--</option>';
     
     function showTesting(chosenClass)
     {
-     $(".hideTestData").hide(500);
-     $("."+chosenClass).show(1000);
+     $(".viralTestData").val('');
+     $(".hideTestData").hide();
+     $("."+chosenClass).show();
     }
     
   </script>

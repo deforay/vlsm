@@ -97,6 +97,18 @@ include('header.php');
         });
        
 	} );
+  function convertPdf(id)
+{
+	$.post("vlRequestPdf.php", { id : id, format: "html"},
+        function(data){
+            if(data == "" || data == null || data == undefined){
+		alert('Unable to generate download');
+	    }else{
+		window.open('uploads/'+data,'_blank');
+	    }
+            
+        });
+}
 </script>
  <?php
  include('footer.php');
