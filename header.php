@@ -32,6 +32,7 @@ if(!isset($_SESSION['userId'])){
   <!-- iCheck -->
   <link href="assets/css/select2.min.css" rel="stylesheet" />
   <link href="assets/css/style.css" rel="stylesheet" />
+  <link href="assets/css/deforayModal.css" rel="stylesheet" />
  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -46,7 +47,7 @@ if(!isset($_SESSION['userId'])){
  <!-- Latest compiled and minified JavaScript -->
     
     <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
-	
+<script src="assets/js/deforayModal.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 
 </head>
@@ -117,6 +118,12 @@ if(!isset($_SESSION['userId'])){
         
         
       </ul>
+      
     </section>
     <!-- /.sidebar -->
   </aside>
+  <!-- content-wrapper -->
+  <div id="dDiv" class="dialog"> 
+            <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
+            <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
+    </div>
