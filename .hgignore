@@ -1,0 +1,10 @@
+syntax: regexp
+^.idea
+^uploads/(?!index.php)
+^temporary/(?!index.php)
+error_log
+npm-debug.log
+Thumbs.db
+Thumbs.db.orig
+.DS_Store
+.DS_Store.orig
