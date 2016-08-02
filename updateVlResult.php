@@ -19,7 +19,7 @@ $sInfo=$db->query($sQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Update Result</h1>
+      <h1>Enter Result</h1>
     </section>
 
     <!-- Main content -->
@@ -49,7 +49,7 @@ $sInfo=$db->query($sQuery);
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();">Submit</a>
-                <a href="javascript:void(0)" onclick="parent.closeModal()" class="btn btn-default "> Cancel</a>
+                <a href="javascript:void(0)" onclick="parent.closeModal()" class="btn btn-default "> Close</a>
               </div>
               <!-- /.box-footer -->
           <!-- /.row -->
