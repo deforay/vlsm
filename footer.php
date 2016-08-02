@@ -1,4 +1,4 @@
- <!-- /.content-wrapper -->
+
   <footer class="main-footer">
     <a href="http://taskforce.org/">Funded by TaskForce</a>
   </footer>
@@ -21,6 +21,7 @@
 <!-- AdminLTE App -->
 <script src="dist/js/app.min.js"></script>
 <script src="assets/js/deforayValidation.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function(){
   <?php
@@ -33,6 +34,16 @@
   }
   ?>
   });
+  function showModal(url, w, h) {
+      showdefModal('dDiv', w, h);
+      document.getElementById('dFrame').style.height = h + 'px';
+      document.getElementById('dFrame').style.width = w + 'px';
+      document.getElementById('dFrame').src = url;
+  }
+  function closeModal() {
+      document.getElementById('dFrame').src = "";
+      hidedefModal('dDiv');
+  }
 </script>
 </body>
 </html>
