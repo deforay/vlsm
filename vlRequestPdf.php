@@ -3,7 +3,7 @@
 ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
-include ('./tcpdf/tcpdf.php');
+include ('./includes/tcpdf/tcpdf.php');
 
 //header and footer
 class MYPDF extends TCPDF {
@@ -140,13 +140,13 @@ if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results
 }else{
  $result[0]['date_results_dispatched']='';
 }
-if($result[0]['current_regimen']!=''){
+if(trim($result[0]['current_regimen'])!=''){
 $aQuery="SELECT * from r_art_code_details where art_id=".$result[0]['current_regimen'];
 $aResult=$db->query($aQuery);
 }else{
     $aResult[0]['art_code'] = '';
 }
-if($result[0]['sample_id']!=''){
+if(trim($result[0]['sample_id'])!=''){
 $sampleTypeQuery="SELECT * FROM r_sample_type where ".$result[0]['sample_id'];
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 }else{
@@ -175,25 +175,25 @@ $fVlResult[0]['sample_name']     = '';
 }
 $html = "";
 $html.='<table border="1" style="font-size:13px;line-height:20px;">';
-$html.='<h4 style="">Facility Details</h4>';
+$html.='<div style="font-weight:bold;font-size:15px;">Facility Details</div>';
 $html.='<tr style=""><td style="vertical-align: middle;">Health Facility Name</td><td style="vertical-align: middle">'.ucwords($result[0]['facility_name']).'</td><td style="vertical-align: middle">Facility Code</td><td style="vertical-align: middle">'.ucwords($result[0]['facility_code']).'</td></tr>';
 $html.='<tr style=""><td style="vertical-align: middle">Country</td><td style="vertical-align: middle">'.ucwords($result[0]['country']).'</td><td style="vertical-align: middle">State</td><td style="vertical-align: middle">'.ucwords($result[0]['state']).'</td></tr>';
 $html.='<tr style=""><td style="vertical-align: middle">Hub Name</td><td colspan="3" style="vertical-align: middle">'.ucwords($result[0]['hub_name']).'</td></tr>';
-$html.='<h4>Patient Details</h4>';
+$html.='<div style="font-weight:bold;font-size:15px;">Patient Details</div>';
 $html.='<tr><td style="vertical-align: middle">Sample Code</td><td style="vertical-align: middle">'.ucwords($result[0]['sample_code']).'</td><td style="vertical-align: middle">Unique Art No.</td><td style="vertical-align: middle">'.$result[0]['art_no'].'</td></tr>';
 $html.='<tr><td style="vertical-align: middle">Patient Name</td><td style="vertical-align: middle">'.ucwords($result[0]['patient_name']).'</td><td>Date of Birth</td><td style="vertical-align: middle">'.$result[0]['patient_dob'].'</td></tr>';
 $html.='<tr><td style="vertical-align: middle">Age in years</td><td style="vertical-align: middle">'.$result[0]['age_in_yrs'].'</td><td>Age in months</td><td style="vertical-align: middle">'.$result[0]['age_in_mnts'].'</td></tr>';
 $html.='<tr><td style="vertical-align: middle">Other Id</td><td style="vertical-align: middle">'.$result[0]['other_id'].'</td><td>Gender</td><td style="vertical-align: middle">'.ucwords($result[0]['gender']).'</td></tr>';
 $html.='<tr><td style="vertical-align: middle">Phone Number</td><td colspan="3" style="vertical-align: middle">'.$result[0]['patient_phone_number'].'</td></tr>';
-$html.='<h4>Sample Information</h4>';
+$html.='<div style="font-weight:bold;font-size:15px;">Sample Information</div>';
 $html.='<tr><td style="vertical-align: middle;">Sample Collected On</td><td style="vertical-align: middle;">'.$result[0]['sample_collection_date'].'</td><td style="vertical-align: middle;">Sample Type </td><td style="vertical-align: middle;">'.$sampleTypeResult[0]['sample_name'].'</td></tr>';
-$html.='<h4>Treatment Information</h4>';
+$html.='<div style="font-weight:bold;font-size:15px;">Treatment Information</div>';
 $html.='<tr><td style="vertical-align: middle;">How long has this patient been on treatment ?</td><td style="vertical-align: middle;">'.$result[0]['treatment_initiation'].'</td><td style="vertical-align: middle;">Treatment Initiatiated On </td><td style="vertical-align: middle;">'.$result[0]['treatment_initiated_date'].'</td></tr>';
 $html.='<tr><td style="vertical-align: middle;">Current Regimen</td><td style="vertical-align: middle;">'.$aResult[0]['art_code'].'</td><td style="vertical-align: middle;">Current Regimen Initiated On </td><td style="vertical-align: middle;">'.$result[0]['date_of_initiation_of_current_regimen'].'</td></tr>';
 $html.='<tr><td style="vertical-align: middle;">Which line of treatment is Patient on ?</td><td colspan="3" style="vertical-align: middle;">'.$result[0]['treatment_details'].'</td></tr>';
 $html.='<tr><td style="vertical-align: middle;">Is Patient Pregnant ? </td><td style="vertical-align: middle;">'.ucwords($result[0]['is_patient_pregnant']).'</td><td style="vertical-align: middle;">If Pregnant, ARC No.</td><td style="vertical-align: middle;">'.$result[0]['arc_no'].'</td></tr>';
 $html.='<tr><td style="vertical-align: middle;">Is Patient Breastfeeding ? </td><td style="vertical-align: middle;">'.ucwords($result[0]['is_patient_breastfeeding']).'</td><td style="vertical-align: middle;">ARV Adherence </td><td style="vertical-align: middle;">'.$result[0]['arv_adherence'].'</td></tr>';
-$html.='<h4>Indication For Viral Load Testing</h4>';
+$html.='<div style="font-weight:bold;font-size:15px;">Indication For Viral Load Testing</div>';
 $checked = '';
 $display = '';
 if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
