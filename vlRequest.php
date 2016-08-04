@@ -28,10 +28,9 @@ include('header.php');
                 <tr>
 		  <th>Sample Code</th>
                   <th>Batch Code</th>
-                  
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-				  <th>Facility Name</th>
+		  <th>Facility Name</th>
                   <th>Facility Code</th>
                   <th>Sample Type</th>
                   <th>Result</th>

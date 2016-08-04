@@ -64,10 +64,22 @@ if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['
  $result[0]['date_sample_received_at_testing_lab']='';
 }
 
+if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00'){
+ $result[0]['lab_tested_date']=$general->humanDateFormat($result[0]['lab_tested_date']);
+}else{
+ $result[0]['lab_tested_date']='';
+}
+
 if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00'){
  $result[0]['date_results_dispatched']=$general->humanDateFormat($result[0]['date_results_dispatched']);
 }else{
  $result[0]['date_results_dispatched']='';
+}
+
+if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00'){
+ $result[0]['result_reviewed_date']=$general->humanDateFormat($result[0]['result_reviewed_date']);
+}else{
+ $result[0]['result_reviewed_date']='';
 }
 
 $query="SELECT * from r_art_code_details where parent_art=0";
@@ -228,7 +240,6 @@ $sampleType='<option value="">--Select--</option>';
                         <label for="patientName" class="col-lg-4 control-label">Patient's Name <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_name']; ?>"/>
-                        <input type="hidden" class="form-control isRequired" id="treamentId" name="treamentId" placeholder="patient Name" title="" value="<?php echo base64_encode($result[0]['treament_id']); ?>"/>
                         </div>
                     </div>
                   </div>
@@ -236,7 +247,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Date of Birth</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth" value="<?php echo $result[0]['patient_dob']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth" value="<?php echo $result[0]['patient_dob']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -360,7 +371,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiatiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" value="<?php echo $result[0]['treatment_initiated_date']; ?>" />
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" value="<?php echo $result[0]['treatment_initiated_date']; ?>" />
                         </div>
                     </div>
                   </div>                       
@@ -396,7 +407,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Current Regimen Initiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" value="<?php echo $result[0]['date_of_initiation_of_current_regimen']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" value="<?php echo $result[0]['date_of_initiation_of_current_regimen']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -500,7 +511,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['routine_monitoring_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['routine_monitoring_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -560,7 +571,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -619,7 +630,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['suspected_treatment_failure_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['suspected_treatment_failure_last_vl_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -677,7 +688,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['request_date']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['request_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -732,14 +743,12 @@ $sampleType='<option value="">--Select--</option>';
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-               
-               
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="labContactPerson" class="col-lg-4 control-label">Lab Contact Person </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Enter Other Id" title="Please enter Other Id" value=""/>
+                        <input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Enter Lab Contact Person Name" title="Please enter lab contact person name" value="<?php echo $result[0]['lab_contact_person']; ?>"/>
                         </div>
                     </div>
                    </div>
@@ -747,7 +756,7 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="labPhoneNo" class="col-lg-4 control-label">Phone Number </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="labPhoneNo" name="labPhoneNo" placeholder="Enter Lab Phone Number" title="Please enter Other Id" value=""/>
+                        <input type="text" class="form-control" id="labPhoneNo" name="labPhoneNo" placeholder="Enter Lab Phone No." title="Please enter lab phone no." value="<?php echo $result[0]['lab_phone_no']; ?>"/>
                         </div>
                     </div>
                    </div>
@@ -757,17 +766,17 @@ $sampleType='<option value="">--Select--</option>';
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="sampleReceivedOn" class="col-lg-4 control-label">Date sample received at testing Lab</label>
+                        <label for="" class="col-lg-4 control-label">Date Sample Received at Testing Lab</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Select Sample Received Date" title="Select sample received date" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
                         </div>
                     </div>
                   </div>
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="sampleTestedOn" class="col-lg-4 control-label">Sample testing Date</label>
+                        <label for="" class="col-lg-4 control-label">Sample Testing Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Sample Tested On" title="Please enter sample received on" value=""/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date" value="<?php echo $result[0]['lab_tested_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -777,17 +786,17 @@ $sampleType='<option value="">--Select--</option>';
                 <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="despachedOn" class="col-lg-4 control-label">Date Results Despatched</label>
+                        <label for="" class="col-lg-4 control-label">Date Results Dispatched</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Select Result Dispatched Date" title="Select result dispatched date" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
                         </div>
                     </div>
                   </div>
                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="patientPhoneNumber" class="col-lg-4 control-label">Reviewed By</label>
+                        <label for="reviewedBy" class="col-lg-4 control-label">Reviewed By</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" />
+                        <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By Name" title="Please enter reviewed by name" value="<?php echo $result[0]['result_reviewed_by']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -795,9 +804,9 @@ $sampleType='<option value="">--Select--</option>';
                 <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="despachedOn" class="col-lg-4 control-label">Reviewed Date</label>
+                        <label for="" class="col-lg-4 control-label">Reviewed Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date" value="<?php echo $result[0]['result_reviewed_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -805,19 +814,30 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="result" class="col-lg-4 control-label">Result</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="result" name="result" placeholder="Enter Result." title="Please enter result" />
+                        <input type="text" class="form-control" id="result" name="result" placeholder="Enter Result" title="Please enter result" value="<?php echo $result[0]['result']; ?>"/>
                         </div>
                     </div>
                   </div>
                 </div>
                  
                  <div class="row">
-                
                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="patientPhoneNumber" class="col-lg-4 control-label">Comments</label>
+                        <label for="comments" class="col-lg-4 control-label">Comments</label>
                         <div class="col-lg-7">
-                        <textarea class="form-control"></textarea>
+                         <textarea class="form-control" id="comments" name="comments" row="4" placeholder="Enter Comments" title="Please enter comments"><?php echo $result[0]['comments']; ?></textarea>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="status" class="col-lg-4 control-label">Status</label>
+                        <div class="col-lg-7">
+                         <select class="form-control" id="status" name="status" title="Please select test status">
+			    <option value="pending" <?php echo($result[0]['status'] == 'pending')?'selected="selected"':''; ?>>Pending</option>
+			    <option value="completed" <?php echo($result[0]['status'] == 'completed')?'selected="selected"':''; ?>>Completed</option>
+			    <option value="cancelled" <?php echo($result[0]['status'] == 'cancelled')?'selected="selected"':''; ?>>Cancelled</option>
+			  </select>
                         </div>
                     </div>
                   </div>
@@ -826,10 +846,10 @@ $sampleType='<option value="">--Select--</option>';
             <!-- /.box-footer-->
           </div>
 
-
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+                <input type="hidden" id="treamentId" name="treamentId" value="<?php echo base64_encode($result[0]['treament_id']); ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -846,11 +866,6 @@ $sampleType='<option value="">--Select--</option>';
   </div>
   
   <script type="text/javascript">
-   
-
-
-
-
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'addVlRequestForm'
@@ -952,7 +967,7 @@ $sampleType='<option value="">--Select--</option>';
       $("#newfacilityName").val('');
      });
      
-     $('.dateTime').datepicker({
+     $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
       dateFormat: 'dd-M-yy',
