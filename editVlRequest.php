@@ -708,24 +708,7 @@ $sampleType='<option value="">--Select--</option>';
                     </div>
                   </div>                       
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="sampleReceivedOn" class="col-lg-4 control-label">Date sample received at testing Lab</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="despachedOn" class="col-lg-4 control-label">Date Results Despatched</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
+                
                 
                 <div class="row">
                     <div class="col-md-6">
@@ -741,7 +724,109 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                   </div>                                    
-                </div>                
+                </div>
+                
+                           <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Lab Details</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+               
+               
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="labContactPerson" class="col-lg-4 control-label">Lab Contact Person </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Enter Other Id" title="Please enter Other Id" value=""/>
+                        </div>
+                    </div>
+                   </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="labPhoneNo" class="col-lg-4 control-label">Phone Number </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="labPhoneNo" name="labPhoneNo" placeholder="Enter Lab Phone Number" title="Please enter Other Id" value=""/>
+                        </div>
+                    </div>
+                   </div>
+                  
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleReceivedOn" class="col-lg-4 control-label">Date sample received at testing Lab</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleTestedOn" class="col-lg-4 control-label">Sample testing Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Sample Tested On" title="Please enter sample received on" value=""/>
+                        </div>
+                    </div>
+                  </div>
+                                         
+                </div>
+                
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="despachedOn" class="col-lg-4 control-label">Date Results Despatched</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="patientPhoneNumber" class="col-lg-4 control-label">Reviewed By</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" />
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="despachedOn" class="col-lg-4 control-label">Reviewed Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control dateTime readonly" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="result" class="col-lg-4 control-label">Result</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="result" name="result" placeholder="Enter Result." title="Please enter result" />
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                 
+                 <div class="row">
+                
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="patientPhoneNumber" class="col-lg-4 control-label">Comments</label>
+                        <div class="col-lg-7">
+                        <textarea class="form-control"></textarea>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- /.box-footer-->
+          </div>
+
+
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
