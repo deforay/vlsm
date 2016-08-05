@@ -144,15 +144,27 @@ include('header.php');
   }
     
   function convertPdf(id){
-	$.post("vlRequestPdf.php", { id : id, format: "html"},
-        function(data){
-            if(data == "" || data == null || data == undefined){
-		alert('Unable to generate download');
-	    }else{
-		window.open('uploads/'+data,'_blank');
-	    }
-            
-        });
+      $.post("vlRequestPdf.php", { id : id, format: "html"},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      alert('Unable to generate download');
+	  }else{
+	      window.open('uploads/'+data,'_blank');
+	  }
+	  
+      });
+  }
+  
+  function convertResultToPdf(id){
+      $.post("vlRequestResultPdf.php", { id : id, format: "html"},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      alert('Unable to generate download');
+	  }else{
+	      window.open('uploads/'+data,'_blank');
+	  }
+	  
+      });
   }
 </script>
  <?php

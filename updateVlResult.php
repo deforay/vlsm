@@ -96,38 +96,48 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
 		    </tr>
 		    <tr>
 		      <td style="width:50%;">
+			<div class="divLabel"><label>Lab Name</label></div>
+			<div class="contentLabel"><input type="text" class="form-control" id="labName" name="labName" placeholder="Enter Lab Name" title="Please enter lab name" value="<?php echo $sInfo[0]['lab_name']; ?>"/></div>
+		      </td>
+		      <td style="width:50%;">
 			<div class="divLabel"><label>Lab Contact Person</label></div> 
 			<div class="contentLabel"><input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Enter Lab Contact Person Name" title="Please enter lab contact person name" value="<?php echo $sInfo[0]['lab_contact_person'];?>"/></div>
 		      </td>
+		    </tr>
+		    <tr>
 		      <td style="width:50%;">
 			<div class="divLabel"><label>Phone Number</label></div>
 			<div class="contentLabel"><input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter Lab Phone No." title="Please enter lab phone no." value="<?php echo $sInfo[0]['lab_phone_no'];?>"/></div>
 		      </td>
-		    </tr>
-		    <tr>
 		      <td style="width:50%;">
 			<div class="divLabel"><label>Date Sample Received at Testing Lab</label></div> 
 			<div class="contentLabel"><input type="text" class="form-control date" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Select Sample Received Date" title="Select sample received date" value="<?php echo $sInfo[0]['date_sample_received_at_testing_lab']; ?>" readonly/></div>
 		      </td>
+		    </tr>
+		    <tr>
 		      <td style="width:50%;">
 			<div class="divLabel"><label>Sample Testing Date</label></div>
 			<div class="contentLabel"><input type="text" class="form-control date" id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date" value="<?php echo $sInfo[0]['lab_tested_date']; ?>" readonly/></div>
 		      </td>
-		    </tr>
-		    <tr>
 		      <td style="width:50%;">
 			<div class="divLabel"><label>Date Results Dispatched</label></div> 
 			<div class="contentLabel"><input type="text" class="form-control date" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Select Result Dispatched Date" title="Select result dispatched date" value="<?php echo $sInfo[0]['date_results_dispatched']; ?>" readonly/></div>
 		      </td>
+		    </tr>
+		    <tr>
 		      <td style="width:50%;">
 			<div class="divLabel"><label>Reviewed By</label></div>
 			<div class="contentLabel"><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By Name" title="Please enter reviewed by name" value="<?php echo $sInfo[0]['result_reviewed_by'];?>"/></div>
 		      </td>
-		    </tr>
-		    <tr>
 		      <td style="width:50%;">
 			<div class="divLabel"><label>Reviewed Date</label></div> 
 			<div class="contentLabel"><input type="text" class="form-control date" id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date" value="<?php echo $sInfo[0]['result_reviewed_date']; ?>" readonly/></div>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td style="width:50%;">
+			<div class="divLabel"><label>Justification</label></div>
+			<div class="contentLabel"><input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $sInfo[0]['justification']; ?>"/></div>
 		      </td>
 		      <td style="width:50%;">
 			<div class="divLabel"><label>Result</label>*</div>
@@ -174,6 +184,7 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
   function validateNow(){
     if($("#result").val()!=''){
       $.post("updateVlResultHelper.php", {
+	  labName: $("#labName").val(),
 	  labContactPerson: $("#labContactPerson").val(),
 	  phoneNumber: $("#phoneNumber").val(),
 	  sampleReceivedOn: $("#sampleReceivedOn").val(),
@@ -181,6 +192,7 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
 	  resultDispatchedOn: $("#resultDispatchedOn").val(),
 	  reviewedBy: $("#reviewedBy").val(),
 	  reviewedOn: $("#reviewedOn").val(),
+	  justification: $("#justification").val(),
 	  result: $("#result").val(),
 	  comments: $("#comments").val(),
 	  status: $("#status").val(),
