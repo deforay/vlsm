@@ -227,8 +227,8 @@ $sampleType='<option value="">--Select--</option>';
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <!--<input type="text" class="form-control isRequired" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" value="< ?php echo $result[0]['art_no']; ?>" />-->
-                        <select class="form-control" id="artNo" name="artNo" placeholder="ART Number"></select>
+                        <input type="hidden" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" value="<?php echo $result[0]['art_no']; ?>" />
+                        <select class="form-control" id="artNoId" name="artNoId" placeholder="ART Number"></select>
                         </div>
                     </div>
                   </div>
@@ -383,7 +383,7 @@ $sampleType='<option value="">--Select--</option>';
                         <label for="currentRegimen" class="col-lg-4 control-label">Current Regimen</label>
                         <div class="col-lg-7">
                         <select class="form-control " id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen">
-                         <option>--Select--</option>
+                         <option value="">--Select--</option>
                          <?php
                          foreach($artCode as $pKey=>$parentRow){
                          ?>
@@ -882,7 +882,7 @@ $sampleType='<option value="">--Select--</option>';
   $("#facilityName").select2({
     data: data
   })
-  $("#artNo").select2({
+  $("#artNoId").select2({
     data: [{ id: '<?php echo $result[0]['art_no']; ?>', text: '<?php echo $result[0]['art_no']; ?>' }]
   })
   $('.facilityDatas').attr('readonly', true);
@@ -915,7 +915,7 @@ $sampleType='<option value="">--Select--</option>';
       minimumInputLength: 1
      });
      
-     $("#artNo").select2({
+     $("#artNoId").select2({
       allowClear: true,
       placeholder: "Enter ART Number",
       ajax: {
@@ -965,6 +965,17 @@ $sampleType='<option value="">--Select--</option>';
       $('.facilityDatas').val('');
       $('.facilityDatas').removeAttr('readonly', true);
       $("#newfacilityName").val('');
+     });
+     
+     $('#artNoId').on("select2:select", function(e) {
+      if (e.params.data.patient==0) {
+        $("#artNo").val(e.params.data.text);
+      }else{
+       $("#artNo").val(e.params.data.text);
+      }
+     });
+     $('#artNoId').on("select2:unselect", function(e) {
+     $("#artNo").val('');
      });
      
      $('.date').datepicker({
