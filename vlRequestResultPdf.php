@@ -77,7 +77,7 @@ $pdf->AddPage();
 $general=new Deforay_Commons_General();
 $id=$_POST['id'];
 
-$fQuery="SELECT * from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id where treament_id=$id";
+$fQuery="SELECT * from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
 $result=$db->query($fQuery);
 
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00'){
@@ -149,7 +149,7 @@ $html.='<table style="font-size:13px;line-height:20px;">';
       $html .='<td style="text-align:left;font-size:12px;"><strong>Date Received</strong></td>';
       $html .='<td style="text-align:left;font-size:12px;">'.$result[0]['date_sample_received_at_testing_lab'].'</td>';
       $html .='<td style="text-align:left;font-size:12px;"><strong>Current Regimen</strong></td>';
-      $html .='<td style="text-align:left;font-size:12px;">'.$result[0]['current_regimen'].'</td>';
+      $html .='<td style="text-align:left;font-size:12px;">'.$result[0]['art_code'].'</td>';
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td style="text-align:left;font-size:12px;"><strong>Date Tested</strong></td>';

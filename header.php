@@ -13,8 +13,8 @@ if(!isset($_SESSION['userId'])){
   <title>VL Lab Request</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-		<link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
-		<link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
 
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -110,10 +110,11 @@ if(!isset($_SESSION['userId'])){
           <ul class="treeview-menu">
             <li><a href="users.php"><i class="fa fa-circle-o"></i> Manage Users</a></li>
             <li><a href="facilities.php"><i class="fa fa-circle-o"></i> Manage Facilities</a></li>
+            <!--<li><a href="globalConfig.php"><i class="fa fa-circle-o"></i> Manage Global Config</a></li>-->
           </ul>
         </li>
 		
-		<li class="treeview">
+	<li class="treeview">
           <a href="#">
             <i class="fa fa-edit"></i>
             <span>Request Management</span>
