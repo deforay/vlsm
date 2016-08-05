@@ -127,7 +127,7 @@ $html.='<table style="font-size:13px;line-height:20px;">';
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td colspan="2" style="text-align:left;font-size:12px;"><strong>Dispensary</strong></td>';
-      $html .='<td colspan="2" style="text-align:right;font-size:12px;"><strong>LAB: '.ucfirst($result[0]['lab_name']).'</strong></td>';
+      $html .='<td colspan="2" style="text-align:left;font-size:12px;"><strong>LAB: '.ucfirst($result[0]['lab_name']).'</strong></td>';
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td colspan="2" style="text-align:center;font-size:14px;"><strong>Viral Load Results</strong></td>';

@@ -128,7 +128,7 @@ if(!isset($_SESSION['userId'])){
           <ul class="treeview-menu">
             <li><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
             <li><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-			<li><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+	    <li><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
           </ul>
         </li>
 		
