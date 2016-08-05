@@ -90,12 +90,60 @@ $primaryKey="treament_id";
         //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
 	$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
+        //echo $sQuery;die;
+	$start_date = '';
+	$end_date = '';
+	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+	   $s_c_date = explode(" ", $_POST['sampleCollectionDate']);
+	   //print_r($s_c_date);die;
+	   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+	     $start_date = $general->dateFormat($s_c_date[0]);
+	   }
+	   if (isset($s_c_date[2]) && trim($s_c_date[2]) != "") {
+	     $end_date = $general->dateFormat($s_c_date[2]);
+	   }
+	}
+	  
+	
+	if (isset($sWhere) && $sWhere != "") {
+           $sWhere=' where '.$sWhere;
+	    //$sQuery = $sQuery.' '.$sWhere;
+	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+	        $sWhere = $sWhere.' AND b.batch_code = "'.$_POST['batchCode'].'"';
+	    }
+	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		if (trim($start_date) == trim($end_date)) {
+		    $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		}else{
+		   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		}
+           }
+	}else{
+	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' b.batch_code = "'.$_POST['batchCode'].'"';
+	    }
+	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		if (trim($start_date) == trim($end_date)) {
+		     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+		        $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		     }else{
+			$sWhere=' where '.$sWhere;
+			$sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		     }
+		}else{
+		   if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+		      $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		   }else{
+		     $sWhere=' where '.$sWhere;
+		     $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		   }
+		}
+	    }
+	}
+	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
-        if (isset($sWhere) && $sWhere != "") {
-            $sWhere=' where '.$sWhere;
-            $sQuery = $sQuery.' '.$sWhere;
-        }
-        
+	//echo $sQuery;die;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
