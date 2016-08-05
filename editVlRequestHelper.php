@@ -132,8 +132,8 @@ try {
           'comments'=>$_POST['comments'],
           'status'=>$_POST['status'],
           'rejection'=>$_POST['rejection'],
-          'created_by'=>$_SESSION['userId'],
-          'created_on'=>$general->getDateTime()
+          //'created_by'=>$_SESSION['userId'],
+          //'created_on'=>$general->getDateTime()
         );
           $db=$db->where('treament_id',$treamentId);
           $id=$db->update($tableName,$vldata);
