@@ -30,6 +30,9 @@ if(!isset($_SESSION['userId'])){
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
   <!-- iCheck -->
+  
+  <link href="assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+  
   <link href="assets/css/select2.min.css" rel="stylesheet" />
   <link href="assets/css/style.css" rel="stylesheet" />
   <link href="assets/css/deforayModal.css" rel="stylesheet" />
