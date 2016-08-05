@@ -130,13 +130,13 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
 			<div class="contentLabel"><input type="text" class="form-control date" id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date" value="<?php echo $sInfo[0]['result_reviewed_date']; ?>" readonly/></div>
 		      </td>
 		      <td style="width:50%;">
-			<div class="divLabel"><label>Result</label></div>
+			<div class="divLabel"><label>Result</label>*</div>
 			<div class="contentLabel"><input type="text" class="form-control" id="result" name="result" placeholder="Enter Result" title="Please enter result" value="<?php echo $sInfo[0]['result'];?>"/></div>
 		      </td>
 		    </tr>
 		    <tr>
 		      <td style="width:50%;">
-			<div class="divLabel"><label>Comments</label></div> 
+			<div class="divLabel"><label>Comments</label></div>
 			<div class="contentLabel"><textarea type="text" class="form-control" id="comments" name="comments" row="4" placeholder="Enter Comments" title="Please enter comments"><?php echo $sInfo[0]['comments'];?></textarea></div>
 		      </td>
 		      <td style="width:50%;">

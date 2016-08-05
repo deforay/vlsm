@@ -1,7 +1,7 @@
+<link href="assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
 <?php
 include('header.php');
 ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -18,6 +18,20 @@ include('header.php');
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
+	    <table cellpadding="1" cellspacing="3" style="margin-left:10%;margin-top:30px;">
+		<tr>
+		    <td><b>Sample Collection Date&nbsp;:&nbsp;</b></td>
+		    <td>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select collection date" readonly style="width:200px;background:#fff;"/>
+		    </td>
+		    <td>&nbsp;&nbsp;<b>Batch Code&nbsp;:&nbsp;</b></td>
+		    <td>
+			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter batch code"/>
+		    </td>
+		    <td>&nbsp;&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm"></td>
+		    <td>&nbsp;&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button></td>
+		</tr>
+	    </table>
             <div class="box-header with-border">
               <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
             </div>
@@ -34,15 +48,15 @@ include('header.php');
                   <th>Facility Code</th>
                   <th>Sample Type</th>
                   <th>Result</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="7" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="10" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
-                
               </table>
             </div>
             <!-- /.box-body -->
@@ -55,11 +69,37 @@ include('header.php');
     </section>
     <!-- /.content -->
   </div>
-  <script>
-  var oTable = null;
+  <script type="text/javascript" src="assets/plugins/daterangepicker/moment.min.js"></script>
+  <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
+  <script type="text/javascript">
+   var startDate = "";
+   var endDate = "";
   $(document).ready(function() {
-	
-        oTable = $('#vlRequestDataTable').dataTable({	
+     $('#sampleCollectionDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+      });
+     $('#sampleCollectionDate').val("");
+     loadVlRequestData();
+  } );
+  
+  var oTable = null;
+  function loadVlRequestData(){
+     oTable = $('#vlRequestDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -78,6 +118,7 @@ include('header.php');
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 0, "asc" ]],
@@ -85,6 +126,8 @@ include('header.php');
             "bServerSide": true,
             "sAjaxSource": "getVlRequestDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
+	      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+	      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -94,10 +137,13 @@ include('header.php');
               });
             }
         });
-       
-	} );
-  function convertPdf(id)
-{
+  }
+  
+  function searchVlRequestData(){
+    oTable.fnDraw();
+  }
+    
+  function convertPdf(id){
 	$.post("vlRequestPdf.php", { id : id, format: "html"},
         function(data){
             if(data == "" || data == null || data == undefined){
@@ -107,7 +153,7 @@ include('header.php');
 	    }
             
         });
-}
+  }
 </script>
  <?php
  include('footer.php');
