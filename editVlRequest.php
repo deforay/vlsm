@@ -737,7 +737,7 @@ $sampleType='<option value="">--Select--</option>';
                   </div>                                    
                 </div>
                 
-                           <div class="box box-primary">
+            <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Lab Details</h3>
             </div>
@@ -746,12 +746,23 @@ $sampleType='<option value="">--Select--</option>';
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
+                        <label for="labName" class="col-lg-4 control-label">Lab Name </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="labName" name="labName" placeholder="Enter Lab Name" title="Please enter lab name" value="<?php echo $result[0]['lab_name']; ?>"/>
+                        </div>
+                    </div>
+                   </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
                         <label for="labContactPerson" class="col-lg-4 control-label">Lab Contact Person </label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Enter Lab Contact Person Name" title="Please enter lab contact person name" value="<?php echo $result[0]['lab_contact_person']; ?>"/>
                         </div>
                     </div>
                    </div>
+                </div>
+                
+                <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="labPhoneNo" class="col-lg-4 control-label">Phone Number </label>
@@ -760,10 +771,6 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                    </div>
-                  
-                </div>
-                
-                <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Sample Received at Testing Lab</label>
@@ -772,7 +779,10 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                   </div>
-                    <div class="col-md-6">
+                </div>
+                
+                <div class="row">
+                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Sample Testing Date</label>
                         <div class="col-lg-7">
@@ -780,10 +790,6 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                   </div>
-                                         
-                </div>
-                
-                <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Results Dispatched</label>
@@ -792,6 +798,9 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                   </div>
+                </div>
+                
+                <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="reviewedBy" class="col-lg-4 control-label">Reviewed By</label>
@@ -800,8 +809,6 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                   </div>
-                </div>
-                <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
@@ -810,7 +817,18 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                   </div>
-                 <div class="col-md-6">
+                </div>
+                 
+                 <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $result[0]['justification']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="result" class="col-lg-4 control-label">Result</label>
                         <div class="col-lg-7">
@@ -821,7 +839,7 @@ $sampleType='<option value="">--Select--</option>';
                 </div>
                  
                  <div class="row">
-                 <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="comments" class="col-lg-4 control-label">Comments</label>
                         <div class="col-lg-7">
@@ -841,7 +859,7 @@ $sampleType='<option value="">--Select--</option>';
                         </div>
                     </div>
                   </div>
-                </div>
+                 </div>
             </div>
             <!-- /.box-footer-->
           </div>

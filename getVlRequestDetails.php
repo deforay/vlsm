@@ -88,37 +88,8 @@ $primaryKey="treament_id";
         */
 	$aWhere = '';
         //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-	$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
-	if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-	    $aWhere = $sQuery = $sQuery.' WHERE b.batch_code = "'.$_POST['batchCode'].'"';
-	}
+	$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
-	$start_date = '';
-	$end_date = '';
-	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-	    $s_c_date = explode(" ", $_POST['sampleCollectionDate']);
-	    //print_r($s_c_date);die;
-	    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-		$start_date = $general->dateFormat($s_c_date[0]);
-	    }
-	    if (isset($s_c_date[2]) && trim($s_c_date[2]) != "") {
-		$end_date = $general->dateFormat($s_c_date[2]);
-	    }
-	    
-	    if(trim($aWhere)!= ''){
-		if (trim($start_date)!= "" && trim($end_date)!= "") {
-		    $sQuery = $sQuery.' AND vl.sample_collection_date >= "'.$start_date.'" AND vl.sample_collection_date <= "'.$end_date.'"';
-		}else{
-		    $sQuery = $sQuery.' AND vl.sample_collection_date = "'.$start_date.'"';
-		}
-	    }else{
-		if (trim($start_date)!= "" && trim($end_date)!= "") {
-		    $sQuery = $sQuery.' WHERE vl.sample_collection_date >= "'.$start_date.'" AND vl.sample_collection_date <= "'.$end_date.'"';
-		}else{
-		    $sQuery = $sQuery.' WHERE vl.sample_collection_date = "'.$start_date.'"';
-		}
-	    }
-	}
 	//echo $sQuery;die;
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -173,7 +144,8 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['status']);
             $row[] = '<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>
 	    <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> PDF</i></a>
-	    <a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>';
+	    <a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>
+	    <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';
            
             $output['aaData'][] = $row;
         }

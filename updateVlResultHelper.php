@@ -19,6 +19,7 @@ try {
         $_POST['reviewedOn']=$general->dateFormat($_POST['reviewedOn']);  
     }
     $vldata=array(
+      'lab_name'=>$_POST['labName'],
       'lab_contact_person'=>$_POST['labContactPerson'],
       'lab_phone_no'=>$_POST['phoneNumber'],
       'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedOn'],
@@ -26,6 +27,7 @@ try {
       'date_results_dispatched'=>$_POST['resultDispatchedOn'],
       'result_reviewed_by'=>$_POST['reviewedBy'],
       'result_reviewed_date'=>$_POST['reviewedOn'],
+      'justification'=>$_POST['justification'],
       'result'=>$_POST['result'],
       'comments'=>$_POST['comments'],
       'status'=>$_POST['status']
