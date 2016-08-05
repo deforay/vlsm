@@ -1,4 +1,4 @@
-<link href="assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+
 <?php
 include('header.php');
 ?>
