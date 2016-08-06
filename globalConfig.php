@@ -33,30 +33,35 @@ $logoInfo=$db->query($globalConfigQuery);
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
-                    <div class="fileinput fileinput-new" data-provides="fileinput">
-                      <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;">
-                        <?php
-                        if(isset($logoInfo[0]['value']) && trim($logoInfo[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $logoInfo[0]['value'])){
-                        ?>
-                         <img src="uploads/logo/<?php echo $logoInfo[0]['value']; ?>" alt="Logo image">
-                        <?php } else { ?>
-                         <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
-                        <?php } ?>
-                      </div>
-                      <!--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>-->
-                      <div>
-                        <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span>
-                        <input type="file" id="logoImage" name="logoImage">
-                        </span>
-                        <?php
-                        if(isset($logoInfo[0]['value']) && trim($logoInfo[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $logoInfo[0]['value'])){
-                        ?>
-                          <a id="clearImage" href="javascript:void(0);" class="btn btn-default" data-dismiss="fileupload" onclick="clearImage('<?php echo $logoInfo[0]['value']; ?>')">Clear</a>
-                        <?php } ?>
-                        <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                    <div class="form-group">
+                      <label for="" class="col-lg-3 control-label">Logo Image </label>
+                      <div class="col-lg-9">
+                       <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
+                          <?php
+                          if(isset($logoInfo[0]['value']) && trim($logoInfo[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $logoInfo[0]['value'])){
+                          ?>
+                           <img src="uploads/logo/<?php echo $logoInfo[0]['value']; ?>" alt="Logo image">
+                          <?php } else { ?>
+                           <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
+                          <?php } ?>
+                        </div>
+                        <!--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>-->
+                        <div>
+                          <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span>
+                          <input type="file" id="logoImage" name="logoImage">
+                          </span>
+                          <?php
+                          if(isset($logoInfo[0]['value']) && trim($logoInfo[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $logoInfo[0]['value'])){
+                          ?>
+                            <a id="clearImage" href="javascript:void(0);" class="btn btn-default" data-dismiss="fileupload" onclick="clearImage('<?php echo $logoInfo[0]['value']; ?>')">Clear</a>
+                          <?php } ?>
+                          <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                        </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                </div>
                 </div>
               </div>
               <!-- /.box-body -->
