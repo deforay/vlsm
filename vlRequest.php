@@ -22,11 +22,11 @@ include('header.php');
 		<tr>
 		    <td><b>Sample Collection Date&nbsp;:&nbsp;</b></td>
 		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select collection date" readonly style="width:200px;background:#fff;"/>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:200px;background:#fff;"/>
 		    </td>
 		    <td>&nbsp;&nbsp;<b>Batch Code&nbsp;:&nbsp;</b></td>
 		    <td>
-			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter batch code"/>
+			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter Batch Code"/>
 		    </td>
 		    <td>&nbsp;&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm"></td>
 		    <td>&nbsp;&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button></td>
