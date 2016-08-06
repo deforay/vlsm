@@ -32,6 +32,15 @@ ALTER TABLE  `vl_request_form` ADD  `result_reviewed_by` VARCHAR( 255 ) NULL DEF
 ALTER TABLE  `vl_request_form` ADD  `result_reviewed_date` DATE NULL DEFAULT NULL AFTER  `result_reviewed_by` ;
 ALTER TABLE  `vl_request_form` ADD  `status` VARCHAR( 255 ) NULL DEFAULT NULL ;
 
---ilahir 05-Pal-2016
+--Pal 05-08-2016
 ALTER TABLE `vl_request_form` ADD `lab_name` VARCHAR(255) NULL DEFAULT NULL AFTER `treatment_details`;
 ALTER TABLE `vl_request_form` ADD `justification` VARCHAR(255) NULL DEFAULT NULL AFTER `lab_tested_date`;
+
+--Pal 05-08-2016
+CREATE TABLE `global_config` (
+  `name` varchar(255) NOT NULL,
+  `value` mediumtext
+)
+
+INSERT INTO `global_config` (`name`, `value`) VALUES
+('logo', '');
