@@ -117,7 +117,8 @@ try {
           'date_results_dispatched'=>$_POST['despachedOn'],
           'rejection'=>$_POST['rejection'],
           'created_by'=>$_SESSION['userId'],
-          'created_on'=>$general->getDateTime()
+          'created_on'=>$general->getDateTime(),
+          'status'=>'1'
         );
         
           $id=$db->insert($tableName,$vldata);

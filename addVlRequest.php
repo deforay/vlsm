@@ -293,9 +293,9 @@ if($sResult[0]['MAX(treament_id)']!=''){
                   </div>    
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiatiated On</label>
+                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" />
+                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" />
                         </div>
                     </div>
                   </div>                       

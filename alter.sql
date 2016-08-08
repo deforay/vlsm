@@ -49,3 +49,26 @@ INSERT INTO `global_config` (`name`, `value`) VALUES
 INSERT INTO `global_config` (`name`, `value`) VALUES ('header', NULL);
 
 ALTER TABLE `vl_request_form` ADD `log_value` VARCHAR(255) NULL DEFAULT NULL AFTER `justification`, ADD `absolute_value` VARCHAR(255) NULL DEFAULT NULL AFTER `log_value`, ADD `text_value` VARCHAR(255) NULL DEFAULT NULL AFTER `absolute_value`;
+
+
+ALTER TABLE  `vl_request_form` CHANGE  `status`  `status` INT NOT NULL ;
+CREATE TABLE IF NOT EXISTS `testing_status` (
+  `status_id` int(11) NOT NULL AUTO_INCREMENT,
+  `status_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`status_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `testing_status`
+--
+
+INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES
+(1, 'waiting'),
+(2, 'lost'),
+(3, 'sample reordered'),
+(4, 'cancel'),
+(5, 'invalid');
+
+ALTER TABLE vl_request_form
+ADD FOREIGN KEY (status)
+REFERENCES testing_status(status_id)
