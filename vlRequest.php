@@ -1,5 +1,12 @@
 <?php
 include('header.php');
+include('./includes/MysqliDb.php');
+$tsQuery="SELECT * FROM testing_status";
+$tsResult = $db->rawQuery($tsQuery);
+$sQuery="SELECT * FROM r_sample_type";
+$sResult = $db->rawQuery($sQuery);
+$fQuery="SELECT * FROM facility_details where status='active'";
+$fResult = $db->rawQuery($fQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -17,19 +24,64 @@ include('header.php');
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-	    <table cellpadding="1" cellspacing="3" style="margin-left:10%;margin-top:30px;">
+	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:3%;margin-top:30px;">
 		<tr>
-		    <td><b>Sample Collection Date&nbsp;:&nbsp;</b></td>
+		    <td><b>Sample Collection Date&nbsp;:</b></td>
 		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:200px;background:#fff;"/>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
-		    <td>&nbsp;&nbsp;<b>Batch Code&nbsp;:&nbsp;</b></td>
+		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
 			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter Batch Code"/>
 		    </td>
-		    <td>&nbsp;&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm"></td>
-		    <td>&nbsp;&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button></td>
-		    <!--<td>&nbsp;&nbsp;<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertAllResultToPdf();"><i class="fa fa-file-pdf-o"> Result PDF</i></a></td>-->
+		    </tr>
+		<tr>
+		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+		    <td>
+		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
+		      <option value="">--select--</option>
+			<?php
+			foreach($sResult as $type){
+			 ?>
+			 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
+			 <?php
+			}
+			?>
+		      </select>
+		    </td>
+		
+		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+		    <td>
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+		      <option value="">--select--</option>
+			<?php
+			foreach($fResult as $name){
+			 ?>
+			 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+			 <?php
+			}
+			?>
+		      </select>
+		    </td>
+		    <td>&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button></td>
+		</tr>
+		<tr style="margin-top:30px;">
+		  <td><b>Choose Status&nbsp;:</b></td>
+		  <td>
+		    <input type="hidden" name="checkedTests" id="checkedTests"/>
+		    <select style="width:220px;" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
+		      <option value="">--select--</option>
+			<?php
+			foreach($tsResult as $status){
+			 ?>
+			 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
+			 <?php
+			}
+			?>
+		    </select>
+		  </td>
+		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>
 		</tr>
 	    </table>
             <div class="box-header with-border">
@@ -40,6 +92,7 @@ include('header.php');
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
+		  <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
 		  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
@@ -54,7 +107,7 @@ include('header.php');
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="10" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="12" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
               </table>
@@ -74,6 +127,8 @@ include('header.php');
   <script type="text/javascript">
    var startDate = "";
    var endDate = "";
+   var selectedTests=[];
+   var selectedTestsId=[];
   $(document).ready(function() {
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -110,6 +165,7 @@ include('header.php');
             
             "bRetrieve": true,                        
             "aoColumns": [
+		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -121,13 +177,24 @@ include('header.php');
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 0, "asc" ]],
+            "aaSorting": [[ 1, "asc" ]],
+	    "fnDrawCallback": function() {
+		var checkBoxes=document.getElementsByName("chk[]");
+                len = checkBoxes.length;
+                for(c=0;c<len;c++){
+                    if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1 ){
+			checkBoxes[c].setAttribute("checked",true);
+                    }
+                }
+	    },
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlRequestDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 	      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
 	      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+	      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -166,20 +233,77 @@ include('header.php');
 	  
       });
   }
-  
-  function convertAllResultToPdf(){
-    var date = $("#sampleCollectionDate").val();
-    var code = $("#batchCode").val();
-    $.post("vlRequestAllResultPdf.php", { sampleCollectionDate : date, sampleCode: code, format: "html"},
+  function toggleTest(obj){
+	 if ($(obj).is(':checked')) {
+	     if($.inArray(obj.value, selectedTests) == -1){
+		 selectedTests.push(obj.value);
+		 selectedTestsId.push(obj.id);
+	     }
+	 } else {
+	     selectedTests.splice( $.inArray(obj.value, selectedTests), 1 );
+	     selectedTestsId.splice( $.inArray(obj.id, selectedTestsId), 1 );
+	     $("#checkTestsData").attr("checked",false);
+	 }
+	 $("#checkedTests").val(selectedTests.join());
+	 if(selectedTests.length!=0){
+	  $("#status").prop('disabled', false);
+	 }else{
+	  $("#status").prop('disabled', true);
+	 }
+	 
+    }
+      
+    function toggleAllVisible(){
+        //alert(tabStatus);
+	$(".checkTests").each(function(){
+	     $(this).prop('checked', false);
+	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
+	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
+	     $("#status").prop('disabled', true);
+	 });
+	 if ($("#checkTestsData").is(':checked')) {
+	 $(".checkTests").each(function(){
+	     $(this).prop('checked', true);
+		 selectedTests.push(this.value);
+		 selectedTestsId.push(this.id);
+	 });
+	 $("#status").prop('disabled', false);
+     } else{
+	$(".checkTests").each(function(){
+	     $(this).prop('checked', false);
+	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
+	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
+	     $("#status").prop('disabled', true);
+	 });
+     }
+     $("#checkedTests").val(selectedTests.join());
+   }
+   function submitTestStatus()
+   {
+    var stValue = $("#status").val();
+    var testIds = $("#checkedTests").val();
+    if(stValue!='' && testIds!=''){
+      conf=confirm("Do you wish to change the test status ?");
+      if (conf) {
+    $.post("updateTestStatus.php", { status : stValue,id:testIds, format: "html"},
       function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
-	  }else{
-	      window.open('uploads/<?php echo $_SESSION['rVal']; ?>/'+data,'_blank');
+	  if(data != ""){
+	    $("#checkedTests").val('');
+	    selectedTests = [];
+	    selectedTestsId = [];
+	    $("#checkTestsData").attr("checked",false);
+	    $("#status").val('');
+	    $("#status").prop('disabled', true);
+	    oTable.fnDraw();
+	    alert('Updated successfully.');
 	  }
-	  
       });
-  }
+      }
+    }else{
+      alert("Please checked atleast one checkbox.");
+    }
+   }
+   
 </script>
  <?php
  include('footer.php');

@@ -101,7 +101,11 @@ if(!isset($_SESSION['userId'])){
 
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-      
+        <li>
+          <a href="index.php">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          </a>
+        </li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-gears"></i>
@@ -113,26 +117,57 @@ if(!isset($_SESSION['userId'])){
           <ul class="treeview-menu">
             <li><a href="users.php"><i class="fa fa-circle-o"></i> Manage Users</a></li>
             <li><a href="facilities.php"><i class="fa fa-circle-o"></i> Manage Facilities</a></li>
-            <li><a href="globalConfig.php"><i class="fa fa-circle-o"></i> Manage Global Config</a></li>
+            <li><a href="globalConfig.php"><i class="fa fa-circle-o"></i> Manage General Configuration</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Manage Import Configuration</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Manage Other Configuration</a></li>
           </ul>
         </li>
 		
-	<li class="treeview">
-          <a href="#">
-            <i class="fa fa-edit"></i>
-            <span>Request Management</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
-            <li><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-	    <li><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
-          </ul>
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-edit"></i>
+                <span>Request Management</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
+                <li><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+                <li><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+            </ul>
         </li>
 		
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-edit"></i>
+                <span>Test Result Management</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="#"><i class="fa fa-circle-o"></i> Import Result</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i> Print Result</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i> Enter Result</a></li>
+            </ul>
+        </li>
         
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-book"></i>
+                <span>Program Management</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="#"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>
+                <li><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+            </ul>
+        </li>
         <!---->
         
         
