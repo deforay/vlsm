@@ -369,9 +369,9 @@ $sampleType='<option value="">--Select--</option>';
                   </div>    
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiatiated On</label>
+                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiatiated On" title="Please enter treatment initiatiated date" value="<?php echo $result[0]['treatment_initiated_date']; ?>" />
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" value="<?php echo $result[0]['treatment_initiated_date']; ?>" />
                         </div>
                     </div>
                   </div>                       
