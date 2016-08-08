@@ -1,4 +1,3 @@
-
 <?php
 include('header.php');
 ?>
@@ -30,6 +29,7 @@ include('header.php');
 		    </td>
 		    <td>&nbsp;&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm"></td>
 		    <td>&nbsp;&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button></td>
+		    <!--<td>&nbsp;&nbsp;<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertAllResultToPdf();"><i class="fa fa-file-pdf-o"> Result PDF</i></a></td>-->
 		</tr>
 	    </table>
             <div class="box-header with-border">
@@ -162,6 +162,20 @@ include('header.php');
 	      alert('Unable to generate download');
 	  }else{
 	      window.open('uploads/'+data,'_blank');
+	  }
+	  
+      });
+  }
+  
+  function convertAllResultToPdf(){
+    var date = $("#sampleCollectionDate").val();
+    var code = $("#batchCode").val();
+    $.post("vlRequestAllResultPdf.php", { sampleCollectionDate : date, sampleCode: code, format: "html"},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      alert('Unable to generate download');
+	  }else{
+	      window.open('uploads/<?php echo $_SESSION['rVal']; ?>/'+data,'_blank');
 	  }
 	  
       });

@@ -1,4 +1,5 @@
 <?php
+session_start();
 ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
@@ -28,6 +29,9 @@ try {
       'result_reviewed_by'=>$_POST['reviewedBy'],
       'result_reviewed_date'=>$_POST['reviewedOn'],
       'justification'=>$_POST['justification'],
+      'log_value'=>$_POST['logValue'],
+      'absolute_value'=>$_POST['absoluteValue'],
+      'text_value'=>$_POST['textValue'],
       'result'=>$_POST['result'],
       'comments'=>$_POST['comments'],
       'status'=>$_POST['status']
