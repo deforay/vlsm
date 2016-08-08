@@ -1,4 +1,3 @@
-
 <?php
 include('header.php');
 include('./includes/MysqliDb.php');
