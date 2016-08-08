@@ -51,9 +51,9 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+//$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+//$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
 // set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
@@ -77,8 +77,13 @@ $pathFront=realpath('./uploads');
 $pdf->AddPage();
 $general=new Deforay_Commons_General();
 $id=$_POST['id'];
-$lQuery="SELECT value from global_config where name='logo'";
-$logoResult=$db->query($lQuery);
+$configQuery="SELECT * from global_config";
+$configResult=$db->query($configQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
 
 $fQuery="SELECT * from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
 $result=$db->query($fQuery);
@@ -125,14 +130,17 @@ if(isset($result[0]['age_in_yrs']) && trim($result[0]['age_in_yrs'])!=''){
 $html = "";
 $html .= '<div style="border:1px solid #333;">';
 $html.='<table style="padding:2px;">';
-    if(isset($logoResult[0]['value']) && trim($logoResult[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $logoResult[0]['value'])){
+    if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
       $html .='<tr>';
-        $html .='<td colspan="4" style="text-align:center;"><img src="uploads/logo/'.$logoResult[0]['value'].'" alt="logo" width="100"></td>';
+        $html .='<td colspan="4" style="text-align:center;"><img src="uploads/logo/'.$arr['logo'].'" alt="logo"></td>';
       $html .='</tr>';
     }
-    $html .='<tr>';
-      $html .='<td colspan="4" style="text-align:center;font-size:16px;">MINISTRY OF HEALTH<br>NATIONAL AIDS AND STD CONTROL PROGRAM (NASCOP)<br>INDIVIDUAL VIRAL LOAD RESULT FORM</td>';
-    $html .='</tr>';
+    
+    if(isset($arr['header']) && trim($arr['header'])!= '') {
+      $html .='<tr>';
+        $html .='<td colspan="4" style="text-align:center;font-size:16px;">'.nl2br($arr['header']).'</td>';
+      $html .='</tr>';
+    }
     $html .='<tr style="line-height:30px;">';
       $html .='<td colspan="2" style="text-align:left;font-size:12px;"><strong>Dispensary</strong></td>';
       $html .='<td colspan="2" style="text-align:left;font-size:12px;"><strong>LAB: '.ucfirst($result[0]['lab_name']).'</strong></td>';
