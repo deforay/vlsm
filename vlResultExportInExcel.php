@@ -154,15 +154,15 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   
   $row[] = $aRow['routine_monitoring_last_vl_date'];
   $row[] = $aRow['routine_monitoring_value'];
-  $row[] = $aRow['rst.sample_name'];
+  $row[] = $aRow['routineSampleName'];
   
   $row[] = $aRow['vl_treatment_failure_adherence_counseling_last_vl_date'];
   $row[] = $aRow['vl_treatment_failure_adherence_counseling_value'];
-  $row[] = $aRow['fst.sample_name'];
+  $row[] = $aRow['failureSampleName'];
   
   $row[] = $aRow['suspected_treatment_failure_last_vl_date'];
   $row[] = $aRow['suspected_treatment_failure_value'];
-  $row[] = $aRow['sst.sample_name'];
+  $row[] = $aRow['suspectedSampleName'];
   
   $row[] = $aRow['request_clinician'];
   $row[] = $aRow['clinician_ph_no'];
@@ -183,7 +183,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['justification'];
   $row[] = $aRow['comments'];
   $row[] = ucwords($aRow['result']);
-  $row[] = ucwords($aRow['status']);
+  $row[] = ucwords($aRow['status_name']);
   
   $output[] = $row;
  }
