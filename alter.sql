@@ -65,3 +65,7 @@ INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES
 (3, 'sample reordered'),
 (4, 'cancel'),
 (5, 'invalid');
+
+ALTER TABLE vl_request_form
+ADD FOREIGN KEY (status)
+REFERENCES testing_status(status_id)

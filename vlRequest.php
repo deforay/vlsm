@@ -64,14 +64,14 @@ $fResult = $db->rawQuery($fQuery);
 			?>
 		      </select>
 		    </td>
-		    <td>&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
+		    <td>&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button></td>
 		</tr>
 		<tr style="margin-top:30px;">
 		  <td><b>Choose Status&nbsp;:</b></td>
 		  <td>
 		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="width:220px;" class="form-control" id="status" name="status" title="Please select test status">
+		    <select style="width:220px;" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
 		      <option value="">--select--</option>
 			<?php
 			foreach($tsResult as $status){
@@ -82,7 +82,7 @@ $fResult = $db->rawQuery($fQuery);
 			?>
 		    </select>
 		  </td>
-		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-default btn-sm"></td>
+		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>
 		</tr>
 	    </table>
             <div class="box-header with-border">
@@ -246,6 +246,12 @@ $fResult = $db->rawQuery($fQuery);
 	     $("#checkTestsData").attr("checked",false);
 	 }
 	 $("#checkedTests").val(selectedTests.join());
+	 if(selectedTests.length!=0){
+	  $("#status").prop('disabled', false);
+	 }else{
+	  $("#status").prop('disabled', true);
+	 }
+	 
     }
       
     function toggleAllVisible(){
@@ -254,6 +260,7 @@ $fResult = $db->rawQuery($fQuery);
 	     $(this).prop('checked', false);
 	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
 	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
+	     $("#status").prop('disabled', true);
 	 });
 	 if ($("#checkTestsData").is(':checked')) {
 	 $(".checkTests").each(function(){
@@ -261,11 +268,13 @@ $fResult = $db->rawQuery($fQuery);
 		 selectedTests.push(this.value);
 		 selectedTestsId.push(this.id);
 	 });
+	 $("#status").prop('disabled', false);
      } else{
 	$(".checkTests").each(function(){
 	     $(this).prop('checked', false);
 	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
 	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
+	     $("#status").prop('disabled', true);
 	 });
      }
      $("#checkedTests").val(selectedTests.join());
@@ -285,6 +294,7 @@ $fResult = $db->rawQuery($fQuery);
 	    selectedTestsId = [];
 	    $("#checkTestsData").attr("checked",false);
 	    $("#status").val('');
+	    $("#status").prop('disabled', true);
 	    oTable.fnDraw();
 	    alert('Updated successfully.');
 	  }
