@@ -14,20 +14,28 @@ try {
         $db->update($tableName,$data);
         $_SESSION['alertMsg']="Logo deleted successfully";
     }
-    if(isset($_FILES['logoImage']['name']) && $_FILES['logoImage']['name'] != ""){
+    if(isset($_FILES['logo']['name']) && $_FILES['logo']['name'] != ""){
        if(!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo")) {
            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo");
        }
-       $extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['logoImage']['name'], PATHINFO_EXTENSION));
+       $extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['logo']['name'], PATHINFO_EXTENSION));
        $string = $general->generateRandomString(6).".";
        $imageName = "logo".$string.$extension;
-       if (move_uploaded_file($_FILES["logoImage"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $imageName)) {
+       if (move_uploaded_file($_FILES["logo"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $imageName)) {
            $data=array('value'=>$imageName);
            $db=$db->where('name','logo');
            $db->update($tableName,$data);
-           $_SESSION['alertMsg']="Logo uploaded successfully";
        }
     }
+    
+    foreach ($_POST as $fieldName => $fieldValue) {
+        if($fieldName!= 'removedLogoImage'){
+           $data=array('value'=>$fieldValue);
+           $db=$db->where('name',$fieldName);
+           $db->update($tableName,$data);
+        }
+    }
+    $_SESSION['alertMsg']="Global Config values updated successfully";
     header("location:globalConfig.php");
 }catch (Exception $exc) {
     error_log($exc->getMessage());
