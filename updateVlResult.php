@@ -139,18 +139,39 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
 			<div class="divLabel"><label>Justification</label></div>
 			<div class="contentLabel"><input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $sInfo[0]['justification']; ?>"/></div>
 		      </td>
-		      <td style="width:50%;">
-			<div class="divLabel"><label>Result</label>*</div>
-			<div class="contentLabel"><input type="text" class="form-control" id="result" name="result" placeholder="Enter Result" title="Please enter result" value="<?php echo $sInfo[0]['result'];?>"/></div>
-		      </td>
+		      <td style="width:50%;"></td>
+		    </tr>
+		    <tr>
+		      <td colspan="2"><strong><h4>Result Details</h4></strong></td>
 		    </tr>
 		    <tr>
 		      <td style="width:50%;">
+			<div class="divLabel"><label>Log Value</label></div>
+			<div class="contentLabel"><input type="text" class="form-control" id="logValue" name="logValue" placeholder="Enter Log Value" title="Please enter log value" value="<?php echo $sInfo[0]['log_value']; ?>"/></div>
+		      </td>
+		      <td style="width:50%;">
+			<div class="divLabel"><label>Absolute Value</label></div>
+			<div class="contentLabel"><input type="text" class="form-control" id="absoluteValue" name="absoluteValue" placeholder="Enter Absolute Value" title="Please enter absolute value" value="<?php echo $sInfo[0]['absolute_value']; ?>"/></div>
+		      </td>
+		    </tr>
+		     <tr>
+		      <td style="width:50%;">
+			<div class="divLabel"><label>Text Value</label></div>
+			<div class="contentLabel"><input type="text" class="form-control" id="textValue" name="textValue" placeholder="Enter Text Value" title="Please enter text value" value="<?php echo $sInfo[0]['text_value']; ?>"/></div>
+		      </td>
+		      <td style="width:50%;">
+			<div class="divLabel"><label>Result</label></div>
+			<div class="contentLabel">
+			  <input type="text" class="form-control" id="result" name="result" placeholder="Enter Result" title="Please select result status" value="<?php echo $sInfo[0]['result']; ?>"/></div>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td style="width:50%;padding-top:30px;">
 			<div class="divLabel"><label>Comments</label></div>
 			<div class="contentLabel"><textarea type="text" class="form-control" id="comments" name="comments" row="4" placeholder="Enter Comments" title="Please enter comments"><?php echo $sInfo[0]['comments'];?></textarea></div>
 		      </td>
-		      <td style="width:50%;">
-			<div class="divLabel"><label>Status</label></div> 
+		      <td style="width:50%;padding-top:30px;">
+			<div class="divLabel"><label>Status</label></div>
 			<div class="contentLabel">
 			  <select class="form-control" id="status" name="status" title="Please select test status">
 			    <option value="pending" <?php echo($sInfo[0]['status'] == 'pending')?'selected="selected"':''; ?>>Pending</option>
@@ -193,6 +214,9 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
 	  reviewedBy: $("#reviewedBy").val(),
 	  reviewedOn: $("#reviewedOn").val(),
 	  justification: $("#justification").val(),
+	  logValue: $("#logValue").val(),
+	  absoluteValue: $("#absoluteValue").val(),
+	  textValue: $("#textValue").val(),
 	  result: $("#result").val(),
 	  comments: $("#comments").val(),
 	  status: $("#status").val(),

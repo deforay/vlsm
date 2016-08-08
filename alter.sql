@@ -46,4 +46,6 @@ INSERT INTO `global_config` (`name`, `value`) VALUES
 ('logo', '');
 
 --Pal 08-08-2016
-INSERT INTO `global_config` (`name`, `value`) VALUES ('header', NULL); 
+INSERT INTO `global_config` (`name`, `value`) VALUES ('header', NULL);
+
+ALTER TABLE `vl_request_form` ADD `log_value` VARCHAR(255) NULL DEFAULT NULL AFTER `justification`, ADD `absolute_value` VARCHAR(255) NULL DEFAULT NULL AFTER `log_value`, ADD `text_value` VARCHAR(255) NULL DEFAULT NULL AFTER `absolute_value`;
