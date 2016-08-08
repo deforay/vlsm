@@ -127,7 +127,7 @@ $html .= '<div style="border:1px solid #333;">';
 $html.='<table style="padding:2px;">';
     if(isset($logoResult[0]['value']) && trim($logoResult[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $logoResult[0]['value'])){
       $html .='<tr>';
-        $html .='<td colspan="4" style="text-align:center;"><img src="uploads/logo/'.$logoResult[0]['value'].'" alt="logo"></td>';
+        $html .='<td colspan="4" style="text-align:center;"><img src="uploads/logo/'.$logoResult[0]['value'].'" alt="logo" width="100"></td>';
       $html .='</tr>';
     }
     $html .='<tr>';
