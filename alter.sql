@@ -44,3 +44,6 @@ CREATE TABLE `global_config` (
 
 INSERT INTO `global_config` (`name`, `value`) VALUES
 ('logo', '');
+
+--Pal 08-08-2016
+INSERT INTO `global_config` (`name`, `value`) VALUES ('header', NULL); 
