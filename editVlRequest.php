@@ -820,13 +820,43 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>
                 </div>
-                 
                  <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="justification" class="col-lg-4 control-label">Justification</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $result[0]['justification']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                 <div class="row">
+                   <div class="col-md-12"><h4>Result Details</h4></div>
+                 </div>
+                 <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="logValue" class="col-lg-4 control-label">Log Value</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="logValue" name="logValue" placeholder="Enter Log Value" title="Please enter log value" value="<?php echo $result[0]['log_value']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="absoluteValue" class="col-lg-4 control-label">Absolute Value</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="absoluteValue" name="absoluteValue" placeholder="Enter Absolute Value" title="Please enter absolute value" value="<?php echo $result[0]['absolute_value']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                 <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="textValue" class="col-lg-4 control-label">Text Value</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="textValue" name="textValue" placeholder="Enter Text Value" title="Please enter text value" value="<?php echo $result[0]['text_value']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -839,7 +869,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>
                 </div>
-                 
+                 <br>
                  <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
