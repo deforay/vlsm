@@ -6,7 +6,7 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $id=base64_decode($_GET['id']);
-$fQuery="SELECT * from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
+$fQuery="SELECT * from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN testing_status as ts ON ts.status_id=vl.status where treament_id=$id";
 $result=$db->query($fQuery);
 
 if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
@@ -95,7 +95,9 @@ foreach($qResult as $val){
 $sampleTypeQuery="SELECT * FROM r_sample_type";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value="">--Select--</option>';
-
+//get testing status values
+$tsQuery="SELECT * FROM testing_status";
+$tsResult = $db->rawQuery($tsQuery);
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
@@ -852,9 +854,13 @@ $sampleType='<option value="">--Select--</option>';
                         <label for="status" class="col-lg-4 control-label">Status</label>
                         <div class="col-lg-7">
                          <select class="form-control" id="status" name="status" title="Please select test status">
-			    <option value="pending" <?php echo($result[0]['status'] == 'pending')?'selected="selected"':''; ?>>Pending</option>
-			    <option value="completed" <?php echo($result[0]['status'] == 'completed')?'selected="selected"':''; ?>>Completed</option>
-			    <option value="cancelled" <?php echo($result[0]['status'] == 'cancelled')?'selected="selected"':''; ?>>Cancelled</option>
+			    <?php
+                            foreach($tsResult as $status){
+                             ?>
+                             <option value="<?php echo ($status['status_id']==$result[0]['status']) ? 'selected="selected"':'';?>"><?php echo ucwords($status['status_name']);?></option>
+                             <?php
+                            }
+                            ?>
 			  </select>
                         </div>
                     </div>
