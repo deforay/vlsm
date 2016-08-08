@@ -4,6 +4,8 @@ include('header.php');
 include('./includes/MysqliDb.php');
 $query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id=''";
 $result = $db->rawQuery($query);
+$fQuery="SELECT * FROM facility_details where status='active'";
+$fResult = $db->rawQuery($fQuery);
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
@@ -41,9 +43,29 @@ $result = $db->rawQuery($query);
                         </div>
                     </div>
                   </div>
+		  
                 </div>
-		
 		<div class="row">
+		  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="batchCode" class="col-lg-4 control-label">Filter Sample by Facility Name & Code</label>
+                        <div class="col-lg-7">
+                        <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" onchange="getSampleCodeDetails();">
+			  <option value="">--select--</option>
+			    <?php
+			    foreach($fResult as $name){
+			     ?>
+			     <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+			     <?php
+			    }
+			    ?>
+			  </select>
+                        </div>
+                    </div>
+                  </div>
+		</div>
+		
+		<div class="row" id="sampleDetails">
 		  <div class="col-md-8">
                     <div class="form-group">
                         <div class="col-md-12">
@@ -152,14 +174,22 @@ $('#deselect-all-samplecode').click(function(){
 
         $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
         function(data){
-            if(data==='1')
-            {
+            if(data==='1'){
                 alert(alrt);
                 duplicateName=false;
                 document.getElementById(obj.id).value="";
             }
-            
         });
+    }
+    function getSampleCodeDetails()
+    {
+      var fName = $("#facilityName").val();
+      $.post("getSampleCodeDetails.php", { fName : fName, format: "html"},
+      function(data){
+	  if(data != ""){
+	    $("#sampleDetails").html(data);
+	  }
+      });
     }
   </script>
   
