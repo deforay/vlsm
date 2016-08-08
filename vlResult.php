@@ -69,23 +69,7 @@ $fResult = $db->rawQuery($fQuery);
 			&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
 			</td>
 		</tr>
-		<tr style="margin-top:30px;">
-		  <td><b>Choose Status&nbsp;:</b></td>
-		  <td>
-		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="width:220px;" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
-		      <option value="">--select--</option>
-			<?php
-			foreach($tsResult as $status){
-			 ?>
-			 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
-			 <?php
-			}
-			?>
-		    </select>
-		  </td>
-		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>
-		</tr>
+		
 	    </table>
             
             <!-- /.box-header -->
@@ -93,7 +77,6 @@ $fResult = $db->rawQuery($fQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
 				  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
@@ -166,7 +149,6 @@ $fResult = $db->rawQuery($fQuery);
             
             "bRetrieve": true,                        
             "aoColumns": [
-	      {"sClass":"center","bSortable":false},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -178,7 +160,7 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 1, "asc" ]],
+            "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlResultDetails.php",
@@ -235,75 +217,7 @@ $fResult = $db->rawQuery($fQuery);
 	  }
     });
   }
-  function toggleTest(obj){
-	 if ($(obj).is(':checked')) {
-	     if($.inArray(obj.value, selectedTests) == -1){
-		 selectedTests.push(obj.value);
-		 selectedTestsId.push(obj.id);
-	     }
-	 } else {
-	     selectedTests.splice( $.inArray(obj.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(obj.id, selectedTestsId), 1 );
-	     $("#checkTestsData").attr("checked",false);
-	 }
-	 $("#checkedTests").val(selectedTests.join());
-	 if(selectedTests.length!=0){
-	  $("#status").prop('disabled', false);
-	 }else{
-	  $("#status").prop('disabled', true);
-	 }
-    }
-      
-    function toggleAllVisible(){
-        //alert(tabStatus);
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	     $("#status").prop('disabled', true);
-	 });
-	 if ($("#checkTestsData").is(':checked')) {
-	 $(".checkTests").each(function(){
-	     $(this).prop('checked', true);
-		 selectedTests.push(this.value);
-		 selectedTestsId.push(this.id);
-	 });
-	 $("#status").prop('disabled', false);
-     } else{
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	     $("#status").prop('disabled', true);
-	 });
-     }
-     $("#checkedTests").val(selectedTests.join());
-   }
-   function submitTestStatus()
-   {
-    var stValue = $("#status").val();
-    var testIds = $("#checkedTests").val();
-    if(stValue!='' && testIds!=''){
-      conf=confirm("Do you wish to change the test status ?");
-      if (conf) {
-    $.post("updateTestStatus.php", { status : stValue,id:testIds, format: "html"},
-      function(data){
-	  if(data != ""){
-	    $("#checkedTests").val('');
-	    selectedTests = [];
-	    selectedTestsId = [];
-	    $("#checkTestsData").attr("checked",false);
-	    $("#status").val('');
-	    $("#status").prop('disabled', true);
-	    oTable.fnDraw();
-	    alert('Updated successfully.');
-	  }
-      });
-      }
-    }else{
-      alert("Please checked atleast one checkbox.");
-    }
-   }
+  
 </script>
  <?php
  include('footer.php');

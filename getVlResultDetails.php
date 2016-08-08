@@ -195,7 +195,6 @@ $primaryKey="treament_id";
         
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
 			$row[] = $aRow['sample_code'];
 			$row[] = $aRow['batch_code'];
 			$row[] = $aRow['art_no'];
