@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
@@ -88,7 +89,7 @@ $primaryKey="treament_id";
         */
 	$aWhere = '';
         //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-	$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id";
 	
         //echo $sQuery;die;
 	$start_date = '';
@@ -109,7 +110,7 @@ $primaryKey="treament_id";
            $sWhere=' where '.$sWhere;
 	    //$sQuery = $sQuery.' '.$sWhere;
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-	        $sWhere = $sWhere.' AND b.batch_code = "'.$_POST['batchCode'].'"';
+	        $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
 	    }
 	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
 		if (trim($start_date) == trim($end_date)) {
@@ -177,6 +178,7 @@ $primaryKey="treament_id";
         }
        //die($sQuery);
       // echo $sQuery;
+        $_SESSION['vlRequestAllResultQuery'] = $sQuery;
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
