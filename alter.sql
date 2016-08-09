@@ -94,3 +94,7 @@ CREATE TABLE IF NOT EXISTS `import_config` (
 
 INSERT INTO `import_config` (`config_id`, `machine_name`, `log_absolute_val_same_col`, `sample_id_col`, `sample_id_row`, `log_val_col`, `log_val_row`, `absolute_val_col`, `absolute_val_row`, `text_val_col`, `text_val_row`) VALUES
 (1, 'Machine 1', 'yes', 'E', '1', 'I', '1', '', '', 'I', '1');
+
+
+--Pal 09-08-2016
+ALTER TABLE `import_config` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `text_val_row`;
