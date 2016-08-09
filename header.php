@@ -106,7 +106,7 @@ if(!isset($_SESSION['userId'])){
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li class="treeview">
+        <li class="treeview manage">
           <a href="#">
             <i class="fa fa-gears"></i>
             <span>Admin</span>
@@ -123,7 +123,7 @@ if(!isset($_SESSION['userId'])){
           </ul>
         </li>
 		
-        <li class="treeview">
+        <li class="treeview request">
             <a href="#">
                 <i class="fa fa-edit"></i>
                 <span>Request Management</span>
@@ -138,7 +138,7 @@ if(!isset($_SESSION['userId'])){
             </ul>
         </li>
 		
-        <li class="treeview">
+        <li class="treeview test">
             <a href="#">
                 <i class="fa fa-edit"></i>
                 <span>Test Result Management</span>
@@ -153,7 +153,7 @@ if(!isset($_SESSION['userId'])){
             </ul>
         </li>
         
-        <li class="treeview">
+        <li class="treeview program">
             <a href="#">
                 <i class="fa fa-book"></i>
                 <span>Program Management</span>
