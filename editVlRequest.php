@@ -95,7 +95,7 @@ foreach($qResult as $val){
 $sampleTypeQuery="SELECT * FROM r_sample_type";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value="">--Select--</option>';
-//get testing status values
+//get test status values
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 ?>
@@ -833,6 +833,7 @@ $tsResult = $db->rawQuery($tsQuery);
                  <div class="row">
                    <div class="col-md-12"><h4>Result Details</h4></div>
                  </div>
+                 
                  <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
