@@ -95,6 +95,7 @@ try {
           'age_in_mnts'=>$_POST['ageInMtns'],
           'gender'=>$_POST['gender'],
           'patient_phone_number'=>$_POST['patientPhoneNumber'],
+          'location'=>$_POST['patientLocation'],
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'sample_id'=>$_POST['sampleType'],
           'treatment_initiation'=>$_POST['treatPeriod'],
@@ -144,8 +145,12 @@ try {
           $id=$db->insert($tableName,$vldata);
           $_SESSION['alertMsg']="VL request added successfully";
     }
+    if($_POST['saveNext']=='next'){
+     header("location:addVlRequest.php");
+    }else{
+    header("location:vlRequest.php"); 
+    }
     
-    header("location:vlRequest.php");
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());
