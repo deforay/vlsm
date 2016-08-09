@@ -98,4 +98,3 @@ INSERT INTO `import_config` (`config_id`, `machine_name`, `log_absolute_val_same
 
 --Pal 09-08-2016
 ALTER TABLE `import_config` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `text_val_row`;
-
