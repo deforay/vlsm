@@ -1,4 +1,3 @@
-
 <?php
 include('header.php');
 include('./includes/MysqliDb.php');
@@ -77,11 +76,11 @@ $fResult = $db->rawQuery($fQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-				  <th>Sample Code</th>
+		  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-				  <th>Facility Name</th>
+		  <th>Facility Name</th>
                   <th>Facility Code</th>
                   <th>Sample Type</th>
                   <th>Result</th>
@@ -184,18 +183,6 @@ $fResult = $db->rawQuery($fQuery);
     oTable.fnDraw();
   }
     
-  function convertPdf(id){
-      $.post("vlRequestPdf.php", { id : id, format: "html"},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
-	  }else{
-	      window.open('uploads/'+data,'_blank');
-	  }
-	  
-      });
-  }
-  
   function convertResultToPdf(id){
       $.post("vlRequestResultPdf.php", { id : id},
       function(data){
@@ -207,6 +194,7 @@ $fResult = $db->rawQuery($fQuery);
 	  
       });
   }
+  
   function exportInexcel() {
     $.post("vlResultExportInExcel.php",
     function(data){
