@@ -23,16 +23,26 @@ include('header.php');
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="globalConfigDataTable" class="table table-bordered table-striped">
+              <table id="importConfigDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th>Config Name</th>
-                  <th>Value</th>
+		  <th>Machine Name</th>
+                  <th>Is Log and Absolute Values are same Column</th>
+                  <th>Sample Id Col.</th>
+                  <th>Sample Id Row</th>
+                  <th>Log Value Col.</th>
+                  <th>Log Value Row</th>
+                  <th>Absolute Value Col.</th>
+                  <th>Absolute Value Row</th>
+		  <th>Text Value Col.</th>
+                  <th>Text Value Row</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="2" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="12" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
               </table>
@@ -50,7 +60,7 @@ include('header.php');
   <script type="text/javascript">
   var oTable = null;  
   $(document).ready(function() {
-     oTable = $('#globalConfigDataTable').dataTable({
+     oTable = $('#importConfigDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -62,12 +72,22 @@ include('header.php');
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
-                {"sClass":"center"}
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center","bSortable":false}
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getGlobalConfigDetails.php",
+            "sAjaxSource": "getImportConfigDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
               $.ajax({
                   "dataType": 'json',
