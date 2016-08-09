@@ -617,7 +617,7 @@ $tsResult = $db->rawQuery($tsQuery);
                    <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
                  </div>
                 
-                <div class="box box-primary" id="toogleDiv">
+                <div id="toogleDiv" class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">Lab Details</h3>
                   </div>
