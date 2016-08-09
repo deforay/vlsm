@@ -13,7 +13,7 @@ try {
     $data=array(
     'user_name'=>$_POST['userName'],
     'email'=>$_POST['email'],
-    'phone_number'=>$_POST['mobileNo'],
+    //'phone_number'=>$_POST['mobileNo'],
     'login_id'=>$_POST['loginId'],
     'password'=>$password,
     'role_id'=>$_POST['role'],

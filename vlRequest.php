@@ -68,23 +68,7 @@ $fResult = $db->rawQuery($fQuery);
 		    &nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf();"><span>Result PDF</span></button>
 		    </td>
 		</tr>
-		<tr style="margin-top:30px;">
-		  <td><b>Choose Status&nbsp;:</b></td>
-		  <td>
-		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="width:100%;" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
-		      <option value="">--select--</option>
-			<?php
-			foreach($tsResult as $status){
-			 ?>
-			 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
-			 <?php
-			}
-			?>
-		    </select>
-		  </td>
-		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>
-		</tr>
+		
 	    </table>
             <div class="box-header with-border">
               <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
@@ -115,8 +99,28 @@ $fResult = $db->rawQuery($fQuery);
               </table>
             </div>
             <!-- /.box-body -->
+	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">
+	    <tr style="margin-top:30px;">
+		  <td><b>Choose Status&nbsp;:</b></td>
+		  <td>
+		    <input type="hidden" name="checkedTests" id="checkedTests"/>
+		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
+		      <option value="">--select--</option>
+			<?php
+			foreach($tsResult as $status){
+			 ?>
+			 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
+			 <?php
+			}
+			?>
+		    </select>
+		  </td>
+		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>
+		</tr>
+	  </table>
           </div>
           <!-- /.box -->
+	  
         </div>
         <!-- /.col -->
       </div>

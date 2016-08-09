@@ -2,11 +2,23 @@
 include('./includes/MysqliDb.php');
 $fName = $_POST['fName'];
 if($fName==''){
-    $query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id=''";
+    $query="SELECT sample_code,treament_id,facility_id FROM vl_request_form where batch_id is NULL OR batch_id=''";
 }else{
-$query="SELECT * FROM vl_request_form where facility_id='".$fName."' AND batch_id is NULL OR batch_id=''";
+if($_POST['sCode']!=''){
+    $ids = implode(",",$_POST['sCode']);
+    $query = "SELECT sample_code,treament_id,facility_id FROM vl_request_form where treament_id NOT IN (".$ids.") AND facility_id='".$fName."' AND batch_id is NULL OR batch_id=''";
+}else{
+$query="SELECT sample_code,treament_id,facility_id FROM vl_request_form where facility_id='".$fName."' AND batch_id is NULL OR batch_id=''";    
+}
 }
 $result = $db->rawQuery($query);
+$sResult = array();
+if($_POST['sCode']!=''){
+    $ids = implode(",",$_POST['sCode']);
+    $sQuery="SELECT sample_code,treament_id,facility_id FROM vl_request_form where treament_id IN (".$ids.") ";
+    $sResult = $db->rawQuery($sQuery);
+}
+$merge = array_merge($sResult, $result);
 ?>
 <div class="col-md-8">
 <div class="form-group">
@@ -17,9 +29,13 @@ $result = $db->rawQuery($query);
           </div><br/><br/>
         <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
         <?php
-        foreach($result as $sample){
+        foreach($merge as $sample){
+            $selected = '';
+            if (in_array($sample['treament_id'], $_POST['sCode'])){
+              $selected = "selected=selected";
+            }
           ?>
-          <option value="<?php echo $sample['treament_id'];?>"><?php  echo ucwords($sample['sample_code']);?></option>
+          <option value="<?php echo $sample['treament_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code']);?></option>
           <?php
         }
         ?>

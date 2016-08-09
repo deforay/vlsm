@@ -147,7 +147,7 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> Import Result</a></li>
+                <li><a href="addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> Print Result</a></li>
                 <li><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
             </ul>

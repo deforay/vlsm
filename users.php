@@ -31,7 +31,7 @@ include('header.php');
                 <tr>
                   <th>User Name</th>
                   <th>Email</th>
-                  <th>Mobile</th>
+                  <!--<th>Mobile</th>-->
                   <th>Role</th>
                   <th>Status</th>
                   <th>Action</th>
@@ -75,7 +75,7 @@ include('header.php');
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
-                {"sClass":"center"},
+                //{"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
