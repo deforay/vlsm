@@ -66,6 +66,9 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
 }else{
  $sInfo[0]['lab_tested_date']='';
 }
+//get test status values
+$tsQuery="SELECT * FROM testing_status";
+$tsResult = $db->rawQuery($tsQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="">
@@ -173,9 +176,13 @@ if(isset($sInfo[0]['lab_tested_date']) && trim($sInfo[0]['lab_tested_date'])!=''
 			<div class="divLabel"><label>Status</label></div>
 			<div class="contentLabel">
 			  <select class="form-control" id="status" name="status" title="Please select test status">
-			    <option value="pending" <?php echo($sInfo[0]['status'] == 'pending')?'selected="selected"':''; ?>>Pending</option>
-			    <option value="completed" <?php echo($sInfo[0]['status'] == 'completed')?'selected="selected"':''; ?>>Completed</option>
-			    <option value="cancelled" <?php echo($sInfo[0]['status'] == 'cancelled')?'selected="selected"':''; ?>>Cancelled</option>
+			      <?php
+                              foreach($tsResult as $status){
+                               ?>
+                               <option value="<?php echo $status['status_id']; ?>" <?php echo ($sInfo[0]['status'] == $status['status_id'])?'selected="selected"':''; ?>><?php echo ucwords($status['status_name']);?></option>
+                               <?php
+                              }
+                              ?>
 			  </select>
 			</div>
 		      </td>
