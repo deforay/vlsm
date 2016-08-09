@@ -6,10 +6,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Manage Global Config</h1>
+      <h1>General Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Global Config</li>
+        <li class="active">General Configuration</li>
       </ol>
     </section>
 
@@ -19,7 +19,7 @@ include('header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="editGlobalConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit Global Config</a>
+              <a href="editGlobalConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

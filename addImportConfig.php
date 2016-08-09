@@ -6,10 +6,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Add Import Result</h1>
+      <h1>Add Import Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Add Import Config</li>
+        <li class="active">Add Configuration</li>
       </ol>
     </section>
 
@@ -28,9 +28,9 @@ include('header.php');
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="machineName" class="col-lg-4 control-label">Import Machine Name<span class="mandatory">*</span></label>
+                        <label for="configurationName" class="col-lg-4 control-label">Configuration Name<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="machineName" name="machineName" placeholder="Machine Name" title="Please enter machine name" onblur="checkNameValidation('import_config','machine_name',this,null,'This machine name already Exist.Try with another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="Configuration Name" title="Please enter machine name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already Exist.Try with another name',null)"/>
                         </div>
                     </div>
                   </div>

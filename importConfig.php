@@ -6,10 +6,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Manage Import Config</h1>
+      <h1>Import Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Import Config</li>
+        <li class="active">Import Configuration</li>
       </ol>
     </section>
 
