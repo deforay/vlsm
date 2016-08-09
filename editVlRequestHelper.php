@@ -2,6 +2,7 @@
 session_start();
 ob_start();
 include('./includes/MysqliDb.php');
+include('header.php');
 include('General.php');
 
 $general=new Deforay_Commons_General();
@@ -16,7 +17,7 @@ try {
                $data=array(
                  'facility_name'=>$_POST['newfacilityName'],
                  'facility_code'=>$_POST['facilityCode'],
-                 'country'=>$_POST['country'],
+                 //'country'=>$_POST['country'],
                  'state'=>$_POST['state'],
                  'hub_name'=>$_POST['hubName'],
                  'status'=>'active'
@@ -137,12 +138,12 @@ try {
           'result'=>$_POST['result'],
           'comments'=>$_POST['comments'],
           'status'=>$_POST['status'],
-          'rejection'=>$_POST['rejection'],
-          //'created_by'=>$_SESSION['userId'],
-          //'created_on'=>$general->getDateTime()
+          'rejection'=>$_POST['rejection']
         );
+          
           $db=$db->where('treament_id',$treamentId);
-          $id=$db->update($tableName,$vldata);
+          $db->update($tableName,$vldata);
+          
           $_SESSION['alertMsg']="VL request updated successfully";
      }
     
