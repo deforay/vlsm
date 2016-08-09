@@ -3,6 +3,8 @@ ob_start();
 session_start();
 include('header.php');
 include('./includes/MysqliDb.php');
+$fQuery="SELECT * FROM facility_type";
+$fResult = $db->rawQuery($fQuery);
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -90,6 +92,23 @@ include('./includes/MysqliDb.php');
                         <label for="address" class="col-lg-4 control-label">Address</label>
                         <div class="col-lg-7">
                         <textarea class="form-control" name="address" id="address" placeholder="Address"></textarea>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address" class="col-lg-4 control-label">Facility Type</label>
+                        <div class="col-lg-7">
+                        <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type">
+			  <option value="">--select--</option>
+			    <?php
+			    foreach($fResult as $type){
+			     ?>
+			     <option value="<?php echo $type['facility_type_id'];?>"><?php echo ucwords($type['facility_type_name']);?></option>
+			     <?php
+			    }
+			    ?>
+			  </select>
                         </div>
                     </div>
                   </div>

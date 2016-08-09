@@ -15,6 +15,7 @@ try {
         'country'=>$_POST['country'],
         'state'=>$_POST['state'],
         'hub_name'=>$_POST['hubName'],
+        'facility_type'=>$_POST['facilityType'],
         'status'=>$_POST['status']
         );
         //print_r($data);die;
