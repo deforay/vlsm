@@ -1,7 +1,7 @@
 <?php
+session_start();
 ob_start();
 include('./includes/MysqliDb.php');
-include('header.php');
 include('General.php');
 
 $general=new Deforay_Commons_General();
@@ -115,10 +115,15 @@ try {
           'email_for_HF'=>$_POST['emailHf'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedOn'],
           'date_results_dispatched'=>$_POST['despachedOn'],
+          'log_value'=>$_POST['logValue'],
+          'absolute_value'=>$_POST['absoluteValue'],
+          'text_value'=>$_POST['textValue'],
+          'result'=>$_POST['result'],
+          'comments'=>$_POST['comments'],
+          'status'=>$_POST['status'],
           'rejection'=>$_POST['rejection'],
           'created_by'=>$_SESSION['userId'],
-          'created_on'=>$general->getDateTime(),
-          'status'=>'1'
+          'created_on'=>$general->getDateTime()
         );
         
           $id=$db->insert($tableName,$vldata);
