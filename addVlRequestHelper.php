@@ -56,7 +56,7 @@ try {
           $data=array(
             'facility_name'=>$_POST['newfacilityName'],
             'facility_code'=>$_POST['facilityCode'],
-            'country'=>$_POST['country'],
+            //'country'=>$_POST['country'],
             'state'=>$_POST['state'],
             'hub_name'=>$_POST['hubName'],
             'status'=>'active'

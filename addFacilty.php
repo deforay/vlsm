@@ -46,12 +46,32 @@ include('./includes/MysqliDb.php');
                     </div>
                   </div>
                 </div>
+                
                 <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email" class="col-lg-4 control-label">Email </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isEmail" id="email" name="email" placeholder="Email" />
+                        </div>
+                    </div>
+                  </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="country" class="col-lg-4 control-label">Country</label>
+                        <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="country" name="country" placeholder="Country"/>
+                        <input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="Contact Person" />
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" />
                         </div>
                     </div>
                   </div>
@@ -68,28 +88,30 @@ include('./includes/MysqliDb.php');
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="hubName" class="col-lg-4 control-label">Hub Name</label>
+                        <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
                         </div>
                     </div>
                   </div>
-                   <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
+                        <label for="address" class="col-lg-4 control-label">Address</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" />
+                        <textarea class="form-control" name="address" id="address" placeholder="Address"></textarea>
                         </div>
                     </div>
                   </div>
                 </div>
                
                <div class="row">
+                  
+                  
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="address" class="col-lg-4 control-label">Address</label>
+                        <label for="country" class="col-lg-4 control-label">Country</label>
                         <div class="col-lg-7">
-                        <textarea class="form-control" name="address" id="address" placeholder="Address"></textarea>
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Country"/>
                         </div>
                     </div>
                   </div>

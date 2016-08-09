@@ -50,11 +50,29 @@ $facilityInfo=$db->query($facilityQuery);
                   </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email" class="col-lg-4 control-label">Email </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isEmail" id="email" name="email" placeholder="Email" value="<?php echo $facilityInfo[0]['email']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="country" class="col-lg-4 control-label">Country</label>
+                        <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="country" name="country" placeholder="Country" value="<?php echo $facilityInfo[0]['country']; ?>"/>
+                        <input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="Contact Person" value="<?php echo $facilityInfo[0]['contact_person']; ?>" />
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" value="<?php echo $facilityInfo[0]['phone_number']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -71,28 +89,28 @@ $facilityInfo=$db->query($facilityQuery);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="hubName" class="col-lg-4 control-label">Hub Name</label>
+                        <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $facilityInfo[0]['hub_name']; ?>"/>
                         </div>
                     </div>
                   </div>
-                   <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
+                        <label for="address" class="col-lg-4 control-label">Address</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" value="<?php echo $facilityInfo[0]['phone_number']; ?>" />
+                        <textarea class="form-control" name="address" id="address" placeholder="Address"><?php echo $facilityInfo[0]['address']; ?></textarea>
                         </div>
                     </div>
                   </div>
                 </div>
                
                <div class="row">
-                  <div class="col-md-6">
+                <div class="col-md-6">
                     <div class="form-group">
-                        <label for="address" class="col-lg-4 control-label">Address</label>
+                        <label for="country" class="col-lg-4 control-label">Country</label>
                         <div class="col-lg-7">
-                        <textarea class="form-control" name="address" id="address" placeholder="Address"><?php echo $facilityInfo[0]['address']; ?></textarea>
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Country" value="<?php echo $facilityInfo[0]['country']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -109,6 +127,7 @@ $facilityInfo=$db->query($facilityQuery);
                         </div>
                     </div>
                   </div>
+                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
