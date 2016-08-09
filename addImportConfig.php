@@ -100,7 +100,7 @@ include('header.php');
                   </div>
                 </div>
                 
-                <div class="row">
+                <div id="absRow" class="row">
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="absoluteValCol" class="col-lg-4 control-label">Absolute Value</label>
@@ -154,7 +154,6 @@ include('header.php');
     <!-- /.content -->
   </div>
   
-  
   <script type="text/javascript">
 
   function validateNow(){
@@ -185,12 +184,20 @@ include('header.php');
   $("input[type='radio']").click(function(){
     var id = $(this).attr('id');
     if(id == 'logAndAbsoluteInSameColumnYes'){
+      $("#absRow").hide();
       $("#absoluteValCol,#absoluteValRow").val("");
-      $("#absoluteValCol,#absoluteValRow").attr("readonly",true);
-      $("#absoluteValCol,#absoluteValRow").css("pointer-events","none");
+      $("label[for*='logValCol']").html("Log/Absolute Value");
+      $("#logValCol").attr("placeholder","Log/Absolute Val Column");
+      $("#logValCol").attr("title","Please enter log/absolute val column");
+      $("#logValRow").attr("placeholder","Log/Absolute Val Row");
+      $("#logValRow").attr("title","Please enter log/absolute val row");
     }else{
-      $("#absoluteValCol,#absoluteValRow").attr("readonly",false);
-      $("#absoluteValCol,#absoluteValRow").css("pointer-events","auto");
+      $("#absRow").show();
+      $("label[for*='logValCol']").html("Log Value");
+      $("#logValCol").attr("placeholder","Log Val Column");
+      $("#logValCol").attr("title","Please enter log val column");
+      $("#logValRow").attr("placeholder","Log Val Row");
+      $("#logValRow").attr("title","Please enter log val row");
     }
   });
 </script>

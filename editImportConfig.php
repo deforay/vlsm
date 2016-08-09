@@ -103,19 +103,19 @@ $sInfo=$db->query($sQuery);
                   </div>
                 </div>
                 
-                <div class="row">
+                <div id="absRow" class="row">
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="absoluteValCol" class="col-lg-4 control-label">Absolute Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="absoluteValCol" name="absoluteValCol" placeholder="Absolute Value Column" title="Please enter absolute value column" value="<?php echo $sInfo[0]['absolute_val_col']; ?>" <?php echo ($sInfo[0]['log_absolute_val_same_col'] == 'yes')?'readonly':''; ?>/>
+                        <input type="text" class="form-control" id="absoluteValCol" name="absoluteValCol" placeholder="Absolute Value Column" title="Please enter absolute value column" value="<?php echo $sInfo[0]['absolute_val_col']; ?>"/>
                         </div>
                     </div>
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-lg-7">
-                          <input type="text" class="form-control" id="absoluteValRow" name="absoluteValRow" placeholder="Absolute Value Row" title="Please enter absolute value row" value="<?php echo $sInfo[0]['absolute_val_row']; ?>" <?php echo ($sInfo[0]['log_absolute_val_same_col'] == 'yes')?'readonly':''; ?>/>
+                          <input type="text" class="form-control" id="absoluteValRow" name="absoluteValRow" placeholder="Absolute Value Row" title="Please enter absolute value row" value="<?php echo $sInfo[0]['absolute_val_row']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -173,6 +173,20 @@ $sInfo=$db->query($sQuery);
   
   
   <script type="text/javascript">
+  $(document).ready(function(){
+    <?php
+    if($sInfo[0]['log_absolute_val_same_col'] == 'yes'){ ?>
+      $("#absRow").hide();
+      $("#absoluteValCol,#absoluteValRow").val("");
+      $("label[for*='logValCol']").html("Log/Absolute Value");
+      $("#logValCol").attr("placeholder","Log/Absolute Val Column");
+      $("#logValCol").attr("title","Please enter log/absolute val column");
+      $("#logValRow").attr("placeholder","Log/Absolute Val Row");
+      $("#logValRow").attr("title","Please enter log/absolute val row");
+    <?php }
+    ?>
+  });
+  
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'editImportConfigForm'
@@ -201,12 +215,20 @@ $sInfo=$db->query($sQuery);
   $("input[type='radio']").click(function(){
     var id = $(this).attr('id');
     if(id == 'logAndAbsoluteInSameColumnYes'){
+      $("#absRow").hide();
       $("#absoluteValCol,#absoluteValRow").val("");
-      $("#absoluteValCol,#absoluteValRow").attr("readonly",true);
-      $("#absoluteValCol,#absoluteValRow").css("pointer-events","none");
+      $("label[for*='logValCol']").html("Log/Absolute Value");
+      $("#logValCol").attr("placeholder","Log/Absolute Val Column");
+      $("#logValCol").attr("title","Please enter log/absolute val column");
+      $("#logValRow").attr("placeholder","Log/Absolute Val Row");
+      $("#logValRow").attr("title","Please enter log/absolute val row");
     }else{
-      $("#absoluteValCol,#absoluteValRow").attr("readonly",false);
-      $("#absoluteValCol,#absoluteValRow").css("pointer-events","auto");
+      $("#absRow").show();
+      $("label[for*='logValCol']").html("Log Value");
+      $("#logValCol").attr("placeholder","Log Val Column");
+      $("#logValCol").attr("title","Please enter log val column");
+      $("#logValRow").attr("placeholder","Log Val Row");
+      $("#logValRow").attr("title","Please enter log val row");
     }
   });
 </script>
