@@ -69,7 +69,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('times', '', 18);
+$pdf->SetFont('helveticaI', '', 18);
 
 $pathFront=realpath('./uploads');
 //$pdf = new TCPDF();
@@ -211,7 +211,7 @@ $html.='<tr><td style="vertical-align: middle;">Rejection </td><td colspan="3" s
 $html.='</table>';
 $pdf->writeHTML($html);
 $pdf->lastPage();
-$filename = 'vl-form-' . date('d-M-Y') . '.pdf';
+$filename = 'vl-form-' . date('d-M-Y-H-i-s') . '.pdf';
 $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
 echo $filename;
 ?>
