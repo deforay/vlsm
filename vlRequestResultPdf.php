@@ -69,7 +69,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('times', '', 18);
+$pdf->SetFont('helveticaI', '', 18);
 
 $pathFront=realpath('./uploads');
 //$pdf = new TCPDF();
@@ -194,7 +194,7 @@ $html.='</table>';
 $html .= "</div>";
 $pdf->writeHTML($html);
 $pdf->lastPage();
-$filename = 'vl-result-form-' . date('d-M-Y') . '.pdf';
+$filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
 $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
 echo $filename;
 ?>
