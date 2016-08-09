@@ -29,6 +29,9 @@ if($sResult[0]['MAX(treament_id)']!=''){
 }else{
  $maxId = 1;
 }
+//get test status values
+$tsQuery="SELECT * FROM testing_status";
+$tsResult = $db->rawQuery($tsQuery);
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
@@ -57,6 +60,9 @@ if($sResult[0]['MAX(treament_id)']!=''){
   display: none !important;
  }.ui_tpicker_time_input{
   width:100%;
+ }
+ #toogleDiv{
+  display:none;
  }
    </style>
    
@@ -371,12 +377,11 @@ if($sResult[0]['MAX(treament_id)']!=''){
                         <label for="breastfeeding" class="col-lg-4 control-label">Is Patient Breastfeeding?</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="patientDatas" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> Yes
-       
-						</label>
-						<label class="radio-inline">
-							<input type="radio" class="patientDatas" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> No
-						</label>
+                             <input type="radio" class="patientDatas" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> Yes
+                       </label>
+                       <label class="radio-inline">
+                               <input type="radio" class="patientDatas" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> No
+                       </label>
                         </div>
                     </div>
                   </div>
@@ -394,7 +399,7 @@ if($sResult[0]['MAX(treament_id)']!=''){
           </div>
                
                 
-                <div class="box box-success">
+            <div class="box box-success">
             <div class="box-header with-border">
               <h3 class="box-title">Indication for viral load testing</h3>
               <small>(please tick one):(To be completed by clinician)</small>
@@ -609,15 +614,85 @@ if($sResult[0]['MAX(treament_id)']!=''){
                         <label for="rejection" class="col-lg-4 control-label">Rejection <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="isRequired patientDatas" id="rejectionYes" name="rejection" value="yes" title="Please check rejection"> Yes
-						</label>
-						<label class="radio-inline">
-							<input type="radio" class="patientDatas" id="rejectionNo" name="rejection" value="no" title="Please check rejection"> No
-						</label>
+                           <input type="radio" class="isRequired patientDatas" id="rejectionYes" name="rejection" value="yes" title="Please check rejection"> Yes
+                        </label>
+                        <label class="radio-inline">
+                           <input type="radio" class="patientDatas" id="rejectionNo" name="rejection" value="no" title="Please check rejection"> No
+                        </label>
                         </div>
                     </div>
                   </div>                                    
-                </div>                
+                </div>
+                
+                <div class="row">
+                   <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Result Details</a></h4></div>
+                 </div>
+                
+                <div id="toogleDiv">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="logValue" class="col-lg-4 control-label">Log Value</label>
+                          <div class="col-lg-7">
+                          <input type="text" class="form-control" id="logValue" name="logValue" placeholder="Enter Log Value" title="Please enter log value"/>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="absoluteValue" class="col-lg-4 control-label">Absolute Value</label>
+                          <div class="col-lg-7">
+                          <input type="text" class="form-control" id="absoluteValue" name="absoluteValue" placeholder="Enter Absolute Value" title="Please enter absolute value"/>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                   <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="textValue" class="col-lg-4 control-label">Text Value</label>
+                          <div class="col-lg-7">
+                          <input type="text" class="form-control" id="textValue" name="textValue" placeholder="Enter Text Value" title="Please enter text value"/>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="result" class="col-lg-4 control-label">Result</label>
+                          <div class="col-lg-7">
+                          <input type="text" class="form-control" id="result" name="result" placeholder="Enter Result" title="Please enter result"/>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                   <br>
+                   <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="comments" class="col-lg-4 control-label">Comments</label>
+                          <div class="col-lg-7">
+                           <textarea class="form-control" id="comments" name="comments" row="4" placeholder="Enter Comments" title="Please enter comments"></textarea>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="status" class="col-lg-4 control-label">Status</label>
+                          <div class="col-lg-7">
+                           <select class="form-control" id="status" name="status" title="Please select test status">
+                              <?php
+                              foreach($tsResult as $status){
+                               ?>
+                               <option value="<?php echo $status['status_id']; ?>"><?php echo ucwords($status['status_name']);?></option>
+                               <?php
+                              }
+                              ?>
+                            </select>
+                          </div>
+                      </div>
+                    </div>
+                   </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -637,10 +712,6 @@ if($sResult[0]['MAX(treament_id)']!=''){
   </div>
   
   <script type="text/javascript">
-   
-
-
-
 
   function validateNow(){
     flag = deforayValidator.init({
@@ -837,6 +908,9 @@ if($sResult[0]['MAX(treament_id)']!=''){
      $("."+chosenClass).show();
     }
     
+    function resultToggler() {
+      $("#toogleDiv").slideToggle();
+    }
   </script>
  <?php
  include('footer.php');
