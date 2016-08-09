@@ -17,6 +17,8 @@ try {
         'country'=>$_POST['country'],
         'state'=>$_POST['state'],
         'hub_name'=>$_POST['hubName'],
+        'email'=>$_POST['email'],
+        'contact_person'=>$_POST['contactPerson'],
         'status'=>'active'
         );
         //print_r($data);die;
