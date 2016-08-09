@@ -729,11 +729,11 @@ $tsResult = $db->rawQuery($tsQuery);
                         <label for="rejection" class="col-lg-4 control-label">Rejection <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
-						</label>
-						<label class="radio-inline">
-							<input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
-						</label>
+                         <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
+                         </label>
+                         <label class="radio-inline">
+                          <input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
+                         </label>
                         </div>
                     </div>
                   </div>                                    
@@ -941,7 +941,6 @@ $tsResult = $db->rawQuery($tsQuery);
     data: [{ id: '<?php echo $result[0]['art_no']; ?>', text: '<?php echo $result[0]['art_no']; ?>' }]
   })
   $('.facilityDatas').attr('readonly', true);
-
      $("#facilityName").select2({
       allowClear: true,
       placeholder: "Enter Facility Name",
