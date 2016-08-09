@@ -1,15 +1,19 @@
 <?php
 ob_start();
 include('header.php');
+include('./includes/MysqliDb.php');
+$id=base64_decode($_GET['id']);
+$sQuery="SELECT * from import_config where config_id=$id";
+$sInfo=$db->query($sQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Add Import Result</h1>
+      <h1>Edit Import Result</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Add Import Config</li>
+        <li class="active">Edit Import Config</li>
       </ol>
     </section>
 
@@ -23,18 +27,17 @@ include('header.php');
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addImportConfigForm' id='addImportConfigForm' autocomplete="off" action="addImportConfigHelper.php">
+            <form class="form-horizontal" method='post' name='editImportConfigForm' id='editImportConfigForm' autocomplete="off" action="editImportConfigHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="machineName" class="col-lg-4 control-label">Import Machine Name<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="machineName" name="machineName" placeholder="Machine Name" title="Please enter machine name" onblur="checkNameValidation('import_config','machine_name',this,null,'This machine name already Exist.Try with another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="machineName" name="machineName" placeholder="Machine Name" title="Please enter machine name" value="<?php echo $sInfo[0]['machine_name']; ?>" onblur="checkNameValidation('import_config','machine_name',this,'<?php echo "config_id##".$sInfo[0]['config_id'];?>','This machine name already Exist.Try with another name',null)"/>
                         </div>
                     </div>
                   </div>
-                   
                 </div>
                 
                 <div class="row">
@@ -43,10 +46,10 @@ include('header.php');
                         <label for="logAndAbsoluteInSameColumnYes" class="col-lg-4 control-label">Is Log and Absolute Values are same Column <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-			  <input type="radio" class="isRequired" id="logAndAbsoluteInSameColumnYes" name="logAndAbsoluteInSameColumn" value="yes" title="Please check log and absolute value are same column" > Yes
+			  <input type="radio" class="isRequired" id="logAndAbsoluteInSameColumnYes" name="logAndAbsoluteInSameColumn" value="yes" title="Please check log and absolute value are same column" <?php echo ($sInfo[0]['log_absolute_val_same_col'] == 'yes')?'checked="checked"':''; ?>> Yes
 			  </label>
 			  <label class="radio-inline">
-			    <input type="radio" class="" id="logAndAbsoluteInSameColumnNo" name="logAndAbsoluteInSameColumn" value="no" title="Please check log and absolute value are same column" checked> No
+			    <input type="radio" class="" id="logAndAbsoluteInSameColumnNo" name="logAndAbsoluteInSameColumn" value="no" title="Please check log and absolute value are same column" <?php echo ($sInfo[0]['log_absolute_val_same_col'] == 'no')?'checked="checked"':''; ?>> No
 			  </label>
                         </div>
                     </div>
@@ -54,10 +57,10 @@ include('header.php');
                 </div>
                 
                 <div class="row" style="padding-bottom:10px;">
-                   <div class="col-md-6" style="padding-left:10%;">
+                  <div class="col-md-6" style="padding-left:10%;">
                     <label for="column" class="col-lg-4 control-label">Column </label>
                   </div>
-                   <div class="col-md-6" style="padding-left:10%;">
+                  <div class="col-md-6" style="padding-left:10%;">
                     <label for="row" class="control-label">Row</label>
                   </div>
                 </div>
@@ -67,7 +70,7 @@ include('header.php');
                     <div class="form-group">
                         <label for="sampleIdCol" class="col-lg-4 control-label">Sample Id <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                          <input type="text" class="form-control isRequired" id="sampleIdCol" name="sampleIdCol" placeholder="Sample Id Column" title="Please enter sample id column" />
+                          <input type="text" class="form-control isRequired" id="sampleIdCol" name="sampleIdCol" placeholder="Sample Id Column" title="Please enter sample id column" value="<?php echo $sInfo[0]['sample_id_col']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -75,7 +78,7 @@ include('header.php');
                   <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="sampleIdRow" name="sampleIdRow" placeholder="Sample Id Row" title="Please enter sample id row" />
+                        <input type="text" class="form-control isRequired" id="sampleIdRow" name="sampleIdRow" placeholder="Sample Id Row" title="Please enter sample id row" value="<?php echo $sInfo[0]['sample_id_row']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -86,7 +89,7 @@ include('header.php');
                     <div class="form-group">
                         <label for="logValCol" class="col-lg-4 control-label">Log Value </label>
                         <div class="col-lg-7">
-                          <input type="text" class="form-control" id="logValCol" name="logValCol" placeholder="Log Value Column" title="Please enter log value column" />
+                          <input type="text" class="form-control" id="logValCol" name="logValCol" placeholder="Log Value Column" title="Please enter log value column" value="<?php echo $sInfo[0]['log_val_col']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -94,7 +97,7 @@ include('header.php');
                   <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="logValRow" name="logValRow" placeholder="Log Value Row" title="Please enter log value row" />
+                        <input type="text" class="form-control" id="logValRow" name="logValRow" placeholder="Log Value Row" title="Please enter log value row" value="<?php echo $sInfo[0]['log_val_row']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -105,14 +108,14 @@ include('header.php');
                     <div class="form-group">
                         <label for="absoluteValCol" class="col-lg-4 control-label">Absolute Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="absoluteValCol" name="absoluteValCol" placeholder="Absolute Value Column" title="Please enter absolute value column" />
+                        <input type="text" class="form-control" id="absoluteValCol" name="absoluteValCol" placeholder="Absolute Value Column" title="Please enter absolute value column" value="<?php echo $sInfo[0]['absolute_val_col']; ?>" <?php echo ($sInfo[0]['log_absolute_val_same_col'] == 'yes')?'readonly':''; ?>/>
                         </div>
                     </div>
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-lg-7">
-                          <input type="text" class="form-control" id="absoluteValRow" name="absoluteValRow" placeholder="Absolute Value Row" title="Please enter absolute value row"/>
+                          <input type="text" class="form-control" id="absoluteValRow" name="absoluteValRow" placeholder="Absolute Value Row" title="Please enter absolute value row" value="<?php echo $sInfo[0]['absolute_val_row']; ?>" <?php echo ($sInfo[0]['log_absolute_val_same_col'] == 'yes')?'readonly':''; ?>/>
                         </div>
                     </div>
                   </div>
@@ -123,22 +126,36 @@ include('header.php');
                     <div class="form-group">
                         <label for="textValCol" class="col-lg-4 control-label">Text Value</label>
                         <div class="col-lg-7">
-                          <input type="text" class="form-control" id="textValCol" name="textValCol" placeholder="Text Value Column" title="Please enter text value column" />
+                          <input type="text" class="form-control" id="textValCol" name="textValCol" placeholder="Text Value Column" title="Please enter text value column" value="<?php echo $sInfo[0]['text_val_col']; ?>"/>
                         </div>
                     </div>
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="textValRow" name="textValRow" placeholder="Text Value Row" title="Please enter text val row"/>
+                        <input type="text" class="form-control" id="textValRow" name="textValRow" placeholder="Text Value Row" title="Please enter text val row" value="<?php echo $sInfo[0]['text_val_row']; ?>"/>
                         </div>
                     </div>
                   </div>
                 </div>
-                
+		
+		<div class="row">
+                   <div class="col-md-6" style="padding-top:20px;">
+                    <div class="form-group">
+                        <label for="status" class="col-lg-4 control-label">Status</label>
+                        <div class="col-lg-7">
+                          <select class="form-control" id="status" name="status" title="Please select import config status">
+			    <option value="active" <?php echo ($sInfo[0]['status'] == 'active')?'selected="selected"':''; ?>>Active</option>
+			    <option value="inactive" <?php echo ($sInfo[0]['status'] == 'inactive')?'selected="selected"':''; ?>>Inactive</option>
+			  </select>
+                        </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+		<input type="hidden" id="configId" name="configId" value="<?php echo base64_encode($sInfo[0]['config_id']); ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="importConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -156,14 +173,13 @@ include('header.php');
   
   
   <script type="text/javascript">
-
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'addImportConfigForm'
+        formId: 'editImportConfigForm'
     });
     
     if(flag){
-      document.getElementById('addImportConfigForm').submit();
+      document.getElementById('editImportConfigForm').submit();
     }
   }
   

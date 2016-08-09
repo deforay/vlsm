@@ -1,11 +1,9 @@
 <?php
+session_start();
 ob_start();
 include('./includes/MysqliDb.php');
-include('header.php');
-
 
 $tableName="import_config";
-
 
 try {
     
@@ -21,8 +19,6 @@ try {
     'text_val_col'=>$_POST['textValCol'],
     'text_val_row'=>$_POST['textValRow']
     );
-    
-    
     //print_r($data);die;
     $db->insert($tableName,$data);    
     
