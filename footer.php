@@ -23,7 +23,6 @@
 <script src="assets/js/deforayValidation.js"></script>
 
 <script type="text/javascript">
-  
   $(document).ready(function(){
   <?php
   if(isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg'])!=""){

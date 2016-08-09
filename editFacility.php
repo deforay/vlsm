@@ -52,7 +52,24 @@ $fResult = $db->rawQuery($fQuery);
                   </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address" class="col-lg-4 control-label">Facility Type</label>
+                        <div class="col-lg-7">
+                        <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type">
+                        <option value="">--select--</option>
+                          <?php
+                          foreach($fResult as $type){
+                           ?>
+                           <option value="<?php echo $type['facility_type_id'];?>"<?php echo ($facilityInfo[0]['facility_type']==$type['facility_type_id'])?"selected='selected'":""?>><?php echo ucwords($type['facility_type_name']);?></option>
+                           <?php
+                          }
+                          ?>
+                        </select>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Email </label>
                         <div class="col-lg-7">
@@ -60,7 +77,10 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                   <div class="col-md-6">
+                  
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
                         <div class="col-lg-7">
@@ -68,8 +88,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
@@ -78,7 +96,11 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                   <div class="col-md-6">
+                  
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State</label>
                         <div class="col-lg-7">
@@ -86,9 +108,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-                
-                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
@@ -97,7 +116,11 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  
+                </div>
+               
+               <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Address</label>
                         <div class="col-lg-7">
@@ -105,9 +128,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-               
-               <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="country" class="col-lg-4 control-label">Country</label>
@@ -116,24 +136,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="address" class="col-lg-4 control-label">Facility Type</label>
-                        <div class="col-lg-7">
-                        <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type">
-			  <option value="">--select--</option>
-			    <?php
-			    foreach($fResult as $type){
-			     ?>
-			     <option value="<?php echo $type['facility_type_id'];?>"<?php echo ($facilityInfo[0]['facility_type']==$type['facility_type_id'])?"selected='selected'":""?>><?php echo ucwords($type['facility_type_name']);?></option>
-			     <?php
-			    }
-			    ?>
-			  </select>
-                        </div>
-                    </div>
-                  </div>
-               
                
               </div>
                <div class="row">
