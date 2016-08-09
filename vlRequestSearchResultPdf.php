@@ -59,6 +59,14 @@ class Pdf_concat extends FPDI {
 }
 
 if(sizeof($requestResult)> 0){
+    $configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+    
     $_SESSION['rVal'] = $general->generateRandomString(6);
     if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
       mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
@@ -109,17 +117,10 @@ if(sizeof($requestResult)> 0){
         // ---------------------------------------------------------
         
         // set font
-        $pdf->SetFont('times', '', 18);
+        $pdf->SetFont('helveticaI', '', 18);
         
         $pdf->AddPage();
         
-        $configQuery="SELECT * from global_config";
-        $configResult=$db->query($configQuery);
-        $arr = array();
-        // now we create an associative array so that we can easily create view variables
-        for ($i = 0; $i < sizeof($configResult); $i++) {
-          $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-        }
         $html = "";
         if(isset($result['sample_collection_date']) && trim($result['sample_collection_date'])!='' && $result['sample_collection_date']!='0000-00-00'){
           $xplodSampleCollectionDate = explode(" ",$result['sample_collection_date']);  
@@ -239,9 +240,10 @@ if(sizeof($requestResult)> 0){
         $resultPdf = new Pdf_concat();
         $resultPdf->setFiles($pages);
         $resultPdf->concat();
-        $resultFilename = 'vl-request-result-' . date('d-M-Y') . '.pdf';
+        $resultFilename = 'vl-request-result-' . date('d-M-Y-H-i-s') . '.pdf';
         $resultPdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR .$resultFilename, "F");
         $general->removeDirectory($pathFront);
+        unset($_SESSION['rVal']);
     }
     
 }
