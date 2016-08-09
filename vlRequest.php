@@ -24,7 +24,7 @@ $fResult = $db->rawQuery($fQuery);
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:3%;margin-top:30px;">
+	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;">
 		<tr>
 		    <td><b>Sample Collection Date&nbsp;:</b></td>
 		    <td>
@@ -64,13 +64,15 @@ $fResult = $db->rawQuery($fQuery);
 		      </select>
 		    </td>
 		    <td>&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
-		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button></td>
+		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+		    &nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf();"><span>Result PDF</span></button>
+		    </td>
 		</tr>
 		<tr style="margin-top:30px;">
 		  <td><b>Choose Status&nbsp;:</b></td>
 		  <td>
 		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="width:220px;" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
+		    <select style="width:100%;" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
 		      <option value="">--select--</option>
 			<?php
 			foreach($tsResult as $status){
@@ -233,6 +235,19 @@ $fResult = $db->rawQuery($fQuery);
 	  
       });
   }
+  
+  function convertSearchResultToPdf(){
+    $.post("vlRequestSearchResultPdf.php", { format: "html"},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      alert('Unable to generate download');
+	  }else{
+	      window.open('uploads/'+data,'_blank');
+	  }
+	  
+      });
+  }
+  
   function toggleTest(obj){
 	 if ($(obj).is(':checked')) {
 	     if($.inArray(obj.value, selectedTests) == -1){
@@ -278,8 +293,8 @@ $fResult = $db->rawQuery($fQuery);
      }
      $("#checkedTests").val(selectedTests.join());
    }
-   function submitTestStatus()
-   {
+   
+   function submitTestStatus(){
     var stValue = $("#status").val();
     var testIds = $("#checkedTests").val();
     if(stValue!='' && testIds!=''){
@@ -303,7 +318,6 @@ $fResult = $db->rawQuery($fQuery);
       alert("Please checked atleast one checkbox.");
     }
    }
-   
 </script>
  <?php
  include('footer.php');

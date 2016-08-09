@@ -4,8 +4,14 @@ ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 include ('./includes/tcpdf/tcpdf.php');
+include ('./includes/fpdi/fpdi.php');
 define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
+
+$requestResult=$db->query($_SESSION['vlRequestSearchResultQuery']);
+$_SESSION['nbPages'] = sizeof($requestResult);
+$_SESSION['aliasPage'] = 1;
+//print_r($requestResult);die;
 $pdfNew = new TCPDF();
 //header and footer
 class MYPDF extends TCPDF {
@@ -28,27 +34,48 @@ class MYPDF extends TCPDF {
         // Set font
         $this->SetFont('helvetica', 'I', 8);
         // Page number
-        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, 'Page '.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
-$requestResult=$db->query($_SESSION['vlRequestAllResultQuery']);
-//print_r($requestResult);die;
+class Pdf_concat extends FPDI {
+    var $files = array();
+ 
+    function setFiles($files) {
+        $this->files = $files;
+    }
+ 
+    function concat() {
+        foreach($this->files AS $file) {
+             $pagecount = $this->setSourceFile($file);
+             for ($i = 1; $i <= $pagecount; $i++) {
+                  $tplidx = $this->ImportPage($i);
+                  $s = $this->getTemplatesize($tplidx);
+                  $this->AddPage('P', array($s['w'], $s['h']));
+                  $this->useTemplate($tplidx);
+             }
+        }
+    }
+}
+
 if(sizeof($requestResult)> 0){
     $_SESSION['rVal'] = $general->generateRandomString(6);
     if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
       mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
     }
     $pathFront = realpath('./uploads/'.$_SESSION['rVal'].'/');
+    
+    $pages = array();
     $page = 1;
     foreach($requestResult as $result){
+        $_SESSION['aliasPage'] = $page;
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         //$pdf->SetAuthor('Saravanan');
-        $pdf->SetTitle('Vl Request All Result Form');
+        $pdf->SetTitle('Vl Request Result');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
         
@@ -200,17 +227,24 @@ if(sizeof($requestResult)> 0){
         $html .= "</div>";
         
         $pdf->writeHTML($html);
-        //$pdf->lastPage();
+        $pdf->lastPage();
         $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
         $pdf->Output($filename,"F");
+        $pages[] = $filename;
       $page++;
     }
     
-    $page = 1;
-    foreach($requestResult as $result){
-      
+    $resultFilename = '';
+    if(count($pages) >0){
+        $resultPdf = new Pdf_concat();
+        $resultPdf->setFiles($pages);
+        $resultPdf->concat();
+        $resultFilename = 'vl-request-result-' . date('d-M-Y') . '.pdf';
+        $resultPdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR .$resultFilename, "F");
+        $general->removeDirectory($pathFront);
     }
+    
 }
 
-echo $filename;
+echo $resultFilename;
 ?>
