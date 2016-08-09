@@ -7,7 +7,7 @@ $primaryKey="user_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('ud.user_name','ud.email','ud.phone_number','r.role_name','ud.status');
+        $aColumns = array('ud.user_name','ud.email','r.role_name','ud.status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -85,7 +85,7 @@ $primaryKey="user_id";
          * Get data to display
         */
         
-       $sQuery="SELECT ud.user_id,ud.user_name,ud.email,ud.phone_number,ud.status,r.role_name FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id ";
+       $sQuery="SELECT ud.user_id,ud.user_name,ud.email,ud.status,r.role_name FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id ";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -131,7 +131,7 @@ $primaryKey="user_id";
             $row = array();
 			$row[] = ucwords($aRow['user_name']);
             $row[] = $aRow['email'];
-            $row[] = $aRow['phone_number'];
+            //$row[] = $aRow['phone_number'];
             $row[] = ucwords($aRow['role_name']);
             $row[] = ucwords($aRow['status']);
             $row[] = '<a href="editUser.php?id=' . base64_encode($aRow['user_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';

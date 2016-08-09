@@ -52,19 +52,36 @@ $result = $db->rawQuery($query);
                   </div>
                 </div>
                 <div class="row">
-                   <div class="col-md-6">
+                   <!--<div class="col-md-6">
                     <div class="form-group">
                         <label for="mobileNo" class="col-lg-4 control-label">Mobile Number <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired" id="mobileNo" name="mobileNo" placeholder="Mobile Number" title="Please enter mobile number" value="<?php echo $userInfo[0]['phone_number']; ?>"/>
                         </div>
                     </div>
-                  </div>
+                  </div>-->
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="loginId" class="col-lg-4 control-label">Login Id <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" value="<?php echo $userInfo[0]['login_id']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="role" class="col-lg-4 control-label">Role <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <select class="form-control isRequired" name='role' id='role' title="Please select the role">
+                        <option value="">--Select--</option>
+                        <?php
+                        foreach ($result as $row) {
+                        ?>
+                        <option value="<?php echo $row['role_id']; ?>" <?php echo ($userInfo[0]['role_id']==$row['role_id'])?"selected='selected'":""?>><?php echo $row['role_name']; ?></option>
+                        <?php
+                        }
+                        ?>
+                        </select>
                         </div>
                     </div>
                   </div>
@@ -90,23 +107,7 @@ $result = $db->rawQuery($query);
                 </div>
                 
                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="role" class="col-lg-4 control-label">Role <span class="mandatory">*</span></label>
-                        <div class="col-lg-7">
-                        <select class="form-control isRequired" name='role' id='role' title="Please select the role">
-                        <option value="">--Select--</option>
-                        <?php
-                        foreach ($result as $row) {
-                        ?>
-                        <option value="<?php echo $row['role_id']; ?>" <?php echo ($userInfo[0]['role_id']==$row['role_id'])?"selected='selected'":""?>><?php echo $row['role_name']; ?></option>
-                        <?php
-                        }
-                        ?>
-                        </select>
-                        </div>
-                    </div>
-                  </div>
+                  
                   
                   <div class="col-md-6">
                     <div class="form-group">
