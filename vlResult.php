@@ -12,10 +12,10 @@ $fResult = $db->rawQuery($fQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Manage VL Result</h1>
+      <h1>Export Result</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage VL Result</li>
+        <li class="active">Export Result</li>
       </ol>
     </section>
 
@@ -24,7 +24,7 @@ $fResult = $db->rawQuery($fQuery);
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;">
+	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
 		<tr>
 		    <td><b>Sample Collection Date&nbsp;:</b></td>
 		    <td>
@@ -63,7 +63,10 @@ $fResult = $db->rawQuery($fQuery);
 			?>
 		      </select>
 		    </td>
-		    <td>&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		    
+		</tr>
+		<tr>
+		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 			&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
 			</td>

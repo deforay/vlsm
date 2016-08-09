@@ -8,7 +8,7 @@ $configId=(int) base64_decode($_POST['configId']);
 try {
     
     $importConfigData=array(
-    'machine_name'=>$_POST['machineName'],
+    'machine_name'=>$_POST['configurationName'],
     'log_absolute_val_same_col'=>$_POST['logAndAbsoluteInSameColumn'],
     'sample_id_col'=>$_POST['sampleIdCol'],
     'sample_id_row'=>$_POST['sampleIdRow'],

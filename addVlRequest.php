@@ -67,7 +67,7 @@ $tsResult = $db->rawQuery($tsQuery);
    </style>
    
     <section class="content-header">
-      <h1>Add Vl Request</h1>
+      <h1>Add VL Request</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Vl Request</li>
@@ -85,7 +85,6 @@ $tsResult = $db->rawQuery($tsQuery);
         <div class="box-body">
           <!-- form start -->
             <form class="form-horizontal" method='post'  name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="addVlRequestHelper.php">
-              
               <div class="box-body">                 
               <div class="box box-default">
             <div class="box-header with-border">
@@ -116,32 +115,22 @@ $tsResult = $db->rawQuery($tsQuery);
                 <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="country" class="col-lg-4 control-label">Country</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control facilityDatas" id="country" name="country" placeholder="Country"/>
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-6">
-                    <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control facilityDatas" id="state" name="state" placeholder="State" />
                         </div>
                     </div>
                   </div>
-                </div>
-                
-                <div class="row">
-                  <div class="col-md-6">
+                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="hubName" class="col-lg-4 control-label">Hub Name</label>
+                        <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control facilityDatas" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
                         </div>
                     </div>
-                  </div>                   
-                </div>              
+                  </div> 
+                </div>
+                           
               </div>
             </div>
             <!-- /.box-footer-->
@@ -154,15 +143,6 @@ $tsResult = $db->rawQuery($tsQuery);
             <!-- /.box-header -->
             <div class="box-body">
              <div class="row">
-                   <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="sampleCode" class="col-lg-4 control-label">Sample Code <span class="mandatory">*</span> </label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter the sample code" value="<?php echo "VL".date('dmY').$maxId; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
@@ -173,27 +153,47 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>
                   
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleCode" class="col-lg-4 control-label">Sample Code <span class="mandatory">*</span> </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter the sample code" value="<?php echo "VL".date('dmY').$maxId; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                
+                  
+                  
                 </div>
                 <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="patientName" class="col-lg-4 control-label">Patient's Name <span class="mandatory">*</span> </label>
+                        <label for="patientName" class="col-lg-4 control-label">Patient's Name </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired patientDatas" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name"/>
+                        <input type="text" class="form-control patientDatas" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name"/>
                         </div>
                     </div>
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label class="col-lg-4 control-label">Date of Birth</label>
+                        <label for="otrId" class="col-lg-4 control-label">Other Id</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
+                        <input type="text" class="form-control patientDatas" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" />
                         </div>
                     </div>
-                  </div>
+                   </div>
+                   
                 </div>
               
                 <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Date of Birth</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date patientDatas readonly" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
+                        </div>
+                    </div>
+                  </div>
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
@@ -203,6 +203,10 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
+                  
+                </div>
+                
+                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
@@ -212,17 +216,6 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-                
-                <div class="row">
-                   <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="otrId" class="col-lg-4 control-label">Other Id</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control patientDatas" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" />
-                        </div>
-                    </div>
-                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="genderMale" class="col-lg-4 control-label">Gender</label>
@@ -301,7 +294,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" />
+                        <input type="text" class="form-control date patientDatas readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" />
                         </div>
                     </div>
                   </div>                       
@@ -337,7 +330,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Current Regimen Initiated On</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" />
+                        <input type="text" class="form-control date patientDatas readonly" readonly='readonly' id="regimenInitiatedOn" name="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" />
                         </div>
                     </div>
                   </div>                       
@@ -429,7 +422,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control date patientDatas viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -471,7 +464,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control date patientDatas viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -512,7 +505,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        <input type="text" class="form-control date patientDatas viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
                         </div>
                     </div>
                   </div>
@@ -564,7 +557,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date"/>                    
+                        <input type="text" class="form-control date patientDatas readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date"/>                    
                         </div>
                     </div>
                   </div>
@@ -595,24 +588,6 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>                       
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="sampleReceivedOn" class="col-lg-4 control-label">Date sample received at testing Lab</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received On" title="Please enter sample received on" />                    
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="despachedOn" class="col-lg-4 control-label">Date Results Despatched</label>
-                        <div class="col-lg-7"> 
-                        <input type="text" class="form-control dateTime patientDatas readonly" readonly='readonly' id="despachedOn" name="despachedOn" placeholder="Results Despatched" title="Please enter hub name" />                       
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
                 
                 <div class="row">
                     <div class="col-md-6">
@@ -631,10 +606,104 @@ $tsResult = $db->rawQuery($tsQuery);
                 </div>
                 
                 <div class="row">
-                   <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Result Details</a></h4></div>
+                   <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
                  </div>
                 
-                <div id="toogleDiv">
+                <div class="box box-primary" id="toogleDiv">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Lab Details</h3>
+                  </div>
+                  
+                  <div class="box-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="labName" class="col-lg-4 control-label">Lab Name </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="labName" name="labName" placeholder="Enter Lab Name" title="Please enter lab name"/>
+                        </div>
+                    </div>
+                   </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="labContactPerson" class="col-lg-4 control-label">Lab Contact Person </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Enter Lab Contact Person Name" title="Please enter lab contact person name"/>
+                        </div>
+                    </div>
+                   </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="labPhoneNo" class="col-lg-4 control-label">Phone Number </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="labPhoneNo" name="labPhoneNo" placeholder="Enter Lab Phone No." title="Please enter lab phone no."/>
+                        </div>
+                    </div>
+                   </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="" class="col-lg-4 control-label">Date Sample Received at Testing Lab</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Select Sample Received Date" title="Select sample received date"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="" class="col-lg-4 control-label">Sample Testing Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date"/>
+                        </div>
+                    </div>
+                  </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="" class="col-lg-4 control-label">Date Results Dispatched</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Select Result Dispatched Date" title="Select result dispatched date"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="reviewedBy" class="col-lg-4 control-label">Reviewed By</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By Name" title="Please enter reviewed by name"/>
+                        </div>
+                    </div>
+                  </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="" class="col-lg-4 control-label">Reviewed Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                 <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                 
+                  <div class="row">
+                   <div class="col-md-12"><h4>Result Details</h4></div>
+                  </div>
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group">
@@ -699,10 +768,11 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                    </div>
                 </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -797,7 +867,7 @@ $tsResult = $db->rawQuery($tsQuery);
       }else{
        $("#facilityId").val(e.params.data.id);
        $("#facilityCode").val(e.params.data.facilityCode);
-       $("#country").val(e.params.data.country);
+       //$("#country").val(e.params.data.country);
        $("#state").val(e.params.data.state);
        $("#hubName").val(e.params.data.hubName);
        $('.facilityDatas').attr('readonly', true);
@@ -861,8 +931,6 @@ $tsResult = $db->rawQuery($tsQuery);
        $("#vlFocalPerson").val(e.params.data.vlFocalPerson);
        $("#vlPhoneNumber").val(e.params.data.vlPhoneNumber);
        $("#emailHf").val(e.params.data.emailHf);
-       $("#sampleReceivedOn").val(e.params.data.sampleReceivedOn);
-       $("#despachedOn").val(e.params.data.despachedOn);
        if(e.params.data.rejection=='yes'){
         $("#rejectionYes").attr('checked', 'checked');
        }if(e.params.data.rejection=='no'){
@@ -875,7 +943,7 @@ $tsResult = $db->rawQuery($tsQuery);
       $(".patientDatas").attr('checked', false);
      });
      
-     $('.dateTime').datepicker({
+     $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
       dateFormat: 'dd-M-yy',
