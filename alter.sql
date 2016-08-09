@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `import_config` (
   `text_val_col` varchar(100) DEFAULT NULL,
   `text_val_row` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`config_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2  ;
 
 
 INSERT INTO `import_config` (`config_id`, `machine_name`, `log_absolute_val_same_col`, `sample_id_col`, `sample_id_row`, `log_val_col`, `log_val_row`, `absolute_val_col`, `absolute_val_row`, `text_val_col`, `text_val_row`) VALUES
