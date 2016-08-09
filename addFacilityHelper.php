@@ -19,6 +19,7 @@ try {
         'hub_name'=>$_POST['hubName'],
         'email'=>$_POST['email'],
         'contact_person'=>$_POST['contactPerson'],
+	'facility_type'=>$_POST['facilityType'],
         'status'=>'active'
         );
         //print_r($data);die;
