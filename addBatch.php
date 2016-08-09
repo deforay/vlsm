@@ -184,7 +184,8 @@ $('#deselect-all-samplecode').click(function(){
     function getSampleCodeDetails()
     {
       var fName = $("#facilityName").val();
-      $.post("getSampleCodeDetails.php", { fName : fName, format: "html"},
+      var sCode= $("#sampleCode").val();
+      $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode, format: "html"},
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);

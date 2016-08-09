@@ -7,6 +7,8 @@ $batchQuery="SELECT * from batch_details where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
 $query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id='' OR batch_id=$id";
 $result = $db->rawQuery($query);
+$fQuery="SELECT * FROM facility_details where status='active'";
+$fResult = $db->rawQuery($fQuery);
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet"/>
 <style>
@@ -45,8 +47,27 @@ $result = $db->rawQuery($query);
                     </div>
                   </div>
                 </div>
-		
 		<div class="row">
+		  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="batchCode" class="col-lg-4 control-label">Filter Sample by Facility Name & Code</label>
+                        <div class="col-lg-7">
+                        <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" onchange="getSampleCodeDetails();">
+			  <option value="">--select--</option>
+			    <?php
+			    foreach($fResult as $name){
+			     ?>
+			     <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+			     <?php
+			    }
+			    ?>
+			  </select>
+                        </div>
+                    </div>
+                  </div>
+		</div>
+		
+		<div class="row" id="sampleDetails">
 		  <div class="col-md-8">
                     <div class="form-group">
                         <div class="col-md-12">
@@ -169,6 +190,17 @@ $('#deselect-all-samplecode').click(function(){
 	  
       });
   }
+  function getSampleCodeDetails()
+    {
+      var fName = $("#facilityName").val();
+      var sCode= $("#sampleCode").val();
+      $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode, format: "html"},
+      function(data){
+	  if(data != ""){
+	    $("#sampleDetails").html(data);
+	  }
+      });
+    }
   </script>
   
  <?php
