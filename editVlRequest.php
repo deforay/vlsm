@@ -898,7 +898,7 @@ $tsResult = $db->rawQuery($tsQuery);
 			    <?php
                             foreach($tsResult as $status){
                              ?>
-                             <option value="<?php echo ($status['status_id']==$result[0]['status']) ? 'selected="selected"':'';?>"><?php echo ucwords($status['status_name']);?></option>
+                             <option value="<?php echo $status['status_id']; ?>" <?php echo ($status['status_id']==$result[0]['status']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']);?></option>
                              <?php
                             }
                             ?>
