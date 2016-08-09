@@ -118,7 +118,7 @@ if(!isset($_SESSION['userId'])){
             <li><a href="users.php"><i class="fa fa-circle-o"></i> Manage Users</a></li>
             <li><a href="facilities.php"><i class="fa fa-circle-o"></i> Manage Facilities</a></li>
             <li><a href="globalConfig.php"><i class="fa fa-circle-o"></i> Manage General Configuration</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Manage Import Configuration</a></li>
+            <li><a href="importConfig.php"><i class="fa fa-circle-o"></i> Manage Import Configuration</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Manage Other Configuration</a></li>
           </ul>
         </li>
