@@ -127,6 +127,9 @@ $tsResult = $db->rawQuery($tsQuery);
  }.ui_tpicker_time_input{
   width:100%;
  }
+ #toogleDiv{
+  display:none;
+ }
    </style>
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
@@ -734,7 +737,11 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>                                    
                 </div>
                 
-            <div class="box box-primary">
+             <div class="row">
+                <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
+             </div>
+             
+            <div id="toogleDiv" class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Lab Details</h3>
             </div>
@@ -1068,6 +1075,9 @@ $tsResult = $db->rawQuery($tsQuery);
      $("."+chosenClass).show();
     }
     
+    function resultToggler() {
+      $("#toogleDiv").slideToggle();
+    }
   </script>
  <?php
  include('footer.php');
