@@ -131,10 +131,10 @@ $tsResult = $db->rawQuery($tsQuery);
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
     <section class="content-header">
-      <h1>Edit Vl Request</h1>
+      <h1>Edit VL Request</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Vl Request</li>
+        <li class="active">Edit VL Request</li>
       </ol>
     </section>
 
@@ -177,14 +177,7 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>
                 </div>
                 <div class="row">
-                   <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="country" class="col-lg-4 control-label">Country</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control facilityDatas" id="country" name="country" placeholder="Country" value="<?php echo $result[0]['country']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
+                  
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State</label>
@@ -193,39 +186,33 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-                
-                <div class="row">
-                  <div class="col-md-6">
+                   
+                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="hubName" class="col-lg-4 control-label">Hub Name</label>
+                        <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control facilityDatas" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $result[0]['hub_name']; ?>"/>
                         </div>
                     </div>
-                  </div>                   
+                  </div> 
+                </div>
+                
+                <div class="row">
+                                    
                 </div>              
               </div>
             </div>
             <!-- /.box-footer-->
           </div>
               
-                  <div class="box box-primary">
+         <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Patient Details</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
              <div class="row">
-                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="sampleCode" class="col-lg-4 control-label">Sample Code <span class="mandatory">*</span> </label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter the sample code" value="<?php echo $result[0]['sample_code']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
@@ -234,18 +221,38 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                   
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
+                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="patientName" class="col-lg-4 control-label">Patient's Name <span class="mandatory">*</span> </label>
+                        <label for="sampleCode" class="col-lg-4 control-label">Sample Code <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_name']; ?>"/>
+                        <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter the sample code" value="<?php echo $result[0]['sample_code']; ?>"/>
                         </div>
                     </div>
                   </div>
-                   <div class="col-md-6">
+                  
+                   
+                </div>
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="otrId" class="col-lg-4 control-label">Other Id</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" value="<?php echo $result[0]['other_id']; ?>"/>
+                        </div>
+                    </div>
+                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="patientName" class="col-lg-4 control-label">Patient's Name </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_name']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                     <div class="col-md-6">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Date of Birth</label>
                         <div class="col-lg-7">
@@ -253,11 +260,6 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                  
-                   
-                </div>
-                
-                <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
@@ -267,7 +269,10 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                                         
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
                         <div class="col-lg-7">
@@ -275,17 +280,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <p class="help-block"><small>If age < 2 years </small></p>
                         </div>
                     </div>
-                  </div>                       
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="otrId" class="col-lg-4 control-label">Other Id</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" value="<?php echo $result[0]['other_id']; ?>"/>
-                        </div>
-                    </div>
-                   </div>
+                  </div>
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="genderMale" class="col-lg-4 control-label">Gender</label>
@@ -729,11 +724,11 @@ $tsResult = $db->rawQuery($tsQuery);
                         <label for="rejection" class="col-lg-4 control-label">Rejection <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
-						</label>
-						<label class="radio-inline">
-							<input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
-						</label>
+                         <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
+                         </label>
+                         <label class="radio-inline">
+                          <input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
+                         </label>
                         </div>
                     </div>
                   </div>                                    
@@ -905,7 +900,7 @@ $tsResult = $db->rawQuery($tsQuery);
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" id="treamentId" name="treamentId" value="<?php echo base64_encode($result[0]['treament_id']); ?>"/>
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -941,7 +936,6 @@ $tsResult = $db->rawQuery($tsQuery);
     data: [{ id: '<?php echo $result[0]['art_no']; ?>', text: '<?php echo $result[0]['art_no']; ?>' }]
   })
   $('.facilityDatas').attr('readonly', true);
-
      $("#facilityName").select2({
       allowClear: true,
       placeholder: "Enter Facility Name",
@@ -1009,7 +1003,7 @@ $tsResult = $db->rawQuery($tsQuery);
       }else{
        $("#facilityId").val(e.params.data.id);
        $("#facilityCode").val(e.params.data.facilityCode);
-       $("#country").val(e.params.data.country);
+       //$("#country").val(e.params.data.country);
        $("#state").val(e.params.data.state);
        $("#hubName").val(e.params.data.hubName);
        $('.facilityDatas').attr('readonly', true);
