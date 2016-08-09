@@ -23,6 +23,7 @@
 <script src="assets/js/deforayValidation.js"></script>
 
 <script type="text/javascript">
+  
   $(document).ready(function(){
   <?php
   if(isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg'])!=""){
@@ -34,6 +35,18 @@
   }
   ?>
   });
+  str=$(location).attr('pathname');
+  
+  splitsUrl=str.split("/",3);
+  if (splitsUrl[2]=='users.php' || splitsUrl[2]=='facilities.php' || splitsUrl[2]=='globalConfig.php' || splitsUrl[2]=='importConfig.php') {
+      $(".manage").addClass('active');
+  }else if (splitsUrl[2]=='vlRequest.php' || splitsUrl[2]=='addVlRequest.php' || splitsUrl[2]=='batchcode.php' ) {
+      $(".request").addClass('active');
+  }else if (splitsUrl[2]=='addImportResult.php' || splitsUrl[2]=='vlTestResult.php') {
+      $(".test").addClass('active');
+  }else if (splitsUrl[2]=='vlResult.php') {
+      $(".program").addClass('active');
+  }
   function showModal(url, w, h) {
       showdefModal('dDiv', w, h);
       document.getElementById('dFrame').style.height = h + 'px';
