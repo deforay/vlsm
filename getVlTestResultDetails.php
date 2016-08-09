@@ -88,10 +88,10 @@ $primaryKey="treament_id";
          * Get data to display
         */
 	$aWhere = '';
-        //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.art_no=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	$sQuery="SELECT vl.*,f.*,s.sample_name,b.*,ts.*,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName  FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	//$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
-        //echo $sQuery;die;
+    //echo $sQuery;die;
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -110,7 +110,7 @@ $primaryKey="treament_id";
            $sWhere=' where '.$sWhere;
 	    //$sQuery = $sQuery.' '.$sWhere;
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-	        $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
+	        $sWhere = $sWhere.' AND b.batch_code = "'.$_POST['batchCode'].'"';
 	    }
 	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
 		if (trim($start_date) == trim($end_date)) {
@@ -119,12 +119,6 @@ $primaryKey="treament_id";
 		   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
 		}
            }
-	   if(isset($_POST['sampleType']) && $_POST['sampleType']!=''){
-	    $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
-	   }
-	   if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
-	    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
-	   }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 		$setWhr = 'where';
@@ -165,9 +159,9 @@ $primaryKey="treament_id";
 		}
 	    }
 	}
-	$sQuery = $sQuery.' '.$sWhere;
-	//echo $sQuery;die;
-	//echo $sQuery;die;
+		$sQuery = $sQuery.' '.$sWhere;
+		$_SESSION['vlResultQuery']=$sQuery;
+		//echo $_SESSION['vlResultQuery'];die;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
@@ -176,20 +170,16 @@ $primaryKey="treament_id";
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-       //die($sQuery);
-      // echo $sQuery;
-        $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
+		//die($sQuery);
         $rResult = $db->rawQuery($sQuery);
-       // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.treament_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
         $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
        // $aResultTotal = $countResult->fetch_row();
-       //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
 
         /*
@@ -202,24 +192,20 @@ $primaryKey="treament_id";
             "aaData" => array()
         );
 	
-	
         
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
-	    $row[] = $aRow['sample_code'];
-	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['art_no'];
+            $row[] = $aRow['sample_code'];
+            $row[] = $aRow['batch_code'];
+            $row[] = $aRow['art_no'];
             $row[] = ucwords($aRow['patient_name']);
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = $aRow['facility_code'];
             $row[] = ucwords($aRow['sample_name']);
             $row[] = ucwords($aRow['result']);
             $row[] = ucwords($aRow['status_name']);
-            $row[] = '<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>
-	    <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> PDF</i></a>
-	    <a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>
-	    <a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';
+            $row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>
+                     <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';
            
             $output['aaData'][] = $row;
         }

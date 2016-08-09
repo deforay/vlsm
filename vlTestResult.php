@@ -1,3 +1,4 @@
+
 <?php
 include('header.php');
 include('./includes/MysqliDb.php');
@@ -12,10 +13,10 @@ $fResult = $db->rawQuery($fQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Manage VL Result</h1>
+      <h1>Manage VL Test Result</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage VL Result</li>
+        <li class="active">Manage VL Test Result</li>
       </ol>
     </section>
 
@@ -65,8 +66,7 @@ $fResult = $db->rawQuery($fQuery);
 		    </td>
 		    <td>&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-			&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
-			</td>
+		    </td>
 		</tr>
 		
 	    </table>
@@ -76,7 +76,7 @@ $fResult = $db->rawQuery($fQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th>Sample Code</th>
+		   <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
@@ -162,12 +162,12 @@ $fResult = $db->rawQuery($fQuery);
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getVlResultDetails.php",
+            "sAjaxSource": "getVlTestResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-			  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-			  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+		aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+		aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+		aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+	        aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -182,7 +182,7 @@ $fResult = $db->rawQuery($fQuery);
   function searchVlRequestData(){
     oTable.fnDraw();
   }
-    
+  
   function convertResultToPdf(id){
       $.post("vlRequestResultPdf.php", { id : id},
       function(data){
@@ -194,18 +194,6 @@ $fResult = $db->rawQuery($fQuery);
 	  
       });
   }
-  
-  function exportInexcel() {
-    $.post("vlResultExportInExcel.php",
-    function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
-	  }else{
-	      window.open('temporary/'+data,'_blank');
-	  }
-    });
-  }
-  
 </script>
  <?php
  include('footer.php');
