@@ -72,3 +72,25 @@ INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES
 ALTER TABLE vl_request_form
 ADD FOREIGN KEY (status)
 REFERENCES testing_status(status_id)
+
+
+--ilahir 09-Aug-2016
+
+CREATE TABLE IF NOT EXISTS `import_config` (
+  `config_id` int(11) NOT NULL AUTO_INCREMENT,
+  `machine_name` varchar(255) DEFAULT NULL,
+  `log_absolute_val_same_col` varchar(100) DEFAULT NULL,
+  `sample_id_col` varchar(100) DEFAULT NULL,
+  `sample_id_row` varchar(100) DEFAULT NULL,
+  `log_val_col` varchar(100) DEFAULT NULL,
+  `log_val_row` varchar(100) DEFAULT NULL,
+  `absolute_val_col` varchar(100) DEFAULT NULL,
+  `absolute_val_row` varchar(100) DEFAULT NULL,
+  `text_val_col` varchar(100) DEFAULT NULL,
+  `text_val_row` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`config_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+
+INSERT INTO `import_config` (`config_id`, `machine_name`, `log_absolute_val_same_col`, `sample_id_col`, `sample_id_row`, `log_val_col`, `log_val_row`, `absolute_val_col`, `absolute_val_row`, `text_val_col`, `text_val_row`) VALUES
+(1, 'Machine 1', 'yes', 'E', '1', 'I', '1', '', '', 'I', '1');
