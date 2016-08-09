@@ -308,6 +308,14 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="location" class="col-lg-4 control-label">Location/District Code</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control patientDatas" id="patientLocation" name="patientLocation" placeholder="Enter Patient location/district code" title="Please enter patient location/district code" value="<?php echo $result[0]['location']; ?>" />
+                        </div>
+                    </div>
+                  </div>
                 </div>
                  
                  
@@ -908,6 +916,8 @@ $tsResult = $db->rawQuery($tsQuery);
               <div class="box-footer">
                 <input type="hidden" id="treamentId" name="treamentId" value="<?php echo base64_encode($result[0]['treament_id']); ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                <input type="hidden" name="saveNext" id="saveNext"/>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validate();return false;">Save and Next</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -927,7 +937,16 @@ $tsResult = $db->rawQuery($tsQuery);
     flag = deforayValidator.init({
         formId: 'addVlRequestForm'
     });
-    
+    $("#saveNext").val('save');
+    if(flag){
+      document.getElementById('addVlRequestForm').submit();
+    }
+  }
+  function validate(){
+    flag = deforayValidator.init({
+        formId: 'addVlRequestForm'
+    });
+    $("#saveNext").val('next');
     if(flag){
       document.getElementById('addVlRequestForm').submit();
     }
