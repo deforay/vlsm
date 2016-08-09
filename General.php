@@ -92,5 +92,33 @@ class Deforay_Commons_General {
         $date = new DateTime( date('Y-m-d H:i:s'), new DateTimeZone($timezone));
         return $date->format('Y-m-d H:i:s');
     }
+    
+    function removeDirectory($dirname) {
+        // Sanity check
+        if (!file_exists($dirname)) {
+            return false;
+        }
+
+        // Simple delete for a file
+        if (is_file($dirname) || is_link($dirname)) {
+            return unlink($dirname);
+        }
+
+        // Loop through the folder
+        $dir = dir($dirname);
+        while (false !== $entry = $dir->read()) {
+            // Skip pointers
+            if ($entry == '.' || $entry == '..') {
+                continue;
+            }
+
+            // Recurse
+            $this->removeDirectory($dirname . DIRECTORY_SEPARATOR . $entry);
+        }
+
+        // Clean up
+        $dir->close();
+        return rmdir($dirname);
+    }
 }
 

@@ -178,7 +178,7 @@ $primaryKey="treament_id";
         }
        //die($sQuery);
       // echo $sQuery;
-        $_SESSION['vlRequestAllResultQuery'] = $sQuery;
+        $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
@@ -219,7 +219,7 @@ $primaryKey="treament_id";
             $row[] = '<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>
 	    <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> PDF</i></a>
 	    <a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>
-	    <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';
+	    <a href="javascript:void(0);" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';
            
             $output['aaData'][] = $row;
         }
