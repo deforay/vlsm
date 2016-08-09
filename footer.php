@@ -36,15 +36,14 @@
   ?>
   });
   str=$(location).attr('pathname');
-  
-  splitsUrl=str.split("/",3);
-  if (splitsUrl[2]=='users.php' || splitsUrl[2]=='facilities.php' || splitsUrl[2]=='globalConfig.php' || splitsUrl[2]=='importConfig.php') {
+  splitsUrl=str.substr(str.lastIndexOf('/') + 1);
+  if (splitsUrl=='users.php' || splitsUrl=='facilities.php' || splitsUrl=='globalConfig.php' || splitsUrl=='importConfig.php') {
       $(".manage").addClass('active');
-  }else if (splitsUrl[2]=='vlRequest.php' || splitsUrl[2]=='addVlRequest.php' || splitsUrl[2]=='batchcode.php' ) {
+  }else if (splitsUrl=='vlRequest.php' || splitsUrl=='addVlRequest.php' || splitsUrl=='batchcode.php' ) {
       $(".request").addClass('active');
-  }else if (splitsUrl[2]=='addImportResult.php' || splitsUrl[2]=='vlTestResult.php') {
+  }else if (splitsUrl=='addImportResult.php' || splitsUrl=='vlTestResult.php') {
       $(".test").addClass('active');
-  }else if (splitsUrl[2]=='vlResult.php') {
+  }else if (splitsUrl=='vlResult.php') {
       $(".program").addClass('active');
   }
   function showModal(url, w, h) {

@@ -98,3 +98,22 @@ INSERT INTO `import_config` (`config_id`, `machine_name`, `log_absolute_val_same
 
 --Pal 09-08-2016
 ALTER TABLE `import_config` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `text_val_row`;
+
+--saravanan 09-aug-2016
+CREATE TABLE IF NOT EXISTS `facility_type` (
+  `facility_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `facility_type_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`facility_type_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `facility_type`
+--
+
+INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`) VALUES
+(1, 'clinic'),
+(2, 'lab'),
+(3, 'hub');
+
+ALTER TABLE  `facility_details` ADD  `facility_type` INT NULL DEFAULT NULL AFTER  `hub_name` ;
+
