@@ -126,7 +126,7 @@ try {
     
         $_SESSION['alertMsg']="Import result details added successfully";
     }
-    header("location:importResult.php");
+    header("location:index.php");
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());
