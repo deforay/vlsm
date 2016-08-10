@@ -17,7 +17,7 @@ try {
         if(count($admin)>0){
             $_SESSION['userId']=$admin[0]['user_id'];
             $_SESSION['userName']=ucwords($admin[0]['user_name']);
-            $_SESSION['roleName']=$admin[0]['role_code'];
+            $_SESSION['roleCode']=$admin[0]['role_code'];
             $_SESSION['email']=$admin[0]['email'];
             header("location:index.php");
         }else{
