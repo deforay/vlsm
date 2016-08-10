@@ -87,7 +87,7 @@ $tsResult = $db->rawQuery($tsQuery);
             <form class="form-horizontal" method='post'  name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="addVlRequestHelper.php">
               <div class="box-body">
                <div class="row">
-                   <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="formToggler();">VL Request Form Details</a></h4></div>
+                   <div class="col-md-12"><h4><a id="vlrfa" href="javascript:void(0);" onclick="formToggler('-');">VL Request Form Details <i class="fa fa-minus"></i></a></h4></div>
                </div>
              <div id="toogleFormDiv">
               <div class="box box-default">
@@ -612,7 +612,7 @@ $tsResult = $db->rawQuery($tsQuery);
                 </div>
                </div>
                 <div class="row">
-                   <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
+                   <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
                 </div>
                 
                 <div id="toogleResultDiv" class="box box-primary">
@@ -996,12 +996,28 @@ $tsResult = $db->rawQuery($tsQuery);
      $("."+chosenClass).show();
     }
     
-    function resultToggler() {
-      $("#toogleResultDiv").slideToggle();
+    function resultToggler(symbol) {
+      if(symbol == "+"){
+          $("#toogleResultDiv").slideToggle();
+          $("#lra").html('Lab/Result Details <i class="fa fa-minus"></i>');
+          $("#lra").attr("onclick", "resultToggler('-')");
+      }else{
+        $("#toogleResultDiv").slideToggle();
+        $("#lra").html('Lab/Result Details <i class="fa fa-plus"></i>');
+        $("#lra").attr("onclick", "resultToggler('+')");
+      }
     }
     
-    function formToggler(){
-      $("#toogleFormDiv").slideToggle();
+    function formToggler(symbol){
+      if(symbol == "-"){
+          $("#toogleFormDiv").slideToggle();
+          $("#vlrfa").html('VL Request Form Details <i class="fa fa-plus"></i>');
+          $("#vlrfa").attr("onclick", "formToggler('+')");
+      }else{
+        $("#toogleFormDiv").slideToggle();
+        $("#vlrfa").html('VL Request Form Details <i class="fa fa-minus"></i>');
+        $("#vlrfa").attr("onclick", "formToggler('-')");
+      }
     }
   </script>
  <?php
