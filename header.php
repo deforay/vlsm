@@ -79,7 +79,7 @@ if(!isset($_SESSION['userId'])){
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="assets/img/default-user.png" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php echo $_SESSION['userName']; ?></span>
+              <span class="hidden-xs"><?php if(isset($_SESSION['userName'])){ echo $_SESSION['userName']; } ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- Menu Footer-->

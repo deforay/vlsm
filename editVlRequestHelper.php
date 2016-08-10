@@ -1,5 +1,4 @@
 <?php
-session_start();
 ob_start();
 include('./includes/MysqliDb.php');
 include('header.php');
