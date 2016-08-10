@@ -57,7 +57,7 @@ if(isset($_SESSION['userId'])){
 
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                             
-                        <form id="loginForm" name="loginForm" class="form-horizontal" role="form" method="post" action="loginProcess.php">
+                        <form id="loginForm" name="loginForm" class="form-horizontal" role="form" method="post" action="loginProcess.php" onsubmit="validateNow();return false;">
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -80,7 +80,7 @@ if(isset($_SESSION['userId'])){
                             <div style="margin-top:10px" class="form-group">
                                 <!-- Button -->
                                 <div class="col-sm-12 controls">
-                                    <a class="btn btn-lg btn-success btn-block" href="javascript:void(0);" onclick="validateNow();return false;">Login</a>
+                                    <button class="btn btn-lg btn-success btn-block" onclick="validateNow();return false;">Login</button>
                                 </div>
                             </div>
                             </form>
