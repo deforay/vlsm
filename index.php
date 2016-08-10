@@ -58,7 +58,14 @@ include('./includes/MysqliDb.php');
             <a href="vlRequest.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-body" id="pieChartDiv">
+            </div>
+          </div>
+        </div>
       </div>
+      
       <!-- /.row -->
       <!-- Main row -->
       <!-- /.row (main row) -->
@@ -66,6 +73,17 @@ include('./includes/MysqliDb.php');
     </section>
     <!-- /.content -->
   </div>
+  <script src="assets/js/highchart.js"></script>
+  <script>
+    $(function () {
+    $.post("getTotalResult.php",{sampleCollectionDate:'',batchCode:'',facilityName:'',sampleType:''},
+      function(data){
+	  if(data!=''){
+	    $("#pieChartDiv").html(data);
+	  }
+      });
+    });
+  </script>
  <?php
  include('footer.php');
  ?>

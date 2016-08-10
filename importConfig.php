@@ -26,16 +26,7 @@ include('header.php');
               <table id="importConfigDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th>Machine Name</th>
-                  <th>Is Log and Absolute Values are same Column</th>
-                  <th>Sample Id Col.</th>
-                  <th>Sample Id Row</th>
-                  <th>Log Value Col.</th>
-                  <th>Log Value Row</th>
-                  <th>Absolute Value Col.</th>
-                  <th>Absolute Value Row</th>
-		  <th>Text Value Col.</th>
-                  <th>Text Value Row</th>
+				  <th>Configuration Name</th>        
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
@@ -71,15 +62,6 @@ include('header.php');
             
             "bRetrieve": true,                        
             "aoColumns": [
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false}

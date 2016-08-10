@@ -63,7 +63,6 @@ $fResult = $db->rawQuery($fQuery);
 			?>
 		      </select>
 		    </td>
-		    
 		</tr>
 		<tr>
 		  <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -86,8 +85,7 @@ $fResult = $db->rawQuery($fQuery);
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
-                  <th>Facility Code</th>
+				  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -183,7 +181,6 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 1, "asc" ]],
@@ -232,19 +229,18 @@ $fResult = $db->rawQuery($fQuery);
   }
   
   function convertResultToPdf(id){
-      $.post("vlRequestResultPdf.php", { id : id, format: "html"},
+    $.post("vlRequestResultPdf.php",{id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
+	    alert('Unable to generate download');
 	  }else{
-	      window.open('uploads/'+data,'_blank');
+	    window.open('uploads/'+data,'_blank');
 	  }
-	  
-      });
+    });
   }
   
   function convertSearchResultToPdf(){
-    $.post("vlRequestSearchResultPdf.php", { format: "html"},
+    $.post("vlRequestSearchResultPdf.php",
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
@@ -325,6 +321,19 @@ $fResult = $db->rawQuery($fQuery);
       alert("Please checked atleast one checkbox.");
     }
    }
+  
+  function printBarcode(tId) {
+    $.post("printBarcode.php",{id:tId},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	    alert('Unable to generate download');
+	  }else{
+	    window.open('uploads/barcode/'+data,'_blank');
+	  }
+    });
+  }
+  
+  
 </script>
  <?php
  include('footer.php');
