@@ -193,8 +193,8 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li class="allMenu"><a href="totalResult.php"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
-                <li><a href=""><i class="fa fa-circle-o"></i> TOT Report</a></li>
+                <li class="allMenu"><a href="missinginResult.php"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>
                 <li class="allMenu vlResultMenu"><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
             </ul>
