@@ -96,14 +96,19 @@ if(!isset($_SESSION['userId'])){
   $allAdminMenuAccess = true;
   $vlRequestMenuAccess = true;
   $addVRequestMenuAccess = true;
+  $batchMenuAccess = true;
   if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'DE'){
      $dashBoardMenuAccess = false;
      $allAdminMenuAccess = false;
      $vlRequestMenuAccess = true;
+     $addVRequestMenuAccess = true;
+     $batchMenuAccess = true;
   }elseif(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'VI'){
       $dashBoardMenuAccess = false;
       $allAdminMenuAccess = false;
       $vlRequestMenuAccess = true;
+      $addVRequestMenuAccess = false;
+      $batchMenuAccess = false;
   }
   ?>
   <!-- Left side column. contains the logo and sidebar -->
@@ -153,8 +158,14 @@ if(!isset($_SESSION['userId'])){
 		if($vlRequestMenuAccess == true){ ?>
                   <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
 		<?php } ?>
-                <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-                <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+		<?php
+		if($addVRequestMenuAccess == true){ ?>
+                  <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+		<?php } ?>
+		<?php
+		if($batchMenuAccess == true){ ?>
+                  <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+		<?php } ?>
             </ul>
         </li>
 		
