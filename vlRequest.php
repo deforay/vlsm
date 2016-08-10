@@ -67,7 +67,7 @@ $fResult = $db->rawQuery($fQuery);
 		<tr>
 		  <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		    &nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf();"><span>Result PDF</span></button>
+		    
 		    </td>
 		</tr>
 		
@@ -228,28 +228,6 @@ $fResult = $db->rawQuery($fQuery);
       });
   }
   
-  function convertResultToPdf(id){
-    $.post("vlRequestResultPdf.php",{id : id},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	    alert('Unable to generate download');
-	  }else{
-	    window.open('uploads/'+data,'_blank');
-	  }
-    });
-  }
-  
-  function convertSearchResultToPdf(){
-    $.post("vlRequestSearchResultPdf.php",
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
-	  }else{
-	      window.open('uploads/'+data,'_blank');
-	  }
-	  
-      });
-  }
   
   function toggleTest(obj){
 	 if ($(obj).is(':checked')) {
