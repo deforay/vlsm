@@ -76,7 +76,7 @@ include('./includes/MysqliDb.php');
   <script src="assets/js/highchart.js"></script>
   <script>
     $(function () {
-    $.post("getTotalResult.php",{sampleCollectionDate:'',batchCode:'',facilityName:'',sampleType:''},
+    $.post("getMissingResult.php",{sampleCollectionDate:'',batchCode:'',facilityName:'',sampleType:''},
       function(data){
 	  if(data!=''){
 	    $("#pieChartDiv").html(data);
