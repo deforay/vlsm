@@ -101,7 +101,7 @@ if(!isset($_SESSION['userId'])){
 
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li>
+        <li class="allMenu dashboardMenu active">
           <a href="index.php">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
@@ -115,10 +115,10 @@ if(!isset($_SESSION['userId'])){
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="users.php"><i class="fa fa-circle-o"></i> Users</a></li>
-            <li><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
-            <li><a href="globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
-            <li><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
+            <li class="allMenu userMenu"><a href="users.php"><i class="fa fa-circle-o"></i> Users</a></li>
+            <li class="allMenu facilityMenu"><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
+            <li class="allMenu globalConfigMenu"><a href="globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
+            <li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
           </ul>
         </li>
@@ -132,9 +132,9 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
-                <li><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-                <li><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+                <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
+                <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+                <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
             </ul>
         </li>
 		
@@ -147,9 +147,9 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
+                <li class="allMenu importResultMenu"><a href="addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> Print Result</a></li>
-                <li><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
+                <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
             </ul>
         </li>
         
@@ -165,7 +165,7 @@ if(!isset($_SESSION['userId'])){
                 <li><a href="#"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>
-                <li><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+                <li class="allMenu vlResultMenu"><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
             </ul>
         </li>
         <!---->
