@@ -1,14 +1,21 @@
 <?php
 include('./includes/MysqliDb.php');
 $fName = $_POST['fName'];
-if($fName==''){
+$sample = $_POST['sName'];
+if($fName=='' && $sample==''){
     $query="SELECT sample_code,treament_id,facility_id FROM vl_request_form where batch_id is NULL OR batch_id=''";
 }else{
 if($_POST['sCode']!=''){
     $ids = implode(",",$_POST['sCode']);
-    $query = "SELECT sample_code,treament_id,facility_id FROM vl_request_form where treament_id NOT IN (".$ids.") AND facility_id='".$fName."' AND batch_id is NULL OR batch_id=''";
+    $query = "SELECT sample_code,treament_id,facility_id FROM vl_request_form where treament_id NOT IN (".$ids.") AND batch_id is NULL";
 }else{
-$query="SELECT sample_code,treament_id,facility_id FROM vl_request_form where facility_id='".$fName."' AND batch_id is NULL OR batch_id=''";    
+$query="SELECT sample_code,treament_id,facility_id FROM vl_request_form where batch_id is NULL";
+}
+if($fName!=''){
+    $query = $query." AND facility_id='".$fName."'";
+}
+if($sample!=''){
+    $query = $query." AND sample_id='".$sample."'";
 }
 }
 $result = $db->rawQuery($query);

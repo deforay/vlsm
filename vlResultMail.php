@@ -6,10 +6,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Manage Batch List</h1>
+      <h1>Send Result To Mail</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Batch List</li>
+        <li class="active">Result to Mail</li>
       </ol>
     </section>
      <!-- Main content -->
@@ -20,17 +20,14 @@ include('header.php');
           <div class="box">
             <div class="box-header with-border">
               
-              <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Batch</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="batchCodeDataTable" class="table table-bordered table-striped">
+              <table id="mailDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>Batch Code</th>
                   <th>Sample Code</th>
-                  <th>Created On</th>
-		  <th> Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -60,7 +57,7 @@ include('header.php');
   });
   $(document).ready(function() {
 	
-        oTable = $('#batchCodeDataTable').dataTable({
+        oTable = $('#mailDataTable').dataTable({	
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -69,19 +66,18 @@ include('header.php');
             "bInfo": true,
             "bScrollCollapse": true,
             
-            "bRetrieve": true,                        
+            "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
-		{"sClass":"center"},
-                {"sClass":"center"},
-		{"sClass":"center"},
+                {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getBatchCodeDetails.php",
+            "sAjaxSource": "getvlResultBatchCodeDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
+	      aoData.push({"name": "vlResult", "value": 'mail'});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -93,28 +89,6 @@ include('header.php');
         });
        
 	} );
-  function generateBarcode(bId){
-    $.post("generateBarcode.php",{id:bId},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
-	  }else{
-	      window.open('uploads/barcode/'+data,'_blank');
-	  }
-	  
-      });
-  }
-  function updateStatus(id,value)
-  {
-    conf = confirm("Do you wisht to change the status?");
-    if(conf){
-    $.post("updateBatchStatus.php",{id:id,value:value},
-      function(data){
-	  alert("Status updated successfully");
-	  oTable.fnDraw();
-      });
-    }
-  }
 </script>
  <?php
  include('footer.php');

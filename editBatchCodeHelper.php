@@ -11,7 +11,7 @@ try {
         $db->update($tableName1,$data);
         $lastId = $_POST['batchId'];
         if($lastId!=0 && $lastId!=''){
-                $value = array('batch_id'=>'');
+                $value = array('batch_id'=>NULL);
                 $db=$db->where('batch_id',$lastId);
                 $db->update($tableName2,$value);
             for($j=0;$j<=count($_POST['sampleCode']);$j++){
