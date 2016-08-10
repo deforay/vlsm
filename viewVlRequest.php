@@ -87,8 +87,8 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
    <style>
-   #toogleDiv{
-    display:none;
+   #toogleResultDiv{
+     display:none;
    }
    </style>
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
@@ -110,7 +110,11 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <div class="box-body">                 
+            <div class="box-body">
+              <div class="row">
+                   <div class="col-md-12"><h4><a id="vlrfa" href="javascript:void(0);" onclick="formToggler('-');">VL Request Form Details <i class="fa fa-minus"></i></a></h4></div>
+               </div>
+             <div id="toogleFormDiv">
               <div class="box box-default">
             <div class="box-header with-border">
               <h3 class="box-title">Facility Information</h3>
@@ -121,7 +125,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="facilityName" class="col-lg-4 control-label">Health Facility Name </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                             <?php echo ucwords($result[0]['facility_name']); ?>
                         </div>
                     </div>
@@ -129,7 +133,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="facilityCode" class="col-lg-4 control-label">Facility Code </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                             <?php echo $result[0]['facility_code']; ?>
                         </div>
                     </div>
@@ -140,7 +144,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['state']); ?>
                         </div>
                     </div>
@@ -149,19 +153,15 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['hub_name']); ?>
                         </div>
                     </div>
                   </div> 
                 </div>
-                
-                <div class="row">
-                </div>              
               </div>
             </div>
             <!-- /.box-footer-->
-          </div>
               
          <div class="box box-primary">
             <div class="box-header with-border">
@@ -173,7 +173,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['art_no']; ?>
                         </div>
                     </div>
@@ -181,7 +181,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="sampleCode" class="col-lg-4 control-label">Sample Code </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['sample_code']; ?>
                         </div>
                     </div>
@@ -193,7 +193,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="otrId" class="col-lg-4 control-label">Other Id</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['other_id']; ?>
                         </div>
                     </div>
@@ -201,7 +201,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="patientName" class="col-lg-4 control-label">Patient's Name </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['patient_name']); ?>
                         </div>
                     </div>
@@ -212,7 +212,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                      <div class="col-md-6">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Date of Birth</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['patient_dob']; ?>
                         </div>
                     </div>
@@ -220,7 +220,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['age_in_yrs']; ?>
                         <p class="help-block"><small>If DOB Unkown</small></p>
                         </div>
@@ -231,7 +231,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['age_in_mnts']; ?>
                         <p class="help-block"><small>If age < 2 years </small></p>
                         </div>
@@ -240,7 +240,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="genderMale" class="col-lg-4 control-label">Gender</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['gender']); ?>
                         </div>
                     </div>
@@ -251,7 +251,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="patientPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['patient_phone_number']; ?>
                         </div>
                     </div>
@@ -259,7 +259,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="location" class="col-lg-4 control-label">Location/District Code</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['location']); ?>
                         </div>
                     </div>
@@ -279,7 +279,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Sample Collected On</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['sample_collection_date']; ?>
                         </div>
                     </div>
@@ -287,7 +287,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="sampleType" class="col-lg-4 control-label">Sample Type </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['sample_name']); ?>
                         </div>
                     </div>
@@ -307,7 +307,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="treatPeriod" class="col-lg-4 control-label">How long has this patient been on treatment ?</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['treatment_initiation']; ?>
                         </div>
                     </div>
@@ -315,7 +315,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['treatment_initiated_date']; ?>
                         </div>
                     </div>
@@ -326,7 +326,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="currentRegimen" class="col-lg-4 control-label">Current Regimen</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['art_code']; ?>
                         </div>
                     </div>
@@ -334,7 +334,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Current Regimen Initiated On</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['date_of_initiation_of_current_regimen']; ?>
                         </div>
                     </div>
@@ -344,7 +344,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-12">
                     <div class="form-group">
                         <label for="treatmentDetails" class="col-lg-2 control-label">Which line of treatment is Patient on ?</label>
-                        <div class="col-lg-10">
+                        <div class="col-lg-10" style="font-style:italic;">
                            <?php echo ucwords($result[0]['treatment_details']); ?>
                         </div>
                     </div>
@@ -354,7 +354,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="pregYes" class="col-lg-4 control-label">Is Patient Pregnant ?</label>
-                        <div class="col-lg-7">                        
+                        <div class="col-lg-7" style="font-style:italic;">                        
                             <?php echo ucfirst($result[0]['is_patient_pregnant']); ?>
                         </div>
                     </div>
@@ -362,7 +362,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="ArcNo" class="col-lg-4 control-label">If Pregnant, ARC No.</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['arc_no']; ?>
                         </div>
                     </div>
@@ -373,7 +373,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="breastfeeding" class="col-lg-4 control-label">Is Patient Breastfeeding?</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucfirst($result[0]['is_patient_breastfeeding']); ?>
                         </div>
                     </div>
@@ -381,7 +381,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['arv_adherence']; ?>
                         </div>
                     </div>
@@ -426,7 +426,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                      <div class="col-md-4">
                       <div class="form-group">
                           <label class="col-lg-4 control-label">Last VL Date</label>
-                          <div class="col-lg-7">
+                          <div class="col-lg-7" style="font-style:italic;">
                              <?php echo $result[0]['routine_monitoring_last_vl_date']; ?>
                           </div>
                       </div>
@@ -434,7 +434,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                      <div class="col-md-4">
                       <div class="form-group">
                           <label for="rmTestingVlValue" class="col-lg-4 control-label">VL Value</label>
-                          <div class="col-lg-7">
+                          <div class="col-lg-7" style="font-style:italic;">
                             <?php echo $result[0]['routine_monitoring_value']; ?>
                           </div>
                       </div>
@@ -442,7 +442,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                      <div class="col-md-4">
                       <div class="form-group">
                           <label for="rmTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
-                          <div class="col-lg-7">
+                          <div class="col-lg-7" style="font-style:italic;">
                              <?php echo ucwords($result[0]['snrm']); ?>
                           </div>
                       </div>
@@ -453,7 +453,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                       <div class="col-md-4">
                        <div class="form-group">
                            <label class="col-lg-4 control-label">Last VL Date</label>
-                           <div class="col-lg-7">
+                           <div class="col-lg-7" style="font-style:italic;">
                               <?php echo $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']; ?>
                            </div>
                        </div>
@@ -461,7 +461,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                       <div class="col-md-4">
                        <div class="form-group">
                            <label for="repeatTestingVlValue" class="col-lg-4 control-label">VL Value</label>
-                           <div class="col-lg-7">
+                           <div class="col-lg-7" style="font-style:italic;">
                               <?php echo $result[0]['vl_treatment_failure_adherence_counseling_value']; ?>
                            </div>
                        </div>
@@ -469,7 +469,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                       <div class="col-md-4">
                        <div class="form-group">
                            <label for="repeatTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
-                           <div class="col-lg-7">
+                           <div class="col-lg-7" style="font-style:italic;">
                               <?php echo ucwords($result[0]['sntfac']); ?>
                            </div>
                        </div>
@@ -481,7 +481,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['suspected_treatment_failure_last_vl_date']; ?>
                         </div>
                     </div>
@@ -489,7 +489,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="suspendTreatmentVlValue" class="col-lg-4 control-label">VL Value</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['suspected_treatment_failure_value']; ?>
                         </div>
                     </div>
@@ -497,7 +497,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="suspendTreatmentSampleType" class="col-lg-4 control-label">Sample Type</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['snstf']); ?>
                         </div>
                     </div>
@@ -512,7 +512,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="requestClinician" class="col-lg-4 control-label">Request Clinician</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['request_clinician']; ?>
                         </div>
                     </div>
@@ -520,7 +520,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="clinicianPhone" class="col-lg-4 control-label">Phone No.</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['clinician_ph_no']; ?>
                         </div>
                     </div>
@@ -531,7 +531,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['request_date']; ?>
                         </div>
                     </div>
@@ -539,7 +539,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="vlFocalPerson" class="col-lg-4 control-label">VL Focal Person</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucwords($result[0]['vl_focal_person']); ?>
                         </div>
                     </div>
@@ -549,7 +549,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="vlPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                          <?php echo $result[0]['focal_person_phone_number']; ?>
                         </div>
                     </div>
@@ -557,7 +557,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                          <?php echo $result[0]['email_for_HF']; ?>
                         </div>
                     </div>
@@ -568,18 +568,19 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="rejection" class="col-lg-4 control-label">Rejection </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucfirst($result[0]['rejection']); ?>
                         </div>
                     </div>
                   </div>                                    
                 </div>
-                
-             <div class="row">
-                <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
              </div>
              
-            <div id="toogleDiv" class="box box-primary">
+             <div class="row">
+                <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
+             </div>
+             
+            <div id="toogleResultDiv" class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Lab Details</h3>
             </div>
@@ -589,7 +590,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="labName" class="col-lg-4 control-label">Lab Name </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['lab_name']); ?>
                         </div>
                     </div>
@@ -597,7 +598,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="labContactPerson" class="col-lg-4 control-label">Lab Contact Person </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucwords($result[0]['lab_contact_person']); ?>
                         </div>
                     </div>
@@ -608,7 +609,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="labPhoneNo" class="col-lg-4 control-label">Phone Number </label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['lab_phone_no']; ?>
                         </div>
                     </div>
@@ -616,7 +617,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Sample Received at Testing Lab</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['date_sample_received_at_testing_lab']; ?>
                         </div>
                     </div>
@@ -627,7 +628,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Sample Testing Date</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['lab_tested_date']; ?>
                         </div>
                     </div>
@@ -635,7 +636,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Results Dispatched</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['date_results_dispatched']; ?>
                         </div>
                     </div>
@@ -646,7 +647,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="reviewedBy" class="col-lg-4 control-label">Reviewed By</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucwords($result[0]['result_reviewed_by']); ?>
                         </div>
                     </div>
@@ -654,7 +655,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['result_reviewed_date']; ?>
                         </div>
                     </div>
@@ -664,7 +665,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="justification" class="col-lg-4 control-label">Justification</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucfirst($result[0]['justification']); ?>
                         </div>
                     </div>
@@ -678,7 +679,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="logValue" class="col-lg-4 control-label">Log Value</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['log_value']; ?>
                         </div>
                     </div>
@@ -686,7 +687,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="absoluteValue" class="col-lg-4 control-label">Absolute Value</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['absolute_value']; ?>
                         </div>
                     </div>
@@ -696,7 +697,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="textValue" class="col-lg-4 control-label">Text Value</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['text_value']; ?>
                         </div>
                     </div>
@@ -704,7 +705,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="result" class="col-lg-4 control-label">Result</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucfirst($result[0]['result']); ?>
                         </div>
                     </div>
@@ -715,7 +716,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="comments" class="col-lg-4 control-label">Comments</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucfirst($result[0]['comments']); ?>
                         </div>
                     </div>
@@ -723,7 +724,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="status" class="col-lg-4 control-label">Status</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucwords($result[0]['status_name']); ?>
                         </div>
                     </div>
@@ -741,8 +742,28 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
     <!-- /.content -->
   </div>
   <script type="text/javascript">
-    function resultToggler() {
-      $("#toogleDiv").slideToggle();
+    function resultToggler(symbol) {
+      if(symbol == "+"){
+          $("#toogleResultDiv").slideToggle();
+          $("#lra").html('Lab/Result Details <i class="fa fa-minus"></i>');
+          $("#lra").attr("onclick", "resultToggler('-')");
+      }else{
+        $("#toogleResultDiv").slideToggle();
+        $("#lra").html('Lab/Result Details <i class="fa fa-plus"></i>');
+        $("#lra").attr("onclick", "resultToggler('+')");
+      }
+    }
+    
+    function formToggler(symbol){
+      if(symbol == "-"){
+          $("#toogleFormDiv").slideToggle();
+          $("#vlrfa").html('VL Request Form Details <i class="fa fa-plus"></i>');
+          $("#vlrfa").attr("onclick", "formToggler('+')");
+      }else{
+        $("#toogleFormDiv").slideToggle();
+        $("#vlrfa").html('VL Request Form Details <i class="fa fa-minus"></i>');
+        $("#vlrfa").attr("onclick", "formToggler('-')");
+      }
     }
   </script>
  <?php

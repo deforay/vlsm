@@ -131,13 +131,13 @@ $html .= '<div style="border:1px solid #333;">';
 $html.='<table style="padding:2px;">';
     if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
       $html .='<tr>';
-        $html .='<td colspan="4" style="text-align:center;"><img src="uploads/logo/'.$arr['logo'].'" alt="logo"></td>';
+        $html .='<td colspan="4" style="text-align:center;"><img src="uploads/logo/'.$arr['logo'].'" style="width:80px;height:80px;" alt="logo"></td>';
       $html .='</tr>';
     }
     
     if(isset($arr['header']) && trim($arr['header'])!= '') {
       $html .='<tr>';
-        $html .='<td colspan="4" style="text-align:center;font-size:16px;">'.nl2br($arr['header']).'</td>';
+        $html .='<td colspan="4" style="text-align:center;font-size:16px;">'.ucwords($arr['header']).'</td>';
       $html .='</tr>';
     }
     $html .='<tr style="line-height:30px;">';

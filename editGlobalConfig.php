@@ -74,6 +74,9 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                           <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
                         </div>
                         </div>
+                        <div class="box-body">
+                            Please make sure logo image size of: <code>80x80</code>
+                        </div>
                       </div>
                     </div>
                    </div>

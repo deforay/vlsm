@@ -13,7 +13,12 @@ if($id>0){
     if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "barcode") && !is_dir('uploads'. DIRECTORY_SEPARATOR."barcode")) {
         mkdir('uploads'. DIRECTORY_SEPARATOR."barcode");
     }
+    $lQuery="SELECT * from global_config where name='logo'";
+    $lResult=$db->query($lQuery);
     
+    $hQuery="SELECT * from global_config where name='header'";
+    $hResult=$db->query($hQuery);
+
     $query="SELECT * from batch_details where batch_id=$id";
     $bResult=$db->query($query);
     
@@ -24,8 +29,9 @@ if($id>0){
     if(count($result)>0){
         // Extend the TCPDF class to create custom Header and Footer
         class MYPDF extends TCPDF {
-            public function setHeading($header) {
+            public function setHeading($logo,$header) {
                 $this->header = $header;
+                $this->logo = $logo;
             }
             //Page header
             public function Header() {
@@ -33,10 +39,20 @@ if($id>0){
                 //$image_file = K_PATH_IMAGES.'logo_example.jpg';
                 //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
                 // Set font
-                $this->SetFont('helvetica','B',18);
-                $this->writeHTMLCell(0,0,0, 5, "Generate Barcode ".$this->header." Batch Id", 0, 0, 0, true, 'C', true);
+                if(trim($this->logo)!=""){
+                    if (file_exists('uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+                        $image_file = 'uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+                        $this->Image($image_file,10, 10, 25, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                    }
+                }
+    
+                $this->SetFont('times', '', 15);
+                $this->header=str_replace("<div","<span",trim($this->header));
+                $this->header=str_replace("</div>","</span><br/>",$this->header);
+    
+                $this->writeHTMLCell(0,0,35,10,$this->header, 0, 0, 0, true, 'C', true);
                 $html='<hr/>';
-                $this->writeHTMLCell(0, 0,10,20, $html, 0, 0, 0, true, 'J', true);
+                $this->writeHTMLCell(0, 0,10,35, $html, 0, 0, 0, true, 'J', true);
                 //$this->Cell(0, 15,$this->header, 0, false, 'C', 0, '', 0, false, 'M', 'M');
             }
         
@@ -54,7 +70,7 @@ if($id>0){
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         
-        $pdf->setHeading(ucwords($bResult[0]['batch_code']));
+        $pdf->setHeading($lResult[0]['value'],$hResult[0]['value']);
         
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -74,7 +90,7 @@ if($id>0){
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
     
         // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
@@ -119,7 +135,7 @@ if($id>0){
             $pdf->Ln();
         }
     
-        $filename = $bResult[0]['batch_code'].'.pdf';
+        $filename = trim($bResult[0]['batch_code']).'.pdf';
         $pdf->Output('uploads'. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
         echo $filename;
     }

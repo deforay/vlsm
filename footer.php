@@ -68,10 +68,18 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importResultMenu").addClass('active');
+  }else if (splitsUrl=='vlPrintResult.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlPrintResultMenu").addClass('active');
   }else if (splitsUrl=='vlTestResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlTestResultMenu").addClass('active');
+  }else if (splitsUrl=='missingResult.php') {
+    $(".program").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".missingResultMenu").addClass('active');
   }else if (splitsUrl=='vlResult.php') {
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');

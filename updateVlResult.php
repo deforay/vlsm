@@ -4,33 +4,33 @@
 <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />  
 <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />  
 <style>
-  .divLabel{
-    float:left;
-    width:30%;
-  }
-  .contentLabel{
-    float:left;
-    width:70%;
-  }
-  .ui_tpicker_second_label {
-  display: none !important;
- }.ui_tpicker_second_slider {
-  display: none !important;
- }.ui_tpicker_millisec_label {
-  display: none !important;
- }.ui_tpicker_millisec_slider {
-  display: none !important;
- }.ui_tpicker_microsec_label {
-  display: none !important;
- }.ui_tpicker_microsec_slider {
-  display: none !important;
- }.ui_tpicker_timezone_label {
-  display: none !important;
- }.ui_tpicker_timezone {
-  display: none !important;
- }.ui_tpicker_time_input{
-  width:100%;
- }
+    .divLabel{
+      float:left;
+      width:30%;
+    }
+    .contentLabel{
+      float:left;
+      width:70%;
+    }
+    .ui_tpicker_second_label {
+    display: none !important;
+   }.ui_tpicker_second_slider {
+    display: none !important;
+   }.ui_tpicker_millisec_label {
+    display: none !important;
+   }.ui_tpicker_millisec_slider {
+    display: none !important;
+   }.ui_tpicker_microsec_label {
+    display: none !important;
+   }.ui_tpicker_microsec_slider {
+    display: none !important;
+   }.ui_tpicker_timezone_label {
+    display: none !important;
+   }.ui_tpicker_timezone {
+    display: none !important;
+   }.ui_tpicker_time_input{
+    width:100%;
+   }
 </style>
 <!-- iCheck -->
 <link href="assets/css/deforayModal.css" rel="stylesheet" />
@@ -95,6 +95,9 @@ $tsResult = $db->rawQuery($tsQuery);
 		      <td style="width:50%;border-top:none;">
 			<label>Patient's Name</label> - <?php echo ucwords($sInfo[0]['patient_name']);?>
 		      </td>
+		    </tr>
+		    <tr>
+		      <td colspan="2"><strong><h4>Lab Details</h4></strong></td>
 		    </tr>
 		    <tr>
 		      <td style="width:50%;">
