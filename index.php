@@ -73,7 +73,7 @@ include('./includes/MysqliDb.php');
     </section>
     <!-- /.content -->
   </div>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="assets/js/highchart.js"></script>
   <script>
     $(function () {
     $.post("getTotalResult.php",{sampleCollectionDate:'',batchCode:'',facilityName:'',sampleType:''},

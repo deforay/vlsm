@@ -89,7 +89,7 @@ $fResult = $db->rawQuery($fQuery);
   </div>
   <script type="text/javascript" src="assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="assets/js/highchart.js"></script>
   <script>
   $(function () {
     $('#sampleCollectionDate').daterangepicker({
