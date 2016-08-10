@@ -79,7 +79,7 @@ if(!isset($_SESSION['userId'])){
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="assets/img/default-user.png" class="user-image" alt="User Image">
-              <span class="hidden-xs"><?php echo $_SESSION['userName']; ?></span>
+              <span class="hidden-xs"><?php if(isset($_SESSION['userName'])){ echo $_SESSION['userName']; } ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- Menu Footer-->
@@ -148,7 +148,7 @@ if(!isset($_SESSION['userId'])){
             </a>
             <ul class="treeview-menu">
                 <li class="allMenu importResultMenu"><a href="addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> Print Result</a></li>
+                <li><a href="vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
             </ul>
         </li>
@@ -162,8 +162,8 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
+                <li class="allMenu"><a href="totalResult.php"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
+                <li><a href=""><i class="fa fa-circle-o"></i> TOT Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>
                 <li class="allMenu vlResultMenu"><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
             </ul>

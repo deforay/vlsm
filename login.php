@@ -18,7 +18,23 @@ if(isset($_SESSION['userId'])){
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- iCheck -->
- 
+
+
+
+    <style>
+        body{
+            
+            background: #F6F6F6;       
+            background: #000;       
+        }
+        
+        body > .container{
+            
+            background : url("assets/img/bg.jpg") center;
+            background-size: contain;            
+            background-repeat:no-repeat;    
+        }
+    </style> 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -26,21 +42,22 @@ if(isset($_SESSION['userId'])){
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
   <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
+
 </head>
 <body class="">
     <div class="container">    
-        <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
-            <div class="panel panel-info" >
+        <div id="loginbox" style="margin-top:140px;margin-bottom:140px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+            <div class="panel panel-primary" style="opacity: 0.98;">
                     <div class="panel-heading">
-                        <div class="panel-title">Sign In</div>
+                        <div class="panel-title">Log in to continue</div>
                         
                     </div>     
 
-                    <div style="padding-top:30px" class="panel-body" >
+                    <div style="padding-top:10px" class="panel-body" >
 
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                             
-                        <form id="loginForm" name="loginForm" class="form-horizontal" role="form" method="post" action="loginProcess.php">
+                        <form id="loginForm" name="loginForm" class="form-horizontal" role="form" method="post" action="loginProcess.php" onsubmit="validateNow();return false;">
                                     
                             <div style="margin-bottom: 25px" class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -63,7 +80,7 @@ if(isset($_SESSION['userId'])){
                             <div style="margin-top:10px" class="form-group">
                                 <!-- Button -->
                                 <div class="col-sm-12 controls">
-                                    <a class="btn btn-lg btn-success btn-block" href="javascript:void(0);" onclick="validateNow();return false;">Login</a>
+                                    <button class="btn btn-lg btn-success btn-block" onclick="validateNow();return false;">Login</button>
                                 </div>
                             </div>
                             </form>
