@@ -143,7 +143,7 @@ $iResult = $db->rawQuery($query);
                         <label class="col-lg-4 control-label">Upload File <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="file" class="isRequired" name="resultFile" id="resultFile" title="Please choose result file">
-                        (upload xls, xlsx, csv format)
+                        (Upload xls, xlsx, csv format)
                         </div>
                     </div>
                   </div>

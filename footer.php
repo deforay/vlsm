@@ -36,15 +36,51 @@
   });
   str=$(location).attr('pathname');
   splitsUrl=str.substr(str.lastIndexOf('/') + 1);
-  if (splitsUrl=='users.php' || splitsUrl=='facilities.php' || splitsUrl=='globalConfig.php' || splitsUrl=='importConfig.php') {
-      $(".manage").addClass('active');
-  }else if (splitsUrl=='vlRequest.php' || splitsUrl=='addVlRequest.php' || splitsUrl=='batchcode.php' ) {
-      $(".request").addClass('active');
-  }else if (splitsUrl=='addImportResult.php' || splitsUrl=='vlTestResult.php') {
-      $(".test").addClass('active');
+  if (splitsUrl=='users.php' || splitsUrl=='addUser.php' || splitsUrl=='editUser.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".userMenu").addClass('active');
+  }else if (splitsUrl=='facilities.php' || splitsUrl=='addFacility.php' || splitsUrl=='editFacility.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".facilityMenu").addClass('active');
+  }else if (splitsUrl=='globalConfig.php' || splitsUrl=='editGlobalConfig.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".globalConfigMenu").addClass('active');
+  }else if (splitsUrl=='importConfig.php' || splitsUrl=='addImportConfig.php' || splitsUrl=='editImportConfig.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".importConfigMenu").addClass('active');
+  }else if (splitsUrl=='vlRequest.php' || splitsUrl=='editVlRequest.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlRequestMenu").addClass('active');
+  }else if (splitsUrl=='addVlRequest.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".addVlRequestMenu").addClass('active');
+  }else if (splitsUrl=='batchcode.php' || splitsUrl=='addBatch.php' || splitsUrl=='editBatch.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".batchCodeMenu").addClass('active');
+  }else if (splitsUrl=='addImportResult.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".importResultMenu").addClass('active');
+  }else if (splitsUrl=='vlTestResult.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlTestResultMenu").addClass('active');
   }else if (splitsUrl=='vlResult.php') {
-      $(".program").addClass('active');
+    $(".program").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlResultMenu").addClass('active');
+  }else{
+    $(".allMenu").removeClass('active');
+    $(".dashboardMenu").addClass('active');
   }
+  
   function showModal(url, w, h) {
       showdefModal('dDiv', w, h);
       document.getElementById('dFrame').style.height = h + 'px';
