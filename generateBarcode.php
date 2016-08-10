@@ -50,7 +50,7 @@ if($id>0){
                 $this->header=str_replace("<div","<span",trim($this->header));
                 $this->header=str_replace("</div>","</span><br/>",$this->header);
     
-                $this->writeHTMLCell(0,0,35,10,$this->header." Batch Id", 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0,0,35,10,$this->header, 0, 0, 0, true, 'C', true);
                 $html='<hr/>';
                 $this->writeHTMLCell(0, 0,10,35, $html, 0, 0, 0, true, 'J', true);
                 //$this->Cell(0, 15,$this->header, 0, false, 'C', 0, '', 0, false, 'M', 'M');
