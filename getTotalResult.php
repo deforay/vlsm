@@ -40,7 +40,7 @@ $tResult[$i] = $db->rawQuery($tQuery);
 $i++;
 }
 ?>
-<h4>Total Result</h4>
+<h4>Missing Result</h4>
 <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 <script>
     <?php
