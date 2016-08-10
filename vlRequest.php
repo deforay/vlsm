@@ -232,19 +232,18 @@ $fResult = $db->rawQuery($fQuery);
   }
   
   function convertResultToPdf(id){
-      $.post("vlRequestResultPdf.php", { id : id, format: "html"},
+    $.post("vlRequestResultPdf.php",{id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
+	    alert('Unable to generate download');
 	  }else{
-	      window.open('uploads/'+data,'_blank');
+	    window.open('uploads/'+data,'_blank');
 	  }
-	  
-      });
+    });
   }
   
   function convertSearchResultToPdf(){
-    $.post("vlRequestSearchResultPdf.php", { format: "html"},
+    $.post("vlRequestSearchResultPdf.php",
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
@@ -325,6 +324,17 @@ $fResult = $db->rawQuery($fQuery);
       alert("Please checked atleast one checkbox.");
     }
    }
+  
+  function printBarcode(tId) {
+    $.post("printBarcode.php",{id:tId},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	    alert('Unable to generate download');
+	  }else{
+	    window.open('uploads/barcode/'+data,'_blank');
+	  }
+    });
+  }
 </script>
  <?php
  include('footer.php');

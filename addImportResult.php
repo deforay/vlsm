@@ -2,7 +2,7 @@
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
-$query="SELECT config_id,machine_name FROM import_config";
+$query="SELECT config_id,machine_name FROM import_config where status='active'";
 $iResult = $db->rawQuery($query);
 ?>
 
@@ -32,7 +32,7 @@ $iResult = $db->rawQuery($query);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="machineName" class="col-lg-4 control-label">Import Machine <span class="mandatory">*</span></label>
+                        <label for="machineName" class="col-lg-4 control-label">Configuration Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <select name="machineName" id="machineName" class="form-control isRequired" title="Please select the import machine type">
                           <option value="">--Select--</option>
@@ -143,7 +143,7 @@ $iResult = $db->rawQuery($query);
                         <label class="col-lg-4 control-label">Upload File <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="file" class="isRequired" name="resultFile" id="resultFile" title="Please choose result file">
-                        (upload xls, xlsx, csv format)
+                        (Upload xls, xlsx, csv format)
                         </div>
                     </div>
                   </div>
