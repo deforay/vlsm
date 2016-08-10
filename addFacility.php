@@ -1,6 +1,5 @@
 <?php
 ob_start();
-session_start();
 include('header.php');
 include('./includes/MysqliDb.php');
 $fQuery="SELECT * FROM facility_type";
