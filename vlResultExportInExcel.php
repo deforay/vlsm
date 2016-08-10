@@ -10,10 +10,21 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $excel = new PHPExcel();
  $output = array();
  $sheet = $excel->getActiveSheet();
- 
+ if(isset($_POST['batchId']) && $_POST['batchId']!=''){
+ $rResult = $db->rawQuery("SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id where b.batch_id='".$_POST['batchId']."'"); 
+ }else{
  $rResult = $db->rawQuery($_SESSION['vlResultQuery']);
- 
- $headings = array("Facility Name","Facility Code","Country","State","Hub Name","Batch Code","Sample Code","Unique ART No","Patient's Name","DOB","Age in years","Age in months","Other Id","Gender","Phone Number","Sample Collected On","Sample Type","Treatment Period","Treatment Initiated On","Current Regimen","Regiment Initiated On","Treatment Details","Patient Is Pregnant","ARC No","Patient Is Breastfeeding","ARV Adherence","Routine Monitoring Last VL Date","Routine Monitoring VL Value","Routine Monitoring Sample Type","VL Test After Suspected treatment failure adherence counseling VL Date","VL Test After Suspected treatment failure adherence counseling VL Value","VL Test After Suspected treatment failure adherence counseling Sample Type","Suspect Treatment Failure VL Date","Suspect Treatment Failure VL Value","Suspect Treatment Failure Sample Type","Clinician Name","Clinician Phone No","Request Date","VL Focal Person","VL Focal Person Phone Number","Email For HF","Lab Name","Lab Contact Person","Lab Phone No.","Sample Received Date","Sample Testing Date","Dispatched Date","Reviewed By","Reviewed Date","Justification","Comments","Log Value","Absolute Value","Text Value","Result","Status");
+ }
+ if(isset($_POST['encValue']) && $_POST['encValue']!='no'){
+ if(isset($_POST['pass'])){
+  $resultVar = '';
+ }else{
+  $resultVar = "Result";
+ }
+ $headings = array("Facility Name","Facility Code","Country","State","Hub Name","Batch Code","Sample Code","Unique ART No","Patient's Name","DOB","Age in years","Age in months","Other Id","Gender","Phone Number","Sample Collected On","Sample Type","Treatment Period","Treatment Initiated On","Current Regimen","Regiment Initiated On","Treatment Details","Patient Is Pregnant","ARC No","Patient Is Breastfeeding","ARV Adherence","Routine Monitoring Last VL Date","Routine Monitoring VL Value","Routine Monitoring Sample Type","VL Test After Suspected treatment failure adherence counseling VL Date","VL Test After Suspected treatment failure adherence counseling VL Value","VL Test After Suspected treatment failure adherence counseling Sample Type","Suspect Treatment Failure VL Date","Suspect Treatment Failure VL Value","Suspect Treatment Failure Sample Type","Clinician Name","Clinician Phone No","Request Date","VL Focal Person","VL Focal Person Phone Number","Email For HF","Lab Name","Lab Contact Person","Lab Phone No.","Sample Received Date","Sample Testing Date","Dispatched Date","Reviewed By","Reviewed Date","Justification","Comments","Log Value","Absolute Value","Text Value",$resultVar,"Status");
+ }else{
+ $headings = array("Facility Name","Facility Code","Country","State","Hub Name","Batch Code","Sample Code","Routine Monitoring Last VL Date","Routine Monitoring VL Value","Routine Monitoring Sample Type","VL Test After Suspected treatment failure adherence counseling VL Date","VL Test After Suspected treatment failure adherence counseling VL Value","VL Test After Suspected treatment failure adherence counseling Sample Type","Suspect Treatment Failure VL Date","Suspect Treatment Failure VL Value","Suspect Treatment Failure Sample Type","Clinician Name","Clinician Phone No","Request Date","VL Focal Person","VL Focal Person Phone Number","Email For HF","Lab Name","Lab Contact Person","Lab Phone No.","Sample Received Date","Sample Testing Date","Dispatched Date","Reviewed By","Reviewed Date","Justification","Comments","Log Value","Absolute Value","Text Value","Status");
+ }
  $colNo = 0;
  
  $styleArray = array(
@@ -44,10 +55,22 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  );
  
  foreach ($headings as $field => $value) {
+  if($value!=''){
   $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
   $colNo++;
+  }
  }
  $sheet->getStyle('A1:BD1')->applyFromArray($styleArray);
+ if(isset($_POST['pass']) && $_POST['pass']!=''){
+ $sheet->getProtection()->setSheet(true);
+ $sheet->getProtection()->setSort(true);
+ $sheet->getProtection()->setInsertRows(true);
+ $sheet->getProtection()->setFormatCells(true);
+
+ $r = $sheet->getProtection()->setPassword($_POST['pass']);
+ echo $r;die;
+ }
+ 
  
  foreach ($rResult as $aRow) {
   $row = array();
@@ -131,6 +154,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['batch_code'];
   $row[] = $aRow['sample_code'];
   
+  if(isset($_POST['encValue']) && $_POST['encValue']!='no'){
   $row[] = $aRow['art_no'];
   $row[] = ucwords($aRow['patient_name']);
   $row[] = $aRow['patient_dob'];
@@ -151,6 +175,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['arc_no'];
   $row[] = $aRow['is_patient_breastfeeding'];
   $row[] = $aRow['arv_adherence'];
+  }
   
   $row[] = $aRow['routine_monitoring_last_vl_date'];
   $row[] = $aRow['routine_monitoring_value'];
@@ -185,12 +210,15 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['log_value'];
   $row[] = $aRow['absolute_value'];
   $row[] = $aRow['text_value'];
-  $row[] = ucwords($aRow['result']);
+  if(isset($_POST['pass'])){
+  }else{
+  $row[] = ucwords($aRow['result']); 
+  }
   $row[] = ucwords($aRow['status_name']);
   
   $output[] = $row;
  }
- 
+
  $start = (count($output));
  foreach ($output as $rowNo => $rowData) {
   $colNo = 0;
