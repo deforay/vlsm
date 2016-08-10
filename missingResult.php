@@ -116,7 +116,7 @@ $fResult = $db->rawQuery($fQuery);
   });
   function searchResultData()
   {
-    $.post("getTotalResult.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),batchCode:$("#batchCode").val(),facilityName:$("#facilityName").val(),sampleType:$("#sampleType").val()},
+    $.post("getMissingResult.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),batchCode:$("#batchCode").val(),facilityName:$("#facilityName").val(),sampleType:$("#sampleType").val()},
       function(data){
 	  if(data!=''){
 	    $("#pieChartDiv").html(data);

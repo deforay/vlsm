@@ -56,6 +56,9 @@ $i++;
                 title: {
                     text: ''
                 },
+                credits: {
+                  enabled: false
+               },
                 tooltip: {
                     pointFormat: '{point.name}: <b>{point.y}</b>'
                 },
