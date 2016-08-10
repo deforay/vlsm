@@ -2,6 +2,7 @@
 session_start();
 ob_start();
 include('./includes/MysqliDb.php');
+include('header.php');
 include('General.php');
 
 $general=new Deforay_Commons_General();
@@ -16,7 +17,7 @@ try {
                $data=array(
                  'facility_name'=>$_POST['newfacilityName'],
                  'facility_code'=>$_POST['facilityCode'],
-                 'country'=>$_POST['country'],
+                 //'country'=>$_POST['country'],
                  'state'=>$_POST['state'],
                  'hub_name'=>$_POST['hubName'],
                  'status'=>'active'
@@ -95,6 +96,7 @@ try {
           'age_in_mnts'=>$_POST['ageInMtns'],
           'gender'=>$_POST['gender'],
           'patient_phone_number'=>$_POST['patientPhoneNumber'],
+          'location'=>$_POST['patientLocation'],
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'sample_id'=>$_POST['sampleType'],
           'treatment_initiation'=>$_POST['treatPeriod'],
@@ -136,16 +138,20 @@ try {
           'result'=>$_POST['result'],
           'comments'=>$_POST['comments'],
           'status'=>$_POST['status'],
-          'rejection'=>$_POST['rejection'],
-          //'created_by'=>$_SESSION['userId'],
-          //'created_on'=>$general->getDateTime()
+          'rejection'=>$_POST['rejection']
         );
+          
           $db=$db->where('treament_id',$treamentId);
-          $id=$db->update($tableName,$vldata);
+          $db->update($tableName,$vldata);
+          
           $_SESSION['alertMsg']="VL request updated successfully";
      }
     
-    header("location:vlRequest.php");
+    if($_POST['saveNext']=='next'){
+     header("location:addVlRequest.php");
+    }else{
+    header("location:vlRequest.php"); 
+    }
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());
