@@ -96,14 +96,19 @@ if(!isset($_SESSION['userId'])){
   $allAdminMenuAccess = true;
   $vlRequestMenuAccess = true;
   $addVRequestMenuAccess = true;
+  $batchMenuAccess = true;
   if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'DE'){
      $dashBoardMenuAccess = false;
      $allAdminMenuAccess = false;
      $vlRequestMenuAccess = true;
+     $addVRequestMenuAccess = true;
+     $batchMenuAccess = true;
   }elseif(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'VI'){
       $dashBoardMenuAccess = false;
       $allAdminMenuAccess = false;
       $vlRequestMenuAccess = true;
+      $addVRequestMenuAccess = false;
+      $batchMenuAccess = false;
   }
   ?>
   <!-- Left side column. contains the logo and sidebar -->
@@ -153,8 +158,14 @@ if(!isset($_SESSION['userId'])){
 		if($vlRequestMenuAccess == true){ ?>
                   <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
 		<?php } ?>
-                <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-                <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+		<?php
+		if($addVRequestMenuAccess == true){ ?>
+                  <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+		<?php } ?>
+		<?php
+		if($batchMenuAccess == true){ ?>
+                  <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+		<?php } ?>
             </ul>
         </li>
 		
@@ -168,7 +179,7 @@ if(!isset($_SESSION['userId'])){
             </a>
             <ul class="treeview-menu">
                 <li class="allMenu importResultMenu"><a href="addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
-                <li><a href="vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+                <li class="allMenu vlPrintResultMenu"><a href="vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
             </ul>
         </li>
@@ -182,7 +193,7 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li class="allMenu"><a href="missingResult.php"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
+                <li class="allMenu missingResultMenu"><a href="missingResult.php"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>
                 <li class="allMenu vlResultMenu"><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>

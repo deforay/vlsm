@@ -39,31 +39,31 @@ $tsResult = $db->rawQuery($tsQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
    <style>
- /*   .hide-calendar .ui-datepicker-calendar {
-    display: none;
-}*/
- .ui_tpicker_second_label {
-  display: none !important;
- }.ui_tpicker_second_slider {
-  display: none !important;
- }.ui_tpicker_millisec_label {
-  display: none !important;
- }.ui_tpicker_millisec_slider {
-  display: none !important;
- }.ui_tpicker_microsec_label {
-  display: none !important;
- }.ui_tpicker_microsec_slider {
-  display: none !important;
- }.ui_tpicker_timezone_label {
-  display: none !important;
- }.ui_tpicker_timezone {
-  display: none !important;
- }.ui_tpicker_time_input{
-  width:100%;
- }
- #toogleDiv{
-  display:none;
- }
+      /*   .hide-calendar .ui-datepicker-calendar {
+         display: none;
+     }*/
+      .ui_tpicker_second_label {
+       display: none !important;
+      }.ui_tpicker_second_slider {
+       display: none !important;
+      }.ui_tpicker_millisec_label {
+       display: none !important;
+      }.ui_tpicker_millisec_slider {
+       display: none !important;
+      }.ui_tpicker_microsec_label {
+       display: none !important;
+      }.ui_tpicker_microsec_slider {
+       display: none !important;
+      }.ui_tpicker_timezone_label {
+       display: none !important;
+      }.ui_tpicker_timezone {
+       display: none !important;
+      }.ui_tpicker_time_input{
+       width:100%;
+      }
+      #toogleResultDiv{
+        display:none;
+      }
    </style>
    
     <section class="content-header">
@@ -85,7 +85,11 @@ $tsResult = $db->rawQuery($tsQuery);
         <div class="box-body">
           <!-- form start -->
             <form class="form-horizontal" method='post'  name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="addVlRequestHelper.php">
-              <div class="box-body">                 
+              <div class="box-body">
+               <div class="row">
+                   <div class="col-md-12"><h4><a id="vlrfa" href="javascript:void(0);" onclick="formToggler('-');">VL Request Form Details <i class="fa fa-minus"></i></a></h4></div>
+               </div>
+             <div id="toogleFormDiv">
               <div class="box box-default">
             <div class="box-header with-border">
               <h3 class="box-title">Facility Information</h3>
@@ -130,13 +134,11 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div> 
                 </div>
-                           
               </div>
             </div>
             <!-- /.box-footer-->
-          </div>
               
-                  <div class="box box-primary">
+            <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Patient Details</h3>
             </div>
@@ -349,7 +351,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>    
-                                     
+                   
                 </div>
                 <div class="row">
                     <div class="col-md-6">
@@ -402,7 +404,6 @@ $tsResult = $db->rawQuery($tsQuery);
             <!-- /.box-footer-->
           </div>
                
-                
             <div class="box box-success">
             <div class="box-header with-border">
               <h3 class="box-title">Indication for viral load testing</h3>
@@ -609,12 +610,12 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>                                    
                 </div>
-                
+               </div>
                 <div class="row">
-                   <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
-                 </div>
+                   <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
+                </div>
                 
-                <div id="toogleDiv" class="box box-primary">
+                <div id="toogleResultDiv" class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">Lab Details</h3>
                   </div>
@@ -786,10 +787,8 @@ $tsResult = $db->rawQuery($tsQuery);
             </form>
           <!-- /.row -->
         </div>
-       
       </div>
       <!-- /.box -->
-
     </section>
     <!-- /.content -->
   </div>
@@ -991,15 +990,34 @@ $tsResult = $db->rawQuery($tsQuery);
        $('#arvAdherence').removeClass('isRequired');
      }
     }
-    function showTesting(chosenClass)
-    {
+    function showTesting(chosenClass){
      $(".viralTestData").val('');
      $(".hideTestData").hide();
      $("."+chosenClass).show();
     }
     
-    function resultToggler() {
-      $("#toogleDiv").slideToggle();
+    function resultToggler(symbol) {
+      if(symbol == "+"){
+          $("#toogleResultDiv").slideToggle();
+          $("#lra").html('Lab/Result Details <i class="fa fa-minus"></i>');
+          $("#lra").attr("onclick", "resultToggler('-')");
+      }else{
+        $("#toogleResultDiv").slideToggle();
+        $("#lra").html('Lab/Result Details <i class="fa fa-plus"></i>');
+        $("#lra").attr("onclick", "resultToggler('+')");
+      }
+    }
+    
+    function formToggler(symbol){
+      if(symbol == "-"){
+          $("#toogleFormDiv").slideToggle();
+          $("#vlrfa").html('VL Request Form Details <i class="fa fa-plus"></i>');
+          $("#vlrfa").attr("onclick", "formToggler('+')");
+      }else{
+        $("#toogleFormDiv").slideToggle();
+        $("#vlrfa").html('VL Request Form Details <i class="fa fa-minus"></i>');
+        $("#vlrfa").attr("onclick", "formToggler('-')");
+      }
     }
   </script>
  <?php
