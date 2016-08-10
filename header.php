@@ -75,7 +75,6 @@ if(!isset($_SESSION['userId'])){
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-         
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="assets/img/default-user.png" class="user-image" alt="User Image">
@@ -88,41 +87,59 @@ if(!isset($_SESSION['userId'])){
               </li>
             </ul>
           </li>
-         
         </ul>
       </div>
     </nav>
   </header>
+  <?php
+  $dashBoardMenuAccess = true;
+  $allAdminMenuAccess = true;
+  $vlRequestMenuAccess = true;
+  $addVRequestMenuAccess = true;
+  if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'DE'){
+     $dashBoardMenuAccess = false;
+     $allAdminMenuAccess = false;
+     $vlRequestMenuAccess = true;
+  }elseif(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'VI'){
+      $dashBoardMenuAccess = false;
+      $allAdminMenuAccess = false;
+      $vlRequestMenuAccess = true;
+  }
+  ?>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      
-
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
-        <li class="allMenu dashboardMenu active">
-          <a href="index.php">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-          </a>
-        </li>
-        <li class="treeview manage">
-          <a href="#">
-            <i class="fa fa-gears"></i>
-            <span>Admin</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="allMenu userMenu"><a href="users.php"><i class="fa fa-circle-o"></i> Users</a></li>
-            <li class="allMenu facilityMenu"><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
-            <li class="allMenu globalConfigMenu"><a href="globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
-            <li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
-          </ul>
-        </li>
-		
+	<?php
+	if($dashBoardMenuAccess == true){ ?>
+	    <li class="allMenu dashboardMenu active">
+	      <a href="index.php">
+		<i class="fa fa-dashboard"></i> <span>Dashboard</span>
+	      </a>
+	    </li>
+	<?php } ?>
+	
+	<?php
+	if($allAdminMenuAccess == true){ ?>
+	    <li class="treeview manage">
+	      <a href="#">
+		<i class="fa fa-gears"></i>
+		<span>Admin</span>
+		<span class="pull-right-container">
+		  <i class="fa fa-angle-left pull-right"></i>
+		</span>
+	      </a>
+	      <ul class="treeview-menu">
+		<li class="allMenu userMenu"><a href="users.php"><i class="fa fa-circle-o"></i> Users</a></li>
+		<li class="allMenu facilityMenu"><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
+		<li class="allMenu globalConfigMenu"><a href="globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
+		<li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
+		<li><a href="#"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
+	      </ul>
+	    </li>
+	<?php } ?>
         <li class="treeview request">
             <a href="#">
                 <i class="fa fa-edit"></i>
@@ -132,7 +149,10 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
+		<?php
+		if($vlRequestMenuAccess == true){ ?>
+                  <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
+		<?php } ?>
                 <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
                 <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
             </ul>
