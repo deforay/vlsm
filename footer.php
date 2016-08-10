@@ -52,7 +52,7 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importConfigMenu").addClass('active');
-  }else if (splitsUrl=='vlRequest.php' || splitsUrl=='editVlRequest.php') {
+  }else if (splitsUrl=='vlRequest.php' || splitsUrl=='editVlRequest.php' || splitsUrl=='viewVlRequest.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlRequestMenu").addClass('active');
