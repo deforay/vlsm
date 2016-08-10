@@ -63,7 +63,6 @@ $fResult = $db->rawQuery($fQuery);
 			?>
 		      </select>
 		    </td>
-		    
 		</tr>
 		<tr>
 		  <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
