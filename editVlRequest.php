@@ -263,28 +263,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ageInYrs" name="ageInYrs" placeholder="Enter age in years" title="Please enter age in years" value="<?php echo $result[0]['age_in_yrs']; ?>"/>
-                        <p class="help-block"><small>If DOB Unkown</small></p>
-                        </div>
-                    </div>
-                  </div>
-                                         
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ageInMtns" data-calendar="false" name="ageInMtns" placeholder="Enter Age in months" title="Please enter age in" value="<?php echo $result[0]['age_in_mnts']; ?>"/>
-                        <p class="help-block"><small>If age < 2 years </small></p>
-                        </div>
-                    </div>
-                  </div>
-                    <div class="col-md-6">
+                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="genderMale" class="col-lg-4 control-label">Gender</label>
                         <div class="col-lg-7">
@@ -297,6 +276,27 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
+                </div>
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="ageInYrs" name="ageInYrs" placeholder="Enter age in years" title="Please enter age in years" value="<?php echo $result[0]['age_in_yrs']; ?>"/>
+                        <p class="help-block"><small>If DOB Unkown</small></p>
+                        </div>
+                    </div>
+                  </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="ageInMtns" data-calendar="false" name="ageInMtns" placeholder="Enter Age in months" title="Please enter age in" value="<?php echo $result[0]['age_in_mnts']; ?>"/>
+                        <p class="help-block"><small>If age < 2 years </small></p>
+                        </div>
+                    </div>
+                  </div>
+                    
                   
                 </div>
                 <div class="row">

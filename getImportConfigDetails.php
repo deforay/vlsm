@@ -7,7 +7,7 @@ $primaryKey="config_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('machine_name','log_absolute_val_same_col','sample_id_col','sample_id_row','log_val_col','log_val_row','absolute_val_col','absolute_val_row','text_val_col','text_val_row','status');
+        $aColumns = array('machine_name','status','');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         //$sIndexColumn = $primaryKey;
@@ -127,15 +127,6 @@ $primaryKey="config_id";
         foreach ($rResult as $aRow) {
             $row = array();
 	    $row[] = ucwords($aRow['machine_name']);
-	    $row[] = $aRow['log_absolute_val_same_col'];
-	    $row[] = $aRow['sample_id_col'];
-	    $row[] = $aRow['sample_id_row'];
-	    $row[] = $aRow['log_val_col'];
-	    $row[] = $aRow['log_val_row'];
-	    $row[] = $aRow['absolute_val_col'];
-	    $row[] = $aRow['absolute_val_row'];
-	    $row[] = $aRow['text_val_col'];
-	    $row[] = $aRow['text_val_row'];
 	    $row[] = ucwords($aRow['status']);
 	    $row[] = '<a href="editImportConfig.php?id=' . base64_encode($aRow['config_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
             $output['aaData'][] = $row;
