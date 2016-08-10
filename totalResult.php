@@ -13,10 +13,10 @@ $fResult = $db->rawQuery($fQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Total Result</h1>
+      <h1>Missing Result</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Total Result</li>
+        <li class="active">Missing Result</li>
       </ol>
     </section>
 
