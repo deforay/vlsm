@@ -19,7 +19,7 @@ include('header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="addFacilty.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility</a>
+              <a href="addFacility.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

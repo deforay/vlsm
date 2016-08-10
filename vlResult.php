@@ -170,7 +170,7 @@ $fResult = $db->rawQuery($fQuery);
 			  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
 			  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
 			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+			  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
