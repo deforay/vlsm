@@ -146,11 +146,8 @@ try {
           $_SESSION['alertMsg']="VL request updated successfully";
      }
     
-    if($_POST['saveNext']=='next'){
-     header("location:addVlRequest.php");
-    }else{
+   
     header("location:vlRequest.php"); 
-    }
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());
