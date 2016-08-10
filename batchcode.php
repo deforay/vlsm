@@ -19,7 +19,6 @@ include('header.php');
           
           <div class="box">
             <div class="box-header with-border">
-              
               <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Batch</a>
             </div>
             <!-- /.box-header -->
@@ -28,16 +27,16 @@ include('header.php');
                 <thead>
                 <tr>
                   <th>Batch Code</th>
-                  <th>Sample Code</th>
+                  <th>No. of Samples</th>
                   <th>Created On</th>
-		  <th> Status</th>
+				  <th> Status</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td colspan="3" class="dataTables_empty">Loading data from server</td>
-                </tr>
+				  </tr>
                 </tbody>
                 
               </table>
@@ -72,7 +71,7 @@ include('header.php');
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
-		{"sClass":"center"},
+				{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
 		{"sClass":"center"},
                 {"sClass":"center","bSortable":false},
@@ -113,7 +112,9 @@ include('header.php');
 	  alert("Status updated successfully");
 	  oTable.fnDraw();
       });
-    }
+    }else{
+	   oTable.fnDraw();
+	}
   }
 </script>
  <?php

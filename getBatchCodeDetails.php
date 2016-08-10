@@ -7,8 +7,9 @@ $primaryKey="batch_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('b.batch_code','vl.sample_code',"DATE_FORMAT(b.created_on,'%d-%b-%Y %H:%i:%s')",'b.batch_status');
-        
+        $aColumns = array('b.batch_code',"DATE_FORMAT(b.created_on,'%d-%b-%Y %H:%i:%s')",'b.batch_status');
+        $orderColumns = array('b.batch_code','','b.created_on','b.batch_status');
+		
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
         
@@ -31,7 +32,8 @@ $primaryKey="batch_id";
             $sOrder = "";
             for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
                 if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($_POST['iSortCol_' . $i])] . "
+                    
+					$sOrder .= $orderColumns[intval($_POST['iSortCol_' . $i])] . "
 				 	" . ( $_POST['sSortDir_' . $i] ) . ", ";
                 }
             }
@@ -85,9 +87,7 @@ $primaryKey="batch_id";
          * Get data to display
         */
         
-       //$sQuery="SELECT * FROM batch_details as b INNER JOIN vl_request_form as vl INNER JOIN b.batch_id=vl.batch_id";
-        //$sQuery="select b.created_on ,b.batch_status,b.batch_code, b.batch_id,group_concat(vl.sample_code separator ',') sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
-	$sQuery="select b.created_on ,b.batch_status,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
+		$sQuery="select b.created_on ,b.batch_status,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -103,7 +103,7 @@ $primaryKey="batch_id";
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
        //die($sQuery);
-       //echo $sQuery;
+       //echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
@@ -127,9 +127,12 @@ $primaryKey="batch_id";
         );
 	
         foreach ($rResult as $aRow) {
-	    $date = $aRow['created_on'];
-	    $humanDate =  date("d-M-Y H:i:s",strtotime($date)); 
-            $row = array();
+			$humanDate="";
+			if(trim($aRow['created_on'])!="" && $aRow['created_on']!='0000-00-00 00:00:00'){
+				$date = $aRow['created_on'];
+				$humanDate =  date("d-M-Y H:i:s",strtotime($date));
+			}
+        $row = array();
 	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
 	    $row[] = ucwords($aRow['batch_code']);
 	    $row[] = $aRow['sample_code'];
