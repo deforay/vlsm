@@ -80,12 +80,11 @@ $fResult = $db->rawQuery($fQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		   <th>Sample Code</th>
+				  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
-                  <th>Facility Code</th>
+				  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -152,7 +151,6 @@ $fResult = $db->rawQuery($fQuery);
             
             "bRetrieve": true,                        
             "aoColumns": [
-                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
