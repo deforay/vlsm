@@ -123,3 +123,4 @@ INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`) VALUES
 ALTER TABLE  `facility_details` ADD  `facility_type` INT NULL DEFAULT NULL AFTER  `hub_name` ;
 
 
+ALTER TABLE  `vl_request_form` ADD  `location` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `patient_phone_number` ;
