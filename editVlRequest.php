@@ -105,34 +105,34 @@ $tsResult = $db->rawQuery($tsQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
    <style>
-    /*.hide-calendar .ui-datepicker-calendar {
-    display: none;
-}*/
-.ui_tpicker_second_label {
-  display: none !important;
- }.ui_tpicker_second_slider {
-  display: none !important;
- }.ui_tpicker_millisec_label {
-  display: none !important;
- }.ui_tpicker_millisec_slider {
-  display: none !important;
- }.ui_tpicker_microsec_label {
-  display: none !important;
- }.ui_tpicker_microsec_slider {
-  display: none !important;
- }.ui_tpicker_timezone_label {
-  display: none !important;
- }.ui_tpicker_timezone {
-  display: none !important;
- }.ui_tpicker_time_input{
-  width:100%;
- }
- #toogleDiv{
-  display:none;
- }
+          /*.hide-calendar .ui-datepicker-calendar {
+          display: none;
+      }*/
+      .ui_tpicker_second_label {
+        display: none !important;
+       }.ui_tpicker_second_slider {
+        display: none !important;
+       }.ui_tpicker_millisec_label {
+        display: none !important;
+       }.ui_tpicker_millisec_slider {
+        display: none !important;
+       }.ui_tpicker_microsec_label {
+        display: none !important;
+       }.ui_tpicker_microsec_slider {
+        display: none !important;
+       }.ui_tpicker_timezone_label {
+        display: none !important;
+       }.ui_tpicker_timezone {
+        display: none !important;
+       }.ui_tpicker_time_input{
+        width:100%;
+       }
+       #toogleResultDiv{
+        display:none;
+       }
    </style>
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
-<link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
+   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
     <section class="content-header">
       <h1>Edit VL Request</h1>
       <ol class="breadcrumb">
@@ -152,14 +152,18 @@ $tsResult = $db->rawQuery($tsQuery);
         <div class="box-body">
           <!-- form start -->
             <form class="form-horizontal" method='post' name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="editVlRequestHelper.php">
-              <div class="box-body">                 
+              <div class="box-body">
+               <div class="row">
+                   <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="formToggler();">VL Request Form Details</a></h4></div>
+               </div>
+             <div id="toogleFormDiv">
               <div class="box box-default">
             <div class="box-header with-border">
               <h3 class="box-title">Facility Information</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-             <div class="row">
+              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="facilityName" class="col-lg-4 control-label">Health Facility Name <span class="mandatory">*</span></label>
@@ -180,7 +184,6 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>
                 </div>
                 <div class="row">
-                  
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State</label>
@@ -199,14 +202,9 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div> 
                 </div>
-                
-                <div class="row">
-                                    
-                </div>              
               </div>
             </div>
             <!-- /.box-footer-->
-          </div>
               
          <div class="box box-primary">
             <div class="box-header with-border">
@@ -232,8 +230,6 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                  
-                   
                 </div>
                 <div class="row">
                  <div class="col-md-6">
@@ -744,12 +740,13 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>                                    
                 </div>
-                
+             </div>
+              
              <div class="row">
                 <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
              </div>
              
-            <div id="toogleDiv" class="box box-primary">
+            <div id="toogleResultDiv" class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Lab Details</h3>
             </div>
@@ -910,7 +907,6 @@ $tsResult = $db->rawQuery($tsQuery);
             </div>
             <!-- /.box-footer-->
           </div>
-
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -924,10 +920,8 @@ $tsResult = $db->rawQuery($tsQuery);
             </form>
           <!-- /.row -->
         </div>
-       
       </div>
       <!-- /.box -->
-
     </section>
     <!-- /.content -->
   </div>
@@ -1087,15 +1081,18 @@ $tsResult = $db->rawQuery($tsQuery);
      }
     }
     
-    function showTesting(chosenClass)
-    {
+    function showTesting(chosenClass){
      $(".viralTestData").val('');
      $(".hideTestData").hide();
      $("."+chosenClass).show();
     }
     
+    function formToggler(){
+      $("#toogleFormDiv").slideToggle();
+    }
+    
     function resultToggler() {
-      $("#toogleDiv").slideToggle();
+      $("#toogleResultDiv").slideToggle();
     }
   </script>
  <?php
