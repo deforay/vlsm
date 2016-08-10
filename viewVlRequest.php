@@ -87,8 +87,8 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
    <style>
-   #toogleDiv{
-    display:none;
+   #toogleResultDiv{
+     display:none;
    }
    </style>
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
@@ -110,7 +110,11 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <div class="box-body">                 
+            <div class="box-body">
+              <div class="row">
+                   <div class="col-md-12"><h4><a id="vlrfa" href="javascript:void(0);" onclick="formToggler('-');">VL Request Form Details <i class="fa fa-minus"></i></a></h4></div>
+               </div>
+             <div id="toogleFormDiv">
               <div class="box box-default">
             <div class="box-header with-border">
               <h3 class="box-title">Facility Information</h3>
@@ -155,12 +159,9 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     </div>
                   </div> 
                 </div>
-                <div class="row">
-                </div>              
               </div>
             </div>
             <!-- /.box-footer-->
-          </div>
               
          <div class="box box-primary">
             <div class="box-header with-border">
@@ -573,12 +574,13 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     </div>
                   </div>                                    
                 </div>
-                
-             <div class="row">
-                <div class="col-md-12"><h4><a href="javascript:void(0);" onclick="resultToggler();">Lab/Result Details</a></h4></div>
              </div>
              
-            <div id="toogleDiv" class="box box-primary">
+             <div class="row">
+                <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
+             </div>
+             
+            <div id="toogleResultDiv" class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Lab Details</h3>
             </div>
@@ -740,8 +742,28 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
     <!-- /.content -->
   </div>
   <script type="text/javascript">
-    function resultToggler() {
-      $("#toogleDiv").slideToggle();
+    function resultToggler(symbol) {
+      if(symbol == "+"){
+          $("#toogleResultDiv").slideToggle();
+          $("#lra").html('Lab/Result Details <i class="fa fa-minus"></i>');
+          $("#lra").attr("onclick", "resultToggler('-')");
+      }else{
+        $("#toogleResultDiv").slideToggle();
+        $("#lra").html('Lab/Result Details <i class="fa fa-plus"></i>');
+        $("#lra").attr("onclick", "resultToggler('+')");
+      }
+    }
+    
+    function formToggler(symbol){
+      if(symbol == "-"){
+          $("#toogleFormDiv").slideToggle();
+          $("#vlrfa").html('VL Request Form Details <i class="fa fa-plus"></i>');
+          $("#vlrfa").attr("onclick", "formToggler('+')");
+      }else{
+        $("#toogleFormDiv").slideToggle();
+        $("#vlrfa").html('VL Request Form Details <i class="fa fa-minus"></i>');
+        $("#vlrfa").attr("onclick", "formToggler('-')");
+      }
     }
   </script>
  <?php
