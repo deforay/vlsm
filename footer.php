@@ -68,6 +68,10 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importResultMenu").addClass('active');
+  }else if (splitsUrl=='vlPrintResult.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlPrintResultMenu").addClass('active');
   }else if (splitsUrl=='vlTestResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
