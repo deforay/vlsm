@@ -62,8 +62,8 @@ try {
      if(isset($_POST['artNo']) && isset($_POST['sampleCode']) && trim($_POST['artNo'])!=""){
          if(!isset($_POST['facilityId']) || trim($_POST['facilityId'])==""){
           $data=array(
-            'facility_name'=>$_POST['newfacilityName'],
-            'facility_code'=>$_POST['facilityCode'],
+            'facility_name'=>$_POST['facilityName'],
+            //'facility_code'=>$_POST['facilityCode'],
             //'country'=>$_POST['country'],
             'state'=>$_POST['state'],
             'hub_name'=>$_POST['hubName'],
@@ -72,7 +72,7 @@ try {
           
           $_POST['facilityId']=$db->insert('facility_details',$data);
         
-    }
+     }
     
      if(!isset($_POST['patientPregnant']) || trim($_POST['patientPregnant'])==''){
         $_POST['patientPregnant']='';
@@ -146,9 +146,9 @@ try {
           $_SESSION['alertMsg']="VL request added successfully";
     }
     if($_POST['saveNext']=='next'){
-     header("location:addVlRequest.php");
+      header("location:addVlRequest.php");
     }else{
-    header("location:vlRequest.php"); 
+      header("location:vlRequest.php"); 
     }
     
   
