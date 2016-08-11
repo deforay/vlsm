@@ -31,47 +31,15 @@ $sResult = $db->rawQuery($sQuery);
         <div class="box-header with-border">
           <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
         </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-          <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addBatchForm' id='addBatchForm' autocomplete="off" action="addBatchCodeHelper.php">
-              <div class="box-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already Exist.Try with another name',null)" />
-                        </div>
-                    </div>
-                  </div>
-		  
-                </div>
-		<div class="row">
-		  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="batchCode" class="col-lg-4 control-label">Filter Sample by Facility Name & Code</label>
-                        <div class="col-lg-7">
-                        <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" onchange="getSampleCodeDetails();">
-			  <option value="">--select--</option>
-			    <?php
-			    foreach($fResult as $name){
-			     ?>
-			     <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
-			     <?php
-			    }
-			    ?>
-			  </select>
-                        </div>
-                    </div>
-                  </div>
-		</div>
-		<div class="row">
-		  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="sampleType" class="col-lg-4 control-label">Sample Type</label>
-                        <div class="col-lg-7">
-                        <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type" onchange="getSampleCodeDetails()">
+	<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
+		<tr>
+		  <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
+		  <td>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
+		    </td>
+		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+		    <td>
+		      <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
 			<option value="">--select--</option>
 			  <?php
 			  foreach($sResult as $type){
@@ -81,11 +49,44 @@ $sResult = $db->rawQuery($sQuery);
 			  }
 			  ?>
 			</select>
+		    </td>
+		</tr>
+		<tr>
+		   <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+		    <td>
+		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+			  <option value="">--select--</option>
+			    <?php
+			    foreach($fResult as $name){
+			     ?>
+			     <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+			     <?php
+			    }
+			    ?>
+			  </select>
+		    </td>
+		  <td>&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
+		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+		    
+		    </td>
+		</tr>
+	    </table>
+        <!-- /.box-header -->
+        <div class="box-body">
+	  
+          <!-- form start -->
+            <form class="form-horizontal" method='post'  name='addBatchForm' id='addBatchForm' autocomplete="off" action="addBatchCodeHelper.php">
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
+                        <div class="col-lg-7" style="margin-left:3%;">
+                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already Exist.Try with another name',null)" />
                         </div>
                     </div>
                   </div>
-		</div>
-		
+                </div>
 		<div class="row" id="sampleDetails">
 		  <div class="col-md-8">
                     <div class="form-group">
@@ -129,8 +130,33 @@ $sResult = $db->rawQuery($sQuery);
   
   <script src="assets/js/jquery.multi-select.js"></script>
   <script src="assets/js/jquery.quicksearch.js"></script>
+  <script type="text/javascript" src="assets/plugins/daterangepicker/moment.min.js"></script>
+  <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
 
+  var startDate = "";
+  var endDate = "";
+  $(document).ready(function() {
+     $('#sampleCollectionDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+      });
+     $('#sampleCollectionDate').val("");
+  } );
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'addBatchForm'
@@ -207,7 +233,7 @@ $('#deselect-all-samplecode').click(function(){
       var fName = $("#facilityName").val();
       var sName = $("#sampleType").val();
       var sCode= $("#sampleCode").val();
-      $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName},
+      $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val()},
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);
