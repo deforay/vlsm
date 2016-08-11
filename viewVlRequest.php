@@ -222,7 +222,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
                         <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['age_in_yrs']; ?>
-                        <p class="help-block"><small>If DOB Unkown</small></p>
+                        <br><p class="help-block"><small>If DOB Unkown</small></p>
                         </div>
                     </div>
                   </div>
@@ -233,7 +233,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
                         <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['age_in_mnts']; ?>
-                        <p class="help-block"><small>If age < 2 years </small></p>
+                        <br><p class="help-block"><small>If age < 2 years </small></p>
                         </div>
                     </div>
                   </div>
