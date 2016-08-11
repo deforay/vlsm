@@ -49,7 +49,7 @@ if(!isset($_SESSION['userId'])){
 
  <!-- Latest compiled and minified JavaScript -->
     
-    <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
+<script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
 <script src="assets/js/deforayModal.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 
@@ -208,7 +208,7 @@ if(!isset($_SESSION['userId'])){
     <!-- /.sidebar -->
   </aside>
   <!-- content-wrapper -->
-  <div id="dDiv" class="dialog"> 
-            <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
-            <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
+    <div id="dDiv" class="dialog">
+        <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
+        <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
     </div>

@@ -1,8 +1,24 @@
 <?php
 include('./includes/MysqliDb.php');
+include('General.php');
+$general=new Deforay_Commons_General();
 $fName = $_POST['fName'];
 $sample = $_POST['sName'];
-if($fName=='' && $sample==''){
+
+$start_date = '';
+$end_date = '';
+if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+   $s_c_date = explode(" ", $_POST['sampleCollectionDate']);
+   //print_r($s_c_date);die;
+   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+     $start_date = $general->dateFormat($s_c_date[0]);
+   }
+   if (isset($s_c_date[2]) && trim($s_c_date[2]) != "") {
+     $end_date = $general->dateFormat($s_c_date[2]);
+   }
+}
+
+if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']==''){
     $query="SELECT sample_code,treament_id,facility_id FROM vl_request_form where batch_id is NULL OR batch_id=''";
 }else{
 if($_POST['sCode']!=''){
@@ -17,7 +33,15 @@ if($fName!=''){
 if($sample!=''){
     $query = $query." AND sample_id='".$sample."'";
 }
+if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+    if (trim($start_date) == trim($end_date)) {
+        $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
+    }else{
+       $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
+    }
 }
+}
+
 $result = $db->rawQuery($query);
 $sResult = array();
 if($_POST['sCode']!=''){

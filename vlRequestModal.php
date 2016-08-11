@@ -1,30 +1,37 @@
 <?php
-include('header.php');
 include('./includes/MysqliDb.php');
-$tsQuery="SELECT * FROM testing_status";
-$tsResult = $db->rawQuery($tsQuery);
 $sQuery="SELECT * FROM r_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 ?>
+  <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
+   <!-- DataTables -->
+  <link rel="stylesheet" href="./assets/plugins/datatables/dataTables.bootstrap.css">
+  <link href="assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" /> 
+   <style>
+    .content-wrapper{
+        padding:2%;
+    }
+   </style> 
+  <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Test Request</h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Test Request</li>
-      </ol>
+      <h3 style="margin:0;">Search Patients</h3>
     </section>
-
      <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;">
+	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:10px;width: 98%;">
 		<tr>
 		    <td style=""><b>Sample Collection Date&nbsp;:</b></td>
 		    <td>
@@ -72,15 +79,12 @@ $fResult = $db->rawQuery($fQuery);
 		</tr>
 		
 	    </table>
-            <div class="box-header with-border">
-              <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
-            </div>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
+		  <th>Select</th>
 		  <th>Sample Code</th>
                   <th>Sample Collection Date</th>
                   <th>Batch Code</th>
@@ -88,38 +92,16 @@ $fResult = $db->rawQuery($fQuery);
                   <th>Patient's Name</th>
 		  <th>Facility Name</th>
                   <th>Sample Type</th>
-                  <th>Result</th>
-                  <th>Status</th>
-                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="13" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="8" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
               </table>
             </div>
             <!-- /.box-body -->
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">
-	    <tr style="margin-top:30px;">
-		  <td><b>Choose Status&nbsp;:</b></td>
-		  <td>
-		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
-		      <option value="">--select--</option>
-			<?php
-			foreach($tsResult as $status){
-			 ?>
-			 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
-			 <?php
-			}
-			?>
-		    </select>
-		  </td>
-		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>
-		</tr>
-	  </table>
           </div>
           <!-- /.box -->
 	  
@@ -130,13 +112,16 @@ $fResult = $db->rawQuery($fQuery);
     </section>
     <!-- /.content -->
   </div>
+    <!-- Bootstrap 3.3.6 -->
+  <script src="assets/js/bootstrap.min.js"></script>
+  <!-- DataTables -->
+  <script src="./assets/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="./assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript" src="assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
    var startDate = "";
    var endDate = "";
-   var selectedTests=[];
-   var selectedTestsId=[];
   $(document).ready(function() {
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -180,24 +165,12 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center","bSortable":false},
+                {"sClass":"center"}
             ],
             "aaSorting": [[ 2, "desc" ]],
-	    "fnDrawCallback": function() {
-		var checkBoxes=document.getElementsByName("chk[]");
-                len = checkBoxes.length;
-                for(c=0;c<len;c++){
-                    if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1 ){
-			checkBoxes[c].setAttribute("checked",true);
-                    }
-                }
-	    },
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getVlRequestDetails.php",
+            "sAjaxSource": "getVlRequestModalDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 	      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
 	      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
@@ -217,102 +190,9 @@ $fResult = $db->rawQuery($fQuery);
   function searchVlRequestData(){
     oTable.fnDraw();
   }
-    
-  function convertPdf(id){
-      $.post("vlRequestPdf.php", { id : id, format: "html"},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
-	  }else{
-	      window.open('uploads/'+data,'_blank');
-	  }
-	  
-      });
-  }
   
-  
-  function toggleTest(obj){
-	 if ($(obj).is(':checked')) {
-	     if($.inArray(obj.value, selectedTests) == -1){
-		 selectedTests.push(obj.value);
-		 selectedTestsId.push(obj.id);
-	     }
-	 } else {
-	     selectedTests.splice( $.inArray(obj.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(obj.id, selectedTestsId), 1 );
-	     $("#checkTestsData").attr("checked",false);
-	 }
-	 $("#checkedTests").val(selectedTests.join());
-	 if(selectedTests.length!=0){
-	  $("#status").prop('disabled', false);
-	 }else{
-	  $("#status").prop('disabled', true);
-	 }
-	 
-    }
-      
-    function toggleAllVisible(){
-        //alert(tabStatus);
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	     $("#status").prop('disabled', true);
-	 });
-	 if ($("#checkTestsData").is(':checked')) {
-	 $(".checkTests").each(function(){
-	     $(this).prop('checked', true);
-		 selectedTests.push(this.value);
-		 selectedTestsId.push(this.id);
-	 });
-	 $("#status").prop('disabled', false);
-     } else{
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	     $("#status").prop('disabled', true);
-	 });
-     }
-     $("#checkedTests").val(selectedTests.join());
-   }
-   
-   function submitTestStatus(){
-    var stValue = $("#status").val();
-    var testIds = $("#checkedTests").val();
-    if(stValue!='' && testIds!=''){
-      conf=confirm("Do you wish to change the test status ?");
-      if (conf) {
-    $.post("updateTestStatus.php", { status : stValue,id:testIds, format: "html"},
-      function(data){
-	  if(data != ""){
-	    $("#checkedTests").val('');
-	    selectedTests = [];
-	    selectedTestsId = [];
-	    $("#checkTestsData").attr("checked",false);
-	    $("#status").val('');
-	    $("#status").prop('disabled', true);
-	    oTable.fnDraw();
-	    alert('Updated successfully.');
-	  }
-      });
-      }
-    }else{
-      alert("Please checked atleast one checkbox.");
-    }
-   }
-  
-  function printBarcode(tId) {
-    $.post("printBarcode.php",{id:tId},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	    alert('Unable to generate download');
-	  }else{
-	    window.open('uploads/barcode/'+data,'_blank');
-	  }
-    });
+  function getPatient(ptDetails){
+    parent.closeModal();
+    window.parent.setPatientDetails(ptDetails);
   }
 </script>
- <?php
- include('footer.php');
- ?>
