@@ -141,11 +141,11 @@ try {
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime()
         );
-        
+        //print_r($vldata);die;
           $id=$db->insert($tableName,$vldata);
           $_SESSION['alertMsg']="VL request added successfully";
     }
-    if($_POST['saveNext']=='next'){
+    if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
       header("location:addVlRequest.php");
     }else{
       header("location:vlRequest.php"); 
