@@ -22,7 +22,7 @@
  * @package    PHPExcel_Shared_OLE
  * @copyright  Copyright (c) 2006 - 2007 Christian Schmidt
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version ##VERSION##, ##DATE##
+ * @version 1.8.0, 2014-03-02
  */
 
 /**

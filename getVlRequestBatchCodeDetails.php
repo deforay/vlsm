@@ -130,7 +130,7 @@ $primaryKey="batch_id";
 			$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
 			$row[] = ucwords($aRow['batch_code']);
 			$row[] = $aRow['sample_code'];
-			$row[] = '<a href="mailResult.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-file"> Send Report</i></a>';
+			$row[] = '<a href="sendRequestToMail.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-file"> Send Report</i></a>';
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

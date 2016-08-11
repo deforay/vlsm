@@ -6,7 +6,7 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Send Result To Mail</h1>
+      <h1>Send Request To Mail</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Result to Mail</li>
@@ -75,7 +75,7 @@ include('header.php');
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getvlResultBatchCodeDetails.php",
+            "sAjaxSource": "getVlRequestBatchCodeDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 	      aoData.push({"name": "vlResult", "value": 'mail'});
               $.ajax({
