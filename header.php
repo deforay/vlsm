@@ -166,6 +166,8 @@ if(!isset($_SESSION['userId'])){
 		if($batchMenuAccess == true){ ?>
                   <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
 		<?php } ?>
+        
+            <li class="allMenu vlReqMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
             </ul>
         </li>
 		

@@ -64,6 +64,10 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".batchCodeMenu").addClass('active');
+  }else if (splitsUrl=='vlRequestMail.php' || splitsUrl=='sendRequestToMail.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlReqMenu").addClass('active');
   }else if (splitsUrl=='addImportResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
