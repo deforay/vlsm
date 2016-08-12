@@ -19,7 +19,9 @@ include('header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
+	      <?php if(isset($_SESSION['privileges']) && in_array("addFacility.php", $_SESSION['privileges'])){ ?>
               <a href="addFacility.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility</a>
+	      <?php } ?>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -31,7 +33,9 @@ include('header.php');
                   <th>Hub Name</th>
                   <th>Country</th>
                   <th>Status</th>
+		  <?php if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
+		  <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -76,7 +80,9 @@ include('header.php');
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+		<?php if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ ?>
                 {"sClass":"center","bSortable":false},
+		<?php } ?>
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,

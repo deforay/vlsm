@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('./includes/MysqliDb.php');
 $tableName="facility_details";
 $primaryKey="facility_id";
@@ -134,8 +135,9 @@ $primaryKey="facility_id";
             $row[] = $aRow['hub_name'];
             $row[] = ucwords($aRow['country']);
             $row[] = ucwords($aRow['status']);
+	     if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ 
             $row[] = '<a href="editFacility.php?id=' . base64_encode($aRow['facility_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-           
+           }
             $output['aaData'][] = $row;
         }
         

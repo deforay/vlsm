@@ -8,7 +8,7 @@ $tableName="user_details";
 $userId=base64_decode($_POST['userId']);
 
 try {
-    
+    if(trim($_POST['username'])!='' && trim($_POST['loginId'])!='' && ($_POST['role'])!=''){
     $data=array(
     'user_name'=>$_POST['userName'],
     'email'=>$_POST['email'],
@@ -28,6 +28,7 @@ try {
     $db->update($tableName,$data);    
     
     $_SESSION['alertMsg']="User details updated successfully";
+    }
     header("location:users.php");
   
 } catch (Exception $exc) {

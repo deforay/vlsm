@@ -6,10 +6,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Users</h1>
+      <h1>Roles</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Users</li>
+        <li class="active">Roles</li>
       </ol>
     </section>
 
@@ -21,21 +21,17 @@ include('header.php');
 
           <div class="box">
             <div class="box-header with-border">
-              <?php if(isset($_SESSION['privileges']) && in_array("addUser.php", $_SESSION['privileges'])){ ?>
-              <a href="addUser.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add User</a>
-	      <?php } ?>
+              
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="userDataTable" class="table table-bordered table-striped">
+              <table id="roleDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>User Name</th>
-                  <th>Email</th>
-                  <!--<th>Mobile</th>-->
-                  <th>Role</th>
+                  <th>Role Name</th>
+                  <th>Role Code</th>
                   <th>Status</th>
-		  <?php if(isset($_SESSION['privileges']) && in_array("editUser.php", $_SESSION['privileges'])){ ?>
+		  <?php if(isset($_SESSION['privileges']) && in_array("editRole.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
 		  <?php } ?>
                 </tr>
@@ -66,7 +62,7 @@ include('header.php');
   });
   $(document).ready(function() {
 	
-        oTable = $('#userDataTable').dataTable({	
+        oTable = $('#roleDataTable').dataTable({	
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -78,18 +74,16 @@ include('header.php');
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
-                //{"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center"},
-		<?php if(isset($_SESSION['privileges']) && in_array("editUser.php", $_SESSION['privileges'])){ ?>
+		<?php if(isset($_SESSION['privileges']) && in_array("editRole.php", $_SESSION['privileges'])){ ?>
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getUserDetails.php",
+            "sAjaxSource": "getRoleDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
               $.ajax({
                   "dataType": 'json',

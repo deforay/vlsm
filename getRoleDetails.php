@@ -1,16 +1,15 @@
 <?php
 session_start();
 include('./includes/MysqliDb.php');
-$tableName="batch_details";
-$primaryKey="batch_id";
+$tableName="roles";
+$primaryKey="role_id";
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('b.batch_code',"DATE_FORMAT(b.created_on,'%d-%b-%Y %H:%i:%s')",'b.batch_status');
-        $orderColumns = array('b.batch_code','','b.created_on','b.batch_status');
-		
+        $aColumns = array('role_name','role_code','status');
+        
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
         
@@ -33,8 +32,7 @@ $primaryKey="batch_id";
             $sOrder = "";
             for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
                 if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
-                    
-					$sOrder .= $orderColumns[intval($_POST['iSortCol_' . $i])] . "
+                    $sOrder .= $aColumns[intval($_POST['iSortCol_' . $i])] . "
 				 	" . ( $_POST['sSortDir_' . $i] ) . ", ";
                 }
             }
@@ -88,13 +86,13 @@ $primaryKey="batch_id";
          * Get data to display
         */
         
-		$sQuery="select b.created_on ,b.batch_status,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
+       $sQuery="SELECT * FROM roles";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
             $sQuery = $sQuery.' '.$sWhere;
         }
-        $sQuery = $sQuery.' group by b.batch_id';
+        
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
@@ -104,19 +102,20 @@ $primaryKey="batch_id";
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
        //die($sQuery);
-       //echo $sQuery;die;
+      // echo $sQuery;
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("select b.created_on,b.batch_status, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM roles $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select b.created_on,b.batch_status, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id group by b.batch_id");
+        $aResultTotal =  $db->rawQuery("select COUNT(role_id) as total FROM roles");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
-        $iTotal = count($aResultTotal);
+        $iTotal = $aResultTotal[0]['total'];
+
         /*
          * Output
         */
@@ -126,30 +125,17 @@ $primaryKey="batch_id";
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-	$batch = false;
-	if(isset($_SESSION['privileges']) && (in_array("editBatch.php", $_SESSION['privileges']))){
-	    $batch = true;
-	}
-	
+        
         foreach ($rResult as $aRow) {
-			$humanDate="";
-			if(trim($aRow['created_on'])!="" && $aRow['created_on']!='0000-00-00 00:00:00'){
-				$date = $aRow['created_on'];
-				$humanDate =  date("d-M-Y H:i:s",strtotime($date));
-			}
-        $row = array();
-	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
-	    $row[] = ucwords($aRow['batch_code']);
-	    $row[] = $aRow['sample_code'];
-	    $row[] = $humanDate;
-	    $row[] = '<select class="form-control" name="status" id=' . $aRow['batch_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
-			    <option value="pending" ' . ($aRow['batch_status'] == "pending" ? "selected=selected" : "") . '>Pending</option>
-			    <option value="completed" ' . ($aRow['batch_status'] == "completed" ? "selected=selected" : "") . '>Completed</option>
-		    </select>';
-	    if($batch){
-            $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>'.$printBarcode;
+            $row = array();
+	    $row[] = ucwords($aRow['role_name']);
+            $row[] = ucwords($aRow['role_code']);
+            $row[] = ucwords($aRow['status']);
+	    if(isset($_SESSION['privileges']) && in_array("editRole.php", $_SESSION['privileges'])){
+            $row[] = '<a href="editRole.php?id=' . base64_encode($aRow['role_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 	    }
             $output['aaData'][] = $row;
         }
+        
         echo json_encode($output);
 ?>

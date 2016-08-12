@@ -4,6 +4,13 @@ date_default_timezone_set("Europe/London");
 if(!isset($_SESSION['userId'])){
     header("location:login.php");
 }
+$link = $_SERVER['PHP_SELF'];
+  $link_array = explode('/',$link);
+  if(end($link_array)!='error.php'){
+    if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
+      header("location:error.php");
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html>
@@ -137,10 +144,17 @@ if(!isset($_SESSION['userId'])){
 		</span>
 	      </a>
 	      <ul class="treeview-menu">
+		<?php if(isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu userMenu"><a href="users.php"><i class="fa fa-circle-o"></i> Users</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])){ ?>
+		<li class="allMenu roleMenu"><a href="roles.php"><i class="fa fa-circle-o"></i> Roles</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu facilityMenu"><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu globalConfigMenu"><a href="globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
+		<?php } if(isset($_SESSION['privileges']) && !in_array("importConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
+		<?php } ?>
 		<li><a href="#"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
 	      </ul>
 	    </li>
@@ -155,15 +169,11 @@ if(!isset($_SESSION['userId'])){
             </a>
             <ul class="treeview-menu">
 		<?php
-		if($vlRequestMenuAccess == true){ ?>
+		 if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
-		<?php } ?>
-		<?php
-		if($addVRequestMenuAccess == true){ ?>
+		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-		<?php } ?>
-		<?php
-		if($batchMenuAccess == true){ ?>
+		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
 		<?php } ?>
             </ul>
@@ -178,9 +188,13 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
+		<?php if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu importResultMenu"><a href="addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("vlPrintResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlPrintResultMenu"><a href="vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
+		<?php } ?>
             </ul>
         </li>
         
@@ -193,10 +207,14 @@ if(!isset($_SESSION['userId'])){
                 </span>
             </a>
             <ul class="treeview-menu">
+		<?php if(isset($_SESSION['privileges']) && in_array("missingResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu missingResultMenu"><a href="missingResult.php"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
+		<?php } ?>
                 <li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>
+		<?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultMenu"><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+		<?php } ?>
             </ul>
         </li>
         <!---->
