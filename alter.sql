@@ -174,5 +174,100 @@ INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES
 (13, 'home', 'Manage Home Page'),
 (14, 'roles', 'Manage Roles');
 
-
 CREATE TABLE IF NOT EXISTS `privileges` (
+  `privilege_id` int(11) NOT NULL AUTO_INCREMENT,
+  `resource_id` int(11) NOT NULL,
+  `privilege_name` varchar(255) DEFAULT NULL,
+  `display_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`privilege_id`),
+  KEY `resource_id` (`resource_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+
+--
+-- Dumping data for table `privileges`
+--
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES
+(1, 1, 'users.php', 'Access'),
+(2, 1, 'addUser.php', 'Add'),
+(3, 1, 'editUser.php', 'Edit'),
+(4, 2, 'facilities.php', 'Access'),
+(5, 2, 'addFacility.php', 'Add'),
+(6, 2, 'editFacility.php', 'Edit'),
+(7, 3, 'globalConfig.php', 'Access'),
+(8, 3, 'editGlobalConfig.php', 'Edit'),
+(9, 4, 'importConfig.php', 'Access'),
+(10, 4, 'addImportConfig.php', 'Add'),
+(11, 4, 'editImportConfig.php', 'Edit'),
+(12, 6, 'vlRequest.php', 'Access'),
+(13, 6, 'addVlRequest.php', 'Add'),
+(14, 6, 'editVlRequest.php', 'Edit'),
+(15, 6, 'viewVlRequest.php', 'View Vl Request'),
+(16, 7, 'batchcode.php', 'Access'),
+(17, 7, 'addBatch.php', 'Add'),
+(18, 7, 'editBatch.php', 'Edit'),
+(19, 8, 'addImportResult.php', 'Add'),
+(20, 9, 'vlPrintResult.php', 'Access'),
+(21, 10, 'vlTestResult.php', 'Access'),
+(22, 11, 'missingResult.php', 'Access'),
+(23, 12, 'vlResult.php', 'Access'),
+(24, 13, 'index.php', 'Access'),
+(25, 14, 'roles.php', 'Access'),
+(26, 14, 'editRole.php', 'Edit'),
+(27, 6, 'vlRequestMail.php', 'Email Test Request'),
+(28, 5, 'otherConfig.php', 'Manage Other Config'),
+(29, 6, 'sendRequestToMail.php', 'Send Request to Mail'),
+(30, 5, 'editOtherConfig.php', 'Edit Other Config');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `privileges`
+--
+ALTER TABLE `privileges`
+  ADD CONSTRAINT `privileges_ibfk_1` FOREIGN KEY (`resource_id`) REFERENCES `resources` (`resource_id`);
+  
+  CREATE TABLE IF NOT EXISTS `roles_privileges_map` (
+  `map_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL,
+  `privilege_id` int(11) NOT NULL,
+  PRIMARY KEY (`map_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=375 ;
+
+--
+-- Dumping data for table `roles_privileges_map`
+--
+
+INSERT INTO `roles_privileges_map` (`map_id`, `role_id`, `privilege_id`) VALUES
+(345, 1, 1),
+(346, 1, 2),
+(347, 1, 3),
+(348, 1, 4),
+(349, 1, 5),
+(350, 1, 6),
+(351, 1, 7),
+(352, 1, 8),
+(353, 1, 9),
+(354, 1, 10),
+(355, 1, 11),
+(356, 1, 28),
+(357, 1, 30),
+(358, 1, 12),
+(359, 1, 13),
+(360, 1, 14),
+(361, 1, 15),
+(362, 1, 27),
+(363, 1, 29),
+(364, 1, 16),
+(365, 1, 17),
+(366, 1, 18),
+(367, 1, 19),
+(368, 1, 20),
+(369, 1, 21),
+(370, 1, 22),
+(371, 1, 23),
+(372, 1, 24),
+(373, 1, 25),
+(374, 1, 26);
