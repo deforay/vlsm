@@ -52,6 +52,10 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importConfigMenu").addClass('active');
+  }else if (splitsUrl=='otherConfig.php' || splitsUrl=='editOtherConfig.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".otherConfigMenu").addClass('active');
   }else if (splitsUrl=='vlRequest.php' || splitsUrl=='editVlRequest.php' || splitsUrl=='viewVlRequest.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
@@ -67,7 +71,7 @@
   }else if (splitsUrl=='vlRequestMail.php' || splitsUrl=='sendRequestToMail.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
-    $(".vlReqMenu").addClass('active');
+    $(".vlRequestMailMenu").addClass('active');
   }else if (splitsUrl=='addImportResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');

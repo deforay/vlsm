@@ -141,7 +141,7 @@ if(!isset($_SESSION['userId'])){
 		<li class="allMenu facilityMenu"><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
 		<li class="allMenu globalConfigMenu"><a href="globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
 		<li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
-		<li><a href="#"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
+		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
 	      </ul>
 	    </li>
 	<?php } ?>
@@ -167,7 +167,7 @@ if(!isset($_SESSION['userId'])){
                   <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
 		<?php } ?>
         
-            <li class="allMenu vlReqMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
+            <li class="allMenu vlRequestMailMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
             </ul>
         </li>
 		
