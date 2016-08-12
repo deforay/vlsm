@@ -1,6 +1,7 @@
 <?php
 ob_start();
-include('header.php');
+session_start();
+//include('header.php');
 include('./includes/MysqliDb.php');
 require './includes/mail/PHPMailerAutoload.php';
 //print_r($_POST);die;
