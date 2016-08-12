@@ -6,7 +6,7 @@ include('./includes/MysqliDb.php');
 $tableName="import_config";
 $configId=(int) base64_decode($_POST['configId']);
 try {
-    
+    if(trim($_POST['configurationName'])!=""){
     $importConfigData=array(
     'machine_name'=>$_POST['configurationName'],
     'log_absolute_val_same_col'=>$_POST['logAndAbsoluteInSameColumn'],
@@ -26,6 +26,7 @@ try {
     $db->update($tableName,$importConfigData);        
     
     $_SESSION['alertMsg']="Import config details updated successfully";
+    }
     header("location:importConfig.php");
   
 } catch (Exception $exc) {

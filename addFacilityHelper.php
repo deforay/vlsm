@@ -8,7 +8,7 @@ $tableName="facility_details";
 
 
 try {
-    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!=""){
+    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){
         $data=array(
         'facility_name'=>$_POST['facilityName'],
         'facility_code'=>$_POST['facilityCode'],

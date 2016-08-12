@@ -19,7 +19,9 @@ include('header.php');
           
           <div class="box">
             <div class="box-header with-border">
+	      <?php if(isset($_SESSION['privileges']) && in_array("addBatch.php", $_SESSION['privileges'])){ ?>
               <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Batch</a>
+	      <?php } ?>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -30,7 +32,9 @@ include('header.php');
                   <th>No. of Samples</th>
                   <th>Created On</th>
 				  <th> Status</th>
+				  <?php if(isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
+		  <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -74,7 +78,9 @@ include('header.php');
 				{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
 		{"sClass":"center"},
+		<?php if(isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])){ ?>
                 {"sClass":"center","bSortable":false},
+		<?php } ?>
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,

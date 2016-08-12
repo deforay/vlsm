@@ -19,7 +19,9 @@ include('header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
+	      <?php if(isset($_SESSION['privileges']) && in_array("editGlobalConfig.php", $_SESSION['privileges'])){ ?>
               <a href="editGlobalConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
+	      <?php } ?>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

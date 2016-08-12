@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('./includes/MysqliDb.php');
 $tableName="user_details";
 $primaryKey="user_id";
@@ -134,8 +135,9 @@ $primaryKey="user_id";
             //$row[] = $aRow['phone_number'];
             $row[] = ucwords($aRow['role_name']);
             $row[] = ucwords($aRow['status']);
+	    if(isset($_SESSION['privileges']) && in_array("editUser.php", $_SESSION['privileges'])){
             $row[] = '<a href="editUser.php?id=' . base64_encode($aRow['user_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-           
+	    }
             $output['aaData'][] = $row;
         }
         

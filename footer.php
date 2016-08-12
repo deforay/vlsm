@@ -40,6 +40,10 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".userMenu").addClass('active');
+  }else if (splitsUrl=='roles.php' || splitsUrl=='editRole.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".roleMenu").addClass('active');
   }else if (splitsUrl=='facilities.php' || splitsUrl=='addFacility.php' || splitsUrl=='editFacility.php') {
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');

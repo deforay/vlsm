@@ -73,7 +73,9 @@ $fResult = $db->rawQuery($fQuery);
 		
 	    </table>
             <div class="box-header with-border">
+	      <?php if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
               <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
+	      <?php } ?>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -90,7 +92,9 @@ $fResult = $db->rawQuery($fQuery);
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
+		  <?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
                   <th>Action</th>
+		  <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -183,7 +187,9 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+		<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
                 {"sClass":"center","bSortable":false},
+		<?php } ?>
             ],
             "aaSorting": [[ 1, "desc" ]],
 	    "fnDrawCallback": function() {
