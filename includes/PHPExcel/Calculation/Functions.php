@@ -22,7 +22,7 @@
  * @package		PHPExcel_Calculation
  * @copyright	Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license		http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version		##VERSION##, ##DATE##
+ * @version		1.8.0, 2014-03-02
  */
 
 
@@ -496,7 +496,7 @@ class PHPExcel_Calculation_Functions {
 	 * @return	string	Version information
 	 */
 	public static function VERSION() {
-		return 'PHPExcel ##VERSION##, ##DATE##';
+		return 'PHPExcel 1.8.0, 2014-03-02';
 	}	//	function VERSION()
 
 

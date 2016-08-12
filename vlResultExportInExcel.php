@@ -7,6 +7,9 @@ include ('./includes/PHPExcel.php');
 $general=new Deforay_Commons_General();
 
 if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
+ 
+ $rResult = $db->rawQuery($_SESSION['vlResultQuery']);
+ 
  $excel = new PHPExcel();
  $output = array();
  $sheet = $excel->getActiveSheet();

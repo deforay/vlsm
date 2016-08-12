@@ -1,5 +1,4 @@
 <?php
-//print_r($result);die;
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
@@ -151,7 +150,7 @@ $tsResult = $db->rawQuery($tsQuery);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post' name='addVlRequestForm' id='addVlRequestForm' autocomplete="off"  action="editVlRequestHelper.php">
+            <form class="form-horizontal" method='post' name='editVlRequestForm' id='editVlRequestForm' autocomplete="off"  action="editVlRequestHelper.php">
               <div class="box-body">
                <div class="row">
                    <div class="col-md-12"><h4><a id="vlrfa" href="javascript:void(0);" onclick="formToggler('-');">VL Request Form Details <i class="fa fa-minus"></i></a></h4></div>
@@ -159,26 +158,26 @@ $tsResult = $db->rawQuery($tsQuery);
              <div id="toogleFormDiv">
               <div class="box box-default">
             <div class="box-header with-border">
-              <h3 class="box-title">Facility Information</h3>
+               <div class="pull-left"><h3 class="box-title">Facility Information</h3></div>
+               <div class="pull-right"><a id="clearFInfo" href="javascript:void(0);" onclick="clearFacilitiesInfo();" class="btn btn-danger btn-sm" style="padding-right:10px;">Clear</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showModal('facilitiesModal.php',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityName" class="col-lg-4 control-label">Health Facility Name <span class="mandatory">*</span></label>
+                        <label for="facilityName" class="col-lg-4 control-label">Facility <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type='hidden' id="facilityId"  name="facilityId" class="facilityDatas" value="<?php echo $result[0]['facility_id']; ?>" />
-                        <input type='hidden' id="newfacilityName"  name="newfacilityName" />
-                        <select class="form-control" id="facilityName" name="facilityName" placeholder="Health Facility Name"></select>
+                        <input type="hidden" id="facilityId" name="facilityId" value="<?php echo $result[0]['facility_id']; ?>"/>
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility" title="Please enter facility" value="<?php echo $result[0]['facility_name']; ?>" readonly/>
                         </div>
                     </div>
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityCode" class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span> </label>
+                        <label for="state" class="col-lg-4 control-label">State</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired facilityDatas" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $result[0]['facility_code']; ?>"/>
+                        <input type="text" class="form-control" id="state" name="state" placeholder="State" value="<?php echo $result[0]['state']; ?>" readonly/>
                         </div>
                     </div>
                   </div>
@@ -186,18 +185,9 @@ $tsResult = $db->rawQuery($tsQuery);
                 <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">State</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control facilityDatas" id="state" name="state" placeholder="State" value="<?php echo $result[0]['state']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                   
-                   <div class="col-md-6">
-                    <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control facilityDatas" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $result[0]['hub_name']; ?>"/>
+                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $result[0]['hub_name']; ?>" readonly/>
                         </div>
                     </div>
                   </div> 
@@ -206,9 +196,10 @@ $tsResult = $db->rawQuery($tsQuery);
             </div>
             <!-- /.box-footer-->
               
-         <div class="box box-primary">
+          <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 class="box-title">Patient Details</h3>
+              <div class="pull-left"><h3 class="box-title">Patient Details</h3></div>
+              <div class="pull-right"><a href="javascript:void(0);" onclick="showModal('vlRequestModal.php',1100,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -217,8 +208,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="hidden" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" value="<?php echo $result[0]['art_no']; ?>" />
-                        <select class="form-control" id="artNoId" name="artNoId" placeholder="ART Number"></select>
+                         <input type="text" class="form-control isRequired" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" value="<?php echo $result[0]['art_no']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -244,7 +234,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     <div class="form-group">
                         <label for="patientName" class="col-lg-4 control-label">Patient's Name </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="patientName" name="patientName" placeholder="patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_name']; ?>"/>
+                        <input type="text" class="form-control" id="patientName" name="patientName" placeholder="Patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_name']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -261,7 +251,7 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>
                      <div class="col-md-6">
                     <div class="form-group">
-                        <label for="genderMale" class="col-lg-4 control-label">Gender</label>
+                        <label for="gender" class="col-lg-4 control-label">Gender</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
                          <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($result[0]['gender']=='male')?"checked='checked'":""?>> Male
@@ -425,9 +415,8 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>    
-                                     
                 </div>
-                <div class="row">
+                <div class="row femaleElements" <?php echo($result[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="pregYes" class="col-lg-4 control-label">Is Patient Pregnant ?</label>
@@ -452,17 +441,16 @@ $tsResult = $db->rawQuery($tsQuery);
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 femaleElements" <?php echo($result[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
                     <div class="form-group">
                         <label for="breastfeeding" class="col-lg-4 control-label">Is Patient Breastfeeding?</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-							<input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);" <?php echo ($result[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>> Yes
-       
-						</label>
-						<label class="radio-inline">
-							<input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);" <?php echo ($result[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>> No
-						</label>
+                            <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);" <?php echo ($result[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>> Yes
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);" <?php echo ($result[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>> No
+                          </label>
                         </div>
                     </div>
                   </div>
@@ -483,7 +471,7 @@ $tsResult = $db->rawQuery($tsQuery);
           <div class="box box-success">
             <div class="box-header with-border">
               <h3 class="box-title">Indication for viral load testing</h3>
-              <small>(please tick one):(To be completed by clinician)</small>
+              <small>(Please tick one):(To be completed by clinician)</small>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -724,7 +712,6 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>                       
                 </div>
                 
-                
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
@@ -929,124 +916,24 @@ $tsResult = $db->rawQuery($tsQuery);
   <script type="text/javascript">
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'addVlRequestForm'
+        formId: 'editVlRequestForm'
     });
     $("#saveNext").val('save');
     if(flag){
-      document.getElementById('addVlRequestForm').submit();
+      document.getElementById('editVlRequestForm').submit();
     }
   }
   function validate(){
     flag = deforayValidator.init({
-        formId: 'addVlRequestForm'
+        formId: 'editVlRequestForm'
     });
     $("#saveNext").val('next');
     if(flag){
-      document.getElementById('addVlRequestForm').submit();
+      document.getElementById('editVlRequestForm').submit();
     }
   }
   
   $(document).ready(function() {
-     var data = [{ id: <?php echo $result[0]['facility_id']; ?>, text: '<?php echo $result[0]['facility_name']; ?>' }];
-
-  $("#facilityName").select2({
-    data: data
-  })
-  $("#artNoId").select2({
-    data: [{ id: '<?php echo $result[0]['art_no']; ?>', text: '<?php echo $result[0]['art_no']; ?>' }]
-  })
-  $('.facilityDatas').attr('readonly', true);
-     $("#facilityName").select2({
-      allowClear: true,
-      placeholder: "Enter Facility Name",
-      ajax: {
-      url: "getFacilitySearch.php",
-      dataType: 'json',
-      delay: 250,
-      data: function (params) {
-        return {
-          q: params.term, // search term
-          page: 10
-        };
-      },
-       processResults: function (data, params) {
-        // parse the results into the format expected by Select2
-        // since we are using custom formatting functions we do not need to
-        // alter the remote JSON dsata, except to indicate that infinite
-        // scrolling can be used
-        params.page = 10;
-        return {
-          results: data.result,        
-        };
-       },
-      },
-      escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-      minimumInputLength: 1
-     });
-     
-     $("#artNoId").select2({
-      allowClear: true,
-      placeholder: "Enter ART Number",
-      ajax: {
-      //url: "https://api.github.com/search/repositories",
-      url: "getArtNumberSearch.php",
-      dataType: 'json',
-      delay: 250,
-      data: function (params) {
-        return {
-          q: params.term, // search term
-          page: 10
-        };
-      },
-       processResults: function (data, params) {
-        // parse the results into the format expected by Select2
-        // since we are using custom formatting functions we do not need to
-        // alter the remote JSON dsata, except to indicate that infinite
-        // scrolling can be used
-        params.page = 10;
-        return {
-          results: data.result,        
-        };
-       },
-      },
-      escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-      minimumInputLength: 1
-     });
-   
-    
-     $('#facilityName').on("select2:select", function(e) {
-      //console.log(e.params.data);
-      if (e.params.data.id==0) {
-        $('.facilityDatas').val('');
-        $('.facilityDatas').removeAttr('readonly', true);
-        $("#newfacilityName").val(e.params.data.text);
-      }else{
-       $("#facilityId").val(e.params.data.id);
-       $("#facilityCode").val(e.params.data.facilityCode);
-       //$("#country").val(e.params.data.country);
-       $("#state").val(e.params.data.state);
-       $("#hubName").val(e.params.data.hubName);
-       $('.facilityDatas').attr('readonly', true);
-       $("#newfacilityName").val('');
-      }
-     });
-     $('#facilityName').on("select2:unselect", function(e) {
-      $('.facilityDatas').val('');
-      $('.facilityDatas').removeAttr('readonly', true);
-      $("#newfacilityName").val('');
-     });
-     
-     $('#artNoId').on("select2:select", function(e) {
-      if (e.params.data.patient==0) {
-        $("#artNo").val(e.params.data.text);
-      }else{
-       $("#artNo").val(e.params.data.text);
-      }
-     });
-     $('#artNoId').on("select2:unselect", function(e) {
-     $("#artNo").val('');
-     });
-     
      $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
@@ -1064,7 +951,6 @@ $tsResult = $db->rawQuery($tsQuery);
        
    });
 
-    
     function checkPatientIsPregnant(val){
      if(val=='yes'){
       $('#arcNo').addClass('isRequired');
@@ -1110,6 +996,69 @@ $tsResult = $db->rawQuery($tsQuery);
         $("#vlrfa").attr("onclick", "formToggler('-')");
       }
     }
+    
+    function setFacilityDetails(fDetails){
+      $("#facilityId").val("");
+      $("#facilityName").val("");
+      $("#state").val("");
+      $("#hubName").val("");
+      facilityArray = fDetails.split("##");
+      $("#facilityId").val(facilityArray[0]);
+      $("#facilityName").val(facilityArray[1]);
+      $("#state").val(facilityArray[2]);
+      $("#hubName").val(facilityArray[3]);
+      $("#facilityName,#state,#hubName").prop('readonly',true);
+      $("#clearFInfo").show();
+    }
+    
+    function clearFacilitiesInfo(){
+      $("#facilityId").val("");
+      $("#facilityName").val("");
+      $("#state").val("");
+      $("#hubName").val("");
+      $("#facilityName,#state,#hubName").prop('readonly',false);
+      $("#clearFInfo").hide();
+    }
+    
+    function setPatientDetails(ptDetails){
+      $("#artNo").val("");
+      $("#sampleCode").val("");
+      $("#otrId").val("");
+      $("#patientName").val("");
+      $("#dob").val("");
+      $("#genderMale").prop('checked',false);
+      $("#genderFemale").prop('checked',false);
+      $(".femaleElements").show();
+      $("#ageInYrs").val("");
+      $("#ageInMtns").val("");
+      $("#patientPhoneNumber").val("");
+      $("#patientLocation").val("");
+      patientArray = ptDetails.split("##");
+      $("#artNo").val(patientArray[0]);
+      $("#sampleCode").val(patientArray[1]);
+      $("#otrId").val(patientArray[2]);
+      $("#patientName").val(patientArray[3]);
+      $("#dob").val(patientArray[4]);
+      if(patientArray[5].toLowerCase() == 'male'){
+        $("#genderMale").prop('checked',true);
+        $(".femaleElements").hide();
+      }else if(patientArray[5].toLowerCase() == 'female'){
+        $("#genderFemale").prop('checked',true);
+        $(".femaleElements").show();
+      }
+      $("#ageInYrs").val(patientArray[6]);
+      $("#ageInMtns").val(patientArray[7]);
+      $("#patientPhoneNumber").val(patientArray[8]);
+      $("#patientLocation").val(patientArray[9]);
+    }
+    
+    $("input:radio[name=gender]").click(function() {
+      if($(this).val() == 'male'){
+         $(".femaleElements").hide();
+      }else if($(this).val() == 'female'){
+        $(".femaleElements").show();
+      }
+    });
   </script>
  <?php
  include('footer.php');

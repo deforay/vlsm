@@ -1,7 +1,6 @@
 <?php
 include('header.php');
 ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -60,10 +59,8 @@ include('header.php');
   var oTable = null;
   $(function () {
     //$("#example1").DataTable();
-   
   });
   $(document).ready(function() {
-	
         oTable = $('#userDataTable').dataTable({	
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"

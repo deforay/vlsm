@@ -11,7 +11,7 @@
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script type="text/javascript" src="assets/js/jquery-ui-timepicker-addon.js"></script>
 
-	<script src="assets/js/select2.js"></script>
+<script src="assets/js/select2.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="assets/js/bootstrap.min.js"></script>
 <!-- DataTables -->
@@ -56,6 +56,10 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importConfigMenu").addClass('active');
+  }else if (splitsUrl=='otherConfig.php' || splitsUrl=='editOtherConfig.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".otherConfigMenu").addClass('active');
   }else if (splitsUrl=='vlRequest.php' || splitsUrl=='editVlRequest.php' || splitsUrl=='viewVlRequest.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
@@ -68,6 +72,10 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".batchCodeMenu").addClass('active');
+  }else if (splitsUrl=='vlRequestMail.php' || splitsUrl=='sendRequestToMail.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlRequestMailMenu").addClass('active');
   }else if (splitsUrl=='addImportResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
