@@ -17,6 +17,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  'batch_id'=>$batchId,
 	 );
 	 $reportId = $db->insert('report_to_mail',$reportData);
+	 
 	 //get email id
 	 $geQuery="SELECT * FROM global_config where name='email'";
 	 $geResult = $db->rawQuery($geQuery);
@@ -77,6 +78,13 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 			   header('location:vlRequestMail.php');
 		  }
 		  else{
+			   //Update status
+			   $flag=array(
+					'sent_mail'=>'yes'
+			   );
+			   $db=$db->where('batch_id',$batchId);
+			   $db->update('batch_details',$flag);
+			   
 			   $_SESSION['alertMsg']='Report sent successfully';
 			   header('location:vlRequestMail.php');
 		  }

@@ -7,7 +7,8 @@ $primaryKey="batch_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('b.batch_code');
+        $aColumns = array('b.batch_code','b.sent_mail','vl.sample_code');
+		$orderColumns = array('b.batch_code','','b.sent_mail');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -31,7 +32,7 @@ $primaryKey="batch_id";
             $sOrder = "";
             for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
                 if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($_POST['iSortCol_' . $i])] . "
+                    $sOrder .= $orderColumns[intval($_POST['iSortCol_' . $i])] . "
 				 	" . ( $_POST['sSortDir_' . $i] ) . ", ";
                 }
             }
@@ -86,7 +87,7 @@ $primaryKey="batch_id";
         */
         
        //$sQuery="SELECT * FROM batch_details as b INNER JOIN vl_request_form as vl INNER JOIN b.batch_id=vl.batch_id";
-        $sQuery="select b.batch_code, b.batch_id,group_concat(vl.sample_code separator ',') sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
+        $sQuery="select b.batch_code,b.batch_id,b.sent_mail,group_concat(vl.sample_code separator ',') sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -130,6 +131,7 @@ $primaryKey="batch_id";
 			$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
 			$row[] = ucwords($aRow['batch_code']);
 			$row[] = $aRow['sample_code'];
+			$row[] = ucwords($aRow['sent_mail']);
 			$row[] = '<a href="sendRequestToMail.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-file"> Send Report</i></a>';
             $output['aaData'][] = $row;
         }
