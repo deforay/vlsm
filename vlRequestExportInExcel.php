@@ -194,8 +194,6 @@ if($batchId>0){
  $filename = 'vl-request-' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("./temporary". DIRECTORY_SEPARATOR . $filename);
  
- $workbook=$excel->load($filename);
- $workbook->getActiveSheet()->getSecurity()->setWorkbookPassword("test");
  echo $filename;
  
 }

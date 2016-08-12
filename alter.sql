@@ -131,13 +131,5 @@ INSERT INTO `vl_lab_request`.`global_config` (`name`, `value`) VALUES ('email', 
 
 --Pal 12-08-2016
 DELETE FROM `global_config` WHERE name ="email"
-DELETE FROM `global_config` WHERE name ="password"
-
-CREATE TABLE `other_config` (
-  `name` varchar(255) NOT NULL,
-  `value` mediumtext
-)
-
-INSERT INTO `other_config` (`name`, `value`) VALUES
-('email', 'zfmailexample@gmail.com'),
-('password', 'mko09876');
+--ilahir 12-Aug-2016
+ALTER TABLE `batch_details` ADD `sent_mail` VARCHAR(100) NOT NULL DEFAULT 'no' AFTER `batch_status`;

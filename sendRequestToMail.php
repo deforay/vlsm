@@ -76,9 +76,9 @@ $id=base64_decode($_GET['id']);
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="toMail" class="col-lg-4 control-label">Comments </label>
+                        <label for="toMail" class="col-lg-4 control-label">Message </label>
                         <div class="col-lg-7">
-                        <textarea class="form-control " id="comment" name="comment" title="Please enter comment" placeholder="Please enter Comments"></textarea>
+                        <textarea class="form-control " id="comment" name="comment" title="Please enter comment" placeholder="Please enter message"></textarea>
                         </div>
                     </div>
                   </div>
@@ -122,7 +122,7 @@ $id=base64_decode($_GET['id']);
     function(data){
         if(data!=''){
           $("#fileName").val(data);
-          //document.getElementById('sendReport').submit();
+          document.getElementById('sendReport').submit();
         }else{
           alert("Something went wrong!.")
         }

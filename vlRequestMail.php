@@ -28,12 +28,13 @@ include('header.php');
                 <tr>
                   <th>Batch Code</th>
                   <th>Sample Code</th>
+                  <th>Mail Sent</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="4" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
                 
@@ -70,6 +71,7 @@ include('header.php');
             "aoColumns": [
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
+				{"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 0, "asc" ]],
