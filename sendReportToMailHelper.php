@@ -19,9 +19,9 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 	 $reportId = $db->insert('report_to_mail',$reportData);
 	 
 	 //get email id
-	 $geQuery="SELECT * FROM global_config where name='email'";
+	 $geQuery="SELECT * FROM other_config where name='email'";
 	 $geResult = $db->rawQuery($geQuery);
-	 $gpQuery="SELECT * FROM global_config where name='password'";
+	 $gpQuery="SELECT * FROM other_config where name='password'";
 	 $gpResult = $db->rawQuery($gpQuery);
 	 if($reportId){
 		  //Create a new PHPMailer instance

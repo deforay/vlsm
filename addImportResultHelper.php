@@ -4,7 +4,8 @@ include('./includes/MysqliDb.php');
 include('header.php');
 include ('./includes/PHPExcel.php');
 include('General.php');
-
+$confFileName=base64_decode($_POST['machineName']);
+include($confFileName.'.php');
 $general=new Deforay_Commons_General();
 
 $tableName="vl_request_form";
@@ -13,12 +14,25 @@ $tableName="vl_request_form";
 try {
     
     if(isset($_POST['machineName'])){
-        $configId=base64_decode($_POST['machineName']);
-        $query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
-        $cResult = $db->rawQuery($query);
-        if(count($cResult)>0){
-            $sampleIdCol=$cResult[0]['sample_id_col'];
-            $sampleIdRow=$cResult[0]['sample_id_row'];
+        //$configId=base64_decode($_POST['machineName']);
+        //$query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
+        //$cResult = $db->rawQuery($query);
+        $confResult=$myConf->getConfigurationVal();
+        
+        if(count($confResult)>0){
+            $sampleIdCol=$confResult['sampleIdCol'];
+            $sampleIdRow=$confResult['sampleIdRow'];
+            $logValCol=$confResult['logValueCol'];
+            $logValRow=$confResult['logValueRow'];
+            $absValCol=$confResult['absoluteValueCol'];
+            $absValRow=$confResult['absoluteValueRow'];
+            $txtValCol=$confResult['textValueCol'];
+            $txtValRow=$confResult['textValueRow'];
+            $seperator=$confResult['seperator'];
+            $logAndAbsoluteValInSameCol=$confResult['logAndAbsoluteValSameColumn'];
+            
+            //$sampleIdCol=$cResult[0]['sample_id_col'];
+            //$sampleIdRow=$cResult[0]['sample_id_row'];
                         
             if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
                 $_POST['sampleReceivedDate']=$general->dateFormat($_POST['sampleReceivedDate']);
@@ -68,9 +82,7 @@ try {
                             }
                         }
                         
-                        if($cResult[0]['log_absolute_val_same_col']=='yes'){
-                            $logValCol=$cResult[0]['log_val_col'];
-                            $logValRow=$cResult[0]['log_val_row'];
+                        if($logAndAbsoluteValInSameCol=='yes'){
                             if($logValCol==$cellName){
                                 if($rKey>=$logValRow){
                                     if(trim($cell->getCalculatedValue())!=""){
@@ -89,13 +101,6 @@ try {
                                 }
                             }
                         }else{
-                            $logValCol=$cResult[0]['log_val_col'];
-                            $logValRow=$cResult[0]['log_val_row'];
-                            $absValCol=$cResult[0]['absolute_val_col'];
-                            $absValRow=$cResult[0]['absolute_val_row'];
-                            $txtValCol=$cResult[0]['text_val_col'];
-                            $txtValRow=$cResult[0]['text_val_row'];
-                            
                             if($logValCol==$cellName){
                                 if($rKey>=$logValRow){
                                     $logVal=trim($cell->getCalculatedValue());
