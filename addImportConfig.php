@@ -1,6 +1,10 @@
 <?php
 ob_start();
-include('header.php');
+//include('header.php');
+include('1.php');
+$confResult=$myConf->getConfigurationVal();
+print_r($confResult);
+die;
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

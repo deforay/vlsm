@@ -129,7 +129,21 @@ ALTER TABLE  `batch_details` ADD  `created_on` DATETIME NOT NULL ;
 ALTER TABLE  `batch_details` ADD  `batch_status` VARCHAR( 255 ) NOT NULL DEFAULT  'pending' AFTER  `batch_code` ;
 INSERT INTO `vl_lab_request`.`global_config` (`name`, `value`) VALUES ('email', 'zfmailexample@gmail.com'), ('password', 'mko09876');
 
+--Pal 12-08-2016
+DELETE FROM `global_config` WHERE name ="email"
+DELETE FROM `global_config` WHERE name ="password"
 
+CREATE TABLE `other_config` (
+  `name` varchar(255) NOT NULL,
+  `value` mediumtext
+)
+
+INSERT INTO `other_config` (`name`, `value`) VALUES
+('email', 'zfmailexample@gmail.com'),
+('password', 'mko09876');
+
+--ilahir 12-Aug-2016
+ALTER TABLE `batch_details` ADD `sent_mail` VARCHAR(100) NOT NULL DEFAULT 'no' AFTER `batch_status`;
 --saravanana 12-aug-2016
 
 CREATE TABLE IF NOT EXISTS `resources` (
@@ -162,89 +176,3 @@ INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES
 
 
 CREATE TABLE IF NOT EXISTS `privileges` (
-  `privilege_id` int(11) NOT NULL AUTO_INCREMENT,
-  `resource_id` int(11) NOT NULL,
-  `privilege_name` varchar(255) DEFAULT NULL,
-  `display_name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`privilege_id`),
-  KEY `resource_id` (`resource_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
-
---
--- Dumping data for table `privileges`
---
-
-INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES
-(1, 1, 'users.php', 'Access'),
-(2, 1, 'addUser.php', 'Add'),
-(3, 1, 'editUser.php', 'Edit'),
-(4, 2, 'facilities.php', 'Access'),
-(5, 2, 'addFacility.php', 'Add'),
-(6, 2, 'editFacility.php', 'Edit'),
-(7, 3, 'globalConfig.php', 'Access'),
-(8, 3, 'editGlobalConfig.php', 'Edit'),
-(9, 4, 'importConfig.php', 'Access'),
-(10, 4, 'addImportConfig.php', 'Add'),
-(11, 4, 'editImportConfig.php', 'Edit'),
-(12, 6, 'vlRequest.php', 'Access'),
-(13, 6, 'addVlRequest.php', 'Add'),
-(14, 6, 'editVlRequest.php', 'Edit'),
-(15, 6, 'viewVlRequest.php', 'View Vl Request'),
-(16, 7, 'batchcode.php', 'Access'),
-(17, 7, 'addBatch.php', 'Add'),
-(18, 7, 'editBatch.php', 'Edit'),
-(19, 8, 'addImportResult.php', 'Add'),
-(20, 9, 'vlPrintResult.php', 'Access'),
-(21, 10, 'vlTestResult.php', 'Access'),
-(22, 11, 'missingResult.php', 'Access'),
-(23, 12, 'vlResult.php', 'Access'),
-(24, 13, 'index.php', 'Access'),
-(25, 14, 'roles.php', 'Access'),
-(26, 14, 'editRole.php', 'Edit');
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `privileges`
---
-ALTER TABLE `privileges`
-  ADD CONSTRAINT `privileges_ibfk_1` FOREIGN KEY (`resource_id`) REFERENCES `resources` (`resource_id`);
-  
-  CREATE TABLE IF NOT EXISTS `roles_privileges_map` (
-  `map_id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_id` int(11) NOT NULL,
-  `privilege_id` int(11) NOT NULL,
-  PRIMARY KEY (`map_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=288 ;
-
---
--- Dumping data for table `roles_privileges_map`
---
-
-INSERT INTO `roles_privileges_map` (`map_id`, `role_id`, `privilege_id`) VALUES
-(264, 1, 1),
-(265, 1, 2),
-(266, 1, 3),
-(267, 1, 4),
-(268, 1, 5),
-(269, 1, 6),
-(270, 1, 7),
-(271, 1, 8),
-(272, 1, 9),
-(273, 1, 10),
-(274, 1, 11),
-(275, 1, 12),
-(276, 1, 13),
-(277, 1, 14),
-(278, 1, 15),
-(279, 1, 16),
-(280, 1, 19),
-(281, 1, 20),
-(282, 1, 21),
-(283, 1, 22),
-(284, 1, 23),
-(285, 1, 24),
-(286, 1, 25),
-(287, 1, 26);

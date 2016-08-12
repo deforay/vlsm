@@ -318,8 +318,6 @@ $fResult = $db->rawQuery($fQuery);
 	  }
     });
   }
-  
-  
 </script>
  <?php
  include('footer.php');

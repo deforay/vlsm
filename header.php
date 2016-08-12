@@ -56,7 +56,7 @@ $link = $_SERVER['PHP_SELF'];
 
  <!-- Latest compiled and minified JavaScript -->
     
-    <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
+<script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
 <script src="assets/js/deforayModal.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 
@@ -155,7 +155,7 @@ $link = $_SERVER['PHP_SELF'];
 		<?php } if(isset($_SESSION['privileges']) && !in_array("importConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
 		<?php } ?>
-		<li><a href="#"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
+		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
 	      </ul>
 	    </li>
 	<?php } ?>
@@ -176,6 +176,8 @@ $link = $_SERVER['PHP_SELF'];
 		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
 		<?php } ?>
+        
+            <li class="allMenu vlRequestMailMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
             </ul>
         </li>
 		
@@ -226,7 +228,7 @@ $link = $_SERVER['PHP_SELF'];
     <!-- /.sidebar -->
   </aside>
   <!-- content-wrapper -->
-  <div id="dDiv" class="dialog"> 
-            <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
-            <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
+    <div id="dDiv" class="dialog">
+        <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
+        <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
     </div>

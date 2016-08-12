@@ -6,7 +6,7 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Send Result To Mail</h1>
+      <h1>Send Request To Mail</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Result to Mail</li>
@@ -28,12 +28,13 @@ include('header.php');
                 <tr>
                   <th>Batch Code</th>
                   <th>Sample Code</th>
+                  <th>Mail Sent</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="3" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="4" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
                 
@@ -70,12 +71,13 @@ include('header.php');
             "aoColumns": [
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
+				{"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getvlResultBatchCodeDetails.php",
+            "sAjaxSource": "getVlRequestBatchCodeDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 	      aoData.push({"name": "vlResult", "value": 'mail'});
               $.ajax({

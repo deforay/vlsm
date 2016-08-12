@@ -31,9 +31,19 @@ $id=base64_decode($_GET['id']);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
+                        <label for="mailSubject" class="col-lg-4 control-label">Email Subject <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isRequired" id="mailSubject" name="mailSubject" placeholder="Email Subject" title="Please enter mail subject"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
                         <label for="toMail" class="col-lg-4 control-label">To Mail <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="toMail" name="toMail" placeholder="To Mail" title="Please enter to mail"/>
+                        <input type="text" class="form-control isRequired isEmail" id="toMail" name="toMail" placeholder="To Mail" title="Please enter to mail"/>
                         </div>
                     </div>
                   </div>
@@ -66,9 +76,9 @@ $id=base64_decode($_GET['id']);
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="toMail" class="col-lg-4 control-label">Comments </label>
+                        <label for="toMail" class="col-lg-4 control-label">Message </label>
                         <div class="col-lg-7">
-                        <textarea class="form-control " id="comment" name="comment" title="Please enter comment" placeholder="Please enter Comments"></textarea>
+                        <textarea class="form-control " id="comment" name="comment" title="Please enter comment" placeholder="Please enter message"></textarea>
                         </div>
                     </div>
                   </div>
@@ -78,9 +88,9 @@ $id=base64_decode($_GET['id']);
               <div class="box-footer">
                 <input type="hidden" name="encValue" id="encValue" value="no"/>
                 <input type="hidden" name="fileName" id="fileName"/>
-                <input type="hidden" name="batchId" id="batchId" value="<?php echo $id;?>"/>
+                <input type="hidden" name="batchId" id="batchId" value="<?php echo base64_encode($id);?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="addReport();return false;">Submit</a>
-                <a href="vlResultMail.php" class="btn btn-default"> Cancel</a>
+                <a href="vlRequestMail.php" class="btn btn-default"> Cancel</a>
               </div>
               </form>
               <!-- /.box-footer -->
@@ -108,16 +118,15 @@ $id=base64_decode($_GET['id']);
   
   function sendReport()
   {
-        $.post("vlResultExportInExcel.php",{pass:$("#password").val(),encValue:$("#encValue").val(),batchId:$("#batchId").val()},
-        function(data){
-            if(data!=''){
-            $("#fileName").val(data);
-            document.getElementById('sendReport').submit();
-            }else{
-                alert("Something went wrong!.")
-            }
-        });
-    
+    $.post("vlRequestExportInExcel.php",{pass:$("#password").val(),encValue:$("#encValue").val(),batchId:$("#batchId").val()},
+    function(data){
+        if(data!=''){
+          $("#fileName").val(data);
+          document.getElementById('sendReport').submit();
+        }else{
+          alert("Something went wrong!.")
+        }
+    });
   }
   function showPassword(obj)
   {
