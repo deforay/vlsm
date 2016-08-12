@@ -1,7 +1,8 @@
 <?php
 ob_start();
+session_start();
 include('./includes/MysqliDb.php');
-include('header.php');
+//include('header.php');
 
 $tableName1="batch_details";
 $tableName2="vl_request_form";

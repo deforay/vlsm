@@ -1,7 +1,8 @@
 <?php
 ob_start();
+session_start();
 include('./includes/MysqliDb.php');
-include('header.php');
+//include('header.php');
 
 
 $tableName="facility_details";

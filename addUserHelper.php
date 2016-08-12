@@ -1,14 +1,15 @@
 <?php
 ob_start();
+session_start();
 include('./includes/MysqliDb.php');
-include('header.php');
+//include('header.php');
 
 
 $tableName="user_details";
 
 
 try {
-    if(trim($_POST['username'])!='' && trim($_POST['loginId'])!='' && ($_POST['role'])!='' && ($_POST['password'])!=''){
+    if(trim($_POST['userName'])!='' && trim($_POST['loginId'])!='' && ($_POST['role'])!='' && ($_POST['password'])!=''){
         
     $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
     $password = sha1($_POST['password'].$passwordSalt);
