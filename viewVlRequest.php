@@ -239,7 +239,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   </div>
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="genderMale" class="col-lg-4 control-label">Gender</label>
+                        <label for="gender" class="col-lg-4 control-label">Gender</label>
                         <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['gender']); ?>
                         </div>

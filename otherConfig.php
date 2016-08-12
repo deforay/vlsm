@@ -5,10 +5,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>General Configuration</h1>
+      <h1>Other Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">General Configuration</li>
+        <li class="active">Other Configuration</li>
       </ol>
     </section>
 
@@ -18,11 +18,11 @@ include('header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="editGlobalConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit General Config</a>
+              <a href="editOtherConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit Other Config</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="globalConfigDataTable" class="table table-bordered table-striped">
+              <table id="otherConfigDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
 		  <th>Config Name</th>
@@ -49,7 +49,7 @@ include('header.php');
   <script type="text/javascript">
   var oTable = null;  
   $(document).ready(function() {
-     oTable = $('#globalConfigDataTable').dataTable({
+     oTable = $('#otherConfigDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -66,7 +66,7 @@ include('header.php');
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getGlobalConfigDetails.php",
+            "sAjaxSource": "getOtherConfigDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
               $.ajax({
                   "dataType": 'json',

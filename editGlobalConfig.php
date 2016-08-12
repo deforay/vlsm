@@ -16,10 +16,10 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Edit Global Config</h1>
+      <h1>Edit General Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Global Config</li>
+        <li class="active">Manage General Config</li>
       </ol>
     </section>
 
@@ -33,7 +33,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post' name='globalConfigForm' id='globalConfigForm' enctype="multipart/form-data" autocomplete="off" action="globalConfigHelper.php">
+            <form class="form-horizontal" method='post' name='editGlobalConfigForm' id='editGlobalConfigForm' enctype="multipart/form-data" autocomplete="off" action="globalConfigHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
@@ -102,11 +102,11 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   <script type="text/javascript">
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'globalConfigForm'
+        formId: 'editGlobalConfigForm'
     });
     
     if(flag){
-      document.getElementById('globalConfigForm').submit();
+      document.getElementById('editGlobalConfigForm').submit();
     }
   }
   
