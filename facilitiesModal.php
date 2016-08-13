@@ -5,20 +5,27 @@
   <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
    <!-- DataTables -->
   <link rel="stylesheet" href="./assets/plugins/datatables/dataTables.bootstrap.css">
+  <link href="assets/css/deforayModal.css" rel="stylesheet" />  
   <style>
     .content-wrapper{
       padding:2%;
     }
+    
     .center{text-align:center;}
+    body{
+      overflow-y: hidden;
+    }
   </style>
   <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
   <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
+  <script src="assets/js/deforayModal.js"></script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h3 style="margin:0;">Search Facilities</h3>
-    </section><hr>
+      <div class="pull-left" style="font-size:22px;">Search Facilities</div>
+      <div class="pull-right"><a class="" href="javascript:void(0);" onclick="showModal('addFacilityModal.php',900,520);">Add Facility</a></div>
+    </section>
      <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -54,11 +61,15 @@
     </section>
     <!-- /.content -->
   </div>
+  <div id="dDiv" class="dialog">
+      <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
+      <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
+  </div>
   <!-- Bootstrap 3.3.6 -->
-<script src="assets/js/bootstrap.min.js"></script>
-<!-- DataTables -->
-<script src="./assets/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="./assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <!-- DataTables -->
+  <script src="./assets/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="./assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
   <script>
   var oTable = null;
   $(document).ready(function() {
@@ -98,5 +109,12 @@
     function getFacility(fDetails){
       parent.closeModal();
       window.parent.setFacilityDetails(fDetails);
+    }
+    
+    function showModal(url, w, h) {
+      showdefModal('dDiv', w, h);
+      document.getElementById('dFrame').style.height = h + 'px';
+      document.getElementById('dFrame').style.width = w + 'px';
+      document.getElementById('dFrame').src = url;
     }
 </script>
