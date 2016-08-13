@@ -272,5 +272,14 @@ INSERT INTO `roles_privileges_map` (`map_id`, `role_id`, `privilege_id`) VALUES
 (373, 1, 25),
 (374, 1, 26);
 
+
+-- Amit Aug 13 2016
+
+ALTER TABLE `import_config` CHANGE `log_absolute_val_same_col` `file_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `other_config` ADD PRIMARY KEY(`name`);
+
 --saravanan 13-aug-2016
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '10', 'updateVlTestResult.php', 'Update Vl Test Result');
+
+
+

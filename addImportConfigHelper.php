@@ -7,22 +7,31 @@ $tableName="import_config";
 
 try {
     if(trim($_POST['configurationName'])!=""){
-    $data=array(
-    'machine_name'=>$_POST['configurationName'],
-    'log_absolute_val_same_col'=>$_POST['logAndAbsoluteInSameColumn'],
-    'sample_id_col'=>$_POST['sampleIdCol'],
-    'sample_id_row'=>$_POST['sampleIdRow'],
-    'log_val_col'=>$_POST['logValCol'],
-    'log_val_row'=>$_POST['logValRow'],
-    'absolute_val_col'=>$_POST['absoluteValCol'],
-    'absolute_val_row'=>$_POST['absoluteValRow'],
-    'text_val_col'=>$_POST['textValCol'],
-    'text_val_row'=>$_POST['textValRow']
-    );
-    //print_r($data);die;
-    $db->insert($tableName,$data);    
-    
-    $_SESSION['alertMsg']="Import config details added successfully";
+        $data=array(
+        'machine_name'=>$_POST['configurationName'],
+        'file_name'=>$_POST['configurationFile'],
+        'status' => 'active'
+        );
+        //print_r($data);die;
+        $db->insert($tableName,$data);    
+        
+        $_SESSION['alertMsg']="Result Import configuration initited for ".$_POST['configurationName'].". Please proceed to write the import logic in the file ".$_POST['configurationFile']." present in import-configs folder" ;
+        
+        $configDir = __DIR__.DIRECTORY_SEPARATOR.'import-configs';
+        $configFile = $configDir.DIRECTORY_SEPARATOR.$_POST['configurationFile'];
+        
+        
+        if (!file_exists($configDir)) {
+            mkdir($configDir, 0777, true);
+        }
+        
+        if (!file_exists($configFile)) {
+            $fp=fopen($configFile,'w');
+            fwrite($fp, '');
+            fclose($fp);
+        }
+        
+        
     }
     header("location:importConfig.php");
   

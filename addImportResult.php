@@ -2,7 +2,7 @@
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
-$query="SELECT config_id,machine_name FROM import_config where status='active'";
+$query="SELECT config_id,machine_name,file_name FROM import_config where status='active'";
 $iResult = $db->rawQuery($query);
 ?>
 
@@ -12,7 +12,7 @@ $iResult = $db->rawQuery($query);
     <section class="content-header">
       <h1>Add Import Result</h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Users</li>
       </ol>
     </section>
@@ -59,7 +59,7 @@ $iResult = $db->rawQuery($query);
                                   <?php
                                   foreach($iResult as $val){
                                   ?>
-                                  <option value="<?php echo base64_encode($val['config_id']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
+                                  <option value="<?php echo base64_encode($val['file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
                                   <?php } ?>
                                 </select>
                                 </div>

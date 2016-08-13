@@ -6,31 +6,22 @@ include('./includes/MysqliDb.php');
 include ('./includes/PHPExcel.php');
 include('General.php');
 $confFileName=base64_decode($_POST['machineName']);
-include($confFileName.'.php');
+
+include("import-configs".DIRECTORY_SEPARATOR.$confFileName);
+
+
+
 $general=new Deforay_Commons_General();
 
 $tableName="vl_request_form";
 
-
 try {
     
-    if(isset($_POST['machineName'])){
+    
         //$configId=base64_decode($_POST['machineName']);
         //$query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
         //$cResult = $db->rawQuery($query);
-        $confResult=$myConf->getConfigurationVal();
         
-        if(count($confResult)>0){
-            $sampleIdCol=$confResult['sampleIdCol'];
-            $sampleIdRow=$confResult['sampleIdRow'];
-            $logValCol=$confResult['logValueCol'];
-            $logValRow=$confResult['logValueRow'];
-            $absValCol=$confResult['absoluteValueCol'];
-            $absValRow=$confResult['absoluteValueRow'];
-            $txtValCol=$confResult['textValueCol'];
-            $txtValRow=$confResult['textValueRow'];
-            $seperator=$confResult['seperator'];
-            $logAndAbsoluteValInSameCol=$confResult['logAndAbsoluteValSameColumn'];
             
             //$sampleIdCol=$cResult[0]['sample_id_col'];
             //$sampleIdRow=$cResult[0]['sample_id_row'];
@@ -62,13 +53,20 @@ try {
                 mkdir('uploads'. DIRECTORY_SEPARATOR."import-result");
             }
             if (move_uploaded_file($_FILES['resultFile']['tmp_name'], 'uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName)) {
+               
+               
                 $objPHPExcel = \PHPExcel_IOFactory::load('uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName);
                 $sheetData = $objPHPExcel->getActiveSheet();
+                
+                
+                
                 //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 //$count = count($sheetData);
                 
-                foreach($sheetData->getRowIterator() as $rKey=>$row)
-                {
+                foreach($sheetData->getRowIterator() as $rKey=>$row){
+                    
+                    if($rKey < 2) continue;
+                    
                     $absVal="";
                     $logVal="";
                     $txtVal="";
@@ -76,53 +74,9 @@ try {
                     foreach($row->getCellIterator() as $key => $cell)
                     {
                         $cellName = $sheetData->getCellByColumnAndRow($key,$rKey)->getColumn();
-                        //$columnLetter = PHPExcel_Cell::stringFromColumnIndex($key);
-                        if($sampleIdCol==$cellName){
-                            if($rKey>=$sampleIdRow){
-                                $sampleVal=$cell->getCalculatedValue();
-                            }
-                        }
                         
-                        if($logAndAbsoluteValInSameCol=='yes'){
-                            if($logValCol==$cellName){
-                                if($rKey>=$logValRow){
-                                    if(trim($cell->getCalculatedValue())!=""){
-                                        $resVal=explode("(",$cell->getCalculatedValue());
-                                        if(count($resVal)==2){
-                                            $absVal=trim($resVal[0]);
-                                            $logVal=substr(trim($resVal[1]),0,-1);
-                                        }else{
-                                            $txtVal=trim($cell->getCalculatedValue());
-                                            if($txtVal=='Invalid' || $txtVal=='Valid'){
-                                                $resultFlag=trim($txtVal);
-                                            }
-                                        }
-                                    }
-                                    
-                                }
-                            }
-                        }else{
-                            if($logValCol==$cellName){
-                                if($rKey>=$logValRow){
-                                    $logVal=trim($cell->getCalculatedValue());
-                                }
-                            }
-                            
-                            if($absValCol==$cellName){
-                                if($rKey>=$absValRow){
-                                    $absVal=trim($cell->getCalculatedValue());
-                                }
-                            }
-                            
-                            if($txtValCol==$cellName){
-                                if($rKey>=$txtValRow){
-                                    $txtVal=trim($cell->getCalculatedValue());
-                                    if($txtVal=='Invalid' || $txtVal=='Valid'){
-                                        $resultFlag=trim($txtVal);
-                                    }
-                                }
-                            }
-                        }
+                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$resultFlag,$rKey,$cellName,$cell);
+                        
                     }
                     //echo $sampleVal."<br/>";
                     //echo $absVal."<br/>";
@@ -147,12 +101,9 @@ try {
                     $id=$db->update($tableName,$data);
                 }
             }
-        }
-        $db->insert($tableName,$data);    
-    
+            
         $_SESSION['alertMsg']="Import result details added successfully";
-    }
-    header("location:index.php");
+        header("location:addImportResult.php");
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());

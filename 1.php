@@ -33,7 +33,7 @@ class myConfiguration
     }
 }
 
-$sampleIdCol='E';
+$sampleIdCol='D';
 $sampleIdRow='2';
 $logValueCol='I';
 $logValueRow='I2';

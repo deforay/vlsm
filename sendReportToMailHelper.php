@@ -20,10 +20,15 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 	 $reportId = $db->insert('report_to_mail',$reportData);
 	 
 	 //get email id
-	 $geQuery="SELECT * FROM other_config where name='email'";
+	 $geQuery="SELECT * FROM other_config";
 	 $geResult = $db->rawQuery($geQuery);
-	 $gpQuery="SELECT * FROM other_config where name='password'";
-	 $gpResult = $db->rawQuery($gpQuery);
+	 
+	 $mailconf = array();
+	 foreach($geResult as $row){
+		  $mailconf[$row['name']] = $row['value'];
+	 }
+	 
+	 
 	 if($reportId){
 		  //Create a new PHPMailer instance
 		  $mail = new PHPMailer();
@@ -33,7 +38,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  // 0 = off (for production use)
 		  // 1 = client messages
 		  // 2 = client and server messages
-		  $mail->SMTPDebug = 0;
+		  $mail->SMTPDebug = 2;
 		  //Ask for HTML-friendly debug output
 		  $mail->Debugoutput = 'html';
 		  //Set the hostname of the mail server
@@ -46,11 +51,11 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  $mail->SMTPAuth = true;
 		  $mail->SMTPKeepAlive = true; 
 		  //Username to use for SMTP authentication - use full email address for gmail
-		  $mail->Username = $geResult[0]['value'];
+		  $mail->Username = $mailconf['email'];
 		  //Password to use for SMTP authentication
-		  $mail->Password = $gpResult[0]['value'];
+		  $mail->Password = $mailconf['password'];
 		  //Set who the message is to be sent from
-		  $mail->setFrom($geResult[0]['value']);
+		  $mail->setFrom($mailconf['email']);
                 
           //Admin Mail
 		  if(isset($_POST['mailSubject']) && trim($_POST['mailSubject'])!=""){
@@ -62,7 +67,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  if(isset($_POST['comment']) && trim($_POST['comment'])!=""){
 			   $message=$_POST['comment'];
 		  }else{
-			   $message='Hi Sir,<br/> PFA';
+			   $message='';
 		  }
 		  
 		  $mail->Subject = $subject;
@@ -72,6 +77,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 
 		  $mail->AddAttachment($file_to_attach);
 		  $mail->msgHTML($message);
+		  
 		  if (!$mail->send())
 		  {
 			   $_SESSION['alertMsg']='Unable to send message. Please try later.';
@@ -86,7 +92,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 			   $db=$db->where('batch_id',$batchId);
 			   $db->update('batch_details',$flag);
 			   
-			   $_SESSION['alertMsg']='Report sent successfully';
+			   $_SESSION['alertMsg']='Email sent successfully';
 			   header('location:vlRequestMail.php');
 		  }
 	 }

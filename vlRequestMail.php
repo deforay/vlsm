@@ -6,9 +6,9 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Send Request To Mail</h1>
+      <h1>Send Request via Mail</h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Result to Mail</li>
       </ol>
     </section>
@@ -27,7 +27,6 @@ include('header.php');
                 <thead>
                 <tr>
                   <th>Batch Code</th>
-                  <th>Sample Code</th>
                   <th>Mail Sent</th>
                   <th>Action</th>
                 </tr>
@@ -70,7 +69,6 @@ include('header.php');
             "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
-                {"sClass":"center","bSortable":false},
 				{"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
