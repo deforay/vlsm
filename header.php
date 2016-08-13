@@ -152,10 +152,11 @@ $link = $_SERVER['PHP_SELF'];
 		<li class="allMenu facilityMenu"><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu globalConfigMenu"><a href="globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
-		<?php } if(isset($_SESSION['privileges']) && !in_array("importConfig.php", $_SESSION['privileges'])){ ?>
+		<?php } if(isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
-		<?php } ?>
+		<?php }  if(isset($_SESSION['privileges']) && in_array("otherConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
+		<?php } ?>
 	      </ul>
 	    </li>
 	<?php } ?>

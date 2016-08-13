@@ -271,3 +271,6 @@ INSERT INTO `roles_privileges_map` (`map_id`, `role_id`, `privilege_id`) VALUES
 (372, 1, 24),
 (373, 1, 25),
 (374, 1, 26);
+
+--saravanan 13-aug-2016
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '10', 'updateVlTestResult.php', 'Update Vl Test Result');
