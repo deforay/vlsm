@@ -97,16 +97,6 @@ $sampleType='<option value="">--Select--</option>';
 //get test status values
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
-
-//get last url
-$display = '';
-$lastUrl = $_SERVER['HTTP_REFERER'];
-$linkLastUrl = explode('/',$lastUrl);
-  if(end($linkLastUrl)!='error.php'){
-    if(isset($_SESSION['privileges']) && end($linkLastUrl)== "vlTestResult.php"){
-     $display = 'display:none';
-    }
-  }
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
@@ -162,7 +152,6 @@ $linkLastUrl = explode('/',$lastUrl);
           <!-- form start -->
             <form class="form-horizontal" method='post' name='editVlRequestForm' id='editVlRequestForm' autocomplete="off"  action="editVlRequestHelper.php">
               <div class="box-body">
-               <div id="vlDiv" style="<?php echo $display;?>">
                <div class="row">
                    <div class="col-md-12"><h4><a id="vlrfa" href="javascript:void(0);" onclick="formToggler('-');">VL Request Form Details <i class="fa fa-minus"></i></a></h4></div>
                </div>
@@ -745,7 +734,6 @@ $linkLastUrl = explode('/',$lastUrl);
                     </div>
                   </div>                                    
                </div>
-              </div>
               
              <div class="row">
                 <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
