@@ -565,9 +565,17 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="rejection" class="col-lg-4 control-label">Rejection </label>
+                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <div class="col-lg-7" style="font-style:italic;">
+                          <?php echo ucfirst($result[0]['justification']); ?>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic </label>
                         <div class="col-lg-7" style="font-style:italic;">
                           <?php echo ucfirst($result[0]['rejection']); ?>
                         </div>
@@ -657,16 +665,6 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
                         <div class="col-lg-7" style="font-style:italic;">
                            <?php echo $result[0]['result_reviewed_date']; ?>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="justification" class="col-lg-4 control-label">Justification</label>
-                        <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo ucfirst($result[0]['justification']); ?>
                         </div>
                     </div>
                   </div>
