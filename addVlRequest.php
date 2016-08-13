@@ -585,9 +585,17 @@ $tsResult = $db->rawQuery($tsQuery);
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="rejection" class="col-lg-4 control-label">Rejection <span class="mandatory">*</span></label>
+                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
                            <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection"> Yes
@@ -681,16 +689,6 @@ $tsResult = $db->rawQuery($tsQuery);
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control date readonly" readonly='readonly' id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date"/>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="justification" class="col-lg-4 control-label">Justification</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification"/>
                         </div>
                     </div>
                   </div>

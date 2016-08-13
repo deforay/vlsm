@@ -722,11 +722,18 @@ $linkLastUrl = explode('/',$lastUrl);
                     </div>
                   </div>                       
                 </div>
-                
                 <div class="row">
-                    <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="rejection" class="col-lg-4 control-label">Rejection <span class="mandatory">*</span></label>
+                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $result[0]['justification']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
                          <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
@@ -737,8 +744,7 @@ $linkLastUrl = explode('/',$lastUrl);
                         </div>
                     </div>
                   </div>                                    
-                </div>
-             </div>
+               </div>
               </div>
               
              <div class="row">
@@ -826,19 +832,9 @@ $linkLastUrl = explode('/',$lastUrl);
                     </div>
                   </div>
                 </div>
-                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="justification" class="col-lg-4 control-label">Justification</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $result[0]['justification']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
+                <div class="row">
+                  <div class="col-md-12"><h4>Result Details</h4></div>
                 </div>
-                 <div class="row">
-                   <div class="col-md-12"><h4>Result Details</h4></div>
-                 </div>
                  
                  <div class="row">
                   <div class="col-md-6">
