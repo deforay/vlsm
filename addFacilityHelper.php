@@ -2,11 +2,8 @@
 ob_start();
 session_start();
 include('./includes/MysqliDb.php');
-//include('header.php');
-
 
 $tableName="facility_details";
-
 
 try {
     if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){

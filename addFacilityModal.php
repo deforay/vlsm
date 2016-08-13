@@ -1,0 +1,216 @@
+<?php
+ob_start();
+include('./includes/MysqliDb.php');
+if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){
+    $tableName="facility_details";
+    $data=array(
+        'facility_name'=>$_POST['facilityName'],
+        'facility_code'=>$_POST['facilityCode'],
+        'phone_number'=>$_POST['phoneNo'],
+        'address'=>$_POST['address'],
+        'country'=>$_POST['country'],
+        'state'=>$_POST['state'],
+        'hub_name'=>$_POST['hubName'],
+        'email'=>$_POST['email'],
+        'contact_person'=>$_POST['contactPerson'],
+	'facility_type'=>$_POST['facilityType'],
+        'status'=>'active'
+        );
+        //print_r($data);die;
+        $db->insert($tableName,$data);
+    ?>
+        <script>window.parent.location.href=window.parent.location.href;</script>
+<?php 
+}
+$fQuery="SELECT * FROM facility_type";
+$fResult = $db->rawQuery($fQuery);
+?>
+  <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
+   <!-- DataTables -->
+  <link rel="stylesheet" href="./assets/plugins/datatables/dataTables.bootstrap.css">
+  <link href="assets/css/deforayModal.css" rel="stylesheet" />    
+   <style>
+    .content-wrapper{
+      padding:2%;
+    }
+  </style> 
+  <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
+  <script src="assets/js/deforayModal.js"></script>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h3>Add Facility</h3>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- SELECT2 EXAMPLE -->
+      <div class="box box-default">
+        <div class="box-header with-border">
+          <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <!-- form start -->
+            <form class="form-vertical" method='post' name='addFacilityModalForm' id='addFacilityModalForm' autocomplete="off" action="#">
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" />
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="facilityCode" class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span> </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isRequired" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address" class="col-lg-4 control-label">Facility Type</label>
+                        <div class="col-lg-7">
+                        <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type">
+                          <option value="">--select--</option>
+                            <?php
+                            foreach($fResult as $type){
+                             ?>
+                             <option value="<?php echo $type['facility_type_id'];?>"><?php echo ucwords($type['facility_type_name']);?></option>
+                             <?php
+                            }
+                            ?>
+                          </select>
+                        </div>
+                    </div>
+                  </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email" class="col-lg-4 control-label">Email </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isEmail" id="email" name="email" placeholder="Email" />
+                        </div>
+                    </div>
+                  </div>
+                   
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="contactPerson" name="contactPerson" placeholder="Contact Person" />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" />
+                        </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                
+                <div class="row">
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="state" class="col-lg-4 control-label">State</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="state" name="state" placeholder="State" />
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
+                        </div>
+                    </div>
+                  </div>
+                  
+                </div>
+               
+               <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address" class="col-lg-4 control-label">Address</label>
+                        <div class="col-lg-7">
+                        <textarea class="form-control" name="address" id="address" placeholder="Address"></textarea>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="country" class="col-lg-4 control-label">Country</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Country"/>
+                        </div>
+                    </div>
+                  </div>
+                  
+                </div>
+               
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
+                <a href="#" class="btn btn-default"> Cancel</a>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          <!-- /.row -->
+        </div>
+       
+      </div>
+      <!-- /.box -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <div id="dDiv" class="dialog">
+      <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
+      <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
+  </div>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="assets/js/bootstrap.min.js"></script>
+  <!-- DataTables -->
+  <script src="./assets/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="./assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
+  <script src="assets/js/deforayValidation.js"></script>
+  <script type="text/javascript">
+  function validateNow(){
+    flag = deforayValidator.init({
+        formId: 'addFacilityModalForm'
+    });
+    
+    if(flag){
+      document.getElementById('addFacilityModalForm').submit();
+    }
+  }
+  
+   function showModal(url, w, h) {
+      showdefModal('dDiv', w, h);
+      document.getElementById('dFrame').style.height = h + 'px';
+      document.getElementById('dFrame').style.width = w + 'px';
+      document.getElementById('dFrame').src = url;
+    }
+  </script>
