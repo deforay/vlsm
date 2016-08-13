@@ -13,6 +13,7 @@
     
     .center{text-align:center;}
     body{
+      overflow-x: hidden;
       overflow-y: hidden;
     }
   </style>
@@ -24,7 +25,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="pull-left" style="font-size:22px;">Search Facilities</div>
-      <div class="pull-right"><a class="" href="javascript:void(0);" onclick="showModal('addFacilityModal.php',900,520);">Add Facility</a></div>
+      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php',900,520);" style="margin-bottom:20px;">Add Facility</a></div>
     </section>
      <!-- Main content -->
     <section class="content">

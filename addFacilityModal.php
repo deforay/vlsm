@@ -173,7 +173,7 @@ $fResult = $db->rawQuery($fQuery);
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                <a href="#" class="btn btn-default"> Cancel</a>
+                <a href="javascript:void(0);" class="btn btn-default" onclick="goBack();"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -197,7 +197,7 @@ $fResult = $db->rawQuery($fQuery);
   <script src="./assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
   <script src="assets/js/deforayValidation.js"></script>
   <script type="text/javascript">
-  function validateNow(){
+   function validateNow(){
     flag = deforayValidator.init({
         formId: 'addFacilityModalForm'
     });
@@ -205,12 +205,16 @@ $fResult = $db->rawQuery($fQuery);
     if(flag){
       document.getElementById('addFacilityModalForm').submit();
     }
-  }
+   }
   
    function showModal(url, w, h) {
       showdefModal('dDiv', w, h);
       document.getElementById('dFrame').style.height = h + 'px';
       document.getElementById('dFrame').style.width = w + 'px';
       document.getElementById('dFrame').src = url;
+    }
+    
+    function goBack(){
+        window.parent.location.href=window.parent.location.href;
     }
   </script>
