@@ -14,7 +14,7 @@
     .center{text-align:center;}
     body{
       overflow-x: hidden;
-      overflow-y: hidden;
+      /*overflow-y: hidden;*/
     }
   </style>
   <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
@@ -113,6 +113,8 @@
     }
     
     function showModal(url, w, h) {
+      $('html, body').css('overflow-x', 'hidden'); 
+      $('html, body').css('overflow-y', 'hidden'); 
       showdefModal('dDiv', w, h);
       document.getElementById('dFrame').style.height = h + 'px';
       document.getElementById('dFrame').style.width = w + 'px';
