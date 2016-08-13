@@ -103,7 +103,7 @@ $display = '';
 $lastUrl = $_SERVER['HTTP_REFERER'];
 $linkLastUrl = explode('/',$lastUrl);
   if(end($linkLastUrl)!='error.php'){
-    if(isset($_SESSION['privileges']) && in_array(end($linkLastUrl), $_SESSION['privileges'])){
+    if(isset($_SESSION['privileges']) && end($linkLastUrl)== "vlTestResult.php"){
      $display = 'display:none';
     }
   }
