@@ -11,8 +11,8 @@ $id=base64_decode($_GET['id']);
     <section class="content-header">
       <h1>Send Report</h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Send Report</li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Email Request</li>
       </ol>
     </section>
 
@@ -48,7 +48,7 @@ $id=base64_decode($_GET['id']);
                     </div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" style="display:none;">
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Do you Want Encrypt? </label>

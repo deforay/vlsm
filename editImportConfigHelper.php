@@ -9,23 +9,31 @@ try {
     if(trim($_POST['configurationName'])!=""){
     $importConfigData=array(
     'machine_name'=>$_POST['configurationName'],
-    'log_absolute_val_same_col'=>$_POST['logAndAbsoluteInSameColumn'],
-    'sample_id_col'=>$_POST['sampleIdCol'],
-    'sample_id_row'=>$_POST['sampleIdRow'],
-    'log_val_col'=>$_POST['logValCol'],
-    'log_val_row'=>$_POST['logValRow'],
-    'absolute_val_col'=>$_POST['absoluteValCol'],
-    'absolute_val_row'=>$_POST['absoluteValRow'],
-    'text_val_col'=>$_POST['textValCol'],
-    'text_val_row'=>$_POST['textValRow'],
+    'file_name'=>$_POST['configurationFile'],
     'status'=>$_POST['status']
     );
-    //print_r($data);die;
+    //print_r($importConfigData);die;
     $db=$db->where('config_id',$configId);
     //print_r($vldata);die;
     $db->update($tableName,$importConfigData);        
     
-    $_SESSION['alertMsg']="Import config details updated successfully";
+        $_SESSION['alertMsg']="Import config details updated successfully";
+    
+        $configDir = __DIR__.DIRECTORY_SEPARATOR.'import-configs';
+        $configFile = $configDir.DIRECTORY_SEPARATOR.$_POST['configurationFile'];
+        
+        
+        if (!file_exists($configDir)) {
+            mkdir($configDir, 0777, true);
+        }
+        
+        if (!file_exists($configFile)) {
+            $fp=fopen($configFile,'w');
+            fwrite($fp, '');
+            fclose($fp);
+        }    
+    
+    
     }
     header("location:importConfig.php");
   

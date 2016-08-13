@@ -26,12 +26,9 @@ if(isset($_SESSION['userId'])){
             
             background: #F6F6F6;       
             background: #000;       
-        }
-        
-        body > .container{
             
             background : url("assets/img/bg.jpg") center;
-            background-size: contain;            
+            background-size: cover;            
             background-repeat:no-repeat;    
         }
     </style> 
@@ -46,10 +43,10 @@ if(isset($_SESSION['userId'])){
 </head>
 <body class="">
     <div class="container">    
-        <div id="loginbox" style="margin-top:140px;margin-bottom:140px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
-            <div class="panel panel-primary" style="opacity: 0.98;">
+        <div id="loginbox" style="margin-top:30px;margin-bottom:70px;float:right;margin-right:50px;" class="mainbox col-md-3 col-sm-8 ">                    
+            <div class="panel panel-default" style="opacity: 0.9;">
                     <div class="panel-heading">
-                        <div class="panel-title">Log in to continue</div>
+                        <div class="panel-title">Viral Load Sample Management</div>
                         
                     </div>     
 
@@ -59,22 +56,14 @@ if(isset($_SESSION['userId'])){
                             
                         <form id="loginForm" name="loginForm" class="form-horizontal" role="form" method="post" action="loginProcess.php" onsubmit="validateNow();return false;">
                                     
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div style="margin-bottom: 5px" class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                 <input id="login-username" type="text" class="form-control isRequired" name="username" value="" placeholder="User Name" title="Please enter the user name">
                             </div>
                                 
-                            <div style="margin-bottom: 25px" class="input-group">
+                            <div style="margin-bottom: 5px" class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                 <input id="login-password" type="password" class="form-control isRequired" name="password" placeholder="Password" title="Please enter the password">
-                            </div>
-                                
-                            <div class="input-group">
-                                      <div class="checkbox">
-                                        <label>
-                                          <input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-                                        </label>
-                                      </div>
                             </div>
 
                             <div style="margin-top:10px" class="form-group">
