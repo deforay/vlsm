@@ -82,6 +82,9 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
 }else{
  $result[0]['result_reviewed_date']='';
 }
+//get test status values
+$tsQuery="SELECT * FROM testing_status";
+$tsResult = $db->rawQuery($tsQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -595,6 +598,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+             <form class="form-horizontal" method='post' name='updateVlTest' id='updateVlTest' autocomplete="off"  action="updateVlTestResultHelper.php">
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
@@ -612,7 +616,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         </div>
                     </div>
                    </div>
-                </div><br/>
+                </div>
                 
                 <div class="row">
                     <div class="col-md-6">
@@ -631,7 +635,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         </div>
                     </div>
                   </div>
-                </div><br/>
+                </div>
                 
                 <div class="row">
                  <div class="col-md-6">
@@ -737,6 +741,13 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     </div>
                   </div>
                  </div>
+                 <div class="box-footer">
+                <input type="hidden" id="treamentId" name="treamentId" value="<?php echo $id; ?>"/>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                <a href="vlTestResult.php" class="btn btn-default"> Cancel</a>
+              </div>
+              <!-- /.box-footer -->
+            </form>
             </div>
           </div>
         </div>
@@ -749,6 +760,23 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
     <!-- /.content -->
   </div>
   <script type="text/javascript">
+   $(document).ready(function() {
+     $('.date').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'dd-M-yy',
+      timeFormat: "hh:mm TT",
+      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     });
+   });
+   function validateNow(){
+    flag = deforayValidator.init({
+        formId: 'updateVlTest'
+    });
+    if(flag){
+      document.getElementById('updateVlTest').submit();
+    }
+  }
     function resultToggler(symbol) {
       if(symbol == "+"){
           $("#toogleResultDiv").slideToggle();
