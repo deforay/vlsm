@@ -94,7 +94,8 @@ try {
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
-                        'result'=>$resultFlag
+                        'result'=>$resultFlag,
+                        'status'=>6
                     );
                     
                     $db=$db->where('sample_code',$sampleVal);
@@ -102,8 +103,8 @@ try {
                 }
             }
             
-        $_SESSION['alertMsg']="Import result details added successfully";
-        header("location:addImportResult.php");
+        $_SESSION['alertMsg']="Imported results successfully";
+        header("location:vlResultApproval.php");
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());

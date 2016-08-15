@@ -2,14 +2,23 @@
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
-$id=base64_decode($_GET['id']);
+$id=(int)base64_decode($_GET['id']);
+
+$sQuery="SELECT * FROM batch_details where batch_id=$id";
+$rResult = $db->rawQuery($sQuery);
+
+if($id <=0 || !isset($rResult) || count($rResult) ==0){
+  header("Location: vlRequestMail.php");
+}
+
+
 ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Send Report</h1>
+      <h1>Send Test Request for <strong><?php echo $rResult[0]['batch_code']; ?></strong></h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Email Request</li>
@@ -33,7 +42,7 @@ $id=base64_decode($_GET['id']);
                     <div class="form-group">
                         <label for="mailSubject" class="col-lg-4 control-label">Email Subject <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="mailSubject" name="mailSubject" placeholder="Email Subject" title="Please enter mail subject"/>
+                        <input type="text" class="form-control isRequired" id="mailSubject" name="mailSubject" placeholder="Email Subject" title="Please enter mail subject" value="Test Request : <?php echo $rResult[0]['batch_code']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -41,7 +50,7 @@ $id=base64_decode($_GET['id']);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="toMail" class="col-lg-4 control-label">To Mail <span class="mandatory">*</span></label>
+                        <label for="toMail" class="col-lg-4 control-label">To email address <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired isEmail" id="toMail" name="toMail" placeholder="To Mail" title="Please enter to mail"/>
                         </div>
@@ -51,7 +60,7 @@ $id=base64_decode($_GET['id']);
                 <div class="row" style="display:none;">
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email" class="col-lg-4 control-label">Do you Want Encrypt? </label>
+                        <label for="email" class="col-lg-4 control-label">Do you want to encrypt? </label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
                         <input type="radio" id="yes" name="encrypt" title="Please choose yes or no" value="yes" onclick="showPassword(this)" />Yes
@@ -78,7 +87,7 @@ $id=base64_decode($_GET['id']);
                     <div class="form-group">
                         <label for="toMail" class="col-lg-4 control-label">Message </label>
                         <div class="col-lg-7">
-                        <textarea class="form-control " id="comment" name="comment" title="Please enter comment" placeholder="Please enter message"></textarea>
+                        <textarea class="form-control " id="comment" name="comment" title="Please enter message" placeholder="Please enter message"></textarea>
                         </div>
                     </div>
                   </div>

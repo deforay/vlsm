@@ -60,7 +60,7 @@ $xquery=mysql_query($inquery);
             <tr>
              <th align="center" valign="middle" class="content" colspan="2">
                 <select name="dept" id="dept">
-                    <option value="">--Select--</option>
+                    <option value="">-- Select --</option>
                    <?php while($row=mysql_fetch_array($xquery))
                      {?>
                      <option value="<?php echo $row['dept_id'];?>"><?php echo $row['dept_name']; ?></option>

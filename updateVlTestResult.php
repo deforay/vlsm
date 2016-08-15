@@ -91,7 +91,7 @@ $tsResult = $db->rawQuery($tsQuery);
     <!-- Content Header (Page header) -->
    <style>
    #toogleResultDiv{
-     display:none;
+     
    }
    </style>
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
@@ -589,7 +589,7 @@ $tsResult = $db->rawQuery($tsQuery);
              </div>
              
              <div class="row">
-                <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
+                <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('-');">Lab/Result Details <i class="fa fa-minus"></i></a></h4></div>
              </div>
              
             <div id="toogleResultDiv" class="box box-primary">
@@ -744,7 +744,7 @@ $tsResult = $db->rawQuery($tsQuery);
                  <div class="box-footer">
                 <input type="hidden" id="treamentId" name="treamentId" value="<?php echo $id; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                <a href="vlTestResult.php" class="btn btn-default"> Cancel</a>
+                <a href="javascript:void(0);" onclick="window.history.go(-1)" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>

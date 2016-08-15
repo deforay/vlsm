@@ -67,7 +67,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  if(isset($_POST['comment']) && trim($_POST['comment'])!=""){
 			   $message=$_POST['comment'];
 		  }else{
-			   $message='';
+			   $message='<br><br>Please find the Test Request attached.<br>';
 		  }
 		  
 		  $mail->Subject = $subject;

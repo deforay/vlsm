@@ -55,7 +55,7 @@ $iResult = $db->rawQuery($query);
                                 <label for="machineName" class="col-lg-4 control-label">Configuration Name <span class="mandatory">*</span></label>
                                 <div class="col-lg-7">
                                 <select name="machineName" id="machineName" class="form-control isRequired" title="Please select the import machine type">
-                                  <option value="">--Select--</option>
+                                  <option value="">-- Select --</option>
                                   <?php
                                   foreach($iResult as $val){
                                   ?>
@@ -91,14 +91,16 @@ $iResult = $db->rawQuery($query);
                               <label for="labName" class="col-lg-4 control-label">Lab Name <span class="mandatory">*</span></label>
                               <div class="col-lg-7">
                               <input type="text" class="form-control isRequired" id="labName" name="labName" placeholder="Lab Name" title="Please enter lab name" />
+                              <input type="hidden" class="form-control" id="labId" name="labId" placeholder="Lab ID" title="Please enter lab name" />
+							  <div class="pull-right"><a id="clearFInfo" href="javascript:void(0);" onclick="clearFacilitiesInfo();" class="btn btn-danger btn-sm" style="padding-right:10px;display:none;">Clear</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showModal('facilitiesModal.php',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
                               </div>
                           </div>
                         </div>
                          <div class="col-md-6">
                           <div class="form-group">
-                              <label for="labContactPerson" class="col-lg-4 control-label">Lab Contact Person <span class="mandatory">*</span></label>
+                              <label for="labContactPerson" class="col-lg-4 control-label">Lab Contact Person </label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control isRequired" id="labContactPerson" name="labContactPerson" placeholder="Lab Contact Person" title="Please enter the lab contact person"/>
+                              <input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Lab Contact Person" title="Please enter the lab contact person"/>
                               </div>
                           </div>
                         </div>
@@ -106,17 +108,17 @@ $iResult = $db->rawQuery($query);
                       <div class="row">
                          <div class="col-md-6">
                           <div class="form-group">
-                              <label for="labPhoneNo" class="col-lg-4 control-label">Lap Phone No <span class="mandatory">*</span></label>
+                              <label for="labPhoneNo" class="col-lg-4 control-label">Lab Phone</label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control isRequired" id="labPhoneNo" name="labPhoneNo" placeholder="Lap Phone No Column" title="Please enter lab phone number" />
+                              <input type="text" class="form-control" id="labPhoneNo" name="labPhoneNo" placeholder="Lab Phone Number" title="Please enter lab phone number" />
                               </div>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                              <label class="col-lg-4 control-label">Sample Received Date <span class="mandatory">*</span></label>
+                              <label class="col-lg-4 control-label">Samples Received On <span class="mandatory">*</span></label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control isRequired datePicker readonly" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received Date" title="Please enter sample received date" readonly="readonly"/>
+                              <input type="text" class="form-control isRequired datePicker readonly" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Samples/Batch Received Date" title="Please enter samples/batch received date" readonly="readonly"/>
                               </div>
                           </div>
                         </div>
@@ -124,15 +126,15 @@ $iResult = $db->rawQuery($query);
                       <div class="row">
                          <div class="col-md-6">
                           <div class="form-group">
-                              <label class="col-lg-4 control-label">Sample Testing Date <span class="mandatory">*</span></label>
+                              <label class="col-lg-4 control-label">Samples Tested On <span class="mandatory">*</span></label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control isRequired datePicker readonly" id="testingDate" name="testingDate" placeholder="Sample Testing Date" title="Please enter sample testing date" readonly="readonly" />
+                              <input type="text" class="form-control isRequired datePicker readonly" id="testingDate" name="testingDate" placeholder="Samples/Batch Testing Date" title="Please enter samples/batch testing date" readonly="readonly" />
                               </div>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                              <label class="col-lg-4 control-label">Dispatched Date <span class="mandatory">*</span></label>
+                              <label class="col-lg-4 control-label">Dispatch On <span class="mandatory">*</span></label>
                               <div class="col-lg-7">
                               <input type="text" class="form-control isRequired datePicker readonly" id="dispatchedDate" name="dispatchedDate" placeholder="Dispatched Date" title="Please enter dispatched date" readonly="readonly"/>
                               </div>
@@ -144,15 +146,15 @@ $iResult = $db->rawQuery($query);
                           <div class="form-group">
                               <label for="reviewedBy" class="col-lg-4 control-label">Reviewed By</label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Reviewed By" title="Please enter reviewed by" />
+                              <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Reviewed By" title="Please enter reviewed by" value="<?php if(isset($_SESSION['userName'])){ echo $_SESSION['userName']; } ?>"/>
                               </div>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                              <label class="col-lg-4 control-label">Reviewed Date <span class="mandatory">*</span></label>
+                              <label class="col-lg-4 control-label">Reviewed On</label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control isRequired datePicker readonly" id="reviewedDate" name="reviewedDate" placeholder="Reviewed Date" title="Please enter reviewed date" readonly="readonly"/>
+                              <input type="text" class="form-control datePicker readonly" id="reviewedDate" name="reviewedDate" placeholder="Reviewed Date" title="Please enter reviewed date" readonly="readonly"/>
                               </div>
                           </div>
                         </div>
@@ -287,6 +289,31 @@ $iResult = $db->rawQuery($query);
         $('.wizard_content').children("#"+objId).fadeIn();
 	
     }
+	
+	
+	
+function setFacilityDetails(fDetails){
+      $("#labId").val("");
+      $("#labName").val("");
+      facilityArray = fDetails.split("##");
+      $("#labId").val(facilityArray[0]);
+      $("#labName").val(facilityArray[1]);
+	  $("#labContactPerson").val(facilityArray[4]);
+	  $("#labPhoneNo").val(facilityArray[5]);
+      $("#labName").prop('readonly',true);
+      $("#clearFInfo").show();
+    }
+    
+    function clearFacilitiesInfo(){
+      $("#labId").val("");
+      $("#labName").val("");
+	  $("#labContactPerson").val("");
+	  $("#labPhoneNo").val("");
+      $("#labName").prop('readonly',false);
+      $("#clearFInfo").hide();
+    }	
+	
+	
 </script>
   
  <?php

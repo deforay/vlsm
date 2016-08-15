@@ -6,10 +6,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Manage Batch List</h1>
+      <h1>Manage Batches</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Batch List</li>
+        <li class="active">Manage Batches</li>
       </ol>
     </section>
      <!-- Main content -->

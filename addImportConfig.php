@@ -31,7 +31,7 @@ include('header.php');
                     <div class="form-group">
                         <label for="configurationName" class="col-lg-4 control-label">Configuration Name<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already Exist.Try with another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null)"/>
                         </div>
                     </div>
                   </div>
@@ -42,7 +42,7 @@ include('header.php');
                     <div class="form-group">
                         <label for="configurationFileName" class="col-lg-4 control-label">Configuration File<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter machine name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already Exist.Try with another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter machine name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null)"/>
                         </div>
                     </div>
                   </div>

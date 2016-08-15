@@ -43,7 +43,7 @@ $sResult = $db->rawQuery($sQuery);
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-			<option value="">--select--</option>
+			<option value="">-- Select --</option>
 			  <?php
 			  foreach($sResult as $type){
 			   ?>
@@ -58,7 +58,7 @@ $sResult = $db->rawQuery($sQuery);
 		   <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
 		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-			  <option value="">--select--</option>
+			  <option value="">-- Select --</option>
 			    <?php
 			    foreach($fResult as $name){
 			     ?>
@@ -84,7 +84,7 @@ $sResult = $db->rawQuery($sQuery);
                     <div class="form-group">
                         <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
-                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo $batchInfo[0]['batch_code'];?>" onblur="checkNameValidation('batch_details','batch_code',this,'<?php echo "batch_id##".$id;?>','This batch code already Exist.Try with another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo $batchInfo[0]['batch_code'];?>" onblur="checkNameValidation('batch_details','batch_code',this,'<?php echo "batch_id##".$id;?>','This batch code already exists.Try another code',null)"/>
                         </div>
                     </div>
                   </div>

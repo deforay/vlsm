@@ -39,7 +39,7 @@ $fResult = $db->rawQuery($fQuery);
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-		      <option value="">--select--</option>
+		      <option value="">-- Select --</option>
 			<?php
 			foreach($sResult as $type){
 			 ?>
@@ -53,7 +53,7 @@ $fResult = $db->rawQuery($fQuery);
 		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-		      <option value="">--select--</option>
+		      <option value="">-- Select --</option>
 			<?php
 			foreach($fResult as $name){
 			 ?>
@@ -111,7 +111,7 @@ $fResult = $db->rawQuery($fQuery);
 		  <td>
 		    <input type="hidden" name="checkedTests" id="checkedTests"/>
 		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
-		      <option value="">--select--</option>
+		      <option value="">-- Select --</option>
 			<?php
 			foreach($tsResult as $status){
 			 ?>

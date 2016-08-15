@@ -10,7 +10,7 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -200,7 +200,6 @@ $primaryKey="treament_id";
 			$row[] = $aRow['art_no'];
             $row[] = ucwords($aRow['patient_name']);
 			$row[] = ucwords($aRow['facility_name']);
-            $row[] = $aRow['facility_code'];
             $row[] = ucwords($aRow['sample_name']);
             $row[] = ucwords($aRow['result']);
             $row[] = ucwords($aRow['status_name']);
