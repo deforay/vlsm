@@ -48,7 +48,13 @@ $primaryKey="treament_id";
          * on very large tables, and MySQL's regex functionality is very limited
         */
         
-        $sWhere = "";
+        if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
+			$sWhere = "vl.status =7 "; // only approved results can be printed
+		}else{
+			$sWhere = "vl.status =1 ";
+		}
+		
+		
         if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
             $searchArray = explode(" ", $_POST['sSearch']);
             $sWhereSub = "";
@@ -106,62 +112,65 @@ $primaryKey="treament_id";
 	}
 	  
 	
-	if (isset($sWhere) && $sWhere != "") {
-           $sWhere=' where '.$sWhere;
-	    //$sQuery = $sQuery.' '.$sWhere;
-	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-	        $sWhere = $sWhere.' AND b.batch_code = "'.$_POST['batchCode'].'"';
-	    }
-	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-		if (trim($start_date) == trim($end_date)) {
-		    $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		}else{
-		   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
-		}
-           }
-	}else{
-	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-		$setWhr = 'where';
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' b.batch_code = "'.$_POST['batchCode'].'"';
-	    }
-	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-		if(isset($setWhr)){
-		    if (trim($start_date) == trim($end_date)) {
-		     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-		        $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }else{
+		if (isset($sWhere) && $sWhere != "") {
 			$sWhere=' where '.$sWhere;
-			$sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }
-		    }
+			if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+				$sWhere = $sWhere.' AND b.batch_code = "'.$_POST['batchCode'].'"';
+			}
+			if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+				if (trim($start_date) == trim($end_date)) {
+					$sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+				}else{
+				   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+				}
+			}
 		}else{
-		    $setWhr = 'where';
-		    $sWhere=' where '.$sWhere;
-		    $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+				$setWhr = 'where';
+				$sWhere=' where '.$sWhere;
+				$sWhere = $sWhere.' b.batch_code = "'.$_POST['batchCode'].'"';
+			}
+			
+			if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+				if(isset($setWhr)){
+					if (trim($start_date) == trim($end_date)) {
+						if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+						   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+						}else{
+						   $sWhere=' where '.$sWhere;
+						   $sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
+						}
+					}
+				}else{
+					$setWhr = 'where';
+					$sWhere=' where '.$sWhere;
+					$sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+				}
+			}
+			
+			if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
+				if(isset($setWhr)){
+					$sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
+				}else{
+					$setWhr = 'where';
+					$sWhere=' where '.$sWhere;
+					$sWhere = $sWhere.' s.sample_id = "'.$_POST['sampleType'].'"';
+				}
+			}
+			
+			if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+				if(isset($setWhr)){
+					$sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+				}else{
+					$sWhere=' where '.$sWhere;
+					$sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
+				}
+			}
 		}
-	    }
-	    if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
-		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
-		}else{
-		$setWhr = 'where';
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' s.sample_id = "'.$_POST['sampleType'].'"';
-		}
-	    }
-	    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
-		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
-		}else{
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
-		}
-	    }
-	}
 		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
 		//echo $_SESSION['vlResultQuery'];die;
+		
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
@@ -170,8 +179,10 @@ $primaryKey="treament_id";
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
+		
 		//die($sQuery);
-	$_SESSION['vlRequestSearchResultQuery'] = $sQuery;
+		$_SESSION['vlRequestSearchResultQuery'] = $sQuery;
+		//die($sQuery);
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
@@ -206,7 +217,7 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['status_name']);
 	    
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
-		$row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-print"> Print</i></a>';
+			$row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-print"> Print</i></a>';
 	    }else{
             //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
             //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';

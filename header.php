@@ -4,7 +4,9 @@ date_default_timezone_set("Europe/London");
 if(!isset($_SESSION['userId'])){
     header("location:login.php");
 }
-$link = $_SERVER['PHP_SELF'];
+
+
+  $link = $_SERVER['PHP_SELF'];
   $link_array = explode('/',$link);
   if(end($link_array)!='error.php'){
     if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
@@ -175,7 +177,7 @@ $link = $_SERVER['PHP_SELF'];
 		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Create Batch</a></li>
+                  <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
 		<?php } ?>
         
             <li class="allMenu vlRequestMailMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
@@ -197,6 +199,8 @@ $link = $_SERVER['PHP_SELF'];
                 <li class="allMenu vlPrintResultMenu"><a href="vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
+                <li class="allMenu vlResultApprovalMenu"><a href="vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
 		<?php } ?>
             </ul>
         </li>

@@ -38,10 +38,9 @@
                 <thead>
                 <tr>
                   <th style="width:10%;">Select</th>
-                  <th>Facility Name</th>
                   <th>Facility Code</th>
-                  <th>Hub Name</th>
-                  <th>Country</th>
+                  <th>Facility Name</th>
+                  <th>Facility Type</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,7 +85,6 @@
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center","bSortable":false},
-                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"}

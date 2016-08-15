@@ -82,10 +82,10 @@ $fResult = $db->rawQuery($fQuery);
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="address" class="col-lg-4 control-label">Facility Type</label>
+                        <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type">
-                          <option value="">--select--</option>
+                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
+                          <option value="">-- Select --</option>
                             <?php
                             foreach($fResult as $type){
                              ?>

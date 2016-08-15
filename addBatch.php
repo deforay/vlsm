@@ -40,7 +40,7 @@ $sResult = $db->rawQuery($sQuery);
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-			<option value="">--select--</option>
+			<option value="">-- Select --</option>
 			  <?php
 			  foreach($sResult as $type){
 			   ?>
@@ -55,7 +55,7 @@ $sResult = $db->rawQuery($sQuery);
 		   <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
 		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-			  <option value="">--select--</option>
+			  <option value="">-- Select --</option>
 			    <?php
 			    foreach($fResult as $name){
 			     ?>
@@ -77,16 +77,6 @@ $sResult = $db->rawQuery($sQuery);
           <!-- form start -->
             <form class="form-horizontal" method='post'  name='addBatchForm' id='addBatchForm' autocomplete="off" action="addBatchCodeHelper.php">
               <div class="box-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
-                        <div class="col-lg-7" style="margin-left:3%;">
-                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already Exist.Try with another name',null)" />
-                        </div>
-                    </div>
-                  </div>
-                </div>
 		<div class="row" id="sampleDetails">
 		  <div class="col-md-8">
                     <div class="form-group">
@@ -109,6 +99,17 @@ $sResult = $db->rawQuery($sQuery);
                     </div>
                   </div>
 		</div>
+		<div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="batchCode" class="col-lg-4 control-label">Enter Batch Code <span class="mandatory">*</span></label>
+                        <div class="col-lg-7" style="margin-left:3%;">
+                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already exists.Try another batch code',null)" />
+                        </div>
+                    </div>
+                  </div>
+      </div>
+
                
               </div>
               <!-- /.box-body -->

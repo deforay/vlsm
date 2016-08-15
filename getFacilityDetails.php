@@ -8,7 +8,7 @@ $primaryKey="facility_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('facility_name','facility_code','hub_name','country','status');
+        $aColumns = array('facility_code','facility_name','facility_type','status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -130,10 +130,10 @@ $primaryKey="facility_id";
         
         foreach ($rResult as $aRow) {
             $row = array();
-			$row[] = ucwords($aRow['facility_name']);
+			
             $row[] = $aRow['facility_code'];
-            $row[] = $aRow['hub_name'];
-            $row[] = ucwords($aRow['country']);
+			$row[] = ($aRow['facility_name']);
+            $row[] = $aRow['facility_type'];
             $row[] = ucwords($aRow['status']);
 	     if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ 
             $row[] = '<a href="editFacility.php?id=' . base64_encode($aRow['facility_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';

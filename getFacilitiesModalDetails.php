@@ -7,7 +7,7 @@ $primaryKey="facility_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('facility_id','facility_name','facility_code','hub_name','country');
+        $aColumns = array('facility_id','facility_code','facility_type','facility_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -132,13 +132,13 @@ $primaryKey="facility_id";
 	
         
         foreach ($rResult as $aRow) {
-	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['state']."##".$aRow['hub_name'];
+	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['state']."##".$aRow['hub_name']."##".$aRow['contact_person']."##".$aRow['phone_number'];
             $row = array();
 	    $row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacility(this.value);">';
+		$row[] = $aRow['facility_code'];
 	    $row[] = ucwords($aRow['facility_name']);
-            $row[] = $aRow['facility_code'];
-            $row[] = $aRow['hub_name'];
-            $row[] = ucwords($aRow['country']);
+            
+            $row[] = $aRow['facility_type'];
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

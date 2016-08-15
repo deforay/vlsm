@@ -27,10 +27,9 @@ include('header.php');
               <table id="userDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
+				  <th>Facility Code</th>
                   <th>Facility Name</th>
-                  <th>Facility Code</th>
-                  <th>Hub Name</th>
-                  <th>Country</th>
+                  <th>Facility Type</th>
                   <th>Status</th>
 		  <?php if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
@@ -72,7 +71,6 @@ include('header.php');
             
             "bRetrieve": true,                        
             "aoColumns": [
-                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},

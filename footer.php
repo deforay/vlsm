@@ -84,11 +84,18 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlPrintResultMenu").addClass('active');
-  }else if (splitsUrl=='vlTestResult.php') {
+  }
+  else if (splitsUrl=='vlTestResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlTestResultMenu").addClass('active');
-  }else if (splitsUrl=='missingResult.php') {
+  }
+  else if (splitsUrl=='vlResultApproval.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlResultApprovalMenu").addClass('active');
+  }
+  else if (splitsUrl=='missingResult.php') {
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".missingResultMenu").addClass('active');

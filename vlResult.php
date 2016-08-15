@@ -39,7 +39,7 @@ $fResult = $db->rawQuery($fQuery);
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-		      <option value="">--select--</option>
+		      <option value="">-- Select --</option>
 			<?php
 			foreach($sResult as $type){
 			 ?>
@@ -53,7 +53,7 @@ $fResult = $db->rawQuery($fQuery);
 		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-		      <option value="">--select--</option>
+		      <option value="">-- Select --</option>
 			<?php
 			foreach($fResult as $name){
 			 ?>
@@ -79,12 +79,11 @@ $fResult = $db->rawQuery($fQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th>Sample Code</th>
+				  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
-                  <th>Facility Code</th>
+				  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -151,7 +150,6 @@ $fResult = $db->rawQuery($fQuery);
             
             "bRetrieve": true,                        
             "aoColumns": [
-                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
