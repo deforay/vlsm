@@ -286,9 +286,19 @@ INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `dis
 --pal 16-aug-2016
 INSERT INTO `global_config` (`name`, `value`) VALUES ('max_no_of_samples_in_a_batch', NULL);
 
-
-
 --saravanana 16-aug-2016
 INSERT INTO `vl_lab_request`.`resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'high_viral_load', 'Manage High Viral Load Result');
-
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '16', 'highViralLoad.php', 'Access');
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '16', 'addContactNotes.php', 'Manage Contact Notes');
+ALTER TABLE  `vl_request_form` ADD  `contact_complete_status` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `result_reviewed_date` ;
+
+CREATE TABLE IF NOT EXISTS `contact_notes_details` (
+  `contact_notes_id` int(11) NOT NULL AUTO_INCREMENT,
+  `treament_contact_id` int(11) DEFAULT NULL,
+  `contact_notes` text,
+  `added_on` datetime DEFAULT NULL,
+  PRIMARY KEY (`contact_notes_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+
+ALTER TABLE  `contact_notes_details` ADD  `added_on` DATETIME NULL DEFAULT NULL ;

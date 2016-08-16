@@ -222,7 +222,7 @@ if(!isset($_SESSION['userId'])){
 		<?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultMenu"><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlHighMenu"><a href="highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load Report</a></li>
+                <li class="allMenu vlHighMenu"><a href="highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
 		<?php } ?>
             </ul>
         </li>
