@@ -9,7 +9,8 @@ $confFileName=base64_decode($_POST['machineName']);
 
 include("import-configs".DIRECTORY_SEPARATOR.$confFileName);
 
-
+$query="select treament_id,sample_code from vl_request_form";
+$vlResult=$db->rawQuery($query);
 
 $general=new Deforay_Commons_General();
 
@@ -62,7 +63,7 @@ try {
                 
                 //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 //$count = count($sheetData);
-                
+                $m=0;
                 foreach($sheetData->getRowIterator() as $rKey=>$row){
                     
                     if($rKey < 2) continue;
@@ -71,11 +72,12 @@ try {
                     $logVal="";
                     $txtVal="";
                     $resultFlag="";
+                    $testingDate="";
                     foreach($row->getCellIterator() as $key => $cell)
                     {
                         $cellName = $sheetData->getCellByColumnAndRow($key,$rKey)->getColumn();
                         
-                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$resultFlag,$rKey,$cellName,$cell);
+                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$resultFlag,$testingDate,$rKey,$cellName,$cell);
                         
                     }
                     //echo $sampleVal."<br/>";
@@ -95,11 +97,15 @@ try {
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
                         'result'=>$resultFlag,
+                        'lab_tested_date'=>$testingDate,
                         'status'=>6
                     );
-                    
-                    $db=$db->where('sample_code',$sampleVal);
+                    if(isset($vlResult[$m]['sample_code'])){
+                    //$db=$db->where('sample_code',$sampleVal);
+                    $db=$db->where('sample_code',$vlResult[$m]['sample_code']);
                     $id=$db->update($tableName,$data);
+                    }
+                    $m++;
                 }
             }
             

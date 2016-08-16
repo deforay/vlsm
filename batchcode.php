@@ -17,10 +17,30 @@ include('header.php');
         <div class="col-xs-12">
           
           <div class="box">
+	    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;margin-left: 325px;" id="showhide" class="">
+	      <div class="row" style="background:#e0e0e0;padding: 15px;">
+		  <div class="col-md-12" >
+			  <div class="col-md-4">
+				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol0">Batch Code</label>
+			  </div>
+			  <div class="col-md-4">
+				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="''" class="showhideCheckBox" /> <label for="iCol1">No. Of Samples</label>
+			  </div>
+			  <div class="col-md-4">
+				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="created_on" class="showhideCheckBox"  /> <label for="iCol2">Created On</label>
+			  </div>
+			  <div class="col-md-4">
+				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="batch_status" class="showhideCheckBox"  /> <label for="iCol3">Status</label> <br>
+			  </div>
+		      </div>
+		  </div>
+	      </span>
+
             <div class="box-header with-border">
 	      <?php if(isset($_SESSION['privileges']) && in_array("addBatch.php", $_SESSION['privileges'])){ ?>
               <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Batch</a>
 	      <?php } ?>
+	      <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -69,7 +89,7 @@ include('header.php');
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            
+            "bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
@@ -94,6 +114,7 @@ include('header.php');
               });
             }
         });
+	
        
 	} );
   
@@ -121,6 +142,7 @@ include('header.php');
 	   oTable.fnDraw();
 	}
   }
+ 
 </script>
  <?php
  include('footer.php');

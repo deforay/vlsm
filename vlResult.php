@@ -69,10 +69,42 @@ $fResult = $db->rawQuery($fQuery);
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 			&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
+			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 			</td>
 		</tr>
 		
 	    </table>
+	    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="showhide" class="">
+			<div class="row" style="background:#e0e0e0;padding: 15px;margin-top: -25px;">
+			    <div class="col-md-12" >
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="sample_code"  class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol1">Batch Code</label>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="art_no" class="showhideCheckBox"  /> <label for="iCol2">Art No</label>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_name" class="showhideCheckBox"  /> <label for="iCol3">Patient's Name</label> <br>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol4">Faility Name</label>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="sample_name" class="showhideCheckBox" /> <label for="iCol5">Sample Type</label> <br>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol6">Result</label>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol7">Status</label>
+				    </div>
+				    
+				</div>
+			    </div>
+			</span>
             
             <!-- /.box-header -->
             <div class="box-body">
@@ -114,6 +146,7 @@ $fResult = $db->rawQuery($fQuery);
    var endDate = "";
    var selectedTests=[];
    var selectedTestsId=[];
+   var oTable = null;
   $(document).ready(function() {
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -135,9 +168,37 @@ $fResult = $db->rawQuery($fQuery);
       });
      $('#sampleCollectionDate').val("");
      loadVlRequestData();
+     
+     $(".showhideCheckBox").change(function(){
+            
+            if($(this).attr('checked')){
+                idpart = $(this).attr('data-showhide');
+                $("#"+idpart+"-sort").show();
+            }else{
+                idpart = $(this).attr('data-showhide');
+                $("#"+idpart+"-sort").hide();
+            }
+        });
+        
+        $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
+        
+        for(colNo=0;colNo <8;colNo++){
+            $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
+            if(oTable.fnSettings().aoColumns[colNo].bVisible){
+                $("#iCol"+colNo+"-sort").show();    
+            }else{
+                $("#iCol"+colNo+"-sort").hide();    
+            }
+        }
   } );
   
-  var oTable = null;
+  function fnShowHide(iCol)
+    {
+        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+        oTable.fnSetColumnVis( iCol, bVis ? false : true );
+    }
+  
+  
   function loadVlRequestData(){
      oTable = $('#vlRequestDataTable').dataTable({
             "oLanguage": {
@@ -147,7 +208,7 @@ $fResult = $db->rawQuery($fQuery);
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            
+            "bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
