@@ -103,6 +103,10 @@
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlResultMenu").addClass('active');
+  }else if (splitsUrl=='highViralLoad.php') {
+    $(".program").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlHighMenu").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');

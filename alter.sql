@@ -286,3 +286,7 @@ INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `dis
 
 
 
+--saravanana 16-aug-2016
+INSERT INTO `vl_lab_request`.`resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'high_viral_load', 'Manage High Viral Load Result');
+
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '16', 'highViralLoad.php', 'Access');
