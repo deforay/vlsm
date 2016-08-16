@@ -49,10 +49,10 @@ $primaryKey="treament_id";
          * on very large tables, and MySQL's regex functionality is very limited
         */
         
-        $sWhere = "vl.status = 6";
+        $sWhere = "";
         if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
             $searchArray = explode(" ", $_POST['sSearch']);
-            $sWhereSub = "";
+            $sWhereSub = "vl.status = 6";
             foreach ($searchArray as $search) {
                 if ($sWhereSub == "") {
                     $sWhereSub .= "(";
@@ -71,7 +71,9 @@ $primaryKey="treament_id";
                 $sWhereSub .= ")";
             }
             $sWhere .= $sWhereSub;
-        }
+        }else{
+			$sWhere = "vl.status = 6";
+		}
         
         /* Individual column filtering */
         for ($i = 0; $i < count($aColumns); $i++) {
@@ -188,7 +190,7 @@ $primaryKey="treament_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
+        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where status = 6");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
