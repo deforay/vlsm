@@ -18,8 +18,20 @@ include('header.php');
         <div class="col-xs-12">
           
           <div class="box">
+	    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;margin-left: 670px;" id="showhide" class="">
+	      <div class="row" style="background:#e0e0e0;padding: 15px;">
+		  <div class="col-md-12" >
+			  <div class="col-md-6">
+				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol0">Batch Code</label>
+			  </div>
+			  <div class="col-md-5">
+				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="sent_mail" class="showhideCheckBox" /> <label for="iCol1">Mail Sent</label>
+			  </div>
+		      </div>
+		  </div>
+	      </span>
             <div class="box-header with-border">
-              
+              <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -65,7 +77,7 @@ include('header.php');
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            
+            "bStateSave" : true,
             "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
@@ -87,8 +99,9 @@ include('header.php');
               });
             }
         });
-       
+      
 	} );
+  
 </script>
  <?php
  include('footer.php');
