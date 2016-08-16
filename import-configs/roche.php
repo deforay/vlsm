@@ -1,6 +1,6 @@
 <?php
 
-function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$resultFlag,$rKey,$cellName,$cell){
+function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$resultFlag,&$testingDate,$rKey,$cellName,$cell){
            
      $sampleIdCol='C';
      $sampleIdRow='2';
@@ -10,15 +10,24 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$resultFlag
      $absValRow='';
      $txtValCol='';
      $txtValRow='';
+     $testingDateCol='AC';
+     $testingDateRow='2';
      $logAndAbsoluteValInSameCol='yes';            
                 
     
-    if($sampleIdCol==$cellName){
+     if($sampleIdCol==$cellName){
         if($rKey>=$sampleIdRow){
             $sampleVal=$cell->getCalculatedValue();
         }
-    }
-    
+     }
+     
+     if($testingDateCol==$cellName){
+        if($rKey>=$testingDateRow){
+          $resVal=explode(" ",$cell->getCalculatedValue());
+          $testingDate=str_replace("/","-",$resVal[0]);
+        }
+     }
+     
     if($logValCol==$cellName){
         if($rKey>=$logValRow){
             if(trim($cell->getCalculatedValue())!=""){

@@ -10,7 +10,7 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
         $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -166,9 +166,9 @@ $primaryKey="treament_id";
 		}
 	    }
 	}
-	$sQuery = $sQuery.' '.$sWhere;
-	//echo $sQuery;die;
-	//echo $sQuery;die;
+		$sQuery = $sQuery.' '.$sWhere;
+		//echo $sQuery;die;
+		//echo $sQuery;die;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
@@ -212,22 +212,31 @@ $primaryKey="treament_id";
 	}
         
         foreach ($rResult as $aRow) {
-	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
-		$xplodDate = explode(" ",$aRow['sample_collection_date']);
-		$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
-	    }else{
-		$aRow['sample_collection_date'] = '';
-	    }
+			$vlResult='';
+			if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
+			$xplodDate = explode(" ",$aRow['sample_collection_date']);
+			$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+			}else{
+			$aRow['sample_collection_date'] = '';
+			}
             $row = array();
-	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
-	    $row[] = $aRow['sample_code'];
-	    $row[] = $aRow['sample_collection_date'];
-	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['art_no'];
+			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
+			$row[] = $aRow['sample_code'];
+			$row[] = $aRow['sample_collection_date'];
+			$row[] = $aRow['batch_code'];
+			$row[] = $aRow['art_no'];
             $row[] = ucwords($aRow['patient_name']);
-	    $row[] = ucwords($aRow['facility_name']);
+			$row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
-            $row[] = ucwords($aRow['result']);
+			if(trim($aRow['absolute_value'])!=''){
+				$vlResult=$aRow['absolute_value'];
+			}else if(trim($aRow['log_value'])!=''){
+				$vlResult=$aRow['log_value'];
+			}else if(trim($aRow['text_value'])!=''){
+				$vlResult=$aRow['text_value'];
+			}
+            $row[] = ucwords($vlResult);
+			
             $row[] = ucwords($aRow['status_name']);
 	    //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['treament_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
 	    //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>';
