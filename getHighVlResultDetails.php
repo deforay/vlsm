@@ -10,8 +10,8 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'f.facility_name','f.phone_number','vl.patient_name','vl.patient_phone_number','vl.absolute_value','','vl.contact_complete');
-        $orderColumns = array('vl.sample_code','vl.sample_collection_date','vl.facility_name','vl.phone_number','vl.patient_name','vl.patient_phone_number','vl.absolute_value','','vl.contact_complete');
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.absolute_value','cn.contact_notes','vl.contact_complete_status');
+        $orderColumns = array('vl.sample_code','vl.sample_collection_date','f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.absolute_value','cn.contact_notes','vl.contact_complete_status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -89,9 +89,8 @@ $primaryKey="treament_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.art_no=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
-	
-        //echo $sQuery;die;
+	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.art_no=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.treament_id ";
+	$sWhere = ' where vl.status=7';
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -104,11 +103,7 @@ $primaryKey="treament_id";
 	     $end_date = $general->dateFormat($s_c_date[2]);
 	   }
 	}
-	  
-	
 	if (isset($sWhere) && $sWhere != "") {
-           $sWhere=' where '.$sWhere;
-	    //$sQuery = $sQuery.' '.$sWhere;
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 	        $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
 	    }
@@ -125,49 +120,9 @@ $primaryKey="treament_id";
 	   if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
 	    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
 	   }
-	}else{
-	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-		$setWhr = 'where';
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' b.batch_code = "'.$_POST['batchCode'].'"';
-	    }
-	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-		if(isset($setWhr)){
-		    if (trim($start_date) == trim($end_date)) {
-		     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-		        $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }else{
-			$sWhere=' where '.$sWhere;
-			$sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }
-		    }
-		}else{
-		    $setWhr = 'where';
-		    $sWhere=' where '.$sWhere;
-		    $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
-		}
-	    }
-	    if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
-		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
-		}else{
-		$setWhr = 'where';
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' s.sample_id = "'.$_POST['sampleType'].'"';
-		}
-	    }
-	    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
-		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
-		}else{
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
-		}
-	    }
 	}
 	$sQuery = $sQuery.' '.$sWhere;
-	//echo $sQuery;die;
-	//echo $sQuery;die;
+        $sQuery = $sQuery.' group by vl.treament_id';
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
@@ -176,18 +131,17 @@ $primaryKey="treament_id";
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-       //die($sQuery);
-      // echo $sQuery;
-        $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
+        
+        //echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.treament_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.art_no=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.treament_id $sWhere group by vl.treament_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
+        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where status=7");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -201,13 +155,9 @@ $primaryKey="treament_id";
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-	$vlRequest = false;
-	$vlView = false;
-	if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges']))){
-	    $vlRequest = true;
-	}
-	if(isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))){
-	    $vlView = true;
+	$vlNotes = false;
+	if(isset($_SESSION['privileges']) && (in_array("addContactNotes.php", $_SESSION['privileges']))){
+	    $vlNotes = true;
 	}
         
         foreach ($rResult as $aRow) {
@@ -218,29 +168,23 @@ $primaryKey="treament_id";
 		$aRow['sample_collection_date'] = '';
 	    }
             $row = array();
-	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $aRow['sample_collection_date'];
-	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['art_no'];
-            $row[] = ucwords($aRow['patient_name']);
 	    $row[] = ucwords($aRow['facility_name']);
-            $row[] = ucwords($aRow['sample_name']);
-            $row[] = ucwords($aRow['result']);
-            $row[] = ucwords($aRow['status_name']);
-	    //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['treament_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
-	    //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>';
-	    if($vlRequest && $vlView){
-		$row[] = '<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>
-			<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> PDF</i></a>
-			<a href="viewVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
-	    }else if($vlRequest){
-		$row[] = '<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>
-			<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> PDF</i></a>';
-	    }else if($vlView){
-		$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> PDF</i></a>
-			<a href="viewVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
-	    }
+	    $row[] = $aRow['phone_number'];
+            $row[] = $aRow['art_no'];
+            $row[] = ucwords($aRow['patient_name']);
+            $row[] = ucwords($aRow['patient_phone_number']);
+            $row[] = ucwords($aRow['absolute_value']);
+            $row[] = ucwords($aRow['contact_notes']);
+            $row[] = '<select class="form-control" name="status" id=' . $aRow['treament_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
+			    <option value="">--select--</option>
+			    <option value="yes" ' . ($aRow['contact_complete_status'] == "yes" ? "selected=selected" : "") . '>Yes</option>
+			    <option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
+		    </select>';
+	   if($vlNotes){
+            $row[] = '<a href="addContactNotes.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-file"> Add Contact Notes</i></a>';
+           }
             $output['aaData'][] = $row;
         }
         

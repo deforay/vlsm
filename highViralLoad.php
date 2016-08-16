@@ -12,7 +12,7 @@ $fResult = $db->rawQuery($fQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>High VL Report</h1>
+      <h1>High VL Result</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">High VL Report</li>
@@ -98,13 +98,13 @@ $fResult = $db->rawQuery($fQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol6">Patient Phone</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol7">Viral Load (absolute > 1000 cp/ml3)</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="absolute_value"  class="showhideCheckBox" /> <label for="iCol7">Viral Load (absolute > 1000 cp/ml3)</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol8">Contact Notes</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="contact_notes"  class="showhideCheckBox" /> <label for="iCol8">Contact Notes</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="9" id="iCol9" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol9">Contact Completed</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="9" id="iCol9" data-showhide="contact_complete"  class="showhideCheckBox" /> <label for="iCol9">Contact Completed</label>
 				    </div>
 				    
 				</div>
@@ -126,12 +126,14 @@ $fResult = $db->rawQuery($fQuery);
                   <th>Viral Load (absolute > 1000 cp/ml3)</th>
                   <th>Contact Notes</th>
                   <th>Contact Completed</th>
+		  <?php if(isset($_SESSION['privileges']) && in_array("addContactNotes.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
+		  <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="10" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="9" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
               </table>
@@ -188,7 +190,7 @@ $fResult = $db->rawQuery($fQuery);
         
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
         
-        for(colNo=0;colNo <10;colNo++){
+        for(colNo=0;colNo <=9;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(oTable.fnSettings().aoColumns[colNo].bVisible){
                 $("#iCol"+colNo+"-sort").show();    
@@ -226,7 +228,9 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+		<?php if(isset($_SESSION['privileges']) && in_array("addContactNotes.php", $_SESSION['privileges'])){ ?>
                 {"sClass":"center","bSortable":false},
+		<?php } ?>
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
@@ -251,6 +255,18 @@ $fResult = $db->rawQuery($fQuery);
   
   function searchVlRequestData(){
     oTable.fnDraw();
+  }
+  function updateStatus(id,value){
+    conf = confirm("Do you wisht to change the contact completed status?");
+    if(conf){
+    $.post("updateContactCompletedStatus.php",{id:id,value:value},
+      function(data){
+	  alert("Status updated successfully");
+	  oTable.fnDraw();
+      });
+    }else{
+	   oTable.fnDraw();
+	}
   }
   
 </script>
