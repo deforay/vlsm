@@ -1,7 +1,6 @@
 <?php
 include('header.php');
 ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -62,7 +61,6 @@ include('header.php');
    
   });
   $(document).ready(function() {
-	
         oTable = $('#batchCodeDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
@@ -98,6 +96,7 @@ include('header.php');
         });
        
 	} );
+  
   function generateBarcode(bId){
     $.post("generateBarcode.php",{id:bId},
       function(data){
@@ -109,8 +108,8 @@ include('header.php');
 	  
       });
   }
-  function updateStatus(id,value)
-  {
+  
+  function updateStatus(id,value){
     conf = confirm("Do you wisht to change the status?");
     if(conf){
     $.post("updateBatchStatus.php",{id:id,value:value},

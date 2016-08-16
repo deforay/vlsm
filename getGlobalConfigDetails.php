@@ -125,7 +125,7 @@ $tableName="global_config";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = ucwords($aRow['name']);
+	    $row[] = str_replace("_"," ",ucwords($aRow['name']));;
 	    $row[] = $aRow['value'];
             $output['aaData'][] = $row;
         }
