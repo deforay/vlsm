@@ -284,5 +284,5 @@ INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `dis
 --saravanan 13-aug-2016
 INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '10', 'updateVlTestResult.php', 'Update Vl Test Result');
 
-
-
+--Pal 16-aug-2016
+INSERT INTO `global_config` (`name`, `value`) VALUES ('max_no_of_samples_in_a_batch', NULL);
