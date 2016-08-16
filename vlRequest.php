@@ -239,7 +239,7 @@ $fResult = $db->rawQuery($fQuery);
             "bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
-		{"sClass":"center","bSortable":false},
+				{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -247,7 +247,7 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center"},
+                {"sClass":"center","bSortable":false},
                 {"sClass":"center"},
 		<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
                 {"sClass":"center","bSortable":false},

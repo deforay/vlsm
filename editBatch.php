@@ -11,6 +11,11 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $sQuery="SELECT * FROM r_sample_type";
 $sResult = $db->rawQuery($sQuery);
+$configQuery="SELECT * FROM global_config WHERE name ='max_no_of_samples_in_a_batch'";
+$configResult = $db->rawQuery($configQuery);
+if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
+  $configResult[0]['value'] = 0;
+}
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet"/>
 <style>
@@ -173,50 +178,68 @@ $sResult = $db->rawQuery($sQuery);
   }
    //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
    $(document).ready(function() {
-   $('.search').multiSelect({
-  selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
-  selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
-  afterInit: function(ms){
-    var that = this,
-        $selectableSearch = that.$selectableUl.prev(),
-        $selectionSearch = that.$selectionUl.prev(),
-        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
-
-    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-    .on('keydown', function(e){
-      if (e.which === 40){
-        that.$selectableUl.focus();
-        return false;
-      }
-    });
-
-    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-    .on('keydown', function(e){
-      if (e.which == 40){
-        that.$selectionUl.focus();
-        return false;
-      }
-    });
-  },
-  afterSelect: function(){
-    this.qs1.cache();
-    this.qs2.cache();
-  },
-  afterDeselect: function(){
-    this.qs1.cache();
-    this.qs2.cache();
-  }
-});
-   $('#select-all-samplecode').click(function(){
-  $('#sampleCode').multiSelect('select_all');
-  return false;
-});
-$('#deselect-all-samplecode').click(function(){
-  $('#sampleCode').multiSelect('deselect_all');
-  return false;
-});
+	  $('.search').multiSelect({
+	 selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
+	 selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
+	 afterInit: function(ms){
+	   var that = this,
+	       $selectableSearch = that.$selectableUl.prev(),
+	       $selectionSearch = that.$selectionUl.prev(),
+	       selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	       selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+       
+	   that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	   .on('keydown', function(e){
+	     if (e.which === 40){
+	       that.$selectableUl.focus();
+	       return false;
+	     }
+	   });
+       
+	   that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	   .on('keydown', function(e){
+	     if (e.which == 40){
+	       that.$selectionUl.focus();
+	       return false;
+	     }
+	   });
+	 },
+	 afterSelect: function(){
+	  var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
+	  if(this.qs2.cache().matchedResultsCount == maxNoOfSample){
+	    alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+	    $(".ms-selectable").css("pointer-events","none");
+	  }
+	   this.qs1.cache();
+	   this.qs2.cache();
+	 },
+	 afterDeselect: function(){
+	   var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
+	  if(this.qs2.cache().matchedResultsCount < maxNoOfSample){
+	    $(".ms-selectable").css("pointer-events","auto");
+	  }
+	   this.qs1.cache();
+	   this.qs2.cache();
+	 }
+       });
+	$('#select-all-samplecode').click(function(){
+	 $('#sampleCode').multiSelect('select_all');
+	 return false;
+       });
+       $('#deselect-all-samplecode').click(function(){
+	 $('#sampleCode').multiSelect('deselect_all');
+	 return false;
+       });
+       
+       <?php
+	if($configResult[0]['value'] == 0){ ?>
+	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+       <?php } else if(count($result) >= $configResult[0]['value']) { ?>
+	  $("#select-all-samplecode").css("pointer-events","none");
+       <?php }
+       ?>
    });
+   
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
   {
       var removeDots=obj.value.replace(/\./g,"");
