@@ -5,7 +5,7 @@ include('./includes/MysqliDb.php');
 include ('./includes/tcpdf/tcpdf.php');
 $id=base64_decode($_POST['id']);
 
-if($id>0){
+if($id >0){
     if (!file_exists('uploads') && !is_dir('uploads')) {
         mkdir('uploads');
     }
@@ -114,25 +114,34 @@ if($id>0){
     
         // define barcode style
         $style = array(
-            'position' => '',
-            'align' => 'C',
-            'stretch' => false,
-            'fitwidth' => true,
-            'cellfitalign' => '',
             'border' => true,
-            'hpadding' => 'auto',
             'vpadding' => 'auto',
+            'hpadding' => 'auto',
             'fgcolor' => array(0,0,0),
-            'bgcolor' => false, //array(255,255,255),
-            'text' => true,
-            'font' => 'times',
-            'fontsize' => 8,
-            'stretchtext' => 4
+            'bgcolor' => false, //array(255,255,255)
+            'module_width' => 1, // width of a single module in points
+            'module_height' => 1 // height of a single module in points
         );
         
+        $b=1;
         foreach($result as $val){
-            $pdf->write1DBarcode($val['sample_code'],'C39','','','',18, 0.4, $style,'N');
-            $pdf->Ln();
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
+            $pdf->setCellMargins(0,0,0,0);
+            // The width is set to the the same as the cell containing the name.
+            // The Y position is also adjusted slightly.
+            $pdf->write2DBarcode($val['sample_code'], 'QRCODE,Q', $x-1.5, $y-2.5, 30, 30, $style, 'N');
+            //Reset X,Y so wrapping cell wraps around the barcode's cell.
+            $pdf->SetXY($x,$y);
+            $pdf->Cell(49, 25, '', 0, 0, 'N', FALSE, '', 0, FALSE, 'C', 'B');
+            $pdf->SetXY($x,$y);
+            $pdf->Cell(49, 33, '', 0, 0, 'N', FALSE, '', 0, FALSE, 'C', 'B');
+            if($b == 4){
+                $pdf->Ln(33.9);
+                $b = 1;
+            }else{
+                $b++;
+            }
         }
     
         $filename = trim($bResult[0]['batch_code']).'.pdf';
