@@ -114,35 +114,26 @@ if($id >0){
     
         // define barcode style
         $style = array(
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => true,
+            'cellfitalign' => '',
             'border' => true,
-            'vpadding' => 'auto',
             'hpadding' => 'auto',
+            'vpadding' => 'auto',
             'fgcolor' => array(0,0,0),
-            'bgcolor' => false, //array(255,255,255)
-            'module_width' => 1, // width of a single module in points
-            'module_height' => 1 // height of a single module in points
+            'bgcolor' => false, //array(255,255,255),
+            'text' => true,
+            'font' => 'helvetica',
+            'fontsize' => 8,
+            'stretchtext' => 4
         );
         
         $b=1;
         foreach($result as $val){
-            $x = $pdf->GetX();
-            $y = $pdf->GetY();
-            $pdf->setCellMargins(0,0,0,0);
-            //Reset X,Y so wrapping cell wraps around the barcode's cell.
-            $pdf->SetXY($x,$y);
-            $pdf->Cell(0, 0, $val['sample_code'], 0, 0, 'N', FALSE, '', 0, FALSE, 'C', 'B');
-            // The width is set to the the same as the cell containing the name.
-            // The Y position is also adjusted slightly.
-            $pdf->write2DBarcode($val['sample_code'], 'QRCODE,Q', $x+1.5, $y+5.5, 30, 30, $style, 'N');
-            //Reset X,Y so wrapping cell wraps around the barcode's cell.
-            $pdf->SetXY($x,$y);
-            $pdf->Cell(49, 33, '', 0, 0, 'N', FALSE, '', 0, FALSE, 'C', 'B');
-            if($b == 4){
-                $pdf->Ln(47.8);
-                $b = 1;
-            }else{
-                $b++;
-            }
+            $pdf->write1DBarcode($val['sample_code'], 'C39', '', '', '', 18, 0.4, $style, 'N');
+            $pdf->Ln();
         }
     
         $filename = trim($bResult[0]['batch_code']).'.pdf';
