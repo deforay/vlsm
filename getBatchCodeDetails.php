@@ -8,8 +8,8 @@ $primaryKey="batch_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('b.batch_code',"DATE_FORMAT(b.created_on,'%d-%b-%Y %H:%i:%s')",'b.batch_status');
-        $orderColumns = array('b.batch_code','','b.created_on','b.batch_status');
+        $aColumns = array('b.batch_code',"DATE_FORMAT(b.created_on,'%d-%b-%Y %H:%i:%s')");
+        $orderColumns = array('b.batch_code','','b.created_on');
 		
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -88,7 +88,7 @@ $primaryKey="batch_id";
          * Get data to display
         */
         
-		$sQuery="select b.created_on ,b.batch_status,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
+	$sQuery="select b.created_on ,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -109,11 +109,11 @@ $primaryKey="batch_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("select b.created_on,b.batch_status, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("select b.created_on, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select b.created_on,b.batch_status, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id group by b.batch_id");
+        $aResultTotal =  $db->rawQuery("select b.created_on, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id group by b.batch_id");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
@@ -132,20 +132,20 @@ $primaryKey="batch_id";
 	}
 	
         foreach ($rResult as $aRow) {
-			$humanDate="";
-			if(trim($aRow['created_on'])!="" && $aRow['created_on']!='0000-00-00 00:00:00'){
-				$date = $aRow['created_on'];
-				$humanDate =  date("d-M-Y H:i:s",strtotime($date));
-			}
-        $row = array();
+	    $humanDate="";
+	    if(trim($aRow['created_on'])!="" && $aRow['created_on']!='0000-00-00 00:00:00'){
+		$date = $aRow['created_on'];
+		$humanDate =  date("d-M-Y H:i:s",strtotime($date));
+	    }
+            $row = array();
 	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
 	    $row[] = ucwords($aRow['batch_code']);
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $humanDate;
-	    $row[] = '<select class="form-control" name="status" id=' . $aRow['batch_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
-			    <option value="pending" ' . ($aRow['batch_status'] == "pending" ? "selected=selected" : "") . '>Pending</option>
-			    <option value="completed" ' . ($aRow['batch_status'] == "completed" ? "selected=selected" : "") . '>Completed</option>
-		    </select>';
+	//    $row[] = '<select class="form-control" name="status" id=' . $aRow['batch_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
+	//		    <option value="pending" ' . ($aRow['batch_status'] == "pending" ? "selected=selected" : "") . '>Pending</option>
+	//		    <option value="completed" ' . ($aRow['batch_status'] == "completed" ? "selected=selected" : "") . '>Completed</option>
+	//	    </select>';
 	    if($batch){
             $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>'.$printBarcode;
 	    }

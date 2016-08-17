@@ -50,8 +50,7 @@ include('header.php');
                   <th>Batch Code</th>
                   <th>No. of Samples</th>
                   <th>Created On</th>
-				  <th> Status</th>
-				  <?php if(isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])){ ?>
+		  <?php if(isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
 		  <?php } ?>
                 </tr>
@@ -59,7 +58,7 @@ include('header.php');
                 <tbody>
                   <tr>
                     <td colspan="3" class="dataTables_empty">Loading data from server</td>
-				  </tr>
+		  </tr>
                 </tbody>
                 
               </table>
@@ -76,10 +75,6 @@ include('header.php');
   </div>
   <script>
   var oTable = null;
-  $(function () {
-    //$("#example1").DataTable();
-   
-  });
   $(document).ready(function() {
         oTable = $('#batchCodeDataTable').dataTable({
             "oLanguage": {
@@ -93,9 +88,8 @@ include('header.php');
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
-				{"sClass":"center","bSortable":false},
+	        {"sClass":"center","bSortable":false},
                 {"sClass":"center"},
-		{"sClass":"center"},
 		<?php if(isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])){ ?>
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
@@ -114,9 +108,7 @@ include('header.php');
               });
             }
         });
-	
-       
-	} );
+  } );
   
   function generateBarcode(bId){
     $.post("generateBarcode.php",{id:bId},
@@ -130,18 +122,18 @@ include('header.php');
       });
   }
   
-  function updateStatus(id,value){
-    conf = confirm("Do you wisht to change the status?");
-    if(conf){
-    $.post("updateBatchStatus.php",{id:id,value:value},
-      function(data){
-	  alert("Status updated successfully");
-	  oTable.fnDraw();
-      });
-    }else{
-	   oTable.fnDraw();
-	}
-  }
+//  function updateStatus(id,value){
+//    conf = confirm("Do you wisht to change the status?");
+//    if(conf){
+//    $.post("updateBatchStatus.php",{id:id,value:value},
+//      function(data){
+//	  alert("Status updated successfully");
+//	  oTable.fnDraw();
+//      });
+//    }else{
+//	   oTable.fnDraw();
+//	}
+//  }
  
 </script>
  <?php
