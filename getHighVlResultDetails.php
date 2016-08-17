@@ -161,6 +161,13 @@ $primaryKey="treament_id";
 	}
         
         foreach ($rResult as $aRow) {
+	    $cNoteQuery = "select contact_notes from contact_notes_details where treament_contact_id='".$aRow['treament_id']."' order by added_on DESC LIMIT 1";
+	    $cnResult = $db->rawQuery($cNoteQuery);
+	    if($cnResult){
+		$aRow['contact_notes'] = $cnResult[0]['contact_notes'];
+	    }else{
+		$aRow['contact_notes'] = '';
+	    }
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
 		$xplodDate = explode(" ",$aRow['sample_collection_date']);
 		$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
