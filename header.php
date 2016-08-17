@@ -61,7 +61,15 @@ if(!isset($_SESSION['userId'])){
 <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
 <script src="assets/js/deforayModal.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
-
+<style>
+  .dataTables_wrapper{
+  position: relative;
+    clear: both;
+    overflow-x: scroll !important;
+    overflow-y: visible !important;
+    padding: 15px 0 !important;
+  }
+</style>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
