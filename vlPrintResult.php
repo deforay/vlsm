@@ -225,9 +225,9 @@ $fResult = $db->rawQuery($fQuery);
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-				  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-				  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-				  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+			      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+			      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});
               $.ajax({

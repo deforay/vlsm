@@ -92,7 +92,6 @@ $iResult = $db->rawQuery($query);
                               <div class="col-lg-7">
                               <input type="text" class="form-control isRequired" id="labName" name="labName" placeholder="Lab Name" title="Please enter lab name" />
                               <input type="hidden" class="form-control" id="labId" name="labId" placeholder="Lab ID" title="Please enter lab name" />
-							  <div class="pull-right"><a id="clearFInfo" href="javascript:void(0);" onclick="clearFacilitiesInfo();" class="btn btn-danger btn-sm" style="padding-right:10px;display:none;">Clear</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showModal('facilitiesModal.php',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
                               </div>
                           </div>
                         </div>
@@ -103,6 +102,11 @@ $iResult = $db->rawQuery($query);
                               <input type="text" class="form-control" id="labContactPerson" name="labContactPerson" placeholder="Lab Contact Person" title="Please enter the lab contact person"/>
                               </div>
                           </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                           <div class="pull-right" style="margin-right:8%;margin-bottom:10px;"><a id="clearFInfo" href="javascript:void(0);" onclick="clearFacilitiesInfo();" class="btn btn-danger btn-sm" style="display:none;">Clear</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showModal('facilitiesModal.php',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
                         </div>
                       </div>
                       <div class="row">

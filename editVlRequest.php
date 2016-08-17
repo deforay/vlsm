@@ -734,7 +734,7 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>                                    
                </div>
-              
+              </div>
              <div class="row">
                 <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
              </div>
