@@ -301,7 +301,12 @@ CREATE TABLE IF NOT EXISTS `contact_notes_details` (
   PRIMARY KEY (`contact_notes_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
+--saravanan 17-aug-2015
+ALTER TABLE contact_notes_details ADD FOREIGN KEY (treament_contact_id) REFERENCES vl_request_form(treament_id)
 
-ALTER TABLE  `contact_notes_details` ADD  `added_on` DATETIME NULL DEFAULT NULL ;
+ALTER TABLE roles_privileges_map ADD FOREIGN KEY (role_id) REFERENCES roles(role_id)
+ALTER TABLE roles_privileges_map ADD FOREIGN KEY (privilege_id) REFERENCES privileges(privilege_id)
+ALTER TABLE report_to_mail ADD FOREIGN KEY ( batch_id ) REFERENCES batch_details( batch_id )
 
+--Pal 17th Aug'16--
 ALTER TABLE `batch_details` CHANGE `batch_status` `batch_status` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'completed'; 

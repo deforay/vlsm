@@ -81,7 +81,7 @@ $fResult = $db->rawQuery($fQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="sample_collection_date" class="showhideCheckBox" /> <label for="iCol1">Sample Code</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="batch_code" class="showhideCheckBox"  /> <label for="iCol2">Date</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="batch_code" class="showhideCheckBox"  /> <label for="iCol2">Sample Collection Date</label>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="art_no" class="showhideCheckBox"  /> <label for="iCol3">Batch Code</label> <br>
