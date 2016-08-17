@@ -48,13 +48,7 @@ $primaryKey="treament_id";
          * on very large tables, and MySQL's regex functionality is very limited
         */
         
-        if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
-			$sWhere = "vl.status =7 "; // only approved results can be printed
-		}else{
-			$sWhere = "vl.status =1 ";
-		}
-		
-		
+       $sWhere = "";
         if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
             $searchArray = explode(" ", $_POST['sSearch']);
             $sWhereSub = "";
@@ -93,8 +87,7 @@ $primaryKey="treament_id";
          * SQL queries
          * Get data to display
         */
-	$aWhere = '';
-	$sQuery="SELECT vl.*,f.*,s.sample_name,b.*,ts.*,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName  FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	$sQuery="SELECT vl.*,f.*,s.sample_name,b.*,ts.*,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	//$sQuery="SELECT vl.treament_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
     //echo $sQuery;die;
@@ -167,6 +160,23 @@ $primaryKey="treament_id";
 				}
 			}
 		}
+		$dWhere = '';
+		// Only approved results can be printed
+		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
+		    if(trim($sWhere)!= ''){
+		        $sWhere = $sWhere." AND vl.status =7 ";
+		    }else{
+		       $sWhere = "WHERE vl.status =7 ";
+		    }
+		    $dWhere = "WHERE status = 7";
+		}else{
+		    if(trim($sWhere)!= ''){
+		        $sWhere = $sWhere." AND vl.status =1 ";
+		    }else{
+		        $sWhere = "WHERE vl.status =1 ";
+		    }
+		    $dWhere = "WHERE status = 1";
+		}
 		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
 		//echo $_SESSION['vlResultQuery'];die;
@@ -190,7 +200,7 @@ $primaryKey="treament_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
+        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form $dWhere");
        // $aResultTotal = $countResult->fetch_row();
         $iTotal = $aResultTotal[0]['total'];
 

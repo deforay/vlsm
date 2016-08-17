@@ -6,13 +6,13 @@ if(!isset($_SESSION['userId'])){
 }
 
 
-  $link = $_SERVER['PHP_SELF'];
-  $link_array = explode('/',$link);
-  if(end($link_array)!='error.php'){
-    if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
-      header("location:error.php");
-    }
+$link = $_SERVER['PHP_SELF'];
+$link_array = explode('/',$link);
+if(end($link_array)!='error.php'){
+  if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
+    header("location:error.php");
   }
+}
 ?>
 <!DOCTYPE html>
 <html>

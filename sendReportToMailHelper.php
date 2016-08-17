@@ -87,7 +87,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  else{
 			   //Update status
 			   $flag=array(
-					'sent_mail'=>'yes'
+			     'sent_mail'=>'yes'
 			   );
 			   $db=$db->where('batch_id',$batchId);
 			   $db->update('batch_details',$flag);

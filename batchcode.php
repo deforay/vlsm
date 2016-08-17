@@ -15,7 +15,6 @@ include('header.php');
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
-          
           <div class="box">
 	    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;margin-left: 325px;" id="showhide" class="">
 	      <div class="row" style="background:#e0e0e0;padding: 15px;">
