@@ -283,7 +283,8 @@ INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `dis
 
 --saravanan 13-aug-2016
 INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '10', 'updateVlTestResult.php', 'Update Vl Test Result');
---pal 16-aug-2016
+
+--Pal 16-aug-2016
 INSERT INTO `global_config` (`name`, `value`) VALUES ('max_no_of_samples_in_a_batch', NULL);
 
 --saravanana 16-aug-2016
@@ -302,3 +303,5 @@ CREATE TABLE IF NOT EXISTS `contact_notes_details` (
 
 
 ALTER TABLE  `contact_notes_details` ADD  `added_on` DATETIME NULL DEFAULT NULL ;
+
+ALTER TABLE `batch_details` CHANGE `batch_status` `batch_status` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'completed'; 

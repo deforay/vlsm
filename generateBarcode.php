@@ -46,7 +46,7 @@ if($id >0){
                     }
                 }
     
-                $this->SetFont('times', '', 15);
+                $this->SetFont('helvetica', '', 15);
                 $this->header=str_replace("<div","<span",trim($this->header));
                 $this->header=str_replace("</div>","</span><br/>",$this->header);
     
@@ -74,10 +74,10 @@ if($id >0){
         
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Nicola Asuni');
+        $pdf->SetAuthor('Admin');
         $pdf->SetTitle('Generate Barcode');
         $pdf->SetSubject('Barcode');
-        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->SetKeywords('Generate Barcode');
     
         // set default header data
         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -107,7 +107,7 @@ if($id >0){
         }
     
         // set font
-        $pdf->SetFont('times', 'BI', 12);
+        $pdf->SetFont('helvetica', '', 10);
     
         // add a page
         $pdf->AddPage();
@@ -128,16 +128,17 @@ if($id >0){
             $x = $pdf->GetX();
             $y = $pdf->GetY();
             $pdf->setCellMargins(0,0,0,0);
-            // The width is set to the the same as the cell containing the name.
-            // The Y position is also adjusted slightly.
-            $pdf->write2DBarcode($val['sample_code'], 'QRCODE,Q', $x-1.5, $y-2.5, 30, 30, $style, 'N');
             //Reset X,Y so wrapping cell wraps around the barcode's cell.
             $pdf->SetXY($x,$y);
-            $pdf->Cell(49, 25, '', 0, 0, 'N', FALSE, '', 0, FALSE, 'C', 'B');
+            $pdf->Cell(0, 0, $val['sample_code'], 0, 0, 'N', FALSE, '', 0, FALSE, 'C', 'B');
+            // The width is set to the the same as the cell containing the name.
+            // The Y position is also adjusted slightly.
+            $pdf->write2DBarcode($val['sample_code'], 'QRCODE,Q', $x+1.5, $y+5.5, 30, 30, $style, 'N');
+            //Reset X,Y so wrapping cell wraps around the barcode's cell.
             $pdf->SetXY($x,$y);
             $pdf->Cell(49, 33, '', 0, 0, 'N', FALSE, '', 0, FALSE, 'C', 'B');
             if($b == 4){
-                $pdf->Ln(33.9);
+                $pdf->Ln(47.8);
                 $b = 1;
             }else{
                 $b++;
