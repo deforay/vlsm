@@ -147,7 +147,7 @@ var oTable = null;
 	  }
       });
     }else{
-        alert("Please enter result");
+        alert("Please enter Notes and Date");
     }
   }
   function formToggler(symbol){
