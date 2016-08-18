@@ -84,7 +84,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 $id=$_POST['id'];
-$fQuery="SELECT * from vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
+$fQuery="SELECT * from vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
 $result=$db->query($fQuery);
 
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00'){
