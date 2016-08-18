@@ -160,7 +160,15 @@ if(sizeof($requestResult)> 0){
             $age = round($difference / $seconds_per_year);
           }
         }
-        
+        $vlResult = '';
+        if(isset($result['absolute_value']) && trim($result['absolute_value'])!= ''){
+          $vlResult = $result['absolute_value'];
+        }elseif(isset($result['log_value']) && trim($result['log_value'])!= ''){
+          $vlResult = $result['log_value'];
+        }elseif(isset($result['text_value']) && trim($result['text_value'])!= ''){
+          $vlResult = $result['text_value'];
+        }
+  
         $html .= '<div style="border:1px solid #333;">';
         $html.='<table style="padding:2px;">';
             if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
@@ -212,7 +220,7 @@ if(sizeof($requestResult)> 0){
             $html .='</tr>';
             $html .='<tr style="line-height:30px;">';
               $html .='<td style="text-align:left;font-size:14px;"><strong>Test Result</strong></td>';
-              $html .='<td colspan="3" style="text-align:left;font-size:12px;"><strong>'.$result['result'].'</strong></td>';
+              $html .='<td colspan="3" style="text-align:left;font-size:12px;"><strong>'.$vlResult.'</strong></td>';
             $html .='</tr>';
             $html .='<tr style="line-height:30px;">';
               $html .='<td style="text-align:left;font-size:14px;"><strong>Comments</strong></td>';

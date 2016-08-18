@@ -212,13 +212,13 @@ $primaryKey="treament_id";
 	}
         
         foreach ($rResult as $aRow) {
-			$vlResult='';
-			if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
-			$xplodDate = explode(" ",$aRow['sample_collection_date']);
-			$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
-			}else{
-			$aRow['sample_collection_date'] = '';
-			}
+	    $vlResult='';
+	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
+	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
+	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+	    }else{
+	       $aRow['sample_collection_date'] = '';
+	    }
             $row = array();
 			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
 			$row[] = $aRow['sample_code'];
