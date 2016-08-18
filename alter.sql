@@ -310,3 +310,5 @@ ALTER TABLE report_to_mail ADD FOREIGN KEY ( batch_id ) REFERENCES batch_details
 
 --Pal 17th Aug'16--
 ALTER TABLE `batch_details` CHANGE `batch_status` `batch_status` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'completed';
+--saravanan 18-aug-2016
+ALTER TABLE  `contact_notes_details` ADD  `collected_on` DATE NULL DEFAULT NULL AFTER  `contact_notes` ;
