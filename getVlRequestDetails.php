@@ -89,8 +89,8 @@ $primaryKey="treament_id";
          * Get data to display
         */
 	$aWhere = '';
-        //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.art_no=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.art_no=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+        //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
+	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
         //echo $sQuery;die;
 	$start_date = '';
@@ -212,13 +212,13 @@ $primaryKey="treament_id";
 	}
         
         foreach ($rResult as $aRow) {
-			$vlResult='';
-			if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
-			$xplodDate = explode(" ",$aRow['sample_collection_date']);
-			$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
-			}else{
-			$aRow['sample_collection_date'] = '';
-			}
+	    $vlResult='';
+	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
+	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
+	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+	    }else{
+	       $aRow['sample_collection_date'] = '';
+	    }
             $row = array();
 			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
 			$row[] = $aRow['sample_code'];
