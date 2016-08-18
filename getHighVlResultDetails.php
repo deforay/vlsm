@@ -190,7 +190,8 @@ $primaryKey="treament_id";
 			    <option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
 		    </select>';
 	   if($vlNotes){
-            $row[] = '<a href="addContactNotes.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-file"> Add Contact Notes</i></a>';
+            //$row[] = '<a href="addContactNotes.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-file"> Add Contact Notes</i></a>';
+            $row[] = '<a href="javascript:void(0)" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Add" onclick="showModal(\'addContactNotes.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520)"><i class="fa fa-file"> Add Contact Notes</i></a>';
            }
             $output['aaData'][] = $row;
         }

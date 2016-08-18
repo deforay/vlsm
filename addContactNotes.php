@@ -1,6 +1,16 @@
+  <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
+   <!-- DataTables -->
+  <link rel="stylesheet" href="./assets/plugins/datatables/dataTables.bootstrap.css">
+  <link href="assets/css/deforayModal.css" rel="stylesheet" />
+  <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
+  <script src="assets/js/deforayModal.js"></script>
 <?php
 ob_start();
-include('header.php');
 include('./includes/MysqliDb.php');
 include('General.php');
 $id=base64_decode($_GET['id']);
@@ -8,14 +18,10 @@ $contactInfo="SELECT * from contact_notes_details where treament_contact_id=$id"
 $contact=$db->query($contactInfo);
 $general=new Deforay_Commons_General();
 ?>
-<div class="content-wrapper">
+<div class="content-wrapper" style="padding: 20px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Add Contact Notes</h1>
-      <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Contact Notes</li>
-      </ol>
+      <h4>Add Contact Notes</h4>
     </section>
 
     <!-- Main content -->
@@ -28,7 +34,7 @@ $general=new Deforay_Commons_General();
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='contactNotes' id='contactNotes' autocomplete="off" action="addContactNotesHelper.php">
+            <div class="form-horizontal" method='post'  name='contactNotes' id='contactNotes' autocomplete="off" action="addContactNotesHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
@@ -40,26 +46,36 @@ $general=new Deforay_Commons_General();
                         </div>
                     </div>
                   </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="address" class="col-lg-4 control-label">Collected On<span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="date" name="date" placeholder="Collected On" title="Enter Collected on"/>
+                        </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                <a href="highViralLoad.php" class="btn btn-default"> Cancel</a>
+                <a href="javascript:void(0)" class="btn btn-default"  onclick="window.parent.closeModal()"> Cancel</a>
               </div>
-            </form>
+            </div>
+            <hr/>
             
             <!--histroy of contact notes-->
-            
-                  <div class="row">
+            <div class="col-md-12"><h4><a id="history" href="javascript:void(0);" style="text-decoration: none;" onclick="formToggler('+');">Show History <i class="fa fa-plus"></i></a></h4></div>
+                  <div class="row" id="showHistory" style="display: none;">
                     <div class="col-xs-12">
                       <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <h2>Contact Notes History</h2>
+                            <h3>Contact Notes History</h3>
                           <table id="contactNotesDetails" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                               <th>Contact Notes</th>
+                              <th>Collected On</th>
                               <th>Added On</th>
                             </tr>
                             </thead>
@@ -68,10 +84,12 @@ $general=new Deforay_Commons_General();
                                 if(count($contact)>0){
                                     foreach($contact as $notes){
                                         $date = explode(" ",$notes['added_on']);
+                                        $collectDate = $general->humanDateFormat($notes['collected_on']);
                                         $humanDate = $general->humanDateFormat($date[0]);
                                         ?>
                                         <tr>
                                         <td><?php echo $notes['contact_notes'];?></td>
+                                        <td><?php echo $collectDate;?></td>
                                         <td><?php echo $humanDate." ".$date[1];?></td>
                                         </tr>
                                         <?php
@@ -79,7 +97,7 @@ $general=new Deforay_Commons_General();
                                 }else{
                                 ?>
                                 <tr>
-                                    <td colspan="2" class="dataTables_empty">Loading data from server</td>
+                                    <td colspan="3" class="dataTables_empty">Loading data from server</td>
                                 </tr>
                               <?php } ?>
                             </tbody>
@@ -97,23 +115,52 @@ $general=new Deforay_Commons_General();
       </div>
     </section>
 </div>
+<script src="assets/js/bootstrap.min.js"></script>
+  <!-- DataTables -->
+  <script src="./assets/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="./assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
  <script type="text/javascript">
 var oTable = null;
   $(document).ready(function() {
+    $('.date').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'dd-M-yy',
+      timeFormat: "hh:mm TT",
+      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     });
     <?php if(count($contact)>0){ ?>
      oTable = $('#contactNotesDetails').dataTable({"aaSorting": [[ 1, "desc" ]]});
      <?php } ?>
   });
   function validateNow(){
-    flag = deforayValidator.init({
-        formId: 'contactNotes'
-    });
-    
-    if(flag){
-      document.getElementById('contactNotes').submit();
+    notes = $("#notes").val();
+    dateVal = $("#date").val();
+    if(notes!='' && dateVal!=''){
+      $.post("addContactNotesHelper.php", {
+	  notes: $("#notes").val(),dateVal: $("#date").val(),treamentId: $("#treamentId").val(),
+	},
+      function(data){
+	  if(data>0){
+              alert("Notes Added Successfully");
+              window.location.reload();
+	  }
+      });
+    }else{
+        alert("Please enter result");
     }
   }
-  
+  function formToggler(symbol){
+      if(symbol == "+"){
+          $("#showHistory").slideToggle();
+          $("#history").html('Hide History <i class="fa fa-minus"></i>');
+          $("#history").attr("onclick", "formToggler('-')");
+      }else{
+        $("#showHistory").slideToggle();
+        $("#history").html('Show History <i class="fa fa-plus"></i>');
+        $("#history").attr("onclick", "formToggler('-')");
+      }
+    }
 </script>
 <?php
 include('footer.php');
