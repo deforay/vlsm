@@ -84,7 +84,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 $id=$_POST['id'];
-$fQuery="SELECT * from vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
+$fQuery="SELECT * from vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
 $result=$db->query($fQuery);
 
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00'){
@@ -125,6 +125,14 @@ if(isset($result[0]['age_in_yrs']) && trim($result[0]['age_in_yrs'])!=''){
     $age = round($difference / $seconds_per_year);
   }
 }
+$vlResult = '';
+  if(isset($result[0]['absolute_value']) && trim($result[0]['absolute_value'])!= ''){
+    $vlResult = $result[0]['absolute_value'];
+  }elseif(isset($result[0]['log_value']) && trim($result[0]['log_value'])!= ''){
+    $vlResult = $result[0]['log_value'];
+  }elseif(isset($result[0]['text_value']) && trim($result[0]['text_value'])!= ''){
+    $vlResult = $result[0]['text_value'];
+  }
 
 $html = "";
 $html .= '<div style="border:1px solid #333;">';
@@ -178,7 +186,7 @@ $html.='<table style="padding:2px;">';
     $html .='</tr>';
     $html .='<tr style="line-height:30px;">';
       $html .='<td style="text-align:left;font-size:14px;"><strong>Test Result</strong></td>';
-      $html .='<td colspan="3" style="text-align:left;font-size:12px;"><strong>'.$result[0]['result'].'</strong></td>';
+      $html .='<td colspan="3" style="text-align:left;font-size:12px;"><strong>'.$vlResult.'</strong></td>';
     $html .='</tr>';
     $html .='<tr style="line-height:30px;">';
       $html .='<td style="text-align:left;font-size:14px;"><strong>Comments</strong></td>';

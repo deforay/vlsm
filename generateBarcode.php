@@ -130,7 +130,7 @@ if($id >0){
             'stretchtext' => 4
         );
         
-        $b=1;
+        //$b=1;
         foreach($result as $val){
             $pdf->write1DBarcode($val['sample_code'], 'C39', '', '', '', 18, 0.4, $style, 'N');
             $pdf->Ln();

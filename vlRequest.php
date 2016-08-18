@@ -239,7 +239,7 @@ $fResult = $db->rawQuery($fQuery);
             "bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
-				{"sClass":"center","bSortable":false},
+		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
