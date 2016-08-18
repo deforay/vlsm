@@ -10,8 +10,8 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.log_value','ts.status_name');
+        $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.log_value','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -72,8 +72,8 @@ $primaryKey="treament_id";
             }
             $sWhere .= $sWhereSub;
         }else{
-			$sWhere = "vl.status = 6";
-		}
+	    $sWhere = "vl.status = 6";
+	}
         
         /* Individual column filtering */
         for ($i = 0; $i < count($aColumns); $i++) {
@@ -207,35 +207,42 @@ $primaryKey="treament_id";
 		$vlRequest = false;
 		$vlView = false;
 		if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges']))){
-			$vlRequest = true;
+		    $vlRequest = true;
 		}
 		if(isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))){
-			$vlView = true;
+		    $vlView = true;
 		}
 			
         foreach ($rResult as $aRow) {
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
-			$xplodDate = explode(" ",$aRow['sample_collection_date']);
-			$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+		    $xplodDate = explode(" ",$aRow['sample_collection_date']);
+		    $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
 	    }else{
-			$aRow['sample_collection_date'] = '';
+		    $aRow['sample_collection_date'] = '';
 	    }
-        $row = array();
+	    
+	    $result = '';
+	    if(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
+		$result = $aRow['log_value'];
+	    }elseif(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
+		$result = $aRow['absolute_value'];
+	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
+		$result = $aRow['text_value'];
+	    }
+            $row = array();
 	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $aRow['sample_collection_date'];
 	    $row[] = $aRow['batch_code'];
 	    $row[] = $aRow['art_no'];
-        $row[] = ucwords($aRow['patient_name']);
+            $row[] = ucwords($aRow['patient_name']);
 	    $row[] = ucwords($aRow['facility_name']);
-        $row[] = ucwords($aRow['sample_name']);
-        $row[] = ucwords($aRow['result']);
-        $row[] = ucwords($aRow['status_name']);
-		$row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
+	    $row[] = ucwords($aRow['sample_name']);
+	    $row[] = $result;
+	    $row[] = ucwords($aRow['status_name']);
+	    $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
 	    
-        
-		$output['aaData'][] = $row;
-		
+	    $output['aaData'][] = $row;
         }
         
         echo json_encode($output);

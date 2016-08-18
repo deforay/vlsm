@@ -10,7 +10,8 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
+        $orderColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -34,7 +35,7 @@ $primaryKey="treament_id";
             $sOrder = "";
             for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
                 if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($_POST['iSortCol_' . $i])] . "
+                    $sOrder .= $orderColumns[intval($_POST['iSortCol_' . $i])] . "
 				 	" . ( $_POST['sSortDir_' . $i] ) . ", ";
                 }
             }
@@ -194,14 +195,23 @@ $primaryKey="treament_id";
 	
         
         foreach ($rResult as $aRow) {
+	    $vlResult = '';
+	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
+		$vlResult = $aRow['absolute_value'];
+	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
+		$vlResult = $aRow['log_value'];
+	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
+		$vlResult = $aRow['text_value'];
+	    }
+	    
             $row = array();
-			$row[] = $aRow['sample_code'];
-			$row[] = $aRow['batch_code'];
-			$row[] = $aRow['art_no'];
+	    $row[] = $aRow['sample_code'];
+	    $row[] = $aRow['batch_code'];
+	    $row[] = $aRow['art_no'];
             $row[] = ucwords($aRow['patient_name']);
-			$row[] = ucwords($aRow['facility_name']);
+	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
-            $row[] = ucwords($aRow['result']);
+            $row[] = $vlResult;
             $row[] = ucwords($aRow['status_name']);
             $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';
            
