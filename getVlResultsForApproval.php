@@ -10,8 +10,8 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.log_value','ts.status_name');
-        $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.log_value','ts.status_name');
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
+        $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -221,13 +221,13 @@ $primaryKey="treament_id";
 		    $aRow['sample_collection_date'] = '';
 	    }
 	    
-	    $result = '';
-	    if(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
-		$result = $aRow['log_value'];
-	    }elseif(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
-		$result = $aRow['absolute_value'];
+	    $vlResult = '';
+	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
+		$vlResult = $aRow['absolute_value'];
+	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
+		$vlResult = $aRow['log_value'];
 	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
-		$result = $aRow['text_value'];
+		$vlResult = $aRow['text_value'];
 	    }
             $row = array();
 	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
@@ -238,7 +238,7 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['patient_name']);
 	    $row[] = ucwords($aRow['facility_name']);
 	    $row[] = ucwords($aRow['sample_name']);
-	    $row[] = $result;
+	    $row[] = $vlResult;
 	    $row[] = ucwords($aRow['status_name']);
 	    $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
 	    
