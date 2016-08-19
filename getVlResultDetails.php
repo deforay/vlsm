@@ -213,7 +213,7 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $vlResult;
             $row[] = ucwords($aRow['status_name']);
-            $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-pdf-o"> Result PDF</i></a>';
+            $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
            
             $output['aaData'][] = $row;
         }

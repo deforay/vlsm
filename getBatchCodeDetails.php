@@ -138,7 +138,7 @@ $primaryKey="batch_id";
 		$humanDate =  date("d-M-Y H:i:s",strtotime($date));
 	    }
             $row = array();
-	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-file-pdf-o"> Print Barcode</i></a>';
+	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    $row[] = ucwords($aRow['batch_code']);
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $humanDate;
