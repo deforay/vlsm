@@ -3,7 +3,6 @@ ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
 include('General.php');
-$general=new Deforay_Commons_General();
 $query="SELECT * from r_art_code_details where parent_art=0";
 $qResult=$db->query($query);
 $artCode=[];
