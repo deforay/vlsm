@@ -26,13 +26,14 @@ try {
           if(isset($_POST['reviewedOn']) && trim($_POST['reviewedOn'])!=""){
                $_POST['reviewedOn']=$general->dateFormat($_POST['reviewedOn']);  
           }
+   
    $vldata =  array('lab_name'=>$_POST['labName'],
           'lab_contact_person'=>$_POST['labContactPerson'],
           'lab_phone_no'=>$_POST['labPhoneNo'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedOn'],
           'lab_tested_date'=>$_POST['sampleTestedOn'],
           'date_results_dispatched'=>$_POST['resultDispatchedOn'],
-          'result_reviewed_by'=>$_POST['reviewedBy'],
+          'result_reviewed_by'=>$_SESSION['userId'],
           'result_reviewed_date'=>$_POST['reviewedOn'],
           'log_value'=>$_POST['logValue'],
           'absolute_value'=>$_POST['absoluteValue'],
@@ -41,7 +42,7 @@ try {
           'comments'=>$_POST['comments'],
           'status'=>$_POST['status'],
         );
-          
+          //print_r($vldata);die;
           $db=$db->where('treament_id',$treamentId);
           $db->update($tableName,$vldata);
           

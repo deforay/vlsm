@@ -76,9 +76,9 @@ if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results
 }
 
 if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00'){
- $result[0]['result_reviewed_date']=$general->humanDateFormat($result[0]['result_reviewed_date']);
+ $result[0]['result_reviewed_date']= $general->humanDateFormat($result[0]['result_reviewed_date']);
 }else{
- $result[0]['result_reviewed_date']='';
+ $result[0]['result_reviewed_date']= $general->humanDateFormat(date('Y-m-d'));
 }
 
 $query="SELECT * from r_art_code_details where parent_art=0";
@@ -803,14 +803,14 @@ $tsResult = $db->rawQuery($tsQuery);
                 </div>
                 
                 <div class="row">
-                 <div class="col-md-6">
+                 <!--<div class="col-md-6">
                     <div class="form-group">
                         <label for="reviewedBy" class="col-lg-4 control-label">Reviewed By</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By Name" title="Please enter reviewed by name" value="<?php echo $result[0]['result_reviewed_by']; ?>"/>
+                        <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By Name" title="Please enter reviewed by name" value="< ?php echo $result[0]['result_reviewed_by']; ?>"/>
                         </div>
                     </div>
-                  </div>
+                  </div>-->
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
