@@ -2,8 +2,11 @@
 ob_start();
 include('header.php');
 include('./includes/MysqliDb.php');
+include('General.php');
+$general=new Deforay_Commons_General();
 $query="SELECT config_id,machine_name,file_name FROM import_config where status='active'";
 $iResult = $db->rawQuery($query);
+$reviewedOn = $general->humanDateFormat(date('Y-m-d'));
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -146,19 +149,19 @@ $iResult = $db->rawQuery($query);
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-6">
+                        <!--<div class="col-md-6">
                           <div class="form-group">
                               <label for="reviewedBy" class="col-lg-4 control-label">Reviewed By</label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Reviewed By" title="Please enter reviewed by" value="<?php if(isset($_SESSION['userName'])){ echo $_SESSION['userName']; } ?>"/>
+                              <input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Reviewed By" title="Please enter reviewed by" value="< ?php if(isset($_SESSION['userName'])){ echo $_SESSION['userName']; } ?>"/>
                               </div>
                           </div>
-                        </div>
+                        </div>-->
                         <div class="col-md-6">
                           <div class="form-group">
                               <label class="col-lg-4 control-label">Reviewed On</label>
                               <div class="col-lg-7">
-                              <input type="text" class="form-control datePicker readonly" id="reviewedDate" name="reviewedDate" placeholder="Reviewed Date" title="Please enter reviewed date" readonly="readonly"/>
+                              <input type="text" class="form-control datePicker readonly" id="reviewedDate" name="reviewedDate" placeholder="Reviewed Date" title="Please enter reviewed date" value="<?php echo $reviewedOn; ?>" readonly="readonly"/>
                               </div>
                           </div>
                         </div>
@@ -319,7 +322,6 @@ function setFacilityDetails(fDetails){
 	
 	
 </script>
-  
  <?php
  include('footer.php');
  ?>

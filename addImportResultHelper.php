@@ -17,8 +17,6 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 
 try {
-    
-    
         //$configId=base64_decode($_POST['machineName']);
         //$query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
         //$cResult = $db->rawQuery($query);
@@ -91,7 +89,7 @@ try {
                         'lab_tested_date'=>$_POST['testingDate'],
                         'date_results_dispatched'=>$_POST['dispatchedDate'],
                         'result_reviewed_date'=>$_POST['reviewedDate'],
-                        'result_reviewed_by'=>$_POST['reviewedBy'],
+                        'result_reviewed_by'=>$_SESSION['userId'],
                         'comments'=>$_POST['comments'],
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
