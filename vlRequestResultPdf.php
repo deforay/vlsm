@@ -84,7 +84,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 $id=$_POST['id'];
-$fQuery="SELECT * from vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
+$fQuery="SELECT * from vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by where treament_id=$id";
 $result=$db->query($fQuery);
 
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00'){
@@ -124,6 +124,12 @@ if(isset($result[0]['age_in_yrs']) && trim($result[0]['age_in_yrs'])!=''){
     $seconds_per_year = 60*60*24*365;
     $age = round($difference / $seconds_per_year);
   }
+}
+
+if(isset($result[0]['user_name']) && trim($result[0]['user_name'])!= ''){
+  $resultReviewedBy = ucwords($result[0]['user_name']);
+}else{
+  $resultReviewedBy  = "N/A";
 }
 $vlResult = '';
   if(isset($result[0]['absolute_value']) && trim($result[0]['absolute_value'])!= ''){
@@ -194,7 +200,7 @@ $html.='<table style="padding:2px;">';
     $html .='</tr>';
     $html .='<tr style="line-height:30px;">';
       $html .='<td style="text-align:left;font-size:12px;"><strong>Result Reviewed By</strong></td>';
-      $html .='<td style="text-align:left;font-size:12px;">'.ucfirst($result[0]['result_reviewed_by']).'</td>';
+      $html .='<td style="text-align:left;font-size:12px;">'.$resultReviewedBy.'</td>';
       $html .='<td style="text-align:left;font-size:12px;"><strong>Date Reviewed</strong></td>';
       $html .='<td style="text-align:left;font-size:12px;">'.$result[0]['result_reviewed_date'].'</td>';
     $html .='</tr>';

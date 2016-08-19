@@ -12,7 +12,6 @@ $treamentId=(int) base64_decode($_POST['treamentId']);
 try {
      //var_dump($_POST);die;
      if(isset($_POST['artNo']) && trim($_POST['artNo'])!="" && $treamentId>0){
-          
           if(!isset($_POST['facilityId']) || trim($_POST['facilityId'])==""){
                $data=array(
                  'facility_name'=>$_POST['facilityName'],
@@ -129,7 +128,7 @@ try {
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedOn'],
           'lab_tested_date'=>$_POST['sampleTestedOn'],
           'date_results_dispatched'=>$_POST['resultDispatchedOn'],
-          'result_reviewed_by'=>$_POST['reviewedBy'],
+          'result_reviewed_by'=>$_SESSION['userId'],
           'result_reviewed_date'=>$_POST['reviewedOn'],
           'justification'=>$_POST['justification'],
           'log_value'=>$_POST['logValue'],

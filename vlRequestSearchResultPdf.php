@@ -7,7 +7,6 @@ include ('./includes/tcpdf/tcpdf.php');
 include ('./includes/fpdi/fpdi.php');
 define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
-
 $requestResult=$db->query($_SESSION['vlRequestSearchResultQuery']);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
@@ -160,6 +159,12 @@ if(sizeof($requestResult)> 0){
             $age = round($difference / $seconds_per_year);
           }
         }
+        
+        if(isset($result['user_name']) && trim($result['user_name'])!= ''){
+          $resultReviewedBy = ucwords($result['user_name']);
+        }else{
+          $resultReviewedBy  = "N/A";
+        }
         $vlResult = '';
         if(isset($result['absolute_value']) && trim($result['absolute_value'])!= ''){
           $vlResult = $result['absolute_value'];
@@ -228,7 +233,7 @@ if(sizeof($requestResult)> 0){
             $html .='</tr>';
             $html .='<tr style="line-height:30px;">';
               $html .='<td style="text-align:left;font-size:12px;"><strong>Result Reviewed By</strong></td>';
-              $html .='<td style="text-align:left;font-size:12px;">'.ucfirst($result['result_reviewed_by']).'</td>';
+              $html .='<td style="text-align:left;font-size:12px;">'.$resultReviewedBy.'</td>';
               $html .='<td style="text-align:left;font-size:12px;"><strong>Date Reviewed</strong></td>';
               $html .='<td style="text-align:left;font-size:12px;">'.$result['result_reviewed_date'].'</td>';
             $html .='</tr>';
