@@ -102,19 +102,19 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 			     <div style="width:60%;margin:0 auto;clear:both;">
 			      <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
 			      </div><br/><br/>
-			    <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
-			    <?php
-			    foreach($result as $sample){
-			      $selected = '';
-			      if($sample['batch_id']==$id){
-				$selected = "selected=selected";
+			      <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
+			      <?php
+			      foreach($result as $sample){
+				$selected = '';
+				if($sample['batch_id']==$id){
+				  $selected = "selected=selected";
+				}
+				?>
+				<option value="<?php echo $sample['treament_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code']);?></option>
+				<?php
 			      }
 			      ?>
-			      <option value="<?php echo $sample['treament_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code']);?></option>
-			      <?php
-			    }
-			    ?>
-			  </select>
+			     </select>
 			  </div>
                         </div>
                     </div>
@@ -143,11 +143,20 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   <script type="text/javascript" src="assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
-
   var startDate = "";
   var endDate = "";
-  $(document).ready(function() {
-     $('#sampleCollectionDate').daterangepicker({
+  function validateNow(){
+    flag = deforayValidator.init({
+        formId: 'editBatchForm'
+    });
+    
+    if(flag){
+      document.getElementById('editBatchForm').submit();
+    }
+  }
+   //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
+   $(document).ready(function() {
+         $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
@@ -160,25 +169,14 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
                 'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
             }
-        },
-        function(start, end) {
-            startDate = start.format('YYYY-MM-DD');
-            endDate = end.format('YYYY-MM-DD');
-      });
-     $('#sampleCollectionDate').val("");
-  } );
-  function validateNow(){
-    flag = deforayValidator.init({
-        formId: 'editBatchForm'
-    });
-    
-    if(flag){
-      document.getElementById('editBatchForm').submit();
-    }
-  }
-   //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
-   $(document).ready(function() {
-	  $('.search').multiSelect({
+	  },
+	  function(start, end) {
+	      startDate = start.format('YYYY-MM-DD');
+	      endDate = end.format('YYYY-MM-DD');
+	});
+	$('#sampleCollectionDate').val("");
+	
+	$('.search').multiSelect({
 	 selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
 	 selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
 	 afterInit: function(ms){
@@ -206,7 +204,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	 },
 	 afterSelect: function(){
 	  var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
-	  if(this.qs2.cache().matchedResultsCount == maxNoOfSample){
+	  if(this.qs2.cache().matchedResultsCount >= maxNoOfSample){
 	    alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 	    $(".ms-selectable").css("pointer-events","none");
 	  }
@@ -214,7 +212,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	   this.qs2.cache();
 	 },
 	 afterDeselect: function(){
-	   var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
+	  var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
 	  if(this.qs2.cache().matchedResultsCount < maxNoOfSample){
 	    $(".ms-selectable").css("pointer-events","auto");
 	  }
@@ -238,10 +236,16 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	  $("#select-all-samplecode").css("pointer-events","none");
        <?php }
        ?>
+       
+       var selectedSampleCount = $("#sampleCode :selected").length;
+       var maxNoOfSampleCount = '<?php echo $configResult[0]['value']; ?>';
+	
+	if(parseInt(selectedSampleCount) >= parseInt(maxNoOfSampleCount)){
+	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+	}
    });
    
-   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
-  {
+   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
       var removeDots=obj.value.replace(/\./g,"");
       var removeDots=removeDots.replace(/\,/g,"");
       //str=obj.value;
@@ -257,11 +261,11 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	  }
       });
   }
-  function getSampleCodeDetails()
-  {
+  
+  function getSampleCodeDetails(){
     var fName = $("#facilityName").val();
-      var sName = $("#sampleType").val();
-      var sCode= $("#sampleCode").val();
+    var sName = $("#sampleType").val();
+    var sCode= $("#sampleCode").val();
     $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val()},
     function(data){
 	if(data != ""){

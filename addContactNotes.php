@@ -34,7 +34,7 @@ $general=new Deforay_Commons_General();
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <div class="form-horizontal" method='post'  name='contactNotes' id='contactNotes' autocomplete="off" action="addContactNotesHelper.php">
+            <div class="form-horizontal" id="contactNotes">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
@@ -109,8 +109,6 @@ $general=new Deforay_Commons_General();
                     </div>
                     <!-- /.col -->
                   </div>
-
-            
         </div>
       </div>
     </section>
@@ -130,9 +128,10 @@ var oTable = null;
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
      });
     <?php if(count($contact)>0){ ?>
-     oTable = $('#contactNotesDetails').dataTable({"aaSorting": [[ 1, "desc" ]]});
+      oTable = $('#contactNotesDetails').dataTable({"aaSorting": [[ 1, "desc" ]]});
      <?php } ?>
   });
+  
   function validateNow(){
     notes = $("#notes").val();
     dateVal = $("#date").val();
@@ -143,6 +142,8 @@ var oTable = null;
       function(data){
 	  if(data>0){
               alert("Notes Added Successfully");
+              $("#notes").val("");
+              $("#date").val("");
               window.location.reload();
 	  }
       });
@@ -150,6 +151,7 @@ var oTable = null;
         alert("Please enter Notes and Date");
     }
   }
+  
   function formToggler(symbol){
       if(symbol == "+"){
           $("#showHistory").slideToggle();
@@ -160,8 +162,5 @@ var oTable = null;
         $("#history").html('Show History <i class="fa fa-plus"></i>');
         $("#history").attr("onclick", "formToggler('-')");
       }
-    }
+  }
 </script>
-<?php
-include('footer.php');
-?>

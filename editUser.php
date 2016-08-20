@@ -8,7 +8,6 @@ $userInfo=$db->query($userQuery);
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -46,7 +45,7 @@ $result = $db->rawQuery($query);
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Email </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="email" name="email" placeholder="Email" title="Please enter email" value="<?php echo $userInfo[0]['email']; ?>"/>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="Email" title="Please enter email" value="<?php echo $userInfo[0]['email']; ?>" onblur="checkNameValidation('user_details','email',this,'<?php echo "user_id##".$userInfo[0]['user_id'];?>','This email id already exists.Try another email id',null)"/>
                         </div>
                     </div>
                   </div>
@@ -56,7 +55,7 @@ $result = $db->rawQuery($query);
                     <div class="form-group">
                         <label for="mobileNo" class="col-lg-4 control-label">Mobile Number <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="mobileNo" name="mobileNo" placeholder="Mobile Number" title="Please enter mobile number" value="<?php echo $userInfo[0]['phone_number']; ?>"/>
+                        <input type="text" class="form-control isRequired" id="mobileNo" name="mobileNo" placeholder="Mobile Number" title="Please enter mobile number" value="< ?php echo $userInfo[0]['phone_number']; ?>"/>
                         </div>
                     </div>
                   </div>-->
@@ -64,7 +63,7 @@ $result = $db->rawQuery($query);
                     <div class="form-group">
                         <label for="loginId" class="col-lg-4 control-label">Login Id <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" value="<?php echo $userInfo[0]['login_id']; ?>"/>
+                        <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" value="<?php echo $userInfo[0]['login_id']; ?>" onblur="checkNameValidation('user_details','login_id',this,'<?php echo "user_id##".$userInfo[0]['user_id'];?>','This login id already exists.Try another login id',null)"/>
                         </div>
                     </div>
                   </div>
@@ -107,8 +106,6 @@ $result = $db->rawQuery($query);
                 </div>
                 
                 <div class="row">
-                  
-                  
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
@@ -122,7 +119,6 @@ $result = $db->rawQuery($query);
                     </div>
                   </div>
                 </div>
-               
                
               </div>
               <!-- /.box-body -->
@@ -153,6 +149,21 @@ $result = $db->rawQuery($query);
     if(flag){
       document.getElementById('userEditForm').submit();
     }
+  }
+  
+  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
+        var removeDots=obj.value.replace(/\./g,"");
+        var removeDots=removeDots.replace(/\,/g,"");
+        //str=obj.value;
+        removeDots = removeDots.replace(/\s{2,}/g,' ');
+
+        $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                alert(alrt);
+                document.getElementById(obj.id).value="";
+            }
+        });
   }
 </script>
   

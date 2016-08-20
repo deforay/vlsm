@@ -7,7 +7,7 @@ $primaryKey="config_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('machine_name','status','');
+        $aColumns = array('machine_name','status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         //$sIndexColumn = $primaryKey;

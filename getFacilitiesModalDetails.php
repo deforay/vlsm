@@ -7,7 +7,7 @@ $primaryKey="facility_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('facility_id','facility_code','facility_type','facility_name');
+        $aColumns = array('facility_id','facility_code','facility_name','facility_type_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -85,7 +85,7 @@ $primaryKey="facility_id";
          * Get data to display
         */
         
-       $sQuery="SELECT * FROM facility_details";
+       $sQuery="SELECT * FROM facility_details as f_d LEFT JOIN facility_type as f_t ON f_t.facility_type_id=f_d.facility_type";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -110,7 +110,7 @@ $primaryKey="facility_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM facility_details $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM facility_details as f_d LEFT JOIN facility_type as f_t ON f_t.facility_type_id=f_d.facility_type $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -135,10 +135,9 @@ $primaryKey="facility_id";
 	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['state']."##".$aRow['hub_name']."##".$aRow['contact_person']."##".$aRow['phone_number'];
             $row = array();
 	    $row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacility(this.value);">';
-		$row[] = $aRow['facility_code'];
+	    $row[] = $aRow['facility_code'];
 	    $row[] = ucwords($aRow['facility_name']);
-            
-            $row[] = $aRow['facility_type'];
+            $row[] = ucwords($aRow['facility_type_name']);
             $output['aaData'][] = $row;
         }
         echo json_encode($output);
