@@ -8,7 +8,6 @@ $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -238,9 +237,9 @@ $fResult = $db->rawQuery($fQuery);
             "bServerSide": true,
             "sAjaxSource": "getHighVlResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-				  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-				  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-				  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+			      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+			      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});
               $.ajax({
@@ -257,6 +256,7 @@ $fResult = $db->rawQuery($fQuery);
   function searchVlRequestData(){
     oTable.fnDraw();
   }
+  
   function updateStatus(id,value){
     conf = confirm("Do you wisht to change the contact completed status?");
     if(conf){
@@ -269,7 +269,6 @@ $fResult = $db->rawQuery($fQuery);
 	   oTable.fnDraw();
 	}
   }
-  
 </script>
  <?php
  include('footer.php');

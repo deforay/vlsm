@@ -73,7 +73,7 @@ $fResult = $db->rawQuery($fQuery);
                     <div class="form-group">
                         <label for="facilityCode" class="col-lg-4 control-label">Facility Code <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code"/>
+                        <input type="text" class="form-control isRequired" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" onblur="checkNameValidation('facility_details','facility_code',this,null,'This code already exists.Try another code',null)"/>
                         </div>
                     </div>
                   </div>
@@ -205,6 +205,21 @@ $fResult = $db->rawQuery($fQuery);
     if(flag){
       document.getElementById('addFacilityModalForm').submit();
     }
+   }
+  
+   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
+        var removeDots=obj.value.replace(/\./g,"");
+        var removeDots=removeDots.replace(/\,/g,"");
+        //str=obj.value;
+        removeDots = removeDots.replace(/\s{2,}/g,' ');
+
+        $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                alert(alrt);
+                document.getElementById(obj.id).value="";
+            }
+        });
    }
   
    function showModal(url, w, h) {

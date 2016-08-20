@@ -133,7 +133,7 @@ if($id >0){
         //$b=1;
         foreach($result as $val){
             $pdf->write1DBarcode($val['sample_code'], 'C39', '', '', '', 18, 0.4, $style, 'N');
-            $pdf->Ln();
+            $pdf->Ln(8);
         }
     
         $filename = trim($bResult[0]['batch_code']).'.pdf';

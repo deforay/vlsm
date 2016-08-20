@@ -165,9 +165,7 @@ $reviewedOn = $general->humanDateFormat(date('Y-m-d'));
                               </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                         <div class="col-md-6">
+                        <div class="col-md-6">
                           <div class="form-group">
                               <label for="comments" class="col-lg-4 control-label">Comments </label>
                               <div class="col-lg-7">

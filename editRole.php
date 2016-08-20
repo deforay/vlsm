@@ -47,7 +47,7 @@ if($priInfo){
                     <div class="form-group">
                         <label for="userName" class="col-lg-4 control-label">Role Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="roleName" name="roleName" placeholder="Role Name" title="Please enter user name" value="<?php echo $roleInfo[0]['role_name']; ?>"/>
+                        <input type="text" class="form-control isRequired" id="roleName" name="roleName" placeholder="Role Name" title="Please enter user name" value="<?php echo $roleInfo[0]['role_name']; ?>" onblur="checkNameValidation('roles','role_name',this,'<?php echo "role_id##".$roleInfo[0]['role_id'];?>','This role name already exists.Try another role name',null)"/>
                         <input type="hidden" name="roleId" id="roleId" value="<?php echo base64_encode($roleInfo[0]['role_id']);?>"/>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ if($priInfo){
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Role Code </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="roleCode" name="roleCode" placeholder="Role Code" title="Please enter role code" value="<?php echo $roleInfo[0]['role_code']; ?>"/>
+                        <input type="text" class="form-control isRequired" id="roleCode" name="roleCode" placeholder="Role Code" title="Please enter role code" value="<?php echo $roleInfo[0]['role_code']; ?>" onblur="checkNameValidation('roles','role_code',this,'<?php echo "role_id##".$roleInfo[0]['role_id'];?>','This role code already exists.Try another role code',null)"/>
                         </div>
                     </div>
                   </div>
@@ -148,16 +148,32 @@ if($priInfo){
       document.getElementById('roleEditForm').submit();
     }
   }
-   $("#cekAllPrivileges").click(function() {
-        $('.unCekAll').prop('checked', false);
-        $('.cekAll').prop('checked', true);
-    });
+  
+  $("#cekAllPrivileges").click(function() {
+       $('.unCekAll').prop('checked', false);
+       $('.cekAll').prop('checked', true);
+   });
 
-    $("#unCekAllPrivileges").click(function() {
-	$('.cekAll').prop('checked', false);
-        $('.unCekAll').prop('checked', true);
-        
-    });
+   $("#unCekAllPrivileges").click(function() {
+       $('.cekAll').prop('checked', false);
+       $('.unCekAll').prop('checked', true);
+       
+   });
+    
+  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
+        var removeDots=obj.value.replace(/\./g,"");
+        var removeDots=removeDots.replace(/\,/g,"");
+        //str=obj.value;
+        removeDots = removeDots.replace(/\s{2,}/g,' ');
+
+        $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                alert(alrt);
+                document.getElementById(obj.id).value="";
+            }
+        });
+  }
 </script>
   
  <?php

@@ -50,12 +50,6 @@ $sInfo=$db->query($sQuery);
                   </div>
                 </div>
                 
-                
-                
-                
-                
-                
-		
 		<div class="row">
                    <div class="col-md-6" style="padding-top:20px;">
                     <div class="form-group">
@@ -72,7 +66,7 @@ $sInfo=$db->query($sQuery);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-				<input type="hidden" id="configId" name="configId" value="<?php echo base64_encode($sInfo[0]['config_id']); ?>"/>
+		<input type="hidden" id="configId" name="configId" value="<?php echo base64_encode($sInfo[0]['config_id']); ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="importConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -88,22 +82,7 @@ $sInfo=$db->query($sQuery);
     <!-- /.content -->
   </div>
   
-  
   <script type="text/javascript">
-  $(document).ready(function(){
-    <?php
-    if($sInfo[0]['log_absolute_val_same_col'] == 'yes'){ ?>
-      $("#absRow").hide();
-      $("#absoluteValCol,#absoluteValRow").val("");
-      $("label[for*='logValCol']").html("Log/Absolute Value");
-      $("#logValCol").attr("placeholder","Log/Absolute Val Column");
-      $("#logValCol").attr("title","Please enter log/absolute val column");
-      $("#logValRow").attr("placeholder","Log/Absolute Val Row");
-      $("#logValRow").attr("title","Please enter log/absolute val row");
-    <?php }
-    ?>
-  });
-  
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'editImportConfigForm'
@@ -128,26 +107,6 @@ $sInfo=$db->query($sQuery);
             }
         });
   }
-  
-  $("input[type='radio']").click(function(){
-    var id = $(this).attr('id');
-    if(id == 'logAndAbsoluteInSameColumnYes'){
-      $("#absRow").hide();
-      $("#absoluteValCol,#absoluteValRow").val("");
-      $("label[for*='logValCol']").html("Log/Absolute Value");
-      $("#logValCol").attr("placeholder","Log/Absolute Val Column");
-      $("#logValCol").attr("title","Please enter log/absolute val column");
-      $("#logValRow").attr("placeholder","Log/Absolute Val Row");
-      $("#logValRow").attr("title","Please enter log/absolute val row");
-    }else{
-      $("#absRow").show();
-      $("label[for*='logValCol']").html("Log Value");
-      $("#logValCol").attr("placeholder","Log Val Column");
-      $("#logValCol").attr("title","Please enter log val column");
-      $("#logValRow").attr("placeholder","Log Val Row");
-      $("#logValRow").attr("title","Please enter log val row");
-    }
-  });
 </script>
   
  <?php

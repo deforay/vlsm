@@ -1,6 +1,5 @@
 <?php
 ob_start();
-session_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
@@ -18,10 +17,8 @@ try {
         );
         //print_r($data);die;
         $result = $db->insert($tableName,$data);
-        $_SESSION['alertMsg']="Contact Notes added successfully";
     }
     //header("location:highViralLoad.php");
-  
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
