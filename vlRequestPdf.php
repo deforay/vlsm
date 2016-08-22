@@ -4,7 +4,7 @@ ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 include ('./includes/tcpdf/tcpdf.php');
-
+define('UPLOAD_PATH','uploads');
 //header and footer
 class MYPDF extends TCPDF {
 
@@ -24,7 +24,7 @@ class MYPDF extends TCPDF {
         // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('helvetica', 'I', 8);
+        $this->SetFont('helvetica', 'B');
         // Page number
         $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
@@ -69,13 +69,16 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('helveticaI', '', 18);
+$pdf->SetFont('helvetica', 'I', 10);
 
 $pathFront=realpath('./uploads');
 //$pdf = new TCPDF();
 $pdf->AddPage();
 $general=new Deforay_Commons_General();
 $id=$_POST['id'];
+
+$sTypeQuery="SELECT * FROM r_sample_type";
+$sTypeResult = $db->rawQuery($sTypeQuery);
 
 $fQuery="SELECT * from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
 $result=$db->query($fQuery);
@@ -173,42 +176,128 @@ $fVlResult = $db->rawQuery($fVlQuery);
 }else{
 $fVlResult[0]['sample_name']     = '';
 }
-$html = "";
-$html.='<table border="1" style="font-size:13px;line-height:20px;">';
-$html.='<div style="font-weight:bold;font-size:15px;">Facility Details</div>';
-$html.='<tr style=""><td style="vertical-align: middle;">Health Facility Name</td><td style="vertical-align: middle">'.ucwords($result[0]['facility_name']).'</td><td style="vertical-align: middle">Facility Code</td><td style="vertical-align: middle">'.ucwords($result[0]['facility_code']).'</td></tr>';
-$html.='<tr style=""><td style="vertical-align: middle">Country</td><td style="vertical-align: middle">'.ucwords($result[0]['country']).'</td><td style="vertical-align: middle">State</td><td style="vertical-align: middle">'.ucwords($result[0]['state']).'</td></tr>';
-$html.='<tr style=""><td style="vertical-align: middle">Hub Name</td><td colspan="3" style="vertical-align: middle">'.ucwords($result[0]['hub_name']).'</td></tr>';
-$html.='<div style="font-weight:bold;font-size:15px;">Patient Details</div>';
-$html.='<tr><td style="vertical-align: middle">Sample Code</td><td style="vertical-align: middle">'.ucwords($result[0]['sample_code']).'</td><td style="vertical-align: middle">Unique Art No.</td><td style="vertical-align: middle">'.$result[0]['art_no'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle">Patient Name</td><td style="vertical-align: middle">'.ucwords($result[0]['patient_name']).'</td><td>Date of Birth</td><td style="vertical-align: middle">'.$result[0]['patient_dob'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle">Age in years</td><td style="vertical-align: middle">'.$result[0]['age_in_yrs'].'</td><td>Age in months</td><td style="vertical-align: middle">'.$result[0]['age_in_mnts'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle">Other Id</td><td style="vertical-align: middle">'.$result[0]['other_id'].'</td><td>Gender</td><td style="vertical-align: middle">'.ucwords($result[0]['gender']).'</td></tr>';
-$html.='<tr><td style="vertical-align: middle">Phone Number</td><td colspan="3" style="vertical-align: middle">'.$result[0]['patient_phone_number'].'</td></tr>';
-$html.='<div style="font-weight:bold;font-size:15px;">Sample Information</div>';
-$html.='<tr><td style="vertical-align: middle;">Sample Collected On</td><td style="vertical-align: middle;">'.$result[0]['sample_collection_date'].'</td><td style="vertical-align: middle;">Sample Type </td><td style="vertical-align: middle;">'.$sampleTypeResult[0]['sample_name'].'</td></tr>';
-$html.='<div style="font-weight:bold;font-size:15px;">Treatment Information</div>';
-$html.='<tr><td style="vertical-align: middle;">How long has this patient been on treatment ?</td><td style="vertical-align: middle;">'.$result[0]['treatment_initiation'].'</td><td style="vertical-align: middle;">Treatment Initiatiated On </td><td style="vertical-align: middle;">'.$result[0]['treatment_initiated_date'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Current Regimen</td><td style="vertical-align: middle;">'.$aResult[0]['art_code'].'</td><td style="vertical-align: middle;">Current Regimen Initiated On </td><td style="vertical-align: middle;">'.$result[0]['date_of_initiation_of_current_regimen'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Which line of treatment is Patient on ?</td><td colspan="3" style="vertical-align: middle;">'.$result[0]['treatment_details'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Is Patient Pregnant ? </td><td style="vertical-align: middle;">'.ucwords($result[0]['is_patient_pregnant']).'</td><td style="vertical-align: middle;">If Pregnant, ARC No.</td><td style="vertical-align: middle;">'.$result[0]['arc_no'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Is Patient Breastfeeding ? </td><td style="vertical-align: middle;">'.ucwords($result[0]['is_patient_breastfeeding']).'</td><td style="vertical-align: middle;">ARV Adherence </td><td style="vertical-align: middle;">'.$result[0]['arv_adherence'].'</td></tr>';
-$html.='<div style="font-weight:bold;font-size:15px;">Indication For Viral Load Testing</div>';
-$checked = '';
-$display = '';
-if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
- $html.='<tr><td><strong>Routine Monitoring</strong></td><td colspan="3" style="vertical-align: middle;">Last VL Date &nbsp;&nbsp;&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VL Value &nbsp;&nbsp;&nbsp;'.$result[0]['routine_monitoring_value'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sample Type &nbsp;&nbsp;&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
-}else if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
- $html.='<tr><td><strong>Repeat VL test after suspected treatment failure adherence counseling</strong></td><td colspan="3" style="vertical-align: middle;">Last VL Date &nbsp;&nbsp;&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VL Value &nbsp;&nbsp;&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sample Type &nbsp;&nbsp;&nbsp;'.$rVlResult[0]['sample_name'].'</td></tr>';
-}else if($result[0]['suspected_treatment_failure_last_vl_date']!='' || $result[0]['suspected_treatment_failure_value']!='' || $result[0]['suspected_treatment_failure_sample_type']!=''){
-    $html.='<tr><td><strong>Suspect Treatment Failure</strong></td><td colspa="3" style="vertical-align: middle;">Last VL Date &nbsp;&nbsp;&nbsp;'.$result[0]['suspected_treatment_failure_last_vl_date'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VL Value &nbsp;&nbsp;&nbsp;'.$result[0]['suspected_treatment_failure_value'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sample Type &nbsp;&nbsp;&nbsp;'.$fVlResult[0]['sample_name'].'</td></tr>';
-}
-$html.='<tr style="padding-top: 40px;"><td style="vertical-align: middle;">Request Clinician </td><td style="vertical-align: middle;">'.$result[0]['request_clinician'].'</td><td style="vertical-align: middle;">Phone No. </td><td style="vertical-align: middle;">'.$result[0]['clinician_ph_no'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Request Date </td><td style="vertical-align: middle;">'.$result[0]['request_date'].'</td><td style="vertical-align: middle;">VL Focal Person </td><td style="vertical-align: middle;">'.$result[0]['vl_focal_person'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Phone Number </td><td>'.$result[0]['focal_person_phone_number'].'</td><td style="vertical-align: middle;">Email for HF </td><td style="vertical-align: middle;">'.$result[0]['email_for_HF'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Date sample received at testing Lab </td><td style="vertical-align: middle;">'.$result[0]['date_sample_received_at_testing_lab'].'</td><td style="vertical-align: middle;">Date Results Despatched </td><td style="vertical-align: middle;">'.$result[0]['date_results_dispatched'].'</td></tr>';
-$html.='<tr><td style="vertical-align: middle;">Rejection </td><td colspan="3" style="vertical-align: middle;">'.ucwords($result[0]['rejection']).'</td></tr>';
-$html.='</table>';
+$configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+    //set sample type
+    $div = '';
+    foreach($sTypeResult as $sType){
+     if($result[0]['sample_id']==$sType['sample_id'])
+     {
+      $div .= '<input type="checkbox" name="check[]" id="name'.$sType['sample_id'].'" value="'.$sType['sample_name'].'" checked="checked" readonly="true"/>&nbsp;'.$sType['sample_name'];
+     }else{
+      $div .= '<input type="checkbox" name="check[]" id="name'.$sType['sample_id'].'" value="'.$sType['sample_name'].'" readonly="true"/>&nbsp;'.$sType['sample_name'];
+     }
+     
+    }
+    //check gender
+    if($result[0]['gender']=='male'){
+    $gender = '<td>:&nbsp;<input type="radio" name="gender" value="male" checked="checked"  readonly="true"/>Male&nbsp;<input type="radio" name="gender" value="female"  readonly="true"/>Female</td>';
+    }if($result[0]['gender']=='female'){
+     $gender = '<td>:&nbsp;<input type="radio" name="gender" value="male"  readonly="true"/>Male&nbsp;<input type="radio" name="gender" value="female" checked="checked"  readonly="true"/>Female</td>';
+    }else{
+     $gender = '<td>:&nbsp;<input type="radio" name="gender" value="male"  readonly="true"/>Male&nbsp;<input type="radio" name="gender" value="female"  readonly="true"/>Female</td>';
+    }
+    if($result[0]['is_patient_pregnant']=='yes'){
+    $prg = '<td>:&nbsp;<input type="radio" name="pregnant" value="yes" checked="checked"  readonly="true"/>Yes&nbsp;<input type="radio" name="pregnant" value="no" readonly="true"/>No</td>';
+    }if($result[0]['is_patient_pregnant']=='no'){
+     $prg = '<td>:&nbsp;<input type="radio" name="pregnant" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="pregnant" value="no" checked="checked" readonly="true"/>No</td>';
+    }else{
+     $prg = '<td>:&nbsp;<input type="radio" name="pregnant" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="pregnant" value="no" readonly="true"/>No</td>';
+    }
+    if($result[0]['is_patient_breastfeeding']=='yes'){
+    $breast = '<td>:&nbsp;<input type="radio" name="breast" value="yes" checked="checked" readonly="true"/>Yes&nbsp;<input type="radio" name="breast" value="no" readonly="true"/>No</td>';
+    }if($result[0]['is_patient_breastfeeding']=='no'){
+     $breast = '<td>:&nbsp;<input type="radio" name="breast" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="breast" value="no" checked="checked" readonly="true"/>No</td>';
+    }else{
+     $breast = '<td>:&nbsp;<input type="radio" name="breast" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="breast" value="no" readonly="true"/>No</td>';
+    }
+    if($result[0]['rejection']=='yes'){
+    $reject = '<td>:&nbsp;<input type="radio" name="reject" value="yes" checked="checked" readonly="true"/>Yes&nbsp;<input type="radio" name="reject" value="no" readonly="true"/>No</td>';
+    }if($result[0]['rejection']=='no'){
+     $reject = '<td>:&nbsp;<input type="radio" name="reject" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="reject" value="no" checked="checked" readonly="true"/>No</td>';
+    }else{
+     $reject = '<td>:&nbsp;<input type="radio" name="reject" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="reject" value="no" readonly="true"/>No</td>';
+    }
+    
+$html = '';
+        $html.='<table style="padding:5px;border:2px solid #333;">';
+        $html .='<tr>';
+        if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
+         $html .='<td style="text-align:center;border-right:2px solid #333;padding:3px 0px 3px 0px;"><img src="uploads/logo/'.$arr['logo'].'" style="width:80px;height:80px;" alt="logo"></td>';
+        }
+        if(isset($arr['header']) && trim($arr['header'])!= '') {
+            $html .='<td colspan="2" style="text-align:center;font-size:15px;border-right:2px solid #333;font-weight:bold;padding:3px 0px 3px 0px;">'.ucwords($arr['header']).'</td>';
+        }
+        $html.='<td style="text-align:center;font-size:14px;">'.$aResult[0]['art_code'].'</td>';
+        $html .='</tr>';
+        $html.='</table><br/><br/>';
+        $html.='<table><tr><td><h4>Facility Details</h4>';
+        $html.='<table style="padding:5px;width:98%;border:2px solid #333;">';
+         $html.='<tr>';
+          $html.='<td>Facility:'.ucwords($result[0]['facility_name']).'</td>';
+         $html.='</tr>';
+         $html.='<tr>';
+          $html.='<td>State:'.ucwords($result[0]['state']).'&nbsp;Hub:'.ucwords($result[0]['hub_name']).'</td>';
+         $html.='</tr>';
+        $html.='</table></td>';
+        $html.='<td><h4>Sample Details</h4><table style="padding:5px;border:2px solid #333;">';
+         $html.='<tr style="width:98%;">';
+          $html.='<td>Date Of Sample Collection:'.$result[0]['sample_collection_date'].'</td>';
+         $html.='</tr>';
+         $html.='<tr>';
+          $html.='<td>Sample Type:'.$div.'</td>';
+         $html.='</tr>';
+        $html.='</table></td></tr>';
+        $html.='</table>';
+        $html.='<h4>Patient Details</h4>';
+        $html.='<table style="padding:5px;border:2px solid #333;">';
+        $html.='<tr><td>Unique ART No.</td><td>:&nbsp;'.$result[0]['art_no'].'</td><td>Sample Code</td><td>:&nbsp;'.$result[0]['sample_code'].'</td></tr>';
+        $html.='<tr><td>Other Id</td><td>:&nbsp;'.$result[0]['other_id'].'</td><td>Patient Name</td><td>:&nbsp;'.$result[0]['patient_name'].'</td></tr>';
+        $html.='<tr><td>Date Of Birth</td><td>:&nbsp;'.$result[0]['patient_dob'].'</td><td>Gender</td>'.$gender.'</tr>';
+        $html.='<tr><td>Age In years</td><td>:&nbsp;'.$result[0]['age_in_yrs'].'</td><td>Age In Month</td><td>:&nbsp;'.$result[0]['age_in_mnts'].'</td></tr>';
+        $html.='<tr><td>Ph Number</td><td>:&nbsp;'.$result[0]['patient_phone_number'].'</td><td>Location</td><td>:&nbsp;'.$result[0]['location'].'</td></tr>';
+        $html.='</table>';
+        $html.='<h4>Treatment Details</h4>';
+        $html.='<table style="padding:5px;border:2px solid #333;">';
+        $html.='<tr><td>How long has this patient been on treatment ?</td><td>:&nbsp;'.$result[0]['treatment_initiation'].'</td><td>Treatment Initiated On</td><td>:&nbsp;'.$result[0]['treatment_initiated_date'].'</td></tr>';
+        $html.='<tr><td>Current Regimen</td><td>:&nbsp;'.$result[0]['art_code'].'</td><td>Current Regimen Initiated On</td><td>:&nbsp;'.$result[0]['date_of_initiation_of_current_regimen'].'</td></tr>';
+        $html.='<tr><td>Which line of treatment is Patient on ?</td><td colspan="2">:&nbsp;'.$result[0]['treatment_details'].'</td></tr>';
+        $html.='<tr><td>Is Patient Pregnant ?</td>'.$prg.'<td>If Pregnant, ARC No.</td><td>:&nbsp;'.$result[0]['arc_no'].'</td></tr>';
+        $html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>ARV Adherence</td><td>:&nbsp;'.$result[0]['arv_adherence'].'</td></tr>';
+        $html.='</table>';
+        $html.='<h4>Indication For Viral Load Testing</h4>';
+        $html.='<table style="padding:5px;border:2px solid #333;">';
+        if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" checked="checked" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+        }else if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true" checked="checked"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+        }else if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true" />Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true" checked="checked"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+        }else{
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$result[0]['sample_name'].'</td></tr>';
+        }
+        $html.='</table><br/><br/>';
+        $html.='<table style="padding:5px;border:2px solid #333;">';
+        $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
+        $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['request_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
+        $html.='<tr><td>Phone Number</td><td>:&nbsp;'.$result[0]['focal_person_phone_number'].'</td><td>Email for HF</td><td>:&nbsp;'.$result[0]['email_for_HF'].'</td></tr>';
+        $html.='<tr><td>Justification</td><td>:&nbsp;'.$result[0]['justification'].'</td><td>Rejection</td>'.$reject.'</tr>';
+        $html.='</table>';
+        
+              
 $pdf->writeHTML($html);
 $pdf->lastPage();
 $filename = 'vl-form-' . date('d-M-Y-H-i-s') . '.pdf';
