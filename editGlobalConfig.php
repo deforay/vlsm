@@ -40,7 +40,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="max_no_of_samples_in_a_batch" class="col-lg-3 control-label">Maximum No. of Samples In a Batch </label>
                       <div class="col-lg-9">
-                        <input type="text" class="control-label isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
+                        <input type="text" class="isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -65,16 +65,14 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                           <?php
                           if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
                           ?>
-                           <img src="uploads/logo/<?php echo $arr['logo']; ?>" alt="Logo image">
+                           <img src="/uploads/logo/<?php echo $arr['logo']; ?>" alt="Logo image">
                           <?php } else { ?>
                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
                           <?php } ?>
                         </div>
-                        <!--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>-->
                         <div>
                           <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span>
-                          <input type="hidden" name="removedLogoImage" id="removedLogoImage"/>
-                          <input type="file" id="logo" name="logo" title="Please select logo image">
+                          <input type="file" id="logo" name="logo" title="Please select logo image" onchange="getNewImage('<?php echo $arr['logo']; ?>');">
                           </span>
                           <?php
                           if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
@@ -94,6 +92,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+                <input type="hidden" name="removedLogoImage" id="removedLogoImage"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="globalConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -122,6 +121,11 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   
   function clearImage(img){
     $(".fileinput").fileinput("clear");
+    $("#clearImage").addClass("hide");
+    $("#removedLogoImage").val(img);
+  }
+  
+  function getNewImage(img){
     $("#clearImage").addClass("hide");
     $("#removedLogoImage").val(img);
   }

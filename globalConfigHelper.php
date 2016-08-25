@@ -15,6 +15,7 @@ try {
         $db->update($tableName,$data);
         $_SESSION['alertMsg']="Logo deleted successfully";
     }
+    
     if(isset($_FILES['logo']['name']) && $_FILES['logo']['name'] != ""){
        if(!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo")) {
            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo");
