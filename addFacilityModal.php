@@ -6,6 +6,7 @@ if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_P
     $data=array(
         'facility_name'=>$_POST['facilityName'],
         'facility_code'=>$_POST['facilityCode'],
+        'other_id'=>$_POST['otherId'],
         'phone_number'=>$_POST['phoneNo'],
         'address'=>$_POST['address'],
         'country'=>$_POST['country'],
@@ -81,6 +82,14 @@ $fResult = $db->rawQuery($fQuery);
                 </div>
                 
                 <div class="row">
+		    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email" class="col-lg-4 control-label">Other Id </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="otherId" name="otherId" placeholder="Other Id" />
+                        </div>
+                    </div>
+                  </div>
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>

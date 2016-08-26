@@ -1,19 +1,53 @@
 <?php
 ob_start();
-include('header.php');
 include('./includes/MysqliDb.php');
+if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){
+    $tableName="facility_details";
+    $data=array(
+        'facility_name'=>$_POST['facilityName'],
+        'facility_code'=>$_POST['facilityCode'],
+	'other_id'=>$_POST['otherId'],
+        'phone_number'=>$_POST['phoneNo'],
+        'address'=>$_POST['address'],
+        'country'=>$_POST['country'],
+        'state'=>$_POST['state'],
+        'district'=>$_POST['district'],
+        'hub_name'=>$_POST['hubName'],
+        'email'=>$_POST['email'],
+        'contact_person'=>$_POST['contactPerson'],
+	'facility_type'=>$_POST['facilityType'],
+        'status'=>'active'
+        );
+        //print_r($data);die;
+        $db->insert($tableName,$data);
+    ?>
+        <script>window.parent.location.href=window.parent.location.href;</script>
+<?php 
+}
 $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
 ?>
+  <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
+   <!-- DataTables -->
+  <link rel="stylesheet" href="./assets/plugins/datatables/dataTables.bootstrap.css">
+  <link href="assets/css/deforayModal.css" rel="stylesheet" />    
+   <style>
+    .content-wrapper{
+      padding:2%;
+    }
+  </style> 
+  <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="assets/js/jquery-ui.1.11.0.js"></script>
+  <script src="assets/js/deforayModal.js"></script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Add Facility</h1>
-      <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Facility</li>
-      </ol>
+      <h3>Add Facility</h3>
     </section>
 
     <!-- Main content -->
@@ -26,7 +60,7 @@ $fResult = $db->rawQuery($fQuery);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addFacilityForm' id='addFacilityForm' autocomplete="off" action="addFacilityHelper.php">
+            <form class="form-vertical" method='post' name='addFacilityModalForm' id='addFacilityModalForm' autocomplete="off" action="#">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
@@ -48,7 +82,7 @@ $fResult = $db->rawQuery($fQuery);
                 </div>
                 
                 <div class="row">
-                  <div class="col-md-6">
+		    <div class="col-md-6">
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Other Id </label>
                         <div class="col-lg-7">
@@ -60,25 +94,12 @@ $fResult = $db->rawQuery($fQuery);
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
-                          <option value="">-- Select --</option>
-                            <?php
-                            foreach($fResult as $type){
-                             ?>
-                             <option value="<?php echo $type['facility_type_id'];?>"><?php echo ucwords($type['facility_type_name']);?></option>
-                             <?php
-                            }
-                            ?>
-                          </select>
+			    <input type="hidden" class="form-control" id="facilityType" name="facilityType" value="2" />
+			    <input type="text" class="form-control readonly" id="facilityTypeName" name="facilityTypeName" value="Lab" readonly="readonly" style="background-color: #fff;"/>
                         </div>
                     </div>
                   </div>
-                    
-                   
-                </div>
-                
-                <div class="row">
-                  <div class="col-md-6">
+                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Email </label>
                         <div class="col-lg-7">
@@ -86,6 +107,10 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
+                   
+                </div>
+                
+                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
@@ -94,9 +119,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-                
-                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
@@ -105,6 +127,10 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
+                  
+                </div>
+                
+                <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State/Province</label>
@@ -113,10 +139,7 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-               
-               <div class="row">
-                <div class="col-md-6">
+		   <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">District</label>
                         <div class="col-lg-7">
@@ -124,7 +147,10 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                <div class="col-md-6">
+                </div>
+               
+               <div class="row">
+		<div class="col-md-6">
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
@@ -132,9 +158,7 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                </div>
-               <div class="row">
-                <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Address</label>
                         <div class="col-lg-7">
@@ -142,7 +166,9 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                <div class="col-md-6">
+                </div>
+	       <div class="row">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="country" class="col-lg-4 control-label">Country</label>
                         <div class="col-lg-7">
@@ -150,13 +176,13 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-               </div>
+	       </div>
                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                <a href="facilities.php" class="btn btn-default"> Cancel</a>
+                <a href="javascript:void(0);" class="btn btn-default" onclick="goBack();"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -169,21 +195,28 @@ $fResult = $db->rawQuery($fQuery);
     </section>
     <!-- /.content -->
   </div>
-  
-  
+  <div id="dDiv" class="dialog">
+      <div style="text-align:center"><span onclick="closeModal();" style="float:right;clear:both;" class="closeModal"></span></div> 
+      <iframe id="dFrame" src="" style="border:none;" scrolling="yes" marginwidth="0" marginheight="0" frameborder="0" vspace="0" hspace="0">some problem</iframe> 
+  </div>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="assets/js/bootstrap.min.js"></script>
+  <!-- DataTables -->
+  <script src="./assets/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="./assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
+  <script src="assets/js/deforayValidation.js"></script>
   <script type="text/javascript">
-
-  function validateNow(){
+   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'addFacilityForm'
+        formId: 'addFacilityModalForm'
     });
     
     if(flag){
-      document.getElementById('addFacilityForm').submit();
+      document.getElementById('addFacilityModalForm').submit();
     }
-  }
+   }
   
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
+   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
         var removeDots=obj.value.replace(/\./g,"");
         var removeDots=removeDots.replace(/\,/g,"");
         //str=obj.value;
@@ -196,9 +229,16 @@ $fResult = $db->rawQuery($fQuery);
                 document.getElementById(obj.id).value="";
             }
         });
-  }
-  </script>
+   }
   
- <?php
- include('footer.php');
- ?>
+   function showModal(url, w, h) {
+      showdefModal('dDiv', w, h);
+      document.getElementById('dFrame').style.height = h + 'px';
+      document.getElementById('dFrame').style.width = w + 'px';
+      document.getElementById('dFrame').src = url;
+    }
+    
+    function goBack(){
+        window.parent.location.href=window.parent.location.href;
+    }
+  </script>

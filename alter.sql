@@ -318,3 +318,5 @@ ALTER TABLE `vl_request_form` CHANGE `result_reviewed_by` `result_reviewed_by` I
 
 --saravanan 26-aug-2016
 ALTER TABLE  `facility_details` ADD  `district` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `state` ;
+ALTER TABLE  `facility_details` ADD  `other_id` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `facility_code` ;
+ALTER TABLE  `vl_request_form` ADD  `patient_receive_sms` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `arv_adherence` ;

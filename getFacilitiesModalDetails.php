@@ -146,7 +146,7 @@ $primaryKey="facility_id";
 	
         
         foreach ($rResult as $aRow) {
-	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['state']."##".$aRow['hub_name']."##".$aRow['contact_person']."##".$aRow['phone_number'];
+	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['state']."##".$aRow['hub_name']."##".$aRow['contact_person']."##".$aRow['phone_number']."##".$aRow['district'];
             $row = array();
 	    $row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacility(this.value);">';
 	    $row[] = $aRow['facility_code'];

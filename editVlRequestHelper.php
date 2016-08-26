@@ -19,6 +19,7 @@ try {
                  //'country'=>$_POST['country'],
                  'state'=>$_POST['state'],
                  'hub_name'=>$_POST['hubName'],
+                 'district'=>$_POST['district'],
                  'status'=>'active'
                );
           
@@ -80,6 +81,9 @@ try {
           if(!isset($_POST['breastfeeding']) || trim($_POST['breastfeeding'])==''){
              $_POST['breastfeeding']='';
           }
+          if(!isset($_POST['receiveSms']) || trim($_POST['receiveSms'])==''){
+          $_POST['receiveSms']='';
+          }
           if(!isset($_POST['gender']) || trim($_POST['gender'])==''){
              $_POST['gender']='';
           }
@@ -107,6 +111,7 @@ try {
           'arc_no'=>$_POST['arcNo'],
           'is_patient_breastfeeding'=>$_POST['breastfeeding'],
           'arv_adherence'=>$_POST['arvAdherence'],
+          'patient_receive_sms'=>$_POST['receiveSms'],
           'routine_monitoring_last_vl_date'=>$_POST['rmTestingLastVLDate'],
           'routine_monitoring_value'=>$_POST['rmTestingVlValue'],
           'routine_monitoring_sample_type'=>$_POST['rmTestingSampleType'],
