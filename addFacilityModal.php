@@ -10,6 +10,7 @@ if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_P
         'address'=>$_POST['address'],
         'country'=>$_POST['country'],
         'state'=>$_POST['state'],
+        'district'=>$_POST['district'],
         'hub_name'=>$_POST['hubName'],
         'email'=>$_POST['email'],
         'contact_person'=>$_POST['contactPerson'],
@@ -131,13 +132,24 @@ $fResult = $db->rawQuery($fQuery);
                 <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">State</label>
+                        <label for="state" class="col-lg-4 control-label">State/Province</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="state" name="state" placeholder="State" />
                         </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+		   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="state" class="col-lg-4 control-label">District</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="district" name="district" placeholder="District" />
+                        </div>
+                    </div>
+                  </div>
+                </div>
+               
+               <div class="row">
+		<div class="col-md-6">
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
@@ -145,10 +157,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  
-                </div>
-               
-               <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Address</label>
@@ -157,7 +165,8 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  
+                </div>
+	       <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="country" class="col-lg-4 control-label">Country</label>
@@ -166,8 +175,7 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  
-                </div>
+	       </div>
                
               </div>
               <!-- /.box-body -->

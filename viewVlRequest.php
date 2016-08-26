@@ -143,7 +143,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                   
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">State</label>
+                        <label for="state" class="col-lg-4 control-label">State/Province</label>
                         <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucwords($result[0]['state']); ?>
                         </div>

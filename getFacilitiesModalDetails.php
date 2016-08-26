@@ -90,9 +90,23 @@ $primaryKey="facility_id";
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
             $sWhere= $sWhere.' AND status = "active"';
+	    if(isset($_POST['hub']) && trim($_POST['hub'])!= ''){
+		$sWhere = $sWhere." AND f_d.hub_name LIKE '%" . $_POST['hub'] . "%' ";
+	    }if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		$sWhere = $sWhere." AND f_d.district LIKE '%" . $_POST['district'] . "%' ";
+	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		$sWhere = $sWhere." AND f_d.state LIKE '%" . $_POST['state'] . "%' ";
+	    }
             $sQuery = $sQuery.' '.$sWhere;
         }else{
             $sWhere=' where status = "active"';
+	    if(isset($_POST['hub']) && trim($_POST['hub'])!= ''){
+		$sWhere = $sWhere." AND f_d.hub_name LIKE '%" . $_POST['hub'] . "%' ";
+	    }if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		$sWhere = $sWhere." AND f_d.district LIKE '%" . $_POST['district'] . "%' ";
+	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		$sWhere = $sWhere." AND f_d.state LIKE '%" . $_POST['state'] . "%' ";
+	    }
             $sQuery = $sQuery.' '.$sWhere;
         }
         
