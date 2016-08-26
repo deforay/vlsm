@@ -139,7 +139,7 @@ try {
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedOn'],
           'lab_tested_date'=>$_POST['sampleTestedOn'],
           'date_results_dispatched'=>$_POST['resultDispatchedOn'],
-          'result_reviewed_by'=>$_SESSION['userId'],
+          'result_reviewed_by'=>$_POST['reviewedBy'],
           'result_reviewed_date'=>$_POST['reviewedOn'],
           'justification'=>$_POST['justification'],
           'log_value'=>$_POST['logValue'],
