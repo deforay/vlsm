@@ -1,3 +1,8 @@
+ <?php
+include('./includes/MysqliDb.php');
+$fQuery="SELECT * FROM facility_details where status='active'";
+$fResult = $db->rawQuery($fQuery);
+?>
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -32,6 +37,32 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
+            <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:10px;">
+              <tr>
+                    <td style=""><b>Hub&nbsp;:</b></td>
+		    <td>
+		      <input type="text" id="hub" name="hub" class="form-control" placeholder="Enter Hub" style="background:#fff;"/>
+		    </td>
+                    <td>&nbsp;<b>District&nbsp;:</b></td>
+		    <td>
+			<input type="text" id="district" name="district" class="form-control" placeholder="Enter District"/>
+		    </td>
+		</tr>
+		<tr>
+		    <td style=""><b>State/Province&nbsp;:</b></td>
+		    <td>
+		      <input type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;"/>
+		    </td>
+		    <td></td><td></td>
+		</tr>
+		<tr>
+		  <td colspan="4">&nbsp;<input type="button" onclick="searchFacilityData();" value="Search" class="btn btn-success btn-sm">
+		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+		    
+		    </td>
+		</tr>
+		
+	    </table>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="facilityModalDataTable" class="table table-bordered table-striped">
@@ -94,6 +125,9 @@
             "bServerSide": true,
             "sAjaxSource": "getFacilitiesModalDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
+              aoData.push({"name": "hub", "value": $("#hub").val()});
+	      aoData.push({"name": "district", "value": $("#district").val()});
+	      aoData.push({"name": "state", "value": $("#state").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -108,6 +142,9 @@
     function getFacility(fDetails){
       parent.closeModal();
       window.parent.setFacilityDetails(fDetails);
+    }
+    function searchFacilityData(){
+    oTable.fnDraw();
     }
     
     function showModal(url, w, h) {

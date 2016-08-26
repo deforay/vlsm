@@ -101,7 +101,7 @@ $fResult = $db->rawQuery($fQuery);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">State</label>
+                        <label for="state" class="col-lg-4 control-label">State/Province</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="state" name="state" placeholder="State" value="<?php echo $facilityInfo[0]['state']; ?>" />
                         </div>
@@ -109,9 +109,9 @@ $fResult = $db->rawQuery($fQuery);
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
+                        <label for="state" class="col-lg-4 control-label">District</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $facilityInfo[0]['hub_name']; ?>"/>
+                        <input type="text" class="form-control" id="district" name="district" placeholder="District" value="<?php echo $facilityInfo[0]['district']; ?>"  />
                         </div>
                     </div>
                   </div>
@@ -121,12 +121,22 @@ $fResult = $db->rawQuery($fQuery);
                <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
+                        <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $facilityInfo[0]['hub_name']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                <div class="col-md-6">
+                    <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Address</label>
                         <div class="col-lg-7">
                         <textarea class="form-control" name="address" id="address" placeholder="Address"><?php echo $facilityInfo[0]['address']; ?></textarea>
                         </div>
                     </div>
                   </div>
+                  </div>
+               <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="country" class="col-lg-4 control-label">Country</label>
@@ -134,10 +144,7 @@ $fResult = $db->rawQuery($fQuery);
                         <input type="text" class="form-control" id="country" name="country" placeholder="Country" value="<?php echo $facilityInfo[0]['country']; ?>"/>
                         </div>
                     </div>
-                  </div>
-               
-              </div>
-               <div class="row">
+                </div>
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
@@ -150,6 +157,7 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
+               </div>
                </div>
               <!-- /.box-body -->
               <div class="box-footer">

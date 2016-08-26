@@ -108,7 +108,7 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">State</label>
+                        <label for="state" class="col-lg-4 control-label">State/Province</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="state" name="state" placeholder="State" />
                         </div>

@@ -14,6 +14,7 @@ try {
         'address'=>$_POST['address'],
         'country'=>$_POST['country'],
         'state'=>$_POST['state'],
+        'district'=>$_POST['district'],
         'hub_name'=>$_POST['hubName'],
         'email'=>$_POST['email'],
         'contact_person'=>$_POST['contactPerson'],

@@ -315,3 +315,6 @@ ALTER TABLE  `contact_notes_details` ADD  `collected_on` DATE NULL DEFAULT NULL 
 
 --Pal 19th Aug'16--
 ALTER TABLE `vl_request_form` CHANGE `result_reviewed_by` `result_reviewed_by` INT(11) NULL DEFAULT NULL;
+
+--saravanan 26-aug-2016
+ALTER TABLE  `facility_details` ADD  `district` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `state` ;
