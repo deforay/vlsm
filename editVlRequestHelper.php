@@ -55,6 +55,13 @@ try {
                $_POST['suspendTreatmentLastVLDate']=$general->dateFormat($_POST['suspendTreatmentLastVLDate']);  
           }
           
+          if(isset($_POST['switchToTDFLastVLDate']) && trim($_POST['switchToTDFLastVLDate'])!=""){
+               $_POST['switchToTDFLastVLDate']=$general->dateFormat($_POST['switchToTDFLastVLDate']);  
+          }
+          if(isset($_POST['missingLastVLDate']) && trim($_POST['missingLastVLDate'])!=""){
+               $_POST['missingLastVLDate']=$general->dateFormat($_POST['missingLastVLDate']);  
+          }
+          
           if(isset($_POST['requestDate']) && trim($_POST['requestDate'])!=""){
                $_POST['requestDate']=$general->dateFormat($_POST['requestDate']);  
           }
