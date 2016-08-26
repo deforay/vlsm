@@ -126,6 +126,17 @@ if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result
  $result[0]['suspected_treatment_failure_last_vl_date']='';
 }
 
+if(isset($result[0]['switch_to_tdf_last_vl_date']) && trim($result[0]['switch_to_tdf_last_vl_date'])!='' && trim($result[0]['switch_to_tdf_last_vl_date'])!='0000-00-00'){
+ $result[0]['switch_to_tdf_last_vl_date']=$general->humanDateFormat($result[0]['switch_to_tdf_last_vl_date']);
+}else{
+ $result[0]['switch_to_tdf_last_vl_date']='';
+}
+if(isset($result[0]['missing_last_vl_date']) && trim($result[0]['missing_last_vl_date'])!='' && trim($result[0]['missing_last_vl_date'])!='0000-00-00'){
+ $result[0]['missing_last_vl_date']=$general->humanDateFormat($result[0]['missing_last_vl_date']);
+}else{
+ $result[0]['missing_last_vl_date']='';
+}
+
 if(isset($result[0]['request_date']) && trim($result[0]['request_date'])!='' && trim($result[0]['request_date'])!='0000-00-00'){
  $result[0]['request_date']=$general->humanDateFormat($result[0]['request_date']);
 }else{
@@ -165,9 +176,9 @@ $rtResult[0]['sample_name']     = '';
 //Repeat VL
 if($result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
 $rVlQuery="SELECT * FROM r_sample_type where ".$result[0]['vl_treatment_failure_adherence_counseling_sample_type'];
-$rVlResult = $db->rawQuery($rVlQuery);
+$rVlresult = $db->rawQuery($rVlQuery);
 }else{
-$rVlResult[0]['sample_name']= '';    
+$rVlresult[0]['sample_name']= '';    
 }
 //Failure VL
 if($result[0]['suspected_treatment_failure_sample_type']!=''){
@@ -175,6 +186,20 @@ $fVlQuery="SELECT * FROM r_sample_type where ".$result[0]['suspected_treatment_f
 $fVlResult = $db->rawQuery($fVlQuery);
 }else{
 $fVlResult[0]['sample_name']     = '';
+}
+// Missing VL
+if($result[0]['missing_sample_type']!=''){
+$mVlQuery="SELECT * FROM r_sample_type where ".$result[0]['missing_sample_type'];
+$mVlResult = $db->rawQuery($mVlQuery);
+}else{
+$mVlResult[0]['sample_name']     = '';
+}
+//Switch to tdf VL
+if($result[0]['switch_to_tdf_sample_type']!=''){
+$sVlQuery="SELECT * FROM r_sample_type where ".$result[0]['suspected_treatment_failure_sample_type'];
+$sVlResult = $db->rawQuery($sVlQuery);
+}else{
+$sVlResult[0]['sample_name']     = '';
 }
 $configQuery="SELECT * from global_config";
     $configResult=$db->query($configQuery);
@@ -275,21 +300,41 @@ $html = '';
         if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" checked="checked" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
-         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlresult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['suspected_treatment_failure_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['suspected_treatment_failure_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$sVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true"/>Missing</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['missing_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['missing_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$mVlResult[0]['sample_name'].'</td></tr>';
         }else if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true" checked="checked"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
-         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlresult[0]['sample_name'].'</td></tr>';
-        }else if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['suspected_treatment_failure_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['suspected_treatment_failure_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$sVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true"/>Missing</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['missing_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['missing_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$mVlResult[0]['sample_name'].'</td></tr>';
+        }else if($result[0]['suspected_treatment_failure_last_vl_date']!='' || $result[0]['suspected_treatment_failure_value']!='' || $result[0]['suspected_treatment_failure_sample_type']!=''){
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true" />Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
-         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true" checked="checked"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlresult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true" checked="checked"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['suspected_treatment_failure_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['suspected_treatment_failure_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$sVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true"/>Missing</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['missing_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['missing_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$mVlResult[0]['sample_name'].'</td></tr>';
+        }else if($result[0]['switch_to_tdf_last_vl_date']!='' || $result[0]['switch_to_tdf_value']!='' || $result[0]['switch_to_tdf_sample_type']!=''){
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true" />Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" checked="checked"/>Switch to TDF</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$sVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true"/>Missing</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['missing_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['missing_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$mVlResult[0]['sample_name'].'</td></tr>';
+        }else if($result[0]['missing_last_vl_date']!='' || $result[0]['missing_value']!='' || $result[0]['missing_sample_type']!=''){
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true" />Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$sVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true" checked="checked"/>Missing</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['missing_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['missing_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$mVlResult[0]['sample_name'].'</td></tr>';
         }else{
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
-         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlresult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="3" readonly="true"/>Suspect Treatment Failure</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$fVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$sVlResult[0]['sample_name'].'</td></tr>';
+         $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true" />Missing</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['missing_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['missing_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$mVlResult[0]['sample_name'].'</td></tr>';
         }
-        $html.='</table><br/><br/>';
+        $html.='</table><br/><br/><br/><br/>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
         $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
         $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['request_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
