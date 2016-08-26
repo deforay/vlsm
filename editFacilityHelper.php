@@ -11,6 +11,7 @@ try {
         $data=array(
         'facility_name'=>$_POST['facilityName'],
         'facility_code'=>$_POST['facilityCode'],
+        'other_id'=>$_POST['otherId'],
         'phone_number'=>$_POST['phoneNo'],
         'address'=>$_POST['address'],
         'country'=>$_POST['country'],

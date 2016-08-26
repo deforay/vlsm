@@ -51,6 +51,14 @@ $fResult = $db->rawQuery($fQuery);
                   </div>
                 </div>
                 <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email" class="col-lg-4 control-label">Other Id </label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="otherId" name="otherId" placeholder="Other Id" value="<?php echo $facilityInfo[0]['other_id']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
@@ -68,6 +76,10 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
+                  
+                  
+                </div>
+                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Email </label>
@@ -76,9 +88,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  
-                </div>
-                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="contactPerson" class="col-lg-4 control-label">Contact Person</label>
@@ -87,6 +96,9 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
+                </div>
+                
+                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
@@ -95,10 +107,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  
-                </div>
-                
-                <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State/Province</label>
@@ -107,7 +115,10 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                </div>
+               
+               <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">District</label>
                         <div class="col-lg-7">
@@ -115,10 +126,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  
-                </div>
-               
-               <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
@@ -127,6 +134,8 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
+                  </div>
+               <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Address</label>
@@ -135,8 +144,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                  </div>
-               <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="country" class="col-lg-4 control-label">Country</label>
@@ -145,7 +152,9 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                 </div>
-                 <div class="col-md-6">
+               </div>
+               <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
                         <div class="col-lg-7">

@@ -5,7 +5,7 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $id=base64_decode($_GET['id']);
-$fQuery="SELECT vl.*,f.facility_name,f.facility_code,f.hub_name,f.state from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
+$fQuery="SELECT vl.*,f.facility_name,f.facility_code,f.hub_name,f.state,f.district from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
 $result=$db->query($fQuery);
 
 if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
@@ -190,7 +190,15 @@ $tsResult = $db->rawQuery($tsQuery);
                         <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $result[0]['hub_name']; ?>" readonly/>
                         </div>
                     </div>
-                  </div> 
+                  </div>
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="district" class="col-lg-4 control-label">District</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="district" name="district" placeholder="District" title="Please enter district" value="<?php echo $result[0]['district']; ?>" readonly />
+                        </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -462,6 +470,21 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>                       
+                </div>
+                <div class="row">
+                   <div class="col-md-6 femaleElements">
+                    <div class="form-group">
+                        <label for="receiveSms" class="col-lg-4 control-label">Patient consent to receive SMS?</label>
+                        <div class="col-lg-7">
+                        <label class="radio-inline">
+                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);" <?php echo ($result[0]['patient_receive_sms']=='yes')?"checked='checked'":""?>> Yes
+                       </label>
+                       <label class="radio-inline">
+                               <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);" <?php echo ($result[0]['patient_receive_sms']=='no')?"checked='checked'":""?>> No
+                       </label>
+                        </div>
+                    </div>
+                  </div>
                 </div>
             </div>
             <!-- /.box-footer-->
@@ -742,6 +765,7 @@ $tsResult = $db->rawQuery($tsQuery);
             <div id="toogleResultDiv" class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Lab Details</h3>
+              <div class="pull-right"><a href="javascript:void(0);" onclick="showModal('facilitiesLabModal.php',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -944,7 +968,7 @@ $tsResult = $db->rawQuery($tsQuery);
       timeFormat: "HH:mm:ss",
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
       });
-       
+       checkPatientReceivesms('<?php echo $result[0]['patient_receive_sms'];?>');
    });
 
     function checkPatientIsPregnant(val){
@@ -1003,7 +1027,8 @@ $tsResult = $db->rawQuery($tsQuery);
       $("#facilityName").val(facilityArray[1]);
       $("#state").val(facilityArray[2]);
       $("#hubName").val(facilityArray[3]);
-      $("#facilityName,#state,#hubName").prop('readonly',true);
+      $("#district").val(facilityArray[6]);
+      $("#facilityName,#state,#hubName,#district").prop('readonly',true);
       $("#clearFInfo").show();
     }
     
@@ -1012,7 +1037,8 @@ $tsResult = $db->rawQuery($tsQuery);
       $("#facilityName").val("");
       $("#state").val("");
       $("#hubName").val("");
-      $("#facilityName,#state,#hubName").prop('readonly',false);
+      $("#district").val("");
+      $("#facilityName,#state,#hubName,#district").prop('readonly',false);
       $("#clearFInfo").hide();
     }
     
@@ -1055,6 +1081,19 @@ $tsResult = $db->rawQuery($tsQuery);
         $(".femaleElements").show();
       }
     });
+    function setFacilityLabDetails(fDetails){
+      $("#labName").val("");
+      facilityArray = fDetails.split("##");
+      $("#labName").val(facilityArray[1]);
+    }
+    function checkPatientReceivesms(val)
+    {
+     if(val=='yes'){
+      $('#patientPhoneNumber').addClass('isRequired');
+     }else{
+       $('#patientPhoneNumber').removeClass('isRequired');
+     }
+    }
   </script>
  <?php
  include('footer.php');
