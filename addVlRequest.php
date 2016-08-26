@@ -551,6 +551,86 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>                   
                 </div>
+               <div class="row">                
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                            <label class="radio-inline">
+                                <input type="radio" class="" id="switchToTDF" name="stViralTesting" value="switch" title="Switch to TDF" onclick="showTesting('switchToTDFTreatment');">
+                                <strong>Switch to TDF</strong>
+                            </label>						
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="row switchToTDFTreatment hideTestData" style="display: none;">
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="switchToTDFLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="switchToTDFLastVLDate" name="switchToTDFLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="switchToTDFVlValue" class="col-lg-4 control-label">VL Value</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control viralTestData" id="switchToTDFVlValue" name="switchToTDFVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="switchToTDFSampleType" class="col-lg-4 control-label">Sample Type</label>
+                        <div class="col-lg-7">
+                        <select class="form-control viralTestData" id="switchToTDFSampleType" name="switchToTDFSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                          <?php echo $sampleType; ?>
+                        </select>
+                        </div>
+                    </div>
+                  </div>                   
+                </div>
+               <div class="row">                
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                            <label class="radio-inline">
+                                <input type="radio" class="" id="missing" name="stViralTesting" value="missing" title="Missing" onclick="showTesting('missingTreatment');">
+                                <strong>Missing</strong>
+                            </label>						
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="row missingTreatment hideTestData" style="display: none;">
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="missingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="missingLastVLDate" name="missingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="missingVlValue" class="col-lg-4 control-label">VL Value</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control viralTestData" id="missingVlValue" name="missingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="missingSampleType" class="col-lg-4 control-label">Sample Type</label>
+                        <div class="col-lg-7">
+                        <select class="form-control viralTestData" id="missingSampleType" name="missingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                          <?php echo $sampleType; ?>
+                        </select>
+                        </div>
+                    </div>
+                  </div>                   
+                </div>
             </div>
             <!-- /.box-footer-->
           </div>

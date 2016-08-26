@@ -50,6 +50,16 @@ if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result
 }else{
  $result[0]['suspected_treatment_failure_last_vl_date']='';
 }
+if(isset($result[0]['switch_to_tdf_last_vl_date']) && trim($result[0]['switch_to_tdf_last_vl_date'])!='' && trim($result[0]['switch_to_tdf_last_vl_date'])!='0000-00-00'){
+ $result[0]['switch_to_tdf_last_vl_date']=$general->humanDateFormat($result[0]['switch_to_tdf_last_vl_date']);
+}else{
+ $result[0]['switch_to_tdf_last_vl_date']='';
+}
+if(isset($result[0]['missing_last_vl_date']) && trim($result[0]['missing_last_vl_date'])!='' && trim($result[0]['missing_last_vl_date'])!='0000-00-00'){
+ $result[0]['missing_last_vl_date']=$general->humanDateFormat($result[0]['missing_last_vl_date']);
+}else{
+ $result[0]['missing_last_vl_date']='';
+}
 
 if(isset($result[0]['request_date']) && trim($result[0]['request_date'])!='' && trim($result[0]['request_date'])!='0000-00-00'){
  $result[0]['request_date']=$general->humanDateFormat($result[0]['request_date']);
@@ -674,6 +684,122 @@ $tsResult = $db->rawQuery($tsQuery);
                            foreach ($sampleTypeResult as $row) {
                            ?>
                            <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['suspected_treatment_failure_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <?php
+                           }
+                           ?>
+                        </select>
+                        </div>
+                    </div>
+                  </div>                   
+                </div>
+                <div class="row">                
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                            <label class="radio-inline">
+                                <?php
+                                $checked = '';
+                                $display = '';
+                                if($result[0]['switch_to_tdf_last_vl_date']!='' || $result[0]['switch_to_tdf_value']!='' || $result[0]['switch_to_tdf_sample_type']!=''){
+                                 $checked = 'checked="checked"';
+                                 $display = 'block';
+                                }else{
+                                 $checked = '';
+                                 $display = 'none';
+                                }
+                                ?>
+                                <input type="radio" class="" id="switchToTDF" name="stViralTesting" value="switch" title="Switch to TDF" <?php echo $checked;?> onclick="showTesting('switchToTDFTreatment');">
+                                <strong>Switch to TDF</strong>
+                            </label>						
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="row switchToTDFTreatment hideTestData"  style="display: <?php echo $display;?>;">
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="switchToTDFLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="switchToTDFLastVLDate" name="switchToTDFLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['switch_to_tdf_last_vl_date']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="switchToTDFVlValue" class="col-lg-4 control-label">VL Value</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control viralTestData" id="switchToTDFVlValue" name="switchToTDFVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['switch_to_tdf_value']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="switchToTDFSampleType" class="col-lg-4 control-label">Sample Type</label>
+                        <div class="col-lg-7">
+                        <select class="form-control viralTestData" id="switchToTDFSampleType" name="switchToTDFSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                         <option value="">--select--</option>
+                          <?php
+                           foreach ($sampleTypeResult as $row) {
+                           ?>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['switch_to_tdf_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <?php
+                           }
+                           ?>
+                        </select>
+                        </div>
+                    </div>
+                  </div>                   
+                </div>
+               <div class="row">                
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                            <label class="radio-inline">
+                                <?php
+                                $checked = '';
+                                $display = '';
+                                if($result[0]['missing_last_vl_date']!='' || $result[0]['missing_value']!='' || $result[0]['missing_sample_type']!=''){
+                                 $checked = 'checked="checked"';
+                                 $display = 'block';
+                                }else{
+                                 $checked = '';
+                                 $display = 'none';
+                                }
+                                ?>
+                                <input type="radio" class="" id="missing" name="stViralTesting" value="missing" title="Missing" <?php echo $checked;?> onclick="showTesting('missingTreatment');">
+                                <strong>Missing</strong>
+                            </label>						
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="row missingTreatment hideTestData" style="display: <?php echo $display;?>;">
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="missingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="missingLastVLDate" name="missingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['missing_last_vl_date']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="missingVlValue" class="col-lg-4 control-label">VL Value</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control viralTestData" id="missingVlValue" name="missingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['missing_value']; ?>" />
+                        </div>
+                    </div>
+                  </div>
+                   <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="missingSampleType" class="col-lg-4 control-label">Sample Type</label>
+                        <div class="col-lg-7">
+                        <select class="form-control viralTestData" id="missingSampleType" name="missingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
+                         <option value="">--select--</option>
+                          <?php
+                           foreach ($sampleTypeResult as $row) {
+                           ?>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['missing_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
                            <?php
                            }
                            ?>
