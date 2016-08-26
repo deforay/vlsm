@@ -387,17 +387,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
-                <div class="row">
-                   <div class="col-md-6 femaleElements">
+                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="receiveSms" class="col-lg-4 control-label">Patient consent to receive SMS?</label>
                         <div class="col-lg-7">
@@ -422,6 +412,22 @@ $tsResult = $db->rawQuery($tsQuery);
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+             <div class="row">
+              <div class="col-md-6">
+                 <div class="form-group">
+                     <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
+                     <div class="col-lg-7">
+                     <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
+                     <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
+                      <option value="">--select--</option>
+                      <option value="good">Good >= 95%</option>
+                      <option value="fair">Fair (85-94%)</option>
+                      <option value="poor">Poor < 85%</option>
+                     </select>
+                     </div>
+                 </div>
+               </div>
+             </div>
              <div class="row">                
                     <div class="col-md-6">
                         <div class="form-group">
