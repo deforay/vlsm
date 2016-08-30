@@ -222,28 +222,35 @@ $configQuery="SELECT * from global_config";
     //check gender
     if($result[0]['gender']=='male'){
     $gender = '<td>:&nbsp;<input type="radio" name="gender" value="male" checked="checked"  readonly="true"/>Male&nbsp;<input type="radio" name="gender" value="female"  readonly="true"/>Female</td>';
-    }if($result[0]['gender']=='female'){
+    }else if($result[0]['gender']=='female'){
      $gender = '<td>:&nbsp;<input type="radio" name="gender" value="male"  readonly="true"/>Male&nbsp;<input type="radio" name="gender" value="female" checked="checked"  readonly="true"/>Female</td>';
     }else{
      $gender = '<td>:&nbsp;<input type="radio" name="gender" value="male"  readonly="true"/>Male&nbsp;<input type="radio" name="gender" value="female"  readonly="true"/>Female</td>';
     }
     if($result[0]['is_patient_pregnant']=='yes'){
     $prg = '<td>:&nbsp;<input type="radio" name="pregnant" value="yes" checked="checked"  readonly="true"/>Yes&nbsp;<input type="radio" name="pregnant" value="no" readonly="true"/>No</td>';
-    }if($result[0]['is_patient_pregnant']=='no'){
+    }else if($result[0]['is_patient_pregnant']=='no'){
      $prg = '<td>:&nbsp;<input type="radio" name="pregnant" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="pregnant" value="no" checked="checked" readonly="true"/>No</td>';
     }else{
      $prg = '<td>:&nbsp;<input type="radio" name="pregnant" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="pregnant" value="no" readonly="true"/>No</td>';
     }
     if($result[0]['is_patient_breastfeeding']=='yes'){
     $breast = '<td>:&nbsp;<input type="radio" name="breast" value="yes" checked="checked" readonly="true"/>Yes&nbsp;<input type="radio" name="breast" value="no" readonly="true"/>No</td>';
-    }if($result[0]['is_patient_breastfeeding']=='no'){
+    }else if($result[0]['is_patient_breastfeeding']=='no'){
      $breast = '<td>:&nbsp;<input type="radio" name="breast" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="breast" value="no" checked="checked" readonly="true"/>No</td>';
     }else{
      $breast = '<td>:&nbsp;<input type="radio" name="breast" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="breast" value="no" readonly="true"/>No</td>';
     }
+    if($result[0]['patient_receive_sms']=='yes'){
+    $sms = '<td>:&nbsp;<input type="radio" name="sms" value="yes" checked="checked" readonly="true"/>Yes&nbsp;<input type="radio" name="sms" value="no" readonly="true"/>No</td>';
+    }else if($result[0]['patient_receive_sms']=='no'){
+     $sms = '<td>:&nbsp;<input type="radio" name="breast" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="sms" value="no" checked="checked" readonly="true"/>No</td>';
+    }else{
+     $sms = '<td>:&nbsp;<input type="radio" name="breast" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="sms" value="no" readonly="true"/>No</td>';
+    }
     if($result[0]['rejection']=='yes'){
     $reject = '<td>:&nbsp;<input type="radio" name="reject" value="yes" checked="checked" readonly="true"/>Yes&nbsp;<input type="radio" name="reject" value="no" readonly="true"/>No</td>';
-    }if($result[0]['rejection']=='no'){
+    }else if($result[0]['rejection']=='no'){
      $reject = '<td>:&nbsp;<input type="radio" name="reject" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="reject" value="no" checked="checked" readonly="true"/>No</td>';
     }else{
      $reject = '<td>:&nbsp;<input type="radio" name="reject" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="reject" value="no" readonly="true"/>No</td>';
@@ -264,10 +271,10 @@ $html = '';
         $html.='<table><tr><td><h4>Facility Details</h4>';
         $html.='<table style="padding:5px;width:98%;border:2px solid #333;">';
          $html.='<tr>';
-          $html.='<td>Facility:'.ucwords($result[0]['facility_name']).'</td>';
+          $html.='<td>Facility:'.ucwords($result[0]['facility_name']).'&nbsp;State:'.ucwords($result[0]['state']).'</td>';
          $html.='</tr>';
          $html.='<tr>';
-          $html.='<td>State:'.ucwords($result[0]['state']).'&nbsp;Hub:'.ucwords($result[0]['hub_name']).'</td>';
+          $html.='<td>Hub:'.ucwords($result[0]['hub_name']).'&nbsp;District:'.ucwords($result[0]['district']).'</td>';
          $html.='</tr>';
         $html.='</table></td>';
         $html.='<td><h4>Sample Details</h4><table style="padding:5px;border:2px solid #333;">';
@@ -293,10 +300,12 @@ $html = '';
         $html.='<tr><td>Current Regimen</td><td>:&nbsp;'.$aResult[0]['art_code'].'</td><td>Current Regimen Initiated On</td><td>:&nbsp;'.$result[0]['date_of_initiation_of_current_regimen'].'</td></tr>';
         $html.='<tr><td>Which line of treatment is Patient on ?</td><td colspan="2">:&nbsp;'.$result[0]['treatment_details'].'</td></tr>';
         $html.='<tr><td>Is Patient Pregnant ?</td>'.$prg.'<td>If Pregnant, ARC No.</td><td>:&nbsp;'.$result[0]['arc_no'].'</td></tr>';
-        $html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>ARV Adherence</td><td>:&nbsp;'.$result[0]['arv_adherence'].'</td></tr>';
+        //$html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>ARV Adherence</td><td>:&nbsp;'.$result[0]['arv_adherence'].'</td></tr>';
+        $html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>Patient consent to receive SMS?</td><td>:&nbsp;'.$sms.'</td></tr>';
         $html.='</table>';
         $html.='<h4>Indication For Viral Load Testing</h4>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
+        $html.='<tr><td>ARV Adherence</td><td colspan="2">:&nbsp;'.$result[0]['arv_adherence'].'</td></tr>';
         if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" checked="checked" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
@@ -334,7 +343,7 @@ $html = '';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['switch_to_tdf_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$sVlResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true" />Missing</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['missing_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['missing_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$mVlResult[0]['sample_name'].'</td></tr>';
         }
-        $html.='</table><br/><br/><br/><br/>';
+        $html.='</table>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
         $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
         $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['request_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
