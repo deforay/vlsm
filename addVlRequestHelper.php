@@ -93,7 +93,10 @@ try {
      if(!isset($_POST['gender']) || trim($_POST['gender'])==''){
         $_POST['gender']='';
      }
-     
+     if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
+          $_POST['patientPregnant']='';
+          $_POST['breastfeeding']='';
+     }
      $vldata=array(
           'facility_id'=>$_POST['facilityId'],
           'sample_code'=>$_POST['sampleCode'],
