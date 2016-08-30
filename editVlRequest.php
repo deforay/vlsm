@@ -279,13 +279,13 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>
                      <div class="col-md-6">
                     <div class="form-group">
-                        <label for="gender" class="col-lg-4 control-label">Gender</label>
+                        <label for="gender" class="col-lg-4 control-label">Gender <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-                         <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($result[0]['gender']=='male')?"checked='checked'":""?>> Male
+                         <input type="radio"  id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($result[0]['gender']=='male')?"checked='checked'":""?>> Male
                         </label>
                         <label class="radio-inline">
-                         <input type="radio" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($result[0]['gender']=='female')?"checked='checked'":""?>> Female
+                         <input type="radio" class="isRequired" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($result[0]['gender']=='female')?"checked='checked'":""?>> Female
                         </label>
                         </div>
                     </div>
