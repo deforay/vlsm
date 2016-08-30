@@ -194,13 +194,13 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>
                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="gender" class="col-lg-4 control-label">Gender</label>
+                        <label for="gender" class="col-lg-4 control-label">Gender <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
                          <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"/> Male
                         </label>
                         <label class="radio-inline">
-                         <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender"/> Female
+                         <input type="radio" class="isRequired" id="genderFemale" name="gender" value="female" title="Please check gender"/> Female
                         </label>
                         </div>
                     </div>
