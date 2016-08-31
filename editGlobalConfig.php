@@ -40,7 +40,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="max_no_of_samples_in_a_batch" class="col-lg-3 control-label">Maximum No. of Samples In a Batch </label>
                       <div class="col-lg-9">
-                        <input type="text" class="isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
+                        <input type="text" class="form-control isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -50,7 +50,18 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="header" class="col-lg-3 control-label">Header </label>
                       <div class="col-lg-9">
-                        <textarea id="header" name="header" placeholder="Header" title="Please enter header" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['header']; ?></textarea>
+                        <textarea class="form-control" id="header" name="header" placeholder="Header" title="Please enter header" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['header']; ?></textarea>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="header" class="col-lg-3 control-label">Do You Want to Show Smiley at Result PDF? </label>
+                      <div class="col-lg-9">
+                        <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>No
                       </div>
                     </div>
                    </div>
