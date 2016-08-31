@@ -327,6 +327,13 @@ ADD  `missing_last_vl_date` DATE NULL DEFAULT NULL AFTER  `switch_to_tdf_sample_
 ADD  `missing_value` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `missing_last_vl_date` ,
 ADD  `missing_sample_type` INT NULL DEFAULT NULL AFTER  `missing_value` ;
 
+--saravanan 31-aug-2016
+ALTER TABLE  `vl_request_form` ADD  `viral_load_indication` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `patient_receive_sms` ;
+
+--ilahir 31-Aug-2016
+
+ALTER TABLE  `vl_request_form` ADD  `absolute_decimal_value` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `text_value` ;
+
 --Pal 31st Aug'16--
 ALTER TABLE `global_config` ADD `display_name` VARCHAR(255) NOT NULL FIRST;
 
@@ -337,7 +344,3 @@ CREATE TABLE `global_config` (
 )
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES
-('Logo', 'logo', ''),
-('Header', 'header', 'MINISTRY OF HEALTH\r\nNATIONAL AIDS AND STD CONTROL PROGRAM\r\nINDIVIDUAL VIRAL LOAD RESULT FORM'),
-('Max. no of sample in a batch', 'max_no_of_samples_in_a_batch', '20'),
-('Do you want to show smiley at result pdf?', 'show_smiley', 'yes');

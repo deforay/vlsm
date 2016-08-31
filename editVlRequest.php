@@ -530,7 +530,8 @@ $tsResult = $db->rawQuery($tsQuery);
                              <?php
                              $checked = '';
                              $display = '';
-                             if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
+                             //if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
+                             if($result[0]['viral_load_indication']=='routine'){
                               $checked = 'checked="checked"';
                               $display = 'block';
                              }else{
@@ -538,7 +539,7 @@ $tsResult = $db->rawQuery($tsQuery);
                               $display = 'none';
                              }
                              ?>
-                               <input type="radio" class="" id="RmTesting" name="stViralTesting" value="Routine Monitoring" title="Please check routine monitoring" <?php echo $checked;?> onclick="showTesting('RmTesting');">
+                               <input type="radio" class="" id="RmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" <?php echo $checked;?> onclick="showTesting('RmTesting');">
                                 <strong>Routine Monitoring</strong>
                             </label>						
                             </div>
@@ -590,7 +591,8 @@ $tsResult = $db->rawQuery($tsQuery);
                              <?php
                              $checked = '';
                              $display = '';
-                             if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
+                             //if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
+                             if($result[0]['viral_load_indication']=='failure'){
                               $checked = 'checked="checked"';
                               $display = 'block';
                              }else{
@@ -598,7 +600,7 @@ $tsResult = $db->rawQuery($tsQuery);
                               $display = 'none';
                              }
                              ?>
-                                <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $checked;?> onclick="showTesting('RepeatTesting');">
+                                <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $checked;?> onclick="showTesting('RepeatTesting');">
                                 <strong>Repeat VL test after suspected treatment failure adherence counseling</strong>
                             </label>
                             </div>
@@ -649,7 +651,8 @@ $tsResult = $db->rawQuery($tsQuery);
                              <?php
                              $checked = '';
                              $display = '';
-                             if($result[0]['suspected_treatment_failure_last_vl_date']!='' || $result[0]['suspected_treatment_failure_value']!='' || $result[0]['suspected_treatment_failure_sample_type']!=''){
+                             //if($result[0]['suspected_treatment_failure_last_vl_date']!='' || $result[0]['suspected_treatment_failure_value']!='' || $result[0]['suspected_treatment_failure_sample_type']!=''){
+                             if($result[0]['viral_load_indication']=='suspect'){
                               $checked = 'checked="checked"';
                               $display = 'block';
                              }else{
@@ -657,7 +660,7 @@ $tsResult = $db->rawQuery($tsQuery);
                               $display = 'none';
                              }
                              ?>
-                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="male" title="Suspect Treatment Failure" <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
+                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
                                 <strong>Suspect Treatment Failure</strong>
                             </label>						
                             </div>
@@ -707,7 +710,8 @@ $tsResult = $db->rawQuery($tsQuery);
                                 <?php
                                 $checked = '';
                                 $display = '';
-                                if($result[0]['switch_to_tdf_last_vl_date']!='' || $result[0]['switch_to_tdf_value']!='' || $result[0]['switch_to_tdf_sample_type']!=''){
+                                //if($result[0]['switch_to_tdf_last_vl_date']!='' || $result[0]['switch_to_tdf_value']!='' || $result[0]['switch_to_tdf_sample_type']!=''){
+                                if($result[0]['viral_load_indication']=='switch'){
                                  $checked = 'checked="checked"';
                                  $display = 'block';
                                 }else{
@@ -722,7 +726,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                 </div>
-               <div class="row switchToTDFTreatment hideTestData"  style="display: <?php echo $display;?>;">
+               <div class="row  hideTestData"  style="display: none;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="switchToTDFLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
@@ -765,7 +769,8 @@ $tsResult = $db->rawQuery($tsQuery);
                                 <?php
                                 $checked = '';
                                 $display = '';
-                                if($result[0]['missing_last_vl_date']!='' || $result[0]['missing_value']!='' || $result[0]['missing_sample_type']!=''){
+                                //if($result[0]['missing_last_vl_date']!='' || $result[0]['missing_value']!='' || $result[0]['missing_sample_type']!=''){
+                                if($result[0]['viral_load_indication']=='missing'){
                                  $checked = 'checked="checked"';
                                  $display = 'block';
                                 }else{
@@ -780,7 +785,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                 </div>
-               <div class="row missingTreatment hideTestData" style="display: <?php echo $display;?>;">
+               <div class="row hideTestData" style="display: none;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="missingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
