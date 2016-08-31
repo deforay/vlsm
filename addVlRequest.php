@@ -229,13 +229,28 @@ $tsResult = $db->rawQuery($tsQuery);
                 <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
+                        <label for="receiveSms" class="col-lg-4 control-label">Patient consent to receive SMS?</label>
+                        <div class="col-lg-7">
+                        <label class="radio-inline">
+                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> Yes
+                       </label>
+                       <label class="radio-inline">
+                               <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> No
+                       </label>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
                         <label for="patientPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" />
                         </div>
                     </div>
                   </div>
-                 <div class="col-md-6">
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="location" class="col-lg-4 control-label">Location/District Code</label>
                         <div class="col-lg-7">
@@ -383,19 +398,6 @@ $tsResult = $db->rawQuery($tsQuery);
                        </label>
                        <label class="radio-inline">
                                <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> No
-                       </label>
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="receiveSms" class="col-lg-4 control-label">Patient consent to receive SMS?</label>
-                        <div class="col-lg-7">
-                        <label class="radio-inline">
-                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> Yes
-                       </label>
-                       <label class="radio-inline">
-                               <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> No
                        </label>
                         </div>
                     </div>

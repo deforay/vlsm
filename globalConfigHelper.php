@@ -29,7 +29,7 @@ try {
            $db->update($tableName,$data);
        }
     }
-    
+    //print_r($_POST);die;
     foreach ($_POST as $fieldName => $fieldValue) {
         if($fieldName!= 'removedLogoImage'){
            $data=array('value'=>$fieldValue);

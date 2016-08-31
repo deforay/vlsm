@@ -256,10 +256,17 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         </div>
                     </div>
                   </div>
-                  
                 </div>
                 <div class="row">
                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="ArvAdherence" class="col-lg-4 control-label">Patient consent to receive SMS? </label>
+                        <div class="col-lg-7" style="font-style:italic;">
+                           <?php echo ucwords($result[0]['patient_receive_sms']); ?>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="patientPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7" style="font-style:italic;">
@@ -267,7 +274,9 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         </div>
                     </div>
                   </div>
-                 <div class="col-md-6">
+                </div>
+                <div class="row">
+                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="location" class="col-lg-4 control-label">Location/District Code</label>
                         <div class="col-lg-7" style="font-style:italic;">
@@ -386,14 +395,6 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         <label for="breastfeeding" class="col-lg-4 control-label">Is Patient Breastfeeding?</label>
                         <div class="col-lg-7" style="font-style:italic;">
                            <?php echo ucfirst($result[0]['is_patient_breastfeeding']); ?>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="ArvAdherence" class="col-lg-4 control-label">Patient consent to receive SMS? </label>
-                        <div class="col-lg-7" style="font-style:italic;">
-                           <?php echo ucwords($result[0]['patient_receive_sms']); ?>
                         </div>
                     </div>
                   </div>

@@ -256,7 +256,7 @@ $configQuery="SELECT * from global_config";
      $reject = '<td>:&nbsp;<input type="radio" name="reject" value="yes" readonly="true"/>Yes&nbsp;<input type="radio" name="reject" value="no" readonly="true"/>No</td>';
     }
     
-$html = '';
+        $html = '';
         $html.='<table style="padding:5px;border:2px solid #333;">';
         $html .='<tr>';
         if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
@@ -292,16 +292,17 @@ $html = '';
         $html.='<tr><td>Other Id</td><td>:&nbsp;'.$result[0]['other_id'].'</td><td>Patient Name</td><td>:&nbsp;'.$result[0]['patient_name'].'</td></tr>';
         $html.='<tr><td>Date Of Birth</td><td>:&nbsp;'.$result[0]['patient_dob'].'</td><td>Gender</td>'.$gender.'</tr>';
         $html.='<tr><td>Age In years</td><td>:&nbsp;'.$result[0]['age_in_yrs'].'</td><td>Age In Month</td><td>:&nbsp;'.$result[0]['age_in_mnts'].'</td></tr>';
-        $html.='<tr><td>Ph Number</td><td>:&nbsp;'.$result[0]['patient_phone_number'].'</td><td>Location</td><td>:&nbsp;'.$result[0]['location'].'</td></tr>';
+        $html.='<tr><td>Patient consent to receive SMS?</td><td>:&nbsp;'.$sms.'</td><td>Ph Number</td><td>:&nbsp;'.$result[0]['patient_phone_number'].'</td></tr>';
+        $html.='<tr><td>Location</td><td colspan="3">:&nbsp;'.$result[0]['location'].'</td></tr>';
         $html.='</table>';
         $html.='<h4>Treatment Details</h4>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
         $html.='<tr><td>How long has this patient been on treatment ?</td><td>:&nbsp;'.$result[0]['treatment_initiation'].'</td><td>Treatment Initiated On</td><td>:&nbsp;'.$result[0]['treatment_initiated_date'].'</td></tr>';
         $html.='<tr><td>Current Regimen</td><td>:&nbsp;'.$aResult[0]['art_code'].'</td><td>Current Regimen Initiated On</td><td>:&nbsp;'.$result[0]['date_of_initiation_of_current_regimen'].'</td></tr>';
-        $html.='<tr><td>Which line of treatment is Patient on ?</td><td colspan="2">:&nbsp;'.$result[0]['treatment_details'].'</td></tr>';
-        $html.='<tr><td>Is Patient Pregnant ?</td>'.$prg.'<td>If Pregnant, ARC No.</td><td>:&nbsp;'.$result[0]['arc_no'].'</td></tr>';
+        $html.='<tr><td>Which line of treatment is Patient on ?</td><td colspan="3">:&nbsp;'.$result[0]['treatment_details'].'</td></tr>';
+        $html.='<tr><td>Is Patient Pregnant ?</td><td>'.$prg.'</td><td>If Pregnant, ARC No.</td><td>:&nbsp;'.$result[0]['arc_no'].'</td></tr>';
         //$html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>ARV Adherence</td><td>:&nbsp;'.$result[0]['arv_adherence'].'</td></tr>';
-        $html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>Patient consent to receive SMS?</td><td>:&nbsp;'.$sms.'</td></tr>';
+        $html.='<tr><td>Is Patient Breastfeeding?</td><td colspan="3">'.$breast.'</td></tr>';
         $html.='</table>';
         $html.='<h4>Indication For Viral Load Testing</h4>';
         $html.='<table style="padding:5px;border:2px solid #333;">';

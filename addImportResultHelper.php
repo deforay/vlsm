@@ -66,6 +66,7 @@ try {
                     
                     if($rKey < 2) continue;
                     
+                    $absDecimalVal="";
                     $absVal="";
                     $logVal="";
                     $txtVal="";
@@ -75,7 +76,7 @@ try {
                     {
                         $cellName = $sheetData->getCellByColumnAndRow($key,$rKey)->getColumn();
                         
-                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$resultFlag,$testingDate,$rKey,$cellName,$cell);
+                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$rKey,$cellName,$cell);
                         
                     }
                     //echo $sampleVal."<br/>";
@@ -94,13 +95,14 @@ try {
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
+                        'absolute_decimal_value'=>$absDecimalVal,
                         'result'=>$resultFlag,
                         'lab_tested_date'=>$testingDate,
                         'status'=>6
                     );
                     if(isset($vlResult[$m]['sample_code'])){
-                    //$db=$db->where('sample_code',$sampleVal);
-                    $db=$db->where('sample_code',$vlResult[$m]['sample_code']);
+                    $db=$db->where('sample_code',$sampleVal);
+                    //$db=$db->where('sample_code',$vlResult[$m]['sample_code']);
                     $id=$db->update($tableName,$data);
                     }
                     $m++;

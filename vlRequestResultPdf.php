@@ -139,6 +139,15 @@ $vlResult = '';
   }elseif(isset($result[0]['text_value']) && trim($result[0]['text_value'])!= ''){
     $vlResult = $result[0]['text_value'];
   }
+  
+$smileyContent = '';  
+if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
+  if(isset($result[0]['absolute_decimal_value']) && trim($result[0]['absolute_decimal_value'])!= '' && trim($result[0]['absolute_decimal_value']) > 1000){
+    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="frown_face"/>';
+  }else if(isset($result[0]['absolute_decimal_value']) && trim($result[0]['absolute_decimal_value'])!= '' && trim($result[0]['absolute_decimal_value']) <= 1000){
+    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
+  }
+}
 
 $html = "";
 $html .= '<div style="border:1px solid #333;">';
@@ -160,7 +169,7 @@ $html.='<table style="padding:2px;">';
     $html .='</tr>';
     $html .='<tr style="line-height:30px;">';
       $html .='<td colspan="2" style="text-align:center;font-size:14px;"><strong>Viral Load Results</strong></td>';
-      $html .='<td colspan="2" style="text-align:center;font-size:14px;"><strong>Historical Information</strong></td>';
+      $html .='<td colspan="2" style="text-align:center;font-size:14px;"><strong>Historical Information</strong>'.$smileyContent.'</td>';
     $html .='</tr>';
     $html .='<tr style="line-height:30px;">';
       $html .='<td style="text-align:left;font-size:12px;"><strong>Patient CCC No</strong></td>';
