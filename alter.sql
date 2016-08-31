@@ -328,6 +328,9 @@ ADD  `missing_value` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `missing_last_vl_da
 ADD  `missing_sample_type` INT NULL DEFAULT NULL AFTER  `missing_value` ;
 
 
+--saravanan 31-aug-2016
+ALTER TABLE  `vl_request_form` ADD  `viral_load_indication` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `patient_receive_sms` ;
+
 --ilahir 31-Aug-2016
 
 ALTER TABLE  `vl_request_form` ADD  `absolute_decimal_value` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `text_value` ;

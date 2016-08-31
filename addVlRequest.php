@@ -309,7 +309,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <label for="currentRegimen" class="col-lg-4 control-label">Current Regimen</label>
                         <div class="col-lg-7">
                         <select class="form-control" id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen">
-                         <option>-- Select --</option>
+                         <option value="">-- Select --</option>
                          <?php
                          foreach($artCode as $pKey=>$parentRow){
                          ?>
@@ -433,7 +433,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="" id="RmTesting" name="stViralTesting" value="Routine Monitoring" title="Please check routine monitoring" onclick="showTesting('RmTesting');">
+                                <input type="radio" class="" id="RmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" onclick="showTesting('RmTesting');">
                                 <strong>Routine Monitoring</strong>
                             </label>						
                             </div>
@@ -475,7 +475,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="male" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');">
+                                <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');">
                                 <strong>Repeat VL test after suspected treatment failure adherence counseling</strong>
                             </label>						
                             </div>
@@ -516,7 +516,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <div class="form-group">
                             <div class="col-lg-12">
                             <label class="radio-inline">
-                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="male" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
+                                <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
                                 <strong>Suspect Treatment Failure</strong>
                             </label>						
                             </div>
@@ -563,7 +563,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                 </div>
-               <div class="row switchToTDFTreatment hideTestData" style="display: none;">
+               <div class="row hideTestData" style="display: none;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="switchToTDFLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
@@ -603,7 +603,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                 </div>
-               <div class="row missingTreatment hideTestData" style="display: none;">
+               <div class="row  hideTestData" style="display: none;">
                    <div class="col-md-4">
                     <div class="form-group">
                         <label for="missingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
