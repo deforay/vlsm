@@ -37,12 +37,12 @@ try {
      if(isset($_POST['suspendTreatmentLastVLDate']) && trim($_POST['suspendTreatmentLastVLDate'])!=""){
           $_POST['suspendTreatmentLastVLDate']=$general->dateFormat($_POST['suspendTreatmentLastVLDate']);  
      }
-     if(isset($_POST['switchToTDFLastVLDate']) && trim($_POST['switchToTDFLastVLDate'])!=""){
-          $_POST['switchToTDFLastVLDate']=$general->dateFormat($_POST['switchToTDFLastVLDate']);  
-     }
-     if(isset($_POST['missingLastVLDate']) && trim($_POST['missingLastVLDate'])!=""){
-          $_POST['missingLastVLDate']=$general->dateFormat($_POST['missingLastVLDate']);  
-     }
+     //if(isset($_POST['switchToTDFLastVLDate']) && trim($_POST['switchToTDFLastVLDate'])!=""){
+     //     $_POST['switchToTDFLastVLDate']=$general->dateFormat($_POST['switchToTDFLastVLDate']);  
+     //}
+     //if(isset($_POST['missingLastVLDate']) && trim($_POST['missingLastVLDate'])!=""){
+     //     $_POST['missingLastVLDate']=$general->dateFormat($_POST['missingLastVLDate']);  
+     //}
      
      if(isset($_POST['requestDate']) && trim($_POST['requestDate'])!=""){
           $_POST['requestDate']=$general->dateFormat($_POST['requestDate']);  
@@ -121,6 +121,7 @@ try {
           'is_patient_breastfeeding'=>$_POST['breastfeeding'],
           'arv_adherence'=>$_POST['arvAdherence'],
           'patient_receive_sms'=>$_POST['receiveSms'],
+          'viral_load_indication'=>$_POST['stViralTesting'],
           'routine_monitoring_last_vl_date'=>$_POST['rmTestingLastVLDate'],
           'routine_monitoring_value'=>$_POST['rmTestingVlValue'],
           'routine_monitoring_sample_type'=>$_POST['rmTestingSampleType'],
@@ -130,12 +131,12 @@ try {
           'suspected_treatment_failure_last_vl_date'=>$_POST['suspendTreatmentLastVLDate'],
           'suspected_treatment_failure_value'=>$_POST['suspendTreatmentVlValue'],
           'suspected_treatment_failure_sample_type'=>$_POST['suspendTreatmentSampleType'],
-          'switch_to_tdf_last_vl_date'=>$_POST['switchToTDFLastVLDate'],
-          'switch_to_tdf_value'=>$_POST['switchToTDFVlValue'],
-          'switch_to_tdf_sample_type'=>$_POST['switchToTDFSampleType'],
-          'missing_last_vl_date'=>$_POST['missingLastVLDate'],
-          'missing_value'=>$_POST['missingVlValue'],
-          'missing_sample_type'=>$_POST['missingSampleType'],
+          //'switch_to_tdf_last_vl_date'=>$_POST['switchToTDFLastVLDate'],
+          //'switch_to_tdf_value'=>$_POST['switchToTDFVlValue'],
+          //'switch_to_tdf_sample_type'=>$_POST['switchToTDFSampleType'],
+          //'missing_last_vl_date'=>$_POST['missingLastVLDate'],
+          //'missing_value'=>$_POST['missingVlValue'],
+          //'missing_sample_type'=>$_POST['missingSampleType'],
           'request_clinician'=>$_POST['requestClinician'],
           'clinician_ph_no'=>$_POST['clinicianPhone'],
           'request_date'=>$_POST['requestDate'],
