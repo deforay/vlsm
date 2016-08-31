@@ -143,9 +143,9 @@ $vlResult = '';
 $smileyContent = '';  
 if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
   if(isset($result[0]['absolute_decimal_value']) && trim($result[0]['absolute_decimal_value'])!= '' && trim($result[0]['absolute_decimal_value']) > 1000){
-    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="frown_face"/>';
+    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
   }else if(isset($result[0]['absolute_decimal_value']) && trim($result[0]['absolute_decimal_value'])!= '' && trim($result[0]['absolute_decimal_value']) <= 1000){
-    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
+    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
   }
 }
 
