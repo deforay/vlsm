@@ -1,6 +1,6 @@
 <?php
 
-function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$resultFlag,&$testingDate,$rKey,$cellName,$cell){
+function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,$rKey,$cellName,$cell){
            
      $sampleIdCol='C';
      $sampleIdRow='2';
@@ -34,6 +34,12 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$resultFlag
                 $resVal=explode("(",$cell->getCalculatedValue());
                 if(count($resVal)==2){
                     $absVal=trim($resVal[0]);
+                    
+                    $expAbsVal=explode("E",$absVal);
+                    if(count($expAbsVal)==2){
+                         $multipleVal=substr($expAbsVal[1],1);
+                         $absDecimalVal=$expAbsVal[0]*pow(10,$multipleVal);
+                    }
                     $logVal=substr(trim($resVal[1]),0,-1);
                 }else{
                     $txtVal=trim($cell->getCalculatedValue());
