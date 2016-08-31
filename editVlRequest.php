@@ -179,7 +179,7 @@ $tsResult = $db->rawQuery($tsQuery);
               <div class="box box-default">
             <div class="box-header with-border">
                <div class="pull-left"><h3 class="box-title">Facility Information</h3></div>
-               <div class="pull-right"><a id="clearFInfo" href="javascript:void(0);" onclick="clearFacilitiesInfo();" class="btn btn-danger btn-sm" style="padding-right:10px;">Clear</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showModal('facilitiesModal.php',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
+               <div class="pull-right"><a id="clearFInfo" href="javascript:void(0);" onclick="clearFacilitiesInfo();" class="btn btn-danger btn-sm" style="padding-right:10px;">Clear</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showModal('facilitiesModal.php?type=all',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -910,7 +910,7 @@ $tsResult = $db->rawQuery($tsQuery);
             <div id="toogleResultDiv" class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Lab Details</h3>
-              <div class="pull-right"><a href="javascript:void(0);" onclick="showModal('facilitiesLabModal.php',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
+              <div class="pull-right"><a href="javascript:void(0);" onclick="showModal('facilitiesModal.php?type=lab',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
