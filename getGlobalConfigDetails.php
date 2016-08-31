@@ -125,8 +125,8 @@ $tableName="global_config";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = ucfirst(str_replace("_"," ",$aRow['name']));
-	    $row[] = $aRow['value'];
+	    $row[] = ucwords($aRow['display_name']);
+	    $row[] = ucwords($aRow['value']);
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

@@ -326,3 +326,18 @@ ADD  `switch_to_tdf_sample_type` INT NULL DEFAULT NULL AFTER  `switch_to_tdf_val
 ADD  `missing_last_vl_date` DATE NULL DEFAULT NULL AFTER  `switch_to_tdf_sample_type` ,
 ADD  `missing_value` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `missing_last_vl_date` ,
 ADD  `missing_sample_type` INT NULL DEFAULT NULL AFTER  `missing_value` ;
+
+--Pal 31st Aug'16--
+ALTER TABLE `global_config` ADD `display_name` VARCHAR(255) NOT NULL FIRST;
+
+CREATE TABLE `global_config` (
+  `display_name` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `value` mediumtext
+)
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES
+('Logo', 'logo', ''),
+('Header', 'header', 'MINISTRY OF HEALTH\r\nNATIONAL AIDS AND STD CONTROL PROGRAM\r\nINDIVIDUAL VIRAL LOAD RESULT FORM'),
+('Max. no of sample in a batch', 'max_no_of_samples_in_a_batch', '20'),
+('Do you want to show smiley at result pdf?', 'show_smiley', 'yes');
