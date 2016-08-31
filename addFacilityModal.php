@@ -1,6 +1,7 @@
 <?php
 ob_start();
 include('./includes/MysqliDb.php');
+$type=$_GET['type'];
 if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){
     $tableName="facility_details";
     $data=array(
@@ -94,6 +95,7 @@ $fResult = $db->rawQuery($fQuery);
                     <div class="form-group">
                         <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
+			    <?php if($type=='all'){ ?>
                         <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
                           <option value="">-- Select --</option>
                             <?php
@@ -104,6 +106,10 @@ $fResult = $db->rawQuery($fQuery);
                             }
                             ?>
                           </select>
+			<?php } else { ?>
+			    <input type="hidden" class="form-control" id="facilityType" name="facilityType" value="2" />
+			    <input type="text" class="form-control readonly" id="facilityTypeName" name="facilityTypeName" value="Lab" readonly="readonly" style="background-color: #fff;"/>
+			<?php } ?>
                         </div>
                     </div>
                   </div>
