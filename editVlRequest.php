@@ -306,7 +306,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="ageInMtns" data-calendar="false" name="ageInMtns" placeholder="Enter Age in months" title="Please enter age in" value="<?php echo $result[0]['age_in_mnts']; ?>"/>
-                        <p class="help-block"><small>If age < 1 years </small></p>
+                        <p class="help-block"><small>If age < 1 year </small></p>
                         </div>
                     </div>
                   </div>
