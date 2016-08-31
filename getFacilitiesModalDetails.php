@@ -96,6 +96,8 @@ $primaryKey="facility_id";
 		$sWhere = $sWhere." AND f_d.district LIKE '%" . $_POST['district'] . "%' ";
 	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
 		$sWhere = $sWhere." AND f_d.state LIKE '%" . $_POST['state'] . "%' ";
+	    }if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		$sWhere = $sWhere." AND f_t.facility_type_id='".$_POST['facilityName']."'";
 	    }
             $sQuery = $sQuery.' '.$sWhere;
         }else{
@@ -106,6 +108,8 @@ $primaryKey="facility_id";
 		$sWhere = $sWhere." AND f_d.district LIKE '%" . $_POST['district'] . "%' ";
 	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
 		$sWhere = $sWhere." AND f_d.state LIKE '%" . $_POST['state'] . "%' ";
+	    }if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		$sWhere = $sWhere." AND f_t.facility_type_id='".$_POST['facilityName']."'";
 	    }
             $sQuery = $sQuery.' '.$sWhere;
         }
@@ -128,7 +132,11 @@ $primaryKey="facility_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
+	if($_POST['type']=='all'){
         $aResultTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details WHERE status = 'active'");
+	}else{
+	    $aResultTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details WHERE status = 'active' AND facility_type=2");
+	}
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -142,13 +150,15 @@ $primaryKey="facility_id";
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-	
-	
         
         foreach ($rResult as $aRow) {
 	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['state']."##".$aRow['hub_name']."##".$aRow['contact_person']."##".$aRow['phone_number']."##".$aRow['district'];
             $row = array();
+	    if($_POST['type']=='all'){
 	    $row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacility(this.value);">';
+	    }else{
+		$row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacilityLab(this.value);">';
+	    }
 	    $row[] = $aRow['facility_code'];
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['facility_type_name']);

@@ -1,7 +1,8 @@
  <?php
 include('./includes/MysqliDb.php');
-$fQuery="SELECT * FROM facility_details where status='active'";
+$fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
+$type=$_GET['type'];
 ?>
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
   <!-- Bootstrap 3.3.6 -->
@@ -30,7 +31,11 @@ $fResult = $db->rawQuery($fQuery);
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="pull-left" style="font-size:22px;">Search Facilities</div>
-      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php',900,520);" style="margin-bottom:20px;">Add Facility</a></div>
+      <?php if($type=='all'){ ?>
+      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php?type=all',900,520);" style="margin-bottom:20px;">Add Facility</a></div>
+      <?php } else { ?>
+      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php?type=lab',900,520);" style="margin-bottom:20px;">Add Facility</a></div>
+      <?php } ?>
     </section>
      <!-- Main content -->
     <section class="content">
@@ -53,7 +58,26 @@ $fResult = $db->rawQuery($fQuery);
 		    <td>
 		      <input type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;"/>
 		    </td>
-		    <td></td><td></td>
+		    <td>&nbsp;<b>Facility Type&nbsp;:</b></td>
+		    <td>
+                      <?php
+                      if($type=='all'){
+                      ?>
+		      <select class="form-control" id="facilityTypeName" name="facilityTypeName" title="Please select facility name">
+		      <option value="">-- Select --</option>
+			<?php
+			foreach($fResult as $name){
+			 ?>
+			 <option value="<?php echo $name['facility_type_id'];?>"><?php echo ucwords($name['facility_type_name']);?></option>
+			 <?php
+			}
+			?>
+		      </select>
+                      <?php } else { ?>
+                      <input type="text" id="fName" name="fName" class="form-control" readonly="readonly" value="Lab" style="background:#fff;"/>
+                      <input type="hidden" id="facilityTypeName" name="facilityTypeName" value="2" />
+                      <?php } ?>
+		    </td>
 		</tr>
 		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchFacilityData();" value="Search" class="btn btn-success btn-sm">
@@ -104,7 +128,7 @@ $fResult = $db->rawQuery($fQuery);
   <script>
   var oTable = null;
   $(document).ready(function() {
-        oTable = $('#facilityModalDataTable').dataTable({	
+        oTable = $('#facilityModalDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -128,6 +152,8 @@ $fResult = $db->rawQuery($fQuery);
               aoData.push({"name": "hub", "value": $("#hub").val()});
 	      aoData.push({"name": "district", "value": $("#district").val()});
 	      aoData.push({"name": "state", "value": $("#state").val()});
+	      aoData.push({"name": "facilityName", "value": $("#facilityTypeName").val()});
+	      aoData.push({"name": "type", "value": '<?php echo $type;?>'});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -142,6 +168,10 @@ $fResult = $db->rawQuery($fQuery);
     function getFacility(fDetails){
       parent.closeModal();
       window.parent.setFacilityDetails(fDetails);
+    }
+    function getFacilityLab(fDetails){
+      parent.closeModal();
+      window.parent.setFacilityLabDetails(fDetails);
     }
     function searchFacilityData(){
     oTable.fnDraw();
