@@ -90,7 +90,7 @@ $primaryKey="treament_id";
         */
 	$aWhere = '';
 	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.treament_id ";
-	$sWhere = ' where vl.status=7';
+	$sWhere = ' where vl.status=7 AND vl.absolute_decimal_value > 1000';
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -141,7 +141,7 @@ $primaryKey="treament_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where status=7");
+        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where status=7 AND absolute_decimal_value > 1000");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
