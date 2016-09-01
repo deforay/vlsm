@@ -351,3 +351,6 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES
 ('Do you want to show smiley at result pdf?', 'show_smiley', 'yes');
 
 INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Patient ART No. Date', 'show_date', 'no');
+
+--saravanan 01-sep-2016
+ALTER TABLE  `vl_request_form` ADD  `patient_art_date` DATE NULL DEFAULT NULL AFTER  `location` ;

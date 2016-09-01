@@ -117,6 +117,30 @@ $sampleType='<option value="">-- Select --</option>';
 //get test status values
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
+//get config values
+$configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+    if($arr['show_date']=='yes'){
+       if(isset($result[0]['patient_art_date']) && trim($result[0]['patient_art_date'])!='' && trim($result[0]['patient_art_date'])!='0000-00-00'){
+         $result[0]['patient_art_date']=$general->humanDateFormat($result[0]['patient_art_date']);
+        }else{
+         $result[0]['patient_art_date']='';
+        }
+    }
+    if($arr['show_date']=='no'){
+       if(isset($result[0]['patient_art_date']) && trim($result[0]['patient_art_date'])!='' && trim($result[0]['patient_art_date'])!='0000-00-00'){
+         $pArtDate = explode("-",$general->humanDateFormat($result[0]['patient_art_date']));
+         $result[0]['patient_art_date'] = $pArtDate[1]."-".$pArtDate[2];
+        }else{
+         $result[0]['patient_art_date']='';
+        }
+    }
+    
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
@@ -124,9 +148,11 @@ $tsResult = $db->rawQuery($tsQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
    <style>
-          /*.hide-calendar .ui-datepicker-calendar {
-          display: none;
-      }*/
+          <?php if($arr['show_date']=='no'){ ?>
+         .ui-datepicker-calendar {
+         display: none;
+     }
+     <?php } ?>
       .ui_tpicker_second_label {
         display: none !important;
        }.ui_tpicker_second_slider {
@@ -492,7 +518,15 @@ $tsResult = $db->rawQuery($tsQuery);
                           </label>
                         </div>
                     </div>
-                  </div>                   
+                  </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Patient Art No. Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control readonly hide-calendar" readonly='readonly' id="artnoDate" name="artnoDate" placeholder="Enter Patient Art No. Date" title="Please choose Art No. Date" value="<?php echo $result[0]['patient_art_date'];?>"/>
+                        </div>
+                    </div>
+                  </div> 
                 </div>
             </div>
             <!-- /.box-footer-->
@@ -1130,20 +1164,62 @@ $tsResult = $db->rawQuery($tsQuery);
   }
   
   $(document).ready(function() {
+   <?php if($arr['show_date']=='yes'){ ?>
+     $('#artnoDate').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'dd-M-yy',
+      timeFormat: "hh:mm TT",
+      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+      }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+     });
+     <?php }else{ ?>
+     $('.ui-datepicker-calendar').hide();
+     $('#artnoDate').datepicker({
+      changeMonth: true,
+      changeYear: true,
+      showButtonPanel:true,
+      dateFormat: 'M-yy',
+      onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').hide();
+            });
+    	},
+      onClose: function(dateText,inst) {
+       var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+       },
+      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+      }).click(function(){
+    	$('.ui-datepicker-calendar').hide();
+    });
+     <?php } ?>
      $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
       dateFormat: 'dd-M-yy',
       timeFormat: "hh:mm TT",
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     });
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
      $('#sampleCollectionDate').datetimepicker({
       changeMonth: true,
       changeYear: true,
       dateFormat: 'dd-M-yy',
-      timeFormat: "HH:mm:ss",
+      timeFormat: "HH:mm",
+      onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-      });
+      }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('.ui-datepicker-calendar').show();
        checkPatientReceivesms('<?php echo $result[0]['patient_receive_sms'];?>');
    });
 

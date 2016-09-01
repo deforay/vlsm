@@ -43,6 +43,14 @@ try {
      //if(isset($_POST['missingLastVLDate']) && trim($_POST['missingLastVLDate'])!=""){
      //     $_POST['missingLastVLDate']=$general->dateFormat($_POST['missingLastVLDate']);  
      //}
+     if(isset($_POST['artnoDate']) && trim($_POST['artnoDate'])!=''){
+          $artDate = explode("-",$_POST['artnoDate']);
+          if(count($artDate)>2){
+               $_POST['artnoDate']=$general->dateFormat($_POST['artnoDate']);
+          }else{
+               $_POST['artnoDate']=$general->dateFormat("01-".$_POST['artnoDate']); 
+          }
+     }
      
      if(isset($_POST['requestDate']) && trim($_POST['requestDate'])!=""){
           $_POST['requestDate']=$general->dateFormat($_POST['requestDate']);  
@@ -109,6 +117,7 @@ try {
           'gender'=>$_POST['gender'],
           'patient_phone_number'=>$_POST['patientPhoneNumber'],
           'location'=>$_POST['patientLocation'],
+          'patient_art_date'=>$_POST['artnoDate'],
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'sample_id'=>$_POST['sampleType'],
           'treatment_initiation'=>$_POST['treatPeriod'],
