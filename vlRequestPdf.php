@@ -306,7 +306,7 @@ $configQuery="SELECT * from global_config";
         $html.='</table>';
         $html.='<h4>Indication For Viral Load Testing</h4>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
-        $html.='<tr><td>ARV Adherence</td><td colspan="2">:&nbsp;'.$result[0]['arv_adherence'].'</td></tr>';
+        $html.='<tr><td colspan="2">ARV Adherence &nbsp;&nbsp;:&nbsp;&nbsp;'.ucwords($result[0]['arv_adherence']).'</td><td colspan="1">Enhance Session &nbsp;&nbsp;:&nbsp;&nbsp;'.ucwords($result[0]['enhance_session']).'</td></tr>';
         if($result[0]['viral_load_indication']=='routine'){
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" checked="checked" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
@@ -344,7 +344,7 @@ $configQuery="SELECT * from global_config";
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true" />Missing</td></tr>';
         }
-        $html.='</table><br/><br/><br/><br/>';
+        $html.='</table>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
         $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
         $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['request_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';

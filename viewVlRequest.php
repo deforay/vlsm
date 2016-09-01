@@ -6,7 +6,7 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $id=base64_decode($_GET['id']);
-$fQuery="SELECT vl.sample_code,vl.patient_name,vl.art_no,vl.patient_dob,vl.gender,vl.patient_phone_number,vl.location,vl.sample_collection_date,vl.treatment_initiation,vl.date_of_initiation_of_current_regimen,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.arv_adherence,vl.viral_load_indication,vl.routine_monitoring_last_vl_date,vl.routine_monitoring_value,vl.routine_monitoring_sample_type,vl.vl_treatment_failure_adherence_counseling_last_vl_date,vl.vl_treatment_failure_adherence_counseling_value,vl.vl_treatment_failure_adherence_counseling_sample_type,vl.suspected_treatment_failure_last_vl_date,vl.suspected_treatment_failure_value,vl.suspected_treatment_failure_sample_type,vl.switch_to_tdf_last_vl_date,vl.switch_to_tdf_value,vl.switch_to_tdf_sample_type,vl.missing_last_vl_date,vl.missing_value,vl.missing_sample_type,vl.request_clinician,vl.clinician_ph_no,vl.request_date,vl.vl_focal_person,vl.focal_person_phone_number,vl.email_for_HF,vl.date_sample_received_at_testing_lab,vl.date_results_dispatched,vl.rejection,vl.other_id,vl.age_in_yrs,vl.age_in_mnts,vl.treatment_initiated_date,vl.arc_no,vl.patient_receive_sms,vl.treatment_details,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.justification,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.result_reviewed_date,vl.status,ts.status_name,r_a_c_d.art_code,f.facility_name,f.facility_code,f.state,f.hub_name,r_s_t.sample_name,r_s_t_rm.sample_name as snrm,r_s_t_tfac.sample_name as sntfac,r_s_t_stf.sample_name as snstf,r_s_t_stdf.sample_name as stdf,r_s_t_mis.sample_name as mis from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as r_s_t ON r_s_t.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_sample_type as r_s_t_rm ON r_s_t_rm.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as r_s_t_tfac ON r_s_t_tfac.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as r_s_t_stf ON r_s_t_stf.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN r_sample_type as r_s_t_stdf ON r_s_t_stdf.sample_id=vl.switch_to_tdf_sample_type LEFT JOIN r_sample_type as r_s_t_mis ON r_s_t_mis.sample_id=vl.missing_sample_type LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
+$fQuery="SELECT vl.sample_code,vl.patient_name,vl.art_no,vl.patient_dob,vl.gender,vl.patient_phone_number,vl.location,vl.sample_collection_date,vl.treatment_initiation,vl.date_of_initiation_of_current_regimen,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.arv_adherence,vl.enhance_session,vl.viral_load_indication,vl.routine_monitoring_last_vl_date,vl.routine_monitoring_value,vl.routine_monitoring_sample_type,vl.vl_treatment_failure_adherence_counseling_last_vl_date,vl.vl_treatment_failure_adherence_counseling_value,vl.vl_treatment_failure_adherence_counseling_sample_type,vl.suspected_treatment_failure_last_vl_date,vl.suspected_treatment_failure_value,vl.suspected_treatment_failure_sample_type,vl.switch_to_tdf_last_vl_date,vl.switch_to_tdf_value,vl.switch_to_tdf_sample_type,vl.missing_last_vl_date,vl.missing_value,vl.missing_sample_type,vl.request_clinician,vl.clinician_ph_no,vl.request_date,vl.vl_focal_person,vl.focal_person_phone_number,vl.email_for_HF,vl.date_sample_received_at_testing_lab,vl.date_results_dispatched,vl.rejection,vl.other_id,vl.age_in_yrs,vl.age_in_mnts,vl.treatment_initiated_date,vl.arc_no,vl.patient_receive_sms,vl.treatment_details,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.justification,vl.test_methods,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.result_reviewed_date,vl.status,ts.status_name,r_a_c_d.art_code,f.facility_name,f.facility_code,f.state,f.hub_name,r_s_t.sample_name,r_s_t_rm.sample_name as snrm,r_s_t_tfac.sample_name as sntfac,r_s_t_stf.sample_name as snstf,r_s_t_stdf.sample_name as stdf,r_s_t_mis.sample_name as mis from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as r_s_t ON r_s_t.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_sample_type as r_s_t_rm ON r_s_t_rm.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as r_s_t_tfac ON r_s_t_tfac.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as r_s_t_stf ON r_s_t_stf.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN r_sample_type as r_s_t_stdf ON r_s_t_stdf.sample_id=vl.switch_to_tdf_sample_type LEFT JOIN r_sample_type as r_s_t_mis ON r_s_t_mis.sample_id=vl.missing_sample_type LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
 //echo $fQuery;die;
 $result=$db->query($fQuery);
 
@@ -420,6 +420,14 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                         </div>
                     </div>
                   </div>
+              <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="enhanceSession" class="col-lg-4 control-label">Enhance Session </label>
+                        <div class="col-lg-7" style="font-style:italic;">
+                           <?php echo ucwords($result[0]['enhance_session']); ?>
+                        </div>
+                    </div>
+                  </div>
              </div>
              <div class="row">                
                     <div class="col-md-6">
@@ -690,6 +698,17 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="" class="col-lg-4 control-label">Test Methods</label>
+                        <div class="col-lg-7" style="font-style:italic;">
+                           <?php echo ucwords($result[0]['test_methods']); ?>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                
                  <div class="row">
                    <div class="col-md-12"><h4>Result Details</h4></div>
                  </div>

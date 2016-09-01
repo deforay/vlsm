@@ -100,6 +100,17 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="header" class="col-lg-3 control-label">Date For Patient ART NO. </label>
+                      <div class="col-lg-9">
+                        <input type="radio" class="" id="show_full_date_yes" name="show_date" value="yes" <?php echo($arr['show_date'] == 'yes')?'checked':''; ?>>Full Date&nbsp;&nbsp;
+                        <input type="radio" class="" id="show_full_date_no" name="show_date" value="no" <?php echo($arr['show_date'] == 'no' || $arr['show_date'] == '')?'checked':''; ?>>Month and Year
+                      </div>
+                    </div>
+                   </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
