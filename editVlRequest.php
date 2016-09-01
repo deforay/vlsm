@@ -521,6 +521,21 @@ $tsResult = $db->rawQuery($tsQuery);
                      </div>
                  </div>
                </div>
+              <div class="col-md-6">
+                 <div class="form-group">
+                     <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
+                     <div class="col-lg-7">
+                     <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
+                      <option value="">--select--</option>
+                      <option value="1" <?php echo ($result[0]['enhance_session']=='1')?"selected='selected'":""?>>1</option>
+                      <option value="2" <?php echo ($result[0]['enhance_session']=='2')?"selected='selected'":""?>>2</option>
+                      <option value="3" <?php echo ($result[0]['enhance_session']=='3')?"selected='selected'":""?>>3</option>
+                      <option value=">3" <?php echo ($result[0]['enhance_session']=='>3')?"selected='selected'":""?>> > 3</option>
+                      <option value="missing" <?php echo ($result[0]['enhance_session']=='missing')?"selected='selected'":""?>> Missing</option>
+                     </select>
+                     </div>
+                 </div>
+               </div>
              </div>
              <div class="row">
                     <div class="col-md-6">
@@ -989,6 +1004,21 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
+                </div>
+                <div class="row">
+                 <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="testMethods" class="col-lg-4 control-label">Test Methods </label>
+                      <div class="col-lg-7">
+                      <select name="testMethods" id="testMethods" class="form-control" title="Please choose test methods">
+                       <option value="">--select--</option>
+                       <option value="individual" <?php echo ($result[0]['test_methods']=='individual')?"selected='selected'":""?>>Individual</option>
+                       <option value="minipool" <?php echo ($result[0]['test_methods']=='minipool')?"selected='selected'":""?>>Minipool</option>
+                       <option value="other pooling algorithm" <?php echo ($result[0]['test_methods']=='other pooling algorithm')?"selected='selected'":""?>>Other Pooling Algorithm</option>
+                      </select>
+                      </div>
+                  </div>
+                </div>
                 </div>
                 <div class="row">
                   <div class="col-md-12"><h4>Result Details</h4></div>

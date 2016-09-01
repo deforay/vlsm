@@ -107,9 +107,9 @@ $fResult = $db->rawQuery($fQuery);
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">State/Province</label>
+                        <label for="state" class="col-lg-4 control-label">State/Province <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="state" name="state" placeholder="State" />
+                        <input type="text" class="form-control isRequired" id="state" name="state" placeholder="State" />
                         </div>
                     </div>
                   </div>
@@ -118,9 +118,9 @@ $fResult = $db->rawQuery($fQuery);
                <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">District</label>
+                        <label for="state" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="district" name="district" placeholder="District" />
+                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District" />
                         </div>
                     </div>
                   </div>

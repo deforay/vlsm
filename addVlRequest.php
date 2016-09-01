@@ -31,6 +31,22 @@ if($sResult[0]['MAX(treament_id)']!=''){
 //get test status values
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
+
+//get config values
+$configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+if($arr['show_date']=='yes'){
+     $dateFormat = 'dd-M-yy';
+     //$showCalender = 'block';
+     } else {
+     $dateFormat = 'M-yy';
+     //$showCalender = 'none';
+     }
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
@@ -60,6 +76,9 @@ $tsResult = $db->rawQuery($tsQuery);
       }.ui_tpicker_time_input{
        width:100%;
       }
+      /*.ui-datepicker-calendar {
+    display: < ?php echo $showCalender;?>;
+    }*/
       #toogleResultDiv,#clearFInfo{
         display:none;
       }
@@ -402,6 +421,14 @@ $tsResult = $db->rawQuery($tsQuery);
                         </div>
                     </div>
                   </div>
+                   <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Patient Art No. Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control readonly hide-calendar" readonly='readonly' id="artnoDate" name="artnoDate" placeholder="Enter Patient Art No. Date" title="Please choose Art No. Date" />
+                        </div>
+                    </div>
+                  </div> 
                 </div>
             </div>
             <!-- /.box-footer-->
@@ -425,6 +452,21 @@ $tsResult = $db->rawQuery($tsQuery);
                       <option value="good">Good >= 95%</option>
                       <option value="fair">Fair (85-94%)</option>
                       <option value="poor">Poor < 85%</option>
+                     </select>
+                     </div>
+                 </div>
+               </div>
+              <div class="col-md-6">
+                 <div class="form-group">
+                     <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
+                     <div class="col-lg-7">
+                     <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
+                      <option value="">--select--</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value=">3"> > 3</option>
+                      <option value="missing"> Missing</option>
                      </select>
                      </div>
                  </div>
@@ -805,6 +847,22 @@ $tsResult = $db->rawQuery($tsQuery);
                     </div>
                   </div>
                 </div>
+                
+                <div class="row">
+                 <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="testMethods" class="col-lg-4 control-label">Test Methods <span class="mandatory">*</span></label>
+                      <div class="col-lg-7">
+                      <select name="testMethods" id="testMethods" class="form-control isRequired" title="Please choose test methods">
+                       <option value="">--select--</option>
+                       <option value="individual">Individual</option>
+                       <option value="minipool">Minipool</option>
+                       <option value="other pooling algorithm">Other Pooling Algorithm</option>
+                      </select>
+                      </div>
+                  </div>
+                </div>
+                </div>
                  
                   <div class="row">
                    <div class="col-md-12"><h4>Result Details</h4></div>
@@ -913,6 +971,7 @@ $tsResult = $db->rawQuery($tsQuery);
   }
   
   $(document).ready(function() {
+   
      $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
@@ -927,7 +986,6 @@ $tsResult = $db->rawQuery($tsQuery);
       timeFormat: "HH:mm",
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
       });
-       
    });
     
     function checkPatientIsPregnant(val){
