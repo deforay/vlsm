@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $otherConfigQuery ="SELECT * from other_config";
 $otherConfigResult=$db->query($otherConfigQuery);
 $arr = array();
