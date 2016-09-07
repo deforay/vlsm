@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $sQuery="SELECT * from import_config where config_id=$id";
 $sInfo=$db->query($sQuery);

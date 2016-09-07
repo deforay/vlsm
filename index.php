@@ -1,6 +1,6 @@
 <?php
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 /* Total data set length */
   $vlFormTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
  // $aResultTotal = $countResult->fetch_row();

@@ -3,6 +3,10 @@ session_start();
 if(isset($_SESSION['userId'])){
     header("location:index.php");
 }
+include('./includes/MysqliDb.php');
+$globalConfigQuery ="SELECT * from global_config where name='logo'";
+$configResult=$db->query($globalConfigQuery);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,15 +46,22 @@ if(isset($_SESSION['userId'])){
 
 </head>
 <body class="">
-    <div class="container-fluid">    
-        <div id="loginbox" style="margin-top:15px;margin-bottom:70px;float:right;margin-right:-15px;" class="mainbox col-md-3 col-sm-8 ">                    
+    <div class="container-fluid">
+        <?php
+        if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
+        ?>
+        <div style="margin-top:15px;float:left;">
+            <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" width="150">
+        </div>
+        <?php } ?>
+        <div id="loginbox" style="margin-top:15px;margin-bottom:70px;float:right;margin-right:-15px;" class="mainbox col-md-3 col-sm-8 ">
             <div class="panel panel-default" style="opacity: 0.9;">
                     <div class="panel-heading">
                         <div class="panel-title">Viral Load Sample Management</div>
                         
                     </div>     
 
-                    <div style="padding-top:10px" class="panel-body" >
+                    <div style="padding-top:10px;" class="panel-body" >
 
                         <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
                             

@@ -2,7 +2,7 @@
 //print_r($result);die;
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $id=base64_decode($_GET['id']);

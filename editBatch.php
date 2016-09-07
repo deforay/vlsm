@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $batchQuery="SELECT * from batch_details where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
