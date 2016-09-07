@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 ?>

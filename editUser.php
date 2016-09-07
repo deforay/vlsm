@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $userQuery="SELECT * from user_details where user_id=$id";
 $userInfo=$db->query($userQuery);

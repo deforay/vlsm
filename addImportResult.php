@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $query="SELECT config_id,machine_name,file_name FROM import_config where status='active'";

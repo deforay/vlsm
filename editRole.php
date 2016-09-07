@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $roleQuery="SELECT * from roles where role_id=$id";
 $roleInfo=$db->query($roleQuery);

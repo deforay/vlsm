@@ -131,6 +131,11 @@ $tableName="global_config";
 	    }else if($aRow['display_name']=='Patient ART No. Date' && $aRow['value']=='yes'){
 		$aRow['value'] = 'Full Date';
 	    }
+		if($aRow['name']=='vl_form'){
+			$query ="SELECT * from form_details where form_id=".$aRow['value'];
+			$formResult=$db->query($query);
+			$aRow['value']=$formResult[0]['form_name'];
+		}
 	    $row[] = ucwords($aRow['value']);
             $output['aaData'][] = $row;
         }

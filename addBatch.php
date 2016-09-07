@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id=''";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
