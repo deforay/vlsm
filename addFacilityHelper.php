@@ -4,9 +4,23 @@ session_start();
 include('./includes/MysqliDb.php');
 
 $tableName="facility_details";
+$tableName1="province_details";
 
 try {
     if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){
+         if(trim($_POST['state'])!=""){
+            $strSearch = $_POST['state'];
+            $facilityQuery="SELECT * from province_details where province_name='".$strSearch."'";
+            $facilityInfo=$db->query($facilityQuery);
+            if($facilityInfo){
+                $_POST['state'] = $facilityInfo[0]['province_id'];
+            }else{
+            $data=array(
+              'province_name'=>$_POST['state'],
+            );
+            $_POST['state']=$db->insert($tableName1,$data);
+            }
+        }
         $data=array(
         'facility_name'=>$_POST['facilityName'],
         'facility_code'=>$_POST['facilityCode'],
@@ -22,8 +36,8 @@ try {
 	'facility_type'=>$_POST['facilityType'],
         'status'=>'active'
         );
-        //print_r($data);die;
-        $db->insert($tableName,$data);    
+        
+        $db->insert($tableName,$data);
         $_SESSION['alertMsg']="Facility details added successfully";
     }
     header("location:facilities.php");
