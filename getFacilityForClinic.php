@@ -49,7 +49,9 @@ if(isset($_POST['pName'])){
     if($facilityInfo){
         $district.="<option value=''>--select--</option>";
         foreach($facilityInfo as $districtName){
+            if(trim($districtName['district'])!=""){
             $district .= "<option value='".$districtName['district']."'>".ucwords($districtName['district'])."</option>";
+            }
         }
     }else{
         $district.="<option value=''>--select--</option>";

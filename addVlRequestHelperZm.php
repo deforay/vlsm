@@ -62,11 +62,13 @@ try {
      
      $vldata=array(
           'urgency'=>$_POST['urgency'],
+          'form_id'=>'2',
+          'serial_no'=>$_POST['serialNo'],
           'facility_id'=>$_POST['clinicName'],
+          'sample_code'=>$_POST['sampleCode'],
           'lab_contact_person'=>$_POST['clinicianName'],
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'collected_by'=>$_POST['collectedBy'],
-          'sample_code'=>$_POST['sampleCode'],
           'patient_name'=>$_POST['patientFname'],
           'surname'=>$_POST['surName'],
           'gender'=>$_POST['gender'],
@@ -94,11 +96,12 @@ try {
           'comments'=>$_POST['labCommnets'],
           'date_sample_received_at_testing_lab'=>$_POST['dateOfReceivedStamp'],
           'rejection'=>$_POST['noResult'],
-          'serial_no'=>$_POST['serialNo'],
           'result_reviewed_by'=>$_SESSION['userId'],
           'status'=>'6',
+          'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime()
         );
+     
           $id=$db->insert($tableName,$vldata);
           $_SESSION['alertMsg']="VL request added successfully";
     
