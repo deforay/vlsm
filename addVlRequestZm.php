@@ -8,8 +8,32 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
+$sQuery="SELECT * from r_sample_type where form_identification='2'";
+$sResult=$db->query($sQuery);
+$pdQuery="SELECT * from province_details";
+$pdResult=$db->query($pdQuery);
 ?>
-
+<style>
+  .ui_tpicker_second_label {
+       display: none !important;
+      }.ui_tpicker_second_slider {
+       display: none !important;
+      }.ui_tpicker_millisec_label {
+       display: none !important;
+      }.ui_tpicker_millisec_slider {
+       display: none !important;
+      }.ui_tpicker_microsec_label {
+       display: none !important;
+      }.ui_tpicker_microsec_slider {
+       display: none !important;
+      }.ui_tpicker_timezone_label {
+       display: none !important;
+      }.ui_tpicker_timezone {
+       display: none !important;
+      }.ui_tpicker_time_input{
+       width:100%;
+      }
+</style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -38,14 +62,33 @@ $aResult=$db->query($aQuery);
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
+                          <label for="serialNo">Serial No</label>
+                          <input type="text" class="form-control" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-3 col-md-3">
+                        <div class="form-group">
                         <label for="province">Province</label>
-                        <input type="text" class="form-control" name="province" id="province" placeholder="Province" title="Provice" style="width:100%;">
+                          <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                            <option value="">--select--</option>
+                            <?php
+                            foreach($pdResult as $province){
+                              ?>
+                              <option value="<?php echo $province['province_id'];?>"><?php echo ucwords($province['province_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="District">District  </label>
-                        <input type="text" class="form-control" name="district" id="district" placeholder="District" title="District" style="width:100%;">
+                          <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
+                            <option value="">--select--</option>
+                          </select>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -65,7 +108,7 @@ $aResult=$db->query($aQuery);
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="clinicName">Clinic Name </label>
-                      <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityDetails()">
+                      <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityDetails(this)">
 		      <option value="">-- Select --</option>
 			<?php
 			foreach($fResult as $name){
@@ -86,7 +129,7 @@ $aResult=$db->query($aQuery);
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="sampleCollectionDate">Sample Collection Date</label>
-                    <input type="text" class="form-control date" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date">
+                    <input type="text" class="form-control" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3 col-lg-3">
@@ -122,19 +165,22 @@ $aResult=$db->query($aQuery);
                         <td style="width:10%">
                           <label for="gender">Gender </label>
                         </td>
-                        <td style="width:20%">
+                        <td style="width:18%">
                            <label class="radio-inline">
                             <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
                             </label>
                           <label class="radio-inline">
                             <input type="radio" class=" " id="genderFemale" name="gender" value="female" title="Please check gender"> Female
                           </label>
+                          <label class="radio-inline">
+                            <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"> Not Recorded
+                          </label>
                         </td>
                       </tr>
                       <tr>
                         <td><label>Date Of Birth</label></td>
                         <td>
-                          <input type="text" class="form-control date" placeholder="DOB"  style="width:100%;" >
+                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" >
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
@@ -173,13 +219,13 @@ $aResult=$db->query($aQuery);
                         </td>
                         <td><label for="dateOfArt">Date Of ART Initiation</label></td>
                         <td>
-                          <input type="text" class="form-control" name="dateOfArt" id="dateOfArt" placeholder="Date Of ART Initiation" title="Date Of ART Initiation" style="width:100%;" >
+                          <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiation" title="Date Of ART Initiation" style="width:100%;" >
                         </td>
                       </tr>
                       <tr>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
-                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen">
+                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();">
                          <option value="">-- Select --</option>
                          <?php
                          foreach($aResult as $parentRow){
@@ -188,6 +234,7 @@ $aResult=$db->query($aQuery);
                          <?php
                          }
                          ?>
+                         <option value="other">Other</option>
                         </select>
                         </td>
                         <td><label>Patient consent to SMS Notification</label></td>
@@ -202,9 +249,15 @@ $aResult=$db->query($aQuery);
                         <td><label for="patientPhoneNumber">Mobile Number</label></td>
                         <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
                       </tr>
+                      <tr class="newArtRegimen" style="display: none;">
+                        <td><label for="newArtRegimen">New ART Regimen</label><span class="mandatory">*</span></td>
+                        <td>
+                          <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
+                        </td>
+                      </tr>
                       <tr>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
-                        <td><input type="text" class="form-control" id="lastViralLoadTest" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" /></td>
                         <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>
                         <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" /></td>
                         <td><label for="viralLoadLog">Viral Load Log</label></td>
@@ -221,9 +274,9 @@ $aResult=$db->query($aQuery);
                             <option value="immunological_failure">Immunological Failure</option>
                            </select>
                         </td>
-                        <td><label for="arvAdherence">Single Drug Substitution</label></td>
+                        <td><label for="drugSubstitution">Single Drug Substitution</label></td>
                         <td>
-                          <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
+                          <select name="drugSubstitution" id="drugSubstitution" class="form-control" title="Please choose Drug Substitution">
                             <option value="">--select--</option>
                             <option value="pregnant_other">Pregnant Mother</option>
                             <option value="lactating mother">Lactating Mother</option>
@@ -232,7 +285,6 @@ $aResult=$db->query($aQuery);
                         </td>
                       </tr>
                     </table>
-                   
                   </div>
                 </div>
                 <div class="box box-primary">
@@ -259,10 +311,13 @@ $aResult=$db->query($aQuery);
                         <td>
                           <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
                               <option value="">--select--</option>
-                              <option value="venous_blood">Venous blood(EDTA)</option>
-                              <option value="frozen_plasma">Frozen Plasma</option>
-                              <option value="venous_DBS">Venous DBS(EDTA)</option>
-                              <option value="capillary_DBS">CAPILLARY DBS</option>
+                              <?php
+                              foreach($sResult as $name){
+                               ?>
+                               <option value="<?php echo $name['sample_id'];?>"><?php echo ucwords($name['sample_name']);?></option>
+                               <?php
+                              }
+                              ?>
                           </select>
                         </td>
                       </tr>
@@ -285,13 +340,13 @@ $aResult=$db->query($aQuery);
                           </label>
                         </td>
                         <td><label>Approved By</label></td>
-                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
                         <td colspan="3"><textarea class="form-control" name="labCommnets" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
                         <td><label for="dateOfReceivedStamp">Date Received Stamp</label></td>
-                        <td><input type="text" class="form-control" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>
                       </tr>
                       <tr>
                         <td><label for="serialNo">Serial No.</label></td>
@@ -304,6 +359,8 @@ $aResult=$db->query($aQuery);
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                <input type="hidden" name="saveNext" id="saveNext"/>
+                <input type="hidden" name="formId" id="formId" value="2"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save and Next</a>
                 <a href="users.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -326,21 +383,33 @@ $aResult=$db->query($aQuery);
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
     });
-    
+    $("#saveNext").val('save');
     if(flag){
       document.getElementById('vlRequestForm').submit();
     }
   }
-  function getfacilityDetails()
+  function validateNow(){
+    flag = deforayValidator.init({
+        formId: 'vlRequestForm'
+    });
+    $("#saveNext").val('next');
+    if(flag){
+      document.getElementById('vlRequestForm').submit();
+    }
+  }
+  function getfacilityDetails(obj)
   {
-    var cName = $("#clinicName").val();
-    if(cName!=''){
+    //check facility name
+    if(obj.id=='clinicName'){
+      var cName = $("#clinicName").val();
+      var pName = $("#province").val();
+    if(cName!='' && pName==''){
       $.post("getFacilityForClinic.php", { cName : cName},
       function(data){
 	  if(data != ""){
             details = data.split("##");
-            $("#province").val(details[0]);
-            $("#district").val(details[1]);
+            $("#province").html(details[0]);
+            $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
             if(details[0]!=''){
               $("#province").prop('readonly',true);
@@ -359,8 +428,37 @@ $aResult=$db->query($aQuery);
             }
 	  }
       });
-    }else{
-      
+    }
+    }
+    if(obj.id=='province'){
+      var pName = $("#province").val();
+      var cName = $("#clinicName").val();
+    if(pName!='' && cName==''){
+      $.post("getFacilityForClinic.php", { pName : pName},
+      function(data){
+	  if(data != ""){
+            details = data.split("##");
+            $("#clinicName").html(details[0]);
+            $("#district").html(details[1]);
+            $("#clinicianName").val(details[2]);
+            if(details[0]!=''){
+              $("#clinicName").prop('readonly',true);
+            }else{
+              $("#clinicName").prop('readonly',false);
+            }
+            if(details[1]!=''){
+              $("#district").prop('readonly',true);
+            }else{
+              $("#district").prop('readonly',false);
+            }
+            if(details[2]!=''){
+              $("#clinicianName").prop('readonly',true);
+            }else{
+              $("#clinicianName").prop('readonly',false);
+            }
+	  }
+      });
+    }
     }
   }
   $(document).ready(function() {
@@ -375,6 +473,23 @@ $aResult=$db->query($aQuery);
    });
    
    $('.date').mask('99-aaa-9999');
+   $('#sampleCollectionDate').mask('99-aaa-9999 99:99');
+   
+   $('#sampleCollectionDate').datetimepicker({
+     changeMonth: true,
+     changeYear: true,
+     dateFormat: 'dd-M-yy',
+     timeFormat: "HH:mm",
+     onChangeMonthYear: function(year, month, widget) {
+           setTimeout(function() {
+              $('.ui-datepicker-calendar').show();
+           });
+   	},
+     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+   	$('.ui-datepicker-calendar').show();
+   });
+   
   });
   $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'male'){
@@ -383,6 +498,17 @@ $aResult=$db->query($aQuery);
         $(".femaleElements").show();
       }
     });
+  function checkValue()
+  {
+    var artRegimen = $("#artRegimen").val();
+    if(artRegimen=='other'){
+      $(".newArtRegimen").show();
+      $("#newArtRegimen").addClass("isRequired");
+    }else{
+      $(".newArtRegimen").hide();
+      $("#newArtRegimen").removeClass("isRequired");
+    }
+  }
 </script>
   
  <?php

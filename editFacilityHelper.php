@@ -5,9 +5,22 @@ include('./includes/MysqliDb.php');
 //include('header.php');
 $tableName="facility_details";
 $facilityId=base64_decode($_POST['facilityId']);
-
+$tableName1="province_details";
 try {
     if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){
+        if(trim($_POST['state'])!=""){
+            $strSearch = $_POST['state'];
+            $facilityQuery="SELECT * from province_details where province_name='".$strSearch."'";
+            $facilityInfo=$db->query($facilityQuery);
+            if($facilityInfo){
+                $_POST['state'] = $facilityInfo[0]['province_id'];
+            }else{
+            $data=array(
+              'province_name'=>$_POST['state'],
+            );
+            $_POST['state']=$db->insert($tableName1,$data);
+            }
+        }
         $data=array(
         'facility_name'=>$_POST['facilityName'],
         'facility_code'=>$_POST['facilityCode'],
