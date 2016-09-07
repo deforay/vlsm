@@ -362,7 +362,7 @@ $pdResult=$db->query($pdQuery);
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="2"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save and Next</a>
-                <a href="users.php" class="btn btn-default"> Cancel</a>
+                <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>
