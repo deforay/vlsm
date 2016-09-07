@@ -143,7 +143,7 @@ $configResult=$db->query($globalConfigQuery);
         ?>
       <div class="user-panel">
         <div class="pull-left ">
-          <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>"  alt="Logo Image" width="150" style="margin-left:22px;">
+          <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>"  alt="Logo Image" width="120" style="margin-left:32px;">
         </div>
         
       </div>
