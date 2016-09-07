@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
 ?>

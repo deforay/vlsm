@@ -1,6 +1,6 @@
 <?php
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 $sQuery="SELECT * FROM r_sample_type";

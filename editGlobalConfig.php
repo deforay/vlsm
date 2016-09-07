@@ -1,8 +1,10 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 define('UPLOAD_PATH','uploads');
+$formQuery ="SELECT * from form_details";
+$formResult=$db->query($formQuery);
 $globalConfigQuery ="SELECT * from global_config";
 $configResult=$db->query($globalConfigQuery);
 $arr = array();
@@ -36,30 +38,30 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
             <form class="form-horizontal" method='post' name='editGlobalConfigForm' id='editGlobalConfigForm' enctype="multipart/form-data" autocomplete="off" action="globalConfigHelper.php">
               <div class="box-body">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-7">
                     <div class="form-group">
-                      <label for="max_no_of_samples_in_a_batch" class="col-lg-3 control-label">Maximum No. of Samples In a Batch </label>
-                      <div class="col-lg-9">
+                      <label for="max_no_of_samples_in_a_batch" class="col-lg-4 control-label">Maximum No. of Samples In a Batch </label>
+                      <div class="col-lg-8">
                         <input type="text" class="form-control isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
                       </div>
                     </div>
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-7">
                     <div class="form-group">
-                      <label for="header" class="col-lg-3 control-label">Header </label>
-                      <div class="col-lg-9">
+                      <label for="header" class="col-lg-4 control-label">Header </label>
+                      <div class="col-lg-8">
                         <textarea class="form-control" id="header" name="header" placeholder="Header" title="Please enter header" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['header']; ?></textarea>
                       </div>
                     </div>
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-7">
                     <div class="form-group">
-                      <label for="header" class="col-lg-3 control-label">Do You Want to Show Smiley at Result PDF? </label>
-                      <div class="col-lg-9">
+                      <label for="header" class="col-lg-4 control-label">Do You Want to Show Smiley at Result PDF? </label>
+                      <div class="col-lg-8">
                         <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>Yes&nbsp;&nbsp;
                         <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>No
                       </div>
@@ -67,16 +69,16 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-7">
                     <div class="form-group">
-                      <label for="" class="col-lg-3 control-label">Logo Image </label>
-                      <div class="col-lg-9">
+                      <label for="" class="col-lg-4 control-label">Logo Image </label>
+                      <div class="col-lg-8">
                        <div class="fileinput fileinput-new" data-provides="fileinput">
                         <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
                           <?php
                           if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
                           ?>
-                           <img src="/uploads/logo/<?php echo $arr['logo']; ?>" alt="Logo image">
+                           <img src="./uploads/logo/<?php echo $arr['logo']; ?>" alt="Logo image">
                           <?php } else { ?>
                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
                           <?php } ?>
@@ -101,16 +103,36 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-7">
                     <div class="form-group">
-                      <label for="header" class="col-lg-3 control-label">Date For Patient ART NO. </label>
-                      <div class="col-lg-9">
+                      <label for="header" class="col-lg-4 control-label">Date For Patient ART NO. </label>
+                      <div class="col-lg-8">
                         <input type="radio" class="" id="show_full_date_yes" name="show_date" value="yes" <?php echo($arr['show_date'] == 'yes')?'checked':''; ?>>Full Date&nbsp;&nbsp;
                         <input type="radio" class="" id="show_full_date_no" name="show_date" value="no" <?php echo($arr['show_date'] == 'no' || $arr['show_date'] == '')?'checked':''; ?>>Month and Year
                       </div>
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="header" class="col-lg-4 control-label">Viral Load Form <span class="mandatory">*</span> </label>
+                      <div class="col-lg-8">
+                        <select class="form-control isRequired" name="vl_form" id="vl_form" title="Please select the viral load form">
+                            <option value="">--Select--</option>
+                            <?php
+                            foreach($formResult as $val){
+                            ?>
+                            <option value="<?php echo $val['form_id']; ?>" <?php echo ($val['form_id']==$arr['vl_form'])?"selected='selected'":""?>><?php echo $val['form_name']; ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">

@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-include('./includes/MysqliDb.php');
+//include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $facilityQuery="SELECT * from facility_details where facility_id=$id";
 $facilityInfo=$db->query($facilityQuery);

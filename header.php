@@ -1,10 +1,10 @@
 <?php
 session_start();
+include('./includes/MysqliDb.php');
 date_default_timezone_set("Europe/London"); 
 if(!isset($_SESSION['userId'])){
     header("location:login.php");
 }
-
 
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/',$link);
@@ -13,6 +13,10 @@ if(end($link_array)!='error.php'){
     header("location:error.php");
   }
 }
+
+$globalConfigQuery ="SELECT * from global_config where name='logo'";
+$configResult=$db->query($globalConfigQuery);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -133,6 +137,17 @@ if(end($link_array)!='error.php'){
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
       <!-- sidebar menu: : style can be found in sidebar.less -->
+      <!-- Sidebar user panel -->
+      <?php
+        if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
+        ?>
+      <div class="user-panel">
+        <div class="pull-left ">
+          <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>"  alt="Logo Image" width="150" style="margin-left:22px;">
+        </div>
+        
+      </div>
+      <?php } ?>
       <ul class="sidebar-menu">
 	<?php
 	if($dashBoardMenuAccess == true){ ?>
