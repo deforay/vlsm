@@ -12,7 +12,17 @@ $sQuery="SELECT * from r_sample_type where form_identification='2'";
 $sResult=$db->query($sQuery);
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
-?>
+$province = '';
+$province.="<option value=''>--select--</option>";
+            foreach($pdResult as $provinceName){
+              $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+            }
+            $facility = '';
+            $facility.="<option value=''>--select--</option>";
+            foreach($fResult as $fDetails){
+              $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+            }
+            ?>
 <style>
   .ui_tpicker_second_label {
        display: none !important;
@@ -72,14 +82,7 @@ $pdResult=$db->query($pdQuery);
                         <div class="form-group">
                         <label for="province">Province</label>
                           <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
-                            <option value="">--select--</option>
-                            <?php
-                            foreach($pdResult as $province){
-                              ?>
-                              <option value="<?php echo $province['province_id'];?>"><?php echo ucwords($province['province_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                            <?php echo $province;?>
                           </select>
                         </div>
                       </div>
@@ -108,15 +111,9 @@ $pdResult=$db->query($pdQuery);
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="clinicName">Clinic Name </label>
-                      <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityDetails(this)">
+                      <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
 		      <option value="">-- Select --</option>
-			<?php
-			foreach($fResult as $name){
-			 ?>
-			 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']);?></option>
-			 <?php
-			}
-			?>
+			<?php echo $facility; ?>
 		      </select>
                     </div>
                   </div>
@@ -378,7 +375,8 @@ $pdResult=$db->query($pdQuery);
   
   
   <script type="text/javascript">
-
+provinceName = true;
+facilityName = true;
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
@@ -399,41 +397,12 @@ $pdResult=$db->query($pdQuery);
   }
   function getfacilityDetails(obj)
   {
-    //check facility name
-    if(obj.id=='clinicName'){
       var cName = $("#clinicName").val();
       var pName = $("#province").val();
-    if(cName!='' && pName==''){
-      $.post("getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("##");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-            if(details[0]!=''){
-              $("#province").prop('readonly',true);
-            }else{
-              $("#province").prop('readonly',false);
-            }
-            if(details[1]!=''){
-              $("#district").prop('readonly',true);
-            }else{
-              $("#district").prop('readonly',false);
-            }
-            if(details[2]!=''){
-              $("#clinicianName").prop('readonly',true);
-            }else{
-              $("#clinicianName").prop('readonly',false);
-            }
-	  }
-      });
-    }
-    }
-    if(obj.id=='province'){
-      var pName = $("#province").val();
-      var cName = $("#clinicName").val();
-    if(pName!='' && cName==''){
+      if(pName!='' && provinceName && facilityName){
+        facilityName = false;
+      }
+    if(pName!='' && provinceName){
       $.post("getFacilityForClinic.php", { pName : pName},
       function(data){
 	  if(data != ""){
@@ -441,24 +410,41 @@ $pdResult=$db->query($pdQuery);
             $("#clinicName").html(details[0]);
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
-            if(details[0]!=''){
-              $("#clinicName").prop('readonly',true);
-            }else{
-              $("#clinicName").prop('readonly',false);
-            }
-            if(details[1]!=''){
-              $("#district").prop('readonly',true);
-            }else{
-              $("#district").prop('readonly',false);
-            }
-            if(details[2]!=''){
-              $("#clinicianName").prop('readonly',true);
-            }else{
-              $("#clinicianName").prop('readonly',false);
-            }
+	  }
+          pNameVal = pName.split("##");
+          sCode = '<?php echo date('ymdd');?>';
+          $("#sampleCode").val(pNameVal[1]+sCode);
+      });
+    }else if(pName=='' && cName==''){
+      provinceName = true;
+      facilityName = true;
+      $("#province").html("<?php echo $province;?>");
+      $("#clinicName").html("<?php echo $facility;?>");
+    }
+  }
+  function getfacilityProvinceDetails(obj)
+  {
+     //check facility name
+      var cName = $("#clinicName").val();
+      var pName = $("#province").val();
+      if(cName!='' && provinceName && facilityName){
+        provinceName = false;
+      }
+    if(cName!='' && facilityName){
+      $.post("getFacilityForClinic.php", { cName : cName},
+      function(data){
+	  if(data != ""){
+            details = data.split("##");
+            $("#province").html(details[0]);
+            $("#district").html(details[1]);
+            $("#clinicianName").val(details[2]);
 	  }
       });
-    }
+    }else if(pName=='' && cName==''){
+      provinceName = true;
+      facilityName = true;
+      $("#province").html("<?php echo $province;?>");
+      $("#clinicName").html("<?php echo $facility;?>");
     }
   }
   $(document).ready(function() {
