@@ -51,7 +51,7 @@ $configResult=$db->query($globalConfigQuery);
         if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
         ?>
         <div style="margin-top:15px;float:left;">
-            <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" width="150">
+            <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" style="max-width:120px;">
         </div>
         <?php } ?>
         <div id="loginbox" style="margin-top:15px;margin-bottom:70px;float:right;margin-right:-15px;" class="mainbox col-md-3 col-sm-8 ">
