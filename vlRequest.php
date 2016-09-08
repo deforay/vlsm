@@ -108,9 +108,17 @@ $fResult = $db->rawQuery($fQuery);
 			    </div>
 			</span>
             <div class="box-header with-border">
-	      <?php if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
+			  <?php if(isset($formConfigResult[0]['value']) && $formConfigResult[0]['value']==2){ 
+			  if(isset($_SESSION['privileges']) && in_array("addVlRequestZm.php", $_SESSION['privileges'])){
+			  ?>
+              <a href="addVlRequestZm.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
+			  <?php } ?>
+			  <?php }else{ 
+			  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
               <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
-	      <?php } ?>
+			  <?php } 
+			  } ?>
+	      
             </div>
             <!-- /.box-header -->
             <div class="box-body">

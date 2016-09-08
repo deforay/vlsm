@@ -17,6 +17,9 @@ if(end($link_array)!='error.php'){
 $globalConfigQuery ="SELECT * from global_config where name='logo'";
 $configResult=$db->query($globalConfigQuery);
 
+$formConfigQuery ="SELECT * from global_config where name='vl_form'";
+$formConfigResult=$db->query($formConfigQuery);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -142,8 +145,8 @@ $configResult=$db->query($globalConfigQuery);
         if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
         ?>
       <div class="user-panel">
-        <div class="pull-left ">
-          <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>"  alt="Logo Image" width="120" style="margin-left:32px;">
+        <div align="center">
+          <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>"  alt="Logo Image" style="max-width:120px;" >
         </div>
         
       </div>
@@ -197,8 +200,15 @@ $configResult=$db->query($globalConfigQuery);
 		<?php
 		 if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){
+            
+            if(isset($formConfigResult[0]['value']) && $formConfigResult[0]['value']==2){
+            ?>
+                <li class="allMenu addVlRequestMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+            <?php }else{ ?>
+                <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+            <?php } ?>
+                  
 		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
 		<?php } ?>
