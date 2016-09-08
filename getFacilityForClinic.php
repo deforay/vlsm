@@ -3,7 +3,7 @@ ob_start();
 include('./includes/MysqliDb.php');
 if(isset($_POST['cName'])){
 $id=$_POST['cName'];
-$facilityQuery="SELECT * from facility_details where facility_id=$id";
+echo $facilityQuery="SELECT * from facility_details where facility_id=$id";die;
 $facilityInfo=$db->query($facilityQuery);
 if($facilityInfo){
     $provinceName = $facilityInfo[0]['state'];
@@ -12,7 +12,7 @@ if($facilityInfo){
     $state = '';
     if($facilityInfo[0]['state']!=''){
         $state.="<option value=''>--select--</option>";
-            $state .= "<option value='".$facilityInfo[0]['state']."##".$pdResult[0]['province_code']."'>".ucwords($facilityInfo[0]['state'])."</option>";
+            $state .= "<option value='".$facilityInfo[0]['state']."'>".ucwords($facilityInfo[0]['state'])."</option>";
     }else{
         $state.="<option value=''>--select--</option>";
     }

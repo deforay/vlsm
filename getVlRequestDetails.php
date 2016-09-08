@@ -177,7 +177,7 @@ $primaryKey="treament_id";
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-       //die($sQuery);
+       die($sQuery);
       // echo $sQuery;
         $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         $rResult = $db->rawQuery($sQuery);
