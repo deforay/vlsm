@@ -3,16 +3,16 @@ ob_start();
 include('./includes/MysqliDb.php');
 if(isset($_POST['cName'])){
 $id=$_POST['cName'];
-echo $facilityQuery="SELECT * from facility_details where facility_id=$id";die;
+$facilityQuery="SELECT * from facility_details where facility_id=$id";
 $facilityInfo=$db->query($facilityQuery);
 if($facilityInfo){
     $provinceName = $facilityInfo[0]['state'];
-    $pdQuery="SELECT * from province_details where state='".$provinceName."'";
+    $pdQuery="SELECT * from province_details where province_name='".$provinceName."'";
     $pdResult=$db->query($pdQuery);
     $state = '';
     if($facilityInfo[0]['state']!=''){
         $state.="<option value=''>--select--</option>";
-            $state .= "<option value='".$facilityInfo[0]['state']."'>".ucwords($facilityInfo[0]['state'])."</option>";
+            $state .= "<option value='".$facilityInfo[0]['state']."##".$pdResult[0]['province_code']."'>".ucwords($facilityInfo[0]['state'])."</option>";
     }else{
         $state.="<option value=''>--select--</option>";
     }
@@ -30,12 +30,12 @@ if($facilityInfo){
     }else{
         $district.="<option value=''>--select--</option>";
     }
-    echo $state."##".$district."##".$facilityInfo[0]['contact_person'];
+    echo $state."###".$district."###".$facilityInfo[0]['contact_person'];
 }
 }
 if(isset($_POST['pName'])){
-   $provinceName=$_POST['pName'];
-    $facilityQuery="SELECT * from facility_details where state='".$provinceName."'";
+   $provinceName=explode("##",$_POST['pName']);
+    $facilityQuery="SELECT * from facility_details where state='".$provinceName[0]."'";
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
@@ -57,7 +57,7 @@ if(isset($_POST['pName'])){
     }else{
         $district.="<option value=''>--select--</option>";
     }
-    echo $facility."##".$district."##".'';
+    echo $facility."###".$district."###".'';
 }
 
 ?>
