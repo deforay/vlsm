@@ -7,14 +7,8 @@ $facilityQuery="SELECT * from facility_details where facility_id=$id";
 $facilityInfo=$db->query($facilityQuery);
 $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
-$provinceid = $facilityInfo[0]['state'];
-$pQuery="SELECT * FROM province_details where province_id='".$provinceid."'";
+$pQuery="SELECT * FROM province_details";
 $pResult = $db->rawQuery($pQuery);
-if($pResult){
-  $pResult[0]['province_name'] = $pResult[0]['province_name'];
-}else{
-  $pResult[0]['province_name'] = '';
-}
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -119,7 +113,16 @@ if($pResult){
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State/Province <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="state" name="state" placeholder="State" value="<?php echo $pResult[0]['province_name']; ?>" />
+                        <select name="state" id="state" class="form-control isRequired" title="Please choose state/province">
+                          <option value="">--Select--</option>
+                          <?php
+                          foreach($pResult as $province){
+                            ?>
+                            <option value="<?php echo $province['province_name'];?>"<?php echo ($facilityInfo[0]['state']==$province['province_name'])?"selected='selected'":""?>><?php echo $province['province_name'];?></option>
+                            <?php
+                          }
+                          ?>
+                        </select>
                         </div>
                     </div>
                   </div>
