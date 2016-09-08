@@ -4,6 +4,8 @@ include('header.php');
 //include('./includes/MysqliDb.php');
 $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
+$pQuery="SELECT * FROM province_details";
+$pResult = $db->rawQuery($pQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -73,8 +75,6 @@ $fResult = $db->rawQuery($fQuery);
                         </div>
                     </div>
                   </div>
-                    
-                   
                 </div>
                 
                 <div class="row">
@@ -109,7 +109,16 @@ $fResult = $db->rawQuery($fQuery);
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State/Province <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="state" name="state" placeholder="State" />
+                        <select name="state" id="state" class="form-control isRequired" title="Please choose state/province">
+                          <option value="">--Select--</option>
+                          <?php
+                          foreach($pResult as $province){
+                            ?>
+                            <option value="<?php echo $province['province_name'];?>"><?php echo $province['province_name'];?></option>
+                            <?php
+                          }
+                          ?>
+                        </select>
                         </div>
                     </div>
                   </div>
