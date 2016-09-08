@@ -15,14 +15,22 @@ $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''>--select--</option>";
             foreach($pdResult as $provinceName){
-              $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+              $province .= "<option value='".$provinceName['province_name']."'>".ucwords($provinceName['province_name'])."</option>";
             }
             $facility = '';
             $facility.="<option value=''>--select--</option>";
             foreach($fResult as $fDetails){
               $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
             }
-            ?>
+//sample code
+//$start_date = date('Y-m-01');
+//$end_date = date('Y-m-31');
+//$svlQuery='select * FROM vl_request_form as vl where vl.form_id="2" AND DATE(vl.created_on) >= "'.$start_date.'" AND DATE(vl.created_on) <= "'.$end_date.'"order by vl.treament_id desc limit 0,1';
+//$svlResult=$db->query($svlQuery);
+//if($svlResult){
+//  
+//}
+?>
 <style>
   .ui_tpicker_second_label {
        display: none !important;
@@ -411,9 +419,9 @@ facilityName = true;
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
 	  }
-          pNameVal = pName.split("##");
-          sCode = '<?php echo date('ymdd');?>';
-          $("#sampleCode").val(pNameVal[1]+sCode);
+          //pNameVal = pName.split("##");
+          //sCode = '<?php echo date('ymdd');?>';
+          //$("#sampleCode").val(pNameVal[1]+sCode);
       });
     }else if(pName=='' && cName==''){
       provinceName = true;
