@@ -13,12 +13,11 @@ try {
             $facilityQuery="SELECT * from province_details where province_name='".$strSearch."'";
             $facilityInfo=$db->query($facilityQuery);
             if($facilityInfo){
-                $_POST['state'] = $facilityInfo[0]['province_id'];
             }else{
             $data=array(
               'province_name'=>$_POST['state'],
             );
-            $_POST['state']=$db->insert($tableName1,$data);
+            $result=$db->insert($tableName1,$data);
             }
         }
         $data=array(

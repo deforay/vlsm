@@ -64,7 +64,6 @@ try {
           'urgency'=>$_POST['urgency'],
           'sample_code_format'=>$_POST['sampleCodeFormat'],
           'sample_code_key'=>$_POST['sampleCodeKey'],
-          'form_id'=>'2',
           'serial_no'=>$_POST['serialNo'],
           'facility_id'=>$_POST['clinicName'],
           'sample_code'=>$_POST['sampleCode'],
@@ -98,20 +97,12 @@ try {
           'comments'=>$_POST['labCommnets'],
           'date_sample_received_at_testing_lab'=>$_POST['dateOfReceivedStamp'],
           'rejection'=>$_POST['noResult'],
-          'result_reviewed_by'=>$_SESSION['userId'],
-          'status'=>'6',
-          'created_by'=>$_SESSION['userId'],
-          'created_on'=>$general->getDateTime()
         );
      
-          $id=$db->insert($tableName,$vldata);
-          $_SESSION['alertMsg']="VL request added successfully";
-    
-    if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
-      header("location:addVlRequestZm.php");
-    }else{
-      header("location:vlRequest.php"); 
-    }
+          $db=$db->where('treament_id',$_POST['treamentId']);
+          $db->update($tableName,$vldata);
+          $_SESSION['alertMsg']="VL request updated successfully";
+          header("location:vlRequest.php"); 
     
   
 } catch (Exception $exc) {
