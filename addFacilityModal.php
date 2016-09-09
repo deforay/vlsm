@@ -27,6 +27,8 @@ if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_P
 }
 $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
+$pQuery="SELECT * FROM province_details";
+$pResult = $db->rawQuery($pQuery);
 ?>
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
   <!-- Bootstrap 3.3.6 -->
@@ -149,7 +151,16 @@ $fResult = $db->rawQuery($fQuery);
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State/Province</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="state" name="state" placeholder="State" />
+			<select name="state" id="state" class="form-control isRequired" title="Please choose state/province">
+                          <option value="">--Select--</option>
+                          <?php
+                          foreach($pResult as $province){
+                            ?>
+                            <option value="<?php echo $province['province_name'];?>"><?php echo $province['province_name'];?></option>
+                            <?php
+                          }
+                          ?>
+                        </select>
                         </div>
                     </div>
                   </div>

@@ -454,6 +454,7 @@ facilityName = true;
     });
     $("#saveNext").val('save');
     if(flag){
+      $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }
   }
@@ -463,6 +464,7 @@ facilityName = true;
     });
     $("#saveNext").val('next');
     if(flag){
+    $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }
   }
