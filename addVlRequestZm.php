@@ -59,7 +59,7 @@ $svlResult=$db->query($svlQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>VIRAL LOAD LABORATORY REQUEST FORM</h1>
+      <h1>VIRAL LOAD LABORATORY REQUEST FORM (ZIMBABWE)</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Add Vl Request</li>
@@ -157,24 +157,22 @@ $svlResult=$db->query($svlQuery);
                         <td style="width:20%">
                           <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" >
                         </td>
-                      </tr>
-                      <tr>
-                        <td style="width:18%">
+                        <td style="width:16%">
                         <label for="patientFname">Patient First Name  </label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control  " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" >
                         </td>
-                        <td style="width:16%">
+                        <td style="width:10%">
                         <label for="surName">Surname </label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" >
                         </td>
-                        <td style="width:10%">
-                          <label for="gender">Gender </label>
-                        </td>
-                        <td style="width:18%">
+                      </tr>
+                      <tr>
+                        <td colspan="2">
+                          <label for="gender">Gender &nbsp;&nbsp;</label>
                            <label class="radio-inline">
                             <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
                             </label>
@@ -185,8 +183,6 @@ $svlResult=$db->query($svlQuery);
                             <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"> Not Recorded
                           </label>
                         </td>
-                      </tr>
-                      <tr>
                         <td><label>Date Of Birth</label></td>
                         <td>
                           <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" >
@@ -194,16 +190,17 @@ $svlResult=$db->query($svlQuery);
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
                           <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter DOB" style="width:100%;" >
-                          
                         </td>
+                      </tr>
+                      <tr>
+                        
+                        
                         <td><label for="ageInMonths">Age in months</label></td>
                         <td>
                           <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" >
                         </td>
-                      </tr>
-                      <tr class="femaleElements">
-                        <td><label for="patientPregnant">Is Patient Pregnant ?</label></td>
-                        <td>
+                        <td class="femaleElements"><label for="patientPregnant">Is Patient Pregnant ?</label></td>
+                        <td class="femaleElements">
                           <label class="radio-inline">
                            <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" > Yes
                           </label>
@@ -211,16 +208,18 @@ $svlResult=$db->query($svlQuery);
                            <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" > No
                           </label>
                         </td>
-                        <td colspan="4"><label for="breastfeeding">Is Patient Breastfeeding?</label>
+                        
+                         <td colspan="2" class="femaleElements"><label for="breastfeeding">Is Patient Breastfeeding?</label>
                         
                           <label class="radio-inline">
-                             <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> Yes
-                       </label>
-                       <label class="radio-inline">
-                               <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);"> No
-                       </label>
+                             <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);">Yes
+                          </label>
+                          <label class="radio-inline">
+                            <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding" onclick="checkPatientIsBreastfeeding(this.value);">No
+                          </label>
                         </td>
                       </tr>
+                      
                       <tr>
                         <td><label for="patientArtNo">Patient OI/ART Number</label></td>
                         <td>
@@ -230,8 +229,6 @@ $svlResult=$db->query($svlQuery);
                         <td>
                           <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiation" title="Date Of ART Initiation" style="width:100%;" >
                         </td>
-                      </tr>
-                      <tr>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
                             <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();">
@@ -246,6 +243,12 @@ $svlResult=$db->query($svlQuery);
                          <option value="other">Other</option>
                         </select>
                         </td>
+                      </tr>
+                      <tr>
+                        <td class="newArtRegimen" style="display: none;"><label for="newArtRegimen">New ART Regimen</label><span class="mandatory">*</span></td>
+                        <td class="newArtRegimen" style="display: none;">
+                          <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
+                        </td>
                         <td><label>Patient consent to SMS Notification</label></td>
                         <td>
                           <label class="radio-inline">
@@ -258,12 +261,7 @@ $svlResult=$db->query($svlQuery);
                         <td><label for="patientPhoneNumber">Mobile Number</label></td>
                         <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
                       </tr>
-                      <tr class="newArtRegimen" style="display: none;">
-                        <td><label for="newArtRegimen">New ART Regimen</label><span class="mandatory">*</span></td>
-                        <td>
-                          <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
-                        </td>
-                      </tr>
+                      
                       <tr>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
                         <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" /></td>
