@@ -42,6 +42,7 @@ $sDate ='';
 $cBy ='';
 $urgency ='';
 $clinicianName = '';
+$sCodeValue = '';
 if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
@@ -55,11 +56,17 @@ $stateResult=$db->query($stateQuery);
 $districtQuery="SELECT * from facility_details where state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
 
-$vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.lab_contact_person from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
+$vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
 $vlResult=$db->query($vlQuery);
 $urgency = $vlResult[0]['urgency'];
 $cBy = $vlResult[0]['collected_by'];
 $clinicianName = $vlResult[0]['lab_contact_person'];
+
+$sKey = $vlResult[0]['sample_code_key']+1;
+$sKey = "00".$sKey;
+$sFormat = $vlResult[0]['sample_code_format'];
+$sCodeValue = $vlResult[0]['sample_code_format'].$sKey; 
+
 if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
  $vlResult[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -68,6 +75,7 @@ if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_co
 }
 $sDate = $vlResult[0]['sample_collection_date'];
 }
+
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -119,7 +127,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Serial No</label>
-                          <input type="text" class="form-control" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" />
+                          <input type="text" class="form-control serialNo" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" />
                         </div>
                       </div>
                     </div>
@@ -205,7 +213,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <label for="sampleCode">Sample Code  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" >
+                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $sCodeValue;?>">
                         </td>
                         <td style="width:16%">
                         <label for="patientFname">Patient First Name  </label>
@@ -302,10 +310,10 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <td><label>Patient consent to SMS Notification</label></td>
                         <td>
                           <label class="radio-inline">
-                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS"> Yes
+                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> Yes
                           </label>
                           <label class="radio-inline">
-                                  <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS"> No
+                                  <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> No
                           </label>
                         </td>
                         <td><label for="patientPhoneNumber">Mobile Number</label></td>
@@ -407,7 +415,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                       </tr>
                       <tr>
                         <td><label for="serialNo">Serial No.</label></td>
-                        <td><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" /></td>
                       </tr>
                     </table>
                   </div>
@@ -418,8 +426,8 @@ $sDate = $vlResult[0]['sample_collection_date'];
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="2"/>
-                <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat"/>
-                <input type="hidden" name="sampleCodeKey" id="sampleCodeKey"/>
+                <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
+                <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                 
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
@@ -543,12 +551,14 @@ facilityName = true;
      }).click(function(){
    	$('.ui-datepicker-calendar').show();
    });
-   
+  
   });
   $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'male'){
          $(".femaleElements").hide();
       }else if($(this).val() == 'female'){
+        $(".femaleElements").show();
+      }else if($(this).val() == 'not_recorded'){
         $(".femaleElements").show();
       }
     });
@@ -563,6 +573,22 @@ facilityName = true;
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
+  function checkPatientReceivesms(val)
+  {
+   if(val=='yes'){
+    $('#patientPhoneNumber').addClass('isRequired');
+   }else{
+     $('#patientPhoneNumber').removeClass('isRequired');
+   }
+  }
+   $(".serialNo").keyup(function(){
+    $(".serialNo1").val($(".serialNo").val());
+  });
+  $(".serialNo1").keyup(function(){
+    $(".serialNo").val($(".serialNo1").val());
+  });
+  
+  
 </script>
   
  <?php

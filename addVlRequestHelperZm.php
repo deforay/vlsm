@@ -103,7 +103,6 @@ try {
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime()
         );
-     
           $id=$db->insert($tableName,$vldata);
           $_SESSION['alertMsg']="VL request added successfully";
     
