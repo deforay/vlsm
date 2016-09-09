@@ -87,7 +87,7 @@ include('header.php');
   });
    
   $(document).ready(function() {
-	
+	$.blockUI();
         oTable = $('#userDataTable').dataTable({	
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
@@ -122,7 +122,7 @@ include('header.php');
               });
             }
         });
-       
+       $.unblockUI();
 	} );
   
 </script>

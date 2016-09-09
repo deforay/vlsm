@@ -51,6 +51,7 @@ include('header.php');
   <script type="text/javascript">
   var oTable = null;  
   $(document).ready(function() {
+    $.blockUI();
      oTable = $('#globalConfigDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
@@ -79,6 +80,7 @@ include('header.php');
               });
             }
         });
+     $.unblockUI();
   } );
 </script>
  <?php

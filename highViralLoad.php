@@ -207,6 +207,7 @@ $fResult = $db->rawQuery($fQuery);
     }
   
   function loadVlRequestData(){
+    $.blockUI();
      oTable = $('#vlRequestDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
@@ -251,10 +252,13 @@ $fResult = $db->rawQuery($fQuery);
               });
             }
         });
+     $.unblockUI();
   }
   
   function searchVlRequestData(){
+    $.blockUI();
     oTable.fnDraw();
+    $.unblockUI();
   }
   
   function updateStatus(id,value){

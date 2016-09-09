@@ -116,12 +116,14 @@ $fResult = $db->rawQuery($fQuery);
   });
   function searchResultData()
   {
+    $.blockUI();
     $.post("getMissingResult.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),batchCode:$("#batchCode").val(),facilityName:$("#facilityName").val(),sampleType:$("#sampleType").val()},
       function(data){
 	  if(data!=''){
 	    $("#pieChartDiv").html(data);
 	  }
       });
+    $.unblockUI();
   }
 </script>
  <?php

@@ -949,6 +949,7 @@ $configQuery="SELECT * from global_config";
     });
     $("#saveNext").val('save');
     if(flag){
+     $.blockUI();
       document.getElementById('addVlRequestForm').submit();
     }
   }
@@ -958,6 +959,7 @@ $configQuery="SELECT * from global_config";
     });
     $("#saveNext").val('next');
     if(flag){
+     $.blockUI();
       document.getElementById('addVlRequestForm').submit();
     }
   }

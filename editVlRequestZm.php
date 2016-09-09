@@ -443,6 +443,7 @@ facilityName = true;
         formId: 'vlRequestForm'
     });
     if(flag){
+      $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }
   }

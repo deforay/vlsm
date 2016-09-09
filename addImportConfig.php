@@ -73,6 +73,7 @@ include('header.php');
     });
     
     if(flag){
+      $.blockUI();
       document.getElementById('addImportConfigForm').submit();
     }
   }

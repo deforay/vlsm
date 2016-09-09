@@ -127,6 +127,7 @@ if($id <=0 || !isset($rResult) || count($rResult) ==0){
   
   function sendReport()
   {
+    $.blockUI();
     $.post("vlRequestExportInExcel.php",{pass:$("#password").val(),encValue:$("#encValue").val(),batchId:$("#batchId").val()},
     function(data){
         if(data!=''){
@@ -136,6 +137,7 @@ if($id <=0 || !isset($rResult) || count($rResult) ==0){
           alert("Something went wrong!.")
         }
     });
+    $.unblockUI();
   }
   function showPassword(obj)
   {

@@ -79,6 +79,7 @@ for ($i = 0; $i < sizeof($otherConfigResult); $i++) {
     });
     
     if(flag){
+        $.blockUI();
       document.getElementById('editOtherConfigForm').submit();
     }
   }

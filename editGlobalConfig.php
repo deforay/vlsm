@@ -159,6 +159,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
     });
     
     if(flag){
+        $.blockUI();
       document.getElementById('editGlobalConfigForm').submit();
     }
   }

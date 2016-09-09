@@ -188,6 +188,7 @@ $pResult = $db->rawQuery($pQuery);
     });
     
     if(flag){
+      $.blockUI();
       document.getElementById('addFacilityForm').submit();
     }
   }
