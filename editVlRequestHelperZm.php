@@ -62,8 +62,6 @@ try {
      
      $vldata=array(
           'urgency'=>$_POST['urgency'],
-          'sample_code_format'=>$_POST['sampleCodeFormat'],
-          'sample_code_key'=>$_POST['sampleCodeKey'],
           'serial_no'=>$_POST['serialNo'],
           'facility_id'=>$_POST['clinicName'],
           'sample_code'=>$_POST['sampleCode'],
