@@ -123,7 +123,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Serial No</label>
-                          <input type="text" class="form-control" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
+                          <input type="text" class="form-control serialNo" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
                         </div>
                       </div>
                     </div>
@@ -299,10 +299,10 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label>Patient consent to SMS Notification</label></td>
                         <td>
                           <label class="radio-inline">
-                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" <?php echo ($vlQueryInfo[0]['patient_receive_sms']=='yes')?"checked='checked'":""?>> Yes
+                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" <?php echo ($vlQueryInfo[0]['patient_receive_sms']=='yes')?"checked='checked'":""?> onclick="checkPatientReceivesms(this.value);"> Yes
                           </label>
                           <label class="radio-inline">
-                                  <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" <?php echo ($vlQueryInfo[0]['patient_receive_sms']=='no')?"checked='checked'":""?>> No
+                                  <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" <?php echo ($vlQueryInfo[0]['patient_receive_sms']=='no')?"checked='checked'":""?> onclick="checkPatientReceivesms(this.value);"> No
                           </label>
                         </td>
                         <td><label for="patientPhoneNumber">Mobile Number</label></td>
@@ -409,7 +409,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       </tr>
                       <tr>
                         <td><label for="serialNo">Serial No.</label></td>
-                        <td><input type="text" class="form-control" id="serialNo" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
+                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
                       </tr>
                     </table>
                   </div>
@@ -534,6 +534,8 @@ facilityName = true;
          $(".femaleElements").hide();
       }else if($(this).val() == 'female'){
         $(".femaleElements").show();
+      }else if($(this).val() == 'not_recorded'){
+        $(".femaleElements").show();
       }
     });
   function checkValue()
@@ -547,6 +549,20 @@ facilityName = true;
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
+  function checkPatientReceivesms(val)
+  {
+   if(val=='yes'){
+    $('#patientPhoneNumber').addClass('isRequired');
+   }else{
+     $('#patientPhoneNumber').removeClass('isRequired');
+   }
+  }
+   $(".serialNo").keyup(function(){
+    $(".serialNo1").val($(".serialNo").val());
+  });
+  $(".serialNo1").keyup(function(){
+    $(".serialNo").val($(".serialNo1").val());
+  });
 </script>
   
  <?php
