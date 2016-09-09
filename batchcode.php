@@ -75,6 +75,7 @@ include('header.php');
   <script>
   var oTable = null;
   $(document).ready(function() {
+    $.blockUI();
         oTable = $('#batchCodeDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
@@ -107,6 +108,7 @@ include('header.php');
               });
             }
         });
+	$.unblockUI();
   } );
   
   function generateBarcode(bId){

@@ -145,6 +145,7 @@ if($priInfo){
     });
     
     if(flag){
+      $.blockUI();
       document.getElementById('roleEditForm').submit();
     }
   }

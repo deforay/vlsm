@@ -151,6 +151,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
     });
     
     if(flag){
+      $.blockUI();
       document.getElementById('editBatchForm').submit();
     }
   }
@@ -263,6 +264,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   }
   
   function getSampleCodeDetails(){
+    $.blockUI();
     var fName = $("#facilityName").val();
     var sName = $("#sampleType").val();
     var sCode= $("#sampleCode").val();
@@ -272,6 +274,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	  $("#sampleDetails").html(data);
 	}
     });
+    $.unblockUI();
   }
   </script>
   

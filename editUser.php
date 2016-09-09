@@ -147,6 +147,7 @@ $result = $db->rawQuery($query);
     });
     
     if(flag){
+      $.blockUI();
       document.getElementById('userEditForm').submit();
     }
   }

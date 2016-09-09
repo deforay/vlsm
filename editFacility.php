@@ -205,6 +205,7 @@ $pResult = $db->rawQuery($pQuery);
     });
     
     if(flag){
+      $.blockUI();
       document.getElementById('editFacilityForm').submit();
     }
   }

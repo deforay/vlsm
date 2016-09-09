@@ -1150,6 +1150,7 @@ $configQuery="SELECT * from global_config";
     });
     $("#saveNext").val('save');
     if(flag){
+     $.blockUI();
       document.getElementById('editVlRequestForm').submit();
     }
   }
@@ -1159,6 +1160,7 @@ $configQuery="SELECT * from global_config";
     });
     $("#saveNext").val('next');
     if(flag){
+     $.blockUI();
       document.getElementById('editVlRequestForm').submit();
     }
   }
