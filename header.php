@@ -204,10 +204,11 @@ $formConfigResult=$db->query($formConfigQuery);
             
             if(isset($formConfigResult[0]['value']) && $formConfigResult[0]['value']==2){
             ?>
-                <li class="allMenu addVlRequestMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+                <li class="allMenu addVlRequestMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request (ZIMBABWE)</a></li>
             <?php }else{ ?>
                 <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
             <?php } ?>
+            <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
                   
 		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
