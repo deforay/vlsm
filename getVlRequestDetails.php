@@ -247,8 +247,7 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['status_name']);
 	    //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['treament_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>';
-		
-		if(isset($formConfigResult[0]['value']) && trim($formConfigResult[0]['value'])==2){
+		if($aRow['form_id']==2){
 			if($editVlRequestZm){
 				$edit='<a href="editVlRequestZm.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 			}
@@ -257,6 +256,16 @@ $primaryKey="treament_id";
 				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 			}
 		}
+		
+		//if(isset($formConfigResult[0]['value']) && trim($formConfigResult[0]['value'])==2){
+		//	if($editVlRequestZm){
+		//		$edit='<a href="editVlRequestZm.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+		//	}
+		//}else{
+		//	if($vlRequest){
+		//		$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+		//	}
+		//}
 		
 		
 		
