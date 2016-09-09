@@ -2,6 +2,8 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
+include('General.php');
+$general=new Deforay_Commons_General();
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -32,6 +34,39 @@ $svlResult=$db->query($svlQuery);
  $maxId = "00".$maxId;
 }else{
  $maxId = '001';
+}
+$facilityResult='';
+$stateResult='';
+$districtResult = '';
+$sDate ='';
+$cBy ='';
+$urgency ='';
+$clinicianName = '';
+if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
+ //facility details
+$facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
+$facilityResult=$db->query($facilityQuery);
+
+$stateName = $facilityResult[0]['state'];
+$stateQuery="SELECT * from province_details where province_name='".$stateName."'";
+$stateResult=$db->query($stateQuery);
+
+//district details
+$districtQuery="SELECT * from facility_details where state='".$stateName."'";
+$districtResult=$db->query($districtQuery);
+
+$vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.lab_contact_person from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
+$vlResult=$db->query($vlQuery);
+$urgency = $vlResult[0]['urgency'];
+$cBy = $vlResult[0]['collected_by'];
+$clinicianName = $vlResult[0]['lab_contact_person'];
+if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
+ $vlResult[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+}else{
+ $vlResult[0]['sample_collection_date']='';
+}
+$sDate = $vlResult[0]['sample_collection_date'];
 }
 ?>
 <style>
@@ -81,7 +116,6 @@ $svlResult=$db->query($svlQuery);
                 <div class="box box-default">
                   <div class="box-body">
                     <div class="row">
-                      
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Serial No</label>
@@ -94,7 +128,11 @@ $svlResult=$db->query($svlQuery);
                         <div class="form-group">
                         <label for="province">Province</label>
                           <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
-                            <?php echo $province;?>
+                          <?php if($facilityResult!='') { ?>
+                            <option value="">--select--</option>
+                            <?php foreach($pdResult as $provinceName){ ?>
+                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
+                            <?php } } else { echo $province;  } ?>
                           </select>
                         </div>
                       </div>
@@ -103,6 +141,15 @@ $svlResult=$db->query($svlQuery);
                         <label for="District">District  </label>
                           <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
                             <option value="">--select--</option>
+                            <?php
+                            if($districtResult!=''){
+                            foreach($districtResult as $districtName){
+                              ?>
+                              <option value="<?php echo $districtName['district'];?>" <?php echo ($facilityResult[0]['district']==$districtName['district'])?"selected='selected'":""?>><?php echo ucwords($districtName['district']);?></option>
+                              <?php
+                            }
+                            }
+                            ?>
                           </select>
                         </div>
                       </div>
@@ -110,10 +157,10 @@ $svlResult=$db->query($svlQuery);
                         <div class="form-group">
                         <label for="urgency">Urgency  </label>
                         <label class="radio-inline">
-                             <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" checked="checked"> Normal
+                             <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" <?php echo ($urgency=='normal')?"checked='checked'":""?>> Normal
                         </label>
                         <label class="radio-inline">
-                             <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency"> Urgent
+                             <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency" <?php echo ($urgency=='urgent')?"checked='checked'":""?>  > Urgent
                         </label>
                         </div>
                       </div>
@@ -124,27 +171,30 @@ $svlResult=$db->query($svlQuery);
                     <div class="form-group">
                     <label for="clinicName">Clinic Name </label>
                       <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                      <?php if($facilityResult!=''){ ?>
 		      <option value="">-- Select --</option>
-			<?php echo $facility; ?>
+			<?php foreach($fResult as $fDetails){ ?>
+                        <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_SESSION['facilityId']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                        <?php } } else { echo $facility; } ?>
 		      </select>
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="clinicianName">Clinician Name </label>
-                    <input type="text" class="form-control  " name="clinicianName" id="clinicianName" placeholder="Enter Clinician Name" style="width:100%;">
+                    <input type="text" class="form-control  " name="clinicianName" id="clinicianName" placeholder="Enter Clinician Name" style="width:100%;" value="<?php echo $clinicianName;?>" >
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="sampleCollectionDate">Sample Collection Date</label>
-                    <input type="text" class="form-control" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date">
+                    <input type="text" class="form-control" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $sDate;?>">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3 col-lg-3">
                     <div class="form-group">
                     <label for="collectedBy">Collected by (Initials)</label>
-                    <input type="text" class="form-control" name="collectedBy" id="collectedBy" style="width:100%;" title="Enter Collected by (Initials)" placeholder="Enter Collected by (Initials)">
+                    <input type="text" class="form-control" name="collectedBy" id="collectedBy" style="width:100%;" title="Enter Collected by (Initials)" placeholder="Enter Collected by (Initials)" value="<?php echo $cBy;?>">
                     </div>
                   </div>
                 </div>

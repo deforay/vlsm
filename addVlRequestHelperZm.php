@@ -108,9 +108,15 @@ try {
           $_SESSION['alertMsg']="VL request added successfully";
     
     if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
+     $_SESSION['treamentId'] = $id;
+     $_SESSION['facilityId'] = $_POST['clinicName'];
       header("location:addVlRequestZm.php");
     }else{
-      header("location:vlRequest.php"); 
+     $_SESSION['treamentId'] = '';
+     $_SESSION['facilityId'] = '';
+     unset($_SESSION['treamentId']);
+     unset($_SESSION['facilityId']);
+     header("location:vlRequest.php");
     }
     
   
