@@ -216,6 +216,9 @@ $primaryKey="treament_id";
 	if(isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))){
 	    $vlView = true;
 	}
+	if(isset($_SESSION['privileges']) && (in_array("viewVlRequestZm.php", $_SESSION['privileges']))){
+	    $vlViewZm = true;
+	}
         
         foreach ($rResult as $aRow) {
 	    $vlResult='';
@@ -252,11 +255,17 @@ $primaryKey="treament_id";
 				$edit='<a href="editVlRequestZm.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 			}
 			$pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertZmbPdf('.$aRow['treament_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
+			if($vlViewZm){
+			    $view = '<a href="viewVlRequestZm.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+			}
 		}else{
 			if($vlRequest){
 				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 			}
 			$pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
+			if($vlViewZm){
+			    $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+			}
 		}
 		
 		//if(isset($formConfigResult[0]['value']) && trim($formConfigResult[0]['value'])==2){
@@ -270,12 +279,11 @@ $primaryKey="treament_id";
 		//}
 		
 	    if($vlView){
-		$row[] = $edit.$pdf.' 
-			<a href="viewVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+		$row[] = $edit.$pdf.$view;
 	    }else if($vlRequest || $editVlRequestZm){
 		$row[] = $edit.$pdf;
 	    }else if($vlView){
-		$row[] = $pdf.'<a href="viewVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+		$row[] = $pdf.$view;
 	    }
             $output['aaData'][] = $row;
         }
