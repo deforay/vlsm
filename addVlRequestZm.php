@@ -15,12 +15,12 @@ $sResult=$db->query($sQuery);
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
-$province.="<option value=''>--select--</option>";
+$province.="<option value=''>-- Select --</option>";
             foreach($pdResult as $provinceName){
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
             }
             $facility = '';
-            $facility.="<option value=''>--select--</option>";
+            $facility.="<option value=''>-- Select --</option>";
             foreach($fResult as $fDetails){
               $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
             }
@@ -80,7 +80,8 @@ $sDate = $vlResult[0]['sample_collection_date'];
 <style>
   .ui_tpicker_second_label {
        display: none !important;
-      }.ui_tpicker_second_slider {
+      }
+      .ui_tpicker_second_slider {
        display: none !important;
       }.ui_tpicker_millisec_label {
        display: none !important;
@@ -126,10 +127,22 @@ $sDate = $vlResult[0]['sample_collection_date'];
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="serialNo">Serial No</label>
-                          <input type="text" class="form-control serialNo" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" />
+                          <label for="serialNo">Form Serial No</label>
+                          <input type="text" class="form-control serialNo" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" />
                         </div>
                       </div>
+                      <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
+                        <div class="form-group">
+                        <label for="urgency">Urgency&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <label class="radio-inline">
+                             <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" <?php echo ($urgency=='normal')?"checked='checked'":""?>> Normal
+                        </label>
+                        <label class="radio-inline">
+                             <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency" <?php echo ($urgency=='urgent')?"checked='checked'":""?>  > Urgent
+                        </label>
+                        </div>
+                      </div>
+                      
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
@@ -137,7 +150,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <label for="province">Province</label>
                           <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
                           <?php if($facilityResult!='') { ?>
-                            <option value="">--select--</option>
+                            <option value="">-- Select --</option>
                             <?php foreach($pdResult as $provinceName){ ?>
                             <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } } else { echo $province;  } ?>
@@ -148,7 +161,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <div class="form-group">
                         <label for="District">District  </label>
                           <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
-                            <option value="">--select--</option>
+                            <option value="">-- Select --</option>
                             <?php
                             if($districtResult!=''){
                             foreach($districtResult as $districtName){
@@ -159,17 +172,6 @@ $sDate = $vlResult[0]['sample_collection_date'];
                             }
                             ?>
                           </select>
-                        </div>
-                      </div>
-                      <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
-                        <label for="urgency">Urgency  </label>
-                        <label class="radio-inline">
-                             <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" <?php echo ($urgency=='normal')?"checked='checked'":""?>> Normal
-                        </label>
-                        <label class="radio-inline">
-                             <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency" <?php echo ($urgency=='urgent')?"checked='checked'":""?>  > Urgent
-                        </label>
                         </div>
                       </div>
                     </div>
@@ -316,8 +318,8 @@ $sDate = $vlResult[0]['sample_collection_date'];
                                   <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> No
                           </label>
                         </td>
-                        <td><label for="patientPhoneNumber">Mobile Number</label></td>
-                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
+                        <td><label for="patientPhoneNumber" class="patientMob">Mobile Number</label></td>
+                        <td><input type="text" class="form-control patientMob" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
                       </tr>
                       
                       <tr>
@@ -332,21 +334,20 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <td><label for="vlTestReason">Reason For VL test</label></td>
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
-                            <option value="">--select--</option>
+                            <option value="">-- Select --</option>
                             <option value="routive_VL">Routive VL</option>
                             <option value="confirmation_of_treatment_failure">Confirmation Of Treatment Failure(repeat VL at 3M)</option>
                             <option value="clinical_failure">Clinical Failure</option>
                             <option value="immunological_failure">Immunological Failure</option>
-                           </select>
-                        </td>
-                        <td><label for="drugSubstitution">Single Drug Substitution</label></td>
-                        <td>
-                          <select name="drugSubstitution" id="drugSubstitution" class="form-control" title="Please choose Drug Substitution">
-                            <option value="">--select--</option>
+                            <option value="single_drug_substitution">Single Drug Substitution</option>
                             <option value="pregnant_other">Pregnant Mother</option>
-                            <option value="lactating mother">Lactating Mother</option>
+                            <option value="lactating_mother">Lactating Mother</option>
                             <option value="baseline_VL">Baseline VL</option>
                            </select>
+                        </td>
+                        <td></td>
+                        <td>
+                          
                         </td>
                       </tr>
                     </table>
@@ -364,7 +365,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
                           <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
-                              <option value="">--select--</option>
+                              <option value="">-- Select --</option>
                               <option value="roche">ROCHE</option>
                               <option value="abbott">ABBOTT</option>
                               <option value="poor">BIOMEREUX</option>
@@ -375,7 +376,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <td><label for="specimenType">Specimen type</label></td>
                         <td>
                           <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
-                              <option value="">--select--</option>
+                              <option value="">-- Select --</option>
                               <?php
                               foreach($sResult as $name){
                                ?>
@@ -387,20 +388,20 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="dateOfResult">Date Of Result</label></td>
-                        <td><input type="text" class="form-control date" id="dateOfResult" name="dateOfResult" placeholder="Enter Date Of Result." title="Please enter date of result" style="width:100%;" /></td>
+                        <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
+                        <td><input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
                         <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" /></td>
                       </tr>
                       <tr>
-                        <td><label>If no result</label></td>
+                        <td><label class="noResult">If no result</label></td>
                         <td colspan="3">
-                          <label class="radio-inline">
+                          <label class="radio-inline noResult">
                              <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result"> Sample Rejected
                           </label>
-                          <label class="radio-inline">
+                          <label class="radio-inline noResult">
                                   <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"> Lab testing Technical Error
                           </label>
                         </td>
@@ -414,8 +415,8 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>
                       </tr>
                       <tr>
-                        <td><label for="serialNo">Serial No.</label></td>
-                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Serial No." title="Please enter serial No" style="width:100%;" /></td>
+                        <td><label for="serialNo">Form Serial No.</label></td>
+                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" /></td>
                       </tr>
                     </table>
                   </div>
@@ -526,6 +527,23 @@ facilityName = true;
     }
   }
   $(document).ready(function() {
+    
+  
+$("#vlResult").bind("keyup change", function(e) {
+    if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
+      $(".noResult").show();
+    }else{
+      $(".noResult").hide();
+    }
+});
+$("#vlLog").bind("keyup change", function(e) {
+    if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
+      $(".noResult").show();
+    }else{
+      $(".noResult").hide();
+    }
+});
+    
   $('.date').datepicker({
      changeMonth: true,
      changeYear: true,
@@ -563,7 +581,15 @@ facilityName = true;
       }else if($(this).val() == 'not_recorded'){
         $(".femaleElements").show();
       }
-    });
+  });
+  $(".patientMob").hide();
+  $("input:radio[name=receiveSms]").click(function() {
+      if($(this).val() == 'no'){
+         $(".patientMob").hide();
+      }else if($(this).val() == 'yes'){
+        $(".patientMob").show();
+      }
+  });
   function checkValue()
   {
     var artRegimen = $("#artRegimen").val();

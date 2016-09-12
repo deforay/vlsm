@@ -24,8 +24,8 @@ try {
      if(isset($_POST['lastViralLoadTestDate']) && trim($_POST['lastViralLoadTestDate'])!=""){
           $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);  
      }
-     if(isset($_POST['dateOfResult']) && trim($_POST['dateOfResult'])!=""){
-          $_POST['dateOfResult']=$general->dateFormat($_POST['dateOfResult']);  
+     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($_POST['sampleTestingDateAtLab']);  
      }
      if(isset($_POST['dateOfReceivedStamp']) && trim($_POST['dateOfReceivedStamp'])!=""){
           $_POST['dateOfReceivedStamp']=$general->dateFormat($_POST['dateOfReceivedStamp']);  
@@ -92,7 +92,7 @@ try {
           'lab_no'=>$_POST['labNo'],
           'vl_test_platform'=>$_POST['testingPlatform'],
           'sample_id'=>$_POST['specimenType'],
-          'request_date'=>$_POST['dateOfResult'],
+          'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
           'result'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
           'comments'=>$_POST['labCommnets'],
