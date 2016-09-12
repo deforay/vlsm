@@ -401,3 +401,6 @@ ALTER TABLE vl_request_form
 DROP FOREIGN KEY vl_request_form_ibfk_1;
 ALTER TABLE vl_request_form
 DROP FOREIGN KEY vl_request_form_ibfk_3;
+
+ALTER TABLE  `vl_request_form` ADD  `sample_rejection_facility` INT NULL DEFAULT NULL AFTER  `rejection` ,
+ADD  `sample_rejection_reason` INT NULL DEFAULT NULL AFTER  `sample_rejection_facility` ;

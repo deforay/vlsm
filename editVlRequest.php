@@ -117,6 +117,14 @@ $sampleType='<option value="">-- Select --</option>';
 //get test status values
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
+
+
+$fQuery="SELECT * FROM facility_details where status='active'";
+$fResult = $db->rawQuery($fQuery);
+
+$rQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status='active'";
+$rResult = $db->rawQuery($rQuery);
+
 //get config values
 $configQuery="SELECT * from global_config";
     $configResult=$db->query($configQuery);
@@ -246,6 +254,21 @@ $configQuery="SELECT * from global_config";
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="gender" class="col-lg-4 control-label">Urgency <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <label class="radio-inline">
+                         <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" <?php echo ($result[0]['urgency']=='normal')?"checked='checked'":""?>> Normal
+                        </label>
+                        <label class="radio-inline">
+                         <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency" <?php echo ($result[0]['urgency']=='urgent')?"checked='checked'":""?> > Urgent
+                        </label>
+                        </div>
+                    </div>
+                </div>
+                </div>
               </div>
             </div>
             <!-- /.box-footer-->
@@ -370,6 +393,122 @@ $configQuery="SELECT * from global_config";
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="requestClinician" class="col-lg-4 control-label">Request Clinician</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name" value="<?php echo $result[0]['request_clinician']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="clinicianPhone" class="col-lg-4 control-label">Phone No.</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." value="<?php echo $result[0]['clinician_ph_no']; ?>"/>
+                        </div>
+                    </div>
+                  </div>                       
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['request_date']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="vlFocalPerson" class="col-lg-4 control-label">VL Focal Person</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter VL Focal Person" value="<?php echo $result[0]['vl_focal_person']; ?>"/>
+                        </div>
+                    </div>
+                  </div>                       
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="vlPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title=" Please enter vl focal person phone number" value="<?php echo $result[0]['focal_person_phone_number']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $result[0]['email_for_HF']; ?>"/>
+                        </div>
+                    </div>
+                  </div>                       
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $result[0]['justification']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <label class="radio-inline">
+                         <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
+                         </label>
+                         <label class="radio-inline">
+                          <input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
+                         </label>
+                        </div>
+                    </div>
+                  </div>                                    
+               </div>
+                <div class="row">
+                 <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleType" class="col-lg-4 control-label">Rejection Facility <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                         <select class="form-control isRequired" name='rejectionFacility' id='rejectionFacility' title="Please select Facility">
+                           <option value="">--Select--</option>
+                           <?php
+                           foreach($fResult as $fDetails){
+                            ?>
+                            <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($result[0]['sample_rejection_facility']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                            <?php
+                           }
+                           ?>
+                         </select>
+                        </div>
+                    </div>
+                  </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleType" class="col-lg-4 control-label">Rejection Reason <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                         <select class="form-control isRequired" name='rejectionReason' id='rejectionReason' title="Please select Reason">
+                           <option value="">--Select--</option>
+                           <?php
+                           foreach($rResult as $rDetails){
+                            ?>
+                            <option value="<?php echo $rDetails['rejection_reason_id'];?>" <?php echo ($result[0]['sample_rejection_reason']==$rDetails['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($rDetails['rejection_reason_name']);?></option>
+                            <?php
+                           }
+                           ?>
+                         </select>
+                        </div>
+                    </div>
+                  </div> 
+                </div>
+                </div>
             </div>
             <!-- /.box-footer-->
           </div>
@@ -418,6 +557,14 @@ $configQuery="SELECT * from global_config";
             <!-- /.box-header -->
             <div class="box-body">
              <div class="row">
+               <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" value="<?php echo $result[0]['treatment_initiated_date']; ?>" />
+                        </div>
+                    </div>
+                  </div> 
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="treatPeriod" class="col-lg-4 control-label">How long has this patient been on treatment ?</label>
@@ -426,14 +573,7 @@ $configQuery="SELECT * from global_config";
                         </div>
                     </div>
                   </div>    
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" value="<?php echo $result[0]['treatment_initiated_date']; ?>" />
-                        </div>
-                    </div>
-                  </div>                       
+                                       
                 </div>
                 
                 <div class="row">
@@ -540,37 +680,7 @@ $configQuery="SELECT * from global_config";
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-             <div class="row">
-              <div class="col-md-6">
-                 <div class="form-group">
-                     <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
-                     <div class="col-lg-7">
-                     <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
-                     <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
-                      <option value="">--select--</option>
-                      <option value="good" <?php echo ($result[0]['arv_adherence']=='good')?"selected='selected'":""?>>Good >= 95%</option>
-                      <option value="fair" <?php echo ($result[0]['arv_adherence']=='fair')?"selected='selected'":""?>>Fair (85-94%)</option>
-                      <option value="poor" <?php echo ($result[0]['arv_adherence']=='poor')?"selected='selected'":""?>>Poor < 85%</option>
-                     </select>
-                     </div>
-                 </div>
-               </div>
-              <div class="col-md-6">
-                 <div class="form-group">
-                     <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
-                     <div class="col-lg-7">
-                     <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
-                      <option value="">--select--</option>
-                      <option value="1" <?php echo ($result[0]['enhance_session']=='1')?"selected='selected'":""?>>1</option>
-                      <option value="2" <?php echo ($result[0]['enhance_session']=='2')?"selected='selected'":""?>>2</option>
-                      <option value="3" <?php echo ($result[0]['enhance_session']=='3')?"selected='selected'":""?>>3</option>
-                      <option value=">3" <?php echo ($result[0]['enhance_session']=='>3')?"selected='selected'":""?>> > 3</option>
-                      <option value="missing" <?php echo ($result[0]['enhance_session']=='missing')?"selected='selected'":""?>> Missing</option>
-                     </select>
-                     </div>
-                 </div>
-               </div>
-             </div>
+             
              <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -869,88 +979,42 @@ $configQuery="SELECT * from global_config";
                     </div>
                   </div>                   
                 </div>
+               <div class="row">
+              <div class="col-md-6">
+                 <div class="form-group">
+                     <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
+                     <div class="col-lg-7">
+                     <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
+                     <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
+                      <option value="">--select--</option>
+                      <option value="good" <?php echo ($result[0]['arv_adherence']=='good')?"selected='selected'":""?>>Good >= 95%</option>
+                      <option value="fair" <?php echo ($result[0]['arv_adherence']=='fair')?"selected='selected'":""?>>Fair (85-94%)</option>
+                      <option value="poor" <?php echo ($result[0]['arv_adherence']=='poor')?"selected='selected'":""?>>Poor < 85%</option>
+                     </select>
+                     </div>
+                 </div>
+               </div>
+              <div class="col-md-6">
+                 <div class="form-group">
+                     <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
+                     <div class="col-lg-7">
+                     <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
+                      <option value="">--select--</option>
+                      <option value="1" <?php echo ($result[0]['enhance_session']=='1')?"selected='selected'":""?>>1</option>
+                      <option value="2" <?php echo ($result[0]['enhance_session']=='2')?"selected='selected'":""?>>2</option>
+                      <option value="3" <?php echo ($result[0]['enhance_session']=='3')?"selected='selected'":""?>>3</option>
+                      <option value=">3" <?php echo ($result[0]['enhance_session']=='>3')?"selected='selected'":""?>> > 3</option>
+                      <option value="missing" <?php echo ($result[0]['enhance_session']=='missing')?"selected='selected'":""?>> Missing</option>
+                     </select>
+                     </div>
+                 </div>
+               </div>
+             </div>
             </div>
             <!-- /.box-footer-->
           </div>
                 
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="requestClinician" class="col-lg-4 control-label">Request Clinician</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name" value="<?php echo $result[0]['request_clinician']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="clinicianPhone" class="col-lg-4 control-label">Phone No.</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." value="<?php echo $result[0]['clinician_ph_no']; ?>"/>
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
                 
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['request_date']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vlFocalPerson" class="col-lg-4 control-label">VL Focal Person</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter VL Focal Person" value="<?php echo $result[0]['vl_focal_person']; ?>"/>
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vlPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title=" Please enter vl focal person phone number" value="<?php echo $result[0]['focal_person_phone_number']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $result[0]['email_for_HF']; ?>"/>
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="justification" class="col-lg-4 control-label">Justification</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $result[0]['justification']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
-                        <div class="col-lg-7">
-                        <label class="radio-inline">
-                         <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
-                         </label>
-                         <label class="radio-inline">
-                          <input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
-                         </label>
-                        </div>
-                    </div>
-                  </div>                                    
-               </div>
               </div>
              <div class="row">
                 <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
