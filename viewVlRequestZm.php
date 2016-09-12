@@ -254,7 +254,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="dateOfResult">Date Of Result</label></td>
+                        <td><label for="sampleTestingDateAtLab">Date Of Result</label></td>
                         <td><input type="text" class="form-control date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['request_date'];?>" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" /></td>
