@@ -372,9 +372,32 @@ ALTER TABLE  `vl_request_form` ADD  `vl_test_platform` VARCHAR( 255 ) NULL DEFAU
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'viewVlRequestZm.php', 'View VL Request(Zm)');
 
 --saravanan 12-sep-2016
+CREATE TABLE IF NOT EXISTS `temp_sample_report` (
+  `temp_sample_id` int(11) NOT NULL AUTO_INCREMENT,
+  `lab_name` varchar(255) DEFAULT NULL,
+  `lab_contact_person` varchar(255) DEFAULT NULL,
+  `lab_phone_no` varchar(255) DEFAULT NULL,
+  `date_sample_received_at_testing_lab` varchar(255) DEFAULT NULL,
+  `lab_tested_date` varchar(255) DEFAULT NULL,
+  `date_results_dispatched` varchar(255) DEFAULT NULL,
+  `result_reviewed_date` varchar(255) DEFAULT NULL,
+  `result_reviewed_by` varchar(255) DEFAULT NULL,
+  `comments` varchar(255) DEFAULT NULL,
+  `sample_code` varchar(255) DEFAULT NULL,
+  `order_number` varchar(255) DEFAULT NULL,
+  `log_value` varchar(255) DEFAULT NULL,
+  `absolute_value` varchar(255) DEFAULT NULL,
+  `text_value` varchar(255) DEFAULT NULL,
+  `absolute_decimal_value` varchar(255) DEFAULT NULL,
+  `result` varchar(255) DEFAULT NULL,
+  `sample_details` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`temp_sample_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '15', 'vlResultUnApproval.php', 'Un Approve Result');
 
 ALTER TABLE vl_request_form
-DROP FOREIGN KEY vl_request_form_ibfk_1
+DROP FOREIGN KEY vl_request_form_ibfk_1;
 ALTER TABLE vl_request_form
-DROP FOREIGN KEY vl_request_form_ibfk_3
+DROP FOREIGN KEY vl_request_form_ibfk_3;
