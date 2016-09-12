@@ -402,5 +402,13 @@ DROP FOREIGN KEY vl_request_form_ibfk_1;
 ALTER TABLE vl_request_form
 DROP FOREIGN KEY vl_request_form_ibfk_3;
 
+
+CREATE TABLE IF NOT EXISTS `r_sample_rejection_reasons` (
+  `rejection_reason_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rejection_reason_name` varchar(255) DEFAULT NULL,
+  `rejection_reason_status` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`rejection_reason_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 ALTER TABLE  `vl_request_form` ADD  `sample_rejection_facility` INT NULL DEFAULT NULL AFTER  `rejection` ,
 ADD  `sample_rejection_reason` INT NULL DEFAULT NULL AFTER  `sample_rejection_facility` ;
