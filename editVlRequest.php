@@ -5,7 +5,7 @@ include('header.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $id=base64_decode($_GET['id']);
-$fQuery="SELECT vl.*,f.facility_name,f.facility_code,f.hub_name,f.state,f.district from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
+$fQuery="SELECT vl.*,f.facility_name,f.facility_code,f.hub_name,f.state,f.district from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
 $result=$db->query($fQuery);
 
 $uQuery = "Select * from user_details where user_id=".$result[0]['result_reviewed_by'];

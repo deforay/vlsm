@@ -204,10 +204,11 @@ $formConfigResult=$db->query($formConfigQuery);
             
             if(isset($formConfigResult[0]['value']) && $formConfigResult[0]['value']==2){
             ?>
-                <li class="allMenu addVlRequestMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request (ZIMBABWE)</a></li>
+                <!--<li class="allMenu addVlRequestMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request (ZIMBABWE)</a></li>-->
             <?php }else{ ?>
-                <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+                <!--<li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>-->
             <?php } ?>
+            <li class="allMenu addVlRequestZmMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request (ZIMBABWE)</a></li>
             <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
                   
 		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
@@ -235,6 +236,8 @@ $formConfigResult=$db->query($formConfigQuery);
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultApprovalMenu"><a href="vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultUnApproval.php", $_SESSION['privileges'])){ ?>
+                <li class="allMenu vlResultUnApprovalMenu"><a href="vlResultUnApproval.php"><i class="fa fa-circle-o"></i>Un Approve Results</a></li>
 		<?php } ?>
             </ul>
         </li>
