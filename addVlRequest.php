@@ -32,6 +32,21 @@ if($sResult[0]['MAX(treament_id)']!=''){
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 
+$fQuery="SELECT * FROM facility_details where status='active'";
+$fResult = $db->rawQuery($fQuery);
+$facility = '';
+            $facility.="<option value=''>--select--</option>";
+            foreach($fResult as $fDetails){
+              $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+            }
+            
+$rQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status='active'";
+$rResult = $db->rawQuery($rQuery);
+$rejectReason = '';
+            $rejectReason.="<option value=''>--select--</option>";
+            foreach($rResult as $rDetails){
+              $rejectReason .= "<option value='".$rDetails['rejection_reason_id']."'>".ucwords($rDetails['rejection_reason_name'])."</option>";
+            }
 //get config values
 $configQuery="SELECT * from global_config";
     $configResult=$db->query($configQuery);
@@ -143,6 +158,21 @@ $configQuery="SELECT * from global_config";
                         </div>
                     </div>
                   </div> 
+                </div>
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="gender" class="col-lg-4 control-label">Urgency <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <label class="radio-inline">
+                         <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" checked="checked"> Normal
+                        </label>
+                        <label class="radio-inline">
+                         <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency" > Urgent
+                        </label>
+                        </div>
+                    </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -270,6 +300,109 @@ $configQuery="SELECT * from global_config";
                     </div>
                   </div>
                 </div>
+                
+                
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="requestClinician" class="col-lg-4 control-label">Request Clinician</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name"/>                    
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="clinicianPhone" class="col-lg-4 control-label">Phone No.</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." />                       
+                        </div>
+                    </div>
+                  </div>                       
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date"/>                    
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="vlFocalPerson" class="col-lg-4 control-label">VL Focal Person</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter VL Focal Person" />                       
+                        </div>
+                    </div>
+                  </div>                       
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="vlPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title=" Please enter vl focal person phone number" />                    
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" />                       
+                        </div>
+                    </div>
+                  </div>                       
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <label class="radio-inline">
+                           <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection"> Yes
+                        </label>
+                        <label class="radio-inline">
+                           <input type="radio" class="" id="rejectionNo" name="rejection" value="no" title="Please check rejection"> No
+                        </label>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleType" class="col-lg-4 control-label">Rejection Facility <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                         <select class="form-control isRequired" name='rejectionFacility' id='rejectionFacility' title="Please select Facility">
+                           <?php echo $facility; ?>
+                         </select>
+                        </div>
+                    </div>
+                  </div>
+                 <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="sampleType" class="col-lg-4 control-label">Rejection Reason <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                         <select class="form-control isRequired" name='rejectionReason' id='rejectionReason' title="Please select Reason">
+                           <?php echo $rejectReason; ?>
+                         </select>
+                        </div>
+                    </div>
+                  </div> 
+                </div>
             </div>
             <!-- /.box-footer-->
           </div>
@@ -311,6 +444,14 @@ $configQuery="SELECT * from global_config";
             <!-- /.box-header -->
             <div class="box-body">
              <div class="row">
+              <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" />
+                        </div>
+                    </div>
+                  </div> 
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="treatPeriod" class="col-lg-4 control-label">How long has this patient been on treatment ?</label>
@@ -319,14 +460,7 @@ $configQuery="SELECT * from global_config";
                         </div>
                     </div>
                   </div>    
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="treatmentInitiatiatedOn" class="col-lg-4 control-label">Treatment Initiated On</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="treatmentInitiatiatedOn" name="treatmentInitiatiatedOn" placeholder="Treatment Initiated On" title="Please enter treatment initiated date" />
-                        </div>
-                    </div>
-                  </div>                       
+                                        
                 </div>
                 
                 <div class="row">
@@ -433,37 +567,7 @@ $configQuery="SELECT * from global_config";
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-             <div class="row">
-              <div class="col-md-6">
-                 <div class="form-group">
-                     <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
-                     <div class="col-lg-7">
-                     <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
-                     <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
-                      <option value="">--select--</option>
-                      <option value="good">Good >= 95%</option>
-                      <option value="fair">Fair (85-94%)</option>
-                      <option value="poor">Poor < 85%</option>
-                     </select>
-                     </div>
-                 </div>
-               </div>
-              <div class="col-md-6">
-                 <div class="form-group">
-                     <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
-                     <div class="col-lg-7">
-                     <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
-                      <option value="">--select--</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value=">3"> > 3</option>
-                      <option value="missing"> Missing</option>
-                     </select>
-                     </div>
-                 </div>
-               </div>
-             </div>
+             
              <div class="row">                
                     <div class="col-md-6">
                         <div class="form-group">
@@ -667,90 +771,42 @@ $configQuery="SELECT * from global_config";
                     </div>
                   </div>                   
                 </div>
+               <div class="row">
+              <div class="col-md-6">
+                 <div class="form-group">
+                     <label for="ArvAdherence" class="col-lg-4 control-label">ARV Adherence </label>
+                     <div class="col-lg-7">
+                     <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
+                     <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
+                      <option value="">--select--</option>
+                      <option value="good">Good >= 95%</option>
+                      <option value="fair">Fair (85-94%)</option>
+                      <option value="poor">Poor < 85%</option>
+                     </select>
+                     </div>
+                 </div>
+               </div>
+              <div class="col-md-6">
+                 <div class="form-group">
+                     <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
+                     <div class="col-lg-7">
+                     <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
+                      <option value="">--select--</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value=">3"> > 3</option>
+                      <option value="missing"> Missing</option>
+                     </select>
+                     </div>
+                 </div>
+               </div>
+             </div>
             </div>
             <!-- /.box-footer-->
           </div>
                 
                 
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="requestClinician" class="col-lg-4 control-label">Request Clinician</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name"/>                    
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="clinicianPhone" class="col-lg-4 control-label">Phone No.</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." />                       
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date"/>                    
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vlFocalPerson" class="col-lg-4 control-label">VL Focal Person</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter VL Focal Person" />                       
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="vlPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title=" Please enter vl focal person phone number" />                    
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" />                       
-                        </div>
-                    </div>
-                  </div>                       
-                </div>
-                
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="justification" class="col-lg-4 control-label">Justification</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification"/>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
-                        <div class="col-lg-7">
-                        <label class="radio-inline">
-                           <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection"> Yes
-                        </label>
-                        <label class="radio-inline">
-                           <input type="radio" class="" id="rejectionNo" name="rejection" value="no" title="Please check rejection"> No
-                        </label>
-                        </div>
-                    </div>
-                  </div>                                    
-                </div>
                </div>
                 <div class="row">
                    <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>

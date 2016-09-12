@@ -108,6 +108,7 @@ try {
      $vldata=array(
           'facility_id'=>$_POST['facilityId'],
           'sample_code'=>$_POST['sampleCode'],
+          'urgency'=>$_POST['urgency'],
           'art_no'=>$_POST['artNo'],
           'patient_name'=>$_POST['patientName'],
           'patient_dob'=>$_POST['dob'],
@@ -170,6 +171,8 @@ try {
           'comments'=>$_POST['comments'],
           'status'=>$_POST['status'],
           'rejection'=>$_POST['rejection'],
+          'sample_rejection_facility'=>$_POST['rejectionFacility'],
+          'sample_rejection_reason'=>$_POST['rejectionReason'],
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime()
         );
