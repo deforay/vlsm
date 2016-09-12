@@ -370,3 +370,11 @@ INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privi
 ALTER TABLE  `vl_request_form` ADD  `vl_test_platform` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `collected_by` ;
 
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'viewVlRequestZm.php', 'View VL Request(Zm)');
+
+--saravanan 12-sep-2016
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '15', 'vlResultUnApproval.php', 'Un Approve Result');
+
+ALTER TABLE vl_request_form
+DROP FOREIGN KEY vl_request_form_ibfk_1
+ALTER TABLE vl_request_form
+DROP FOREIGN KEY vl_request_form_ibfk_3

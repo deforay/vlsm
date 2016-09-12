@@ -9,12 +9,12 @@ $confFileName=base64_decode($_POST['machineName']);
 
 include("import-configs".DIRECTORY_SEPARATOR.$confFileName);
 
-$query="select treament_id,sample_code from vl_request_form";
-$vlResult=$db->rawQuery($query);
+//$query="select treament_id,sample_code from vl_request_form";
+//$vlResult=$db->rawQuery($query);
 
 $general=new Deforay_Commons_General();
 
-$tableName="vl_request_form";
+$tableName="temp_sample_report";
 
 try {
         //$configId=base64_decode($_POST['machineName']);
@@ -79,9 +79,7 @@ try {
                         fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$rKey,$cellName,$cell);
                         
                     }
-                    //echo $sampleVal."<br/>";
-                    //echo $absVal."<br/>";
-                    
+                    if($sampleVal!=''){
                     $data=array(
                         'lab_name'=>$_POST['labName'],
                         'lab_contact_person'=>$_POST['labContactPerson'],
@@ -92,25 +90,37 @@ try {
                         'result_reviewed_date'=>$_POST['reviewedDate'],
                         'result_reviewed_by'=>$_SESSION['userId'],
                         'comments'=>$_POST['comments'],
+                        'sample_code'=>$sampleVal,
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
                         'absolute_decimal_value'=>$absDecimalVal,
                         'result'=>$resultFlag,
                         'lab_tested_date'=>$testingDate,
-                        'status'=>6
+                        'status'=>'waiting for Approve'
                     );
-                    if(isset($vlResult[$m]['sample_code'])){
-                    $db=$db->where('sample_code',$sampleVal);
-                    //$db=$db->where('sample_code',$vlResult[$m]['sample_code']);
-                    $id=$db->update($tableName,$data);
+                    $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
+                    $vlResult=$db->rawQuery($query);
+                    if($vlResult){
+                        if(trim($vlResult[0]['result']!='')){
+                            $data['sample_details'] = 'Already Result Exist';
+                        }
+                    }else{
+                        $data['sample_details'] = 'New Sample';
                     }
+                    $db->insert($tableName,$data);
+                    //if(isset($vlResult[$m]['sample_code'])){
+                    //$db=$db->where('sample_code',$sampleVal);
+                    ////$db=$db->where('sample_code',$vlResult[$m]['sample_code']);
+                    //$id=$db->update($tableName,$data);
+                    //}
                     $m++;
+                }
                 }
             }
             
         $_SESSION['alertMsg']="Imported results successfully";
-        header("location:vlResultApproval.php");
+        header("location:vlResultUnApproval.php");
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());

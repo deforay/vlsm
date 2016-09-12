@@ -2,7 +2,7 @@
 
 function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,$rKey,$cellName,$cell){
            
-     $sampleIdCol='C';
+     $sampleIdCol='E';
      $sampleIdRow='2';
      $logValCol='I';
      $logValRow='2';
@@ -12,7 +12,7 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
      $txtValRow='';
      $testingDateCol='AC';
      $testingDateRow='2';
-     $logAndAbsoluteValInSameCol='yes';            
+     $logAndAbsoluteValInSameCol='yes';
                 
     
      if($sampleIdCol==$cellName){
