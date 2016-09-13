@@ -11,8 +11,8 @@ $tsResult = $db->rawQuery($tsQuery);
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','rst.sample_name');
-        $orderColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','rst.sample_name');
+        $aColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','tsr.sample_type');
+        $orderColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','tsr.sample_type');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -89,7 +89,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status INNER JOIN r_sample_type as rst ON rst.sample_id=tsr.sample_type";
+	$sQuery="SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
 	
         //echo $sQuery;die;
 	
@@ -108,7 +108,7 @@ $tsResult = $db->rawQuery($tsQuery);
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status INNER JOIN r_sample_type as rst ON rst.sample_id=tsr.sample_type $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -133,7 +133,8 @@ $tsResult = $db->rawQuery($tsQuery);
 		$vlResult = $aRow['text_value'];
 	    }
             $row = array();
-	    if($aRow['sample_details']=='Already Result Exist')
+	    if($aRow['sample_code']!=''){
+		if($aRow['sample_details']=='Already Result Exist')
             {
                 $row['DT_RowClass'] = "exist";
             }
@@ -145,13 +146,8 @@ $tsResult = $db->rawQuery($tsQuery);
             {
                 $row['DT_RowClass'] = "no-result";
             }
-	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
-	    $row[] = $aRow['sample_code'];
-	    $row[] = $aRow['batch_code'];
-	    $row[] = ucwords($aRow['lab_name']);
-	    $row[] = ucwords($aRow['sample_name']);
-	    $row[] = $vlResult;
-	    $row[] = '<select class="form-control" style="" name="status" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="updateStatus(this.id,this.value)">
+		$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
+		$status = '<select class="form-control" style="" name="status" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="updateStatus(this.id,this.value)">
 				<option value="">--select--</option>
 				<option value="1" '.($aRow['status']=="1" ? "selected=selected" : "").'>Waiting</option>
 				<option value="2" '.($aRow['status']=="2" ? "selected=selected" : "").'>Lost</option>
@@ -161,7 +157,18 @@ $tsResult = $db->rawQuery($tsQuery);
 				<option value="6" '.($aRow['status']=="6" ? "selected=selected" : "").'>Awaiting Clinic Approval</option>
 				<option value="7" '.($aRow['status']=="7" ? "selected=selected" : "").'>Received and Approved</option>
 			</select><br><br>';
+	    }else{
+		$row['DT_RowClass'] = "empty-sample";
+		$row[] = '';
+		$status = '';
+	    }
 	    
+	    $row[] = $aRow['sample_code'];
+	    $row[] = $aRow['batch_code'];
+	    $row[] = ucwords($aRow['lab_name']);
+	    $row[] = ucwords($aRow['sample_type']);
+	    $row[] = $vlResult;
+	    $row[] = $status;
 	    
 	    $output['aaData'][] = $row;
         }
