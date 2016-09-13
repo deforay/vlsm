@@ -231,7 +231,7 @@ $rejectReason = '';
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Date of Birth</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="dob" name="dob" placeholder="Enter DOB" title="Enter patient date of birth" onchange="getDateOfBirth();"/>
                         </div>
                     </div>
                   </div>
@@ -1202,6 +1202,36 @@ $rejectReason = '';
      }else{
        $('#patientPhoneNumber').removeClass('isRequired');
      }
+    }
+    
+    function getDateOfBirth(){
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth();
+      var yyyy = today.getFullYear();
+      if(dd<10) {
+        dd='0'+dd
+      } 
+      
+      if(mm<10) {
+       mm='0'+mm
+      }
+      
+      var dob = $("#dob").val();
+      splitDob = dob.split("-");
+      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
+      var monthDigit = dobDate.getMonth();
+      var dobYear = splitDob[2];
+      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+      var dobMonth = (dobMonth.toString().length > 1) ? dobMonth: '0'+dobMonth;
+      var dobDate = splitDob[0];
+      
+      var date1 = new Date(yyyy,mm,dd);
+      var date2 = new Date(dobYear,dobMonth,dobDate);
+      var diff = new Date(date1.getTime() - date2.getTime());
+      $("#ageInMtns").val(diff.getUTCMonth()); // Gives difference as year
+      $("#ageInYrs").val((diff.getUTCFullYear() - 1970)); // Gives month count of difference
+      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
     }
   </script>
  <?php
