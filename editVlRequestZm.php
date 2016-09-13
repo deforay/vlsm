@@ -236,7 +236,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         </td>
                         <td><label>Date Of Birth</label></td>
                         <td>
-                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>" onchange="getDateOfBirth('ch');">
+                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>" onchange="getDateOfBirth('ch');return false;">
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
@@ -615,6 +615,16 @@ $("#vlLog").bind("keyup change", function(e) {
   
   function getDateOfBirth(formSource){
       var today = new Date();
+      if(formSource == "ld") {
+        var dob = "<?php echo $vlQueryInfo[0]['patient_dob']; ?>";
+      }else{
+        var dob = $("#dob").val();
+      }
+      if($.trim(dob) == ""){
+        $("#ageInMonths").val("");
+        $("#ageInYears").val("");
+        return false;
+      }
       var dd = today.getDate();
       var mm = today.getMonth();
       var yyyy = today.getFullYear();
@@ -626,11 +636,6 @@ $("#vlLog").bind("keyup change", function(e) {
        mm='0'+mm
       }
      
-      if(formSource == "ld") {
-        var dob = "<?php echo $vlQueryInfo[0]['patient_dob']; ?>";
-      }else{
-        var dob = $("#dob").val();
-      }
       splitDob = dob.split("-");
       var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
       var monthDigit = dobDate.getMonth();
