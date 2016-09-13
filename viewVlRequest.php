@@ -77,26 +77,30 @@ if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_d
  $result[0]['sample_testing_date']='';
 }
 
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($result[0]['date_sample_received_at_testing_lab']);
+if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
+ $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['date_sample_received_at_testing_lab']='';
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00'){
- $result[0]['lab_tested_date']=$general->humanDateFormat($result[0]['lab_tested_date']);
+if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['lab_tested_date']);
+ $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['lab_tested_date']='';
 }
 
-if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00'){
- $result[0]['date_results_dispatched']=$general->humanDateFormat($result[0]['date_results_dispatched']);
+if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['date_results_dispatched']);
+ $result[0]['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['date_results_dispatched']='';
 }
 
-if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00'){
- $result[0]['result_reviewed_date']=$general->humanDateFormat($result[0]['result_reviewed_date']);
+if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['result_reviewed_date']);
+ $result[0]['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['result_reviewed_date']='';
 }

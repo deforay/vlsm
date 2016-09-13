@@ -43,6 +43,8 @@ $cBy ='';
 $urgency ='';
 $clinicianName = '';
 $sCodeValue = '';
+$sKey = '';
+$sFormat='';
 if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
@@ -211,12 +213,12 @@ $sDate = $vlResult[0]['sample_collection_date'];
                 <br/>
                     <table class="table" style="width:100%">
                       <tr>
-                        <td style="width:18%">
+                        <!--<td style="width:18%">
                         <label for="sampleCode">Sample Code  </label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $sCodeValue;?>">
-                        </td>
+                        </td>-->
                         <td style="width:16%">
                         <label for="patientFname">Patient First Name  </label>
                         </td>
@@ -360,6 +362,12 @@ $sDate = $vlResult[0]['sample_collection_date'];
                     </div>
                     <table class="table">
                       <tr>
+                        <td><label for="serialNo">Form Serial No.</label></td>
+                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" /></td>
+                        <td><label for="sampleCode">Sample Code</label></td>
+                        <td><input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $sCodeValue;?>"></td>
+                      </tr>
+                      <tr>
                         <td><label for="labNo">LAB No</label></td>
                         <td><input type="text" class="form-control" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
@@ -414,10 +422,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         <td><label for="dateOfReceivedStamp">Date Received Stamp</label></td>
                         <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>
                       </tr>
-                      <tr>
-                        <td><label for="serialNo">Form Serial No.</label></td>
-                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" /></td>
-                      </tr>
+                      
                     </table>
                   </div>
                 </div>

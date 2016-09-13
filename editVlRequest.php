@@ -77,26 +77,30 @@ if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_d
  $result[0]['sample_testing_date']='';
 }
 
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($result[0]['date_sample_received_at_testing_lab']);
+if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
+ $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['date_sample_received_at_testing_lab']='';
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00'){
- $result[0]['lab_tested_date']=$general->humanDateFormat($result[0]['lab_tested_date']);
+if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['lab_tested_date']);
+ $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['lab_tested_date']='';
 }
 
-if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00'){
- $result[0]['date_results_dispatched']=$general->humanDateFormat($result[0]['date_results_dispatched']);
+if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['date_results_dispatched']);
+ $result[0]['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['date_results_dispatched']='';
 }
 
-if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00'){
- $result[0]['result_reviewed_date']= $general->humanDateFormat($result[0]['result_reviewed_date']);
+if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['result_reviewed_date']);
+ $result[0]['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['result_reviewed_date']= $general->humanDateFormat(date('Y-m-d'));
 }
@@ -415,7 +419,7 @@ $configQuery="SELECT * from global_config";
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
+                        <label for="requestDate" class="col-lg-4 control-label">Sample Testing Date</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['sample_testing_date']; ?>"/>
                         </div>
@@ -1059,7 +1063,7 @@ $configQuery="SELECT * from global_config";
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Sample Received at Testing Lab</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Select Sample Received Date" title="Select sample received date" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Select Sample Received Date" title="Select sample received date" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1068,9 +1072,9 @@ $configQuery="SELECT * from global_config";
                 <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="" class="col-lg-4 control-label">Sample Testing Date</label>
+                        <label for="" class="col-lg-4 control-label">Lab Sample Testing Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date" value="<?php echo $result[0]['lab_tested_date']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date" value="<?php echo $result[0]['lab_tested_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1078,7 +1082,7 @@ $configQuery="SELECT * from global_config";
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Results Dispatched</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Select Result Dispatched Date" title="Select result dispatched date" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Select Result Dispatched Date" title="Select result dispatched date" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1098,7 +1102,7 @@ $configQuery="SELECT * from global_config";
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date" value="<?php echo $result[0]['result_reviewed_date']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date" value="<?php echo $result[0]['result_reviewed_date']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1283,6 +1287,80 @@ $configQuery="SELECT * from global_config";
     	},
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
       }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('#sampleReceivedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         onSelect: function(selectedDate) {
+             $('#sampleTestedOn').val("");
+             $('#resultDispatchedOn').val("");
+             $('#reviewedOn').val("");
+             $("#sampleTestedOn").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+             $("#sampleTestedOn").datepicker("option", "minDate", selectedDate);
+         },
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('#sampleTestedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         onSelect: function(selectedDate) {
+             $('#resultDispatchedOn').val("");
+             $('#reviewedOn').val("");
+             $("#resultDispatchedOn").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+             $("#resultDispatchedOn").datepicker("option", "minDate", selectedDate);
+         },
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('#resultDispatchedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         onSelect: function(selectedDate) {
+             $('#reviewedOn').val("");
+             $("#reviewedOn").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+             $("#reviewedOn").datepicker("option", "minDate", selectedDate);
+         },
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('#reviewedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
     	$('.ui-datepicker-calendar').show();
     });
      $('.ui-datepicker-calendar').show();
