@@ -71,10 +71,10 @@ if(isset($result[0]['missing_last_vl_date']) && trim($result[0]['missing_last_vl
  $result[0]['missing_last_vl_date']='';
 }
 
-if(isset($result[0]['request_date']) && trim($result[0]['request_date'])!='' && trim($result[0]['request_date'])!='0000-00-00'){
- $result[0]['request_date']=$general->humanDateFormat($result[0]['request_date']);
+if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_date'])!='' && trim($result[0]['sample_testing_date'])!='0000-00-00'){
+ $result[0]['sample_testing_date']=$general->humanDateFormat($result[0]['sample_testing_date']);
 }else{
- $result[0]['request_date']='';
+ $result[0]['sample_testing_date']='';
 }
 
 if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
@@ -417,7 +417,7 @@ $configQuery="SELECT * from global_config";
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['request_date']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['sample_testing_date']; ?>"/>
                         </div>
                     </div>
                   </div>
