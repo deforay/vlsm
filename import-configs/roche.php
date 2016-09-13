@@ -1,6 +1,6 @@
 <?php
 
-function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,$rKey,$cellName,$cell){
+function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$rKey,$cellName,$cell){
            
      $sampleIdCol='E';
      $sampleIdRow='2';
@@ -13,11 +13,23 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
      $testingDateCol='AC';
      $testingDateRow='2';
      $logAndAbsoluteValInSameCol='yes';
+     $sampleTypeVal = 'F';
+     $batchCodeVal = 'G';
                 
     
      if($sampleIdCol==$cellName){
         if($rKey>=$sampleIdRow){
             $sampleVal=$cell->getCalculatedValue();
+        }
+     }
+     if($sampleTypeVal==$cellName){
+        if($rKey>=$sampleIdRow){
+            $sampleType=$cell->getCalculatedValue();
+        }
+     }
+     if($batchCodeVal==$cellName){
+        if($rKey>=$sampleIdRow){
+            $batchCode=$cell->getCalculatedValue();
         }
      }
      

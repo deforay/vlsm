@@ -5,13 +5,14 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $tableName="temp_sample_report";
 $primaryKey="temp_sample_id";
-
+$tsQuery="SELECT * FROM testing_status";
+$tsResult = $db->rawQuery($tsQuery);
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('sample_code','lab_name','result','status');
-        $orderColumns = array('sample_code','lab_name','result','status');
+        $aColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','rst.sample_name');
+        $orderColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','rst.sample_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -88,7 +89,7 @@ $primaryKey="temp_sample_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT * FROM temp_sample_report";
+	$sQuery="SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status INNER JOIN r_sample_type as rst ON rst.sample_id=tsr.sample_type";
 	
         //echo $sQuery;die;
 	
@@ -107,7 +108,7 @@ $primaryKey="temp_sample_id";
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * from temp_sample_report $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status INNER JOIN r_sample_type as rst ON rst.sample_id=tsr.sample_type $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -124,13 +125,43 @@ $primaryKey="temp_sample_id";
         );
 			
         foreach ($rResult as $aRow) {
+	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
+		$vlResult = $aRow['absolute_value'];
+	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
+		$vlResult = $aRow['log_value'];
+	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
+		$vlResult = $aRow['text_value'];
+	    }
             $row = array();
+	    if($aRow['sample_details']=='Already Result Exist')
+            {
+                $row['DT_RowClass'] = "exist";
+            }
+	    if($aRow['sample_details']=='New Sample')
+            {
+                $row['DT_RowClass'] = "new-add";
+            }
+	    if($aRow['sample_details']=='')
+            {
+                $row['DT_RowClass'] = "no-result";
+            }
 	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
 	    $row[] = $aRow['sample_code'];
+	    $row[] = $aRow['batch_code'];
 	    $row[] = ucwords($aRow['lab_name']);
-	    $row[] = ucwords($aRow['sample_details']);
-	    $row[] = ucwords($aRow['status']);
-	    $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['temp_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
+	    $row[] = ucwords($aRow['sample_name']);
+	    $row[] = $vlResult;
+	    $row[] = '<select class="form-control" style="" name="status" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="updateStatus(this.id,this.value)">
+				<option value="">--select--</option>
+				<option value="1" '.($aRow['status']=="1" ? "selected=selected" : "").'>Waiting</option>
+				<option value="2" '.($aRow['status']=="2" ? "selected=selected" : "").'>Lost</option>
+				<option value="3" '.($aRow['status']=="3"  ? "selected=selected" : "").'>Sample Reordered</option>
+				<option value="4" '.($aRow['status']=="4"  ? "selected=selected" : "").'>Canceled</option>
+				<option value="5" '.($aRow['status']=="5" ? "selected=selected" : "").'>Invalid</option>
+				<option value="6" '.($aRow['status']=="6" ? "selected=selected" : "").'>Awaiting Clinic Approval</option>
+				<option value="7" '.($aRow['status']=="7" ? "selected=selected" : "").'>Received and Approved</option>
+			</select><br><br>';
+	    
 	    
 	    $output['aaData'][] = $row;
         }

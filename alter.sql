@@ -413,7 +413,16 @@ CREATE TABLE IF NOT EXISTS `r_sample_rejection_reasons` (
 ALTER TABLE  `vl_request_form` ADD  `sample_rejection_facility` INT NULL DEFAULT NULL AFTER  `rejection` ,
 ADD  `sample_rejection_reason` INT NULL DEFAULT NULL AFTER  `sample_rejection_facility` ;
 
-
-
 -- Amit 12 Sep 2016
 ALTER TABLE `vl_request_form` CHANGE `request_date` `sample_testing_date` DATE NULL DEFAULT NULL;
+ALTER TABLE  `temp_sample_report` ADD  `batch_code` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `sample_code` ,
+ADD  `sample_type` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `batch_code` ;
+
+ALTER TABLE  `temp_sample_report` ADD  `lab_id` INT NULL DEFAULT NULL AFTER  `lab_name` ;
+ALTER TABLE  `vl_request_form` ADD  `lab_id` INT NULL DEFAULT NULL AFTER  `lab_name` ;
+
+ALTER TABLE  `vl_request_form` CHANGE  `date_sample_received_at_testing_lab`  `date_sample_received_at_testing_lab` DATETIME NULL DEFAULT NULL ,
+CHANGE  `date_results_dispatched`  `date_results_dispatched` DATETIME NULL DEFAULT NULL ,
+CHANGE  `lab_tested_date`  `lab_tested_date` DATETIME NULL DEFAULT NULL ,
+CHANGE  `result_reviewed_date`  `result_reviewed_date` DATETIME NULL DEFAULT NULL ;
+ALTER TABLE  `temp_sample_report` ADD  `facility_id` INT NULL DEFAULT NULL AFTER  `temp_sample_id` ;
