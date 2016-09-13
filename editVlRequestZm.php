@@ -636,8 +636,8 @@ $("#vlLog").bind("keyup change", function(e) {
       var monthDigit = dobDate.getMonth();
       var dobYear = splitDob[2];
       var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      var dobMonth = (dobMonth.toString().length > 1) ? dobMonth: '0'+dobMonth;
-      var dobDate = splitDob[0];
+      var dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
       
       var date1 = new Date(yyyy,mm,dd);
       var date2 = new Date(dobYear,dobMonth,dobDate);
