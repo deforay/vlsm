@@ -150,6 +150,7 @@ $fResult = $db->rawQuery($fQuery);
   $(document).ready(function() {
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
+	    separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),

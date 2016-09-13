@@ -98,13 +98,12 @@ $primaryKey="treament_id";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-	   $s_c_date = explode(" ", $_POST['sampleCollectionDate']);
-	   //print_r($s_c_date);die;
+	   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
 	   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-	     $start_date = $general->dateFormat($s_c_date[0]);
+	     $start_date = $general->dateFormat(trim($s_c_date[0]));
 	   }
-	   if (isset($s_c_date[2]) && trim($s_c_date[2]) != "") {
-	     $end_date = $general->dateFormat($s_c_date[2]);
+	   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+	     $end_date = $general->dateFormat(trim($s_c_date[1]));
 	   }
 	}
 	  
@@ -180,7 +179,7 @@ $primaryKey="treament_id";
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
        //die($sQuery);
-      // echo $sQuery;
+        //echo $sQuery;
         $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
