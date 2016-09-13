@@ -72,7 +72,7 @@
 
         this.locale = {
             format: 'DD-MMM-YYYY',
-            separator: '  ',
+            separator: ' to ',
             applyLabel: 'Apply',
             cancelLabel: 'Cancel',
             weekLabel: 'W',

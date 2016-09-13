@@ -5,7 +5,6 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="treament_id";
-
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
@@ -96,13 +95,13 @@ $primaryKey="treament_id";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-	   $s_c_date = explode(" ", $_POST['sampleCollectionDate']);
+	   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
 	   //print_r($s_c_date);die;
 	   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-	     $start_date = $general->dateFormat($s_c_date[0]);
+	     $start_date = $general->dateFormat(trim($s_c_date[0]));
 	   }
-	   if (isset($s_c_date[2]) && trim($s_c_date[2]) != "") {
-	     $end_date = $general->dateFormat($s_c_date[2]);
+	   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+	     $end_date = $general->dateFormat(trim($s_c_date[1]));
 	   }
 	}
 	  
@@ -193,7 +192,6 @@ $primaryKey="treament_id";
             "aaData" => array()
         );
 	
-        
         foreach ($rResult as $aRow) {
 	    $vlResult = '';
 	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){

@@ -4,10 +4,15 @@ ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
-
 $tableName="vl_request_form";
 
 try {
+     $configQuery ="SELECT value FROM global_config where name='auto_approval'";
+     $configResult = $db->rawQuery($configQuery);
+     $status = 6;
+     if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
+          $status = 7;
+     }
      //var_dump($_POST);die;
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
@@ -31,7 +36,6 @@ try {
           $_POST['dateOfReceivedStamp']=$general->dateFormat($_POST['dateOfReceivedStamp']);  
      }
     
-     
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
@@ -99,7 +103,7 @@ try {
           'date_sample_received_at_testing_lab'=>$_POST['dateOfReceivedStamp'],
           'rejection'=>$_POST['noResult'],
           'result_reviewed_by'=>$_SESSION['userId'],
-          'status'=>'6',
+          'status'=>$status,
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime()
         );

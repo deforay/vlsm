@@ -143,6 +143,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   $(document).ready(function() {
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
+	    separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
@@ -251,8 +252,8 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
             }
         });
     }
-    function getSampleCodeDetails()
-    {
+    
+    function getSampleCodeDetails(){
       $.blockUI();
       var fName = $("#facilityName").val();
       var sName = $("#sampleType").val();
