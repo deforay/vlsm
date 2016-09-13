@@ -186,7 +186,7 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['absolute_value']);
             $row[] = ucwords($aRow['contact_notes']);
             $row[] = '<select class="form-control" name="status" id=' . $aRow['treament_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
-			    <option value="">--select--</option>
+			    <option value=""> -- Select -- </option>
 			    <option value="yes" ' . ($aRow['contact_complete_status'] == "yes" ? "selected=selected" : "") . '>Yes</option>
 			    <option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
 		    </select>';

@@ -911,7 +911,7 @@ $configQuery="SELECT * from global_config";
                         <label for="switchToTDFSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <select class="form-control viralTestData" id="switchToTDFSampleType" name="switchToTDFSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                         <option value="">--select--</option>
+                         <option value=""> -- Select -- </option>
                           <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
@@ -970,7 +970,7 @@ $configQuery="SELECT * from global_config";
                         <label for="missingSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <select class="form-control viralTestData" id="missingSampleType" name="missingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                         <option value="">--select--</option>
+                         <option value=""> -- Select -- </option>
                           <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
@@ -990,7 +990,7 @@ $configQuery="SELECT * from global_config";
                      <div class="col-lg-7">
                      <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
                      <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
-                      <option value="">--select--</option>
+                      <option value=""> -- Select -- </option>
                       <option value="good" <?php echo ($result[0]['arv_adherence']=='good')?"selected='selected'":""?>>Good >= 95%</option>
                       <option value="fair" <?php echo ($result[0]['arv_adherence']=='fair')?"selected='selected'":""?>>Fair (85-94%)</option>
                       <option value="poor" <?php echo ($result[0]['arv_adherence']=='poor')?"selected='selected'":""?>>Poor < 85%</option>
@@ -1003,7 +1003,7 @@ $configQuery="SELECT * from global_config";
                      <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
                      <div class="col-lg-7">
                      <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
-                      <option value="">--select--</option>
+                      <option value=""> -- Select -- </option>
                       <option value="1" <?php echo ($result[0]['enhance_session']=='1')?"selected='selected'":""?>>1</option>
                       <option value="2" <?php echo ($result[0]['enhance_session']=='2')?"selected='selected'":""?>>2</option>
                       <option value="3" <?php echo ($result[0]['enhance_session']=='3')?"selected='selected'":""?>>3</option>
@@ -1113,7 +1113,7 @@ $configQuery="SELECT * from global_config";
                       <label for="testMethods" class="col-lg-4 control-label">Test Methods </label>
                       <div class="col-lg-7">
                       <select name="testMethods" id="testMethods" class="form-control" title="Please choose test methods">
-                       <option value="">--select--</option>
+                       <option value=""> -- Select -- </option>
                        <option value="individual" <?php echo ($result[0]['test_methods']=='individual')?"selected='selected'":""?>>Individual</option>
                        <option value="minipool" <?php echo ($result[0]['test_methods']=='minipool')?"selected='selected'":""?>>Minipool</option>
                        <option value="other pooling algorithm" <?php echo ($result[0]['test_methods']=='other pooling algorithm')?"selected='selected'":""?>>Other Pooling Algorithm</option>

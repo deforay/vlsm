@@ -148,7 +148,7 @@ $tsResult = $db->rawQuery($tsQuery);
             }
 		$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
 		$status = '<select class="form-control" style="" name="status" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="updateStatus(this.id,this.value)">
-				<option value="">--select--</option>
+				<option value=""> -- Select -- </option>
 				<option value="1" '.($aRow['status']=="1" ? "selected=selected" : "").'>Waiting</option>
 				<option value="2" '.($aRow['status']=="2" ? "selected=selected" : "").'>Lost</option>
 				<option value="3" '.($aRow['status']=="3"  ? "selected=selected" : "").'>Sample Reordered</option>
