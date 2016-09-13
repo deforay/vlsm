@@ -95,13 +95,13 @@ $primaryKey="treament_id";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-	   $s_c_date = explode(" ", $_POST['sampleCollectionDate']);
+	   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
 	   //print_r($s_c_date);die;
 	   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-	     $start_date = $general->dateFormat($s_c_date[0]);
+	     $start_date = $general->dateFormat(trim($s_c_date[0]));
 	   }
-	   if (isset($s_c_date[2]) && trim($s_c_date[2]) != "") {
-	     $end_date = $general->dateFormat($s_c_date[2]);
+	   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+	     $end_date = $general->dateFormat(trim($s_c_date[1]));
 	   }
 	}
 	if (isset($sWhere) && $sWhere != "") {
@@ -122,7 +122,7 @@ $primaryKey="treament_id";
 	    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
 	   }
 	}
-		$sQuery = $sQuery.' '.$sWhere;
+	$sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by vl.treament_id';
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
