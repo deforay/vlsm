@@ -69,12 +69,10 @@ try {
                 $sheetData = $objPHPExcel->getActiveSheet();
                 
                 
-                
                 //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 //$count = count($sheetData);
                 $m=0;
                 foreach($sheetData->getRowIterator() as $rKey=>$row){
-                    
                     if($rKey < 2) continue;
                     
                     $absDecimalVal="";
@@ -86,21 +84,23 @@ try {
                     foreach($row->getCellIterator() as $key => $cell)
                     {
                         $cellName = $sheetData->getCellByColumnAndRow($key,$rKey)->getColumn();
-                        
+                        $cellRow = $sheetData->getCellByColumnAndRow($key,$rKey)->getRow();
+                                                
                         fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$sampleType,$batchCode,$rKey,$cellName,$cell);
                     }
-                    if($sampleVal!=''){
+                    //echo $cellRow;
+                    //if($sampleVal!=''){
                     //check sample exist
-                    $sampleTypeQuery="SELECT * FROM r_sample_type where sample_name='".$sampleType."' AND form_identification='".$arr['vl_form']."'";
-                    $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
-                    if($sampleTypeResult){
-                     $sampleType =  $sampleTypeResult[0]['sample_id'];
-                    }else{
-                        $sampleData=array('sample_name'=>$sampleType,'form_identification'=>$arr['vl_form']);
-                        $db->insert('r_sample_type',$sampleData);
-                        $lastId = $db->getInsertId();
-                        $sampleType = $lastId;
-                    }
+                    //$sampleTypeQuery="SELECT * FROM r_sample_type where sample_name='".$sampleType."' AND form_identification='".$arr['vl_form']."'";
+                    //$sampleTypeResult = $db->rawQuery($sampleTypeQuery);
+                    //if($sampleTypeResult){
+                     //$sampleType =  $sampleTypeResult[0]['sample_id'];
+                    //}else{
+                        //$sampleData=array('sample_name'=>$sampleType,'form_identification'=>$arr['vl_form']);
+                        //$db->insert('r_sample_type',$sampleData);
+                        //$lastId = $db->getInsertId();
+                        //$sampleType = $lastId;
+                    //}
                     
                     $data=array(
                         'lab_id'=>$_POST['labId'],
@@ -135,14 +135,16 @@ try {
                     }else{
                         $data['sample_details'] = 'New Sample';
                     }
+                    if($sampleVal!='' || $batchCode!='' || $sampleType!='' || $logVal!='' || $absVal!='' || $absDecimalVal!=''){
                     $db->insert($tableName,$data);
+                    }
                     //if(isset($vlResult[$m]['sample_code'])){
                     //$db=$db->where('sample_code',$sampleVal);
                     ////$db=$db->where('sample_code',$vlResult[$m]['sample_code']);
                     //$id=$db->update($tableName,$data);
                     //}
+                   // }
                     $m++;
-                }
                 }
             }
             
