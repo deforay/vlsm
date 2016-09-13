@@ -65,13 +65,9 @@ $tsResult = $db->rawQuery($tsQuery);
 				<input type="hidden" name="checkedTests" id="checkedTests"/>
 				<select style="" class="form-control" id="status" name="status" title="Please select test status" >
 				  <option value="">-- Select --</option>
-				<?php
-				foreach($tsResult as $status){
-				 ?>
-				 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
-				 <?php
-				}
-				?>
+				  <option value="1">Hold</option>
+				  <option value="4">Rejected</option>
+				  <option value="7">Accepted</option>
 				</select>
 				</div>
 			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>
@@ -148,7 +144,7 @@ $tsResult = $db->rawQuery($tsQuery);
                 {"sClass":"center","bSortable":false},
 		{"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 1, "desc" ]],
+            //"aaSorting": [[ 1, "desc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;
@@ -214,7 +210,7 @@ $tsResult = $db->rawQuery($tsQuery);
    }
    
    function submitTestStatus(){
-    if($("#status").val()!=''){
+    if($("#status").val()!='' && $("#checkedTests").val()!=''){
       conf=confirm("Do you wish to change the status ?");
       if(conf){
 	$.blockUI();
@@ -224,6 +220,7 @@ $tsResult = $db->rawQuery($tsQuery);
 		selectedTests = [];
 		selectedTestsId = [];
 		$("#checkedTests").val('');
+		$("#status").val('');
 		$(".countChecksPending").html(0);
 	       });
 	$.unblockUI();
@@ -232,7 +229,7 @@ $tsResult = $db->rawQuery($tsQuery);
       }
     }
    else{
-      alert("Please select the status.");
+      alert("Please select the status and atleast one checkbox");
     }
    }
   function updateStatus(value,status){
