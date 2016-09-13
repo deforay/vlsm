@@ -202,12 +202,12 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                 <br/>
                     <table class="table" style="width:100%">
                       <tr>
-                        <td style="width:18%">
+                        <!--<td style="width:18%">
                         <label for="sampleCode">Sample Code  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>">
-                        </td>
+                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">
+                        </td>-->
                         <td style="width:16%">
                         <label for="patientFname">Patient First Name  </label>
                         </td>
@@ -353,6 +353,12 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                     </div>
                     <table class="table">
                       <tr>
+                        <td><label for="serialNo">Form Serial No.</label></td>
+                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
+                        <td><label for="sampleCode">Form Serial No.</label></td>
+                        <td><input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"></td>
+                      </tr>
+                      <tr>
                         <td><label for="labNo">LAB No</label></td>
                         <td><input type="text" class="form-control" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_no'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
@@ -407,10 +413,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label for="dateOfReceivedStamp">Date Received Stamp</label></td>
                         <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab'];?>" /></td>
                       </tr>
-                      <tr>
-                        <td><label for="serialNo">Form Serial No.</label></td>
-                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
-                      </tr>
+                      
                     </table>
                   </div>
                 </div>
