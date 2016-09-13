@@ -151,17 +151,6 @@ if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_d
  $result[0]['sample_testing_date']='';
 }
 
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($result[0]['date_sample_received_at_testing_lab']);
-}else{
- $result[0]['date_sample_received_at_testing_lab']='';
-}
-
-if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00'){
- $result[0]['date_results_dispatched']=$general->humanDateFormat($result[0]['date_results_dispatched']);
-}else{
- $result[0]['date_results_dispatched']='';
-}
 if(trim($result[0]['current_regimen'])!=''){
 $aQuery="SELECT * from r_art_code_details where art_id=".$result[0]['current_regimen'];
 $aResult=$db->query($aQuery);

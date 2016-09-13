@@ -12,19 +12,23 @@ $treamentId=(int) $_POST['treamentId'];
 
 try {
    if(isset($_POST['sampleReceivedOn']) && trim($_POST['sampleReceivedOn'])!=""){
-               $_POST['sampleReceivedOn']=$general->dateFormat($_POST['sampleReceivedOn']);  
+               $sampleReceiveDate = explode(" ",$_POST['sampleReceivedOn']);
+               $_POST['sampleReceivedOn']=$general->dateFormat($sampleReceiveDate[0])." ".$sampleReceiveDate[1];
           }
           
           if(isset($_POST['sampleTestedOn']) && trim($_POST['sampleTestedOn'])!=""){
-               $_POST['sampleTestedOn']=$general->dateFormat($_POST['sampleTestedOn']);  
+               $sampletestDate = explode(" ",$_POST['sampleTestedOn']);
+               $_POST['sampleTestedOn']=$general->dateFormat($sampletestDate[0])." ".$sampletestDate[1];
           }
           
           if(isset($_POST['resultDispatchedOn']) && trim($_POST['resultDispatchedOn'])!=""){
-               $_POST['resultDispatchedOn']=$general->dateFormat($_POST['resultDispatchedOn']);  
+               $sampleDispatchDate = explode(" ",$_POST['resultDispatchedOn']);
+               $_POST['resultDispatchedOn']=$general->dateFormat($sampleDispatchDate[0])." ".$sampleDispatchDate[1];
           }
           
           if(isset($_POST['reviewedOn']) && trim($_POST['reviewedOn'])!=""){
-               $_POST['reviewedOn']=$general->dateFormat($_POST['reviewedOn']);  
+               $sampleReviewDate = explode(" ",$_POST['reviewedOn']);
+               $_POST['reviewedOn']=$general->dateFormat($sampleReviewDate[0])." ".$sampleReviewDate[1];
           }
    
    $vldata =  array('lab_name'=>$_POST['labName'],

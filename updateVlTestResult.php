@@ -6,7 +6,7 @@ include('header.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $id=base64_decode($_GET['id']);
-$fQuery="SELECT vl.sample_code,vl.patient_name,vl.art_no,vl.patient_dob,vl.gender,vl.patient_phone_number,vl.location,vl.sample_collection_date,vl.treatment_initiation,vl.date_of_initiation_of_current_regimen,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.arv_adherence,vl.routine_monitoring_last_vl_date,vl.routine_monitoring_value,vl.routine_monitoring_sample_type,vl.vl_treatment_failure_adherence_counseling_last_vl_date,vl.vl_treatment_failure_adherence_counseling_value,vl.vl_treatment_failure_adherence_counseling_sample_type,vl.suspected_treatment_failure_last_vl_date,vl.suspected_treatment_failure_value,vl.suspected_treatment_failure_sample_type,vl.request_clinician,vl.clinician_ph_no,vl.request_date,vl.vl_focal_person,vl.focal_person_phone_number,vl.email_for_HF,vl.date_sample_received_at_testing_lab,vl.date_results_dispatched,vl.rejection,vl.other_id,vl.age_in_yrs,vl.age_in_mnts,vl.treatment_initiated_date,vl.arc_no,vl.treatment_details,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.justification,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.result_reviewed_date,vl.status,ts.status_name,r_a_c_d.art_code,f.facility_name,f.facility_code,f.state,f.hub_name,r_s_t.sample_name,r_s_t_rm.sample_name as snrm,r_s_t_tfac.sample_name as sntfac,r_s_t_stf.sample_name as snstf from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as r_s_t ON r_s_t.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_sample_type as r_s_t_rm ON r_s_t_rm.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as r_s_t_tfac ON r_s_t_tfac.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as r_s_t_stf ON r_s_t_stf.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
+$fQuery="SELECT vl.sample_code,vl.patient_name,vl.art_no,vl.patient_dob,vl.gender,vl.patient_phone_number,vl.location,vl.sample_collection_date,vl.treatment_initiation,vl.date_of_initiation_of_current_regimen,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.arv_adherence,vl.routine_monitoring_last_vl_date,vl.routine_monitoring_value,vl.routine_monitoring_sample_type,vl.vl_treatment_failure_adherence_counseling_last_vl_date,vl.vl_treatment_failure_adherence_counseling_value,vl.vl_treatment_failure_adherence_counseling_sample_type,vl.suspected_treatment_failure_last_vl_date,vl.suspected_treatment_failure_value,vl.suspected_treatment_failure_sample_type,vl.request_clinician,vl.clinician_ph_no,vl.sample_testing_date,vl.vl_focal_person,vl.focal_person_phone_number,vl.email_for_HF,vl.date_sample_received_at_testing_lab,vl.date_results_dispatched,vl.rejection,vl.other_id,vl.age_in_yrs,vl.age_in_mnts,vl.treatment_initiated_date,vl.arc_no,vl.treatment_details,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.justification,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.result_reviewed_date,vl.status,ts.status_name,r_a_c_d.art_code,f.facility_name,f.facility_code,f.state,f.hub_name,r_s_t.sample_name,r_s_t_rm.sample_name as snrm,r_s_t_tfac.sample_name as sntfac,r_s_t_stf.sample_name as snstf from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as r_s_t ON r_s_t.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_sample_type as r_s_t_rm ON r_s_t_rm.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as r_s_t_tfac ON r_s_t_tfac.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as r_s_t_stf ON r_s_t_stf.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where treament_id=$id";
 //echo $fQuery;die;
 $result=$db->query($fQuery);
 
@@ -53,32 +53,36 @@ if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result
  $result[0]['suspected_treatment_failure_last_vl_date']='';
 }
 
-if(isset($result[0]['request_date']) && trim($result[0]['request_date'])!='' && trim($result[0]['request_date'])!='0000-00-00'){
- $result[0]['request_date']=$general->humanDateFormat($result[0]['request_date']);
+if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_date'])!='' && trim($result[0]['sample_testing_date'])!='0000-00-00'){
+ $result[0]['sample_testing_date']=$general->humanDateFormat($result[0]['sample_testing_date']);
 }else{
- $result[0]['request_date']='';
+ $result[0]['sample_testing_date']='';
 }
 
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($result[0]['date_sample_received_at_testing_lab']);
+if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
+ $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['date_sample_received_at_testing_lab']='';
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00'){
- $result[0]['lab_tested_date']=$general->humanDateFormat($result[0]['lab_tested_date']);
+if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['lab_tested_date']);
+ $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['lab_tested_date']='';
 }
 
-if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00'){
- $result[0]['date_results_dispatched']=$general->humanDateFormat($result[0]['date_results_dispatched']);
+if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['date_results_dispatched']);
+ $result[0]['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['date_results_dispatched']='';
 }
 
-if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00'){
- $result[0]['result_reviewed_date']= $general->humanDateFormat($result[0]['result_reviewed_date']);
+if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['result_reviewed_date']);
+ $result[0]['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $result[0]['result_reviewed_date']= $general->humanDateFormat(date('Y-m-d'));
 }
@@ -93,6 +97,25 @@ $tsResult = $db->rawQuery($tsQuery);
    #toogleResultDiv{
      
    }
+   .ui_tpicker_second_label {
+       display: none !important;
+      }.ui_tpicker_second_slider {
+       display: none !important;
+      }.ui_tpicker_millisec_label {
+       display: none !important;
+      }.ui_tpicker_millisec_slider {
+       display: none !important;
+      }.ui_tpicker_microsec_label {
+       display: none !important;
+      }.ui_tpicker_microsec_slider {
+       display: none !important;
+      }.ui_tpicker_timezone_label {
+       display: none !important;
+      }.ui_tpicker_timezone {
+       display: none !important;
+      }.ui_tpicker_time_input{
+       width:100%;
+      }
    </style>
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
    <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
@@ -534,9 +557,9 @@ $tsResult = $db->rawQuery($tsQuery);
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
+                        <label for="requestDate" class="col-lg-4 control-label">Sample Testing Date</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo $result[0]['request_date']; ?>
+                          <?php echo $result[0]['sample_testing_date']; ?>
                         </div>
                     </div>
                   </div>
@@ -640,7 +663,7 @@ $tsResult = $db->rawQuery($tsQuery);
                 <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="" class="col-lg-4 control-label">Sample Testing Date</label>
+                        <label for="" class="col-lg-4 control-label">Lab Sample Testing Date</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control date readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date" value="<?php echo $result[0]['lab_tested_date']; ?>"/>
                         </div>
@@ -761,13 +784,82 @@ $tsResult = $db->rawQuery($tsQuery);
   </div>
   <script type="text/javascript">
    $(document).ready(function() {
-     $('.date').datepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'dd-M-yy',
-      timeFormat: "hh:mm TT",
-      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     });
+     
+     $('#sampleReceivedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         onSelect: function(selectedDate) {
+             $('#sampleTestedOn').val("");
+             $('#resultDispatchedOn').val("");
+             $('#reviewedOn').val("");
+             $("#sampleTestedOn").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+             $("#sampleTestedOn").datepicker("option", "minDate", selectedDate);
+         },
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('#sampleTestedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         onSelect: function(selectedDate) {
+             $('#resultDispatchedOn').val("");
+             $('#reviewedOn').val("");
+             $("#resultDispatchedOn").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+             $("#resultDispatchedOn").datepicker("option", "minDate", selectedDate);
+         },
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('#resultDispatchedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         onSelect: function(selectedDate) {
+             $('#reviewedOn').val("");
+             $("#reviewedOn").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+             $("#reviewedOn").datepicker("option", "minDate", selectedDate);
+         },
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('#reviewedOn').datetimepicker({
+         changeMonth: true,
+         changeYear: true,
+         dateFormat: 'dd-M-yy',
+         timeFormat: "HH:mm",
+         onChangeMonthYear: function(year, month, widget) {
+            setTimeout(function() {
+               $('.ui-datepicker-calendar').show();
+            });
+    	},
+         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+     }).click(function(){
+    	$('.ui-datepicker-calendar').show();
+    });
+     $('.ui-datepicker-calendar').show();
    });
    function validateNow(){
     flag = deforayValidator.init({

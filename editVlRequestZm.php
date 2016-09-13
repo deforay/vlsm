@@ -61,10 +61,10 @@ if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_
 }else{
  $vlQueryInfo[0]['last_viral_load_date']='';
 }
-if(isset($vlQueryInfo[0]['request_date']) && trim($vlQueryInfo[0]['request_date'])!='' && trim($vlQueryInfo[0]['request_date'])!='0000-00-00'){
- $vlQueryInfo[0]['request_date']=$general->humanDateFormat($vlQueryInfo[0]['request_date']);
+if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && trim($vlQueryInfo[0]['sample_testing_date'])!='0000-00-00'){
+ $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($vlQueryInfo[0]['sample_testing_date']);
 }else{
- $vlQueryInfo[0]['request_date']='';
+ $vlQueryInfo[0]['sample_testing_date']='';
 }
 if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQueryInfo[0]['date_sample_received_at_testing_lab'])!='' && trim($vlQueryInfo[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
  $vlQueryInfo[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($vlQueryInfo[0]['date_sample_received_at_testing_lab']);
@@ -202,12 +202,12 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                 <br/>
                     <table class="table" style="width:100%">
                       <tr>
-                        <td style="width:18%">
+                        <!--<td style="width:18%">
                         <label for="sampleCode">Sample Code  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>">
-                        </td>
+                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">
+                        </td>-->
                         <td style="width:16%">
                         <label for="patientFname">Patient First Name  </label>
                         </td>
@@ -353,6 +353,12 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                     </div>
                     <table class="table">
                       <tr>
+                        <td><label for="serialNo">Form Serial No.</label></td>
+                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
+                        <td><label for="sampleCode">Form Serial No.</label></td>
+                        <td><input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"></td>
+                      </tr>
+                      <tr>
                         <td><label for="labNo">LAB No</label></td>
                         <td><input type="text" class="form-control" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_no'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
@@ -382,7 +388,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['request_date'];?>" /></td>
+                        <td><input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_testing_date'];?>" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
@@ -404,13 +410,10 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
                         <td colspan="3"><textarea class="form-control" name="labCommnets" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo $vlQueryInfo[0]['comments'];?></textarea></td>
-                        <td><label for="dateOfReceivedStamp">Date Received Stamp</label></td>
+                        <td><label for="dateOfReceivedStamp">Date Of Result</label></td>
                         <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab'];?>" /></td>
                       </tr>
-                      <tr>
-                        <td><label for="serialNo">Form Serial No.</label></td>
-                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
-                      </tr>
+                      
                     </table>
                   </div>
                 </div>
