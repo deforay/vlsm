@@ -8,6 +8,27 @@ $query="SELECT config_id,machine_name,file_name FROM import_config where status=
 $iResult = $db->rawQuery($query);
 $reviewedOn = $general->humanDateFormat(date('Y-m-d'));
 ?>
+<style>
+  .ui_tpicker_second_label {
+       display: none !important;
+      }.ui_tpicker_second_slider {
+       display: none !important;
+      }.ui_tpicker_millisec_label {
+       display: none !important;
+      }.ui_tpicker_millisec_slider {
+       display: none !important;
+      }.ui_tpicker_microsec_label {
+       display: none !important;
+      }.ui_tpicker_microsec_slider {
+       display: none !important;
+      }.ui_tpicker_timezone_label {
+       display: none !important;
+      }.ui_tpicker_timezone {
+       display: none !important;
+      }.ui_tpicker_time_input{
+       width:100%;
+      }
+</style>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -213,11 +234,50 @@ $reviewedOn = $general->humanDateFormat(date('Y-m-d'));
     }
   }
   $(document).ready(function() {
-    $('.datePicker').datepicker({
+    $('#sampleReceivedDate').datetimepicker({
         changeMonth: true,
         changeYear: true,
         dateFormat: 'dd-M-yy',
-        timeFormat: "hh:mm TT",
+        timeFormat: "HH:mm",
+        onSelect: function(selectedDate) {
+            $('#testingDate').val("");
+            $('#dispatchedDate').val("");
+            $('#reviewedDate').val("");
+            $("#testingDate").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+            $("#testingDate").datepicker("option", "minDate", selectedDate);
+        },
+        yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+    });
+    $('#testingDate').datetimepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-M-yy',
+        timeFormat: "HH:mm",
+        onSelect: function(selectedDate) {
+            $('#dispatchedDate').val("");
+            $('#reviewedDate').val("");
+            $("#dispatchedDate").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+            $("#dispatchedDate").datepicker("option", "minDate", selectedDate);
+        },
+        yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+    });
+    $('#dispatchedDate').datetimepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-M-yy',
+        timeFormat: "HH:mm",
+        onSelect: function(selectedDate) {
+            $('#reviewedDate').val("");
+            $("#reviewedDate").datepicker("option", "minDateTime", new Date($(this).datepicker('getDate')));
+            $("#reviewedDate").datepicker("option", "minDate", selectedDate);
+        },
+        yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+    });
+    $('#reviewedDate').datetimepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-M-yy',
+        timeFormat: "HH:mm",
         yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
     });
   
