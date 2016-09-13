@@ -77,12 +77,21 @@ $pdf->AddPage();
 $general=new Deforay_Commons_General();
 $id=$_POST['id'];
 
-$sTypeQuery="SELECT * FROM r_sample_type";
+
+$configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+    
+$sTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 
 $fQuery="SELECT * from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
 $result=$db->query($fQuery);
-
+    
 if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
  $result[0]['patient_dob']=$general->humanDateFormat($result[0]['patient_dob']);
 }else{
@@ -137,10 +146,10 @@ if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result
 // $result[0]['missing_last_vl_date']='';
 //}
 
-if(isset($result[0]['request_date']) && trim($result[0]['request_date'])!='' && trim($result[0]['request_date'])!='0000-00-00'){
- $result[0]['request_date']=$general->humanDateFormat($result[0]['request_date']);
+if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_date'])!='' && trim($result[0]['sample_testing_date'])!='0000-00-00'){
+ $result[0]['sample_testing_date']=$general->humanDateFormat($result[0]['sample_testing_date']);
 }else{
- $result[0]['request_date']='';
+ $result[0]['sample_testing_date']='';
 }
 
 if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
@@ -201,13 +210,14 @@ $sVlResult = $db->rawQuery($sVlQuery);
 }else{
 $sVlResult[0]['sample_name']     = '';
 }
-$configQuery="SELECT * from global_config";
-    $configResult=$db->query($configQuery);
-    $arr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($configResult); $i++) {
-      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-    }
+
+//rejection facility and reason
+$rejectionfQuery="SELECT * FROM facility_details where facility_id='".$result[0]['sample_rejection_facility']."'";
+$rejectionfResult = $db->rawQuery($rejectionfQuery);
+
+$rejectionrQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_id='".$result[0]['sample_rejection_reason']."'";
+$rejectionrResult = $db->rawQuery($rejectionrQuery);
+
     //set sample type
     $div = '';
     foreach($sTypeResult as $sType){
@@ -218,6 +228,14 @@ $configQuery="SELECT * from global_config";
       $div .= '<input type="checkbox" name="check[]" id="name'.$sType['sample_id'].'" value="'.$sType['sample_name'].'" readonly="true"/>&nbsp;'.$sType['sample_name'];
      }
      
+    }
+    //check urgency
+    if($result[0]['urgency']=='normal'){
+    $urgency = '<td>:&nbsp;<input type="radio" name="urgency" value="normal" checked="checked"  readonly="true"/>Normal&nbsp;<input type="radio" name="urgency" value="urgent"  readonly="true"/>Urgent</td>';
+    }else if($result[0]['urgency']=='urgent'){
+     $urgency = '<td>:&nbsp;<input type="radio" name="urgency" value="normal"  readonly="true"/>Normal&nbsp;<input type="radio" name="urgency" value="urgent" checked="checked"  readonly="true"/>Urgent</td>';
+    }else{
+     $urgency = '<td>:&nbsp;<input type="radio" name="urgency" value="normal"  readonly="true"/>Normal&nbsp;<input type="radio" name="urgency" value="urgent"  readonly="true"/>Urgent</td>';
     }
     //check gender
     if($result[0]['gender']=='male'){
@@ -276,6 +294,9 @@ $configQuery="SELECT * from global_config";
          $html.='<tr>';
           $html.='<td>Hub:'.ucwords($result[0]['hub_name']).'&nbsp;District:'.ucwords($result[0]['district']).'</td>';
          $html.='</tr>';
+         $html.='<tr>';
+          $html.='<td>Urgency'.ucwords($urgency).'</td>';
+         $html.='</tr>';
         $html.='</table></td>';
         $html.='<td><h4>Sample Details</h4><table style="padding:5px;border:2px solid #333;">';
          $html.='<tr style="width:98%;">';
@@ -292,8 +313,13 @@ $configQuery="SELECT * from global_config";
         $html.='<tr><td>Other Id</td><td>:&nbsp;'.$result[0]['other_id'].'</td><td>Patient Name</td><td>:&nbsp;'.$result[0]['patient_name'].'</td></tr>';
         $html.='<tr><td>Date Of Birth</td><td>:&nbsp;'.$result[0]['patient_dob'].'</td><td>Gender</td>'.$gender.'</tr>';
         $html.='<tr><td>Age In years</td><td>:&nbsp;'.$result[0]['age_in_yrs'].'</td><td>Age In Month</td><td>:&nbsp;'.$result[0]['age_in_mnts'].'</td></tr>';
-        $html.='<tr><td>Patient consent to receive SMS?</td><td>:&nbsp;'.$sms.'</td><td>Ph Number</td><td>:&nbsp;'.$result[0]['patient_phone_number'].'</td></tr>';
+        $html.='<tr><td>Patient consent to receive SMS?</td><td>&nbsp;'.$sms.'</td><td>Ph Number</td><td>:&nbsp;'.$result[0]['patient_phone_number'].'</td></tr>';
         $html.='<tr><td>Location</td><td colspan="3">:&nbsp;'.$result[0]['location'].'</td></tr>';
+        $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
+        $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['sample_testing_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
+        $html.='<tr><td>Phone Number</td><td>:&nbsp;'.$result[0]['focal_person_phone_number'].'</td><td>Email for HF</td><td>:&nbsp;'.$result[0]['email_for_HF'].'</td></tr>';
+        $html.='<tr><td>Justification</td><td>:&nbsp;'.$result[0]['justification'].'</td><td>Rejection</td><td>&nbsp;'.$reject.'</td></tr>';
+        $html.='<tr><td>Rejection Facility</td><td>:&nbsp;'.ucwords($rejectionfResult[0]['facility_name']).'</td><td>Rejection Reason</td><td>:&nbsp;'.ucwords($rejectionrResult[0]['rejection_reason_name']).'</td></tr>';
         $html.='</table>';
         $html.='<h4>Treatment Details</h4>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
@@ -303,10 +329,9 @@ $configQuery="SELECT * from global_config";
         $html.='<tr><td>Is Patient Pregnant ?</td><td>'.$prg.'</td><td>If Pregnant, ARC No.</td><td>:&nbsp;'.$result[0]['arc_no'].'</td></tr>';
         //$html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>ARV Adherence</td><td>:&nbsp;'.$result[0]['arv_adherence'].'</td></tr>';
         $html.='<tr><td>Is Patient Breastfeeding?</td><td colspan="3">'.$breast.'</td></tr>';
-        $html.='</table>';
+        $html.='</table><br/><br/><br/><br/>';
         $html.='<h4>Indication For Viral Load Testing</h4>';
         $html.='<table style="padding:5px;border:2px solid #333;">';
-        $html.='<tr><td colspan="2">ARV Adherence &nbsp;&nbsp;:&nbsp;&nbsp;'.ucwords($result[0]['arv_adherence']).'</td><td colspan="1">Enhance Session &nbsp;&nbsp;:&nbsp;&nbsp;'.ucwords($result[0]['enhance_session']).'</td></tr>';
         if($result[0]['viral_load_indication']=='routine'){
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="1" checked="checked" readonly="true"/>Routine Monitoring</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['routine_monitoring_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rtResult[0]['sample_name'].'</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="2" readonly="true"/>Repeat VL test after suspected treatment failure adherence counseling</td></tr><tr><td>Last VL Date &nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'].'</td><td>VL Value&nbsp;&nbsp;:&nbsp;'.$result[0]['vl_treatment_failure_adherence_counseling_value'].'</td><td>Sample Type&nbsp;&nbsp;:&nbsp;'.$rVlresult[0]['sample_name'].'</td></tr>';
@@ -344,12 +369,7 @@ $configQuery="SELECT * from global_config";
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="4" readonly="true" />Switch to TDF</td></tr>';
          $html.='<tr><td colspan="3"><input type="checkbox" name="routine" value="5" readonly="true" />Missing</td></tr>';
         }
-        $html.='</table>';
-        $html.='<table style="padding:5px;border:2px solid #333;">';
-        $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
-        $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['request_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
-        $html.='<tr><td>Phone Number</td><td>:&nbsp;'.$result[0]['focal_person_phone_number'].'</td><td>Email for HF</td><td>:&nbsp;'.$result[0]['email_for_HF'].'</td></tr>';
-        $html.='<tr><td>Justification</td><td>:&nbsp;'.$result[0]['justification'].'</td><td>Rejection</td>'.$reject.'</tr>';
+        $html.='<tr><td colspan="2">ARV Adherence &nbsp;&nbsp;:&nbsp;&nbsp;'.ucwords($result[0]['arv_adherence']).'</td><td colspan="1">Enhance Session &nbsp;&nbsp;:&nbsp;&nbsp;'.ucwords($result[0]['enhance_session']).'</td></tr>';
         $html.='</table>';
 $pdf->writeHTML($html);
 $pdf->lastPage();
