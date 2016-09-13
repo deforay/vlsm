@@ -11,7 +11,13 @@ include("import-configs".DIRECTORY_SEPARATOR.$confFileName);
 
 //$query="select treament_id,sample_code from vl_request_form";
 //$vlResult=$db->rawQuery($query);
-
+$configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
 $general=new Deforay_Commons_General();
 
 $tableName="temp_sample_report";
@@ -26,19 +32,24 @@ try {
             //$sampleIdRow=$cResult[0]['sample_id_row'];
                         
             if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
-                $_POST['sampleReceivedDate']=$general->dateFormat($_POST['sampleReceivedDate']);
+                $sampleDate = explode(" ",$_POST['sampleReceivedDate']);
+                $_POST['sampleReceivedDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
             }
             if(isset($_POST['testingDate']) && trim($_POST['testingDate'])!=""){
-                $_POST['testingDate']=$general->dateFormat($_POST['testingDate']);
+                $testDate = explode(" ",$_POST['testingDate']);
+                $_POST['testingDate']=$general->dateFormat($testDate[0])." ".$testDate[1];
             }
             
             if(isset($_POST['dispatchedDate']) && trim($_POST['dispatchedDate'])!=""){
-                $_POST['dispatchedDate']=$general->dateFormat($_POST['dispatchedDate']);
+                $dispatchDate = explode(" ",$_POST['dispatchedDate']);
+                $_POST['dispatchedDate']=$general->dateFormat($dispatchDate[0])." ".$dispatchDate[1];
             }
             
             if(isset($_POST['reviewedDate']) && trim($_POST['reviewedDate'])!=""){
-                $_POST['reviewedDate']=$general->dateFormat($_POST['reviewedDate']);
+                $reviewDate = explode(" ",$_POST['reviewedDate']);
+                $_POST['reviewedDate']=$general->dateFormat($reviewDate[0])." ".$reviewDate[1];
             }
+            
             
             $allowedExtensions = array('xls', 'xlsx', 'csv');
             $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['resultFile']['name']);
@@ -76,11 +87,23 @@ try {
                     {
                         $cellName = $sheetData->getCellByColumnAndRow($key,$rKey)->getColumn();
                         
-                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$rKey,$cellName,$cell);
-                        
+                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$sampleType,$batchCode,$rKey,$cellName,$cell);
                     }
                     if($sampleVal!=''){
+                    //check sample exist
+                    $sampleTypeQuery="SELECT * FROM r_sample_type where sample_name='".$sampleType."' AND form_identification='".$arr['vl_form']."'";
+                    $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
+                    if($sampleTypeResult){
+                     $sampleType =  $sampleTypeResult[0]['sample_id'];
+                    }else{
+                        $sampleData=array('sample_name'=>$sampleType,'form_identification'=>$arr['vl_form']);
+                        $db->insert('r_sample_type',$sampleData);
+                        $lastId = $db->getInsertId();
+                        $sampleType = $lastId;
+                    }
+                    
                     $data=array(
+                        'lab_id'=>$_POST['labId'],
                         'lab_name'=>$_POST['labName'],
                         'lab_contact_person'=>$_POST['labContactPerson'],
                         'lab_phone_no'=>$_POST['labPhoneNo'],
@@ -91,20 +114,24 @@ try {
                         'result_reviewed_by'=>$_SESSION['userId'],
                         'comments'=>$_POST['comments'],
                         'sample_code'=>$sampleVal,
+                        'batch_code'=>$batchCode,
+                        'sample_type'=>$sampleType,
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
                         'absolute_decimal_value'=>$absDecimalVal,
                         'result'=>$resultFlag,
                         'lab_tested_date'=>$testingDate,
-                        'status'=>'waiting for Approve'
+                        'status'=>'6'
                     );
-                    $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
+                    
+                    $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='".$sampleVal."'";
                     $vlResult=$db->rawQuery($query);
                     if($vlResult){
-                        if(trim($vlResult[0]['result']!='')){
+                        if($vlResult[0]['log_value']!='' || $vlResult[0]['absolute_value']!='' || $vlResult[0]['text_value']!='' || $vlResult[0]['absolute_decimal_value']!=''){
                             $data['sample_details'] = 'Already Result Exist';
                         }
+                        $data['facility_id'] = $vlResult[0]['facility_id'];
                     }else{
                         $data['sample_details'] = 'New Sample';
                     }

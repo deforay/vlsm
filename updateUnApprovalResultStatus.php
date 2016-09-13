@@ -8,10 +8,6 @@ $tableName1="vl_request_form";
 try {
     $id= explode(",",$_POST['value']);
     for($i=0;$i<count($id);$i++){
-        if($_POST['status']=='reject'){
-            $db=$db->where('temp_sample_id',$id[$i]);
-            $result=$db->delete($tableName);
-        }else{
             $sQuery="SELECT * FROM temp_sample_report where temp_sample_id='".$id[$i]."'";
             $rResult = $db->rawQuery($sQuery);
             
@@ -35,7 +31,7 @@ try {
                         'result'=>$rResult[0]['result'],
                         'lab_tested_date'=>$rResult[0]['lab_tested_date'],
                         'created_by'=>$rResult[0]['result_reviewed_by'],
-                        'status'=>6
+                        'status'=>$_POST['status']
                     );
             if(count($vlResult)>0){
                 $db=$db->where('sample_code',$rResult[0]['sample_code']);
@@ -46,7 +42,6 @@ try {
             }
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);
-        }
     }
 }
 catch (Exception $exc) {

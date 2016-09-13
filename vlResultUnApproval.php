@@ -1,11 +1,46 @@
 <?php
 include('header.php');
+$tsQuery="SELECT * FROM testing_status";
+$tsResult = $db->rawQuery($tsQuery);
 ?>
+<style>
+  .new-add td{
+        background-color:#5BB75B !important;
+        color:#ffffff;
+    }
+    .new-add td a{
+        /*background-color:#5BB75B !important;*/
+        color:#ffffff;
+    }
+    .exist td{
+        background-color:#F72727 !important;
+        color:#ffffff;
+    }
+    .exist td a{
+        /*background-color:#F77171 !important;*/
+        color:#ffffff;
+    }
+    .no-result td{
+        background-color:#337ab7 !important;
+        color:#ffffff;
+    }
+    .no-result td a{
+        /*background-color:#664805 !important;*/
+        color:#ffffff;
+    }
+    .dataTables_wrapper{
+      position: relative;
+    clear: both;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    padding: 15px 0 !important;
+    }
+</style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Imported Results Un Approval</h1>
+      <h1>Imported Results</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Test Request</li>
@@ -18,30 +53,47 @@ include('header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
+			  <div class="box-header with-border">
 			  <div class="col-md-4 col-sm-4">
 				<input type="hidden" name="checkedTests" id="checkedTests"/>
+				<select style="" class="form-control" id="status" name="status" title="Please select test status" >
+				  <option value="">-- Select --</option>
+				<?php
+				foreach($tsResult as $status){
+				 ?>
+				 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
+				 <?php
+				}
+				?>
+				</select>
 				</div>
+			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>
+			  <ul style="list-style: none;float: right;">
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #5BB75B"></i> - New Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #F72727"></i> - Exist Result</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #337ab7"></i> - New Result</li>
+	    </ul>
+            </div>
+
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-	      <div style="padding-top:20px;">
-                                            <a href="javascript:void(0)" onclick="submitTestStatus($('#approvalPending').val(),'approve')" class="btn btn-success btn-sm" style="margin-bottom: 15px;"><i class="fa fa-cogs"></i>&nbsp;<b>Mark (<span class="countChecksPending">0</span>) as Approved</b></a>
-					    <a href="javascript:void(0)" onclick="submitTestStatus($('#approvalPending').val(),'reject')" class="btn btn-danger btn-sm" style="margin-bottom: 15px;"><i class="fa fa-cogs"></i>&nbsp;<b>Mark (<span class="countChecksPending">0</span>) as Reject</b></a>
-                                        </div>
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
-		  <th>Sample Code</th>
-		  <th>Lab Name</th>
-                  <th>Sample Details</th>
-                  <th>Status</th>
+		  <th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
+		  <th style="width: 13%;">Sample Code</th>
+		  <th style="width: 11%;">Batch Code</th>
+                  <th style="width: 18%;">Lab Name</th>
+                  <th style="width: 11%;">Sample Type</th>
+                  <th style="width: 9%;">Result</th>
+                  <th style="width: 16%;">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td colspan="5" class="dataTables_empty">Loading data from server</td>
-                </tr>
+		  </tr>
                 </tbody>
               </table>
             </div>
@@ -85,6 +137,8 @@ include('header.php');
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center","bSortable":false},
+		{"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 1, "desc" ]],
 	    "fnDrawCallback": function() {
@@ -151,12 +205,12 @@ include('header.php');
      $(".countChecksPending").text(selectedTests.length);
    }
    
-   function submitTestStatus(value,status){
-    if($("#checkedTests").val()!=0){
+   function submitTestStatus(){
+    if($("#status").val()!=''){
       conf=confirm("Do you wish to change the status ?");
       if(conf){
 	$.blockUI();
-	$.post("updateUnApprovalResultStatus.php", { value : $("#checkedTests").val(),status:status, format: "html"},
+	$.post("updateUnApprovalResultStatus.php", { value : $("#checkedTests").val(),status:$("#status").val(), format: "html"},
 	       function(data){
 		oTable.fnDraw();
 		selectedTests = [];
@@ -165,10 +219,34 @@ include('header.php');
 		$(".countChecksPending").html(0);
 	       });
 	$.unblockUI();
+      }else{
+      oTable.fnDraw();
       }
     }
    else{
-      alert("Please checked atleast one checkbox.");
+      alert("Please select the status.");
+    }
+   }
+  function updateStatus(value,status){
+    if(status!=''){
+      conf=confirm("Do you wish to change the status ?");
+      if(conf){
+	$.blockUI();
+	$.post("updateUnApprovalResultStatus.php", { value : value,status:status, format: "html"},
+	       function(data){
+		oTable.fnDraw();
+		selectedTests = [];
+		selectedTestsId = [];
+		$("#checkedTests").val('');
+		$(".countChecksPending").html(0);
+	       });
+	$.unblockUI();
+      }else{
+      oTable.fnDraw();
+      }
+    }
+   else{
+      alert("Please select the status.");
     }
    }
   

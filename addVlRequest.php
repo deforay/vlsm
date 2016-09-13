@@ -3,6 +3,15 @@ ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
 include('General.php');
+//get config values
+$configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+    
 $query="SELECT * from r_art_code_details where parent_art=0";
 $qResult=$db->query($query);
 $artCode=[];
@@ -13,7 +22,7 @@ foreach($qResult as $val){
   $artCode[$val['art_code']][$vl['art_id']]=$vl['art_code'];
  }
 }
-$sampleTypeQuery="SELECT * FROM r_sample_type";
+$sampleTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value="">-- Select --</option>';
 foreach ($sampleTypeResult as $row) {
@@ -47,14 +56,7 @@ $rejectReason = '';
             foreach($rResult as $rDetails){
               $rejectReason .= "<option value='".$rDetails['rejection_reason_id']."'>".ucwords($rDetails['rejection_reason_name'])."</option>";
             }
-//get config values
-$configQuery="SELECT * from global_config";
-    $configResult=$db->query($configQuery);
-    $arr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($configResult); $i++) {
-      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-    }
+
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
 <script type="text/javascript" src="assets/js/jquery.easy-autocomplete.min.js"></script>
