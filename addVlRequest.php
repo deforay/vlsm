@@ -44,7 +44,7 @@ $tsResult = $db->rawQuery($tsQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $facility = '';
-            $facility.="<option value=''>--select--</option>";
+            $facility.="<option value=''> -- Select -- </option>";
             foreach($fResult as $fDetails){
               $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
             }
@@ -52,7 +52,7 @@ $facility = '';
 $rQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status='active'";
 $rResult = $db->rawQuery($rQuery);
 $rejectReason = '';
-            $rejectReason.="<option value=''>--select--</option>";
+            $rejectReason.="<option value=''> -- Select -- </option>";
             foreach($rResult as $rDetails){
               $rejectReason .= "<option value='".$rDetails['rejection_reason_id']."'>".ucwords($rDetails['rejection_reason_name'])."</option>";
             }
@@ -780,7 +780,7 @@ $rejectReason = '';
                      <div class="col-lg-7">
                      <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
                      <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
-                      <option value="">--select--</option>
+                      <option value=""> -- Select -- </option>
                       <option value="good">Good >= 95%</option>
                       <option value="fair">Fair (85-94%)</option>
                       <option value="poor">Poor < 85%</option>
@@ -793,7 +793,7 @@ $rejectReason = '';
                      <label for="enhanceSession" class="col-lg-4 control-label">Enhanced Sessions </label>
                      <div class="col-lg-7">
                      <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
-                      <option value="">--select--</option>
+                      <option value=""> -- Select -- </option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -904,7 +904,7 @@ $rejectReason = '';
                       <label for="testMethods" class="col-lg-4 control-label">Test Methods <span class="mandatory">*</span></label>
                       <div class="col-lg-7">
                       <select name="testMethods" id="testMethods" class="form-control isRequired" title="Please choose test methods">
-                       <option value="">--select--</option>
+                       <option value=""> -- Select -- </option>
                        <option value="individual">Individual</option>
                        <option value="minipool">Minipool</option>
                        <option value="other pooling algorithm">Other Pooling Algorithm</option>
