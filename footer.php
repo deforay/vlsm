@@ -70,6 +70,10 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".addVlRequestMenu").addClass('active');
+  }else if (splitsUrl=='addVlRequestZm.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".addVlRequestZmMenu").addClass('active');
   }else if (splitsUrl=='batchcode.php' || splitsUrl=='addBatch.php' || splitsUrl=='editBatch.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
