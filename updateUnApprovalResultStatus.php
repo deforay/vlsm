@@ -5,12 +5,16 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $tableName="temp_sample_report";
 $tableName1="vl_request_form";
+$tableName2="hold_sample_report";
 try {
     $id= explode(",",$_POST['value']);
     for($i=0;$i<count($id);$i++){
             $sQuery="SELECT * FROM temp_sample_report where temp_sample_id='".$id[$i]."'";
             $rResult = $db->rawQuery($sQuery);
-            
+            if($_POST['status']=='1'){
+               $inQuery = "INSERT INTO hold_sample_report SELECT * FROM temp_sample_report where temp_sample_id='".$id[$i]."'";
+               $inResult = $db->rawQuery($inQuery);
+            }else{
             $sampleVal = $rResult[0]['sample_code'];
             $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
             $vlResult=$db->rawQuery($query);
@@ -39,6 +43,7 @@ try {
             }else{
                 $data['sample_code']=$rResult[0]['sample_code'];
             $db->insert($tableName1,$data);
+            }
             }
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);

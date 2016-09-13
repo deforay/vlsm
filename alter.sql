@@ -429,3 +429,31 @@ ALTER TABLE  `temp_sample_report` ADD  `facility_id` INT NULL DEFAULT NULL AFTER
 
 -- Pal 13 Sep 2016
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Auto Approval', 'auto_approval', 'yes');
+
+--saravana 13-sep-2016
+CREATE TABLE IF NOT EXISTS `hold_sample_report` (
+  `hold_sample_id` int(11) NOT NULL AUTO_INCREMENT,
+  `facility_id` int(11) DEFAULT NULL,
+  `lab_name` varchar(255) DEFAULT NULL,
+  `lab_id` int(11) DEFAULT NULL,
+  `lab_contact_person` varchar(255) DEFAULT NULL,
+  `lab_phone_no` varchar(255) DEFAULT NULL,
+  `date_sample_received_at_testing_lab` varchar(255) DEFAULT NULL,
+  `lab_tested_date` varchar(255) DEFAULT NULL,
+  `date_results_dispatched` varchar(255) DEFAULT NULL,
+  `result_reviewed_date` varchar(255) DEFAULT NULL,
+  `result_reviewed_by` varchar(255) DEFAULT NULL,
+  `comments` varchar(255) DEFAULT NULL,
+  `sample_code` varchar(255) DEFAULT NULL,
+  `batch_code` varchar(255) DEFAULT NULL,
+  `sample_type` varchar(255) DEFAULT NULL,
+  `order_number` varchar(255) DEFAULT NULL,
+  `log_value` varchar(255) DEFAULT NULL,
+  `absolute_value` varchar(255) DEFAULT NULL,
+  `text_value` varchar(255) DEFAULT NULL,
+  `absolute_decimal_value` varchar(255) DEFAULT NULL,
+  `result` varchar(255) DEFAULT NULL,
+  `sample_details` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`hold_sample_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+ALTER TABLE  `hold_sample_report` ADD  `status` VARCHAR( 255 ) NULL DEFAULT NULL ;

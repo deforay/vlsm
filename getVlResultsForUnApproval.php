@@ -100,8 +100,11 @@ $tsResult = $db->rawQuery($tsQuery);
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
-        }
-        
+        }else{
+	    $sOrder = 'temp_sample_id ASC';
+	    $sQuery = $sQuery.' order by '.$sOrder;
+	}
+        //echo $sQuery;die;
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
@@ -133,7 +136,8 @@ $tsResult = $db->rawQuery($tsQuery);
 		$vlResult = $aRow['text_value'];
 	    }
             $row = array();
-	    if($aRow['sample_code']!=''){
+	    if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
+		
 		if($aRow['sample_details']=='Already Result Exist')
             {
                 $row['DT_RowClass'] = "exist";
@@ -149,20 +153,15 @@ $tsResult = $db->rawQuery($tsQuery);
 		$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
 		$status = '<select class="form-control" style="" name="status" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="updateStatus(this.id,this.value)">
 				<option value="">--select--</option>
-				<option value="1" '.($aRow['status']=="1" ? "selected=selected" : "").'>Waiting</option>
-				<option value="2" '.($aRow['status']=="2" ? "selected=selected" : "").'>Lost</option>
-				<option value="3" '.($aRow['status']=="3"  ? "selected=selected" : "").'>Sample Reordered</option>
-				<option value="4" '.($aRow['status']=="4"  ? "selected=selected" : "").'>Canceled</option>
-				<option value="5" '.($aRow['status']=="5" ? "selected=selected" : "").'>Invalid</option>
-				<option value="6" '.($aRow['status']=="6" ? "selected=selected" : "").'>Awaiting Clinic Approval</option>
-				<option value="7" '.($aRow['status']=="7" ? "selected=selected" : "").'>Received and Approved</option>
+				<option value="1" '.($aRow['status']=="1" ? "selected=selected" : "").'>Hold</option>
+				<option value="4" '.($aRow['status']=="4"  ? "selected=selected" : "").'>Rejected</option>
+				<option value="7" '.($aRow['status']=="7" ? "selected=selected" : "").'>Accepted</option>
 			</select><br><br>';
 	    }else{
 		$row['DT_RowClass'] = "empty-sample";
 		$row[] = '';
 		$status = '';
 	    }
-	    
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $aRow['batch_code'];
 	    $row[] = ucwords($aRow['lab_name']);
