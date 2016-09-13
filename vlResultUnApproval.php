@@ -27,6 +27,13 @@ $tsResult = $db->rawQuery($tsQuery);
     .no-result td a{
         /*background-color:#664805 !important;*/
         color:#ffffff;
+    }.empty-sample td{
+        background-color:#ED401A !important;
+        color:#ffffff;
+    }
+    .empty-sample td a{
+        /*background-color:#664805 !important;*/
+        color:#ffffff;
     }
     .dataTables_wrapper{
       position: relative;
@@ -72,6 +79,7 @@ $tsResult = $db->rawQuery($tsQuery);
 	    <li><i class="fa fa-square" aria-hidden="true" style="color: #5BB75B"></i> - New Sample</li>
 	    <li><i class="fa fa-square" aria-hidden="true" style="color: #F72727"></i> - Exist Result</li>
 	    <li><i class="fa fa-square" aria-hidden="true" style="color: #337ab7"></i> - New Result</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #ED401A"></i> - Empty Sample</li>
 	    </ul>
             </div>
 
