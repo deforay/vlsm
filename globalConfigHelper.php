@@ -3,8 +3,9 @@ session_start();
 ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
+include('ImageResize.php');
 define('UPLOAD_PATH','uploads');
-$general=new Deforay_Commons_General();
+$general = new Deforay_Commons_General();
 $tableName="global_config";
 
 try {
@@ -24,6 +25,9 @@ try {
        $string = $general->generateRandomString(6).".";
        $imageName = "logo".$string.$extension;
        if (move_uploaded_file($_FILES["logo"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $imageName)) {
+           $resizeObj = new Deforay_Image_Resize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR .$imageName);
+           $resizeObj->resizeImage(80, 80, 'auto');
+	   $resizeObj->saveImage(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR. $imageName, 100);
            $data=array('value'=>$imageName);
            $db=$db->where('name','logo');
            $db->update($tableName,$data);
