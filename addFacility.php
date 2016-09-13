@@ -110,7 +110,7 @@ $pResult = $db->rawQuery($pQuery);
                         <label for="state" class="col-lg-4 control-label">State/Province <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <select name="state" id="state" class="form-control isRequired" title="Please choose state/province">
-                          <option value="">--Select--</option>
+                          <option value=""> -- Select -- </option>
                           <?php
                           foreach($pResult as $province){
                             ?>
