@@ -42,40 +42,40 @@ $sDate ='';
 $cBy ='';
 $urgency ='';
 $clinicianName = '';
-$sCodeValue = '';
 $sKey = '';
-$sFormat='';
+$sFormat = '';
+$sCodeValue = '';
 if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
- //facility details
-$facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
-$facilityResult=$db->query($facilityQuery);
-
-$stateName = $facilityResult[0]['state'];
-$stateQuery="SELECT * from province_details where province_name='".$stateName."'";
-$stateResult=$db->query($stateQuery);
-
-//district details
-$districtQuery="SELECT * from facility_details where state='".$stateName."'";
-$districtResult=$db->query($districtQuery);
-
-$vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
-$vlResult=$db->query($vlQuery);
-$urgency = $vlResult[0]['urgency'];
-$cBy = $vlResult[0]['collected_by'];
-$clinicianName = $vlResult[0]['lab_contact_person'];
-
-$sKey = $vlResult[0]['sample_code_key']+1;
-$sKey = "00".$sKey;
-$sFormat = $vlResult[0]['sample_code_format'];
-$sCodeValue = $vlResult[0]['sample_code_format'].$sKey; 
-
-if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
- $vlResult[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlResult[0]['sample_collection_date']='';
-}
-$sDate = $vlResult[0]['sample_collection_date'];
+  //facility details
+ $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
+ $facilityResult=$db->query($facilityQuery);
+ 
+ $stateName = $facilityResult[0]['state'];
+ $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
+ $stateResult=$db->query($stateQuery);
+ 
+ //district details
+ $districtQuery="SELECT * from facility_details where state='".$stateName."'";
+ $districtResult=$db->query($districtQuery);
+ 
+ $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
+ $vlResult=$db->query($vlQuery);
+ $urgency = $vlResult[0]['urgency'];
+ $cBy = $vlResult[0]['collected_by'];
+ $clinicianName = $vlResult[0]['lab_contact_person'];
+ 
+ $sKey = $vlResult[0]['sample_code_key']+1;
+ $sKey = "00".$sKey;
+ $sFormat = $vlResult[0]['sample_code_format'];
+ $sCodeValue = $vlResult[0]['sample_code_format'].$sKey; 
+ 
+ if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
+  $vlResult[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+ }else{
+  $vlResult[0]['sample_collection_date']='';
+ }
+ $sDate = $vlResult[0]['sample_collection_date'];
 }
 
 ?>

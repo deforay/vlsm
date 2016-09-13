@@ -60,7 +60,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="header" class="col-lg-4 control-label">Do You Want to Show Smiley at Result PDF? </label>
+                      <label for="show_smiley" class="col-lg-4 control-label">Do You Want to Show Smiley at Result PDF? </label>
                       <div class="col-lg-8">
                         <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>Yes&nbsp;&nbsp;
                         <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>No
@@ -105,7 +105,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="header" class="col-lg-4 control-label">Date For Patient ART NO. </label>
+                      <label for="show_date" class="col-lg-4 control-label">Date For Patient ART NO. </label>
                       <div class="col-lg-8">
                         <input type="radio" class="" id="show_full_date_yes" name="show_date" value="yes" <?php echo($arr['show_date'] == 'yes')?'checked':''; ?>>Full Date&nbsp;&nbsp;
                         <input type="radio" class="" id="show_full_date_no" name="show_date" value="no" <?php echo($arr['show_date'] == 'no' || $arr['show_date'] == '')?'checked':''; ?>>Month and Year
@@ -116,7 +116,18 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="header" class="col-lg-4 control-label">Viral Load Form <span class="mandatory">*</span> </label>
+                      <label for="auto_approval" class="col-lg-4 control-label">Auto Approval </label>
+                      <div class="col-lg-8">
+                        <input type="radio" class="" id="auto_approval_yes" name="auto_approval" value="yes" <?php echo($arr['auto_approval'] == 'yes')?'checked':''; ?>>Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_approval_no" name="auto_approval" value="no" <?php echo($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '')?'checked':''; ?>>No
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="vl_form" class="col-lg-4 control-label">Viral Load Form <span class="mandatory">*</span> </label>
                       <div class="col-lg-8">
                         <select class="form-control isRequired" name="vl_form" id="vl_form" title="Please select the viral load form">
                             <option value="">--Select--</option>

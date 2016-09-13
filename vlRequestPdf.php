@@ -77,14 +77,13 @@ $pdf->AddPage();
 $general=new Deforay_Commons_General();
 $id=$_POST['id'];
 
-
 $configQuery="SELECT * from global_config";
-    $configResult=$db->query($configQuery);
-    $arr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($configResult); $i++) {
-      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-    }
+$configResult=$db->query($configQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
     
 $sTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sTypeResult = $db->rawQuery($sTypeQuery);

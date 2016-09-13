@@ -159,6 +159,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
    $(document).ready(function() {
          $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
+	    separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
