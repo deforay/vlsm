@@ -245,7 +245,7 @@ $sDate = $vlResult[0]['sample_collection_date'];
                         </td>
                         <td><label>Date Of Birth</label></td>
                         <td>
-                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" >
+                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" onchange="getDateOfBirth();">
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
@@ -601,8 +601,7 @@ $("#vlLog").bind("keyup change", function(e) {
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
-  function checkPatientReceivesms(val)
-  {
+  function checkPatientReceivesms(val){
    if(val=='yes'){
     $('#patientPhoneNumber').addClass('isRequired');
    }else{
@@ -616,7 +615,35 @@ $("#vlLog").bind("keyup change", function(e) {
     $(".serialNo").val($(".serialNo1").val());
   });
   
-  
+  function getDateOfBirth(){
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth();
+      var yyyy = today.getFullYear();
+      if(dd<10) {
+        dd='0'+dd
+      } 
+      
+      if(mm<10) {
+       mm='0'+mm
+      }
+      
+      var dob = $("#dob").val();
+      splitDob = dob.split("-");
+      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
+      var monthDigit = dobDate.getMonth();
+      var dobYear = splitDob[2];
+      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+      var dobMonth = (dobMonth.toString().length > 1) ? dobMonth: '0'+dobMonth;
+      var dobDate = splitDob[0];
+      
+      var date1 = new Date(yyyy,mm,dd);
+      var date2 = new Date(dobYear,dobMonth,dobDate);
+      var diff = new Date(date1.getTime() - date2.getTime());
+      $("#ageInMonths").val(diff.getUTCMonth()); // Gives difference as year
+      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives month count of difference
+      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
+  }
 </script>
   
  <?php
