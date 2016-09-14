@@ -96,6 +96,7 @@ try {
           'comments'=>$_POST['labCommnets'],
           'date_sample_received_at_testing_lab'=>$_POST['dateOfReceivedStamp'],
           'rejection'=>$_POST['noResult'],
+          'modified_on'=>$general->getDateTime()
         );
      
           $db=$db->where('treament_id',$_POST['treamentId']);

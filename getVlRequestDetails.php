@@ -11,9 +11,8 @@ $primaryKey="treament_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
-        $orderColumns = array('','vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.form_id','vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
+        $orderColumns = array('','vl.form_id','vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -93,7 +92,7 @@ $primaryKey="treament_id";
 	$aWhere = '';
         //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
 	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
-	
+	$sQuery = $sQuery." ORDER BY vl.treament_id DESC, vl.modified_on DESC";
         //echo $sQuery;die;
 	$start_date = '';
 	$end_date = '';
@@ -107,7 +106,6 @@ $primaryKey="treament_id";
 	   }
 	}
 	  
-	
 	if (isset($sWhere) && $sWhere != "") {
            $sWhere=' where '.$sWhere;
 	    //$sQuery = $sQuery.' '.$sWhere;
@@ -172,7 +170,7 @@ $primaryKey="treament_id";
 		//echo $sQuery;die;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
-            $sQuery = $sQuery.' order by '.$sOrder;
+            $sQuery = $sQuery.",".$sOrder;
         }
         
         if (isset($sLimit) && isset($sOffset)) {
@@ -230,6 +228,7 @@ $primaryKey="treament_id";
 	    }
             $row = array();
 			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
+			$row[] = $aRow['form_id'];
 			$row[] = $aRow['sample_code'];
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['batch_code'];

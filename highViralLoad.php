@@ -234,7 +234,7 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-            "aaSorting": [[ 0, "asc" ]],
+            //"aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getHighVlResultDetails.php",

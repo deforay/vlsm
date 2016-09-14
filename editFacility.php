@@ -133,7 +133,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District" value="<?php echo $facilityInfo[0]['district']; ?>"  />
+                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District" value="<?php echo $facilityInfo[0]['district']; ?>"  title="Please enter district"/>
                         </div>
                     </div>
                   </div>
