@@ -126,7 +126,6 @@ $tsResult = $db->rawQuery($tsQuery);
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-			
         foreach ($rResult as $aRow) {
 	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
 		$vlResult = $aRow['absolute_value'];
@@ -140,15 +139,15 @@ $tsResult = $db->rawQuery($tsQuery);
 		
 		if($aRow['sample_details']=='Already Result Exist')
             {
-                $row['DT_RowClass'] = "exist";
+                $color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
 	    if($aRow['sample_details']=='New Sample')
             {
-                $row['DT_RowClass'] = "new-add";
+		$color = '<span style="color:#e8000b;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
 	    if($aRow['sample_details']=='')
             {
-                $row['DT_RowClass'] = "no-result";
+		$color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
 		$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
 		$status = '<select class="form-control" style="" name="status" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="updateStatus(this.id,this.value)">
@@ -158,11 +157,11 @@ $tsResult = $db->rawQuery($tsQuery);
 				<option value="7" '.($aRow['status']=="7" ? "selected=selected" : "").'>Accepted</option>
 			</select><br><br>';
 	    }else{
-		$row['DT_RowClass'] = "empty-sample";
+		$color = '<span style="color:#7d8388;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
 		$row[] = '';
 		$status = '';
 	    }
-	    $row[] = $aRow['sample_code'];
+	    $row[] = $aRow['sample_code'].$color;
 	    $row[] = $aRow['batch_code'];
 	    $row[] = ucwords($aRow['lab_name']);
 	    $row[] = ucwords($aRow['sample_type']);

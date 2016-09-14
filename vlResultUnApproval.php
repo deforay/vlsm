@@ -4,37 +4,6 @@ $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 ?>
 <style>
-  .new-add td{
-        background-color:#5BB75B !important;
-        color:#ffffff;
-    }
-    .new-add td a{
-        /*background-color:#5BB75B !important;*/
-        color:#ffffff;
-    }
-    .exist td{
-        background-color:#F72727 !important;
-        color:#ffffff;
-    }
-    .exist td a{
-        /*background-color:#F77171 !important;*/
-        color:#ffffff;
-    }
-    .no-result td{
-        background-color:#337ab7 !important;
-        color:#ffffff;
-    }
-    .no-result td a{
-        /*background-color:#664805 !important;*/
-        color:#ffffff;
-    }.empty-sample td{
-        background-color:#ED401A !important;
-        color:#ffffff;
-    }
-    .empty-sample td a{
-        /*background-color:#664805 !important;*/
-        color:#ffffff;
-    }
     .dataTables_wrapper{
       position: relative;
     clear: both;
@@ -72,13 +41,13 @@ $tsResult = $db->rawQuery($tsQuery);
 				</div>
 			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>
 			  <ul style="list-style: none;float: right;">
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #5BB75B"></i> - New Sample</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #F72727"></i> - Exist Result</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #337ab7"></i> - New Result</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #ED401A"></i> - Empty Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #e8000b"></i> - Unknown Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #86c0c8"></i> - Existing Result</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #337ab7"></i> - Result for Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #7d8388"></i> - Control</li>
 	    </ul>
             </div>
-
+	      <span><b style="color: #f03033;">Note:-</b>When you leave from this page,these records will be deleted.</span>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

@@ -4,15 +4,15 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
            
      $sampleIdCol='E';
      $sampleIdRow='2';
-     $logValCol='';
-     $logValRow='';
-     $absValCol='I';
-     $absValRow='2';
+     $logValCol='I';
+     $logValRow='2';
+     $absValCol='';
+     $absValRow='';
      $txtValCol='';
      $txtValRow='';
      $testingDateCol='AC';
      $testingDateRow='2';
-     $logAndAbsoluteValInSameCol='no';
+     $logAndAbsoluteValInSameCol='yes';
      $sampleTypeVal = 'F';
      $batchCodeVal = 'G';
                 
@@ -40,15 +40,24 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
         }
      }
      
-    if($absValCol==$cellName){
-        if($rKey>=$absValRow){
+    if($logValCol==$cellName){
+        if($rKey>=$logValRow){
             if(trim($cell->getCalculatedValue())!=""){
-                $resVal=(int)$cell->getCalculatedValue();
-                if($resVal >= 0){
-                    $absVal=trim($cell->getCalculatedValue());
-                    $logVal=floor(log10($absVal));
+                $resVal=explode("(",$cell->getCalculatedValue());
+                if(count($resVal)==2){
+                    $absVal=trim($resVal[0]);
+                    
+                    $expAbsVal=explode("E",$absVal);
+                    if(count($expAbsVal)==2){
+                         $multipleVal=substr($expAbsVal[1],1);
+                         $absDecimalVal=$expAbsVal[0]*pow(10,$multipleVal);
+                    }
+                    $logVal=substr(trim($resVal[1]),0,-1);
                 }else{
                     $txtVal=trim($cell->getCalculatedValue());
+                    if($txtVal=='Invalid'){
+                        $resultFlag=trim($txtVal);
+                    }
                 }
             }
             
