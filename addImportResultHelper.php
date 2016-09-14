@@ -21,7 +21,7 @@ $configQuery="SELECT * from global_config";
 $general=new Deforay_Commons_General();
 
 $tableName="temp_sample_report";
-
+$tableName1="activity_log";
 try {
         //$configId=base64_decode($_POST['machineName']);
         //$query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
@@ -81,8 +81,7 @@ try {
                     $txtVal="";
                     $resultFlag="";
                     $testingDate="";
-                    foreach($row->getCellIterator() as $key => $cell)
-                    {
+                    foreach($row->getCellIterator() as $key => $cell){
                         $cellName = $sheetData->getCellByColumnAndRow($key,$rKey)->getColumn();
                         $cellRow = $sheetData->getCellByColumnAndRow($key,$rKey)->getRow();
                                                 
@@ -149,6 +148,17 @@ try {
             }
             
         $_SESSION['alertMsg']="Imported results successfully";
+        //Add event log
+        $eventType = 'import';
+        $action = ucwords($_SESSION['userName']).' have been imported a new test result';
+        $resource = 'import-result';
+        $data=array(
+        'event_type'=>$eventType,
+        'action'=>$action,
+        'resource'=>$resource,
+        'date_time'=>$general->getDateTime()
+        );
+        $db->insert($tableName1,$data);
         header("location:vlResultUnApproval.php");
   
 } catch (Exception $exc) {

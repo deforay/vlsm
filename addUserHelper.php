@@ -3,11 +3,7 @@ ob_start();
 session_start();
 include('./includes/MysqliDb.php');
 //include('header.php');
-
-
 $tableName="user_details";
-
-
 try {
     if(trim($_POST['userName'])!='' && trim($_POST['loginId'])!='' && ($_POST['role'])!='' && ($_POST['password'])!=''){
         

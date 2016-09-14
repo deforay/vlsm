@@ -5,7 +5,7 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
-
+$tableName1="activity_log";
 try {
      $configQuery ="SELECT value FROM global_config where name='auto_approval'";
      $configResult = $db->rawQuery($configQuery);
@@ -109,17 +109,27 @@ try {
         );
           $id=$db->insert($tableName,$vldata);
           $_SESSION['alertMsg']="VL request added successfully";
-    
+          //Add event log
+          $eventType = 'add-vl-request-zm';
+          $action = ucwords($_SESSION['userName']).' have been added a new request data with the sample code '.$_POST['sampleCode'];
+          $resource = 'vl-request-zm';
+          $data=array(
+          'event_type'=>$eventType,
+          'action'=>$action,
+          'resource'=>$resource,
+          'date_time'=>$general->getDateTime()
+          );
+          $db->insert($tableName1,$data);
     if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
-     $_SESSION['treamentId'] = $id;
-     $_SESSION['facilityId'] = $_POST['clinicName'];
-      header("location:addVlRequestZm.php");
+          $_SESSION['treamentId'] = $id;
+          $_SESSION['facilityId'] = $_POST['clinicName'];
+          header("location:addVlRequestZm.php");
     }else{
-     $_SESSION['treamentId'] = '';
-     $_SESSION['facilityId'] = '';
-     unset($_SESSION['treamentId']);
-     unset($_SESSION['facilityId']);
-     header("location:vlRequest.php");
+          $_SESSION['treamentId'] = '';
+          $_SESSION['facilityId'] = '';
+          unset($_SESSION['treamentId']);
+          unset($_SESSION['facilityId']);
+          header("location:vlRequest.php");
     }
     
   

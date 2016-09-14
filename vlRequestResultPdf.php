@@ -1,10 +1,10 @@
 <?php
+session_start();
 ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 include ('./includes/tcpdf/tcpdf.php');
 define('UPLOAD_PATH','uploads');
-
 //header and footer
 class MYPDF extends TCPDF {
 
@@ -75,7 +75,7 @@ $pathFront=realpath('./uploads');
 //$pdf = new TCPDF();
 $pdf->AddPage();
 $general=new Deforay_Commons_General();
-
+$tableName1="activity_log";
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);
 $arr = array();
@@ -222,5 +222,18 @@ $pdf->writeHTML($html);
 $pdf->lastPage();
 $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
 $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
+//Add event log
+if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
+  $eventType = 'print-result';
+  $action = ucwords($_SESSION['userName']).' have been print the test result with patient CCC no. '.$result[0]['art_no'];
+  $resource = 'print-request-result';
+  $data=array(
+  'event_type'=>$eventType,
+  'action'=>$action,
+  'resource'=>$resource,
+  'date_time'=>$general->getDateTime()
+  );
+  $db->insert($tableName1,$data);
+}
 echo $filename;
 ?>

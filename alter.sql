@@ -457,3 +457,20 @@ CREATE TABLE IF NOT EXISTS `hold_sample_report` (
   PRIMARY KEY (`hold_sample_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 ALTER TABLE  `hold_sample_report` ADD  `status` VARCHAR( 255 ) NULL DEFAULT NULL ;
+
+--Pal 14th-Sep'16
+alter table activity_log add FOREIGN KEY(user) REFERENCES user_details(user_id)
+
+CREATE TABLE `activity_log` (
+  `log_id` int(11) NOT NULL,
+  `event_type` varchar(255) DEFAULT NULL,
+  `action` varchar(255) DEFAULT NULL,
+  `resource` varchar(255) DEFAULT NULL,
+  `date_time` datetime DEFAULT NULL
+)
+
+ALTER TABLE `activity_log`
+  ADD PRIMARY KEY (`log_id`);
+  
+ALTER TABLE `activity_log`
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;

@@ -6,7 +6,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 
 $tableName="vl_request_form";
-
+$tableName1="activity_log";
 try {
      //var_dump($_POST);die;
      if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
@@ -183,6 +183,17 @@ try {
         //print_r($vldata);die;
           $id=$db->insert($tableName,$vldata);
           $_SESSION['alertMsg']="VL request added successfully";
+          //Add event log
+          $eventType = 'add-vl-request';
+          $action = ucwords($_SESSION['userName']).' have been added a new request data with the sample code '.$_POST['sampleCode'];
+          $resource = 'vl-request';
+          $data=array(
+          'event_type'=>$eventType,
+          'action'=>$action,
+          'resource'=>$resource,
+          'date_time'=>$general->getDateTime()
+          );
+          $db->insert($tableName1,$data);
     }
     if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
       header("location:addVlRequest.php");

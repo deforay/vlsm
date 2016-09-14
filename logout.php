@@ -2,7 +2,24 @@
 // Initialize the session.
 // If you are using session_name("something"), don't forget it now!
 session_start();
+ob_start();
+include('./includes/MysqliDb.php');
+include('General.php');
+$general=new Deforay_Commons_General();
 
+$tableName1="activity_log";
+//Add event log
+$eventType = 'log-out';
+$action = ucwords($_SESSION['userName']).' have been logged out';
+$resource = 'user-log-out';
+$data=array(
+'event_type'=>$eventType,
+'action'=>$action,
+'resource'=>$resource,
+'date_time'=>$general->getDateTime()
+);
+$db->insert($tableName1,$data);
+    
 // Unset all of the session variables.
 $_SESSION = array();
 

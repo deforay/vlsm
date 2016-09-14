@@ -2,9 +2,10 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$id=base64_decode($_GET['id']);
 include('General.php');
 $general=new Deforay_Commons_General();
+$tableName1="activity_log";
+$id=base64_decode($_GET['id']);
 $vlQuery="SELECT * from vl_request_form where treament_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -51,6 +52,17 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
 }else{
  $vlQueryInfo[0]['date_sample_received_at_testing_lab']='';
 }
+//Add event log
+$eventType = 'view-vl-request-zm';
+$action = ucwords($_SESSION['userName']).' have been viewed a request data with the sample code '.$vlQueryInfo[0]['sample_code'];
+$resource = 'vl-request-zm';
+$data=array(
+'event_type'=>$eventType,
+'action'=>$action,
+'resource'=>$resource,
+'date_time'=>$general->getDateTime()
+);
+$db->insert($tableName1,$data);
 ?>
 <style>
   .form-control{border: none;margin-top: -3%;}
