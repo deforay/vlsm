@@ -193,11 +193,10 @@ $fResult = $db->rawQuery($fQuery);
         }
   } );
   
-  function fnShowHide(iCol)
-    {
-        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
-        oTable.fnSetColumnVis( iCol, bVis ? false : true );
-    }
+  function fnShowHide(iCol){
+    var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+    oTable.fnSetColumnVis( iCol, bVis ? false : true );
+  }
   
   function loadVlRequestData(){
     $.blockUI();
@@ -251,7 +250,7 @@ $fResult = $db->rawQuery($fQuery);
   }
   
   function convertResultToPdf(id){
-      $.post("vlRequestResultPdf.php", { id : id},
+      $.post("vlRequestResultPdf.php", { source:'print', id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
@@ -260,6 +259,7 @@ $fResult = $db->rawQuery($fQuery);
 	  }
       });
   }
+  
   function convertSearchResultToPdf(){
     $.post("vlRequestSearchResultPdf.php",
       function(data){

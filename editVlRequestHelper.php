@@ -8,6 +8,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 
 $tableName="vl_request_form";
+$tableName1="activity_log";
 $treamentId=(int) base64_decode($_POST['treamentId']);
 try {
      //var_dump($_POST);die;
@@ -187,9 +188,18 @@ try {
           $db->update($tableName,$vldata);
           
           $_SESSION['alertMsg']="VL request updated successfully";
+          //Add event log
+          $eventType = 'update-vl-request';
+          $action = ucwords($_SESSION['userName']).' have been updated a request data with the sample code '.$_POST['sampleCode'];
+          $resource = 'vl-request';
+          $data=array(
+          'event_type'=>$eventType,
+          'action'=>$action,
+          'resource'=>$resource,
+          'date_time'=>$general->getDateTime()
+          );
+          $db->insert($tableName1,$data);
      }
-    
-   
     header("location:vlRequest.php"); 
   
 } catch (Exception $exc) {
