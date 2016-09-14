@@ -126,8 +126,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="serialNo">Form Serial No</label>
-                          <input type="text" class="form-control serialNo checkNum" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
+                          <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control serialNo checkNum isRequired" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -175,8 +175,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                 <div class="row">
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
-                    <label for="clinicName">Clinic Name </label>
-                      <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                    <label for="clinicName">Clinic Name <span class="mandatory">*</span> </label>
+                      <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
                         <option value=''>-- Select --</option>
 			<?php foreach($fResult as $fDetails){ ?>
                         <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
@@ -333,7 +333,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
                             <option value="">-- Select --</option>
-                            <option value="routive_VL" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='routive_VL')?"selected='selected'":""?>>Routive VL</option>
+                            <option value="routine_VL" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='routine_VL')?"selected='selected'":""?>>Routine VL</option>
                             <option value="confirmation_of_treatment_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='confirmation_of_treatment_failure')?"selected='selected'":""?>>Confirmation Of Treatment Failure(repeat VL at 3M)</option>
                             <option value="clinical_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='clinical_failure')?"selected='selected'":""?>>Clinical Failure</option>
                             <option value="immunological_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='immunological_failure')?"selected='selected'":""?>>Immunological Failure</option>
@@ -358,11 +358,11 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                     </div>
                     <table class="table">
                       <tr>
-                        <td><label for="serialNo">Form Serial No.</label></td>
-                        <td><input type="text" class="form-control serialNo1 checkNum" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
-                        <td><label for="sampleCode">Request Barcode</label></td>
+                        <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
+                        <td><input type="text" class="form-control serialNo1 checkNum isRequired" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
+                        <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control reqBarcode checkNum" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>">
+                          <input type="text" class="form-control reqBarcode checkNum isRequired" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>">
                           <input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>">
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -372,7 +372,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                             <?php
                             foreach($lResult as $labName){
                               ?>
-                              <option value="<?php echo $labName['facility_id'];?>"<?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo $labName['facility_name'];?></option>
+                              <option value="<?php echo $labName['facility_id'];?>"<?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
                               <?php
                             }
                             ?>

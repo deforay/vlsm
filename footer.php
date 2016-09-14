@@ -70,7 +70,7 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".addVlRequestMenu").addClass('active');
-  }else if (splitsUrl=='addVlRequestZm.php') {
+  }else if (splitsUrl=='addVlRequestZm.php' || splitsUrl=='editVlRequestZm.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".addVlRequestZmMenu").addClass('active');
