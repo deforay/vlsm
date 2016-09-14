@@ -460,3 +460,5 @@ ALTER TABLE  `hold_sample_report` ADD  `status` VARCHAR( 255 ) NULL DEFAULT NULL
 
 --saravanna 14-sep-2016
 ALTER TABLE  `hold_sample_report` ADD  `controller_track` INT NULL DEFAULT NULL ;
+ALTER TABLE  `hold_sample_report` CHANGE  `controller_track`  `import_batch_tracking` INT( 11 ) NULL DEFAULT NULL ;
+
