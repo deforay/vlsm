@@ -29,11 +29,11 @@ try {
                         'absolute_decimal_value'=>$rResult[0]['absolute_decimal_value'],
                         'result'=>$rResult[0]['result'],
                         'lab_tested_date'=>$rResult[0]['lab_tested_date'],
+                        'lab_id'=>$rResult[0]['lab_id'],
                     );
             if($_POST['status']=='1'){
                 $data['result_reviewed_by']=$rResult[0]['result_reviewed_by'];
                $data['facility_id']=$rResult[0]['facility_id'];
-               $data['lab_id']=$rResult[0]['lab_id'];
                $data['sample_code']=$rResult[0]['sample_code'];
                $data['status']=$_POST['status'];
                $data['import_batch_tracking']=$_SESSION['controllertrack'];

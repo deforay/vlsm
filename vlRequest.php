@@ -132,6 +132,8 @@ $fResult = $db->rawQuery($fQuery);
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
 		  <th>Facility Name</th>
+		  <th>Province</th>
+		  <th>District</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -142,7 +144,7 @@ $fResult = $db->rawQuery($fQuery);
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="13" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="15" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
               </table>
@@ -250,6 +252,8 @@ $fResult = $db->rawQuery($fQuery);
             "bRetrieve": true,                        
             "aoColumns": [
 		{"sClass":"center","bSortable":false},
+                {"sClass":"center"},
+                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
