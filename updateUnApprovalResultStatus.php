@@ -36,7 +36,7 @@ try {
                $data['lab_id']=$rResult[0]['lab_id'];
                $data['sample_code']=$rResult[0]['sample_code'];
                $data['status']=$_POST['status'];
-               $data['controller_track']=$_SESSION['controllertrack'];
+               $data['import_batch_tracking']=$_SESSION['controllertrack'];
                $result = $db->insert('hold_sample_report',$data);
             }else{
             $data['created_by']=$rResult[0]['result_reviewed_by'];

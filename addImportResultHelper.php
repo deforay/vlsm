@@ -32,11 +32,11 @@ try {
             //$sampleIdRow=$cResult[0]['sample_id_row'];   
             $db->delete('temp_sample_report');
             //set session for controller track id in hold_sample_record table
-            $cQuery="select MAX(controller_track) FROM hold_sample_report";
+            $cQuery="select MAX(import_batch_tracking) FROM hold_sample_report";
             $cResult=$db->query($cQuery);
             //print_r($sResult[0]['MAX(treament_id)']);die;
-            if($cResult[0]['MAX(controller_track)']!=''){
-             $maxId = $cResult[0]['MAX(controller_track)']+1;
+            if($cResult[0]['MAX(import_batch_tracking)']!=''){
+             $maxId = $cResult[0]['MAX(import_batch_tracking)']+1;
             }else{
              $maxId = 1;
             }
