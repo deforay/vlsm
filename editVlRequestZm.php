@@ -9,6 +9,10 @@ $vlQuery="SELECT * from vl_request_form where treament_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
+//get lab facility details
+$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lResult = $db->rawQuery($lQuery);
+
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
 $sQuery="SELECT * from r_sample_type where form_identification='2'";
@@ -123,7 +127,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No</label>
-                          <input type="text" class="form-control serialNo" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
+                          <input type="text" class="form-control serialNo checkNum" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -350,20 +354,34 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                   <div class="box-body">
                     <div class="box-header with-border">
                     <h3 class="box-title">FOR LABORATORY USE ONLY</h3>
+                    <div class="pull-right"><a href="javascript:void(0);" onclick="showModal('facilitiesModal.php?type=lab',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
                     </div>
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No.</label></td>
-                        <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
+                        <td><input type="text" class="form-control serialNo1 checkNum" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
                         <td><label for="sampleCode">Request Barcode</label></td>
                         <td>
-                          <input type="text" class="form-control reqBarcode" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>">
+                          <input type="text" class="form-control reqBarcode checkNum" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>">
                           <input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>">
+                        </td>
+                        <td><label for="labId">Lab Name</label></td>
+                        <td>
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                            <option value="">--Select--</option>
+                            <?php
+                            foreach($lResult as $labName){
+                              ?>
+                              <option value="<?php echo $labName['facility_id'];?>"<?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo $labName['facility_name'];?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
                         </td>
                       </tr>
                       <tr>
                         <td><label for="labNo">LAB No</label></td>
-                        <td><input type="text" class="form-control" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_no'];?>" /></td>
+                        <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_no'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
                           <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
@@ -659,6 +677,11 @@ $("#vlLog").bind("keyup change", function(e) {
       $("#ageInMonths").val(diff.getUTCMonth()); // Gives difference as year
       $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives month count of difference
       //console.log(diff.getUTCDate() - 1); // Gives day count of difference
+    }
+    function setFacilityLabDetails(fDetails){
+      $("#labId").val("");
+      facilityArray = fDetails.split("##");
+      $("#labId").val(facilityArray[0]);
     }
 </script>
   

@@ -87,6 +87,7 @@ try {
           'vl_test_reason'=>$_POST['vlTestReason'],
           'drug_substitution'=>$_POST['drugSubstitution'],
           'lab_no'=>$_POST['labNo'],
+          'lab_id'=>$_POST['labId'],
           'vl_test_platform'=>$_POST['testingPlatform'],
           'sample_id'=>$_POST['specimenType'],
           'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],

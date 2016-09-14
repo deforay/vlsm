@@ -459,7 +459,6 @@ CREATE TABLE IF NOT EXISTS `hold_sample_report` (
 ALTER TABLE  `hold_sample_report` ADD  `status` VARCHAR( 255 ) NULL DEFAULT NULL ;
 
 --Pal 14th-Sep'16
-alter table activity_log add FOREIGN KEY(user) REFERENCES user_details(user_id)
 
 CREATE TABLE `activity_log` (
   `log_id` int(11) NOT NULL,
