@@ -14,6 +14,13 @@ if(end($link_array)!='error.php'){
   }
 }
 
+$previousUrl = $_SERVER['HTTP_REFERER'];
+$urlLast = explode('/',$previousUrl);
+if(end($urlLast)=='vlResultUnApproval.php'){
+    $db->delete('temp_sample_report');
+    unset($_SESSION['controllertrack']);
+}
+
 $globalConfigQuery ="SELECT * from global_config where name='logo'";
 $configResult=$db->query($globalConfigQuery);
 

@@ -29,8 +29,19 @@ try {
         
             
             //$sampleIdCol=$cResult[0]['sample_id_col'];
-            //$sampleIdRow=$cResult[0]['sample_id_row'];
-                        
+            //$sampleIdRow=$cResult[0]['sample_id_row'];   
+            $db->delete('temp_sample_report');
+            //set session for controller track id in hold_sample_record table
+            $cQuery="select MAX(controller_track) FROM hold_sample_report";
+            $cResult=$db->query($cQuery);
+            //print_r($sResult[0]['MAX(treament_id)']);die;
+            if($cResult[0]['MAX(controller_track)']!=''){
+             $maxId = $cResult[0]['MAX(controller_track)']+1;
+            }else{
+             $maxId = 1;
+            }
+            $_SESSION['controllertrack'] = $maxId;
+            
             if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
                 $sampleDate = explode(" ",$_POST['sampleReceivedDate']);
                 $_POST['sampleReceivedDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
@@ -50,14 +61,12 @@ try {
                 $_POST['reviewedDate']=$general->dateFormat($reviewDate[0])." ".$reviewDate[1];
             }
             
-            
             $allowedExtensions = array('xls', 'xlsx', 'csv');
             $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['resultFile']['name']);
             $fileName = str_replace(" ", "-", $fileName);
             $ranNumber = str_pad(rand(0, pow(10, 6)-1), 6, '0', STR_PAD_LEFT);
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $fileName =$ranNumber.".".$extension;
-    
     
             if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "import-result") && !is_dir('uploads'. DIRECTORY_SEPARATOR."import-result")) {
                 mkdir('uploads'. DIRECTORY_SEPARATOR."import-result");

@@ -457,3 +457,6 @@ CREATE TABLE IF NOT EXISTS `hold_sample_report` (
   PRIMARY KEY (`hold_sample_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 ALTER TABLE  `hold_sample_report` ADD  `status` VARCHAR( 255 ) NULL DEFAULT NULL ;
+
+--saravanna 14-sep-2016
+ALTER TABLE  `hold_sample_report` ADD  `controller_track` INT NULL DEFAULT NULL ;
