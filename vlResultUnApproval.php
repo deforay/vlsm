@@ -5,15 +5,15 @@ $tsResult = $db->rawQuery($tsQuery);
 ?>
 <style>
   .new-add td{
-        background-color:#5BB75B !important;
+        background-color:#e8000b !important;
         color:#ffffff;
     }
     .new-add td a{
-        /*background-color:#5BB75B !important;*/
+        /*background-color:#e8000b !important;*/
         color:#ffffff;
     }
     .exist td{
-        background-color:#F72727 !important;
+        background-color:#86c0c8 !important;
         color:#ffffff;
     }
     .exist td a{
@@ -28,7 +28,7 @@ $tsResult = $db->rawQuery($tsQuery);
         /*background-color:#664805 !important;*/
         color:#ffffff;
     }.empty-sample td{
-        background-color:#ED401A !important;
+        background-color:#7d8388 !important;
         color:#ffffff;
     }
     .empty-sample td a{
@@ -72,10 +72,10 @@ $tsResult = $db->rawQuery($tsQuery);
 				</div>
 			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>
 			  <ul style="list-style: none;float: right;">
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #5BB75B"></i> - New Sample</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #F72727"></i> - Exist Result</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #337ab7"></i> - New Result</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #ED401A"></i> - Empty Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #e8000b"></i> - Unknown Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #86c0c8"></i> - Existing Result</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #337ab7"></i> - Result for Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color: #7d8388"></i> - Control</li>
 	    </ul>
             </div>
 

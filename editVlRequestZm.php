@@ -310,8 +310,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                                   <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" <?php echo ($vlQueryInfo[0]['patient_receive_sms']=='no')?"checked='checked'":""?> onclick="checkPatientReceivesms(this.value);"> No
                           </label>
                         </td>
-                        <td><label for="patientPhoneNumber" class="patientMob">Mobile Number</label></td>
-                        <td><input type="text" class="form-control patientMob" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" /></td>
+                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
+                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" /></td>
                       </tr>
                       <tr class="newArtRegimen" style="display: none;">
                         
@@ -355,8 +355,11 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <tr>
                         <td><label for="serialNo">Form Serial No.</label></td>
                         <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
-                        <td><label for="sampleCode">Form Serial No.</label></td>
-                        <td><input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"></td>
+                        <td><label for="sampleCode">Request Barcode</label></td>
+                        <td>
+                          <input type="text" class="form-control reqBarcode" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>">
+                          <input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>">
+                        </td>
                       </tr>
                       <tr>
                         <td><label for="labNo">LAB No</label></td>
@@ -572,18 +575,18 @@ $("#vlLog").bind("keyup change", function(e) {
   
   
   if($("input:radio[name=receiveSms]:checked") && $("input:radio[name=receiveSms]:checked").val() =='yes'){
-    $(".patientMob").show();
+    $("#patientPhoneNumber").removeAttr("disabled");
   }else{
-    $(".patientMob").hide();
+    $("#patientPhoneNumber").attr("disabled","disabled");
   }
 
   //$(".patientMob").hide();
   
   $("input:radio[name=receiveSms]").click(function() {
       if($(this).val() == 'no'){
-         $(".patientMob").hide();
+         $("#patientPhoneNumber").attr("disabled","disabled");
       }else if($(this).val() == 'yes'){
-        $(".patientMob").show();
+        $("#patientPhoneNumber").removeAttr("disabled");
       }
   });  
   
@@ -606,11 +609,17 @@ $("#vlLog").bind("keyup change", function(e) {
      $('#patientPhoneNumber').removeClass('isRequired');
    }
   }
-   $(".serialNo").keyup(function(){
+  $(".serialNo").keyup(function(){
     $(".serialNo1").val($(".serialNo").val());
+    $(".reqBarcode").val($(".serialNo").val());
   });
   $(".serialNo1").keyup(function(){
     $(".serialNo").val($(".serialNo1").val());
+    $(".reqBarcode").val($(".serialNo1").val());
+  });
+  $(".reqBarcode").keyup(function(){
+    $(".serialNo").val($(".reqBarcode").val());
+    $(".serialNo1").val($(".reqBarcode").val());
   });
   
   function getDateOfBirth(formSource){

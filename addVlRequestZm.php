@@ -320,8 +320,8 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                                   <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);"> No
                           </label>
                         </td>
-                        <td><label for="patientPhoneNumber" class="patientMob">Mobile Number</label></td>
-                        <td><input type="text" class="form-control patientMob" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
+                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
+                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
                       </tr>
                       
                       <tr>
@@ -364,8 +364,11 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                       <tr>
                         <td><label for="serialNo">Form Serial No.</label></td>
                         <td><input type="text" class="form-control serialNo1" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" /></td>
-                        <td><label for="sampleCode">Sample Code</label></td>
-                        <td><input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $sCodeValue;?>"></td>
+                        <td><label for="sampleCode">Request Barcode</label></td>
+                        <td>
+                          <input type="text" class="form-control  reqBarcode" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;">
+                          <input type="hidden" class="form-control  sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $sCodeValue;?>">
+                        </td>
                       </tr>
                       <tr>
                         <td><label for="labNo">LAB No</label></td>
@@ -571,7 +574,7 @@ $("#vlLog").bind("keyup change", function(e) {
            setTimeout(function() {
               $('.ui-datepicker-calendar').show();
            });
-   	},
+     },
      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
      }).click(function(){
    	$('.ui-datepicker-calendar').show();
@@ -587,12 +590,12 @@ $("#vlLog").bind("keyup change", function(e) {
         $(".femaleElements").show();
       }
   });
-  $(".patientMob").hide();
+  $("#patientPhoneNumber").attr("disabled","disabled");
   $("input:radio[name=receiveSms]").click(function() {
       if($(this).val() == 'no'){
-         $(".patientMob").hide();
+         $("#patientPhoneNumber").attr("disabled","disabled");
       }else if($(this).val() == 'yes'){
-        $(".patientMob").show();
+        $("#patientPhoneNumber").removeAttr("disabled");
       }
   });
   function checkValue()
@@ -615,9 +618,15 @@ $("#vlLog").bind("keyup change", function(e) {
   }
    $(".serialNo").keyup(function(){
     $(".serialNo1").val($(".serialNo").val());
+    $(".reqBarcode").val($(".serialNo").val());
   });
   $(".serialNo1").keyup(function(){
     $(".serialNo").val($(".serialNo1").val());
+    $(".reqBarcode").val($(".serialNo1").val());
+  });
+  $(".reqBarcode").keyup(function(){
+    $(".serialNo").val($(".reqBarcode").val());
+    $(".serialNo1").val($(".reqBarcode").val());
   });
   
   function getDateOfBirth(){
