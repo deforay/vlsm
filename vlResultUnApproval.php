@@ -4,37 +4,6 @@ $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 ?>
 <style>
-  .new-add td{
-        background-color:#e8000b !important;
-        color:#ffffff;
-    }
-    .new-add td a{
-        /*background-color:#e8000b !important;*/
-        color:#ffffff;
-    }
-    .exist td{
-        background-color:#86c0c8 !important;
-        color:#ffffff;
-    }
-    .exist td a{
-        /*background-color:#F77171 !important;*/
-        color:#ffffff;
-    }
-    .no-result td{
-        background-color:#337ab7 !important;
-        color:#ffffff;
-    }
-    .no-result td a{
-        /*background-color:#664805 !important;*/
-        color:#ffffff;
-    }.empty-sample td{
-        background-color:#7d8388 !important;
-        color:#ffffff;
-    }
-    .empty-sample td a{
-        /*background-color:#664805 !important;*/
-        color:#ffffff;
-    }
     .dataTables_wrapper{
       position: relative;
     clear: both;
@@ -78,7 +47,7 @@ $tsResult = $db->rawQuery($tsQuery);
 	    <li><i class="fa fa-square" aria-hidden="true" style="color: #7d8388"></i> - Control</li>
 	    </ul>
             </div>
-
+	      <span><b style="color: #f03033;">Note:-</b>When you leave from this page,these records will be deleted.</span>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
