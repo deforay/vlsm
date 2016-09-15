@@ -104,6 +104,13 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
  $result[0]['sample_collection_date']='';
 }
 
+if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && $result[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
+ $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+}else{
+ $result[0]['date_sample_received_at_testing_lab']='';
+}
+
 if(isset($result[0]['treatment_initiated_date']) && trim($result[0]['treatment_initiated_date'])!='' && trim($result[0]['treatment_initiated_date'])!='0000-00-00'){
  $result[0]['treatment_initiated_date']=$general->humanDateFormat($result[0]['treatment_initiated_date']);
 }else{
@@ -289,6 +296,9 @@ $rejectionrResult = $db->rawQuery($rejectionrQuery);
         $html.='<td><h4>Sample Details</h4><table style="padding:5px;border:2px solid #333;">';
          $html.='<tr style="width:98%;">';
           $html.='<td>Date Of Sample Collection:'.$result[0]['sample_collection_date'].'</td>';
+         $html.='</tr>';
+         $html.='<tr style="width:98%;">';
+          $html.='<td>Sample Received Date:'.$result[0]['date_sample_received_at_testing_lab'].'</td>';
          $html.='</tr>';
          $html.='<tr>';
           $html.='<td>Sample Type:'.$div.'</td>';
