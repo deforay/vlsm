@@ -18,6 +18,12 @@ try {
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
           $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
      }
+     
+     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
+          $sampleReceivedDate = explode(" ",$_POST['sampleReceivedDate']);
+          $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDate[0])." ".$sampleReceivedDate[1];
+     }
+     
      if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
           $_POST['dob']=$general->dateFormat($_POST['dob']);  
      }
@@ -31,9 +37,6 @@ try {
      }
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
           $_POST['sampleTestingDateAtLab']=$general->dateFormat($_POST['sampleTestingDateAtLab']);  
-     }
-     if(isset($_POST['dateOfReceivedStamp']) && trim($_POST['dateOfReceivedStamp'])!=""){
-          $_POST['dateOfReceivedStamp']=$general->dateFormat($_POST['dateOfReceivedStamp']);  
      }
     
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
@@ -101,7 +104,7 @@ try {
           'result'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
           'comments'=>$_POST['labCommnets'],
-          'date_sample_received_at_testing_lab'=>$_POST['dateOfReceivedStamp'],
+          'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
           'result_reviewed_by'=>$_SESSION['userId'],
           'status'=>$status,
