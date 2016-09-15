@@ -141,6 +141,14 @@ $db->insert($tableName1,$data);
                     <input type="text" class="form-control1" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_collection_date'];?>">
                     </div>
                   </div>
+                  <div class="col-xs-3 col-md-3">
+                    <div class="form-group">
+                    <label for="">Sample Received Date</label>
+                    <input type="text" class="form-control1" style="width:100%;" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab'];?>">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-xs-3 col-md-3 col-lg-3">
                     <div class="form-group">
                     <label for="collectedBy">Collected by (Initials)</label>
@@ -281,9 +289,7 @@ $db->insert($tableName1,$data);
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="3"><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['comments'];?>"/> </td>
-                        <td><label for="dateOfReceivedStamp">Date Received Stamp</label></td>
-                        <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab'];?>" /></td>
+                        <td colspan="5"><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['comments'];?>"/> </td>
                       </tr>
                       <tr>
                         <td><label for="serialNo">Serial No.</label></td>

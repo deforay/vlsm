@@ -58,6 +58,7 @@ $clinicianName = '';
 $sKey = '';
 $sFormat = '';
 $sCodeValue = '';
+$sampleReceivedDate = '';
 if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
   //facility details
  $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
@@ -71,7 +72,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $districtQuery="SELECT * from facility_details where state='".$stateName."'";
  $districtResult=$db->query($districtQuery);
  
- $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
+ $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
  $vlResult=$db->query($vlQuery);
  $urgency = $vlResult[0]['urgency'];
  $cBy = $vlResult[0]['collected_by'];
@@ -89,6 +90,14 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
   $vlResult[0]['sample_collection_date']='';
  }
  $sDate = $vlResult[0]['sample_collection_date'];
+ 
+ if(isset($vlResult[0]['date_sample_received_at_testing_lab']) && trim($vlResult[0]['date_sample_received_at_testing_lab'])!='' && $vlResult[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlResult[0]['date_sample_received_at_testing_lab']);
+  $vlResult[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+ }else{
+  $vlResult[0]['date_sample_received_at_testing_lab']='';
+ }
+ $sampleReceivedDate = $vlResult[0]['date_sample_received_at_testing_lab'];
 }
 
 ?>
@@ -216,6 +225,14 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                     <input type="text" class="form-control" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $sDate;?>">
                     </div>
                   </div>
+                  <div class="col-xs-3 col-md-3">
+                    <div class="form-group">
+                    <label for="">Sample Received Date</label>
+                    <input type="text" class="form-control" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" value="<?php echo $sampleReceivedDate; ?>">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-xs-3 col-md-3 col-lg-3">
                     <div class="form-group">
                     <label for="collectedBy">Collected by (Initials)</label>
@@ -448,9 +465,9 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="3"><textarea class="form-control" name="labCommnets" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
-                        <td><label for="dateOfReceivedStamp">Date Of Result</label></td>
-                        <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>
+                        <td colspan="5"><textarea class="form-control" name="labCommnets" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
+                        <!--<td><label for="dateOfReceivedStamp">Date Of Result</label></td>
+                        <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>-->
                       </tr>
                       
                     </table>
@@ -596,9 +613,9 @@ $("#vlLog").bind("keyup change", function(e) {
    });
    
    $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate').mask('99-aaa-9999 99:99');
+   $('#sampleCollectionDate,#sampleReceivedDate').mask('99-aaa-9999 99:99');
    
-   $('#sampleCollectionDate').datetimepicker({
+   $('#sampleCollectionDate,#sampleReceivedDate').datetimepicker({
      changeMonth: true,
      changeYear: true,
      dateFormat: 'dd-M-yy',
