@@ -1216,6 +1216,9 @@ $configQuery="SELECT * from global_config";
     flag = deforayValidator.init({
         formId: 'editVlRequestForm'
     });
+    $('.isRequired').each(function () {
+            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
+    });
     $("#saveNext").val('save');
     if(flag){
      $.blockUI();
@@ -1225,6 +1228,9 @@ $configQuery="SELECT * from global_config";
   function validate(){
     flag = deforayValidator.init({
         formId: 'editVlRequestForm'
+    });
+    $('.isRequired').each(function () {
+            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     $("#saveNext").val('next');
     if(flag){

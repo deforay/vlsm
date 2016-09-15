@@ -465,6 +465,9 @@ facilityName = true;
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
     });
+    $('.isRequired').each(function () {
+            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
+    });
     if(flag){
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
