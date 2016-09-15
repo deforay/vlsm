@@ -152,7 +152,7 @@ if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
   }
 }
 
-$html = "";
+$html = '';
 $html .= '<div style="border:1px solid #333;">';
 $html.='<table style="padding:2px;">';
     if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
