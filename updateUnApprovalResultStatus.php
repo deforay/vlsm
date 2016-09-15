@@ -40,6 +40,8 @@ try {
                $result = $db->insert('hold_sample_report',$data);
             }else{
             $data['created_by']=$rResult[0]['result_reviewed_by'];
+            $data['created_on']=$general->getDateTime();
+            $data['modified_on']=$general->getDateTime();
             $sampleVal = $rResult[0]['sample_code'];
             $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
             $vlResult=$db->rawQuery($query);
