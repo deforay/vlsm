@@ -478,3 +478,4 @@ ALTER TABLE `activity_log`
 ALTER TABLE  `hold_sample_report` ADD  `controller_track` INT NULL DEFAULT NULL ;
 ALTER TABLE  `hold_sample_report` CHANGE  `controller_track`  `import_batch_tracking` INT( 11 ) NULL DEFAULT NULL ;
 ALTER TABLE  `vl_request_form` ADD  `modified_on` DATETIME NULL DEFAULT NULL AFTER  `created_on` ;
+ALTER TABLE  `vl_request_form` CHANGE  `lab_no`  `lab_no` INT NULL DEFAULT NULL ;

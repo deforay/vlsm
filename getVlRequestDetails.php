@@ -11,8 +11,8 @@ $primaryKey="treament_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        $aColumns = array('vl.form_id','vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
-        $orderColumns = array('','vl.form_id','vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.serial_no','vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
+        $orderColumns = array('','vl.serial_no','vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -229,7 +229,7 @@ $primaryKey="treament_id";
 	    }
             $row = array();
 			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
-			$row[] = $aRow['form_id'];
+			$row[] = $aRow['serial_no'];
 			$row[] = $aRow['sample_code'];
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['batch_code'];
