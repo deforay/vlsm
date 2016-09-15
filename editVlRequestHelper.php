@@ -182,6 +182,7 @@ try {
           'rejection'=>$_POST['rejection'],
           'sample_rejection_facility'=>$_POST['rejectionFacility'],
           'sample_rejection_reason'=>$_POST['rejectionReason'],
+          'modified_on'=>$general->getDateTime()
         );
           
           $db=$db->where('treament_id',$treamentId);

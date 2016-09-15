@@ -178,7 +178,8 @@ try {
           'sample_rejection_facility'=>$_POST['rejectionFacility'],
           'sample_rejection_reason'=>$_POST['rejectionReason'],
           'created_by'=>$_SESSION['userId'],
-          'created_on'=>$general->getDateTime()
+          'created_on'=>$general->getDateTime(),
+          'modified_on'=>$general->getDateTime()
         );
         //print_r($vldata);die;
           $id=$db->insert($tableName,$vldata);
