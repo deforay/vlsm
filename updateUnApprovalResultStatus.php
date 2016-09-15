@@ -35,6 +35,7 @@ try {
                 $data['result_reviewed_by']=$rResult[0]['result_reviewed_by'];
                $data['facility_id']=$rResult[0]['facility_id'];
                $data['sample_code']=$rResult[0]['sample_code'];
+               $data['batch_code']=$rResult[0]['batch_code'];
                $data['status']=$_POST['status'];
                $data['import_batch_tracking']=$_SESSION['controllertrack'];
                $result = $db->insert('hold_sample_report',$data);
@@ -43,6 +44,16 @@ try {
             $data['created_on']=$general->getDateTime();
             $data['modified_on']=$general->getDateTime();
             $sampleVal = $rResult[0]['sample_code'];
+            
+            //get bacth code
+            $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
+            $bvlResult=$db->rawQuery($bquery);
+            if($bvlResult){
+                $data['batch_id'] = $bvlResult['batch_id'];
+            }else{
+                $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
+                $data['batch_id'] = $db->getInsertId();
+            }
             $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
             $vlResult=$db->rawQuery($query);
             $data['status']=$_POST['status'];

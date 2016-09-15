@@ -56,12 +56,14 @@ $tsResult = $db->rawQuery($tsQuery);
                 <thead>
                 <tr>
 		  <th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
-		  <th style="width: 13%;">Sample Code</th>
-		  <th style="width: 11%;">Batch Code</th>
-                  <th style="width: 18%;">Lab Name</th>
+		  <th style="width: 13%;">Form Serial No.</th>
+		  <th style="width: 11%;">Sample Collection Date</th>
+                  <th style="width: 18%;">Receive Date</th>
+                  <th style="width: 18%;">Clinic Name</th>
+                  <th style="width: 18%;">Reason</th>
                   <th style="width: 11%;">Sample Type</th>
                   <th style="width: 9%;">Result</th>
-                  <th style="width: 16%;">Action</th>
+                  <th style="width: 9%;">Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -111,9 +113,12 @@ $tsResult = $db->rawQuery($tsQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center","bSortable":false},
-		{"sClass":"center","bSortable":false},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
             ],
+	    "iDisplayLength": 100,
             //"aaSorting": [[ 1, "desc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
