@@ -127,7 +127,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo checkNum isRequired" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
+                          <input type="text" class="form-control serialNo checkNum isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "treament_id##".$id;?>','This serial number already exists.Try another number',null)"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -359,10 +359,10 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 checkNum isRequired" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" /></td>
+                        <td><input type="text" class="form-control serialNo1 checkNum isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "treament_id##".$id;?>','This serial number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control reqBarcode checkNum isRequired" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>">
+                          <input type="text" class="form-control reqBarcode checkNum isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "treament_id##".$id;?>','This barcode already exists.Try another barcode',null)"/>
                           <input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>">
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -685,6 +685,23 @@ $("#vlLog").bind("keyup change", function(e) {
       $("#labId").val("");
       facilityArray = fDetails.split("##");
       $("#labId").val(facilityArray[0]);
+    }
+    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
+    {
+      console.log(obj);
+        var removeDots=obj.value.replace(/\./g,"");
+        var removeDots=removeDots.replace(/\,/g,"");
+        //str=obj.value;
+        removeDots = removeDots.replace(/\s{2,}/g,' ');
+
+        $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                alert(alrt);
+                duplicateName=false;
+                $(".removeValue").val('');
+            }
+        });
     }
 </script>
   
