@@ -115,7 +115,17 @@ foreach($qResult as $val){
   $artCode[$val['art_code']][$vl['art_id']]=$vl['art_code'];
  }
 }
-$sampleTypeQuery="SELECT * FROM r_sample_type";
+
+//get config values
+$configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+    
+$sampleTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value="">-- Select --</option>';
 //get test status values
@@ -129,14 +139,6 @@ $fResult = $db->rawQuery($fQuery);
 $rQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status='active'";
 $rResult = $db->rawQuery($rQuery);
 
-//get config values
-$configQuery="SELECT * from global_config";
-    $configResult=$db->query($configQuery);
-    $arr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($configResult); $i++) {
-      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-    }
     if($arr['show_date']=='yes'){
        if(isset($result[0]['patient_art_date']) && trim($result[0]['patient_art_date'])!='' && trim($result[0]['patient_art_date'])!='0000-00-00'){
          $result[0]['patient_art_date']=$general->humanDateFormat($result[0]['patient_art_date']);
