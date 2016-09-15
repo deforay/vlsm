@@ -901,9 +901,9 @@ $rejectReason = '';
                 <div class="row">
                  <div class="col-md-6">
                   <div class="form-group">
-                      <label for="testMethods" class="col-lg-4 control-label">Test Methods <span class="mandatory">*</span></label>
+                      <label for="testMethods" class="col-lg-4 control-label">Test Methods </label>
                       <div class="col-lg-7">
-                      <select name="testMethods" id="testMethods" class="form-control isRequired" title="Please choose test methods">
+                      <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
                        <option value=""> -- Select -- </option>
                        <option value="individual">Individual</option>
                        <option value="minipool">Minipool</option>

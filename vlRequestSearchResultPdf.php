@@ -132,18 +132,21 @@ if(sizeof($requestResult)> 0){
         }else{
          $result['date_of_initiation_of_current_regimen']='N/A';
         }
-        if(isset($result['date_sample_received_at_testing_lab']) && trim($result['date_sample_received_at_testing_lab'])!='' && $result['date_sample_received_at_testing_lab']!='0000-00-00'){
-         $result['date_sample_received_at_testing_lab']=$general->humanDateFormat($result['date_sample_received_at_testing_lab']);
+        if(isset($result['date_sample_received_at_testing_lab']) && trim($result['date_sample_received_at_testing_lab'])!='' && $result['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
+            $expStr=explode(" ",$result['date_sample_received_at_testing_lab']);
+            $result['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
         }else{
          $result['date_sample_received_at_testing_lab']='N/A';
         }
-        if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00'){
-         $result['lab_tested_date']=$general->humanDateFormat($result['lab_tested_date']);
+        if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00 00:00:00'){
+            $expStr=explode(" ",$result['lab_tested_date']);
+            $result['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
         }else{
          $result['lab_tested_date']='N/A';
         }
-        if(isset($result['result_reviewed_date']) && trim($result['result_reviewed_date'])!='' && $result['result_reviewed_date']!='0000-00-00'){
-         $result['result_reviewed_date']=$general->humanDateFormat($result['result_reviewed_date']);
+        if(isset($result['result_reviewed_date']) && trim($result['result_reviewed_date'])!='' && $result['result_reviewed_date']!='0000-00-00 00:00:00'){
+            $expStr=explode(" ",$result['result_reviewed_date']);
+            $result['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
         }else{
          $result['result_reviewed_date']='N/A';
         }

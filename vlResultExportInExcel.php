@@ -99,32 +99,36 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['suspected_treatment_failure_last_vl_date']='';
   }
   
-  if(isset($aRow['request_date']) && trim($aRow['request_date'])!='' && $aRow['request_date']!='0000-00-00'){
-   $aRow['request_date']=$general->humanDateFormat($aRow['request_date']);
+  if(isset($aRow['sample_testing_date']) && trim($aRow['sample_testing_date'])!='' && $aRow['sample_testing_date']!='0000-00-00'){
+ $aRow['sample_testing_date']=$general->humanDateFormat($aRow['sample_testing_date']);
   }else{
-   $aRow['request_date']='';
+   $aRow['sample_testing_date']='';
   }
   
-  if(isset($aRow['date_sample_received_at_testing_lab']) && trim($aRow['date_sample_received_at_testing_lab'])!='' && $aRow['date_sample_received_at_testing_lab']!='0000-00-00'){
-   $aRow['date_sample_received_at_testing_lab']=$general->humanDateFormat($aRow['date_sample_received_at_testing_lab']);
+  if(isset($aRow['date_sample_received_at_testing_lab']) && trim($aRow['date_sample_received_at_testing_lab'])!='' && $aRow['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['date_sample_received_at_testing_lab']);
+   $aRow['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
    $aRow['date_sample_received_at_testing_lab']='';
   }
   
-  if(isset($aRow['lab_tested_date']) && trim($aRow['lab_tested_date'])!='' && $aRow['lab_tested_date']!='0000-00-00'){
-   $aRow['lab_tested_date']=$general->humanDateFormat($aRow['lab_tested_date']);
+  if(isset($aRow['lab_tested_date']) && trim($aRow['lab_tested_date'])!='' && $aRow['lab_tested_date']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['lab_tested_date']);
+   $aRow['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
    $aRow['lab_tested_date']='';
   }
   
-  if(isset($aRow['date_results_dispatched']) && trim($aRow['date_results_dispatched'])!='' && $aRow['date_results_dispatched']!='0000-00-00'){
-   $aRow['date_results_dispatched']=$general->humanDateFormat($aRow['date_results_dispatched']);
+  if(isset($aRow['date_results_dispatched']) && trim($aRow['date_results_dispatched'])!='' && $aRow['date_results_dispatched']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['date_results_dispatched']);
+   $aRow['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
    $aRow['date_results_dispatched']='';
   }
   
-  if(isset($aRow['result_reviewed_date']) && trim($aRow['result_reviewed_date'])!='' && $aRow['result_reviewed_date']!='0000-00-00'){
-   $aRow['result_reviewed_date']=$general->humanDateFormat($aRow['result_reviewed_date']);
+  if(isset($aRow['result_reviewed_date']) && trim($aRow['result_reviewed_date'])!='' && $aRow['result_reviewed_date']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['result_reviewed_date']);
+   $aRow['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
    $aRow['result_reviewed_date']='';
   }
