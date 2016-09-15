@@ -11,7 +11,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','tsr.sample_type');
+        $aColumns = array('','tsr.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.date_sample_received_at_testing_lab,'%d-%b-%Y')",'','tsr.batch_code','tsr.lab_name','tsr.sample_type');
         $orderColumns = array('','tsr.sample_code','tsr.batch_code','tsr.lab_name','tsr.sample_type');
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -89,7 +89,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
+	$sQuery="SELECT * FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
 	
         //echo $sQuery;die;
 	
@@ -111,7 +111,7 @@ $tsResult = $db->rawQuery($tsQuery);
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM temp_sample_report as tsr INNER JOIN testing_status as ts ON ts.status_id=tsr.status $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -134,6 +134,18 @@ $tsResult = $db->rawQuery($tsQuery);
 	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
 		$vlResult = $aRow['text_value'];
 	    }
+	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
+	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
+	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+	    }else{
+	       $aRow['sample_collection_date'] = '';
+	    }
+	    if(isset($aRow['date_sample_received_at_testing_lab']) && trim($aRow['date_sample_received_at_testing_lab'])!= '' && $aRow['date_sample_received_at_testing_lab']!= '0000-00-00 00:00:00'){
+	       $xplodDate = explode(" ",$aRow['date_sample_received_at_testing_lab']);
+	       $aRow['date_sample_received_at_testing_lab'] = $general->humanDateFormat($xplodDate[0]);
+	    }else{
+	       $aRow['date_sample_received_at_testing_lab'] = '';
+	    }
             $row = array();
 	    if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
 		
@@ -150,23 +162,20 @@ $tsResult = $db->rawQuery($tsQuery);
 		$color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
 		$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
-		$status = '<select class="form-control" style="" name="status" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="updateStatus(this.id,this.value)">
-				<option value="">--select--</option>
-				<option value="7" '.($aRow['status']=="7" ? "selected=selected" : "").'>Accepted</option>
-				<option value="1" '.($aRow['status']=="1" ? "selected=selected" : "").'>Hold</option>
-				<option value="4" '.($aRow['status']=="4"  ? "selected=selected" : "").'>Rejected</option>
-			</select><br><br>';
 	    }else{
 		$color = '<span style="color:#7d8388;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
 		$row[] = '';
-		$status = '';
 	    }
 	    $row[] = $aRow['sample_code'].$color;
-	    $row[] = $aRow['batch_code'];
-	    $row[] = ucwords($aRow['lab_name']);
+	    $row[] = $aRow['sample_collection_date'];
+	    $row[] = $aRow['date_sample_received_at_testing_lab'];
+	    $row[] = $aRow['facility_name'];
+	    $row[] = $aRow['rejection_reason_name'];
+	    //$row[] = $aRow['batch_code'];
+	    //$row[] = ucwords($aRow['lab_name']);
 	    $row[] = ucwords($aRow['sample_type']);
 	    $row[] = $vlResult;
-	    $row[] = $status;
+	    $row[] = ucwords($aRow['status_name']);
 	    
 	    $output['aaData'][] = $row;
         }

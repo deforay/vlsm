@@ -22,6 +22,7 @@ $general=new Deforay_Commons_General();
 
 $tableName="temp_sample_report";
 $tableName1="activity_log";
+$tableName1="activity_log";
 try {
         //$configId=base64_decode($_POST['machineName']);
         //$query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
@@ -97,18 +98,24 @@ try {
                         fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$sampleType,$batchCode,$rKey,$cellName,$cell);
                     }
                     //echo $cellRow;
-                    //if($sampleVal!=''){
-                    //check sample exist
-                    //$sampleTypeQuery="SELECT * FROM r_sample_type where sample_name='".$sampleType."' AND form_identification='".$arr['vl_form']."'";
-                    //$sampleTypeResult = $db->rawQuery($sampleTypeQuery);
-                    //if($sampleTypeResult){
-                     //$sampleType =  $sampleTypeResult[0]['sample_id'];
-                    //}else{
-                        //$sampleData=array('sample_name'=>$sampleType,'form_identification'=>$arr['vl_form']);
-                        //$db->insert('r_sample_type',$sampleData);
-                        //$lastId = $db->getInsertId();
-                        //$sampleType = $lastId;
-                    //}
+                    
+                    if($sampleVal!='' || $batchCode!='' || $sampleType!='' || $logVal!='' || $absVal!='' || $absDecimalVal!=''){
+                        if($batchCode==''){
+                            $bacthId = date('Ymd001');
+                            $batchResult = $db->insert('batch_details',array('batch_code'=>$bacthId,'sent_mail'=>'no','created_on'=>$general->getDateTime()));
+                            $batchIdval = $db->getInsertId();
+                        }else{
+                            $bacthId = $batchCode;
+                            $bquery="select * from batch_details where batch_code='".$bacthId."'";
+                            $bvlResult=$db->rawQuery($bquery);
+                            if($bvlResult){
+                                $batchIdval = $bvlResult[0]['batch_id'];
+                            }else{
+                                $batchResult = $db->insert('batch_details',array('batch_code'=>$bacthId,'sent_mail'=>'no','created_on'=>$general->getDateTime()));
+                                $batchIdval = $db->getInsertId();
+                            }
+                        }
+                    }
                     
                     $data=array(
                         'lab_id'=>$_POST['labId'],
@@ -122,8 +129,6 @@ try {
                         'result_reviewed_by'=>$_SESSION['userId'],
                         'comments'=>$_POST['comments'],
                         'sample_code'=>$sampleVal,
-                        'batch_code'=>$batchCode,
-                        'sample_type'=>$sampleType,
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
@@ -138,11 +143,19 @@ try {
                     if($vlResult){
                         if($vlResult[0]['log_value']!='' || $vlResult[0]['absolute_value']!='' || $vlResult[0]['text_value']!='' || $vlResult[0]['absolute_decimal_value']!=''){
                             $data['sample_details'] = 'Already Result Exist';
+                        }else{
+                            $data['status'] = '7';
+                            $vlDataVal = $data;
+                            $vlDataVal['batch_id']=$batchIdval;
+                            $db=$db->where('sample_code',$sampleVal);
+                            $result=$db->update('vl_request_form',$vlDataVal);
                         }
                         $data['facility_id'] = $vlResult[0]['facility_id'];
                     }else{
                         $data['sample_details'] = 'New Sample';
                     }
+                    $data['batch_code']=$bacthId;
+                    $data['sample_type']=$sampleType;
                     if($sampleVal!='' || $batchCode!='' || $sampleType!='' || $logVal!='' || $absVal!='' || $absDecimalVal!=''){
                     $db->insert($tableName,$data);
                     }
@@ -151,7 +164,6 @@ try {
                     ////$db=$db->where('sample_code',$vlResult[$m]['sample_code']);
                     //$id=$db->update($tableName,$data);
                     //}
-                   // }
                     $m++;
                 }
             }
