@@ -33,7 +33,7 @@ $tsResult = $db->rawQuery($tsQuery);
 			  <div class="col-md-4 col-sm-4">
 				<input type="hidden" name="checkedTests" id="checkedTests"/>
 				<select style="" class="form-control" id="status" name="status" title="Please select test status" >
-				  <option value="">-- Select --</option>
+				  <option value=""> -- Select -- </option>
 				  <option value="7">Accepted</option>
 				  <option value="1">Hold</option>
 				  <option value="4">Rejected</option>

@@ -66,7 +66,7 @@ $pResult = $db->rawQuery($pQuery);
                         <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
                         <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
-                        <option value="">-- Select --</option>
+                        <option value=""> -- Select -- </option>
                           <?php
                           foreach($fResult as $type){
                            ?>
@@ -170,7 +170,7 @@ $pResult = $db->rawQuery($pQuery);
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                           <select class="form-control isRequired" name='status' id='status' title="Please select the status">
-                            <option value="">-- Select --</option>
+                            <option value=""> -- Select -- </option>
                             <option value="active" <?php echo ($facilityInfo[0]['status']=='active')?"selected='selected'":""?>>Active</option>
                             <option value="inactive" <?php echo ($facilityInfo[0]['status']=='inactive')?"selected='selected'":""?>>Inactive</option>
                           </select>

@@ -51,7 +51,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-			<option value="">-- Select --</option>
+			<option value=""> -- Select -- </option>
 			  <?php
 			  foreach($sResult as $type){
 			   ?>
