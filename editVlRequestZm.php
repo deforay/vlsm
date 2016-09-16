@@ -33,12 +33,12 @@ $districtQuery="SELECT * from facility_details where state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
 
 $province = '';
-$province.="<option value=''>-- Select --</option>";
+$province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
             }
             $facility = '';
-            $facility.="<option value=''>-- Select --</option>";
+            $facility.="<option value=''> -- Select -- </option>";
             foreach($fResult as $fDetails){
               $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
             }
@@ -149,7 +149,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <div class="form-group">
                         <label for="province">Province</label>
                           <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
-                            <option value="">-- Select --</option>
+                            <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
                             <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } ?>
@@ -160,7 +160,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <div class="form-group">
                         <label for="District">District  </label>
                           <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
-                            <option value="">-- Select --</option>
+                            <option value=""> -- Select -- </option>
                             <?php
                             foreach($districtResult as $districtName){
                               ?>
@@ -178,7 +178,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                     <div class="form-group">
                     <label for="clinicName">Clinic Name <span class="mandatory">*</span> </label>
                       <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-                        <option value=''>-- Select --</option>
+                        <option value=''> -- Select -- </option>
 			<?php foreach($fResult as $fDetails){ ?>
                         <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                         <?php } ?>
@@ -297,7 +297,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
                             <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();">
-                         <option value="">-- Select --</option>
+                         <option value=""> -- Select -- </option>
                          <?php
                          foreach($aResult as $parentRow){
                          ?>
@@ -341,7 +341,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label for="vlTestReason">Reason For VL test</label></td>
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
-                            <option value="">-- Select --</option>
+                            <option value=""> -- Select -- </option>
                             <option value="routine_VL" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='routine_VL')?"selected='selected'":""?>>Routine VL</option>
                             <option value="confirmation_of_treatment_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='confirmation_of_treatment_failure')?"selected='selected'":""?>>Confirmation Of Treatment Failure(repeat VL at 3M)</option>
                             <option value="clinical_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='clinical_failure')?"selected='selected'":""?>>Clinical Failure</option>
@@ -377,7 +377,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label for="labId">Lab Name</label></td>
                         <td>
                           <select name="labId" id="labId" class="form-control" title="Please choose lab name">
-                            <option value="">--Select--</option>
+                            <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
                               ?>
@@ -394,7 +394,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
                           <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
-                              <option value="">-- Select --</option>
+                              <option value=""> -- Select -- </option>
                               <option value="roche" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='roche')?"selected='selected'":""?>>ROCHE</option>
                               <option value="abbott" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='abbott')?"selected='selected'":""?>>ABBOTT</option>
                               <option value="poor" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='poor')?"selected='selected'":""?>>BIOMEREUX</option>
@@ -405,7 +405,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label for="specimenType">Specimen type</label></td>
                         <td>
                           <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
-                              <option value="">-- Select --</option>
+                              <option value=""> -- Select -- </option>
                               <?php
                               foreach($sResult as $name){
                                ?>
