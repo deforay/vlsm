@@ -43,6 +43,7 @@ try {
             }
             $_SESSION['controllertrack'] = $maxId;
             
+            /*
             if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
                 $sampleDate = explode(" ",$_POST['sampleReceivedDate']);
                 $_POST['sampleReceivedDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
@@ -61,6 +62,7 @@ try {
                 $reviewDate = explode(" ",$_POST['reviewedDate']);
                 $_POST['reviewedDate']=$general->dateFormat($reviewDate[0])." ".$reviewDate[1];
             }
+            */
             
             $allowedExtensions = array('xls', 'xlsx', 'csv');
             $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['resultFile']['name']);
@@ -99,36 +101,17 @@ try {
                     }
                     //echo $cellRow;
                     
-                    if($sampleVal!='' || $batchCode!='' || $sampleType!='' || $logVal!='' || $absVal!='' || $absDecimalVal!=''){
                         if($batchCode==''){
                             $bacthId = date('Ymd001');
-                            $batchResult = $db->insert('batch_details',array('batch_code'=>$bacthId,'sent_mail'=>'no','created_on'=>$general->getDateTime()));
-                            $batchIdval = $db->getInsertId();
                         }else{
                             $bacthId = $batchCode;
-                            $bquery="select * from batch_details where batch_code='".$bacthId."'";
-                            $bvlResult=$db->rawQuery($bquery);
-                            if($bvlResult){
-                                $batchIdval = $bvlResult[0]['batch_id'];
-                            }else{
-                                $batchResult = $db->insert('batch_details',array('batch_code'=>$bacthId,'sent_mail'=>'no','created_on'=>$general->getDateTime()));
-                                $batchIdval = $db->getInsertId();
-                            }
                         }
-                    }
                     
                     $data=array(
-                        'lab_id'=>$_POST['labId'],
-                        'lab_name'=>$_POST['labName'],
-                        'lab_contact_person'=>$_POST['labContactPerson'],
-                        'lab_phone_no'=>$_POST['labPhoneNo'],
-                        'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
-                        'lab_tested_date'=>$_POST['testingDate'],
-                        'date_results_dispatched'=>$_POST['dispatchedDate'],
-                        'result_reviewed_date'=>$_POST['reviewedDate'],
+                        'lab_id'=>base64_decode($_POST['labId']),
                         'result_reviewed_by'=>$_SESSION['userId'],
-                        'comments'=>$_POST['comments'],
                         'sample_code'=>$sampleVal,
+			'batch_code'=>$bacthId,
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
@@ -145,17 +128,12 @@ try {
                             $data['sample_details'] = 'Already Result Exist';
                         }else{
                             $data['status'] = '7';
-                            $vlDataVal = $data;
-                            $vlDataVal['batch_id']=$batchIdval;
-                            $db=$db->where('sample_code',$sampleVal);
-                            $result=$db->update('vl_request_form',$vlDataVal);
                         }
                         $data['facility_id'] = $vlResult[0]['facility_id'];
                     }else{
                         $data['sample_details'] = 'New Sample';
                     }
-                    $data['batch_code']=$bacthId;
-                    $data['sample_type']=$sampleType;
+                    
                     if($sampleVal!='' || $batchCode!='' || $sampleType!='' || $logVal!='' || $absVal!='' || $absDecimalVal!=''){
                     $db->insert($tableName,$data);
                     }

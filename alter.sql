@@ -348,7 +348,7 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES
 ('Logo', 'logo', ''),
 ('Header', 'header', 'MINISTRY OF HEALTH\r\nNATIONAL AIDS AND STD CONTROL PROGRAM\r\nINDIVIDUAL VIRAL LOAD RESULT FORM'),
 ('Max. no of sample in a batch', 'max_no_of_samples_in_a_batch', '20'),
-('Do you want to show smiley at result pdf?', 'show_smiley', 'yes');
+('Do you want to show smiley in the result PDF?', 'show_smiley', 'yes');
 
 INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Patient ART No. Date', 'show_date', 'no');
 
@@ -479,3 +479,8 @@ ALTER TABLE  `hold_sample_report` ADD  `controller_track` INT NULL DEFAULT NULL 
 ALTER TABLE  `hold_sample_report` CHANGE  `controller_track`  `import_batch_tracking` INT( 11 ) NULL DEFAULT NULL ;
 ALTER TABLE  `vl_request_form` ADD  `modified_on` DATETIME NULL DEFAULT NULL AFTER  `created_on` ;
 ALTER TABLE  `vl_request_form` CHANGE  `lab_no`  `lab_no` INT NULL DEFAULT NULL ;
+
+
+--saravanan 16-sep-2016
+ALTER TABLE  `vl_request_form` ADD  `result_approved_by` INT NULL DEFAULT NULL AFTER  `comments` ,
+ADD  `result_approved_on` DATETIME NULL DEFAULT NULL AFTER  `result_approved_by` ;

@@ -2,7 +2,7 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id=''";
+$query="SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -16,6 +16,9 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
+  .select2-selection__choice{
+	color:#000000 !important;
+  }
   #ms-sampleCode{width: 110%;}
 </style>
   <!-- Content Wrapper. Contains page content -->
@@ -59,8 +62,8 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 		<tr>
 		   <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-			  <option value=""> -- Select -- </option>
+		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name"  multiple="multiple">
+			  <option value="">-- Select --</option>
 			    <?php
 			    foreach($fResult as $name){
 			     ?>
@@ -93,7 +96,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 			    <?php
 			    foreach($result as $sample){
 			      ?>
-			      <option value="<?php echo $sample['treament_id'];?>"><?php  echo ucwords($sample['sample_code']);?></option>
+			      <option value="<?php echo $sample['treament_id'];?>"><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
 			      <?php
 			    }
 			    ?>
@@ -141,6 +144,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   var startDate = "";
   var endDate = "";
   $(document).ready(function() {
+	  $("#facilityName").select2();
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
