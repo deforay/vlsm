@@ -67,7 +67,7 @@ if($priInfo){
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                           <select class="form-control isRequired" name='status' id='status' title="Please select the status">
-                            <option value="">-- Select --</option>
+                            <option value=""> -- Select -- </option>
                             <option value="active" <?php echo ($roleInfo[0]['status']=='active')?"selected='selected'":""?>>Active</option>
                             <option value="inactive" <?php echo ($roleInfo[0]['status']=='inactive')?"selected='selected'":""?>>Inactive</option>
                           </select>

@@ -24,7 +24,7 @@ foreach($qResult as $val){
 }
 $sampleTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
-$sampleType='<option value="">-- Select --</option>';
+$sampleType='<option value=""> -- Select -- </option>';
 foreach ($sampleTypeResult as $row) {
  $sampleType.='<option value="'.$row['sample_id'].'">'.ucwords($row['sample_name']).'</option>';
 }
@@ -471,7 +471,7 @@ $rejectReason = '';
                         <label for="currentRegimen" class="col-lg-4 control-label">Current Regimen</label>
                         <div class="col-lg-7">
                         <select class="form-control" id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen">
-                         <option value="">-- Select --</option>
+                         <option value=""> -- Select -- </option>
                          <?php
                          foreach($artCode as $pKey=>$parentRow){
                          ?>

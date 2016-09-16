@@ -63,7 +63,7 @@ $pResult = $db->rawQuery($pQuery);
                         <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
                         <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
-                          <option value="">-- Select --</option>
+                          <option value=""> -- Select -- </option>
                             <?php
                             foreach($fResult as $type){
                              ?>

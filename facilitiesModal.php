@@ -64,7 +64,7 @@ $type=$_GET['type'];
                       if($type=='all'){
                       ?>
 		      <select class="form-control" id="facilityTypeName" name="facilityTypeName" title="Please select facility name">
-		      <option value="">-- Select --</option>
+		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
 			 ?>
