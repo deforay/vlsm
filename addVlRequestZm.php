@@ -59,6 +59,7 @@ $sKey = '';
 $sFormat = '';
 $sCodeValue = '';
 $sampleReceivedDate = '';
+$labNameId = '';
 if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
   //facility details
  $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
@@ -72,12 +73,12 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $districtQuery="SELECT * from facility_details where state='".$stateName."'";
  $districtResult=$db->query($districtQuery);
  
- $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
+ $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
  $vlResult=$db->query($vlQuery);
  $urgency = $vlResult[0]['urgency'];
  $cBy = $vlResult[0]['collected_by'];
  $clinicianName = $vlResult[0]['lab_contact_person'];
- 
+ $labNameId = $vlResult[0]['lab_id'];
  $sKey = $vlResult[0]['sample_code_key']+1;
  $sKey = "00".$sKey;
  $sFormat = $vlResult[0]['sample_code_format'];
@@ -407,7 +408,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                             <?php
                             foreach($lResult as $labName){
                               ?>
-                              <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
+                              <option value="<?php echo $labName['facility_id'];?>" <?php echo ($labNameId==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
                               <?php
                             }
                             ?>
