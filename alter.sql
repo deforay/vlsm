@@ -348,7 +348,7 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES
 ('Logo', 'logo', ''),
 ('Header', 'header', 'MINISTRY OF HEALTH\r\nNATIONAL AIDS AND STD CONTROL PROGRAM\r\nINDIVIDUAL VIRAL LOAD RESULT FORM'),
 ('Max. no of sample in a batch', 'max_no_of_samples_in_a_batch', '20'),
-('Do you want to show smiley at result pdf?', 'show_smiley', 'yes');
+('Do you want to show smiley in the result PDF?', 'show_smiley', 'yes');
 
 INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Patient ART No. Date', 'show_date', 'no');
 

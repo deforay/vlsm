@@ -60,7 +60,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="show_smiley" class="col-lg-4 control-label">Do You Want to Show Smiley at Result PDF? </label>
+                      <label for="show_smiley" class="col-lg-4 control-label">Do you want to show smiley in the result PDF? </label>
                       <div class="col-lg-8">
                         <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>Yes&nbsp;&nbsp;
                         <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>No

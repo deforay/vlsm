@@ -4,3 +4,6 @@
 .readonly {
     background: #fff !important;
 }
+.treeview-menu li{
+    margin-left:10px !important;
+}

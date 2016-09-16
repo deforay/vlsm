@@ -134,15 +134,14 @@ $fResult = $db->rawQuery($fQuery);
                 <thead>
                 <tr>
 		  <!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
-		  <th>Form Id</th>
-		  <th>Sample Code</th>
+				  <th>Form Serial No.</th>
                   <th>Sample Collection Date</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
-		  <th>Province</th>
-		  <th>District</th>
+				  <th>Facility Name</th>
+				  <th>Province</th>
+				  <th>District</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -261,7 +260,6 @@ $fResult = $db->rawQuery($fQuery);
             "bRetrieve": true,                        
             "aoColumns": [
 		//{"sClass":"center","bSortable":false},
-                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
