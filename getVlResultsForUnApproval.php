@@ -127,6 +127,7 @@ $tsResult = $db->rawQuery($tsQuery);
             "aaData" => array()
         );
         foreach ($rResult as $aRow) {
+	    $rsDetails = '';
 	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
 		$vlResult = $aRow['absolute_value'];
 	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
@@ -151,14 +152,17 @@ $tsResult = $db->rawQuery($tsQuery);
 		
 		if($aRow['sample_details']=='Already Result Exist')
             {
+		$rsDetails = 'Existing Result';
                 $color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
 	    if($aRow['sample_details']=='New Sample')
             {
+		$rsDetails = 'Unknown Sample';
 		$color = '<span style="color:#e8000b;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
 	    if($aRow['sample_details']=='')
             {
+		$rsDetails = 'Result for Sample';
 		$color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
 		//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
@@ -174,7 +178,7 @@ $tsResult = $db->rawQuery($tsQuery);
 		//$row[] = '';
 		$status ='';
 	    }
-	    $row[] = $aRow['sample_code'].$color;
+	    $row[] = '<span title="'.$rsDetails.'">'.$aRow['sample_code'].$color.'</span>';
 	    $row[] = $aRow['sample_collection_date'];
 	    $row[] = $aRow['date_sample_received_at_testing_lab'];
 	    $row[] = $aRow['facility_name'];

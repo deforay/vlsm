@@ -545,6 +545,8 @@ $("#vlResult").bind("keyup change", function(e) {
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();
     }else{
+      $( "#noResultRejected" ).prop( "checked", false );
+      $( "#noResultError" ).prop( "checked", false );
       $(".noResult").hide();
     }
 });
@@ -552,6 +554,8 @@ $("#vlLog").bind("keyup change", function(e) {
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();
     }else{
+      $( "#noResultRejected" ).prop( "checked", false );
+      $( "#noResultError" ).prop( "checked", false );
       $(".noResult").hide();
     }
 });    
