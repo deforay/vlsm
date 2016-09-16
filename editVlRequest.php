@@ -127,7 +127,7 @@ $configQuery="SELECT * from global_config";
     
 $sampleTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
-$sampleType='<option value="">-- Select --</option>';
+$sampleType='<option value=""> -- Select -- </option>';
 //get test status values
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
@@ -539,7 +539,7 @@ $rResult = $db->rawQuery($rQuery);
                         <label for="sampleType" class="col-lg-4 control-label">Sample Type <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                          <select class="form-control isRequired" name='sampleType' id='sampleType' title="Please select sample type">
-                           <option value="">-- Select --</option>
+                           <option value=""> -- Select -- </option>
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
@@ -588,7 +588,7 @@ $rResult = $db->rawQuery($rQuery);
                         <label for="currentRegimen" class="col-lg-4 control-label">Current Regimen</label>
                         <div class="col-lg-7">
                         <select class="form-control " id="currentRegimen" name="currentRegimen" placeholder="Enter Current Regimen" title="Please enter current regimen">
-                         <option value="">-- Select --</option>
+                         <option value=""> -- Select -- </option>
                          <?php
                          foreach($artCode as $pKey=>$parentRow){
                          ?>
@@ -734,7 +734,7 @@ $rResult = $db->rawQuery($rQuery);
                         <div class="col-lg-7">
                         <!--<input type="text" class="form-control" id="RmTestingSampleType" name="RmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" />-->
                         <select class="form-control viralTestData" id="rmTestingSampleType" name="rmTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                         <option value="">-- Select --</option>
+                         <option value=""> -- Select -- </option>
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
@@ -794,7 +794,7 @@ $rResult = $db->rawQuery($rQuery);
                         <label for="repeatTestingSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <select class="form-control viralTestData" id="repeatTestingSampleType" name="repeatTestingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                          <option value="">-- Select --</option>
+                          <option value=""> -- Select -- </option>
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
@@ -854,7 +854,7 @@ $rResult = $db->rawQuery($rQuery);
                         <label for="suspendTreatmentSampleType" class="col-lg-4 control-label">Sample Type</label>
                         <div class="col-lg-7">
                         <select class="form-control viralTestData" id="suspendTreatmentSampleType" name="suspendTreatmentSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                          <option value="">-- Select --</option>
+                          <option value=""> -- Select -- </option>
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
