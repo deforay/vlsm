@@ -180,10 +180,11 @@ $formConfigResult=$db->query($formConfigQuery);
 		</span>
 	      </a>
 	      <ul class="treeview-menu">
-		<?php if(isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])){ ?>
-		<li class="allMenu userMenu"><a href="users.php"><i class="fa fa-circle-o"></i> Users</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])){ ?>
+		<?php if(isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu roleMenu"><a href="roles.php"><i class="fa fa-circle-o"></i> Roles</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])){ ?>
+        <li class="allMenu userMenu"><a href="users.php"><i class="fa fa-circle-o"></i> Users</a></li>
+		
 		<?php } if(isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu facilityMenu"><a href="facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])){ ?>
@@ -243,7 +244,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlResultApprovalMenu"><a href="vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+                <!--<li class="allMenu vlResultApprovalMenu"><a href="vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>-->
 		<?php }  ?>
             </ul>
         </li>
@@ -258,10 +259,10 @@ $formConfigResult=$db->query($formConfigQuery);
             </a>
             <ul class="treeview-menu">
 		<?php if(isset($_SESSION['privileges']) && in_array("missingResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu missingResultMenu"><a href="missingResult.php"><i class="fa fa-circle-o"></i> Missing Result Report</a></li>
+                <li class="allMenu missingResultMenu"><a href="missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
 		<?php } ?>
-                <li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>
+                <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
+                <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
 		<?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultMenu"><a href="vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
