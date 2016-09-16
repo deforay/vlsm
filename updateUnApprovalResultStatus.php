@@ -32,6 +32,7 @@ try {
                         'result'=>$rResult[0]['result'],
                         'lab_tested_date'=>$rResult[0]['lab_tested_date'],
                         'lab_id'=>$rResult[0]['lab_id'],
+                        'file_name'=>$rResult[0]['file_name'],
                     );
             if($status[$i]=='1'){
                 $data['result_reviewed_by']=$rResult[0]['result_reviewed_by'];
@@ -54,7 +55,7 @@ try {
             if($bvlResult){
                 $data['batch_id'] = $bvlResult[0]['batch_id'];
             }else{
-                $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
+                $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
                 $data['batch_id'] = $db->getInsertId();
             }
             $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
@@ -71,6 +72,9 @@ try {
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);
     }
+        if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $rResult[0]['file_name'])) {
+            copy('temporary'. DIRECTORY_SEPARATOR ."import-result". DIRECTORY_SEPARATOR.$rResult[0]['file_name'], 'uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $rResult[0]['file_name']);
+        }
     }
     //get all accepted data result
     $accQuery="SELECT * FROM temp_sample_report where status='7'";
@@ -99,6 +103,7 @@ try {
                         'modified_on'=>$general->getDateTime(),
                         'result_approved_by'=>$_SESSION['userId'],
                         'result_approved_on'=>$general->getDateTime(),
+                        'file_name'=>$accResult[$i]['file_name'],
                         'status'=>'7'
                     );
             //get bacth code
@@ -107,15 +112,19 @@ try {
                 if($bvlResult){
                     $data['batch_id'] = $bvlResult[0]['batch_id'];
                 }else{
-                    $batchResult = $db->insert('batch_details',array('batch_code'=>$accResult[$i]['batch_code'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
+                    $batchResult = $db->insert('batch_details',array('batch_code'=>$accResult[$i]['batch_code'],'batch_code_key'=>$accResult[$i]['batch_code_key'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
                     $data['batch_id'] = $db->getInsertId();
                 }
                 $db=$db->where('sample_code',$accResult[$i]['sample_code']);
                 $result=$db->update($tableName1,$data);
+                if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $accResult[$i]['file_name'])) {
+                    copy('temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['file_name'], 'uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['file_name']);
+                }
                 $db=$db->where('temp_sample_id',$accResult[$i]['temp_sample_id']);
                 $result=$db->delete($tableName);
-                
+        
     }
+        
     }
     
 }
