@@ -69,7 +69,7 @@ $result = $db->rawQuery($query);
                         <label for="role" class="col-lg-4 control-label">Role <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <select class="form-control isRequired" name='role' id='role' title="Please select the role">
-                        <option value="">-- Select --</option>
+                        <option value=""> -- Select -- </option>
                         <?php
                         foreach ($result as $row) {
                         ?>

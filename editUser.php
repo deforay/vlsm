@@ -72,7 +72,7 @@ $result = $db->rawQuery($query);
                         <label for="role" class="col-lg-4 control-label">Role <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <select class="form-control isRequired" name='role' id='role' title="Please select the role">
-                        <option value="">-- Select --</option>
+                        <option value=""> -- Select -- </option>
                         <?php
                         foreach ($result as $row) {
                         ?>
@@ -111,7 +111,7 @@ $result = $db->rawQuery($query);
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                           <select class="form-control isRequired" name='status' id='status' title="Please select the status">
-                            <option value="">-- Select --</option>
+                            <option value=""> -- Select -- </option>
                             <option value="active" <?php echo ($userInfo[0]['status']=='active')?"selected='selected'":""?>>Active</option>
                             <option value="inactive" <?php echo ($userInfo[0]['status']=='inactive')?"selected='selected'":""?>>Inactive</option>
                           </select>

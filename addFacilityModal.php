@@ -99,7 +99,7 @@ $pResult = $db->rawQuery($pQuery);
                         <div class="col-lg-7">
 			    <?php if($type=='all'){ ?>
                         <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
-                          <option value="">-- Select --</option>
+                          <option value=""> -- Select -- </option>
                             <?php
                             foreach($fResult as $type){
                              ?>
