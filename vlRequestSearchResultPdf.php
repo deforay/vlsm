@@ -142,13 +142,12 @@ if(sizeof($requestResult)> 0){
           $sampleCollectionTime = $expStr[1];
         }else{
           $result['sample_collection_date']='';
+          $sampleCollectionTime = '';
         }
-        if(isset($result['date_sample_received_at_testing_lab']) && trim($result['date_sample_received_at_testing_lab'])!='' && $result['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-          $expStr=explode(" ",$result['date_sample_received_at_testing_lab']);
-          $result['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0]);
-          $sampleReceivedTime = $expStr[1];
+        if(isset($result['sample_testing_date']) && trim($result['sample_testing_date'])!='' && $result['sample_testing_date']!='0000-00-00'){
+          $result['sample_testing_date']=$general->humanDateFormat($result['sample_testing_date']);
         }else{
-          $result['date_sample_received_at_testing_lab']='';
+          $result['sample_testing_date']='';
         }
         if(isset($result['last_viral_load_result']) && trim($result['last_viral_load_result'])!='' && $result['last_viral_load_result']!='0000-00-00 00:00:00'){
           $expStr=explode(" ",$result['last_viral_load_result']);
@@ -162,6 +161,7 @@ if(sizeof($requestResult)> 0){
           $lastViralLoadResultTime = $expStr[1];
         }else{
           $result['last_viral_load_date']='';
+          $lastViralLoadResultTime = '';
         }
         if(!isset($result['patient_receive_sms']) || trim($result['patient_receive_sms'])== ''){
           $result['patient_receive_sms'] = 'missing';
@@ -270,8 +270,7 @@ if(sizeof($requestResult)> 0){
                 $html .='<tr>';
                   $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['sample_collection_date'].'</td>';
                   $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$sampleCollectionTime.'</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['date_sample_received_at_testing_lab'].'</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$sampleReceivedTime.'</td>';
+                  $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['sample_testing_date'].'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen Type</td>';
@@ -281,13 +280,16 @@ if(sizeof($requestResult)> 0){
                   $html .='<td colspan="4" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
                 $html .='</tr>';
                 $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$vlResult.'</td>';
+                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$vlResult.'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Reviewed by</td>';
                   $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$resultReviewedBy.'</td>';
                   $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Approved by</td>';
                   $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$resultApprovedBy.'</td>';
+                $html .='</tr>';
+                $html .='<tr>';
+                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">Viral load adequately controlled : continue current regimen</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
@@ -303,32 +305,32 @@ if(sizeof($requestResult)> 0){
              $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Previous results</td>';
             $html .='</tr>';
             $html .='<tr>';
-             $html .='<td colspan="2" style="font-size:10px;font-weight:bold;">Previous Sample Collection Date</td>';
-             $html .='<td colspan="2" style="font-size:10px;font-style:italic;">'.$result['last_viral_load_date'].'</td>';
+             $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Previous Sample Collection Date</td>';
+             $html .='<td colspan="2" style="font-size:10px;font-style:italic;text-align:left;">'.$result['last_viral_load_date'].'</td>';
             $html .='</tr>';
             $html .='<tr>';
-             $html .='<td colspan="2" style="font-size:10px;font-weight:bold;">Result of previous viral load(copies/ml)</td>';
-             $html .='<td colspan="2" style="font-size:10px;font-style:italic;">'.$result['last_viral_load_result'].'</td>';
+             $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Result of previous viral load(copies/ml)</td>';
+             $html .='<td colspan="2" style="font-size:10px;font-style:italic;text-align:left;">'.$result['last_viral_load_result'].'</td>';
             $html .='</tr>';
             $html .='<tr>';
-              $html .='<td colspan="4" style="line-height:40px;border-bottom:1px solid #333;"></td>';
+             $html .='<td colspan="4" style="line-height:40px;border-bottom:1px solid #333;"></td>';
             $html .='</tr>';
             $html .='<tr>';
-            $html .='<td colspan="4">';
-             $html .='<table>';
-              $html .='<tr>';
-                $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:14px;height:14px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
-                $html .='<td style="font-size:10px;font-style:italic;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;Time '.$printDateTime.'</td>';
-              $html .='</tr>';
-              $html .='<tr>';
-                $html .='<td colspan="2" style="line-height:10px;"></td>';
-              $html .='</tr>';
-              $html .='<tr>';
-                $html .='<td colspan="2" style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_frown.png" alt="frown_face" style="width:14px;height:14px;"/> = VL > 1000 copies/ml: copies/ml: Clinical and counselling action required</td>';
-              $html .='</tr>';
-             $html .='</table>';
-            $html .='</td>';
-          $html .='</tr>';
+              $html .='<td colspan="4">';
+               $html .='<table>';
+                $html .='<tr>';
+                  $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:14px;height:14px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
+                  $html .='<td style="font-size:10px;font-style:italic;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;Time '.$printDateTime.'</td>';
+                $html .='</tr>';
+                $html .='<tr>';
+                  $html .='<td colspan="2" style="line-height:10px;"></td>';
+                $html .='</tr>';
+                $html .='<tr>';
+                  $html .='<td colspan="2" style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_frown.png" alt="frown_face" style="width:14px;height:14px;"/> = VL > 1000 copies/ml: copies/ml: Clinical and counselling action required</td>';
+                $html .='</tr>';
+               $html .='</table>';
+              $html .='</td>';
+            $html .='</tr>';
         $html.='</table>';
         $html .= "</div>";
         $pdf->writeHTML($html);

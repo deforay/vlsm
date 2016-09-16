@@ -109,13 +109,12 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
   $sampleCollectionTime = $expStr[1];
 }else{
   $result[0]['sample_collection_date']='';
+  $sampleCollectionTime = '';
 }
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && $result[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
-  $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0]);
-  $sampleReceivedTime = $expStr[1];
+if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_date'])!='' && $result[0]['sample_testing_date']!='0000-00-00'){
+  $result[0]['sample_testing_date']=$general->humanDateFormat($result[0]['sample_testing_date']);
 }else{
-  $result[0]['date_sample_received_at_testing_lab']='';
+  $result[0]['sample_testing_date']='';
 }
 if(isset($result[0]['last_viral_load_result']) && trim($result[0]['last_viral_load_result'])!='' && $result[0]['last_viral_load_result']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$result[0]['last_viral_load_result']);
@@ -129,6 +128,7 @@ if(isset($result[0]['last_viral_load_date']) && trim($result[0]['last_viral_load
   $lastViralLoadResultTime = $expStr[1];
 }else{
   $result[0]['last_viral_load_date']='';
+  $lastViralLoadResultTime = '';
 }
 if(!isset($result[0]['patient_receive_sms']) || trim($result[0]['patient_receive_sms'])== ''){
   $result[0]['patient_receive_sms'] = 'missing';
@@ -237,8 +237,7 @@ $html.='<table style="padding:2px;">';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result[0]['sample_collection_date'].'</td>';
           $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$sampleCollectionTime.'</td>';
-          $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result[0]['date_sample_received_at_testing_lab'].'</td>';
-          $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$sampleReceivedTime.'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result[0]['sample_testing_date'].'</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen Type</td>';
@@ -255,6 +254,9 @@ $html.='<table style="padding:2px;">';
           $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$resultReviewedBy.'</td>';
           $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Approved by</td>';
           $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$resultApprovedBy.'</td>';
+        $html .='</tr>';
+        $html .='<tr>';
+          $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">Viral load adequately controlled : continue current regimen</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
