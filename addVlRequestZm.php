@@ -592,6 +592,8 @@ $("#vlResult").bind("keyup change", function(e) {
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();
     }else{
+      $( "#noResultRejected" ).prop( "checked", false );
+      $( "#noResultError" ).prop( "checked", false );
       $(".noResult").hide();
     }
 });
@@ -599,6 +601,8 @@ $("#vlLog").bind("keyup change", function(e) {
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();
     }else{
+      $( "#noResultRejected" ).prop( "checked", false );
+      $( "#noResultError" ).prop( "checked", false );
       $(".noResult").hide();
     }
 });
@@ -721,7 +725,6 @@ $("#vlLog").bind("keyup change", function(e) {
     }
   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
     {
-      console.log(obj);
         var removeDots=obj.value.replace(/\./g,"");
         var removeDots=removeDots.replace(/\,/g,"");
         //str=obj.value;
