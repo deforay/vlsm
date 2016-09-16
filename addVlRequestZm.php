@@ -79,10 +79,10 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $cBy = $vlResult[0]['collected_by'];
  $clinicianName = $vlResult[0]['lab_contact_person'];
  $labNameId = $vlResult[0]['lab_id'];
- $sKey = $vlResult[0]['sample_code_key']+1;
- $sKey = "00".$sKey;
- $sFormat = $vlResult[0]['sample_code_format'];
- $sCodeValue = $vlResult[0]['sample_code_format'].$sKey; 
+ //$sKey = $vlResult[0]['sample_code_key']+1;
+ //$sKey = "00".$sKey;
+ //$sFormat = $vlResult[0]['sample_code_format'];
+ //$sCodeValue = $vlResult[0]['sample_code_format'].$sKey; 
  
  if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
@@ -248,7 +248,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                         <label for="sampleCode">Sample Code  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="<?php echo $sCodeValue;?>">
+                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="< ?php echo $sCodeValue;?>">
                         </td>-->
                         <td style="width:16%">
                         <label for="patientFname">Patient First Name  </label>
@@ -399,7 +399,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
                           <input type="text" class="form-control  reqBarcode checkNum isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This barcode already exists.Try another barcode',null)">
-                          <input type="hidden" class="form-control  sampleCode " name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $sCodeValue;?>">
+                          <!--<input type="hidden" class="form-control  sampleCode " name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $sCodeValue;?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
@@ -480,8 +480,8 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="2"/>
-                <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
-                <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
+                <!--<input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="< ?php echo $sFormat;?>"/>-->
+                <!--<input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="< ?php echo $sKey;?>"/>-->
                 
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
@@ -547,12 +547,12 @@ facilityName = true;
 	  }
       });
       }
-      pNameVal = pName.split("##");
-      sCode = '<?php echo date('Ymd');?>';
-      sCodeKey = '<?php echo $maxId;?>';
-      $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-      $("#sampleCodeFormat").val(pNameVal[1]+sCode);
-      $("#sampleCodeKey").val(sCodeKey);
+      //pNameVal = pName.split("##");
+      //sCode = '<?php echo date('Ymd');?>';
+      //sCodeKey = '<?php echo $maxId;?>';
+      //$("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
+      //$("#sampleCodeFormat").val(pNameVal[1]+sCode);
+      //$("#sampleCodeKey").val(sCodeKey);
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
