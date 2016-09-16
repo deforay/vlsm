@@ -107,14 +107,10 @@ try {
                         fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$sampleType,$batchCode,$rKey,$cellName,$cell);
                     }
                     //echo $cellRow;
-                    
-                       
-                    
                     $data=array(
                         'lab_id'=>base64_decode($_POST['labId']),
                         'result_reviewed_by'=>$_SESSION['userId'],
                         'sample_code'=>$sampleVal,
-			'batch_code'=>$bacthId,
                         'log_value'=>$logVal,
                         'sample_type'=>$sampleType,
                         'absolute_value'=>$absVal,
@@ -133,7 +129,7 @@ try {
                         $data['batch_code']=$batchCode;
                     }
                     
-                    $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='".$sampleVal."'";
+                    $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where serial_no='".$sampleVal."'";
                     $vlResult=$db->rawQuery($query);
                     if($vlResult){
                         if($vlResult[0]['log_value']!='' || $vlResult[0]['absolute_value']!='' || $vlResult[0]['text_value']!='' || $vlResult[0]['absolute_decimal_value']!=''){
