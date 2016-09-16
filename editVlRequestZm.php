@@ -372,7 +372,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
                           <input type="text" class="form-control reqBarcode checkNum isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "treament_id##".$id;?>','This barcode already exists.Try another barcode',null)"/>
-                          <input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>">
+                          <!--<input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
@@ -498,9 +498,9 @@ facilityName = true;
 	  }
       });
       }
-      $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-      $("#sampleCodeFormat").val(pNameVal[1]+sCode);
-      $("#sampleCodeKey").val(sCodeKey);
+      //$("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
+      //$("#sampleCodeFormat").val(pNameVal[1]+sCode);
+      //$("#sampleCodeKey").val(sCodeKey);
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
