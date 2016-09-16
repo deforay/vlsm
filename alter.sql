@@ -484,3 +484,11 @@ ALTER TABLE  `vl_request_form` CHANGE  `lab_no`  `lab_no` INT NULL DEFAULT NULL 
 --saravanan 16-sep-2016
 ALTER TABLE  `vl_request_form` ADD  `result_approved_by` INT NULL DEFAULT NULL AFTER  `comments` ,
 ADD  `result_approved_on` DATETIME NULL DEFAULT NULL AFTER  `result_approved_by` ;
+
+ALTER TABLE  `batch_details` ADD  `batch_code_key` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `batch_code` ;
+ALTER TABLE  `batch_details` CHANGE  `batch_code`  `batch_code` INT( 11 ) NULL DEFAULT NULL ;
+
+ALTER TABLE  `temp_sample_report` CHANGE  `batch_code_key`  `batch_code_key` INT( 11 ) NULL DEFAULT NULL ;
+ALTER TABLE  `temp_sample_report` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL ;
+ALTER TABLE  `vl_request_form` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL ;
+ALTER TABLE  `hold_sample_report` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL ;

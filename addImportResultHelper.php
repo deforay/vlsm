@@ -71,22 +71,29 @@ try {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $fileName =$ranNumber.".".$extension;
     
-            if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "import-result") && !is_dir('uploads'. DIRECTORY_SEPARATOR."import-result")) {
-                mkdir('uploads'. DIRECTORY_SEPARATOR."import-result");
+            if (!file_exists('temporary'. DIRECTORY_SEPARATOR . "import-result") && !is_dir('temporary'. DIRECTORY_SEPARATOR."import-result")) {
+                mkdir('temporary'. DIRECTORY_SEPARATOR."import-result");
             }
-            if (move_uploaded_file($_FILES['resultFile']['tmp_name'], 'uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName)) {
+            if (move_uploaded_file($_FILES['resultFile']['tmp_name'], 'temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName)) {
                
                
-                $objPHPExcel = \PHPExcel_IOFactory::load('uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName);
+                $objPHPExcel = \PHPExcel_IOFactory::load('temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName);
                 $sheetData = $objPHPExcel->getActiveSheet();
                 
-                
+                $bquery="select MAX(batch_code_key) from batch_details";
+                $bvlResult=$db->rawQuery($bquery);
+                if($bvlResult[0]['MAX(batch_code_key)']!='' && $bvlResult[0]['MAX(batch_code_key)']!=NULL){
+                   $maxBatchCodeKey = $bvlResult[0]['MAX(batch_code_key)']+1;
+                }else{
+                   $maxBatchCodeKey = '001';
+                }
+                $newBacthCode = date('Ymd').$maxBatchCodeKey;
                 //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 //$count = count($sheetData);
                 $m=0;
                 foreach($sheetData->getRowIterator() as $rKey=>$row){
                     if($rKey < 2) continue;
-                    
+                    $batchCode = '';
                     $absDecimalVal="";
                     $absVal="";
                     $logVal="";
@@ -101,11 +108,7 @@ try {
                     }
                     //echo $cellRow;
                     
-                        if($batchCode==''){
-                            $bacthId = date('Ymd001');
-                        }else{
-                            $bacthId = $batchCode;
-                        }
+                       
                     
                     $data=array(
                         'lab_id'=>base64_decode($_POST['labId']),
@@ -113,13 +116,22 @@ try {
                         'sample_code'=>$sampleVal,
 			'batch_code'=>$bacthId,
                         'log_value'=>$logVal,
+                        'sample_type'=>$sampleType,
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
                         'absolute_decimal_value'=>$absDecimalVal,
                         'result'=>$resultFlag,
                         'lab_tested_date'=>$testingDate,
-                        'status'=>'6'
+                        'status'=>'6',
+                        'file_name'=>$fileName
                     );
+                     if($batchCode==''){
+                        $data['batch_code']=$newBacthCode;
+                        $data['batch_code_key']=$maxBatchCodeKey;
+                        
+                    }else{
+                        $data['batch_code']=$batchCode;
+                    }
                     
                     $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='".$sampleVal."'";
                     $vlResult=$db->rawQuery($query);
