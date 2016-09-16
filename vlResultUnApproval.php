@@ -30,17 +30,16 @@ $tsResult = $db->rawQuery($tsQuery);
           <div class="box">
             <div class="box-header with-border">
 			  <div class="box-header with-border">
-			  <div class="col-md-4 col-sm-4">
-				<input type="hidden" name="checkedTests" id="checkedTests"/>
+			  <!--<div class="col-md-4 col-sm-4">
+				
 				<select style="" class="form-control" id="status" name="status" title="Please select test status" >
-				  <option value=""> -- Select -- </option>
+				  <option value="">-- Select --</option>
 				  <option value="7">Accepted</option>
 				  <option value="1">Hold</option>
 				  <option value="4">Rejected</option>
-				  
 				</select>
 				</div>
-			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>
+			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>-->
 			  <ul style="list-style: none;float: right;">
 	    <li><i class="fa fa-square" aria-hidden="true" style="color: #e8000b"></i> - Unknown Sample</li>
 	    <li><i class="fa fa-square" aria-hidden="true" style="color: #86c0c8"></i> - Existing Result</li>
@@ -55,7 +54,7 @@ $tsResult = $db->rawQuery($tsQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
+		  <!--<th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 		  <th style="width: 13%;">Form Serial No.</th>
 		  <th style="width: 11%;">Sample Collection Date</th>
                   <th style="width: 18%;">Receive Date</th>
@@ -73,10 +72,20 @@ $tsResult = $db->rawQuery($tsQuery);
                 </tbody>
               </table>
             </div>
+	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">
+	    <tr>
+		  <td><b>Comments&nbsp;:</b></td>
+		  <input type="hidden" name="checkedTests" id="checkedTests"/>
+		  <input type="hidden" name="checkedTestsIdValue" id="checkedTestsIdValue"/>
+		  <td>
+		    <textarea class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
+		  </td>
+		  <td style="vertical-align: middle;">&nbsp;<input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
+		</tr>
+	  </table>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
-	  
         </div>
         <!-- /.col -->
       </div>
@@ -89,7 +98,7 @@ $tsResult = $db->rawQuery($tsQuery);
    var startDate = "";
    var endDate = "";
    var selectedTests=[];
-   var selectedTestsId=[];
+   var selectedTestsIdValue=[];
   $(document).ready(function() {
      loadVlRequestData();
   } );
@@ -108,7 +117,6 @@ $tsResult = $db->rawQuery($tsQuery);
             
             "bRetrieve": true,                        
             "aoColumns": [
-		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -144,69 +152,41 @@ $tsResult = $db->rawQuery($tsQuery);
         });
      $.unblockUI();
   }
-  
   function toggleTest(obj){
-	 if ($(obj).is(':checked')) {
-	     if($.inArray(obj.value, selectedTests) == -1){
-		 selectedTests.push(obj.value);
-		 selectedTestsId.push(obj.id);
-	     }
-	 } else {
-	     selectedTests.splice( $.inArray(obj.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(obj.id, selectedTestsId), 1 );
-	     $("#checkTestsData").attr("checked",false);
-	 }
-	 $("#checkedTests").val(selectedTests.join());
-	 $(".countChecksPending").text(selectedTests.length);
+    var dValue = obj.value;
+    var dId = obj.id;
+    if($.inArray(obj.id, selectedTests) == -1){
+    selectedTests.push(obj.id);
+    selectedTestsIdValue.push(obj.value);
+    }else{
+      var indexValue = selectedTests.indexOf(obj.id);
+      selectedTestsIdValue[indexValue]=obj.value;  
     }
-      
-    function toggleAllVisible(){
-        //alert(tabStatus);
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	 });
-	 if ($("#checkTestsData").is(':checked')) {
-	 $(".checkTests").each(function(){
-	     $(this).prop('checked', true);
-		 selectedTests.push(this.value);
-		 selectedTestsId.push(this.id);
-	 });
-     } else{
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	 });
-     }
-     $("#checkedTests").val(selectedTests.join());
-     $(".countChecksPending").text(selectedTests.length);
-   }
-   
+    $("#checkedTests").val(selectedTests.join());
+    $("#checkedTestsIdValue").val(selectedTestsIdValue.join());
+  }
    function submitTestStatus(){
-    if($("#status").val()!='' && $("#checkedTests").val()!=''){
-      conf=confirm("Do you wish to change the status ?");
-      if(conf){
-	$.blockUI();
-	$.post("updateUnApprovalResultStatus.php", { value : $("#checkedTests").val(),status:$("#status").val(), format: "html"},
+    id = $("#checkedTests").val();
+    status = $("#checkedTestsIdValue").val();
+    comments = $("#comments").val();
+    conf=confirm("Do you wish to change the status ?");
+    if(conf){
+    $.blockUI();
+	$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments, format: "html"},
 	       function(data){
 		oTable.fnDraw();
 		selectedTests = [];
-		selectedTestsId = [];
+		selectedTestsIdValue = [];
 		$("#checkedTests").val('');
-		$("#status").val('');
-		$(".countChecksPending").html(0);
+		$("#checkedTestsIdValue").val('');
+		$("#comments").val('');
 	       });
 	$.unblockUI();
       }else{
       oTable.fnDraw();
       }
-    }
-   else{
-      alert("Please select the status and atleast one checkbox");
-    }
    }
+   
   function updateStatus(value,status){
     if(status!=''){
       conf=confirm("Do you wish to change the status ?");
