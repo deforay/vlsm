@@ -133,7 +133,7 @@ $fResult = $db->rawQuery($fQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
+		  <!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 		  <th>Form Id</th>
 		  <th>Sample Code</th>
                   <th>Sample Collection Date</th>
@@ -159,25 +159,25 @@ $fResult = $db->rawQuery($fQuery);
               </table>
             </div>
             <!-- /.box-body -->
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">
-	    <tr style="margin-top:30px;">
-		  <td><b>Choose Status&nbsp;:</b></td>
-		  <td>
-		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
-		      <option value="">-- Select --</option>
-			<?php
-			foreach($tsResult as $status){
-			 ?>
-			 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
-			 <?php
-			}
-			?>
-		    </select>
-		  </td>
-		  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>
-		</tr>
-	  </table>
+	<!--    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">-->
+	<!--    <tr style="margin-top:30px;">-->
+	<!--	  <td><b>Choose Status&nbsp;:</b></td>-->
+	<!--	  <td>-->
+	<!--	    <input type="hidden" name="checkedTests" id="checkedTests"/>-->
+	<!--	    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">-->
+	<!--	      <option value="">-- Select --</option>-->
+	<!--		< ?php-->
+	<!--		foreach($tsResult as $status){-->
+	<!--		 ?>-->
+	<!--		 <option value="< ?php echo $status['status_id'];?>">< ?php echo ucwords($status['status_name']);?></option>-->
+	<!--		 < ?php-->
+	<!--		}-->
+	<!--		?>-->
+	<!--	    </select>-->
+	<!--	  </td>-->
+	<!--	  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>-->
+	<!--	</tr>-->
+	<!--  </table>-->
           </div>
           <!-- /.box -->
 	  
@@ -260,7 +260,7 @@ $fResult = $db->rawQuery($fQuery);
             "bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
-		{"sClass":"center","bSortable":false},
+		//{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
