@@ -206,10 +206,9 @@ $formConfigResult=$db->query($formConfigQuery);
                 </span>
             </a>
             <ul class="treeview-menu">
-		<?php
-		 if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){
+		
+        <?php
+        if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){
             
             if(isset($formConfigResult[0]['value']) && $formConfigResult[0]['value']==2){
             ?>
@@ -220,11 +219,15 @@ $formConfigResult=$db->query($formConfigQuery);
            <!-- <li class="allMenu addVlRequestZmMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request (ZIMBABWE)</a></li>
             <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>-->
                   
-		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
-		<?php } ?>
+            <?php }
+            
+             if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
+            <?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
+                      <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batches</a></li>
+            <?php } ?>
         
-            <li class="allMenu vlRequestMailMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
+            <!--<li class="allMenu vlRequestMailMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>-->
             </ul>
         </li>
 		
@@ -237,7 +240,7 @@ $formConfigResult=$db->query($formConfigQuery);
                 </span>
             </a>
             <ul class="treeview-menu">
-		<?php if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
+		<?php if(isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu importResultMenu"><a href="addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlPrintResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlPrintResultMenu"><a href="vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
