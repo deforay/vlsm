@@ -43,6 +43,7 @@ try {
             }
             $_SESSION['controllertrack'] = $maxId;
             
+            /*
             if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
                 $sampleDate = explode(" ",$_POST['sampleReceivedDate']);
                 $_POST['sampleReceivedDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
@@ -61,6 +62,7 @@ try {
                 $reviewDate = explode(" ",$_POST['reviewedDate']);
                 $_POST['reviewedDate']=$general->dateFormat($reviewDate[0])." ".$reviewDate[1];
             }
+            */
             
             $allowedExtensions = array('xls', 'xlsx', 'csv');
             $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['resultFile']['name']);
@@ -118,16 +120,8 @@ try {
                     }
                     
                     $data=array(
-                        'lab_id'=>$_POST['labId'],
-                        'lab_name'=>$_POST['labName'],
-                        'lab_contact_person'=>$_POST['labContactPerson'],
-                        'lab_phone_no'=>$_POST['labPhoneNo'],
-                        'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
-                        'lab_tested_date'=>$_POST['testingDate'],
-                        'date_results_dispatched'=>$_POST['dispatchedDate'],
-                        'result_reviewed_date'=>$_POST['reviewedDate'],
+                        'lab_id'=>base64_decode($_POST['labId']),
                         'result_reviewed_by'=>$_SESSION['userId'],
-                        'comments'=>$_POST['comments'],
                         'sample_code'=>$sampleVal,
                         'log_value'=>$logVal,
                         'absolute_value'=>$absVal,
