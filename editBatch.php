@@ -5,7 +5,7 @@ include('header.php');
 $id=base64_decode($_GET['id']);
 $batchQuery="SELECT * from batch_details where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
-$query="SELECT * FROM vl_request_form where batch_id is NULL OR batch_id='' OR batch_id=$id";
+$query="SELECT vl.sample_code,vl.batch_id,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' OR batch_id=$id ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -19,6 +19,9 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet"/>
 <style>
+  .select2-selection__choice{
+	color:#000000 !important;
+  }
   #ms-sampleCode{width: 110%;}
 </style>
   <!-- Content Wrapper. Contains page content -->
@@ -62,8 +65,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 		<tr>
 		   <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-			  <option value="">-- Select --</option>
+		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
 			    <?php
 			    foreach($fResult as $name){
 			     ?>
@@ -110,7 +112,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 				  $selected = "selected=selected";
 				}
 				?>
-				<option value="<?php echo $sample['treament_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code']);?></option>
+				<option value="<?php echo $sample['treament_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);;?></option>
 				<?php
 			      }
 			      ?>
@@ -157,7 +159,8 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   }
    //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
    $(document).ready(function() {
-         $('#sampleCollectionDate').daterangepicker({
+		$("#facilityName").select2();
+        $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
             startDate: moment().subtract('days', 29),
