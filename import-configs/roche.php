@@ -44,7 +44,7 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
         if($rKey>=$absValRow){
             if(trim($cell->getCalculatedValue())!=""){
                 $resVal=(int)$cell->getCalculatedValue();
-                if($resVal >= 0){
+                if($resVal > 0){
                     $absVal=trim($cell->getCalculatedValue());
                     $logVal=floor(log10($absVal));
                 }else{
