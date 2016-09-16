@@ -492,3 +492,5 @@ ALTER TABLE  `temp_sample_report` CHANGE  `batch_code_key`  `batch_code_key` INT
 ALTER TABLE  `temp_sample_report` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL ;
 ALTER TABLE  `vl_request_form` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL ;
 ALTER TABLE  `hold_sample_report` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL ;
+
+ALTER TABLE  `batch_details` CHANGE  `batch_code_key`  `batch_code_key` VARCHAR( 255 ) NULL DEFAULT NULL ;

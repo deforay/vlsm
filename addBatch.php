@@ -13,6 +13,24 @@ $configResult = $db->rawQuery($configQuery);
 if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   $configResult[0]['value'] = 0;
 }
+$start_date = date('Y-m-d');
+$end_date = date('Y-m-d');
+$batchQuery='select MAX(batch_code_key) FROM batch_details as bd where DATE(bd.created_on) >= "'.$start_date.'" AND DATE(bd.created_on) <= "'.$end_date.'"';
+$batchResult=$db->query($batchQuery);
+
+  if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code_key)']!=NULL){
+ $maxId = $batchResult[0]['MAX(batch_code_key)']+1;
+ $lngth = strlen($maxId);
+ if($lngth==1){
+ $maxId = "00".$maxId;
+ }else if($lngth==2){
+ $maxId = "0".$maxId; 
+ }else if($lngth==3){
+ $maxId = $maxId; 
+ }
+}else{
+ $maxId = '001';
+}
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
@@ -111,7 +129,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
                     <div class="form-group">
                         <label for="batchCode" class="col-lg-4 control-label">Enter Batch Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
-                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already exists.Try another batch code',null)" />
+                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo date('Ymd').$maxId;?>" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already exists.Try another batch code',null)" />
                         </div>
                     </div>
                   </div>
