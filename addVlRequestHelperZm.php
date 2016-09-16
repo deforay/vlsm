@@ -69,10 +69,11 @@ try {
      
      $vldata=array(
           'urgency'=>$_POST['urgency'],
-          'sample_code_format'=>$_POST['sampleCodeFormat'],
-          'sample_code_key'=>$_POST['sampleCodeKey'],
+          //'sample_code_format'=>$_POST['sampleCodeFormat'],
+          //'sample_code_key'=>$_POST['sampleCodeKey'],
           'form_id'=>'2',
           'serial_no'=>$_POST['serialNo'],
+          'sample_code'=>$_POST['serialNo'],
           'facility_id'=>$_POST['clinicName'],
           'sample_code'=>$_POST['sampleCode'],
           'lab_contact_person'=>$_POST['clinicianName'],

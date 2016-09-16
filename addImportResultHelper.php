@@ -22,7 +22,6 @@ $general=new Deforay_Commons_General();
 
 $tableName="temp_sample_report";
 $tableName1="activity_log";
-$tableName1="activity_log";
 try {
         //$configId=base64_decode($_POST['machineName']);
         //$query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
