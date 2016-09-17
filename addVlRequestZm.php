@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('header.php');
+//include('header.php');
 //include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
@@ -742,5 +742,5 @@ $("#vlLog").bind("keyup change", function(e) {
 </script>
   
  <?php
- include('footer.php');
+ //include('footer.php');
  ?>
