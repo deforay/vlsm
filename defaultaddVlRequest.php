@@ -1315,8 +1315,12 @@ $rejectReason = '';
       var date1 = new Date(yyyy,mm,dd);
       var date2 = new Date(dobYear,dobMonth,dobDate);
       var diff = new Date(date1.getTime() - date2.getTime());
-      $("#ageInMtns").val(diff.getUTCMonth()); // Gives difference as year
-      $("#ageInYrs").val((diff.getUTCFullYear() - 1970)); // Gives month count of difference
+      if((diff.getUTCFullYear() - 1970) == 0){
+        $("#ageInMtns").val(diff.getUTCMonth()); // Gives month count of difference
+      }else{
+        $("#ageInMtns").val("");
+      }
+      $("#ageInYrs").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
       //console.log(diff.getUTCDate() - 1); // Gives day count of difference
     }
   </script>
