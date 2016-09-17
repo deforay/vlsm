@@ -273,7 +273,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['sample_testing_date'].'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen Type</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
                   $html .='<td colspan="3" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.ucwords($result['sample_name']).'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
@@ -320,7 +320,7 @@ if(sizeof($requestResult)> 0){
                $html .='<table>';
                 $html .='<tr>';
                   $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:14px;height:14px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
-                  $html .='<td style="font-size:10px;font-style:italic;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;Time '.$printDateTime.'</td>';
+                  $html .='<td style="font-size:10px;font-style:italic;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;time '.$printDateTime.'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td colspan="2" style="line-height:10px;"></td>';

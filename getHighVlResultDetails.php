@@ -104,24 +104,24 @@ $primaryKey="treament_id";
 	     $end_date = $general->dateFormat(trim($s_c_date[1]));
 	   }
 	}
-	if (isset($sWhere) && $sWhere != "") {
-	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-	        $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
-	    }
-	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-		if (trim($start_date) == trim($end_date)) {
-		    $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		}else{
-		   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
-		}
-           }
-	   if(isset($_POST['sampleType']) && $_POST['sampleType']!=''){
-	    $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
-	   }
-	   if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
-	    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
-	   }
+	
+	if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+	    $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
 	}
+	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+	    if (trim($start_date) == trim($end_date)) {
+		$sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+	    }else{
+	       $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+	    }
+        }
+        if(isset($_POST['sampleType']) && $_POST['sampleType']!=''){
+	  $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
+        }
+        if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
+	  $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+        }
+       
 	$sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by vl.treament_id';
         if (isset($sOrder) && $sOrder != "") {
