@@ -129,7 +129,7 @@ try {
     if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
           $_SESSION['treamentId'] = $id;
           $_SESSION['facilityId'] = $_POST['clinicName'];
-          header("location:addVlRequestZm.php");
+          header("location:addVlRequest.php");
     }else{
           $_SESSION['treamentId'] = '';
           $_SESSION['facilityId'] = '';
