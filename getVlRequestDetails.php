@@ -3,7 +3,12 @@ session_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
-$formConfigResult=$db->query($formConfigQuery);
+$configResult=$db->query($formConfigQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="treament_id";
@@ -165,9 +170,12 @@ $primaryKey="treament_id";
 		}
 	    }
 	}
+	if($sWhere!=''){
+	    $sWhere = $sWhere.' AND vl.form_id="'.$arr['vl_form'].'"';
+	}else{
+	    $sWhere = $sWhere.' where vl.form_id="'.$arr['vl_form'].'"';
+	}
 		$sQuery = $sQuery.' '.$sWhere;
-		//echo $sQuery;die;
-		//echo $sQuery;die;
 	$sQuery = $sQuery." ORDER BY vl.modified_on DESC";
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
@@ -177,17 +185,14 @@ $primaryKey="treament_id";
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-       //die($sQuery);
-        //echo $sQuery;
         $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         $rResult = $db->rawQuery($sQuery);
-       // print_r($rResult);
         /* Data set length after filtering */
         $aResultFilterTotal =$db->rawQuery("SELECT vl.treament_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere  ORDER BY vl.modified_on DESC, $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
+        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where form_id='".$arr['vl_form']."'");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -202,19 +207,12 @@ $primaryKey="treament_id";
             "aaData" => array()
         );
 	$vlRequest = false;
-	$editVlRequestZm = false;
 	$vlView = false;
 	if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges']))){
 	    $vlRequest = true;
 	}
-	if(isset($_SESSION['privileges']) && (in_array("editVlRequestZm.php", $_SESSION['privileges']))){
-	    $editVlRequestZm = true;
-	}
 	if(isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))){
 	    $vlView = true;
-	}
-	if(isset($_SESSION['privileges']) && (in_array("viewVlRequestZm.php", $_SESSION['privileges']))){
-	    $vlViewZm = true;
 	}
         
         foreach ($rResult as $aRow) {
@@ -250,32 +248,23 @@ $primaryKey="treament_id";
 	    //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['treament_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520);"> Result</a>';
 		if($aRow['form_id']==2){
-			if($editVlRequestZm){
-				$edit='<a href="editVlRequestZm.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+			if($vlRequest){
+				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 			}
 			$pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertZmbPdf('.$aRow['treament_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
-			if($vlViewZm){
+			if($vlView){
 			    $view = '<a href="viewVlRequestZm.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
 			}
 		}else{
 			if($vlRequest){
-				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+			    $edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 			}
 			$pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['treament_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
-			if($vlViewZm){
+			if($vlView){
 			    $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
 			}
 		}
 		
-		//if(isset($formConfigResult[0]['value']) && trim($formConfigResult[0]['value'])==2){
-		//	if($editVlRequestZm){
-		//		$edit='<a href="editVlRequestZm.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-		//	}
-		//}else{
-		//	if($vlRequest){
-		//		$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-		//	}
-		//}
 		
 	    if($vlView){
 			$row[] = $edit;//.$pdf.$view;
