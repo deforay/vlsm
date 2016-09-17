@@ -41,9 +41,17 @@ try {
               foreach($priInfo as $id){
                 $priId[] = $id['privilege_name'];
               }
+              $redirect = 'error.php';
+              $fileNameList = array('index.php','addVlRequest.php','vlRequest.php','batchcode.php','vlRequestMail.php','addImportResult.php','vlPrintResult.php','vlTestResult.php','missingResult.php','vlResult.php','highViralLoad.php','roles.php','users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php');
+              foreach($fileNameList as $redirectFile){
+                if(in_array($redirectFile,$priId)){
+                    $redirect = $redirectFile;
+                    break;
+                }
+              }
             }
             $_SESSION['privileges'] = $priId;
-            header("location:index.php");
+            header("location:".$redirect);
         }else{
             header("location:login.php");
             $_SESSION['alertMsg']="Please check login credential";

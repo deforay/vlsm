@@ -10,7 +10,7 @@ $tableName1="batch_details";
 $tableName2="vl_request_form";
 try {
         if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=""){
-                $data=array('batch_code'=>$_POST['batchCode'],'created_on'=>$general->getDateTime());
+                $data=array('batch_code'=>$_POST['batchCode'],'batch_code_key'=>$_POST['batchCodeKey'],'created_on'=>$general->getDateTime());
                 $db->insert($tableName1,$data);
                 $lastId = $db->getInsertId();
                 if($lastId!=0 && $lastId!=''){
