@@ -7,8 +7,9 @@ $sQuery="SELECT * FROM r_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
+$batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
+$batResult = $db->rawQuery($batQuery);
 ?>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -33,9 +34,18 @@ $fResult = $db->rawQuery($fQuery);
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
-			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter Batch Code"/>
+		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
+		         <option value=""> -- Select -- </option>
+			 <?php
+			 foreach($batResult as $code){
+			  ?>
+			  <option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
+			  <?php
+			 }
+			 ?>
+		      </select>
 		    </td>
-		    </tr>
+		</tr>
 		<tr>
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
@@ -69,7 +79,7 @@ $fResult = $db->rawQuery($fQuery);
 		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchResultData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-			</td>
+		  </td>
 		</tr>
 		
 	    </table>
