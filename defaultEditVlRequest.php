@@ -1538,5 +1538,5 @@ $rResult = $db->rawQuery($rQuery);
     }
   </script>
  <?php
- include('footer.php');
+ //include('footer.php');
  ?>
