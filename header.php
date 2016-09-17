@@ -21,6 +21,32 @@ if(end($urlLast)=='vlResultUnApproval.php'){
     unset($_SESSION['controllertrack']);
 }
 }
+if(array_intersect($_SESSION['privileges'], array('roles.php', 'users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php'))) {
+  $allAdminMenuAccess = true;
+}else{
+  $allAdminMenuAccess = false;  
+}
+if(array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php','batchcode.php','vlRequestMail.php'))) {
+  $requestMenuAccess = true;
+}else{
+  $requestMenuAccess = false;  
+}
+if(array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlPrintResult.php','vlTestResult.php'))) {
+  $testResultMenuAccess = true;
+}else{
+  $testResultMenuAccess = false;  
+}
+if(array_intersect($_SESSION['privileges'], array('missingResult.php', 'vlResult.php','highViralLoad.php'))) {
+  $managementMenuAccess = true;
+}else{
+  $managementMenuAccess = false;  
+}
+if(in_array(('index.php'),$_SESSION['privileges']))
+{
+  $dashBoardMenuAccess = true;
+}else{
+  $dashBoardMenuAccess = false;  
+}
 
 $globalConfigQuery ="SELECT * from global_config where name='logo'";
 $configResult=$db->query($globalConfigQuery);
@@ -123,26 +149,7 @@ $formConfigResult=$db->query($formConfigQuery);
       </div>
     </nav>
   </header>
-  <?php
-  $dashBoardMenuAccess = true;
-  $allAdminMenuAccess = true;
-  $vlRequestMenuAccess = true;
-  $addVRequestMenuAccess = true;
-  $batchMenuAccess = true;
-  if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'DE'){
-     $dashBoardMenuAccess = false;
-     $allAdminMenuAccess = false;
-     $vlRequestMenuAccess = true;
-     $addVRequestMenuAccess = true;
-     $batchMenuAccess = true;
-  }elseif(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == 'VI'){
-      $dashBoardMenuAccess = false;
-      $allAdminMenuAccess = false;
-      $vlRequestMenuAccess = true;
-      $addVRequestMenuAccess = false;
-      $batchMenuAccess = false;
-  }
-  ?>
+  
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -196,7 +203,9 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } ?>
 	      </ul>
 	    </li>
-	<?php } ?>
+	<?php }
+        if($requestMenuAccess == true){
+        ?>
         <li class="treeview request">
             <a href="#">
                 <i class="fa fa-edit"></i>
@@ -206,31 +215,21 @@ $formConfigResult=$db->query($formConfigQuery);
                 </span>
             </a>
             <ul class="treeview-menu">
-		
-        <?php
-        if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){
-            
-            if(isset($formConfigResult[0]['value']) && $formConfigResult[0]['value']==2){
-            ?>
-                <li class="allMenu addVlRequestZmMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-            <?php }else{ ?>
-                <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-            <?php } ?>
-           <!-- <li class="allMenu addVlRequestZmMenu"><a href="addVlRequestZm.php"><i class="fa fa-circle-o"></i> Add New Request (ZIMBABWE)</a></li>
-            <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>-->
-                  
-            <?php }
-            
-             if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
+		<?php
+		 if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu vlRequestMenu"><a href="vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
-            <?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
-                      <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batches</a></li>
-            <?php } ?>
-        
-            <!--<li class="allMenu vlRequestMailMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>-->
+		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
+                <li class="allMenu addVlRequestMenu"><a href="addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
+		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu batchCodeMenu"><a href="batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
+		<?php } if(isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu vlRequestMailMenu"><a href="vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
+		<?php } ?>
             </ul>
         </li>
-		
+        <?php }
+        if($testResultMenuAccess == true){
+        ?>
         <li class="treeview test">
             <a href="#">
                 <i class="fa fa-edit"></i>
@@ -251,7 +250,9 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php }  ?>
             </ul>
         </li>
-        
+        <?php }
+        if($managementMenuAccess == true){
+        ?>
         <li class="treeview program">
             <a href="#">
                 <i class="fa fa-book"></i>
@@ -273,6 +274,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } ?>
             </ul>
         </li>
+        <?php } ?>
         <!---->
         
         

@@ -1,8 +1,7 @@
 <?php
 ob_start();
-include('header.php');
+//include('header.php');
 //include('./includes/MysqliDb.php');
-$id=base64_decode($_GET['id']);
 include('General.php');
 $general=new Deforay_Commons_General();
 $vlQuery="SELECT * from vl_request_form where treament_id=$id";
@@ -716,5 +715,5 @@ $("#vlLog").bind("keyup change", function(e) {
 </script>
   
  <?php
- include('footer.php');
+ //include('footer.php');
  ?>
