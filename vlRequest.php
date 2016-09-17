@@ -7,6 +7,8 @@ $sQuery="SELECT * FROM r_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
+$batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
+$batResult = $db->rawQuery($batQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -32,14 +34,23 @@ $fResult = $db->rawQuery($fQuery);
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
-			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter Batch Code"/>
+		       <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
+		         <option value=""> -- Select -- </option>
+			 <?php
+			 foreach($batResult as $code){
+			  ?>
+			  <option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
+			  <?php
+			 }
+			 ?>
+		       </select>
 		    </td>
-		    </tr>
+		</tr>
 		<tr>
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-		      <option value=""> -- Select -- </option>
+		       <option value=""> -- Select -- </option>
 			<?php
 			foreach($sResult as $type){
 			 ?>
@@ -131,14 +142,14 @@ $fResult = $db->rawQuery($fQuery);
                 <thead>
                 <tr>
 		  <!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
-				  <th>Form Serial No.</th>
+		  <th>Form Serial No.</th>
                   <th>Sample Collection Date</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-				  <th>Facility Name</th>
-				  <th>Province</th>
-				  <th>District</th>
+		  <th>Facility Name</th>
+		  <th>Province</th>
+		  <th>District</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>

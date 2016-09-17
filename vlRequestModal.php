@@ -4,6 +4,8 @@ $sQuery="SELECT * FROM r_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
+$batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
+$batResult = $db->rawQuery($batQuery);
 ?>
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
   <!-- Bootstrap 3.3.6 -->
@@ -40,9 +42,18 @@ $fResult = $db->rawQuery($fQuery);
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
-			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter Batch Code"/>
+		       <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
+		        <option value=""> -- Select -- </option>
+			 <?php
+			 foreach($batResult as $code){
+			  ?>
+			  <option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
+			  <?php
+			 }
+			 ?>
+		       </select>
 		    </td>
-		    </tr>
+		</tr>
 		<tr>
 		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
 		    <td>
