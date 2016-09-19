@@ -61,11 +61,13 @@ try {
             $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
             $vlResult=$db->rawQuery($query);
             $data['status']=$_POST['status'];
+            $data['serial_no']=$rResult[0]['sample_code'];
             if(count($vlResult)>0){
                 $db=$db->where('sample_code',$rResult[0]['sample_code']);
                 $result=$db->update($tableName1,$data);
             }else{
                 $data['sample_code']=$rResult[0]['sample_code'];
+                $data['form_id']='2';
                 $db->insert($tableName1,$data);
             }
             }

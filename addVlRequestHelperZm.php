@@ -75,7 +75,7 @@ try {
           'serial_no'=>$_POST['serialNo'],
           'sample_code'=>$_POST['serialNo'],
           'facility_id'=>$_POST['clinicName'],
-          'sample_code'=>$_POST['sampleCode'],
+          //'sample_code'=>$_POST['sampleCode'],
           'lab_contact_person'=>$_POST['clinicianName'],
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'collected_by'=>$_POST['collectedBy'],
@@ -96,13 +96,13 @@ try {
           'last_viral_load_result'=>$_POST['lastViralLoadResult'],
           'viral_load_log'=>$_POST['viralLoadLog'],
           'vl_test_reason'=>$_POST['vlTestReason'],
-          'drug_substitution'=>$_POST['drugSubstitution'],
+          //'drug_substitution'=>$_POST['drugSubstitution'],
           'lab_no'=>$_POST['labNo'],
           'lab_id'=>$_POST['labId'],
           'vl_test_platform'=>$_POST['testingPlatform'],
           'sample_id'=>$_POST['specimenType'],
           'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
-          'result'=>$_POST['vlResult'],
+          'absolute_value'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
           'comments'=>$_POST['labCommnets'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
@@ -118,7 +118,7 @@ try {
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
           $eventType = 'add-vl-request-zm';
-          $action = ucwords($_SESSION['userName']).' have been added a new request data with the sample code '.$_POST['sampleCode'];
+          $action = ucwords($_SESSION['userName']).' have been added a new request data with the sample code '.$_POST['serialNo'];
           $resource = 'vl-request-zm';
           $data=array(
           'event_type'=>$eventType,

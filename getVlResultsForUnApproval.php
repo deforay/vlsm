@@ -89,7 +89,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.absolute_value,tsr.log_value,vl.text_value,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
+	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.absolute_value,tsr.log_value,tsr.text_value,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
 	
         //echo $sQuery;die;
 	
@@ -111,7 +111,7 @@ $tsResult = $db->rawQuery($tsQuery);
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT tsr.temp_sample_id,tsr.sample_details,tsr.sample_code,tsr.absolute_value,tsr.log_value,vl.text_value,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT tsr.temp_sample_id,tsr.sample_details,tsr.sample_code,tsr.absolute_value,tsr.log_value,tsr.text_value,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -128,6 +128,7 @@ $tsResult = $db->rawQuery($tsQuery);
         );
         foreach ($rResult as $aRow) {
 	    $rsDetails = '';
+	    $vlResult = '';
 	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
 		$vlResult = $aRow['absolute_value'];
 	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
