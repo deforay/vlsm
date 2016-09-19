@@ -63,6 +63,7 @@ try {
             $data['status']=$_POST['status'];
             $data['serial_no']=$rResult[0]['sample_code'];
             if(count($vlResult)>0){
+                $data['form_id']='2';
                 $db=$db->where('sample_code',$rResult[0]['sample_code']);
                 $result=$db->update($tableName1,$data);
             }else{

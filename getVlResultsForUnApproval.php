@@ -90,7 +90,7 @@ $tsResult = $db->rawQuery($tsQuery);
         */
 	$aWhere = '';
 	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.absolute_value,tsr.log_value,tsr.text_value,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
-	
+	$sOrder = 'temp_sample_id ASC';
         //echo $sQuery;die;
 	
 	if (isset($sWhere) && $sWhere != "") {
@@ -101,7 +101,7 @@ $tsResult = $db->rawQuery($tsQuery);
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
         }else{
-	    $sOrder = 'temp_sample_id ASC';
+	    
 	    $sQuery = $sQuery.' order by '.$sOrder;
 	}
         //echo $sQuery;die;
