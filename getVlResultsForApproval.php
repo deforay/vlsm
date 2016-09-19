@@ -240,6 +240,12 @@ $primaryKey="treament_id";
 	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
 		$vlResult = $aRow['text_value'];
 	    }
+	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['treament_id'].'" title="Please select status" onchange="updateStatus(this)">
+ 				<option value="">-- Select --</option>
+				<option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
+ 				<option value="1" '.($aRow['status_id']=="1" ? "selected=selected" : "").'>Hold</option>
+ 				<option value="4" '.($aRow['status_id']=="4"  ? "selected=selected" : "").'>Rejected</option>
+ 			</select><br><br>';
             $row = array();
 	    $row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
 	    $row[] = $aRow['sample_code'];
@@ -250,7 +256,7 @@ $primaryKey="treament_id";
 	    $row[] = ucwords($aRow['facility_name']);
 	    $row[] = ucwords($aRow['sample_name']);
 	    $row[] = $vlResult;
-	    $row[] = ucwords($aRow['status_name']);
+	    $row[] = $status;
 	    $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
 	    
 	    $output['aaData'][] = $row;
