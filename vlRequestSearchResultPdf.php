@@ -135,6 +135,9 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['facility_name']) || trim($result['facility_name']) == ''){
            $result['facility_name'] = '';
         }
+        if(!isset($result[0]['labName']) || trim($result[0]['labName']) == ''){
+           $result[0]['labName'] = '';
+        }
         //Set Age
         $age = 'Unknown';
         if(isset($result['patient_dob']) && trim($result['patient_dob'])!='' && $result['patient_dob']!='0000-00-00'){
@@ -238,7 +241,7 @@ if(sizeof($requestResult)> 0){
               $html .='<td colspan="3">';
                $html .='<table>';
                 $html .='<tr>';
-                  $html .='<td colspan="4" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">'.ucwords($result['lab_name']).'</td>';
+                  $html .='<td colspan="4" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">'.ucwords($result['labName']).'</td>';
                  $html .='</tr>';
                  $html .='<tr>';
                   $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lab number</td>';
