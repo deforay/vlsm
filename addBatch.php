@@ -2,17 +2,20 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$query="SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
-$result = $db->rawQuery($query);
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$sQuery="SELECT * FROM r_sample_type";
-$sResult = $db->rawQuery($sQuery);
 $configQuery="SELECT * FROM global_config WHERE name ='max_no_of_samples_in_a_batch'";
 $configResult = $db->rawQuery($configQuery);
 if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   $configResult[0]['value'] = 0;
 }
+$query="SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
+$result = $db->rawQuery($query);
+$fQuery="SELECT * FROM facility_details where status='active'";
+$fResult = $db->rawQuery($fQuery);
+$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormResult = $db->rawQuery($configFormQuery);
+$sQuery="SELECT * FROM r_sample_type where form_identification='".$configFormResult[0]['value']."'";
+$sResult = $db->rawQuery($sQuery);
+
 $start_date = date('Y-m-d');
 $end_date = date('Y-m-d');
 $batchQuery='select MAX(batch_code_key) FROM batch_details as bd where DATE(bd.created_on) >= "'.$start_date.'" AND DATE(bd.created_on) <= "'.$end_date.'"';
