@@ -83,6 +83,7 @@ try {
                 $bvlResult=$db->rawQuery($bquery);
                 if($bvlResult[0]['MAX(batch_code_key)']!='' && $bvlResult[0]['MAX(batch_code_key)']!=NULL){
                    $maxBatchCodeKey = $bvlResult[0]['MAX(batch_code_key)']+1;
+                   $maxBatchCodeKey = "00".$maxBatchCodeKey;
                 }else{
                    $maxBatchCodeKey = '001';
                 }
