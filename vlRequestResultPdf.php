@@ -75,7 +75,7 @@ $pathFront=realpath('./uploads');
 //$pdf = new TCPDF();
 $pdf->AddPage();
 $general=new Deforay_Commons_General();
-$printedTime = $general->getDateTime();
+$printedTime = date('Y-m-d H:i:s');
 $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
@@ -88,21 +88,38 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 $id=$_POST['id'];
-$fQuery="SELECT vl.sample_code,vl.serial_no,vl.patient_name,vl.patient_name,vl.surname,vl.patient_dob,vl.art_no,vl.gender,vl.patient_receive_sms,vl.patient_phone_number,vl.sample_collection_date,vl.request_clinician,vl.clinician_ph_no,vl.sample_testing_date,vl.date_sample_received_at_testing_lab,vl.age_in_yrs,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.request_clinician,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.last_viral_load_result,vl.result_reviewed_date,f.facility_name,f.facility_code,s.sample_name,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy FROM vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by WHERE treament_id=$id";
+$fQuery="SELECT vl.sample_code,vl.serial_no,vl.patient_name,vl.patient_name,vl.surname,vl.patient_dob,vl.age_in_yrs,vl.age_in_mnts,vl.art_no,vl.gender,vl.patient_receive_sms,vl.patient_phone_number,vl.sample_collection_date,vl.clinician_ph_no,vl.sample_testing_date,vl.date_sample_received_at_testing_lab,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.lab_no,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.last_viral_load_result,vl.last_viral_load_date,vl.result_reviewed_date,f.facility_name,f.facility_code,f.state,f.district,s.sample_name,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy FROM vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by WHERE treament_id=$id";
 $result=$db->query($fQuery);
+if(!isset($result[0]['facility_code']) || trim($result[0]['facility_code']) == ''){
+  $result[0]['facility_code'] = '';
+}
+if(!isset($result[0]['state']) || trim($result[0]['state']) == ''){
+  $result[0]['state'] = '';
+}
+if(!isset($result[0]['district']) || trim($result[0]['district']) == ''){
+  $result[0]['district'] = '';
+}
+if(!isset($result[0]['facility_name']) || trim($result[0]['facility_name']) == ''){
+  $result[0]['facility_name'] = '';
+}
 //Set Age
 $age = 'Unknown';
-if(isset($result[0]['age_in_yrs']) && trim($result[0]['age_in_yrs'])!=''){
+if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
+  $todayDate = strtotime(date('Y-m-d'));
+  $dob = strtotime($result[0]['patient_dob']);
+  $difference = $todayDate - $dob;
+  $seconds_per_year = 60*60*24*365;
+  $age = round($difference / $seconds_per_year);
+}elseif(isset($result[0]['age_in_yrs']) && trim($result[0]['age_in_yrs'])!='' && trim($result[0]['age_in_yrs']) >0){
   $age = $result[0]['age_in_yrs'];
-}else{
-  if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
-    $todayDate = strtotime(date('Y-m-d'));
-    $dob = strtotime($result[0]['patient_dob']);
-    $difference = $todayDate - $dob;
-    $seconds_per_year = 60*60*24*365;
-    $age = round($difference / $seconds_per_year);
+}elseif(isset($result[0]['age_in_mnts']) && trim($result[0]['age_in_mnts'])!='' && trim($result[0]['age_in_mnts']) >0){
+  if($result[0]['age_in_mnts'] > 1){
+    $age = $result[0]['age_in_mnts'].' months';
+  }else{
+    $age = $result[0]['age_in_mnts'].' month';
   }
 }
+
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$result[0]['sample_collection_date']);
   $result[0]['sample_collection_date']=$general->humanDateFormat($expStr[0]);
@@ -116,19 +133,10 @@ if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_d
 }else{
   $result[0]['sample_testing_date']='';
 }
-if(isset($result[0]['last_viral_load_result']) && trim($result[0]['last_viral_load_result'])!='' && $result[0]['last_viral_load_result']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$result[0]['last_viral_load_result']);
-  $result[0]['last_viral_load_result']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
-  $result[0]['last_viral_load_result']='';
-}
-if(isset($result[0]['last_viral_load_date']) && trim($result[0]['last_viral_load_date'])!='' && $result[0]['last_viral_load_date']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$result[0]['last_viral_load_date']);
-  $result[0]['last_viral_load_date']=$general->humanDateFormat($expStr[0]);
-  $lastViralLoadResultTime = $expStr[1];
+if(isset($result[0]['last_viral_load_date']) && trim($result[0]['last_viral_load_date'])!='' && $result[0]['last_viral_load_date']!='0000-00-00'){
+  $result[0]['last_viral_load_date']=$general->humanDateFormat($result[0]['last_viral_load_date']);
 }else{
   $result[0]['last_viral_load_date']='';
-  $lastViralLoadResultTime = '';
 }
 if(!isset($result[0]['patient_receive_sms']) || trim($result[0]['patient_receive_sms'])== ''){
   $result[0]['patient_receive_sms'] = 'missing';
@@ -176,11 +184,19 @@ $html.='<table style="padding:2px;">';
     $html .='<tr>';
      $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Clinic code</td>';
      $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result[0]['facility_code'].'</td>';
-     $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.ucwords($result[0]['facility_name']).'</td>';
+     $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.strtoupper($result[0]['state']).'</td>';
+    $html .='</tr>';
+    $html .='<tr>';
+      $html .='<td colspan="2"></td>';
+      $html .='<td colspan="2" style="line-height:12px;font-size:12px;font-style:italic;text-align:left;">'.strtoupper($result[0]['district']).'</td>';
+    $html .='</tr>';
+    $html .='<tr>';
+      $html .='<td colspan="2"></td>';
+      $html .='<td colspan="2" style="line-height:12px;font-size:12px;font-style:italic;text-align:left;">'.strtoupper($result[0]['facility_name']).'</td>';
     $html .='</tr>';
     $html .='<tr>';
      $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
-     $html .='<td colspan="3" style="line-height:22px;font-size:10px;font-weight:bold;text-align:left;">'.ucwords($result[0]['request_clinician']).'</td>';
+     $html .='<td colspan="3" style="line-height:22px;font-size:10px;font-weight:bold;text-align:left;">'.ucwords($result[0]['lab_contact_person']).'</td>';
     $html .='</tr>';
     $html .='<tr>';
      $html .='<td colspan="4" style="line-height:2px;border-bottom:2px solid #333;"></td>';
@@ -196,7 +212,7 @@ $html.='<table style="padding:2px;">';
           $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Barcode number</td>';
          $html .='</tr>';
          $html .='<tr>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.ucwords($result[0]['lab_name']).'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$result[0]['lab_no'].'</td>';
           $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$result[0]['serial_no'].'</td>';
          $html .='</tr>';
          $html .='<tr>';
@@ -204,7 +220,7 @@ $html.='<table style="padding:2px;">';
           $html .='<td colspan="3" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">'.$result[0]['art_no'].'</td>';
          $html .='</tr>';
          $html .='<tr>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">First name</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">First Name</td>';
           $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Surname</td>';
          $html .='</tr>';
          $html .='<tr>';
