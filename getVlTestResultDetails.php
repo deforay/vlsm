@@ -2,6 +2,13 @@
 session_start();
 include('./includes/MysqliDb.php');
 include('General.php');
+$formConfigQuery ="SELECT * from global_config where name='vl_form'";
+$configResult=$db->query($formConfigQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="treament_id";
@@ -165,18 +172,18 @@ $primaryKey="treament_id";
 		// Only approved results can be printed
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND vl.status =7 ";
+		        $sWhere = $sWhere." AND vl.status =7 AND vl.form_id='".$arr['vl_form']."'";
 		    }else{
-		       $sWhere = "WHERE vl.status =7 ";
+		       $sWhere = "WHERE vl.status =7 AND vl.form_id='".$arr['vl_form']."'";
 		    }
-		    $dWhere = "WHERE status = 7";
+		    $dWhere = "WHERE vl.status = 7 AND vl.form_id='".$arr['vl_form']."'";
 		}else{
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND vl.status =1 ";
+		        $sWhere = $sWhere." AND vl.status =1 AND vl.form_id='".$arr['vl_form']."'";
 		    }else{
-		        $sWhere = "WHERE vl.status =1 ";
+		        $sWhere = "WHERE vl.status =1  AND vl.form_id='".$arr['vl_form']."'";
 		    }
-		    $dWhere = "WHERE status = 1";
+		    $dWhere = "WHERE vl.status = 1 AND vl.form_id='".$arr['vl_form']."'";
 		}
 		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
@@ -199,9 +206,8 @@ $primaryKey="treament_id";
         
         $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
-
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form $dWhere");
+        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form as vl $dWhere");
        // $aResultTotal = $countResult->fetch_row();
         $iTotal = $aResultTotal[0]['total'];
 
