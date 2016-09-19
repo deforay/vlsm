@@ -181,9 +181,7 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-		<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
                 {"sClass":"center","bSortable":false},
-		<?php } ?>
             ],
             "aaSorting": [[ 1, "desc" ]],
 	    "fnDrawCallback": function() {

@@ -2,6 +2,13 @@
 session_start();
 include('./includes/MysqliDb.php');
 include('General.php');
+$formConfigQuery ="SELECT * from global_config where name='vl_form'";
+$configResult=$db->query($formConfigQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="treament_id";
@@ -52,7 +59,7 @@ $primaryKey="treament_id";
         $sWhere = "";
         if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
             $searchArray = explode(" ", $_POST['sSearch']);
-            $sWhereSub = "vl.status = 6";
+            //$sWhereSub = "vl.status = 6";
             foreach ($searchArray as $search) {
                 if ($sWhereSub == "") {
                     $sWhereSub .= "(";
@@ -72,7 +79,7 @@ $primaryKey="treament_id";
             }
             $sWhere .= $sWhereSub;
         }else{
-	    $sWhere = "vl.status = 6";
+	    //$sWhere = "vl.status = 6";
 	}
         
         /* Individual column filtering */
@@ -167,6 +174,11 @@ $primaryKey="treament_id";
 		}
 	    }
 	}
+	if($sWhere!=''){
+	    $sWhere = $sWhere.' AND vl.form_id="'.$arr['vl_form'].'"';
+	}else{
+	    $sWhere = $sWhere.' where vl.form_id="'.$arr['vl_form'].'"';
+	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
 	//echo $sQuery;die;
@@ -189,7 +201,7 @@ $primaryKey="treament_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where status = 6");
+        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where form_id='".$arr['vl_form']."'");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
