@@ -63,6 +63,7 @@ $data=array(
 'date_time'=>$general->getDateTime()
 );
 $db->insert($tableName1,$data);
+
 ?>
 <style>
   .form-control{border: none;margin-top: -3%;}
@@ -105,7 +106,6 @@ $db->insert($tableName1,$data);
                         <div class="form-group">
                         <label for="province">Province</label>
                           <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($facilityResult[0]['state']);?>"/>
-                          </select>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
