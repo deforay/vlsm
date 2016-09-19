@@ -7,6 +7,8 @@ $sQuery="SELECT * FROM r_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
+$batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
+$batResult = $db->rawQuery($batQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -32,7 +34,16 @@ $fResult = $db->rawQuery($fQuery);
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
-			<input type="text" id="batchCode" name="batchCode" class="form-control" placeholder="Enter Batch Code"/>
+		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
+		        <option value=""> -- Select -- </option>
+			 <?php
+			 foreach($batResult as $code){
+			  ?>
+			  <option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
+			  <?php
+			 }
+			 ?>
+		      </select>
 		    </td>
 		    </tr>
 		<tr>
@@ -75,15 +86,10 @@ $fResult = $db->rawQuery($fQuery);
             <div class="box-header with-border">
 			  <div class="col-md-4 col-sm-4">
 				<input type="hidden" name="checkedTests" id="checkedTests"/>
-				<select style="" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">
-				  <option value=""> -- Select -- </option>
-				<?php
-				foreach($tsResult as $status){
-				 ?>
-				 <option value="<?php echo $status['status_id'];?>"><?php echo ucwords($status['status_name']);?></option>
-				 <?php
-				}
-				?>
+				<select style="" class="form-control" id="status" name="status" title="Please select test status" disabled="disabled">
+				<option value="">-- Select --</option>
+				<option value="7">Accepted</option>
+ 				<option value="4">Rejected</option>
 				</select>
 				</div>
 			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>
