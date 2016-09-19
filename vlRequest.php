@@ -90,7 +90,7 @@ $batResult = $db->rawQuery($batQuery);
 			    <div class="col-md-12" >
 			      
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="form_id" class="showhideCheckBox" /> <label for="iCol0">Serial No</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="form_id" class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="sample_collection_date" class="showhideCheckBox"  /> <label for="iCol1">Sample Collection Date</label>
