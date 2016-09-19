@@ -284,7 +284,7 @@ $fResult = $db->rawQuery($fQuery);
     if(stValue!='' && testIds!=''){
       conf=confirm("Do you wish to change the test status ?");
       if (conf) {
-    $.post("updateTestStatus.php", { status : stValue,id:testIds, format: "html"},
+    $.post("updateTestStatus.php", { status : stValue,id:testIds},
       function(data){
 	  if(data != ""){
 	    $("#checkedTests").val('');
@@ -301,6 +301,27 @@ $fResult = $db->rawQuery($fQuery);
     }else{
       alert("Please checked atleast one checkbox.");
     }
+   }
+   function updateStatus(obj)
+   {
+    if(obj.value!=''){
+      conf=confirm("Do you wish to change the status ?");
+      if (conf) {
+    $.post("updateTestStatus.php", { status : obj.value,id:obj.id},
+      function(data){
+	if(data != ""){
+	  $("#checkedTests").val('');
+	    selectedTests = [];
+	    selectedTestsId = [];
+	    $("#checkTestsData").attr("checked",false);
+	    $("#status").val('');
+	    $("#status").prop('disabled', true);
+	    oTable.fnDraw();
+	    alert('Updated successfully.');
+	}
+      });
+    }
+   }
    }
   
   function printBarcode(tId) {
