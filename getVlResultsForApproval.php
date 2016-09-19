@@ -243,7 +243,6 @@ $primaryKey="treament_id";
 	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['treament_id'].'" title="Please select status" onchange="updateStatus(this)">
  				<option value="">-- Select --</option>
 				<option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
- 				<option value="1" '.($aRow['status_id']=="1" ? "selected=selected" : "").'>Hold</option>
  				<option value="4" '.($aRow['status_id']=="4"  ? "selected=selected" : "").'>Rejected</option>
  			</select><br><br>';
             $row = array();
