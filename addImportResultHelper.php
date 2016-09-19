@@ -92,7 +92,9 @@ try {
                 $m=0;
                 foreach($sheetData->getRowIterator() as $rKey=>$row){
                     if($rKey < 2) continue;
-                    $batchCode = '';
+                    $sampleVal = "";
+                    $batchCode = "";
+                    $sampleType = "";
                     $absDecimalVal="";
                     $absVal="";
                     $logVal="";
@@ -128,7 +130,7 @@ try {
                         $data['batch_code']=$batchCode;
                     }
                     
-                    $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where serial_no='".$sampleVal."'";
+                    $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='".$sampleVal."'";
                     $vlResult=$db->rawQuery($query);
                     if($vlResult){
                         if($vlResult[0]['log_value']!='' || $vlResult[0]['absolute_value']!='' || $vlResult[0]['text_value']!='' || $vlResult[0]['absolute_decimal_value']!=''){
