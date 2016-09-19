@@ -225,23 +225,23 @@ $primaryKey="treament_id";
 	       $aRow['sample_collection_date'] = '';
 	    }
             $row = array();
-			//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
-			$row[] = $aRow['serial_no'];
-			$row[] = $aRow['sample_collection_date'];
-			$row[] = $aRow['batch_code'];
-			$row[] = $aRow['art_no'];
-            $row[] = ucwords($aRow['patient_name']);
-			$row[] = ucwords($aRow['facility_name']);
-			$row[] = ucwords($aRow['state']);
-			$row[] = ucwords($aRow['district']);
+	    //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
+	    $row[] = $aRow['serial_no'];
+	    $row[] = $aRow['sample_collection_date'];
+	    $row[] = $aRow['batch_code'];
+	    $row[] = $aRow['art_no'];
+            $row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
+	    $row[] = ucwords($aRow['facility_name']);
+	    $row[] = ucwords($aRow['state']);
+	    $row[] = ucwords($aRow['district']);
             $row[] = ucwords($aRow['sample_name']);
-			if(trim($aRow['absolute_value'])!=''){
-				$vlResult=$aRow['absolute_value'];
-			}else if(trim($aRow['log_value'])!=''){
-				$vlResult=$aRow['log_value'];
-			}else if(trim($aRow['text_value'])!=''){
-				$vlResult=$aRow['text_value'];
-			}
+	    if(trim($aRow['absolute_value'])!=''){
+		    $vlResult=$aRow['absolute_value'];
+	    }else if(trim($aRow['log_value'])!=''){
+		    $vlResult=$aRow['log_value'];
+	    }else if(trim($aRow['text_value'])!=''){
+		    $vlResult=$aRow['text_value'];
+	    }
             $row[] = ucwords($vlResult);
 			
             $row[] = ucwords($aRow['status_name']);
