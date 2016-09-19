@@ -445,13 +445,8 @@ $tsResult = $db->rawQuery($tsQuery);
                        <td colspan="5">
                         <select class="form-control" id="status" name="status" title="Please select test status">
                          <option value="">-- Select --</option>
-			    <?php
-                            foreach($tsResult as $status){
-                             ?>
-                             <option value="<?php echo $status['status_id']; ?>" <?php echo ($status['status_id']==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']);?></option>
-                             <?php
-                            }
-                            ?>
+                         <option value="7"<?php echo (7==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>>Accepted</option>
+ 			 <option value="4"<?php echo (4==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>>Rejected</option>
 			  </select>
                        </td>
                       </tr>
