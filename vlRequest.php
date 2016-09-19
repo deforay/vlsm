@@ -3,7 +3,9 @@ include('header.php');
 //include('./includes/MysqliDb.php');
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
-$sQuery="SELECT * FROM r_sample_type";
+$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormResult = $db->rawQuery($configFormQuery);
+$sQuery="SELECT * FROM r_sample_type where form_identification='".$configFormResult[0]['value']."'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -142,7 +144,7 @@ $batResult = $db->rawQuery($batQuery);
                 <thead>
                 <tr>
 		  <!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
-		  <th>Form Serial No.</th>
+		  <th>Sample Code</th>
                   <th>Sample Collection Date</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
