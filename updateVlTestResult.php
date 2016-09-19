@@ -260,7 +260,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
                         <div class="col-lg-7" style="font-style:italic;">
                           <?php echo $result[0]['age_in_mnts']; ?>
-                        <br><p class="help-block"><small>If age < 2 years </small></p>
+                        <br><p class="help-block"><small>If age < 1 years </small></p>
                         </div>
                     </div>
                   </div>
