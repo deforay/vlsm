@@ -9,7 +9,9 @@ $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
      
-     
+     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($_POST['sampleTestingDateAtLab']);  
+     }
      $vldata=array(
           'serial_no'=>$_POST['serialNo'],
           'sample_code'=>$_POST['serialNo'],
@@ -22,7 +24,6 @@ try {
           'log_value'=>$_POST['vlLog'],
           'comments'=>$_POST['labCommnets'],
           'result_approved_by'=>$_POST['approvedBy'],
-          'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
           'status'=>$_POST['status'],
           'modified_on'=>$general->getDateTime()
