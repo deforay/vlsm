@@ -9,7 +9,9 @@ $query="SELECT vl.sample_code,vl.batch_id,vl.treament_id,vl.facility_id,f.facili
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
-$sQuery="SELECT * FROM r_sample_type";
+$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormResult = $db->rawQuery($configFormQuery);
+$sQuery="SELECT * FROM r_sample_type where form_identification='".$configFormResult[0]['value']."'";
 $sResult = $db->rawQuery($sQuery);
 $configQuery="SELECT * FROM global_config WHERE name ='max_no_of_samples_in_a_batch'";
 $configResult = $db->rawQuery($configQuery);

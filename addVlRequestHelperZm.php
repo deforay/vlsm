@@ -108,6 +108,7 @@ try {
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
           'result_reviewed_by'=>$_SESSION['userId'],
+          'result_approved_by'=>$_POST['approvedBy'],
           'status'=>$status,
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime(),

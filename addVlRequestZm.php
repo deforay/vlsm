@@ -4,6 +4,8 @@ ob_start();
 //include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
+$userQuery="SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -99,6 +101,9 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
   $vlResult[0]['date_sample_received_at_testing_lab']='';
  }
  $sampleReceivedDate = $vlResult[0]['date_sample_received_at_testing_lab'];
+}
+if($urgency==''){
+  $urgency= 'normal';
 }
 
 ?>
@@ -462,7 +467,19 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
                           </label>
                         </td>
                         <td><label>Approved By</label></td>
-                        <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>
+                        <td>
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By">
+                              <option value=""> -- Select -- </option>
+                              <?php
+                              foreach($userResult as $uName){
+                               ?>
+                               <option value="<?php echo $uName['user_id'];?>"><?php echo ucwords($uName['user_name']);?></option>
+                               <?php
+                              }
+                              ?>
+                          </select>
+                        </td>
+                        <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>-->
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
