@@ -127,7 +127,7 @@ $tsResult = $db->rawQuery($tsQuery);
             ],
 	    "iDisplayLength": 100,
             //"aaSorting": [[ 1, "desc" ]],
-	    "fnDrawCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+	    "fnDrawCallback": function() {
 //		var checkBoxes=document.getElementsByName("chk[]");
 //                len = checkBoxes.length;
 //                for(c=0;c<len;c++){
@@ -135,6 +135,11 @@ $tsResult = $db->rawQuery($tsQuery);
 //			checkBoxes[c].setAttribute("checked",true);
 //                    }
 //                }
+	      var oSettings = this.fnSettings();
+              var iTotalRecords = oSettings.fnRecordsTotal();
+	      if(iTotalRecords==0){
+		window.location.href="vlPrintResult.php";
+	      }
 	    },
             "bProcessing": true,
             "bServerSide": true,
