@@ -127,19 +127,14 @@ $tsResult = $db->rawQuery($tsQuery);
             ],
 	    "iDisplayLength": 100,
             //"aaSorting": [[ 1, "desc" ]],
-	    "fnDrawCallback": function() {
-		var checkBoxes=document.getElementsByName("chk[]");
-                len = checkBoxes.length;
-                for(c=0;c<len;c++){
-                    if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1 ){
-			checkBoxes[c].setAttribute("checked",true);
-                    }
-                }
-		var oSettings = this.fnSettings();
-                var iTotalRecords = oSettings.fnRecordsTotal();
-		if(iTotalRecords==0){
-		  window.location.href="vlPrintResult.php";
-		}
+	    "fnDrawCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+//		var checkBoxes=document.getElementsByName("chk[]");
+//                len = checkBoxes.length;
+//                for(c=0;c<len;c++){
+//                    if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1 ){
+//			checkBoxes[c].setAttribute("checked",true);
+//                    }
+//                }
 	    },
             "bProcessing": true,
             "bServerSide": true,
@@ -178,6 +173,10 @@ $tsResult = $db->rawQuery($tsQuery);
     $.blockUI();
 	$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments, format: "html"},
 	       function(data){
+		if(data=='vlPrintResult.php')
+		{
+		  window.location.href="vlPrintResult.php";
+		}
 		oTable.fnDraw();
 		selectedTests = [];
 		selectedTestsIdValue = [];

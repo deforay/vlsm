@@ -127,9 +127,14 @@ try {
                 $result=$db->delete($tableName);
         
     }
-        
     }
     
+    $stQuery="SELECT * FROM temp_sample_report where sample_type='s'";
+    $stResult = $db->rawQuery($stQuery);
+    if($stResult){
+    }else{
+        $result = "vlPrintResult.php";
+    }
 }
 catch (Exception $exc) {
     error_log($exc->getMessage());
