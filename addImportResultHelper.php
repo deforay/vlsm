@@ -92,7 +92,10 @@ try {
                 //$count = count($sheetData);
                 $m=0;
                 foreach($sheetData->getRowIterator() as $rKey=>$row){
-                    if($rKey < 2) continue;
+                    if($rKey < $skipTillRow) continue;
+                    
+                    if($sheetData->getCell($orderNumberColumn.$rKey)->getValue() == "") break;
+                    
                     $sampleVal = "";
                     $batchCode = "";
                     $sampleType = "";
@@ -106,8 +109,9 @@ try {
                         $cellName = $sheetData->getCellByColumnAndRow($key,$rKey)->getColumn();
                         $cellRow = $sheetData->getCellByColumnAndRow($key,$rKey)->getRow();
                                                 
-                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$sampleType,$batchCode,$rKey,$cellName,$cell);
+                        fetchValuesFromFile($sampleVal,$logVal,$absVal,$txtVal,$absDecimalVal,$resultFlag,$testingDate,$sampleType,$batchCode,$key,$rKey,$cellName,$cell,$sheetData);
                     }
+                    
                     //echo $cellRow;
                     $data=array(
                         'lab_id'=>base64_decode($_POST['labId']),
@@ -145,7 +149,7 @@ try {
                     }
                     
                     if($sampleVal!='' || $batchCode!='' || $sampleType!='' || $logVal!='' || $absVal!='' || $absDecimalVal!=''){
-                    $db->insert($tableName,$data);
+                      $db->insert($tableName,$data);
                     }
                     //if(isset($vlResult[$m]['sample_code'])){
                     //$db=$db->where('sample_code',$sampleVal);
@@ -168,6 +172,7 @@ try {
         'date_time'=>$general->getDateTime()
         );
         $db->insert($tableName1,$data);
+        
         header("location:vlResultUnApproval.php");
   
 } catch (Exception $exc) {
