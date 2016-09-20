@@ -494,3 +494,9 @@ ALTER TABLE  `vl_request_form` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL
 ALTER TABLE  `hold_sample_report` ADD  `file_name` VARCHAR( 255 ) NULL DEFAULT NULL ;
 
 ALTER TABLE  `batch_details` CHANGE  `batch_code_key`  `batch_code_key` VARCHAR( 255 ) NULL DEFAULT NULL ;
+
+--saravanan 20-sep-2016
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '14', 'addRole.php', 'Add');
+
+--Pal 20th-Sep'16
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '11', 'vlTestResultStatus.php', 'VL Test Result Status');

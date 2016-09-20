@@ -175,7 +175,7 @@ $primaryKey="treament_id";
 	}else{
 	    $sWhere = $sWhere.' where vl.form_id="'.$arr['vl_form'].'"';
 	}
-		$sQuery = $sQuery.' '.$sWhere;
+	$sQuery = $sQuery.' '.$sWhere;
 	$sQuery = $sQuery." ORDER BY vl.modified_on DESC";
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
