@@ -42,7 +42,7 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".userMenu").addClass('active');
-  }else if (splitsUrl=='roles.php' || splitsUrl=='editRole.php') {
+  }else if (splitsUrl=='roles.php' || splitsUrl=='editRole.php' || splitsUrl=='addRole.php') {
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".roleMenu").addClass('active');

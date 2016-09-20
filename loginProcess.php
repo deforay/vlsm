@@ -33,6 +33,7 @@ try {
             $_SESSION['roleCode']=$admin[0]['role_code'];
             $_SESSION['email']=$admin[0]['email'];
             
+            $redirect = 'error.php';
             //set role and privileges
             $priQuery="SELECT p.privilege_name,rp.privilege_id from roles_privileges_map as rp INNER JOIN privileges as p ON p.privilege_id=rp.privilege_id  where rp.role_id='".$admin[0]['role_id']."'";
             $priInfo=$db->query($priQuery);
@@ -41,7 +42,7 @@ try {
               foreach($priInfo as $id){
                 $priId[] = $id['privilege_name'];
               }
-              $redirect = 'error.php';
+              
               $fileNameList = array('index.php','addVlRequest.php','vlRequest.php','batchcode.php','vlRequestMail.php','addImportResult.php','vlPrintResult.php','vlTestResult.php','missingResult.php','vlResult.php','highViralLoad.php','roles.php','users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php');
               foreach($fileNameList as $redirectFile){
                 if(in_array($redirectFile,$priId)){

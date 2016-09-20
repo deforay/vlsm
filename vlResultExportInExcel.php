@@ -14,7 +14,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Facility Name","Facility Code","Country","State","Hub Name","Batch Code","Sample Code","Unique ART No","Patient's Name","DOB","Age in years","Age in months","Other Id","Gender","Phone Number","Sample Collected On","Sample Type","Treatment Period","Treatment Initiated On","Current Regimen","Regiment Initiated On","Treatment Details","Patient Is Pregnant","ARC No","Patient Is Breastfeeding","ARV Adherence","Routine Monitoring Last VL Date","Routine Monitoring VL Value","Routine Monitoring Sample Type","VL Test After Suspected treatment failure adherence counseling VL Date","VL Test After Suspected treatment failure adherence counseling VL Value","VL Test After Suspected treatment failure adherence counseling Sample Type","Suspect Treatment Failure VL Date","Suspect Treatment Failure VL Value","Suspect Treatment Failure Sample Type","Clinician Name","Clinician Phone No","Request Date","VL Focal Person","VL Focal Person Phone Number","Email For HF","Lab Name","Lab Contact Person","Lab Phone No.","Sample Received Date","Sample Testing Date","Dispatched Date","Reviewed By","Reviewed Date","Justification","Comments","Log Value","Absolute Value","Text Value","Result","Status");
+ $headings = array("Serial No.","Batch Code","Urgency","Province","District","Clinic Name","Clinician Name","Sample Collection Date","Sample Received Date","Collected By","Patient Name","Gender","DOB","Age In Years","Age In Months","Patient Pregnant","Patient BreastFeeding","ART Number","ART Initiation","ART Regimen","SMS Notification","Mobile Number","Date Of Last Viral Load Test","Result Of Last Viral Load","Viral Load Log","Reason For VL Test","LAB Name","LAB No.","VL Testing Platform","Specimen Type","Sample Testing Date","Viral Load Result","No Result","Approved By","Approved On","Comments","Status");
  
  $colNo = 0;
  
@@ -51,9 +51,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $colNo++;
   
  }
- $sheet->getStyle('A1:BD1')->applyFromArray($styleArray);
- 
- 
+ $sheet->getStyle('A1:AJ1')->applyFromArray($styleArray);
  
  foreach ($rResult as $aRow) {
   $row = array();
@@ -63,16 +61,11 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['patient_dob']='';
   }
   
-  if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00'){
-   $aRow['sample_collection_date']=$general->humanDateFormat($aRow['sample_collection_date']);
+  if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['sample_collection_date']);
+   $aRow['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
    $aRow['sample_collection_date']='';
-  }
-  
-  if(isset($aRow['treatment_initiated_date']) && trim($aRow['treatment_initiated_date'])!='' && $aRow['treatment_initiated_date']!='0000-00-00'){
-   $aRow['treatment_initiated_date']=$general->humanDateFormat($aRow['treatment_initiated_date']);
-  }else{
-   $aRow['treatment_initiated_date']='';
   }
   
   if(isset($aRow['date_of_initiation_of_current_regimen']) && trim($aRow['date_of_initiation_of_current_regimen'])!='' && $aRow['date_of_initiation_of_current_regimen']!='0000-00-00'){
@@ -81,28 +74,15 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['date_of_initiation_of_current_regimen']='';
   }
   
-  if(isset($aRow['routine_monitoring_last_vl_date']) && trim($aRow['routine_monitoring_last_vl_date'])!='' && $aRow['routine_monitoring_last_vl_date']!='0000-00-00'){
-   $aRow['routine_monitoring_last_vl_date']=$general->humanDateFormat($aRow['routine_monitoring_last_vl_date']);
-  }else{
-   $aRow['routine_monitoring_last_vl_date']='';
-  }
-  
-  if(isset($aRow['vl_treatment_failure_adherence_counseling_last_vl_date']) && trim($aRow['vl_treatment_failure_adherence_counseling_last_vl_date'])!='' && $aRow['vl_treatment_failure_adherence_counseling_last_vl_date']!='0000-00-00'){
-   $aRow['vl_treatment_failure_adherence_counseling_last_vl_date']=$general->humanDateFormat($aRow['vl_treatment_failure_adherence_counseling_last_vl_date']);
-  }else{
-   $aRow['vl_treatment_failure_adherence_counseling_last_vl_date']='';
-  }
-  
-  if(isset($aRow['suspected_treatment_failure_last_vl_date']) && trim($aRow['suspected_treatment_failure_last_vl_date'])!='' && $aRow['suspected_treatment_failure_last_vl_date']!='0000-00-00'){
-   $aRow['suspected_treatment_failure_last_vl_date']=$general->humanDateFormat($aRow['suspected_treatment_failure_last_vl_date']);
-  }else{
-   $aRow['suspected_treatment_failure_last_vl_date']='';
-  }
-  
   if(isset($aRow['sample_testing_date']) && trim($aRow['sample_testing_date'])!='' && $aRow['sample_testing_date']!='0000-00-00'){
  $aRow['sample_testing_date']=$general->humanDateFormat($aRow['sample_testing_date']);
   }else{
    $aRow['sample_testing_date']='';
+  }
+  if(isset($aRow['last_viral_load_date']) && trim($aRow['last_viral_load_date'])!='' && $aRow['last_viral_load_date']!='0000-00-00'){
+ $aRow['last_viral_load_date']=$general->humanDateFormat($aRow['last_viral_load_date']);
+  }else{
+   $aRow['last_viral_load_date']='';
   }
   
   if(isset($aRow['date_sample_received_at_testing_lab']) && trim($aRow['date_sample_received_at_testing_lab'])!='' && $aRow['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
@@ -110,6 +90,12 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
    $aRow['date_sample_received_at_testing_lab']='';
+  }
+  if(isset($aRow['result_approved_on']) && trim($aRow['result_approved_on'])!='' && $aRow['result_approved_on']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['result_approved_on']);
+   $aRow['result_approved_on']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  }else{
+   $aRow['result_approved_on']='';
   }
   
   if(isset($aRow['lab_tested_date']) && trim($aRow['lab_tested_date'])!='' && $aRow['lab_tested_date']!='0000-00-00 00:00:00'){
@@ -119,87 +105,51 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['lab_tested_date']='';
   }
   
-  if(isset($aRow['date_results_dispatched']) && trim($aRow['date_results_dispatched'])!='' && $aRow['date_results_dispatched']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['date_results_dispatched']);
-   $aRow['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['date_results_dispatched']='';
-  }
-  
-  if(isset($aRow['result_reviewed_date']) && trim($aRow['result_reviewed_date'])!='' && $aRow['result_reviewed_date']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['result_reviewed_date']);
-   $aRow['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['result_reviewed_date']='';
-  }
-  
-  $row[] = ucwords($aRow['facility_name']);
-  $row[] = $aRow['facility_code'];
-  $row[] = $aRow['country'];
-  $row[] = $aRow['state'];
-  $row[] = $aRow['hub_name'];
+  $row[] = $aRow['serial_no'];
   $row[] = $aRow['batch_code'];
-  $row[] = $aRow['sample_code'];
-  
-  
-  $row[] = $aRow['art_no'];
-  $row[] = ucwords($aRow['patient_name']);
+  $row[] = ucwords($aRow['urgency']);
+  $row[] = ucwords($aRow['state']);
+  $row[] = ucwords($aRow['district']);
+  $row[] = ucwords($aRow['facility_name']);
+  $row[] = ucwords($aRow['lab_contact_person']);
+  $row[] = $aRow['sample_collection_date'];
+  $row[] = $aRow['date_sample_received_at_testing_lab'];
+  $row[] = $aRow['collected_by'];
+  $row[] = ucwords($aRow['patient_name'].$aRow['surname']);
+  $row[] = ucwords(str_replace("_"," ",$aRow['gender']));
   $row[] = $aRow['patient_dob'];
   $row[] = $aRow['age_in_yrs'];
   $row[] = $aRow['age_in_mnts'];
-  $row[] = $aRow['other_id'];
-  $row[] = $aRow['gender'];
-  
-  $row[] = $aRow['patient_phone_number'];
-  $row[] = $aRow['sample_collection_date'];
-  $row[] = ucwords($aRow['sample_name']);
-  $row[] = $aRow['treatment_initiation'];
-  $row[] = $aRow['treatment_initiated_date'];
-  $row[] = $aRow['art_code'];
+  $row[] = ucwords($aRow['is_patient_pregnant']);
+  $row[] = ucwords($aRow['is_patient_breastfeeding']);
+  $row[] = $aRow['art_no'];
   $row[] = $aRow['date_of_initiation_of_current_regimen'];
-  $row[] = $aRow['treatment_details'];
-  $row[] = $aRow['is_patient_pregnant'];
-  $row[] = $aRow['arc_no'];
-  $row[] = $aRow['is_patient_breastfeeding'];
-  $row[] = $aRow['arv_adherence'];
+  $row[] = $aRow['current_regimen'];
+  $row[] = ucwords($aRow['patient_receive_sms']);
+  $row[] = $aRow['patient_phone_number'];
+  $row[] = $aRow['last_viral_load_date'];
+  $row[] = $aRow['last_viral_load_result'];
+  $row[] = $aRow['viral_load_log'];
+  $row[] = ucwords(str_replace("_"," ",$aRow['vl_test_reason']));
+  $row[] = ucwords($aRow['labName']);
+  $row[] = $aRow['lab_no'];
+  $row[] = ucwords($aRow['vl_test_platform']);
+  $row[] = $aRow['sample_name'];
+  $row[] = $aRow['sample_testing_date'];
+  $vlResult = '';
+  if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
+       $vlResult = $aRow['absolute_value'];
+   }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
+       $vlResult = $aRow['log_value'];
+   }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
+       $vlResult = $aRow['text_value'];
+   }
+  $row[] = $vlResult;
   
-  
-  $row[] = $aRow['routine_monitoring_last_vl_date'];
-  $row[] = $aRow['routine_monitoring_value'];
-  $row[] = $aRow['routineSampleName'];
-  
-  $row[] = $aRow['vl_treatment_failure_adherence_counseling_last_vl_date'];
-  $row[] = $aRow['vl_treatment_failure_adherence_counseling_value'];
-  $row[] = $aRow['failureSampleName'];
-  
-  $row[] = $aRow['suspected_treatment_failure_last_vl_date'];
-  $row[] = $aRow['suspected_treatment_failure_value'];
-  $row[] = $aRow['suspectedSampleName'];
-  
-  $row[] = $aRow['request_clinician'];
-  $row[] = $aRow['clinician_ph_no'];
-  $row[] = $aRow['request_date'];
-  $row[] = $aRow['vl_focal_person'];
-  $row[] = $aRow['focal_person_phone_number'];
-  $row[] = $aRow['email_for_HF'];
-  
-  $row[] = $aRow['lab_name'];
-  $row[] = $aRow['lab_contact_person'];
-  $row[] = $aRow['lab_phone_no'];
-  $row[] = $aRow['date_sample_received_at_testing_lab'];
-  $row[] = $aRow['lab_tested_date'];
-  $row[] = $aRow['date_results_dispatched'];
-  
-  $row[] = $aRow['result_reviewed_by'];
-  $row[] = $aRow['result_reviewed_date'];
-  $row[] = $aRow['justification'];
+  $row[] = ucwords(str_replace("_"," ",$aRow['rejection']));
+  $row[] = ucwords($aRow['approvedBy']);
+  $row[] = $aRow['result_approved_on'];
   $row[] = $aRow['comments'];
-  $row[] = $aRow['log_value'];
-  $row[] = $aRow['absolute_value'];
-  $row[] = $aRow['text_value'];
-  
-  $row[] = ucwords($aRow['result']); 
-  
   $row[] = ucwords($aRow['status_name']);
   
   $output[] = $row;

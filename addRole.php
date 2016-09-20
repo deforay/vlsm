@@ -1,20 +1,8 @@
 <?php
 ob_start();
 include('header.php');
-//include('./includes/MysqliDb.php');
-$id=base64_decode($_GET['id']);
-$roleQuery="SELECT * from roles where role_id=$id";
-$roleInfo=$db->query($roleQuery);
 $resourcesQuery="SELECT * from resources";
 $rInfo=$db->query($resourcesQuery);
-$priQuery="SELECT * from roles_privileges_map where role_id=$id";
-$priInfo=$db->query($priQuery);
-$priId = array();
-if($priInfo){
-  foreach($priInfo as $id){
-    $priId[] = $id['privilege_id'];
-  }
-}
 ?>
 <style>
     .labelName{font-size: 13px;}
@@ -23,10 +11,10 @@ if($priInfo){
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Edit Role</h1>
+      <h1>Add Role</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Roles</li>
+        <li class="active">Add Role</li>
       </ol>
     </section>
 
@@ -40,15 +28,14 @@ if($priInfo){
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='roleEditForm' id='roleEditForm' autocomplete="off" action="editRolesHelper.php">
+            <form class="form-horizontal" method='post'  name='roleAddForm' id='roleAddForm' autocomplete="off" action="addRolesHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="userName" class="col-lg-4 control-label">Role Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="roleName" name="roleName" placeholder="Role Name" title="Please enter user name" value="<?php echo $roleInfo[0]['role_name']; ?>" onblur="checkNameValidation('roles','role_name',this,'<?php echo "role_id##".$roleInfo[0]['role_id'];?>','This role name already exists.Try another role name',null)"/>
-                        <input type="hidden" name="roleId" id="roleId" value="<?php echo base64_encode($roleInfo[0]['role_id']);?>"/>
+                        <input type="text" class="form-control isRequired" id="roleName" name="roleName" placeholder="Role Name" title="Please enter user name"  onblur="checkNameValidation('roles','role_name',this,null,'This role name already exists.Try another role name',null)"/>
                         </div>
                     </div>
                   </div>
@@ -56,7 +43,7 @@ if($priInfo){
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Role Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="roleCode" name="roleCode" placeholder="Role Code" title="Please enter role code" value="<?php echo $roleInfo[0]['role_code']; ?>" onblur="checkNameValidation('roles','role_code',this,'<?php echo "role_id##".$roleInfo[0]['role_id'];?>','This role code already exists.Try another role code',null)"/>
+                        <input type="text" class="form-control isRequired" id="roleCode" name="roleCode" placeholder="Role Code" title="Please enter role code" onblur="checkNameValidation('roles','role_code',this,null,'This role code already exists.Try another role code',null)"/>
                         </div>
                     </div>
                   </div>
@@ -68,8 +55,8 @@ if($priInfo){
                         <div class="col-lg-7">
                           <select class="form-control isRequired" name='status' id='status' title="Please select the status">
                             <option value=""> -- Select -- </option>
-                            <option value="active" <?php echo ($roleInfo[0]['status']=='active')?"selected='selected'":""?>>Active</option>
-                            <option value="inactive" <?php echo ($roleInfo[0]['status']=='inactive')?"selected='selected'":""?>>Inactive</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
                           </select>
                         </div>
                     </div>
@@ -96,20 +83,20 @@ if($priInfo){
                           $pQuery="SELECT * from privileges where resource_id='".$value['resource_id']."'";
                           $pInfo=$db->query($pQuery);
                           foreach ($pInfo as $privilege) {
-                            if (in_array($privilege['privilege_id'], $priId)){
-                              $allowChecked = " checked='' ";
-                              $denyChecked = "";
-                              } else {
-                              $denyChecked = " checked='' ";
-                              $allowChecked = "";
-                              }
+                            //if (in_array($privilege['privilege_id'], $priId)){
+                            //  $allowChecked = " checked='' ";
+                            //  $denyChecked = "";
+                            //  } else {
+                            //  $denyChecked = " checked='' ";
+                            //  $allowChecked = "";
+                            //  }
                           echo "<td>"
                           . "<label class='labelName'>" . ucwords($privilege['display_name']) . "</label>
                             <label>
-                                    <input type='radio' class='cekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='allow' $allowChecked> <i class='fa fa-check'></i>
+                                    <input type='radio' class='cekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='allow' > <i class='fa fa-check'></i>
                             </label>
                             <label>
-                                    <input type='radio' class='unCekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='deny' $denyChecked>  <i class='fa fa-times'></i>
+                                    <input type='radio' class='unCekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='deny' >  <i class='fa fa-times'></i>
                             </label>
                             </td>";
                             }
@@ -141,12 +128,12 @@ if($priInfo){
 
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'roleEditForm'
+        formId: 'roleAddForm'
     });
     
     if(flag){
       $.blockUI();
-      document.getElementById('roleEditForm').submit();
+      document.getElementById('roleAddForm').submit();
     }
   }
   
