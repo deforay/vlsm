@@ -177,8 +177,8 @@ if($urgency==''){
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="province">Province</label>
-                          <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                        <label for="province">Province <span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
                           <?php if($facilityResult!='') { ?>
                             <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
@@ -189,8 +189,8 @@ if($urgency==''){
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="District">District  </label>
-                          <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
+                        <label for="District">District  <span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             if($districtResult!=''){
@@ -227,8 +227,8 @@ if($urgency==''){
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
-                    <label for="sampleCollectionDate">Sample Collection Date</label>
-                    <input type="text" class="form-control" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $sDate;?>">
+                    <label for="sampleCollectionDate">Sample Collection Date <span class="mandatory">*</span></label>
+                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
@@ -256,16 +256,16 @@ if($urgency==''){
                           <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="< ?php echo $sCodeValue;?>">
                         </td>-->
                         <td style="width:16%">
-                        <label for="patientFname">Patient First Name  </label>
+                        <label for="patientFname">Patient First Name   <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control  " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" >
+                          <input type="text" class="form-control isRequired " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" >
                         </td>
                         <td style="width:10%">
-                        <label for="surName">Surname </label>
+                        <label for="surName">Surname  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" >
+                          <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" >
                         </td>
                       </tr>
                       <tr>

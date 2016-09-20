@@ -148,8 +148,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="province">Province</label>
-                          <select class="form-control" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                        <label for="province">Province<span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
                             <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
                             <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
@@ -159,8 +159,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="District">District  </label>
-                          <select class="form-control" name="district" id="district" title="Please choose district" style="width:100%;">
+                        <label for="District">District <span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($districtResult as $districtName){
@@ -194,8 +194,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
-                    <label for="sampleCollectionDate">Sample Collection Date</label>
-                    <input type="text" class="form-control" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $vlQueryInfo[0]['sample_collection_date'];?>">
+                    <label for="sampleCollectionDate">Sample Collection Date<span class="mandatory">*</span></label>
+                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $vlQueryInfo[0]['sample_collection_date'];?>">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
@@ -223,16 +223,16 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                           <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">
                         </td>-->
                         <td style="width:16%">
-                        <label for="patientFname">Patient First Name  </label>
+                        <label for="patientFname">Patient First Name <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control  " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_name'];?>" >
+                          <input type="text" class="form-control isRequired " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_name'];?>" >
                         </td>
                         <td style="width:10%">
-                        <label for="surName">Surname </label>
+                        <label for="surName">Surname <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:18%">
-                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;"  value="<?php echo $vlQueryInfo[0]['surname'];?>" >
+                          <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;"  value="<?php echo $vlQueryInfo[0]['surname'];?>" >
                         </td>
                       </tr>
                       <tr>
