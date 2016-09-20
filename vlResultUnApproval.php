@@ -135,6 +135,11 @@ $tsResult = $db->rawQuery($tsQuery);
 			checkBoxes[c].setAttribute("checked",true);
                     }
                 }
+		var oSettings = this.fnSettings();
+                var iTotalRecords = oSettings.fnRecordsTotal();
+		if(iTotalRecords==0){
+		  window.location.href="vlPrintResult.php";
+		}
 	    },
             "bProcessing": true,
             "bServerSide": true,
@@ -145,9 +150,9 @@ $tsResult = $db->rawQuery($tsQuery);
                   "type": "POST",
                   "url": sSource,
                   "data": aoData,
-                  "success": fnCallback
+                  "success": fnCallback,
               });
-            }
+            },
         });
      $.unblockUI();
   }
