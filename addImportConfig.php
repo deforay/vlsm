@@ -30,7 +30,7 @@ include('header.php');
                     <div class="form-group">
                         <label for="configurationName" class="col-lg-4 control-label">Configuration Name<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null);setConfigFileName();"onkeypress="setConfigFileName();"/>
                         </div>
                     </div>
                   </div>
@@ -112,6 +112,20 @@ include('header.php');
       $("#logValRow").attr("title","Please enter log val row");
     }
   });
+  
+  function setConfigFileName(){
+    var configName = $("#configurationName").val();
+    if($.trim(configName)!= ''){
+      configName = configName.replace(/[^a-zA-Z0-9 ]/g, "")
+      if(configName.length >0){
+        configName = configName.replace(/ /g, '-') 
+        var configFileName = configName.toLowerCase()+".php";
+        $("#configurationFile").val(configFileName);
+      }
+    }else{
+      $("#configurationFile").val("");
+    }
+  }
 </script>
   
  <?php
