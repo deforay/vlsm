@@ -21,7 +21,9 @@ include('header.php');
 
           <div class="box">
             <div class="box-header with-border">
-              
+              <?php if(isset($_SESSION['privileges']) && in_array("addRole.php", $_SESSION['privileges'])){ ?>
+              <a href="addRole.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Role</a>
+	      <?php } ?>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

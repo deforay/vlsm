@@ -14,7 +14,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Facility Name","Facility Code","Country","State","Hub Name","Batch Code","Sample Code","Unique ART No","Patient's Name","DOB","Age in years","Age in months","Other Id","Gender","Phone Number","Sample Collected On","Sample Type","Treatment Period","Treatment Initiated On","Current Regimen","Regiment Initiated On","Treatment Details","Patient Is Pregnant","ARC No","Patient Is Breastfeeding","ARV Adherence","Routine Monitoring Last VL Date","Routine Monitoring VL Value","Routine Monitoring Sample Type","VL Test After Suspected treatment failure adherence counseling VL Date","VL Test After Suspected treatment failure adherence counseling VL Value","VL Test After Suspected treatment failure adherence counseling Sample Type","Suspect Treatment Failure VL Date","Suspect Treatment Failure VL Value","Suspect Treatment Failure Sample Type","Clinician Name","Clinician Phone No","Request Date","VL Focal Person","VL Focal Person Phone Number","Email For HF","Lab Name","Lab Contact Person","Lab Phone No.","Sample Received Date","Sample Testing Date","Dispatched Date","Reviewed By","Reviewed Date","Justification","Comments","Log Value","Absolute Value","Text Value","Result","Status");
+ $headings = array("Facility Name","Facility Code","Country","State","Hub Name","Batch Code","Sample Code","Unique ART No","Patient's Name","DOB","Age in years","Age in months","Other Id","Gender","Phone Number","Sample Collected On","Sample Type","Treatment Period","Treatment Initiated On","Current Regimen","Regiment Initiated On","Treatment Details","Patient Is Pregnant","ARC No","Patient Is Breastfeeding","ARV Adherence","Routine Monitoring Last VL Date","Routine Monitoring VL Value","Routine Monitoring Sample Type","VL Test After Suspected treatment failure adherence counseling VL Date","VL Test After Suspected treatment failure adherence counseling VL Value","VL Test After Suspected treatment failure adherence counseling Sample Type","Suspect Treatment Failure VL Date","Suspect Treatment Failure VL Value","Suspect Treatment Failure Sample Type","Clinician Name","Clinician Phone No","Request Date","VL Focal Person","VL Focal Person Phone Number","Email For HF","Lab Name","Lab Contact Person","Lab Phone No.","Sample Received Date","Sample Testing Date","Dispatched Date","Reviewed By","Reviewed Date","Justification","Comments","Result","Status");
  
  $colNo = 0;
  
@@ -51,7 +51,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $colNo++;
   
  }
- $sheet->getStyle('A1:BD1')->applyFromArray($styleArray);
+ $sheet->getStyle('A1:BA1')->applyFromArray($styleArray);
  
  
  
@@ -194,11 +194,19 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['result_reviewed_date'];
   $row[] = $aRow['justification'];
   $row[] = $aRow['comments'];
-  $row[] = $aRow['log_value'];
-  $row[] = $aRow['absolute_value'];
-  $row[] = $aRow['text_value'];
+  $vlResult = '';
+  if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
+       $vlResult = $aRow['absolute_value'];
+   }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
+       $vlResult = $aRow['log_value'];
+   }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
+       $vlResult = $aRow['text_value'];
+   }
+  //$row[] = $aRow['log_value'];
+  //$row[] = $aRow['absolute_value'];
+  //$row[] = $aRow['text_value'];
   
-  $row[] = ucwords($aRow['result']); 
+  $row[] = $vlResult;
   
   $row[] = ucwords($aRow['status_name']);
   
