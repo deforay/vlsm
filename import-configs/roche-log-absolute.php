@@ -1,6 +1,10 @@
 <?php
 
-function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$rKey,$cellName,$cell){
+$skipTillRow = 2;
+$orderNumberColumn = "C"; //mandatory column. Used to check when to stop looping
+
+//function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$rKey,$cellName,$cell){
+function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$key,$rKey,$cellName,$cell,$sheetData){
            
      $sampleIdCol='E';
      $sampleIdRow='2';
