@@ -198,7 +198,7 @@ $batResult = $db->rawQuery($batQuery);
         });
         
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
-        for(colNo=0;colNo <=10;colNo++){
+        for(colNo=0;colNo <=9;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(oTable.fnSettings().aoColumns[colNo].bVisible){
                 $("#iCol"+colNo+"-sort").show();    
