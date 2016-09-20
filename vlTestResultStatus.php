@@ -4,8 +4,8 @@ include('header.php');
 $id=base64_decode($_GET['id']);
 $tsQuery = "SELECT status_name FROM testing_status WHERE status_id = '".$id."'";
 $tsResult = $db->rawQuery($tsQuery);
-if(!isset($tsResult)){
-  header("location:index.php");
+if(!isset($tsResult) || count($tsResult) == 0){
+  header("location:index.php");exit;
 }
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
