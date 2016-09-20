@@ -118,7 +118,9 @@ include('header.php');
     if($.trim(configName)!= ''){
       configName = configName.replace(/[^a-zA-Z0-9 ]/g, "")
       if(configName.length >0){
-        configName = configName.replace(/ /g, '-') 
+        configName = configName.replace(/\s+/g, ' ');
+        configName = configName.replace(/ /g, '-');
+        configName = configName.replace(/\-$/, '');
         var configFileName = configName.toLowerCase()+".php";
         $("#configurationFile").val(configFileName);
       }
