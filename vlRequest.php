@@ -206,6 +206,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
+     loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -226,10 +227,8 @@ $batResult = $db->rawQuery($batQuery);
             endDate = end.format('YYYY-MM-DD');
       });
      $('#sampleCollectionDate').val("");
-     loadVlRequestData();
      
      $(".showhideCheckBox").change(function(){
-            
             if($(this).attr('checked')){
                 idpart = $(this).attr('data-showhide');
                 $("#"+idpart+"-sort").show();
@@ -240,7 +239,6 @@ $batResult = $db->rawQuery($batQuery);
         });
         
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
-        
         for(colNo=0;colNo <=10;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(oTable.fnSettings().aoColumns[colNo].bVisible){
@@ -251,11 +249,11 @@ $batResult = $db->rawQuery($batQuery);
         }
   } );
   
-  function fnShowHide(iCol)
-    {
+  function fnShowHide(iCol){
         var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
         oTable.fnSetColumnVis( iCol, bVis ? false : true );
-    }
+  }
+  
   function loadVlRequestData(){
     $.blockUI();
      oTable = $('#vlRequestDataTable').dataTable({

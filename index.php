@@ -1,14 +1,13 @@
 <?php
 include('header.php');
-//include('./includes/MysqliDb.php');
 /* Total data set length */
   $vlFormTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
  // $aResultTotal = $countResult->fetch_row();
  //print_r($aResultTotal);
   $labCount = $vlFormTotal[0]['total'];
   
-   $facilityTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details");
-   $facilityCount = $facilityTotal[0]['total'];
+  $facilityTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details");
+  $facilityCount = $facilityTotal[0]['total'];
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -34,7 +33,6 @@ include('header.php');
           <div class="small-box bg-aqua">
             <div class="inner">
               <h3><?php echo $facilityCount;?></h3>
-
               <p>Facilities</p>
             </div>
             <div class="icon">
