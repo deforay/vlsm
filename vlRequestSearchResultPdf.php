@@ -35,7 +35,7 @@ class MYPDF extends TCPDF {
         // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('helvetica', 'I', 8);
+        $this->SetFont('helvetica', '', 8);
         // Page number
         $this->Cell(0, 10, 'Page '.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
@@ -120,7 +120,7 @@ if(sizeof($requestResult)> 0){
         // ---------------------------------------------------------
         
         // set font
-        $pdf->SetFont('helveticaI', '', 18);
+        $pdf->SetFont('helvetica', '', 18);
         
         $pdf->AddPage();
         if(!isset($result['facility_code']) || trim($result['facility_code']) == ''){
@@ -135,8 +135,8 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['facility_name']) || trim($result['facility_name']) == ''){
            $result['facility_name'] = '';
         }
-        if(!isset($result[0]['labName']) || trim($result[0]['labName']) == ''){
-           $result[0]['labName'] = '';
+        if(!isset($result['labName']) || trim($result['labName']) == ''){
+           $result['labName'] = '';
         }
         //Set Age
         $age = 'Unknown';
@@ -219,16 +219,16 @@ if(sizeof($requestResult)> 0){
             $html .='</tr>';
             $html .='<tr>';
              $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Clinic code</td>';
-             $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['facility_code'].'</td>';
-             $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.strtoupper($result['state']).'</td>';
+             $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['facility_code'].'</td>';
+             $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['state']).'</td>';
             $html .='</tr>';
             $html .='<tr>';
               $html .='<td colspan="2"></td>';
-              $html .='<td colspan="2" style="line-height:12px;font-size:12px;font-style:italic;text-align:left;">'.strtoupper($result['district']).'</td>';
+              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['district']).'</td>';
             $html .='</tr>';
             $html .='<tr>';
               $html .='<td colspan="2"></td>';
-              $html .='<td colspan="2" style="line-height:12px;font-size:12px;font-style:italic;text-align:left;">'.strtoupper($result['facility_name']).'</td>';
+              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['facility_name']).'</td>';
             $html .='</tr>';
             $html .='<tr>';
              $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
@@ -248,7 +248,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Barcode number</td>';
                  $html .='</tr>';
                  $html .='<tr>';
-                  $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$result['lab_no'].'</td>';
+                  $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$result['lab_no'].'</td>';
                   $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$result['serial_no'].'</td>';
                  $html .='</tr>';
                  $html .='<tr>';
@@ -270,10 +270,10 @@ if(sizeof($requestResult)> 0){
                   $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Sex</td>';
                  $html .='</tr>';
                  $html .='<tr>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.ucwords($result['patient_receive_sms']).'</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['patient_phone_number'].'</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$age.'</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;font-weight:bold;text-align:left;">'.ucwords($result['gender']).'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_receive_sms']).'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['patient_phone_number'].'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords($result['gender']).'</td>';
                  $html .='</tr>';
                $html .='</table>';
               $html .='</td>';
@@ -287,34 +287,34 @@ if(sizeof($requestResult)> 0){
                   $html .='<td colspan="2" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Date of Viral Load Result</td>';
                 $html .='</tr>';
                 $html .='<tr>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['sample_collection_date'].'</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$sampleCollectionTime.'</td>';
-                  $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$result['sample_testing_date'].'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_collection_date'].'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleCollectionTime.'</td>';
+                  $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_testing_date'].'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
-                  $html .='<td colspan="3" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.ucwords($result['sample_name']).'</td>';
+                  $html .='<td colspan="3" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td colspan="4" style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
                 $html .='</tr>';
                 $html .='<tr>';
-                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$vlResult.'</td>';
+                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$vlResult.'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Reviewed by</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$resultReviewedBy.'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultReviewedBy.'</td>';
                   $html .='<td style="line-height:22px;font-size:14px;font-weight:bold;text-align:left;">Approved by</td>';
-                  $html .='<td style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.$resultApprovedBy.'</td>';
+                  $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
-                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">Viral load adequately controlled : continue current regimen</td>';
+                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">Viral load adequately controlled : continue current regimen</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
                 $html .='</tr>';
                 $html .='<tr>';
-                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-style:italic;text-align:left;">'.ucfirst($result['comments']).'</td>';
+                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['comments']).'</td>';
                 $html .='</tr>';
               $html .='</table>';
              $html .='</td>';
@@ -325,11 +325,11 @@ if(sizeof($requestResult)> 0){
             $html .='</tr>';
             $html .='<tr>';
              $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Previous Sample Collection Date</td>';
-             $html .='<td colspan="2" style="font-size:10px;font-style:italic;text-align:left;">'.$result['last_viral_load_date'].'</td>';
+             $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result['last_viral_load_date'].'</td>';
             $html .='</tr>';
             $html .='<tr>';
              $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Result of previous viral load(copies/ml)</td>';
-             $html .='<td colspan="2" style="font-size:10px;font-style:italic;text-align:left;">'.$result['last_viral_load_result'].'</td>';
+             $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result['last_viral_load_result'].'</td>';
             $html .='</tr>';
             $html .='<tr>';
              $html .='<td colspan="4" style="line-height:40px;border-bottom:1px solid #333;"></td>';
@@ -339,7 +339,7 @@ if(sizeof($requestResult)> 0){
                $html .='<table>';
                 $html .='<tr>';
                   $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:14px;height:14px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
-                  $html .='<td style="font-size:10px;font-style:italic;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;time '.$printDateTime.'</td>';
+                  $html .='<td style="font-size:10px;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;time '.$printDateTime.'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td colspan="2" style="line-height:10px;"></td>';
