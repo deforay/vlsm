@@ -137,7 +137,7 @@ try {
                     
                     $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='".$sampleVal."'";
                     $vlResult=$db->rawQuery($query);
-                    if($vlResult){
+                    if($vlResult && $sampleVal!=''){
                         if($vlResult[0]['log_value']!='' || $vlResult[0]['absolute_value']!='' || $vlResult[0]['text_value']!='' || $vlResult[0]['absolute_decimal_value']!=''){
                             $data['sample_details'] = 'Already Result Exist';
                         }else{
