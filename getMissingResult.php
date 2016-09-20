@@ -78,11 +78,11 @@ foreach($tsResult as $tsId){
             colorByPoint: true,
             point: {
 		events: {
-			click: function(e) {
-				//console.log(e.point.url);
-				location.href = e.point.url;
-				e.preventDefault();
-			}
+                     click: function(e) {
+                        //console.log(e.point.url);
+                        window.open(e.point.url, '_blank');
+                        e.preventDefault();
+                     }
 		}
 	    },
             data: [
