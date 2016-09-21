@@ -24,7 +24,7 @@ class MYPDF extends TCPDF {
         // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('helvetica', 'B');
+        $this->SetFont('helvetica', '');
         // Page number
         $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
@@ -69,7 +69,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('helvetica', 'I', 10);
+$pdf->SetFont('helvetica', '', 10);
 
 $pathFront=realpath('./uploads');
 //$pdf = new TCPDF();
@@ -216,8 +216,7 @@ $rejectionrResult = $db->rawQuery($rejectionrQuery);
     //set sample type
     $div = '';
     foreach($sTypeResult as $sType){
-     if($result[0]['sample_id']==$sType['sample_id'])
-     {
+     if($result[0]['sample_id']==$sType['sample_id']){
       $div .= '<input type="checkbox" name="check[]" id="name'.$sType['sample_id'].'" value="'.$sType['sample_name'].'" checked="checked" readonly="true"/>&nbsp;'.$sType['sample_name'];
      }else{
       $div .= '<input type="checkbox" name="check[]" id="name'.$sType['sample_id'].'" value="'.$sType['sample_name'].'" readonly="true"/>&nbsp;'.$sType['sample_name'];
