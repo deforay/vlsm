@@ -24,7 +24,7 @@ class MYPDF extends TCPDF {
         // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('helvetica', 'B');
+        $this->SetFont('helvetica', '');
         // Page number
         $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
@@ -61,7 +61,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // set font
-$pdf->SetFont('helvetica', 'I', 10);
+$pdf->SetFont('helvetica', '', 10);
 
 $pathFront=realpath('./uploads');
 //$pdf = new TCPDF();
