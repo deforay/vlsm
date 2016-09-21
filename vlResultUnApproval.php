@@ -2,6 +2,8 @@
 include('header.php');
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
+$userQuery="SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
 ?>
 <style>
     .dataTables_wrapper{
@@ -72,16 +74,30 @@ $tsResult = $db->rawQuery($tsQuery);
                 </tbody>
               </table>
             </div>
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">
+	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 75%;">
 	    <tr>
-		  <td><b>Comments&nbsp;:</b></td>
 		  <input type="hidden" name="checkedTests" id="checkedTests"/>
 		  <input type="hidden" name="checkedTestsIdValue" id="checkedTestsIdValue"/>
 		  <td>
-		    <textarea class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
+		    <b>Comments&nbsp;</b>
+		    <textarea style="height: 34px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
 		  </td>
-		  <td style="vertical-align: middle;">&nbsp;<input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
-		</tr>
+		<td>
+		  <b>Approved By&nbsp;</b>
+		  <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By" >
+			    <option value=""> -- Select -- </option>
+			    <?php
+			    foreach($userResult as $uName){
+			     ?>
+			     <option value="<?php echo $uName['user_id'];?>" <?php echo ($_SESSION['userId']==$uName['user_id'])?"selected='selected'":"";?>><?php echo ucwords($uName['user_name']);?></option>
+			     <?php
+			    }
+			    ?>
+		  </select>
+		</td>
+		  <td><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
+	      </tr>
+	    
 	  </table>
             <!-- /.box-body -->
           </div>
@@ -173,10 +189,12 @@ $tsResult = $db->rawQuery($tsQuery);
     id = $("#checkedTests").val();
     status = $("#checkedTestsIdValue").val();
     comments = $("#comments").val();
+    appBy = $("#approvedBy").val();
+    if(appBy!=''){
     conf=confirm("Do you wish to change the status ?");
     if(conf){
     $.blockUI();
-	$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments, format: "html"},
+	$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments,appBy:appBy, format: "html"},
 	       function(data){
 		if(data=='vlPrintResult.php')
 		{
@@ -193,6 +211,9 @@ $tsResult = $db->rawQuery($tsQuery);
       }else{
       oTable.fnDraw();
       }
+    }else{
+      alert("Please choose approved by field");
+    }
    }
    
   function updateStatus(value,status){
