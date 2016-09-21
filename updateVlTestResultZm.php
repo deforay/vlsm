@@ -24,11 +24,17 @@ $pdResult=$db->query($pdQuery);
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
-
+if(isset($facilityResult[0]['state']) && $facilityResult[0]['state']!=''){
+}else{
+  $facilityResult[0]['state'] = 0;
+}
 $stateName = $facilityResult[0]['state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
-
+if(isset($stateResult[0]['province_code']) && $stateResult[0]['province_code']!=''){
+}else{
+  $stateResult[0]['province_code'] = 0;
+}
 //district details
 $districtQuery="SELECT * from facility_details where state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
