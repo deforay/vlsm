@@ -199,11 +199,11 @@ if(sizeof($requestResult)> 0){
         }
         $smileyContent = '';
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
-         if(isset($result['result']) && trim($result['result'])!= '' && trim($result['result']) > 1000){
-           $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-         }else if(isset($result['result']) && trim($result['result'])!= '' && trim($result['result']) <= 1000){
-           $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-         }
+          if(trim($result['result']) > 1000 || strtolower(trim($result['result'])) == "target not detected"){
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+          }else if(trim($result['result']) <= 1000){
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+          }
         }
         $html = '';
         $html .= '<div style="">';
