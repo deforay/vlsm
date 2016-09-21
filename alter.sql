@@ -500,3 +500,6 @@ INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privi
 
 --Pal 20th-Sep'16
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '11', 'vlTestResultStatus.php', 'VL Test Result Status');
+
+--Pal 21st-Sep'16
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Default Time Zone', 'default_time_zone', 'Africa/Harare');
