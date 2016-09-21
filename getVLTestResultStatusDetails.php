@@ -9,7 +9,7 @@ $primaryKey="treament_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        $aColumns = array('vl.serial_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value');
+        $aColumns = array('vl.serial_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result');
         $orderColumns = array('vl.serial_no','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result');
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -199,7 +199,6 @@ $primaryKey="treament_id";
         );
         
         foreach ($rResult as $aRow) {
-	    $vlResult='';
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
 	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
 	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
@@ -216,14 +215,7 @@ $primaryKey="treament_id";
 	    $row[] = ucwords($aRow['state']);
 	    $row[] = ucwords($aRow['district']);
             $row[] = ucwords($aRow['sample_name']);
-	    if(trim($aRow['absolute_value'])!=''){
-		$vlResult=$aRow['absolute_value'];
-	    }else if(trim($aRow['log_value'])!=''){
-		$vlResult=$aRow['log_value'];
-	    }else if(trim($aRow['text_value'])!=''){
-		$vlResult=$aRow['text_value'];
-	    }
-            $row[] = ucwords($vlResult);
+            $row[] = $aRow['result'];
             $output['aaData'][] = $row;
         }
         
