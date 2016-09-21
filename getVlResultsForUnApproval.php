@@ -11,7 +11,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('tsr.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.date_sample_received_at_testing_lab,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.absolute_value','tsr.log_value','tsr.text_value','ts.status_name');
+        $aColumns = array('tsr.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.date_sample_received_at_testing_lab,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
         $orderColumns = array('tsr.sample_code','vl.sample_collection_date','vl.date_sample_received_at_testing_lab','fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -128,14 +128,6 @@ $tsResult = $db->rawQuery($tsQuery);
         );
         foreach ($rResult as $aRow) {
 	    $rsDetails = '';
-	    $vlResult = '';
-	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
-		$vlResult = $aRow['absolute_value'];
-	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
-		$vlResult = $aRow['log_value'];
-	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
-		$vlResult = $aRow['text_value'];
-	    }
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
 	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
 	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
@@ -151,18 +143,15 @@ $tsResult = $db->rawQuery($tsQuery);
             $row = array();
 	    if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
 		
-		if($aRow['sample_details']=='Already Result Exist')
-            {
+		if($aRow['sample_details']=='Already Result Exist'){
 		$rsDetails = 'Existing Result';
                 $color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
-	    if($aRow['sample_details']=='New Sample')
-            {
+	    if($aRow['sample_details']=='New Sample'){
 		$rsDetails = 'Unknown Sample';
 		$color = '<span style="color:#e8000b;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
-	    if($aRow['sample_details']=='')
-            {
+	    if($aRow['sample_details']==''){
 		$rsDetails = 'Result for Sample';
 		$color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
             }
@@ -185,7 +174,7 @@ $tsResult = $db->rawQuery($tsQuery);
 	    $row[] = $aRow['facility_name'];
 	    $row[] = $aRow['rejection_reason_name'];
 	    $row[] = ucwords($aRow['sample_type']);
-	    $row[] = $vlResult;
+	    $row[] = $aRow['result'];
 	    $row[] = $status;
 	    
 	    $output['aaData'][] = $row;

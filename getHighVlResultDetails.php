@@ -10,8 +10,8 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.absolute_value','cn.contact_notes','vl.contact_complete_status');
-        $orderColumns = array('vl.sample_code','vl.sample_collection_date','f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.absolute_value','cn.contact_notes','vl.contact_complete_status');
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.result','cn.contact_notes','vl.contact_complete_status');
+        $orderColumns = array('vl.sample_code','vl.sample_collection_date','f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.result','cn.contact_notes','vl.contact_complete_status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
