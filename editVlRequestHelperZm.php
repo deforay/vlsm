@@ -60,6 +60,13 @@ try {
           $_POST['patientPregnant']='';
           $_POST['breastfeeding']='';
      }
+     if($_POST['vlResult']!=''){
+          $_POST['result'] = $_POST['vlResult'];
+     }else if($_POST['vlLog']!=''){
+          $_POST['result'] = $_POST['vlLog'];
+     }else if($_POST['textValue']!=''){
+          $_POST['result'] = $_POST['textValue'];
+     }
      
      
      $vldata=array(
@@ -96,6 +103,7 @@ try {
           'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
           'absolute_value'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
+          'result'=>$_POST['result'],
           'comments'=>$_POST['labCommnets'],
           'result_approved_by'=>$_POST['approvedBy'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
