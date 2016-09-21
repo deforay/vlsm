@@ -46,7 +46,7 @@ try {
             $data['created_by']=$rResult[0]['result_reviewed_by'];
             $data['created_on']=$general->getDateTime();
             $data['modified_on']=$general->getDateTime();
-            $data['result_approved_by']=$_SESSION['userId'];
+            $data['result_approved_by']=$_POST['appBy'];
             $data['result_approved_on']=$general->getDateTime();
             $sampleVal = $rResult[0]['sample_code'];
             //get bacth code
@@ -104,7 +104,7 @@ try {
                         'created_by'=>$accResult[$i]['result_reviewed_by'],
                         'created_on'=>$general->getDateTime(),
                         'modified_on'=>$general->getDateTime(),
-                        'result_approved_by'=>$_SESSION['userId'],
+                        'result_approved_by'=>$_POST['appBy'],
                         'result_approved_on'=>$general->getDateTime(),
                         'file_name'=>$accResult[$i]['file_name'],
                         'status'=>'7'
