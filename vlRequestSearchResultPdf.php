@@ -7,6 +7,13 @@ include ('./includes/tcpdf/tcpdf.php');
 include ('./includes/fpdi/fpdi.php');
 define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
+$configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
+$configResult=$db->query($configQuery);
+if(isset($configResult) && count($configResult)> 0){
+  date_default_timezone_set($configResult[0]['value']);
+}else{
+  date_default_timezone_set("Europe/London");
+}
 $printedTime = date('Y-m-d H:i:s');
 $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
@@ -224,11 +231,7 @@ if(sizeof($requestResult)> 0){
             $html .='</tr>';
             $html .='<tr>';
               $html .='<td colspan="2"></td>';
-              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['district']).'</td>';
-            $html .='</tr>';
-            $html .='<tr>';
-              $html .='<td colspan="2"></td>';
-              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['facility_name']).'</td>';
+              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['district']).'<br><br>'.strtoupper($result['facility_name']).'</td>';
             $html .='</tr>';
             $html .='<tr>';
              $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
