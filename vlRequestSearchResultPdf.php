@@ -224,11 +224,7 @@ if(sizeof($requestResult)> 0){
             $html .='</tr>';
             $html .='<tr>';
               $html .='<td colspan="2"></td>';
-              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['district']).'</td>';
-            $html .='</tr>';
-            $html .='<tr>';
-              $html .='<td colspan="2"></td>';
-              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['facility_name']).'</td>';
+              $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['district']).'<br><br>'.strtoupper($result['facility_name']).'</td>';
             $html .='</tr>';
             $html .='<tr>';
              $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
