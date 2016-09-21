@@ -1,5 +1,4 @@
 <?php
-
 /**
  * General functions
  *
@@ -88,7 +87,7 @@ class Deforay_Commons_General {
         }
     }
     
-    public static function getDateTime($timezone = 'Asia/Calcutta') {
+    public static function getDateTime($timezone = 'Africa/Harare') {
         $date = new DateTime( date('Y-m-d H:i:s'), new DateTimeZone($timezone));
         return $date->format('Y-m-d H:i:s');
     }

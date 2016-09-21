@@ -5,6 +5,13 @@ include('./includes/MysqliDb.php');
 include('General.php');
 include ('./includes/tcpdf/tcpdf.php');
 define('UPLOAD_PATH','uploads');
+$configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
+$configResult=$db->query($configQuery);
+if(isset($configResult) && count($configResult)> 0){
+  date_default_timezone_set($configResult[0]['value']);
+}else{
+  date_default_timezone_set("Europe/London");
+}
 //header and footer
 class MYPDF extends TCPDF {
 

@@ -7,6 +7,13 @@ include ('./includes/tcpdf/tcpdf.php');
 include ('./includes/fpdi/fpdi.php');
 define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
+$configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
+$configResult=$db->query($configQuery);
+if(isset($configResult) && count($configResult)> 0){
+  date_default_timezone_set($configResult[0]['value']);
+}else{
+  date_default_timezone_set("Europe/London");
+}
 $printedTime = date('Y-m-d H:i:s');
 $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
