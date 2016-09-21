@@ -187,14 +187,6 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['gender']) || trim($result['gender'])== ''){
           $result['gender'] = 'not reported';
         }
-        $vlResult = '';
-        if(isset($result['absolute_value']) && trim($result['absolute_value'])!= ''){
-          $vlResult = $result['absolute_value'];
-        }elseif(isset($result['log_value']) && trim($result['log_value'])!= ''){
-          $vlResult = $result['log_value'];
-        }elseif(isset($result['text_value']) && trim($result['text_value'])!= ''){
-          $vlResult = $result['text_value'];
-        }
         if(isset($result['reviewedBy']) && trim($result['reviewedBy'])!= ''){
           $resultReviewedBy = ucwords($result['reviewedBy']);
         }else{
@@ -207,9 +199,9 @@ if(sizeof($requestResult)> 0){
         }
         $smileyContent = '';
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
-         if(isset($result['absolute_value']) && trim($result['absolute_value'])!= '' && trim($result['absolute_value']) > 1000){
+         if(isset($result['result']) && trim($result['result'])!= '' && trim($result['result']) > 1000){
            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-         }else if(isset($result['absolute_value']) && trim($result['absolute_value'])!= '' && trim($result['absolute_value']) <= 1000){
+         }else if(isset($result['result']) && trim($result['result'])!= '' && trim($result['result']) <= 1000){
            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
          }
         }
@@ -269,7 +261,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['serial_no'].'</td>';
                  $html .='</tr>';
                  $html .='<tr>';
-                  $html .='<td colspan="4" style="line-height:2px;border-bottom:2px solid #333;"></td>';
+                  $html .='<td colspan="4" style="line-height:6px;border-bottom:2px solid #333;"></td>';
                  $html .='</tr>';
                  $html .='<tr>';
                   $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient Id</td>';
@@ -319,7 +311,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
                 $html .='</tr>';
                 $html .='<tr>';
-                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$vlResult.'</td>';
+                  $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$result['result'].'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Reviewed by</td>';

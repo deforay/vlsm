@@ -17,7 +17,7 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
         $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -231,15 +231,7 @@ $primaryKey="treament_id";
 	    }else{
 		    $aRow['sample_collection_date'] = '';
 	    }
-	    
-	    $vlResult = '';
-	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
-		$vlResult = $aRow['absolute_value'];
-	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
-		$vlResult = $aRow['log_value'];
-	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
-		$vlResult = $aRow['text_value'];
-	    }
+	  
 	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['treament_id'].'" title="Please select status" onchange="updateStatus(this)">
  				<option value="">-- Select --</option>
 				<option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
@@ -254,7 +246,7 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['patient_name']);
 	    $row[] = ucwords($aRow['facility_name']);
 	    $row[] = ucwords($aRow['sample_name']);
-	    $row[] = $vlResult;
+	    $row[] = $aRow['result'];
 	    $row[] = $status;
 	    $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
 	    

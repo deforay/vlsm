@@ -136,7 +136,7 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Patient Code</th>
                   <th>Patient Name</th>
                   <th>Patient Phone</th>
-                  <th>Viral Load (absolute > 1000 cp/ml3)</th>
+                  <th>Viral Load (result > 1000 cp/ml3)</th>
                   <th>Contact Notes</th>
                   <th>Contact Completed</th>
 		  <?php if(isset($_SESSION['privileges']) && in_array("addContactNotes.php", $_SESSION['privileges'])){ ?>

@@ -16,7 +16,7 @@ $primaryKey="treament_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.absolute_value','vl.log_value','vl.text_value','ts.status_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
         $orderColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -205,15 +205,6 @@ $primaryKey="treament_id";
         );
 	
         foreach ($rResult as $aRow) {
-	    $vlResult = '';
-	    if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
-		$vlResult = $aRow['absolute_value'];
-	    }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
-		$vlResult = $aRow['log_value'];
-	    }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
-		$vlResult = $aRow['text_value'];
-	    }
-	    
             $row = array();
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $aRow['batch_code'];
@@ -221,7 +212,7 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
-            $row[] = $vlResult;
+            $row[] = $aRow['result'];
             $row[] = ucwords($aRow['status_name']);
             $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['treament_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
            
