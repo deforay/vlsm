@@ -49,6 +49,13 @@ try {
             $data['result_approved_by']=$_POST['appBy'];
             $data['result_approved_on']=$general->getDateTime();
             $sampleVal = $rResult[0]['sample_code'];
+            if($rResult[0]['absolute_value']!=''){
+                $data['result'] = $rResult[0]['absolute_value'];
+            }else if($rResult[0]['log_value']!=''){
+                $data['result'] = $rResult[0]['log_value'];
+            }else if($rResult[0]['text_value']!=''){
+                $data['result'] = $rResult[0]['text_value'];
+            }
             //get bacth code
             $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
             $bvlResult=$db->rawQuery($bquery);
@@ -109,6 +116,13 @@ try {
                         'file_name'=>$accResult[$i]['file_name'],
                         'status'=>'7'
                     );
+                if($accResult[$i]['absolute_value']!=''){
+                    $data['result'] = $rResult[0]['absolute_value'];
+                }else if($accResult[$i]['log_value']!=''){
+                    $data['result'] = $rResult[0]['log_value'];
+                }else if($accResult[$i]['text_value']!=''){
+                    $data['result'] = $rResult[0]['text_value'];
+                }
             //get bacth code
                 $bquery="select * from batch_details where batch_code='".$accResult[$i]['batch_code']."'";
                 $bvlResult=$db->rawQuery($bquery);
