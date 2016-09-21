@@ -1,7 +1,13 @@
 <?php
 session_start();
 include('./includes/MysqliDb.php');
-date_default_timezone_set("Europe/London"); 
+$configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
+$configResult=$db->query($configQuery);
+if(isset($configResult) && count($configResult)> 0){
+    date_default_timezone_set($configResult[0]['value']);
+}else{
+    date_default_timezone_set("Europe/London");
+}
 if(!isset($_SESSION['userId'])){
     header("location:login.php");
 }

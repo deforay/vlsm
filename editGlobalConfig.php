@@ -50,6 +50,16 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
+                      <label for="default_time_zone" class="col-lg-4 control-label">Default Time Zone </label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control" id="default_time_zone" name="default_time_zone" placeholder="eg: Africa/Harare" title="Please enter default time zone" value="<?php echo $arr['default_time_zone']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
                       <label for="header" class="col-lg-4 control-label">Header </label>
                       <div class="col-lg-8">
                         <textarea class="form-control" id="header" name="header" placeholder="Header" title="Please enter header" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['header']; ?></textarea>

@@ -5,6 +5,13 @@ include('./includes/MysqliDb.php');
 include('General.php');
 include ('./includes/tcpdf/tcpdf.php');
 define('UPLOAD_PATH','uploads');
+$configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
+$configResult=$db->query($configQuery);
+if(isset($configResult) && count($configResult)> 0){
+  date_default_timezone_set($configResult[0]['value']);
+}else{
+  date_default_timezone_set("Europe/London");
+}
 //header and footer
 class MYPDF extends TCPDF {
 
@@ -191,11 +198,7 @@ $html.='<table style="padding:2px;">';
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td colspan="2"></td>';
-      $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result[0]['district']).'</td>';
-    $html .='</tr>';
-    $html .='<tr>';
-      $html .='<td colspan="2"></td>';
-      $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result[0]['facility_name']).'</td>';
+      $html .='<td colspan="2" style="line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result[0]['district']).'<br><br>'.strtoupper($result[0]['facility_name']).'</td>';
     $html .='</tr>';
     $html .='<tr>';
      $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
