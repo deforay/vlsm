@@ -125,14 +125,13 @@ $batResult = $db->rawQuery($batQuery);
 				</div>
 			    </div>
 			</span>
-            <div class="box-header with-border">
+			<div class="box-header with-border">
 			  <?php 
 			  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
-              <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
-			  <?php } 
+			      <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
+			  <?php }
 			  ?>
-	      
-            </div>
+			</div>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
