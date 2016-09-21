@@ -89,7 +89,7 @@ foreach($tsResult as $tsId){
             <?php
             foreach($tResult as $total){
                 ?>
-                {name:'<?php echo ucwords($total[0]['status_name']);?>',y:<?php echo ucwords($total[0]['total']);?>,url:'/vlTestResultStatus.php?id=<?php echo base64_encode($total[0]['status_id']); ?>'},
+                {name:'<?php echo ucwords($total[0]['status_name']);?>',y:<?php echo ucwords($total[0]['total']);?>,url:'vlTestResultStatus.php?id=<?php echo base64_encode($total[0]['status_id']); ?>'},
                 <?php
             }
             ?>
