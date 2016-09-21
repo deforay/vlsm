@@ -227,13 +227,13 @@ if(sizeof($requestResult)> 0){
               $html .='<table>';
                $html .='<tr>';
                 $html .='<td style="width:50%;"></td>';
-                 $html .='<td style="width:25%;line-height:22px;font-size:13px;font-weight:bold;text-align:left;">District</td>';
-                $html .='<td style="width:25%;line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['district']).'</td>';
+                 $html .='<td style="width:25%;line-height:22px;font-size:13px;font-weight:bold;text-align:left;">&nbsp;District</td>';
+                $html .='<td style="width:25%;line-height:12px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['district']).'</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td style="width:50%;"></td>';
-                 $html .='<td style="width:25%;line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic Name</td>';
-                $html .='<td style="width:25%;line-height:12px;font-size:12px;text-align:left;">'.strtoupper($result['facility_name']).'</td>';
+                 $html .='<td style="width:25%;line-height:22px;font-size:13px;font-weight:bold;text-align:left;">&nbsp;Clinic Name</td>';
+                $html .='<td style="width:25%;line-height:12px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['facility_name']).'</td>';
               $html .='</tr>';
               $html .='</table>';
               $html .='</td>';
