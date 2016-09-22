@@ -4,8 +4,6 @@ ob_start();
 //include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
