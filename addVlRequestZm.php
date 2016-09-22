@@ -299,8 +299,6 @@ if($urgency==''){
                         </td>
                       </tr>
                       <tr>
-                        
-                        
                         <td><label for="ageInMonths">Age in months</label></td>
                         <td>
                           <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" >
@@ -478,7 +476,6 @@ if($urgency==''){
                         <td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" /></td>
                         <?php
                         if($autoApprovalFieldStatus == 'show'){ ?>
-                        ?>
                          <td><label>Approved By</label></td>
                          <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>
                         <?php } else { ?>
