@@ -202,6 +202,7 @@ if(sizeof($requestResult)> 0){
         $vlResult = '';
         $smileyContent = '';
         $showMessage = '';
+        $fontBig = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
           if(strtolower(trim($result['result'])) == "target not detected"){
             $vlResult = 'TND*';
@@ -211,6 +212,7 @@ if(sizeof($requestResult)> 0){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment';
+            $fontBig = '18px';
           }else if(trim($result['result']) <= 1000){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
@@ -342,7 +344,7 @@ if(sizeof($requestResult)> 0){
                 $html .='</tr>';
                 if(trim($showMessage)!= ''){
                   $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$showMessage.'</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:'.$fontBig.';text-align:left;">'.$showMessage.'</td>';
                   $html .='</tr>';
                 }
                 $html .='<tr>';
