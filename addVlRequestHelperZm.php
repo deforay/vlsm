@@ -113,7 +113,7 @@ try {
           'comments'=>$_POST['labCommnets'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
-          'result_reviewed_by'=>$_SESSION['userId'],
+          'result_reviewed_by'=>$_POST['reviewedBy'],
           'result_approved_by'=>$_POST['approvedBy'],
           'status'=>$status,
           'created_by'=>$_SESSION['userId'],

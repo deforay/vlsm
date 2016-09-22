@@ -105,6 +105,7 @@ try {
           'log_value'=>$_POST['vlLog'],
           'result'=>$_POST['result'],
           'comments'=>$_POST['labCommnets'],
+          'result_reviewed_by'=>$_POST['reviewedBy'],
           'result_approved_by'=>$_POST['approvedBy'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],

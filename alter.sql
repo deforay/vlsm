@@ -503,3 +503,8 @@ INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privi
 
 --Pal 21st-Sep'16
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Default Time Zone', 'default_time_zone', 'Africa/Harare');
+
+
+--saravanan 22-sep-2016
+ALTER TABLE  `vl_request_form` CHANGE  `result_approved_by`  `result_approved_by` VARCHAR( 255 ) NULL DEFAULT NULL ;
+ALTER TABLE  `vl_request_form` CHANGE  `result_reviewed_by`  `result_reviewed_by` VARCHAR( 255 ) NULL DEFAULT NULL ;
