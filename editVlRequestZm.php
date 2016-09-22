@@ -4,8 +4,8 @@ ob_start();
 //include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
+//$userQuery="SELECT * FROM user_details where status='active'";
+//$userResult = $db->rawQuery($userQuery);
 $vlQuery="SELECT * from vl_request_form where treament_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -436,27 +436,18 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       </tr>
                       <tr class="">
                         <td><label class="noResult">If no result</label></td>
-                        <td colspan="3">
+                        <td>
                           <label class="radio-inline noResult">
                              <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" <?php echo ($vlQueryInfo[0]['rejection']=='sample_rejected')?"checked='checked'":""?>> Sample Rejected
                           </label>
-                          <label class="radio-inline noResult">
-                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['rejection']=='technical_error')?"checked='checked'":""?>> Lab testing Technical Error
+                          <label class="radio-inline noResult" style="margin-left: 0px;">
+                              <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['rejection']=='technical_error')?"checked='checked'":""?>> Lab testing Technical Error
                           </label>
                         </td>
+                        <td><label>Reviewed By</label></td>
+                        <td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>
                         <td><label>Approved By</label></td>
-                        <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By">
-                              <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($userResult as $uName){
-                               ?>
-                               <option value="<?php echo $uName['user_id'];?>"<?php echo ($vlQueryInfo[0]['result_approved_by']==$uName['user_id'])?"selected='selected'":""?>><?php echo ucwords($uName['user_name']);?></option>
-                               <?php
-                              }
-                              ?>
-                          </select>
-                        </td>
+                        <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>

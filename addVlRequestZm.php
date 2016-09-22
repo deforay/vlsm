@@ -458,28 +458,18 @@ if($urgency==''){
                       </tr>
                       <tr>
                         <td><label class="noResult">If no result</label></td>
-                        <td colspan="3">
+                        <td>
                           <label class="radio-inline noResult">
                              <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result"> Sample Rejected
                           </label>
-                          <label class="radio-inline noResult">
+                          <label class="radio-inline noResult" style="margin-left: 0px;">
                                   <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"> Lab testing Technical Error
                           </label>
                         </td>
+                        <td><label>Reviewed By</label></td>
+                        <td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" /></td>
                         <td><label>Approved By</label></td>
-                        <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By">
-                              <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($userResult as $uName){
-                               ?>
-                               <option value="<?php echo $uName['user_id'];?>"><?php echo ucwords($uName['user_name']);?></option>
-                               <?php
-                              }
-                              ?>
-                          </select>
-                        </td>
-                        <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>-->
+                        <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
