@@ -508,3 +508,6 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Default T
 --saravanan 22-sep-2016
 ALTER TABLE  `vl_request_form` CHANGE  `result_approved_by`  `result_approved_by` VARCHAR( 255 ) NULL DEFAULT NULL ;
 ALTER TABLE  `vl_request_form` CHANGE  `result_reviewed_by`  `result_reviewed_by` VARCHAR( 255 ) NULL DEFAULT NULL ;
+
+--Pal 22nd-Sep'16
+ALTER TABLE `vl_request_form` ADD `date_result_printed` DATETIME NULL DEFAULT NULL AFTER `vl_test_platform`;
