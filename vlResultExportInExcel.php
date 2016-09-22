@@ -14,7 +14,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Serial No.","Batch Code","Urgency","Province","District","Clinic Name","Clinician Name","Sample Collection Date","Sample Received Date","Collected By","Patient Name","Gender","DOB","Age In Years","Age In Months","Patient Pregnant","Patient BreastFeeding","ART Number","ART Initiation","ART Regimen","SMS Notification","Mobile Number","Date Of Last Viral Load Test","Result Of Last Viral Load","Viral Load Log","Reason For VL Test","LAB Name","LAB No.","VL Testing Platform","Specimen Type","Sample Testing Date","Viral Load Result","No Result","Reviewed By","Approved By","Approved On","Comments","Status");
+ $headings = array("Serial No.","Batch Code","Urgency","Province","District","Clinic Name","Clinician Name","Sample Collection Date","Sample Received Date","Collected By","Patient Name","Gender","DOB","Age In Years","Age In Months","Patient Pregnant","Patient BreastFeeding","ART Number","ART Initiation","ART Regimen","SMS Notification","Mobile Number","Date Of Last Viral Load Test","Result Of Last Viral Load","Viral Load Log","Reason For VL Test","LAB Name","LAB No.","VL Testing Platform","Specimen Type","Sample Testing Date","Last Print On","Viral Load Result","No Result","Reviewed By","Approved By","Approved On","Comments","Status");
  
  $colNo = 0;
  
@@ -51,7 +51,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $colNo++;
   
  }
- $sheet->getStyle('A1:AL1')->applyFromArray($styleArray);
+ $sheet->getStyle('A1:AM1')->applyFromArray($styleArray);
  
  foreach ($rResult as $aRow) {
   $row = array();
@@ -105,6 +105,13 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['lab_tested_date']='';
   }
   
+  if(isset($aRow['date_result_printed']) && trim($aRow['date_result_printed'])!='' && $aRow['date_result_printed']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['date_result_printed']);
+   $aRow['date_result_printed']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  }else{
+   $aRow['date_result_printed']='';
+  }
+  
   $row[] = $aRow['serial_no'];
   $row[] = $aRow['batch_code'];
   $row[] = ucwords($aRow['urgency']);
@@ -136,6 +143,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = ucwords($aRow['vl_test_platform']);
   $row[] = $aRow['sample_name'];
   $row[] = $aRow['sample_testing_date'];
+  $row[] = $aRow['date_result_printed'];
   $vlResult = '';
   if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
        $vlResult = $aRow['absolute_value'];

@@ -115,12 +115,22 @@ $primaryKey="treament_id";
 	$eTestDate = '';
 	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 	   $s_t_date = explode("to", $_POST['sampleTestDate']);
-	   //print_r($s_c_date);die;
 	   if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
 	     $sTestDate = $general->dateFormat(trim($s_t_date[0]));
 	   }
 	   if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
 	     $eTestDate = $general->dateFormat(trim($s_t_date[1]));
+	   }
+	}
+	$sPrintDate = '';
+	$ePrintDate = '';
+	if(isset($_POST['printDate']) && trim($_POST['printDate'])!= ''){
+	   $s_p_date = explode("to", $_POST['printDate']);
+	   if (isset($s_p_date[0]) && trim($s_p_date[0]) != "") {
+	     $sPrintDate = $general->dateFormat(trim($s_p_date[0]));
+	   }
+	   if (isset($s_p_date[1]) && trim($s_p_date[1]) != "") {
+	     $ePrintDate = $general->dateFormat(trim($s_p_date[1]));
 	   }
 	}
 	  
@@ -143,6 +153,13 @@ $primaryKey="treament_id";
 		    $sWhere = $sWhere.' AND DATE(vl.sample_testing_date) = "'.$sTestDate.'"';
 		}else{
 		   $sWhere = $sWhere.' AND DATE(vl.sample_testing_date) >= "'.$sTestDate.'" AND DATE(vl.sample_testing_date) <= "'.$eTestDate.'"';
+		}
+           }
+	   if(isset($_POST['printDate']) && trim($_POST['printDate'])!= ''){
+		if (trim($sPrintDate) == trim($eTestDate)) {
+		    $sWhere = $sWhere.' AND DATE(vl.date_result_printed) = "'.$sPrintDate.'"';
+		}else{
+		   $sWhere = $sWhere.' AND DATE(vl.date_result_printed) >= "'.$sPrintDate.'" AND DATE(vl.date_result_printed) <= "'.$ePrintDate.'"';
 		}
            }
 	   if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
@@ -195,6 +212,15 @@ $primaryKey="treament_id";
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
 	        $sWhere = $sWhere.' DATE(vl.sample_testing_date) >= "'.$sTestDate.'" AND DATE(vl.sample_testing_date) <= "'.$eTestDate.'"';
+		}
+	    }
+	    if(isset($_POST['printDate']) && trim($_POST['printDate'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND DATE(vl.date_result_printed) >= "'.$sPrintDate.'" AND DATE(vl.date_result_printed) <= "'.$ePrintDate.'"';
+		}else{
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' DATE(vl.date_result_printed) >= "'.$sPrintDate.'" AND DATE(vl.date_result_printed) <= "'.$ePrintDate.'"';
 		}
 	    }
 	    if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
