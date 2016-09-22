@@ -456,7 +456,6 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>
                         <?php
                         if($autoApprovalFieldStatus == 'show'){ ?>
-                        ?>
                           <td><label>Approved By</label></td>
                           <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>
                         <?php } else { ?>
