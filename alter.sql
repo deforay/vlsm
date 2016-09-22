@@ -511,3 +511,5 @@ ALTER TABLE  `vl_request_form` CHANGE  `result_reviewed_by`  `result_reviewed_by
 
 --Pal 22nd-Sep'16
 ALTER TABLE `vl_request_form` ADD `date_result_printed` DATETIME NULL DEFAULT NULL AFTER `vl_test_platform`;
+
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'patientList.php', 'Export Patient List');
