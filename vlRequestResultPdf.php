@@ -165,19 +165,28 @@ if(isset($result[0]['result_approved_by']) && trim($result[0]['result_approved_b
 }else{
   $resultApprovedBy  = '';
 }
+$vlResult = '';
 $smileyContent = '';
-$showMessage = 'no';
-if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
-  if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
-    if(trim($result[0]['result']) > 1000 || strtolower(trim($result[0]['result'])) == "target not detected"){
-      $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-      $showMessage = 'no';
-    }else if(trim($result[0]['result']) <= 1000){
-      $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-      $showMessage = 'yes';
-    }
+$showMessage = '';
+if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
+  if(strtolower(trim($result[0]['result'])) == "target not detected"){
+    $vlResult = 'TND*';
+    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+    $showMessage = 'TND* - Target not Detectable';
+  }else if(trim($result[0]['result']) > 1000){
+    $vlResult = $result[0]['result'];
+    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+    $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment';
+  }else if(trim($result[0]['result']) <= 1000){
+    $vlResult = $result[0]['result'];
+    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+    $showMessage = 'Viral load adequately controlled : continue current regimen';
   }
 }
+if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
+  $smileyContent = '';
+}
+
 $html = '';
 $html .= '<div style="">';
 $html.='<table style="padding:2px;">';
@@ -289,7 +298,7 @@ $html.='<table style="padding:2px;">';
           $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
         $html .='</tr>';
         $html .='<tr>';
-          $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['result'].'</td>';
+          $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$vlResult.'</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Reviewed by</td>';
@@ -297,9 +306,9 @@ $html.='<table style="padding:2px;">';
           $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
         $html .='</tr>';
-        if($showMessage == 'yes'){
+        if(trim($showMessage)!= ''){
           $html .='<tr>';
-            $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">Viral load adequately controlled : continue current regimen</td>';
+            $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$showMessage.'</td>';
           $html .='</tr>';
         }
         $html .='<tr>';
