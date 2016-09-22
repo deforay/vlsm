@@ -33,7 +33,6 @@ $userResult = $db->rawQuery($userQuery);
             <div class="box-header with-border">
 			  <div class="box-header with-border">
 			  <!--<div class="col-md-4 col-sm-4">
-				
 				<select style="" class="form-control" id="status" name="status" title="Please select test status" >
 				  <option value="">-- Select --</option>
 				  <option value="7">Accepted</option>
@@ -96,7 +95,7 @@ $userResult = $db->rawQuery($userQuery);
 		  </select>
 		</td>
 		  <td><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
-	      </tr>
+	    </tr>
 	    
 	  </table>
             <!-- /.box-body -->
