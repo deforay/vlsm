@@ -168,6 +168,7 @@ if(isset($result[0]['result_approved_by']) && trim($result[0]['result_approved_b
 $vlResult = '';
 $smileyContent = '';
 $showMessage = '';
+$fontBig = '12px';
 if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
   if(strtolower(trim($result[0]['result'])) == "target not detected"){
     $vlResult = 'TND*';
@@ -177,6 +178,7 @@ if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
     $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment';
+    $fontBig = '18px';
   }else if(trim($result[0]['result']) <= 1000){
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
@@ -308,7 +310,7 @@ $html.='<table style="padding:2px;">';
         $html .='</tr>';
         if(trim($showMessage)!= ''){
           $html .='<tr>';
-            $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$showMessage.'</td>';
+            $html .='<td colspan="4" style="line-height:22px;font-size:'.$fontBig.';text-align:left;">'.$showMessage.'</td>';
           $html .='</tr>';
         }
         $html .='<tr>';
