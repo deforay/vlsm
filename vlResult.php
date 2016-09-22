@@ -16,11 +16,13 @@ $batResult = $db->rawQuery($batQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Export Result</h1>
-      <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Export Result</li>
-      </ol>
+      <h1>Export Result
+      <!--<ol class="breadcrumb">-->
+      <!--  <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>-->
+      <!--  <li class="active">Export Result</li>-->
+      <!--</ol>-->
+      <button class="btn btn-info pull-right" type="button" onclick="exportInexcel()">Export to excel</button>
+      </h1>
     </section>
 
      <!-- Main content -->
@@ -79,9 +81,29 @@ $batResult = $db->rawQuery($batQuery);
 		    
 		</tr>
 		<tr>
+		    <td><b>Sample Test Date&nbsp;:</b></td>
+		    <td>
+		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+		    </td>
+		    <td>&nbsp;<b>Viral Load &nbsp;:</b></td>
+		    <td>
+		      <select class="form-control" id="vLoad" name="vLoad" title="Please select batch code">
+		         <option value=""> -- Select -- </option>
+			 <option value="<=1000"><= 1000 cp/ml</option>
+			 <option value=">1000">> 1000 cp/ml</option>
+		      </select>
+		    </td>
+		</tr>
+		<tr>
+		    <td><b>Last Print Date&nbsp;:</b></td>
+		    <td>
+		      <input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;"/>
+		    </td>
+		</tr>
+		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-			&nbsp;&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
+			
 			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 			</td>
 		</tr>
@@ -180,7 +202,47 @@ $batResult = $db->rawQuery($batQuery);
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
+     $('#sampleTestDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+	    separator: ' to ',
+            startTestDate: moment().subtract('days', 29),
+            endTestDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startTestDate = start.format('YYYY-MM-DD');
+            endTestDate = end.format('YYYY-MM-DD');
+      });
+     $('#printDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+	    separator: ' to ',
+            startPrintDate: moment().subtract('days', 29),
+            endPrintDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startPrintDate = start.format('YYYY-MM-DD');
+            endPrintDate = end.format('YYYY-MM-DD');
+      });
+     $('#printDate').val("");
      $('#sampleCollectionDate').val("");
+     $('#sampleTestDate').val("");
      loadVlRequestData();
      
      $(".showhideCheckBox").change(function(){
@@ -243,8 +305,11 @@ $batResult = $db->rawQuery($batQuery);
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 			  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
 			  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+			  aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
+			  aoData.push({"name": "printDate", "value": $("#printDate").val()});
 			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 			  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+			  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
