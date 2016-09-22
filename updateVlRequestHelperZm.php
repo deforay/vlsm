@@ -24,6 +24,7 @@ try {
           'log_value'=>$_POST['vlLog'],
           'comments'=>$_POST['labCommnets'],
           'result_approved_by'=>$_POST['approvedBy'],
+          'result_reviewed_by'=>$_POST['reviewedBy'],
           'rejection'=>$_POST['noResult'],
           'status'=>$_POST['status'],
           'modified_on'=>$general->getDateTime()
