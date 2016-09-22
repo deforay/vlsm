@@ -300,10 +300,10 @@ if($urgency==''){
                         <td class="femaleElements"><label for="patientPregnant">Is Patient Pregnant ?</label></td>
                         <td class="femaleElements">
                           <label class="radio-inline">
-                           <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" > Yes
+                           <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" onclick="checkPatientIsPregnant(this.value);"> Yes
                           </label>
                           <label class="radio-inline">
-                           <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" > No
+                           <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" onclick="checkPatientIsPregnant(this.value);"> No
                           </label>
                         </td>
                         
@@ -369,7 +369,7 @@ if($urgency==''){
                         <td><input type="text" class="form-control" id="viralLoadLog" name="viralLoadLog" placeholder="Enter Viral Load Log" title="Enter Viral Load Log" style="width:100%;" /></td>
                       </tr>
                       <tr>
-                        <td><label for="vlTestReason">Reason For VL test</label></td>
+                        <td><label for="vlTestReason">Reason For VL Test</label></td>
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
                             <option value=""> -- Select -- </option>
@@ -378,7 +378,7 @@ if($urgency==''){
                             <option value="clinical_failure">Clinical Failure</option>
                             <option value="immunological_failure">Immunological Failure</option>
                             <option value="single_drug_substitution">Single Drug Substitution</option>
-                            <option value="pregnant_other">Pregnant Mother</option>
+                            <option value="pregnant_mother">Pregnant Mother</option>
                             <option value="lactating_mother">Lactating Mother</option>
                             <option value="baseline_VL">Baseline VL</option>
                            </select>
@@ -760,6 +760,20 @@ $("#vlLog").bind("keyup change", function(e) {
             }
         });
     }
+    function checkPatientIsPregnant(value)
+    {
+      if(value=='yes')
+      {
+        $("select option[value*='pregnant_mother']").prop('disabled',false);
+      }else{
+        if($("#vlTestReason").val()=='pregnant_mother'){
+          $("#vlTestReason").val('');
+        }
+        $("select option[value*='pregnant_mother']").prop('disabled',true);
+      }
+    }
+    
+    
 </script>
   
  <?php
