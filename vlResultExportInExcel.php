@@ -51,7 +51,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $colNo++;
   
  }
- $sheet->getStyle('A1:AJ1')->applyFromArray($styleArray);
+ $sheet->getStyle('A1:AL1')->applyFromArray($styleArray);
  
  foreach ($rResult as $aRow) {
   $row = array();
