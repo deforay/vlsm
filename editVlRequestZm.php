@@ -274,10 +274,10 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td class="femaleElements" <?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>><label for="patientPregnant">Is Patient Pregnant ?</label></td>
                         <td class="femaleElements" <?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
                           <label class="radio-inline">
-                           <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='yes')?"checked='checked'":""?> > Yes
+                           <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='yes')?"checked='checked'":""?>  onclick="checkPatientIsPregnant(this.value);"> Yes
                           </label>
                           <label class="radio-inline">
-                           <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='no')?"checked='checked'":""?> > No
+                           <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='no')?"checked='checked'":""?>  onclick="checkPatientIsPregnant(this.value);"> No
                           </label>
                         </td>
                         
@@ -354,7 +354,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                             <option value="clinical_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='clinical_failure')?"selected='selected'":""?>>Clinical Failure</option>
                             <option value="immunological_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='immunological_failure')?"selected='selected'":""?>>Immunological Failure</option>
                             <option value="single_drug_substitution" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='single_drug_substitution')?"selected='selected'":""?>>Single Drug Substitution</option>
-                            <option value="pregnant_other" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='pregnant_other')?"selected='selected'":""?>>Pregnant Mother</option>
+                            <option value="pregnant_mother" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='pregnant_mother')?"selected='selected'":""?>>Pregnant Mother</option>
                             <option value="lactating_mother" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='lactating_mother')?"selected='selected'":""?>>Lactating Mother</option>
                             <option value="baseline_VL" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='baseline_VL')?"selected='selected'":""?>>Baseline VL</option>                            
                            </select>
@@ -613,6 +613,9 @@ $("#vlLog").bind("keyup change", function(e) {
      if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!= ''){ ?>
        getDateOfBirth("ld");
      <?php }
+     if(isset($vlQueryInfo[0]['is_patient_pregnant']) && trim($vlQueryInfo[0]['is_patient_pregnant'])!= ''){ ?>
+       checkPatientIsPregnant('<?php echo $vlQueryInfo[0]['is_patient_pregnant'];?>');
+     <?php }
      ?>
   });
   $("input:radio[name=gender]").click(function() {
@@ -737,6 +740,18 @@ $("#vlLog").bind("keyup change", function(e) {
                 $(".removeValue").val('');
             }
         });
+    }
+    function checkPatientIsPregnant(value)
+    {
+      if(value=='yes')
+      {
+        $("select option[value*='pregnant_mother']").prop('disabled',false);
+      }else{
+        if($("#vlTestReason").val()=='pregnant_mother'){
+          $("#vlTestReason").val('');
+        }
+        $("select option[value*='pregnant_mother']").prop('disabled',true);
+      }
     }
 </script>
   
