@@ -4,6 +4,14 @@ ob_start();
 //include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
+$autoApprovalFieldStatus = 'show';
+if($_SESSION['roleCode'] == "DE"){
+  $configQuery="SELECT value FROM global_config WHERE name = 'auto_approval'";
+  $configResult=$db->query($configQuery);
+  if(isset($configResult) && count($configResult)> 0 && $configResult[0]['value'] == 'no'){
+    $autoApprovalFieldStatus = 'hide';
+  }
+}
 //$userQuery="SELECT * FROM user_details where status='active'";
 //$userResult = $db->rawQuery($userQuery);
 $vlQuery="SELECT * from vl_request_form where treament_id=$id";
@@ -446,8 +454,14 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         </td>
                         <td><label>Reviewed By</label></td>
                         <td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>
-                        <td><label>Approved By</label></td>
-                        <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>
+                        <?php
+                        if($autoApprovalFieldStatus == 'show'){ ?>
+                        ?>
+                          <td><label>Approved By</label></td>
+                          <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>
+                        <?php } else { ?>
+                          <td colspan="2"></td>
+                        <?php } ?>
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>

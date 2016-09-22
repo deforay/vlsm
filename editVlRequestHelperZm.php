@@ -68,7 +68,6 @@ try {
           $_POST['result'] = $_POST['textValue'];
      }
      
-     
      $vldata=array(
           'urgency'=>$_POST['urgency'],
           'serial_no'=>$_POST['serialNo'],
@@ -106,11 +105,13 @@ try {
           'result'=>$_POST['result'],
           'comments'=>$_POST['labCommnets'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
-          'result_approved_by'=>$_POST['approvedBy'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
           'modified_on'=>$general->getDateTime()
         );
+          if(isset($_POST['approvedBy'])){
+            $vldata['result_approved_by'] = $_POST['approvedBy'];
+          } 
           //print_r($vldata);die;
           $db=$db->where('treament_id',$_POST['treamentId']);
           $db->update($tableName,$vldata);

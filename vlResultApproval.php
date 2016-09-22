@@ -84,15 +84,15 @@ $batResult = $db->rawQuery($batQuery);
 		
 	    </table>
             <div class="box-header with-border">
-			  <div class="col-md-4 col-sm-4">
-				<input type="hidden" name="checkedTests" id="checkedTests"/>
-				<select style="" class="form-control" id="status" name="status" title="Please select test status" disabled="disabled">
-				<option value="">-- Select at least one sample to apply bulk action --</option>
-				<option value="7">Accepted</option>
- 				<option value="4">Rejected</option>
-				</select>
-				</div>
-			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Bulk Action" class="btn btn-success btn-sm"></div>
+		<div class="col-md-5 col-sm-5">
+		    <input type="hidden" name="checkedTests" id="checkedTests"/>
+		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled="disabled">
+		      <option value="">-- Select at least one sample to apply bulk action --</option>
+		      <option value="7">Accepted</option>
+		      <option value="4">Rejected</option>
+		    </select>
+		</div>
+		<div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Bulk Action" class="btn btn-success btn-sm"></div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
