@@ -113,6 +113,10 @@
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlHighMenu").addClass('active');
+  }else if (splitsUrl=='patientList.php') {
+    $(".program").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".patientList").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');
