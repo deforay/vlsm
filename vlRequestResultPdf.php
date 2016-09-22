@@ -165,11 +165,15 @@ if(isset($result[0]['approvedBy']) && trim($result[0]['approvedBy'])!= ''){
   $resultApprovedBy  = '';
 }
 $smileyContent = '';
+$showMessage = 'no';
 if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
-  if(trim($result[0]['result']) > 1000 || strtolower(trim($result[0]['result'])) == "target not detected"){
-    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-  }else if(trim($result[0]['result']) <= 1000){
-    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+  if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
+    if(trim($result[0]['result']) > 1000 || strtolower(trim($result[0]['result'])) == "target not detected"){
+      $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+      $showMessage = 'yes';
+    }else if(trim($result[0]['result']) <= 1000){
+      $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+    }
   }
 }
 $html = '';
@@ -194,12 +198,12 @@ $html.='<table style="padding:2px;">';
       $html .='<table>';
        $html .='<tr>';
         $html .='<td style="width:50%;"></td>';
-         $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">&nbsp;District</td>';
+         $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">District</td>';
         $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result[0]['district']).'</td>';
       $html .='</tr>';
       $html .='<tr>';
         $html .='<td style="width:50%;"></td>';
-         $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">&nbsp;Clinic Name</td>';
+         $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Clinic Name</td>';
         $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result[0]['facility_name']).'</td>';
       $html .='</tr>';
       $html .='</table>';
@@ -291,9 +295,11 @@ $html.='<table style="padding:2px;">';
           $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
         $html .='</tr>';
-        $html .='<tr>';
-          $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">Viral load adequately controlled : continue current regimen</td>';
-        $html .='</tr>';
+        if($showMessage == 'yes'){
+          $html .='<tr>';
+            $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">Viral load adequately controlled : continue current regimen</td>';
+          $html .='</tr>';
+        }
         $html .='<tr>';
           $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
         $html .='</tr>';
