@@ -70,7 +70,9 @@ try {
      }else if($_POST['vlLog']!=''){
           $_POST['result'] = $_POST['vlLog'];
      }
-     
+     if(!isset($_POST['approvedBy'])){
+          $_POST['approvedBy'] = '';
+     }
      
      $vldata=array(
           'urgency'=>$_POST['urgency'],
