@@ -341,7 +341,7 @@ $tsResult = $db->rawQuery($tsQuery);
                             <option value="clinical_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='clinical_failure')?"selected='selected'":""?>>Clinical Failure</option>
                             <option value="immunological_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='immunological_failure')?"selected='selected'":""?>>Immunological Failure</option>
                             <option value="single_drug_substitution" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='single_drug_substitution')?"selected='selected'":""?>>Single Drug Substitution</option>
-                            <option value="pregnant_other" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='pregnant_other')?"selected='selected'":""?>>Pregnant Mother</option>
+                            <option value="pregnant_mother" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='pregnant_mother')?"selected='selected'":""?>>Pregnant Mother</option>
                             <option value="lactating_mother" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='lactating_mother')?"selected='selected'":""?>>Lactating Mother</option>
                             <option value="baseline_VL" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='baseline_VL')?"selected='selected'":""?>>Baseline VL</option>                            
                            </select>
@@ -420,27 +420,18 @@ $tsResult = $db->rawQuery($tsQuery);
                       </tr>
                       <tr class="">
                         <td><label class="noResult">If no result</label></td>
-                        <td colspan="3">
+                        <td>
                           <label class="radio-inline noResult">
                              <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" <?php echo ($vlQueryInfo[0]['rejection']=='sample_rejected')?"checked='checked'":""?>> Sample Rejected
                           </label>
-                          <label class="radio-inline noResult">
+                          <label class="radio-inline noResult" style="margin-left: 0px;">
                                   <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['rejection']=='technical_error')?"checked='checked'":""?>> Lab testing Technical Error
                           </label>
                         </td>
+                        <td><label>Reviewed By</label></td>
+                        <td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>
                         <td><label>Approved By</label></td>
-                        <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By">
-                              <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($userResult as $uName){
-                               ?>
-                               <option value="<?php echo $uName['user_id'];?>"<?php echo ($vlQueryInfo[0]['result_approved_by']==$uName['user_id'])?"selected='selected'":""?>><?php echo ucwords($uName['user_name']);?></option>
-                               <?php
-                              }
-                              ?>
-                          </select>
-                        </td>
+                        <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>
                       </tr>
                       <tr>
                         <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
