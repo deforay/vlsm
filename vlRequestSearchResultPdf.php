@@ -6,6 +6,8 @@ include('General.php');
 include ('./includes/tcpdf/tcpdf.php');
 include ('./includes/fpdi/fpdi.php');
 define('UPLOAD_PATH','uploads');
+$tableName1="activity_log";
+$tableName2="vl_request_form";
 $general=new Deforay_Commons_General();
 $configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
 $configResult=$db->query($configQuery);
@@ -198,15 +200,15 @@ if(sizeof($requestResult)> 0){
           $resultApprovedBy  = '';
         }
         $smileyContent = '';
-        $showMessage = 'yes';
+        $showMessage = 'no';
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "yes"){
           if($result['result']!= NULL && trim($result['result'])!= '') {
             if(trim($result['result']) > 1000 || strtolower(trim($result['result'])) == "target not detected"){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-              $showMessage = '';
+              $showMessage = 'no';
             }else if(trim($result['result']) <= 1000){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-              $showMessage = '';
+              $showMessage = 'yes';
             }
           }
         }
@@ -382,6 +384,22 @@ if(sizeof($requestResult)> 0){
         $pdf->Output($filename,"F");
         $pages[] = $filename;
       $page++;
+      if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
+        //Add event log
+        $eventType = 'print-result';
+        $action = ucwords($_SESSION['userName']).' have been print the test result with patient CCC no. '.$result['art_no'];
+        $resource = 'print-test-result';
+        $data=array(
+        'event_type'=>$eventType,
+        'action'=>$action,
+        'resource'=>$resource,
+        'date_time'=>$general->getDateTime()
+        );
+        $db->insert($tableName1,$data);
+        //Update print datetime in VL tbl.
+        $db=$db->where('treament_id',$result['treament_id']);
+        $db->update($tableName2,array('date_result_printed'=>$general->getDateTime()));
+      }
     }
     
     $resultFilename = '';
