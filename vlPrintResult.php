@@ -262,22 +262,28 @@ $batResult = $db->rawQuery($batQuery);
   }
   
   function convertResultToPdf(id){
+      $.blockUI();
       $.post("vlRequestResultPdf.php", { source:'print', id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
+	      $.unblockUI();
 	  }else{
+	      $.unblockUI();
 	      window.open('uploads/'+data,'_blank');
 	  }
       });
   }
   
   function convertSearchResultToPdf(){
-    $.post("vlRequestSearchResultPdf.php",
+    $.blockUI();
+    $.post("vlRequestSearchResultPdf.php", { source:'print'},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
+	      $.unblockUI();
 	  }else{
+	      $.unblockUI();
 	      window.open('uploads/'+data,'_blank');
 	  }
 	  
