@@ -61,23 +61,23 @@ $primaryKey="treament_id";
             $searchArray = explode(" ", $_POST['sSearch']);
             //$sWhereSub = "vl.status = 6";
             foreach ($searchArray as $search) {
-                if ($sWhereSub == "") {
-                    $sWhereSub .= "(";
+                if ($sWhere == "") {
+                    $sWhere .= "(";
                 } else {
-                    $sWhereSub .= " AND (";
+                    $sWhere .= " AND (";
                 }
                 $colSize = count($aColumns);
                 
                 for ($i = 0; $i < $colSize; $i++) {
                     if ($i < $colSize - 1) {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
+                        $sWhere .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
                     } else {
-                        $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
+                        $sWhere .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
                     }
                 }
-                $sWhereSub .= ")";
+                $sWhere .= ")";
             }
-            $sWhere .= $sWhereSub;
+            //$sWhere .= $sWhereSub;
         }else{
 	    //$sWhere = "vl.status = 6";
 	}
