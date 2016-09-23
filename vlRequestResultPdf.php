@@ -339,7 +339,7 @@ $html .= '<div style="">';
       $html .='</table>';
      $html .='</td>';
      $html .='<td style="text-align:left;">';
-       $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
+       $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
      $html .='</td>';
     $html .='</tr>';
     $html .='<tr>';
