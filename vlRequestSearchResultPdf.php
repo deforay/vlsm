@@ -372,7 +372,9 @@ if(sizeof($requestResult)> 0){
                   $html .='</tr>';
                 $html .='</table>';
                $html .='</td>';
-               $html .='<td style="text-align:left;">'.$smileyContent.'</td>';
+               $html .='<td style="text-align:left;">';
+                $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
+               $html .='</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Previous results</td>';
@@ -386,7 +388,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result['last_viral_load_result'].'</td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="4" style="line-height:68px;border-bottom:1px solid #333;"></td>';
+               $html .='<td colspan="4" style="line-height:72px;border-bottom:1px solid #333;"></td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td colspan="4">';
@@ -399,7 +401,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="font-size:10px;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;time '.$printDateTime.'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:6px;"></td>';
+                    $html .='<td colspan="2" style="line-height:4px;"></td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="2" style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_frown.png" alt="frown_face" style="width:10px;height:10px;"/> = VL > 1000 copies/ml: copies/ml: Clinical and counselling action required</td>';
