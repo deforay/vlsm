@@ -100,7 +100,7 @@ $primaryKey="treament_id";
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
         }
-        
+        $_SESSION['vlPatientQuery']=$sQuery;
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
@@ -135,7 +135,7 @@ $primaryKey="treament_id";
 		$humanDate =  $general->humanDateFormat($aRow['patient_dob']);
 	    }
             $row = array();
-	    $row[] = ucwords($aRow['patient_name'].$aRow['surname']);
+	    $row[] = ucwords($aRow['patient_name']." ".$aRow['surname']);
 	    $row[] = $aRow['gender'];
 	    $row[] = $humanDate;
 	    $row[] = $aRow['art_no'];

@@ -49,10 +49,6 @@ include('header.php');
     <!-- /.content -->
   </div>
   <script type="text/javascript">
-   var startDate = "";
-   var endDate = "";
-   var selectedTests=[];
-   var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
      loadVlRequestData();
@@ -95,7 +91,14 @@ include('header.php');
   }
   
   function exportInexcel() {
-    
+    $.post("vlPatientExportInExcel.php",
+    function(data){
+	  if(data == "" || data == null || data == undefined){
+	      alert('Unable to generate download');
+	  }else{
+	      window.open('temporary/'+data,'_blank');
+	  }
+    });
   }
   
 </script>
