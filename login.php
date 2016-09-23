@@ -11,7 +11,7 @@ $configResult=$db->query($globalConfigQuery);
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8"> 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Log in</title>
   <!-- Tell the browser to be responsive to screen width -->
@@ -22,8 +22,6 @@ $configResult=$db->query($globalConfigQuery);
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- iCheck -->
-
-
 
     <style>
         body{
