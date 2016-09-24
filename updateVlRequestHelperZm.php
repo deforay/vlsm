@@ -22,7 +22,7 @@ try {
           'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
           'absolute_value'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
-          'comments'=>$_POST['labCommnets'],
+          'comments'=>$_POST['labComments'],
           'result_approved_by'=>$_POST['approvedBy'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
           'rejection'=>$_POST['noResult'],

@@ -107,7 +107,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
 }
 //Add event log
 $eventType = 'view-vl-request';
-$action = ucwords($_SESSION['userName']).' have been viewed a request data with the sample code '.$result[0]['sample_code'];
+$action = ucwords($_SESSION['userName']).' viewed a request data with the sample code '.$result[0]['sample_code'];
 $resource = 'vl-request';
 $data=array(
 'event_type'=>$eventType,

@@ -179,6 +179,7 @@ try {
           'sample_rejection_reason'=>$_POST['rejectionReason'],
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime(),
+          'modified_by'=>$_SESSION['userId'],
           'modified_on'=>$general->getDateTime()
         );
         //print_r($vldata);die;
@@ -186,7 +187,7 @@ try {
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
           $eventType = 'add-vl-request';
-          $action = ucwords($_SESSION['userName']).' have been added a new request data with the sample code '.$_POST['sampleCode'];
+          $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
           $resource = 'vl-request';
           $data=array(
           'event_type'=>$eventType,

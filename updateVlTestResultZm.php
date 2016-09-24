@@ -434,11 +434,11 @@ $tsResult = $db->rawQuery($tsQuery);
                         <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>
                       </tr>
                       <tr>
-                        <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="5"><textarea class="form-control" name="labCommnets" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo $vlQueryInfo[0]['comments'];?></textarea></td>
+                        <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
+                        <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo $vlQueryInfo[0]['comments'];?></textarea></td>
                       </tr>
                       <tr>
-                       <td><label for="labCommnets">Status</label></td>
+                       <td><label for="labComments">Status</label></td>
                        <td colspan="5">
                         <select class="form-control" id="status" name="status" title="Please select test status">
                          <option value="">-- Select --</option>

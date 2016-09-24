@@ -10,7 +10,7 @@ $general=new Deforay_Commons_General();
 $tableName1="activity_log";
 //Add event log
 $eventType = 'log-out';
-$action = ucwords($_SESSION['userName']).' have been logged out';
+$action = ucwords($_SESSION['userName']).' logged out';
 $resource = 'user-log-out';
 $data=array(
 'event_type'=>$eventType,

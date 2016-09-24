@@ -483,8 +483,8 @@ if($urgency==''){
                         <?php } ?>
                       </tr>
                       <tr>
-                        <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="5"><textarea class="form-control" name="labCommnets" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
+                        <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
+                        <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
                         <!--<td><label for="dateOfReceivedStamp">Date Of Result</label></td>
                         <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>-->
                       </tr>
