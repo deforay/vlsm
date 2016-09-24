@@ -122,11 +122,25 @@ try {
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
                         'absolute_decimal_value'=>$absDecimalVal,
-                        'result'=>$resultFlag,
+                        //'result'=>$resultFlag,
                         'lab_tested_date'=>$testingDate,
                         'status'=>'6',
-                        'file_name'=>$fileName
+                        'file_name'=>$fileName,
+                        'comments'=>$resultFlag
                     );
+                    
+                    
+                    if($absVal != ""){
+                      $data['result'] = $absVal;
+                    }else if($logVal != ""){
+                      $data['result'] = $logVal;
+                    }else if($txtVal != ""){
+                      $data['result'] = $txtVal;
+                    }else{
+                      $data['result'] = "";
+                    }
+                    
+                    
                      if($batchCode==''){
                         $data['batch_code']=$newBacthCode;
                         $data['batch_code_key']=$maxBatchCodeKey;

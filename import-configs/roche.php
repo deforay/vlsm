@@ -19,6 +19,8 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
      $logAndAbsoluteValInSameCol='no';
      $sampleTypeVal = 'F';
      $batchCodeVal = 'G';
+     $flagCol = 'K';
+     //$flagRow = '2';
                 
     
      if($sampleIdCol==$cellName){
@@ -26,6 +28,7 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
             $sampleVal=$cell->getCalculatedValue();
         }
      }
+     
      if($sampleTypeVal==$cellName){
         if($rKey>=$sampleIdRow){
             $sampleType=$cell->getCalculatedValue();
@@ -34,6 +37,12 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
      if($batchCodeVal==$cellName){
         if($rKey>=$sampleIdRow){
             $batchCode=$cell->getCalculatedValue();
+        }
+     }
+     
+     if($flagCol==$cellName){
+        if($rKey>=$sampleIdRow){
+            $resultFlag=$cell->getCalculatedValue();
         }
      }
      

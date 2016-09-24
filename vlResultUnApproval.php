@@ -83,7 +83,8 @@ $userResult = $db->rawQuery($userQuery);
 		  </td>
 		<td>
 		  <b>Approved By&nbsp;</b>
-		  <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By" >
+		  <input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>
+		  <!--<select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By" >
 			    <option value=""> -- Select -- </option>
 			    <?php
 			    foreach($userResult as $uName){
@@ -92,7 +93,7 @@ $userResult = $db->rawQuery($userQuery);
 			     <?php
 			    }
 			    ?>
-		  </select>
+		  </select>-->
 		</td>
 		  <td><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
 	    </tr>
