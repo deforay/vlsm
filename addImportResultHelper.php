@@ -163,7 +163,7 @@ try {
         $_SESSION['alertMsg']="Imported results successfully";
         //Add event log
         $eventType = 'import';
-        $action = ucwords($_SESSION['userName']).' have been imported a new test result';
+        $action = ucwords($_SESSION['userName']).' imported a new test result';
         $resource = 'import-result';
         $data=array(
         'event_type'=>$eventType,

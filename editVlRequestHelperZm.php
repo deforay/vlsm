@@ -103,7 +103,7 @@ try {
           'absolute_value'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
           'result'=>$_POST['result'],
-          'comments'=>$_POST['labCommnets'],
+          'comments'=>$_POST['labComments'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
@@ -118,7 +118,7 @@ try {
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log
           $eventType = 'update-vl-request-zm';
-          $action = ucwords($_SESSION['userName']).' have been updated a request data with the sample code '.$_POST['serialNo'];
+          $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['serialNo'];
           $resource = 'vl-request-zm';
           $data=array(
           'event_type'=>$eventType,
