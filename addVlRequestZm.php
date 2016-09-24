@@ -236,13 +236,13 @@ if($urgency==''){
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="sampleCollectionDate">Sample Collection Date <span class="mandatory">*</span></label>
-                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>">
+                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="">Sample Received Date</label>
-                    <input type="text" class="form-control" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" value="<?php echo $sampleReceivedDate; ?>">
+                    <input type="text" class="form-control" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" value="<?php echo $sampleReceivedDate; ?>" onchange="checkSampleReceviedDate();">
                     </div>
                   </div>
                 </div>
@@ -291,7 +291,7 @@ if($urgency==''){
                         </td>
                         <td><label>Date Of Birth</label></td>
                         <td>
-                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" onchange="getDateOfBirth();return false;">
+                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" onchange="getDateOfBirth();checkARTInitiationDate();">
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
@@ -331,7 +331,7 @@ if($urgency==''){
                         </td>
                         <td><label for="dateOfArt">Date Of ART Initiation</label></td>
                         <td>
-                          <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiation" title="Date Of ART Initiation" style="width:100%;" >
+                          <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiation" title="Date Of ART Initiation" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;" >
                         </td>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
@@ -368,7 +368,7 @@ if($urgency==''){
                       
                       <tr>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
-                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" onchange="checkLastVLTestDate();" style="width:100%;" /></td>
                         <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>
                         <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" /></td>
                         <td><label for="viralLoadLog">Viral Load Log</label></td>
@@ -456,7 +456,7 @@ if($urgency==''){
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" onchange="checkSampleTestingDate();" style="width:100%;" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
@@ -726,7 +726,7 @@ $("#vlLog").bind("keyup change", function(e) {
       var monthDigit = dobDate.getMonth();
       var dobYear = splitDob[2];
       var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      var dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
       var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
       
       var date1 = new Date(yyyy,mm,dd);
@@ -761,10 +761,9 @@ $("#vlLog").bind("keyup change", function(e) {
             }
         });
     }
-    function checkPatientIsPregnant(value)
-    {
-      if(value=='yes')
-      {
+    
+    function checkPatientIsPregnant(value){
+      if(value=='yes'){
         $("select option[value*='pregnant_mother']").prop('disabled',false);
       }else{
         if($("#vlTestReason").val()=='pregnant_mother'){
@@ -774,7 +773,131 @@ $("#vlLog").bind("keyup change", function(e) {
       }
     }
     
+    function checkSampleReceviedDate(){
+      var sampleCollectionDate = $("#sampleCollectionDate").val();
+      var sampleReceivedDate = $("#sampleReceivedDate").val();
+      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= '') {
+        //Set sample coll. datetime
+        splitSampleCollDateTime = sampleCollectionDate.split(" ");
+        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
+        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
+  
+        var monthDigit = sampleCollOn.getMonth();
+        var smplCollYear = splitSampleCollDate[2];
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
+        var smplCollDate = (splitSampleCollDate[0]<10) ? '0'+splitSampleCollDate[0]: splitSampleCollDate[0];
+        sampleCollDateTime = smplCollDate+"/"+smplCollMonth+"/"+smplCollYear+" "+splitSampleCollDateTime[1];
+        //Set sample rece. datetime
+        splitSampleReceivedDateTime = sampleReceivedDate.split(" ");
+        splitSampleReceivedDate = splitSampleReceivedDateTime[0].split("-");
+        var sampleReceivedOn = new Date(splitSampleReceivedDate[1] + splitSampleReceivedDate[2]+", "+splitSampleReceivedDate[0]);
+  
+        var monthDigit = sampleReceivedOn.getMonth();
+        var smplReceivedYear = splitSampleReceivedDate[2];
+        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        smplReceivedMonth = (smplReceivedMonth<10) ? '0'+smplReceivedMonth: smplReceivedMonth;
+        var smplReceivedDate = (splitSampleReceivedDate[0]<10) ? '0'+splitSampleReceivedDate[0]: splitSampleReceivedDate[0];
+        sampleReceivedDateTime = smplReceivedDate+"/"+smplReceivedMonth+"/"+smplReceivedYear+" "+splitSampleReceivedDateTime[1];
+        if(Date.parse (sampleReceivedDateTime) < Date.parse (sampleCollDateTime)) {
+          alert("Sample Received Date could not be earlier than Sample Collection Date!");
+          $("#sampleReceivedDate").val("");
+        }
+      }
+    }
     
+    function checkSampleTestingDate(){
+      var sampleCollectionDate = $("#sampleCollectionDate").val();
+      var sampleTestingDate = $("#sampleTestingDateAtLab").val();
+      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= '') {
+        //Set sample coll. date
+        splitSampleCollDateTime = sampleCollectionDate.split(" ");
+        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
+        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
+  
+        var monthDigit = sampleCollOn.getMonth();
+        var smplCollYear = splitSampleCollDate[2];
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
+        var smplCollDate = (splitSampleCollDate[0]<10) ? '0'+splitSampleCollDate[0]: splitSampleCollDate[0];
+        sampleCollDate = smplCollDate+"/"+smplCollMonth+"/"+smplCollYear;
+        //Set sample testing date
+        splitSampleTestingDate = sampleTestingDate.split("-");
+        var sampleTestingOn = new Date(splitSampleTestingDate[1] + splitSampleTestingDate[2]+", "+splitSampleTestingDate[0]);
+  
+        var monthDigit = sampleTestingOn.getMonth();
+        var smplTestingYear = splitSampleTestingDate[2];
+        var smplTestingMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
+        var smplTestingDate = (splitSampleTestingDate[0]<10) ? '0'+splitSampleTestingDate[0]: splitSampleTestingDate[0];
+        sampleTestingAtLabDate = smplTestingDate+"/"+smplTestingMonth+"/"+smplTestingYear;
+        if(Date.parse (sampleTestingAtLabDate) < Date.parse (sampleCollDate)) {
+          alert("Sample Testing Date could not be earlier than Sample Collection Date!");
+          $("#sampleTestingDateAtLab").val("");
+        }
+      }
+    }
+    
+    function checkARTInitiationDate(){
+      var dob = $("#dob").val();
+      var artInitiationDate = $("#dateOfArtInitiation").val();
+      if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
+        //Set DOB date
+        splitDob = dob.split("-");
+        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
+        var monthDigit = dobDate.getMonth();
+        var dobYear = splitDob[2];
+        var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+        var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
+        dobDate = dobDate+"/"+dobMonth+"/"+dobYear;
+        //Set ART initiation date
+        splitArtIniDate = artInitiationDate.split("-");
+        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
+  
+        var monthDigit = artInigOn.getMonth();
+        var artIniYear = splitArtIniDate[2];
+        var artIniMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
+        var artIniDate = (splitArtIniDate[0]<10) ? '0'+splitArtIniDate[0]: splitArtIniDate[0];
+        artIniDate = artIniDate+"/"+artIniMonth+"/"+artIniYear;
+        if(Date.parse (artIniDate) < Date.parse (dobDate)) {
+          alert("ART Initiation Date could not be earlier than DOB!");
+          $("#dateOfArtInitiation").val("");
+        }
+      }
+    }
+    
+    function checkLastVLTestDate(){
+      var artInitiationDate = $("#dateOfArtInitiation").val();
+      var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
+      if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
+        //Set ART initiation date
+        splitArtIniDate = artInitiationDate.split("-");
+        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
+  
+        var monthDigit = artInigOn.getMonth();
+        var artIniYear = splitArtIniDate[2];
+        var artIniMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
+        var artIniDate = (splitArtIniDate[0]<10) ? '0'+splitArtIniDate[0]: splitArtIniDate[0];
+        artIniDate = artIniDate+"/"+artIniMonth+"/"+artIniYear;
+        //Set Last VL Test date
+        splitLastVLTestDate = dateOfLastVLTest.split("-");
+        var lastVLTestOn = new Date(splitLastVLTestDate[1] + splitLastVLTestDate[2]+", "+splitLastVLTestDate[0]);
+  
+        var monthDigit = lastVLTestOn.getMonth();
+        var lastVLTestYear = splitArtIniDate[2];
+        var lastVLTestMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
+        var lastVLTestDate = (splitLastVLTestDate[0]<10) ? '0'+splitLastVLTestDate[0]: splitLastVLTestDate[0];
+        lastVLTestDate = lastVLTestDate+"/"+lastVLTestMonth+"/"+lastVLTestYear;
+        if(Date.parse (lastVLTestDate) < Date.parse (artIniDate)) {
+          alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
+          $("#lastViralLoadTestDate").val("");
+        }
+      }
+    }
 </script>
   
  <?php
