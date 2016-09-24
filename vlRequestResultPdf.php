@@ -324,7 +324,7 @@ $html .= '<div style="">';
         }
         if(trim($tndMessage)!= ''){
           $html .='<tr>';
-            $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.$tndMessage.'</td>';
+            $html .='<td colspan="4" style="line-height:22px;font-size:18px;text-align:left;">'.$tndMessage.'</td>';
           $html .='</tr>';
           $html .='<tr>';
             $html .='<td colspan="4" style="line-height:6px;"></td>';

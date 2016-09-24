@@ -1309,7 +1309,7 @@ $rejectReason = '';
       var monthDigit = dobDate.getMonth();
       var dobYear = splitDob[2];
       var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      var dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
       var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
       
       var date1 = new Date(yyyy,mm,dd);
