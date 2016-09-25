@@ -58,7 +58,7 @@ $userResult = $db->rawQuery($userQuery);
 		  <!--<th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 		  <th style="width: 13%;">Form Serial No.</th>
 		  <th style="width: 11%;">Sample Collection Date</th>
-                  <th style="width: 18%;">Receive Date</th>
+                  <th style="width: 18%;">Sample Test Date</th>
                   <th style="width: 18%;">Clinic Name</th>
                   <th style="width: 18%;">Reason</th>
                   <th style="width: 11%;">Sample Type</th>
