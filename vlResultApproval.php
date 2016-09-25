@@ -108,6 +108,7 @@ $batResult = $db->rawQuery($batQuery);
 		  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
+                  <th>Last Modified on</th>
                   <th>Status</th>
 		  <?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
                   <th>Action</th>
@@ -187,9 +188,10 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 1, "desc" ]],
+            "aaSorting": [[ 9, "desc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;

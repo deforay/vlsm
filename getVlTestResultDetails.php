@@ -17,8 +17,8 @@ $primaryKey="vl_sample_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.modified_on,'%d-%b-%Y')",'ts.status_name');
+        $orderColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','vl.modified_on','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -38,6 +38,9 @@ $primaryKey="vl_sample_id";
         */
         
         $sOrder = "";
+		
+		
+		
         if (isset($_POST['iSortCol_0'])) {
             $sOrder = "";
             for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
@@ -228,9 +231,17 @@ $primaryKey="vl_sample_id";
             $row[] = $aRow['batch_code'];
             $row[] = $aRow['art_no'];
             $row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
-	    $row[] = ucwords($aRow['facility_name']);
+			$row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
+			
+			if(isset($aRow['modified_on']) && trim($aRow['modified_on'])!= '' && $aRow['modified_on']!= '0000-00-00 00:00:00'){
+			   $xplodDate = explode(" ",$aRow['modified_on']);
+			   $aRow['modified_on'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+			}else{
+			   $aRow['modified_on'] = '';
+			}			
+			$row[] = $aRow['modified_on'];
             $row[] = ucwords($aRow['status_name']);
 	    
 	    if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){

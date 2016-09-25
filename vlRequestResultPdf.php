@@ -382,7 +382,7 @@ $html .= '<div style="">';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:10px;height:10px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
-          $html .='<td style="font-size:10px;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;time '.$printDateTime.'</td>';
+          $html .='<td style="font-size:10px;text-align:left;">Printed on : '.$printDate.'&nbsp;&nbsp;'.$printDateTime.'</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td colspan="2" style="line-height:4px;"></td>';
