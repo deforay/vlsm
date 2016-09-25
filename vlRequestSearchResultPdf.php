@@ -211,7 +211,7 @@ if(sizeof($requestResult)> 0){
             $vlResult = 'TND*';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen';
-            $tndMessage = 'TND* - Target not Detectable';
+            $tndMessage = 'TND* - Target not Detected';
             $resultTextSize = '18px';
           }else if(trim($result['result']) > 1000){
             $vlResult = $result['result'];

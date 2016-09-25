@@ -11,8 +11,8 @@ $tsResult = $db->rawQuery($tsQuery);
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('tsr.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.date_sample_received_at_testing_lab,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
-        $orderColumns = array('tsr.sample_code','vl.sample_collection_date','vl.date_sample_received_at_testing_lab','fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
+        $aColumns = array('tsr.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(tsr.lab_tested_date,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
+        $orderColumns = array('tsr.sample_code','vl.sample_collection_date','tsr.lab_tested_date','fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -89,7 +89,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.absolute_value,tsr.log_value,tsr.text_value,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
+	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.absolute_value,tsr.log_value,tsr.text_value,vl.sample_collection_date,tsr.lab_tested_date,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status";
 	$sOrder = 'temp_sample_id ASC';
         //echo $sQuery;die;
 	
@@ -111,7 +111,7 @@ $tsResult = $db->rawQuery($tsQuery);
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT tsr.temp_sample_id,tsr.sample_details,tsr.sample_code,tsr.absolute_value,tsr.log_value,tsr.text_value,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT tsr.temp_sample_id,tsr.sample_details,tsr.sample_code,tsr.absolute_value,tsr.log_value,tsr.text_value,vl.sample_collection_date,tsr.lab_tested_date,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN testing_status as ts ON ts.status_id=tsr.status $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -134,11 +134,11 @@ $tsResult = $db->rawQuery($tsQuery);
 	    }else{
 	       $aRow['sample_collection_date'] = '';
 	    }
-	    if(isset($aRow['date_sample_received_at_testing_lab']) && trim($aRow['date_sample_received_at_testing_lab'])!= '' && $aRow['date_sample_received_at_testing_lab']!= '0000-00-00 00:00:00'){
-	       $xplodDate = explode(" ",$aRow['date_sample_received_at_testing_lab']);
-	       $aRow['date_sample_received_at_testing_lab'] = $general->humanDateFormat($xplodDate[0]);
+	    if(isset($aRow['lab_tested_date']) && trim($aRow['lab_tested_date'])!= '' && $aRow['lab_tested_date']!= '0000-00-00 00:00:00'){
+	       $xplodDate = explode(" ",$aRow['lab_tested_date']);
+	       $aRow['lab_tested_date'] = $general->humanDateFormat($xplodDate[0]);
 	    }else{
-	       $aRow['date_sample_received_at_testing_lab'] = '';
+	       $aRow['lab_tested_date'] = '';
 	    }
             $row = array();
 	    if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
@@ -170,7 +170,7 @@ $tsResult = $db->rawQuery($tsQuery);
 	    }
 	    $row[] = '<span title="'.$rsDetails.'">'.$aRow['sample_code'].$color.'</span>';
 	    $row[] = $aRow['sample_collection_date'];
-	    $row[] = $aRow['date_sample_received_at_testing_lab'];
+	    $row[] = $aRow['lab_tested_date'];
 	    $row[] = $aRow['facility_name'];
 	    $row[] = $aRow['rejection_reason_name'];
 	    $row[] = ucwords($aRow['sample_type']);
