@@ -7,7 +7,7 @@ $tableName="facility_details";
 $tableName1="province_details";
 
 try {
-    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_POST['facilityCode'])!=''){
+    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!=""){
          if(trim($_POST['state'])!=""){
             $strSearch = $_POST['state'];
             $facilityQuery="SELECT * from province_details where province_name='".$strSearch."'";
@@ -32,7 +32,7 @@ try {
         'hub_name'=>$_POST['hubName'],
         'email'=>$_POST['email'],
         'contact_person'=>$_POST['contactPerson'],
-	'facility_type'=>$_POST['facilityType'],
+		'facility_type'=>$_POST['facilityType'],
         'status'=>'active'
         );
         
