@@ -131,6 +131,7 @@ $batResult = $db->rawQuery($batQuery);
 				  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
+                  <th>Last Modified On</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
@@ -231,9 +232,10 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 0, "asc" ]],
+            "aaSorting": [[ 7, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
