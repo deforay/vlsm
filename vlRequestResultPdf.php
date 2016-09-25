@@ -179,6 +179,11 @@ if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
     $showMessage = 'Viral load adequately controlled : continue current regimen';
     $tndMessage = 'TND* - Target not Detected';
     $resultTextSize = '18px';
+  }else if(in_array(strtolower(trim($result[0]['result'])), array("failed","fail","no_sample"))){
+    $vlResult = $result[0]['result'];
+    $smileyContent = '';
+    $showMessage = '';
+    $messageTextSize = '18px';
   }else if(trim($result[0]['result']) > 1000){
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';

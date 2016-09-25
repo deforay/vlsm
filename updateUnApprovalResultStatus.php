@@ -43,41 +43,42 @@ try {
                $data['import_batch_tracking']=$_SESSION['controllertrack'];
                $result = $db->insert($tableName2,$data);
             }else{
-            $data['created_by']=$rResult[0]['result_reviewed_by'];
-            $data['created_on']=$general->getDateTime();
-            $data['modified_on']=$general->getDateTime();
-            $data['result_approved_by']=$_POST['appBy'];
-            $data['result_approved_on']=$general->getDateTime();
-            $sampleVal = $rResult[0]['sample_code'];
-            if($rResult[0]['absolute_value']!=''){
-                $data['result'] = $rResult[0]['absolute_value'];
-            }else if($rResult[0]['log_value']!=''){
-                $data['result'] = $rResult[0]['log_value'];
-            }else if($rResult[0]['text_value']!=''){
-                $data['result'] = $rResult[0]['text_value'];
-            }
-            //get bacth code
-            $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
-            $bvlResult=$db->rawQuery($bquery);
-            if($bvlResult){
-                $data['batch_id'] = $bvlResult[0]['batch_id'];
-            }else{
-                $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
-                $data['batch_id'] = $db->getInsertId();
-            }
-            $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
-            $vlResult=$db->rawQuery($query);
-            $data['status']=$_POST['status'];
-            $data['serial_no']=$rResult[0]['sample_code'];
-            if(count($vlResult)>0){
-                $data['form_id']='2';
-                $db=$db->where('sample_code',$rResult[0]['sample_code']);
-                $result=$db->update($tableName1,$data);
-            }else{
-                $data['sample_code']=$rResult[0]['sample_code'];
-                $data['form_id']='2';
-                $db->insert($tableName1,$data);
-            }
+                $data['created_by']=$rResult[0]['result_reviewed_by'];
+                $data['created_on']=$general->getDateTime();
+                $data['modified_by']=$rResult[0]['result_reviewed_by'];
+                $data['modified_on']=$general->getDateTime();
+                $data['result_approved_by']=$_POST['appBy'];
+                $data['result_approved_on']=$general->getDateTime();
+                $sampleVal = $rResult[0]['sample_code'];
+                if($rResult[0]['absolute_value']!=''){
+                    $data['result'] = $rResult[0]['absolute_value'];
+                }else if($rResult[0]['log_value']!=''){
+                    $data['result'] = $rResult[0]['log_value'];
+                }else if($rResult[0]['text_value']!=''){
+                    $data['result'] = $rResult[0]['text_value'];
+                }
+                //get bacth code
+                $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
+                $bvlResult=$db->rawQuery($bquery);
+                if($bvlResult){
+                    $data['batch_id'] = $bvlResult[0]['batch_id'];
+                }else{
+                    $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
+                    $data['batch_id'] = $db->getInsertId();
+                }
+                $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
+                $vlResult=$db->rawQuery($query);
+                $data['status']=$_POST['status'];
+                $data['serial_no']=$rResult[0]['sample_code'];
+                if(count($vlResult)>0){
+                    $data['form_id']='2';
+                    $db=$db->where('sample_code',$rResult[0]['sample_code']);
+                    $result=$db->update($tableName1,$data);
+                }else{
+                    $data['sample_code']=$rResult[0]['sample_code'];
+                    $data['form_id']='2';
+                    $db->insert($tableName1,$data);
+                }
             }
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);
