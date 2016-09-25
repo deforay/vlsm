@@ -9,6 +9,10 @@ $iResult = $db->rawQuery($query);
 
 $fQuery="SELECT * FROM facility_details where facility_type=2";
 $fResult = $db->rawQuery($fQuery);
+
+$lastQuery="SELECT * FROM vl_request_form ORDER BY vl_sample_id DESC LIMIT 1";
+$lastResult = $db->rawQuery($lastQuery);
+
 ?>
 
 
@@ -55,6 +59,10 @@ $fResult = $db->rawQuery($fQuery);
                                   <option value="<?php echo base64_encode($val['file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
                                   <?php } ?>
                                 </select>
+								
+								<input type="hidden" id="vltestPlatform" name="vltestPlatform" value="" />
+								
+								
                                 </div>
                             </div>
                           </div>
@@ -88,7 +96,7 @@ $fResult = $db->rawQuery($fQuery);
                                   <?php
                                   foreach($fResult as $val){
                                   ?>
-                                  <option value="<?php echo base64_encode($val['facility_id']); ?>" selected="selected"><?php echo ucwords($val['facility_name']); ?></option>
+									<option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (($lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""); ?> ><?php echo ucwords($val['facility_name']); ?></option>
                                   <?php } ?>
 							  </select>
                               </div>
@@ -137,6 +145,18 @@ $fResult = $db->rawQuery($fQuery);
       document.getElementById('addImportResultForm').submit();
     }
   }
+  
+  
+  $("#machineName").change(function(){
+	if ($("#machineName").val() == "") {
+        $("#vltestPlatform").val("");
+    }else{
+	  $("#vltestPlatform").val($("#machineName option:selected").text());
+	}
+  });
+  
+
+  
 </script>
  <?php
  include('footer.php');

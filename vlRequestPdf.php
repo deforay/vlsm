@@ -88,7 +88,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 $sTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 
-$fQuery="SELECT * from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id=$id";
+$fQuery="SELECT * from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id=$id";
 $result=$db->query($fQuery);
     
 if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){

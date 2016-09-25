@@ -185,7 +185,7 @@ try {
           'modified_on'=>$general->getDateTime()
         );
           
-          $db=$db->where('treament_id',$treamentId);
+          $db=$db->where('vl_sample_id',$treamentId);
           $db->update($tableName,$vldata);
           
           $_SESSION['alertMsg']="VL request updated successfully";

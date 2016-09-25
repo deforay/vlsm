@@ -4,7 +4,7 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
-$primaryKey="treament_id";
+$primaryKey="vl_sample_id";
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -90,7 +90,7 @@ $primaryKey="treament_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.treament_id where vl.status=7 AND vl.result > 1000";
+	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > 1000";
 	//$sWhere = ' where vl.status=7 AND vl.result > 1000';
 	$start_date = '';
 	$end_date = '';
@@ -123,7 +123,7 @@ $primaryKey="treament_id";
         }
        
 	$sQuery = $sQuery.' '.$sWhere;
-        $sQuery = $sQuery.' group by vl.treament_id';
+        $sQuery = $sQuery.' group by vl.vl_sample_id';
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
@@ -138,11 +138,11 @@ $primaryKey="treament_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.treament_id where vl.status=7 AND vl.result > 1000 $sWhere group by vl.treament_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > 1000 $sWhere group by vl.vl_sample_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where status=7 AND result > 1000");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where status=7 AND result > 1000");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -162,7 +162,7 @@ $primaryKey="treament_id";
 	}
         
         foreach ($rResult as $aRow) {
-	    $cNoteQuery = "select contact_notes from contact_notes_details where treament_contact_id='".$aRow['treament_id']."' order by added_on DESC LIMIT 1";
+	    $cNoteQuery = "select contact_notes from contact_notes_details where treament_contact_id='".$aRow['vl_sample_id']."' order by added_on DESC LIMIT 1";
 	    $cnResult = $db->rawQuery($cNoteQuery);
 	    if($cnResult){
 		$aRow['contact_notes'] = $cnResult[0]['contact_notes'];
@@ -185,14 +185,14 @@ $primaryKey="treament_id";
             $row[] = ucwords($aRow['patient_phone_number']);
             $row[] = $aRow['result'];
             $row[] = ucwords($aRow['contact_notes']);
-            $row[] = '<select class="form-control" name="status" id=' . $aRow['treament_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
+            $row[] = '<select class="form-control" name="status" id=' . $aRow['vl_sample_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
 			    <option value=""> -- Select -- </option>
 			    <option value="yes" ' . ($aRow['contact_complete_status'] == "yes" ? "selected=selected" : "") . '>Yes</option>
 			    <option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
 		    </select>';
 	   if($vlNotes){
-            //$row[] = '<a href="addContactNotes.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-file"> Add Contact Notes</i></a>';
-            $row[] = '<a href="javascript:void(0)" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Add" onclick="showModal(\'addContactNotes.php?id=' . base64_encode($aRow['treament_id']) . '\',900,520)"><i class="fa fa-file"> Add Contact Notes</i></a>';
+            //$row[] = '<a href="addContactNotes.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-file"> Add Contact Notes</i></a>';
+            $row[] = '<a href="javascript:void(0)" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Add" onclick="showModal(\'addContactNotes.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520)"><i class="fa fa-file"> Add Contact Notes</i></a>';
            }
             $output['aaData'][] = $row;
         }

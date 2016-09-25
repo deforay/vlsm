@@ -7,7 +7,7 @@ $configResult = $db->rawQuery($configQuery);
 if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   $configResult[0]['value'] = 0;
 }
-$query="SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -117,7 +117,7 @@ $batchResult=$db->query($batchQuery);
 			    <?php
 			    foreach($result as $sample){
 			      ?>
-			      <option value="<?php echo $sample['treament_id'];?>"><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
+			      <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
 			      <?php
 			    }
 			    ?>

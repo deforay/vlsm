@@ -44,7 +44,7 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $id=base64_decode($_GET['id']);
-$sQuery="SELECT * from vl_request_form where treament_id=$id";
+$sQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $sInfo=$db->query($sQuery);
 if(isset($sInfo[0]['date_sample_received_at_testing_lab']) && trim($sInfo[0]['date_sample_received_at_testing_lab'])!='' && $sInfo[0]['date_sample_received_at_testing_lab']!='0000-00-00'){
  $sInfo[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($sInfo[0]['date_sample_received_at_testing_lab']);
@@ -195,7 +195,7 @@ $tsResult = $db->rawQuery($tsQuery);
         </div>
 	<!-- /.box-body -->
 	<div class="box-footer">
-	  <input type="hidden" id="treamentId" name="treamentId" value="<?php echo base64_encode($sInfo[0]['treament_id']); ?>"/>
+	  <input type="hidden" id="treamentId" name="treamentId" value="<?php echo base64_encode($sInfo[0]['vl_sample_id']); ?>"/>
 	  <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();">Submit</a>&nbsp;
 	  <a href="javascript:void(0)" onclick="parent.closeModal()" class="btn btn-default "> Close</a>
 	</div>
