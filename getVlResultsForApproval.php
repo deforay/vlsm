@@ -11,7 +11,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 }
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
-$primaryKey="treament_id";
+$primaryKey="vl_sample_id";
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -98,7 +98,7 @@ $primaryKey="treament_id";
          * Get data to display
         */
 	$aWhere = '';
-        //$sQuery="SELECT vl.treament_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
+        //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
 	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
         //echo $sQuery;die;
@@ -197,11 +197,11 @@ $primaryKey="treament_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.treament_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form where form_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where form_id='".$arr['vl_form']."'");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -232,14 +232,14 @@ $primaryKey="treament_id";
 		    $aRow['sample_collection_date'] = '';
 	    }
 	  
-	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['treament_id'].'" title="Please select status" onchange="updateStatus(this)">
+	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['vl_sample_id'].'" title="Please select status" onchange="updateStatus(this)">
  				<option value="">-- Select --</option>
 				<option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
  				<option value="4" '.($aRow['status_id']=="4"  ? "selected=selected" : "").'>Rejected</option>
  			</select><br><br>';
 			
 			$row = array();
-			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['treament_id'] . '"  value="' . $aRow['treament_id'] . '" onclick="toggleTest(this);"  />';
+			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
 			$row[] = $aRow['sample_code'];
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['batch_code'];
@@ -249,7 +249,7 @@ $primaryKey="treament_id";
 			$row[] = ucwords($aRow['sample_name']);
 			$row[] = $aRow['result'];
 			$row[] = $status;
-			$row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['treament_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
+			$row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
 			
 			$output['aaData'][] = $row;
         }

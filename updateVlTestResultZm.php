@@ -6,7 +6,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
-$vlQuery="SELECT * from vl_request_form where treament_id=$id";
+$vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -122,7 +122,7 @@ $tsResult = $db->rawQuery($tsQuery);
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo checkNum removeValue" id="" <?php echo $disable; ?> name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "treament_id##".$id;?>','This serial number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control serialNo checkNum removeValue" id="" <?php echo $disable; ?> name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This serial number already exists.Try another number',null)"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -362,10 +362,10 @@ $tsResult = $db->rawQuery($tsQuery);
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 checkNum isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "treament_id##".$id;?>','This serial number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 checkNum isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This serial number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control reqBarcode checkNum isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "treament_id##".$id;?>','This barcode already exists.Try another barcode',null)"/>
+                          <input type="text" class="form-control reqBarcode checkNum isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This barcode already exists.Try another barcode',null)"/>
                           <!--<input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -454,7 +454,7 @@ $tsResult = $db->rawQuery($tsQuery);
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                <input type="hidden" name="treamentId" id="treamentId" value="<?php echo $vlQueryInfo[0]['treament_id'];?>"/>
+                <input type="hidden" name="treamentId" id="treamentId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
                 <a href="vlResultApproval.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->

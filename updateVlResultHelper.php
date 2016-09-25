@@ -35,7 +35,7 @@ try {
       'comments'=>$_POST['comments'],
       'status'=>$_POST['status']
     );
-    $db=$db->where('treament_id',$treamentId);
+    $db=$db->where('vl_sample_id',$treamentId);
     //print_r($vldata);die;
     $db->update($tableName,$vldata);       
     

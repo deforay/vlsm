@@ -68,7 +68,7 @@ $pathFront=realpath('./uploads');
 $pdf->AddPage();
 $general=new Deforay_Commons_General();
 $id=$_POST['id'];
-$fQuery="SELECT * from vl_request_form as vl where treament_id=$id";
+$fQuery="SELECT * from vl_request_form as vl where vl_sample_id=$id";
 $result=$db->query($fQuery);
 
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00 00:00:00'){

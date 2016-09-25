@@ -96,7 +96,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 $id=$_POST['id'];
-$fQuery="SELECT vl.treament_id,vl.sample_code,vl.serial_no,vl.patient_name,vl.patient_name,vl.surname,vl.patient_dob,vl.age_in_yrs,vl.age_in_mnts,vl.art_no,vl.gender,vl.patient_receive_sms,vl.patient_phone_number,vl.sample_collection_date,vl.clinician_ph_no,vl.sample_testing_date,vl.date_sample_received_at_testing_lab,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.lab_no,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.last_viral_load_result,vl.last_viral_load_date,vl.result_reviewed_date,vl.result_approved_by,vl.vl_test_platform,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,s.sample_name FROM vl_request_form as vl LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id WHERE treament_id=$id";
+$fQuery="SELECT vl.vl_sample_id,vl.sample_code,vl.serial_no,vl.patient_name,vl.patient_name,vl.surname,vl.patient_dob,vl.age_in_yrs,vl.age_in_mnts,vl.art_no,vl.gender,vl.patient_receive_sms,vl.patient_phone_number,vl.sample_collection_date,vl.clinician_ph_no,vl.sample_testing_date,vl.date_sample_received_at_testing_lab,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.lab_no,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.last_viral_load_result,vl.last_viral_load_date,vl.result_reviewed_date,vl.result_approved_by,vl.vl_test_platform,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,s.sample_name FROM vl_request_form as vl LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id WHERE vl_sample_id=$id";
 $result=$db->query($fQuery);
 if(!isset($result[0]['facility_code']) || trim($result[0]['facility_code']) == ''){
   $result[0]['facility_code'] = '';
@@ -139,6 +139,18 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
   $result[0]['sample_collection_date']='';
   $sampleCollectionTime = '';
 }
+
+
+
+if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && $result[0]['lab_tested_date']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$result[0]['lab_tested_date']);
+  $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0]);
+}else{
+  $result[0]['lab_tested_date']='';
+}
+
+
+
 if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_date'])!='' && $result[0]['sample_testing_date']!='0000-00-00'){
   $result[0]['sample_testing_date']=$general->humanDateFormat($result[0]['sample_testing_date']);
 }else{
@@ -183,12 +195,12 @@ if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
     $vlResult = $result[0]['result'];
     $smileyContent = '';
     $showMessage = '';
-    $messageTextSize = '18px';
+    $messageTextSize = '14px';
   }else if(trim($result[0]['result']) > 1000){
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
     $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
-    $messageTextSize = '18px';
+    $messageTextSize = '16px';
   }else if(trim($result[0]['result']) <= 1000){
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
@@ -300,7 +312,7 @@ $html .= '<div style="">';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['sample_collection_date'].'</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleCollectionTime.'</td>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['sample_testing_date'].'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['lab_tested_date'].'</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
@@ -401,7 +413,7 @@ if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
   );
   $db->insert($tableName1,$data);
   //Update print datetime in VL tbl.
-  $db=$db->where('treament_id',$result[0]['treament_id']);
+  $db=$db->where('vl_sample_id',$result[0]['vl_sample_id']);
   $db->update($tableName2,array('date_result_printed'=>$general->getDateTime()));
 }
 echo $filename;

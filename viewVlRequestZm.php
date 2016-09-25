@@ -6,7 +6,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $tableName1="activity_log";
 $id=base64_decode($_GET['id']);
-$vlQuery="SELECT * from vl_request_form where treament_id=$id";
+$vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);

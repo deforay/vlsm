@@ -24,6 +24,7 @@ try {
                         'date_results_dispatched'=>$rResult[0]['date_results_dispatched'],
                         'result_reviewed_date'=>$rResult[0]['result_reviewed_date'],
                         'result_reviewed_by'=>$rResult[0]['result_reviewed_by'],
+                        'vl_test_platform'=>$rResult[0]['vl_test_platform'],
                         'comments'=>$_POST['comments'],
                         'log_value'=>$rResult[0]['log_value'],
                         'absolute_value'=>$rResult[0]['absolute_value'],
@@ -39,6 +40,8 @@ try {
                $data['facility_id']=$rResult[0]['facility_id'];
                $data['sample_code']=$rResult[0]['sample_code'];
                $data['batch_code']=$rResult[0]['batch_code'];
+                $data['modified_by']=$rResult[0]['result_reviewed_by'];
+                $data['modified_on']=$general->getDateTime();               
                $data['status']=$status[$i];
                $data['import_batch_tracking']=$_SESSION['controllertrack'];
                $result = $db->insert($tableName2,$data);
@@ -66,7 +69,7 @@ try {
                     $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
                     $data['batch_id'] = $db->getInsertId();
                 }
-                $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
+                $query="select vl_sample_id,result from vl_request_form where sample_code='".$sampleVal."'";
                 $vlResult=$db->rawQuery($query);
                 $data['status']=$_POST['status'];
                 $data['serial_no']=$rResult[0]['sample_code'];

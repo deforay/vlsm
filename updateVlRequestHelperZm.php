@@ -30,7 +30,7 @@ try {
           'modified_on'=>$general->getDateTime()
         );
           //print_r($vldata);die;
-          $db=$db->where('treament_id',$_POST['treamentId']);
+          $db=$db->where('vl_sample_id',$_POST['treamentId']);
           $db->update($tableName,$vldata);
           $_SESSION['alertMsg']="VL result updated successfully";
           header("location:vlResultApproval.php");

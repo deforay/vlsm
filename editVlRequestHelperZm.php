@@ -113,7 +113,7 @@ try {
             $vldata['result_approved_by'] = $_POST['approvedBy'];
           } 
           //print_r($vldata);die;
-          $db=$db->where('treament_id',$_POST['treamentId']);
+          $db=$db->where('vl_sample_id',$_POST['treamentId']);
           $db->update($tableName,$vldata);
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log

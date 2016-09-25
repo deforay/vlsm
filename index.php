@@ -1,7 +1,7 @@
 <?php
 include('header.php');
 /* Total data set length */
-  $vlFormTotal =  $db->rawQuery("select COUNT(treament_id) as total FROM vl_request_form");
+  $vlFormTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form");
  // $aResultTotal = $countResult->fetch_row();
  //print_r($aResultTotal);
   $labCount = $vlFormTotal[0]['total'];
