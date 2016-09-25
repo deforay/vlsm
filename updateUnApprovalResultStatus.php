@@ -36,7 +36,7 @@ try {
                         'lab_tested_date'=>$rResult[0]['lab_tested_date'],
                         'date_results_dispatched'=>$rResult[0]['date_results_dispatched'],
                         'result_reviewed_date'=>$rResult[0]['result_reviewed_date'],
-                        'result_reviewed_by'=>$rResult[0]['result_reviewed_by'],
+                        'result_reviewed_by'=>$_POST['reviewedBy'],
                         'vl_test_platform'=>$rResult[0]['vl_test_platform'],
                         'comments'=>$comments,
                         'log_value'=>$rResult[0]['log_value'],
@@ -49,7 +49,7 @@ try {
                         'file_name'=>$rResult[0]['file_name'],
                     );
             if($status[$i]=='1'){
-                $data['result_reviewed_by']=$rResult[0]['result_reviewed_by'];
+                $data['result_reviewed_by']=$_POST['reviewedBy'];
                $data['facility_id']=$rResult[0]['facility_id'];
                $data['sample_code']=$rResult[0]['sample_code'];
                $data['batch_code']=$rResult[0]['batch_code'];
@@ -116,7 +116,7 @@ try {
                         'lab_tested_date'=>$accResult[$i]['lab_tested_date'],
                         'date_results_dispatched'=>$accResult[$i]['date_results_dispatched'],
                         'result_reviewed_date'=>$accResult[$i]['result_reviewed_date'],
-                        'result_reviewed_by'=>$accResult[$i]['result_reviewed_by'],
+                        'result_reviewed_by'=>$_POST['reviewedBy'],
                         'comments'=>$_POST['comments'],
                         'log_value'=>$accResult[$i]['log_value'],
                         'absolute_value'=>$accResult[$i]['absolute_value'],
