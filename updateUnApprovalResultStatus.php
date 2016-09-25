@@ -15,6 +15,19 @@ try {
     for($i=0;$i<count($id);$i++){
             $sQuery="SELECT * FROM temp_sample_report where temp_sample_id='".$id[$i]."'";
             $rResult = $db->rawQuery($sQuery);
+            
+            if(isset($rResult[0]['comments']) && $rResult[0]['comments'] != ""){
+                $comments = $rResult[0]['comments'] ;//
+                
+                if($_POST['comments'] != ""){
+                    $comments .=" - " .$_POST['comments'];
+                }
+                
+            }else{
+                $comments = $_POST['comments'];
+            }
+            
+            
             $data=array(
                         'lab_name'=>$rResult[0]['lab_name'],
                         'lab_contact_person'=>$rResult[0]['lab_contact_person'],
@@ -25,7 +38,7 @@ try {
                         'result_reviewed_date'=>$rResult[0]['result_reviewed_date'],
                         'result_reviewed_by'=>$rResult[0]['result_reviewed_by'],
                         'vl_test_platform'=>$rResult[0]['vl_test_platform'],
-                        'comments'=>$_POST['comments'],
+                        'comments'=>$comments,
                         'log_value'=>$rResult[0]['log_value'],
                         'absolute_value'=>$rResult[0]['absolute_value'],
                         'text_value'=>$rResult[0]['text_value'],
