@@ -9,7 +9,7 @@ try {
         $status=array(
             'contact_complete_status'=>$_POST['value']
         );
-        $db=$db->where('treament_id',$id);
+        $db=$db->where('vl_sample_id',$id);
         $db->update($tableName,$status);
         $result = $id;
 }

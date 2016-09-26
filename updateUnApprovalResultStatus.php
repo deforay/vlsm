@@ -15,6 +15,19 @@ try {
     for($i=0;$i<count($id);$i++){
             $sQuery="SELECT * FROM temp_sample_report where temp_sample_id='".$id[$i]."'";
             $rResult = $db->rawQuery($sQuery);
+            
+            if(isset($rResult[0]['comments']) && $rResult[0]['comments'] != ""){
+                $comments = $rResult[0]['comments'] ;//
+                
+                if($_POST['comments'] != ""){
+                    $comments .=" - " .$_POST['comments'];
+                }
+                
+            }else{
+                $comments = $_POST['comments'];
+            }
+            
+            
             $data=array(
                         'lab_name'=>$rResult[0]['lab_name'],
                         'lab_contact_person'=>$rResult[0]['lab_contact_person'],
@@ -23,8 +36,9 @@ try {
                         'lab_tested_date'=>$rResult[0]['lab_tested_date'],
                         'date_results_dispatched'=>$rResult[0]['date_results_dispatched'],
                         'result_reviewed_date'=>$rResult[0]['result_reviewed_date'],
-                        'result_reviewed_by'=>$rResult[0]['result_reviewed_by'],
-                        'comments'=>$_POST['comments'],
+                        'result_reviewed_by'=>$_POST['reviewedBy'],
+                        'vl_test_platform'=>$rResult[0]['vl_test_platform'],
+                        'comments'=>$comments,
                         'log_value'=>$rResult[0]['log_value'],
                         'absolute_value'=>$rResult[0]['absolute_value'],
                         'text_value'=>$rResult[0]['text_value'],
@@ -35,49 +49,52 @@ try {
                         'file_name'=>$rResult[0]['file_name'],
                     );
             if($status[$i]=='1'){
-                $data['result_reviewed_by']=$rResult[0]['result_reviewed_by'];
+                $data['result_reviewed_by']=$_POST['reviewedBy'];
                $data['facility_id']=$rResult[0]['facility_id'];
                $data['sample_code']=$rResult[0]['sample_code'];
                $data['batch_code']=$rResult[0]['batch_code'];
+                $data['modified_by']=$rResult[0]['result_reviewed_by'];
+                $data['modified_on']=$general->getDateTime();               
                $data['status']=$status[$i];
                $data['import_batch_tracking']=$_SESSION['controllertrack'];
                $result = $db->insert($tableName2,$data);
             }else{
-            $data['created_by']=$rResult[0]['result_reviewed_by'];
-            $data['created_on']=$general->getDateTime();
-            $data['modified_on']=$general->getDateTime();
-            $data['result_approved_by']=$_POST['appBy'];
-            $data['result_approved_on']=$general->getDateTime();
-            $sampleVal = $rResult[0]['sample_code'];
-            if($rResult[0]['absolute_value']!=''){
-                $data['result'] = $rResult[0]['absolute_value'];
-            }else if($rResult[0]['log_value']!=''){
-                $data['result'] = $rResult[0]['log_value'];
-            }else if($rResult[0]['text_value']!=''){
-                $data['result'] = $rResult[0]['text_value'];
-            }
-            //get bacth code
-            $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
-            $bvlResult=$db->rawQuery($bquery);
-            if($bvlResult){
-                $data['batch_id'] = $bvlResult[0]['batch_id'];
-            }else{
-                $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
-                $data['batch_id'] = $db->getInsertId();
-            }
-            $query="select treament_id,result from vl_request_form where sample_code='".$sampleVal."'";
-            $vlResult=$db->rawQuery($query);
-            $data['status']=$_POST['status'];
-            $data['serial_no']=$rResult[0]['sample_code'];
-            if(count($vlResult)>0){
-                $data['form_id']='2';
-                $db=$db->where('sample_code',$rResult[0]['sample_code']);
-                $result=$db->update($tableName1,$data);
-            }else{
-                $data['sample_code']=$rResult[0]['sample_code'];
-                $data['form_id']='2';
-                $db->insert($tableName1,$data);
-            }
+                $data['created_by']=$rResult[0]['result_reviewed_by'];
+                $data['created_on']=$general->getDateTime();
+                $data['modified_by']=$rResult[0]['result_reviewed_by'];
+                $data['modified_on']=$general->getDateTime();
+                $data['result_approved_by']=$_POST['appBy'];
+                $data['result_approved_on']=$general->getDateTime();
+                $sampleVal = $rResult[0]['sample_code'];
+                if($rResult[0]['absolute_value']!=''){
+                    $data['result'] = $rResult[0]['absolute_value'];
+                }else if($rResult[0]['log_value']!=''){
+                    $data['result'] = $rResult[0]['log_value'];
+                }else if($rResult[0]['text_value']!=''){
+                    $data['result'] = $rResult[0]['text_value'];
+                }
+                //get bacth code
+                $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
+                $bvlResult=$db->rawQuery($bquery);
+                if($bvlResult){
+                    $data['batch_id'] = $bvlResult[0]['batch_id'];
+                }else{
+                    $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','created_on'=>$general->getDateTime()));
+                    $data['batch_id'] = $db->getInsertId();
+                }
+                $query="select vl_sample_id,result from vl_request_form where sample_code='".$sampleVal."'";
+                $vlResult=$db->rawQuery($query);
+                $data['status']=$_POST['status'];
+                $data['serial_no']=$rResult[0]['sample_code'];
+                if(count($vlResult)>0){
+                    $data['form_id']='2';
+                    $db=$db->where('sample_code',$rResult[0]['sample_code']);
+                    $result=$db->update($tableName1,$data);
+                }else{
+                    $data['sample_code']=$rResult[0]['sample_code'];
+                    $data['form_id']='2';
+                    $db->insert($tableName1,$data);
+                }
             }
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);
@@ -99,7 +116,7 @@ try {
                         'lab_tested_date'=>$accResult[$i]['lab_tested_date'],
                         'date_results_dispatched'=>$accResult[$i]['date_results_dispatched'],
                         'result_reviewed_date'=>$accResult[$i]['result_reviewed_date'],
-                        'result_reviewed_by'=>$accResult[$i]['result_reviewed_by'],
+                        'result_reviewed_by'=>$_POST['reviewedBy'],
                         'comments'=>$_POST['comments'],
                         'log_value'=>$accResult[$i]['log_value'],
                         'absolute_value'=>$accResult[$i]['absolute_value'],

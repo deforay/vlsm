@@ -58,7 +58,7 @@ $userResult = $db->rawQuery($userQuery);
 		  <!--<th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 		  <th style="width: 13%;">Form Serial No.</th>
 		  <th style="width: 11%;">Sample Collection Date</th>
-                  <th style="width: 18%;">Receive Date</th>
+                  <th style="width: 18%;">Sample Test Date</th>
                   <th style="width: 18%;">Clinic Name</th>
                   <th style="width: 18%;">Reason</th>
                   <th style="width: 11%;">Sample Type</th>
@@ -82,17 +82,12 @@ $userResult = $db->rawQuery($userQuery);
 		    <textarea style="height: 34px;" class="form-control" id="comments" name="comments" placeholder="Comments"></textarea>
 		  </td>
 		<td>
+		  <b>Reviewed By&nbsp;</b>
+		  <input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>
+		</td>
+		<td>
 		  <b>Approved By&nbsp;</b>
-		  <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Approved By" >
-			    <option value=""> -- Select -- </option>
-			    <?php
-			    foreach($userResult as $uName){
-			     ?>
-			     <option value="<?php echo $uName['user_id'];?>" <?php echo ($_SESSION['userId']==$uName['user_id'])?"selected='selected'":"";?>><?php echo ucwords($uName['user_name']);?></option>
-			     <?php
-			    }
-			    ?>
-		  </select>
+		  <input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>
 		</td>
 		  <td><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
 	    </tr>
@@ -189,27 +184,27 @@ $userResult = $db->rawQuery($userQuery);
     status = $("#checkedTestsIdValue").val();
     comments = $("#comments").val();
     appBy = $("#approvedBy").val();
+    reviewedBy = $("#reviewedBy").val();
     if(appBy!=''){
-    conf=confirm("Do you wish to change the status ?");
-    if(conf){
-    $.blockUI();
-	$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments,appBy:appBy, format: "html"},
-	       function(data){
-		if(data=='vlPrintResult.php')
-		{
-		  window.location.href="vlPrintResult.php";
+		conf=confirm("Are you sure you want to continue ?");
+		if(conf){
+			$.blockUI();
+			$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments,appBy:appBy, reviewedBy : reviewedBy, format: "html"},
+			function(data){
+				if(data=='vlPrintResult.php'){
+				  window.location.href="vlPrintResult.php";
+				}
+				oTable.fnDraw();
+				selectedTests = [];
+				selectedTestsIdValue = [];
+				$("#checkedTests").val('');
+				$("#checkedTestsIdValue").val('');
+				$("#comments").val('');
+			});
+			$.unblockUI();
+		}else{
+			oTable.fnDraw();
 		}
-		oTable.fnDraw();
-		selectedTests = [];
-		selectedTestsIdValue = [];
-		$("#checkedTests").val('');
-		$("#checkedTestsIdValue").val('');
-		$("#comments").val('');
-	       });
-	$.unblockUI();
-      }else{
-      oTable.fnDraw();
-      }
     }else{
       alert("Please choose approved by field");
     }
@@ -219,16 +214,16 @@ $userResult = $db->rawQuery($userQuery);
     if(status!=''){
       conf=confirm("Do you wish to change the status ?");
       if(conf){
-	$.blockUI();
-	$.post("updateUnApprovalResultStatus.php", { value : value,status:status, format: "html"},
+		$.blockUI();
+		$.post("updateUnApprovalResultStatus.php", { value : value,status:status, format: "html"},
 	       function(data){
-		oTable.fnDraw();
-		selectedTests = [];
-		selectedTestsId = [];
-		$("#checkedTests").val('');
-		$(".countChecksPending").html(0);
-	       });
-	$.unblockUI();
+			oTable.fnDraw();
+			selectedTests = [];
+			selectedTestsId = [];
+			$("#checkedTests").val('');
+			$(".countChecksPending").html(0);
+	    });
+		$.unblockUI();
       }else{
       oTable.fnDraw();
       }

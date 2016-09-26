@@ -173,6 +173,16 @@ if(sizeof($requestResult)> 0){
           $result['sample_collection_date']='';
           $sampleCollectionTime = '';
         }
+        
+        if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00 00:00:00'){
+          $expStr=explode(" ",$result['lab_tested_date']);
+          $result['lab_tested_date']=$general->humanDateFormat($expStr[0]);
+        }else{
+          $result['lab_tested_date']='';
+        }
+        
+        
+        
         if(isset($result['sample_testing_date']) && trim($result['sample_testing_date'])!='' && $result['sample_testing_date']!='0000-00-00'){
           $result['sample_testing_date']=$general->humanDateFormat($result['sample_testing_date']);
         }else{
@@ -206,17 +216,23 @@ if(sizeof($requestResult)> 0){
         $resultTextSize = '12px';
         $messageTextSize = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
-          if(strtolower(trim($result['result'])) == "target not detected"){
+          
+          if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
             $vlResult = 'TND*';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen';
-            $tndMessage = 'TND* - Target not Detectable';
+            $tndMessage = 'TND* - Target not Detected';
             $resultTextSize = '18px';
+          }else if(in_array(strtolower(trim($result[0]['result'])), array("failed","fail","no_sample"))){
+            $vlResult = $result[0]['result'];
+            $smileyContent = '';
+            $showMessage = '';
+            $messageTextSize = '14px';
           }else if(trim($result['result']) > 1000){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
-            $messageTextSize = '18px';
+            $messageTextSize = '16px';
           }else if(trim($result['result']) <= 1000){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
@@ -328,7 +344,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_collection_date'].'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleCollectionTime.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_testing_date'].'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_tested_date'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
@@ -398,7 +414,7 @@ if(sizeof($requestResult)> 0){
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:10px;height:10px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
-                    $html .='<td style="font-size:10px;text-align:left;">Print date '.$printDate.'&nbsp;&nbsp;&nbsp;&nbsp;time '.$printDateTime.'</td>';
+                    $html .='<td style="font-size:10px;text-align:left;">Printed on : '.$printDate.'&nbsp;&nbsp;'.$printDateTime.'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:4px;"></td>';
@@ -420,7 +436,7 @@ if(sizeof($requestResult)> 0){
       if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
         //Add event log
         $eventType = 'print-result';
-        $action = ucwords($_SESSION['userName']).' have been print the test result with patient CCC no. '.$result['art_no'];
+        $action = ucwords($_SESSION['userName']).' print the test result with patient CCC no. '.$result['art_no'];
         $resource = 'print-test-result';
         $data=array(
         'event_type'=>$eventType,
@@ -430,7 +446,7 @@ if(sizeof($requestResult)> 0){
         );
         $db->insert($tableName1,$data);
         //Update print datetime in VL tbl.
-        $db=$db->where('treament_id',$result['treament_id']);
+        $db=$db->where('vl_sample_id',$result['vl_sample_id']);
         $db->update($tableName2,array('date_result_printed'=>$general->getDateTime()));
       }
     }

@@ -1,3 +1,5 @@
+
+
 ALTER TABLE vl_request_form DROP FOREIGN KEY vl_request_form_ibfk_2
 
 ALTER TABLE `vl_request_form` CHANGE `art_no` `art_no` VARCHAR( 255 ) NULL DEFAULT NULL ;
@@ -512,3 +514,11 @@ ALTER TABLE  `vl_request_form` CHANGE  `result_reviewed_by`  `result_reviewed_by
 ALTER TABLE `vl_request_form` ADD `date_result_printed` DATETIME NULL DEFAULT NULL AFTER `vl_test_platform`;
 
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'patientList.php', 'Export Patient List');
+
+
+-- Amit 24 Sep 2016
+ALTER TABLE `vl_request_form` ADD `modified_by` INT NULL DEFAULT NULL AFTER `created_on`;
+
+-- Amit 25 Sep 2016
+ALTER TABLE `vl_request_form` CHANGE `treament_id` `vl_sample_id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `temp_sample_report` ADD `vl_test_platform` VARCHAR(255) NULL AFTER `file_name`;

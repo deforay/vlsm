@@ -29,11 +29,11 @@ foreach ($sampleTypeResult as $row) {
  $sampleType.='<option value="'.$row['sample_id'].'">'.ucwords($row['sample_name']).'</option>';
 }
 //sample code
-$sQuery="select MAX(treament_id) FROM vl_request_form";
+$sQuery="select MAX(vl_sample_id) FROM vl_request_form";
 $sResult=$db->query($sQuery);
-//print_r($sResult[0]['MAX(treament_id)']);die;
-if($sResult[0]['MAX(treament_id)']!=''){
- $maxId = $sResult[0]['MAX(treament_id)']+1;
+//print_r($sResult[0]['MAX(vl_sample_id)']);die;
+if($sResult[0]['MAX(vl_sample_id)']!=''){
+ $maxId = $sResult[0]['MAX(vl_sample_id)']+1;
 }else{
  $maxId = 1;
 }
