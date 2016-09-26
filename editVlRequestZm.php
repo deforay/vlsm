@@ -768,10 +768,10 @@ $("#vlLog").bind("keyup change", function(e) {
   
         var monthDigit = sampleCollOn.getMonth();
         var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = (splitSampleCollDate[0]<10) ? '0'+splitSampleCollDate[0]: splitSampleCollDate[0];
-        sampleCollDateTime = smplCollDate+"/"+smplCollMonth+"/"+smplCollYear+" "+splitSampleCollDateTime[1];
+        var smplCollDate = splitSampleCollDate[0];
+        sampleCollDateTime = smplCollDate+"/"+smplCollMonth+"/"+smplCollYear+" "+splitSampleCollDateTime[1]+":00";
         //Set sample rece. datetime
         splitSampleReceivedDateTime = sampleReceivedDate.split(" ");
         splitSampleReceivedDate = splitSampleReceivedDateTime[0].split("-");
@@ -779,11 +779,11 @@ $("#vlLog").bind("keyup change", function(e) {
   
         var monthDigit = sampleReceivedOn.getMonth();
         var smplReceivedYear = splitSampleReceivedDate[2];
-        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         smplReceivedMonth = (smplReceivedMonth<10) ? '0'+smplReceivedMonth: smplReceivedMonth;
-        var smplReceivedDate = (splitSampleReceivedDate[0]<10) ? '0'+splitSampleReceivedDate[0]: splitSampleReceivedDate[0];
-        sampleReceivedDateTime = smplReceivedDate+"/"+smplReceivedMonth+"/"+smplReceivedYear+" "+splitSampleReceivedDateTime[1];
-        if(Date.parse (sampleReceivedDateTime) < Date.parse (sampleCollDateTime)) {
+        var smplReceivedDate = splitSampleReceivedDate[0];
+        sampleReceivedDateTime = smplReceivedDate+"/"+smplReceivedMonth+"/"+smplReceivedYear+" "+splitSampleReceivedDateTime[1]+":00";
+        if(sampleReceivedDateTime < sampleCollDateTime) {
           alert("Sample Received Date could not be earlier than Sample Collection Date!");
           $("#sampleReceivedDate").val("");
         }
@@ -801,21 +801,23 @@ $("#vlLog").bind("keyup change", function(e) {
   
         var monthDigit = sampleCollOn.getMonth();
         var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = (splitSampleCollDate[0]<10) ? '0'+splitSampleCollDate[0]: splitSampleCollDate[0];
+        var smplCollDate = splitSampleCollDate[0];
         sampleCollDate = smplCollDate+"/"+smplCollMonth+"/"+smplCollYear;
         //Set sample testing date
-        splitSampleTestingDate = sampleTestingDate.split("-");
-        var sampleTestingOn = new Date(splitSampleTestingDate[1] + splitSampleTestingDate[2]+", "+splitSampleTestingDate[0]);
+        splitSampleTestedDate = sampleTestingDate.split("-");
+        var sampleTestingOn = new Date(splitSampleTestedDate[1] + splitSampleTestedDate[2]+", "+splitSampleTestedDate[0]);
   
         var monthDigit = sampleTestingOn.getMonth();
-        var smplTestingYear = splitSampleTestingDate[2];
-        var smplTestingMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var smplTestingYear = splitSampleTestedDate[2];
+        var smplTestingMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
-        var smplTestingDate = (splitSampleTestingDate[0]<10) ? '0'+splitSampleTestingDate[0]: splitSampleTestingDate[0];
+        var smplTestingDate = splitSampleTestedDate[0];
         sampleTestingAtLabDate = smplTestingDate+"/"+smplTestingMonth+"/"+smplTestingYear;
-        if(Date.parse (sampleTestingAtLabDate) < Date.parse (sampleCollDate)) {
+        //console.log(sampleTestingAtLabDate);
+        //console.log(sampleCollDate);
+        if(sampleTestingAtLabDate < sampleCollDate) {
           alert("Sample Testing Date could not be earlier than Sample Collection Date!");
           $("#sampleTestingDateAtLab").val("");
         }
@@ -831,9 +833,9 @@ $("#vlLog").bind("keyup change", function(e) {
         var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
         var monthDigit = dobDate.getMonth();
         var dobYear = splitDob[2];
-        var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var dobMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-        var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
+        var dobDate = splitDob[0];
         dobDate = dobDate+"/"+dobMonth+"/"+dobYear;
         //Set ART initiation date
         splitArtIniDate = artInitiationDate.split("-");
@@ -841,11 +843,11 @@ $("#vlLog").bind("keyup change", function(e) {
   
         var monthDigit = artInigOn.getMonth();
         var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = (splitArtIniDate[0]<10) ? '0'+splitArtIniDate[0]: splitArtIniDate[0];
+        var artIniDate = splitArtIniDate[0];
         artIniDate = artIniDate+"/"+artIniMonth+"/"+artIniYear;
-        if(Date.parse (artIniDate) < Date.parse (dobDate)) {
+        if(artIniDate < dobDate) {
           alert("ART Initiation Date could not be earlier than DOB!");
           $("#dateOfArtInitiation").val("");
         }
@@ -862,9 +864,9 @@ $("#vlLog").bind("keyup change", function(e) {
   
         var monthDigit = artInigOn.getMonth();
         var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = (splitArtIniDate[0]<10) ? '0'+splitArtIniDate[0]: splitArtIniDate[0];
+        var artIniDate = splitArtIniDate[0];
         artIniDate = artIniDate+"/"+artIniMonth+"/"+artIniYear;
         //Set Last VL Test date
         splitLastVLTestDate = dateOfLastVLTest.split("-");
@@ -872,11 +874,13 @@ $("#vlLog").bind("keyup change", function(e) {
   
         var monthDigit = lastVLTestOn.getMonth();
         var lastVLTestYear = splitArtIniDate[2];
-        var lastVLTestMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+        var lastVLTestMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
-        var lastVLTestDate = (splitLastVLTestDate[0]<10) ? '0'+splitLastVLTestDate[0]: splitLastVLTestDate[0];
+        var lastVLTestDate = splitLastVLTestDate[0];
         lastVLTestDate = lastVLTestDate+"/"+lastVLTestMonth+"/"+lastVLTestYear;
-        if(Date.parse (lastVLTestDate) < Date.parse (artIniDate)) {
+        //console.log(artIniDate);
+        //console.log(lastVLTestDate);
+        if(lastVLTestDate < artIniDate) {
           alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
           $("#lastViralLoadTestDate").val("");
         }
