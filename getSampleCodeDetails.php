@@ -19,13 +19,13 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 
 if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']==''){
-    $query="SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id=''";
+    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id=''";
 }else{
 if(isset($_POST['sCode']) && $_POST['sCode']!=''){
     $ids = implode(",",$_POST['sCode']);
-    $query = "SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where treament_id NOT IN (".$ids.") AND batch_id is NULL";
+    $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id NOT IN (".$ids.") AND batch_id is NULL";
 }else{
-$query="SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL";
 }
 if($fName!=''){
     $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
@@ -49,7 +49,7 @@ $result = $db->rawQuery($query);
 $sResult = array();
 if($_POST['sCode']!=''){
     $ids = implode(",",$_POST['sCode']);
-    $sQuery="SELECT vl.sample_code,vl.treament_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.treament_id IN (".$ids.") ";
+    $sQuery="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id IN (".$ids.") ";
     $sResult = $db->rawQuery($sQuery);
 }else{
    $_POST['sCode'] = array();
@@ -67,11 +67,11 @@ $merge = array_merge($sResult, $result);
         <?php
         foreach($merge as $sample){
             $selected = '';
-            if (in_array($sample['treament_id'], $_POST['sCode'])){
+            if (in_array($sample['vl_sample_id'], $_POST['sCode'])){
               $selected = "selected=selected";
             }
           ?>
-          <option value="<?php echo $sample['treament_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
+          <option value="<?php echo $sample['vl_sample_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
           <?php
         }
         ?>

@@ -10,7 +10,7 @@ try {
         $status=array(
             'status'=>$_POST['status']
         );
-        $db=$db->where('treament_id',$id[$i]);
+        $db=$db->where('vl_sample_id',$id[$i]);
         $db->update($tableName,$status);
         $result = $id[$i];
     }

@@ -65,8 +65,8 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
                     $logVal=floor(log10($absVal));
                     $txtVal="";
                 }else if($resVal == "<"){
-                    $absVal="0";
-                    $logVal="0";                    
+                    $absVal="";
+                    $logVal="";                    
                     $txtVal="< 100";
                 }
                 else{

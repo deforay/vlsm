@@ -185,13 +185,13 @@ try {
           'modified_on'=>$general->getDateTime()
         );
           
-          $db=$db->where('treament_id',$treamentId);
+          $db=$db->where('vl_sample_id',$treamentId);
           $db->update($tableName,$vldata);
           
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log
           $eventType = 'update-vl-request';
-          $action = ucwords($_SESSION['userName']).' have been updated a request data with the sample code '.$_POST['sampleCode'];
+          $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
           $resource = 'vl-request';
           $data=array(
           'event_type'=>$eventType,

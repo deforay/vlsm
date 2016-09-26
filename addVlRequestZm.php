@@ -83,7 +83,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $districtQuery="SELECT * from facility_details where state='".$stateName."'";
  $districtResult=$db->query($districtQuery);
  
- $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.treament_id="'.$_SESSION['treamentId'].'"';
+ $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentId'].'"';
  $vlResult=$db->query($vlQuery);
  $urgency = $vlResult[0]['urgency'];
  $cBy = $vlResult[0]['collected_by'];
@@ -433,11 +433,8 @@ if($urgency==''){
                         <td>
                           <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
                               <option value=""> -- Select -- </option>
-                              <option value="roche">ROCHE</option>
-                              <option value="abbott">ABBOTT</option>
-                              <option value="poor">BIOMEREUX</option>
-                              <option value="poc">POC</option>
-                              <option value="other">OTHER</option>
+                              <option value="Roche">Roche</option>
+                              <option value="Biomerieux">Biomerieux</option>
                           </select>
                         </td>
                         <td><label for="specimenType">Specimen type</label></td>
@@ -483,8 +480,8 @@ if($urgency==''){
                         <?php } ?>
                       </tr>
                       <tr>
-                        <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="5"><textarea class="form-control" name="labCommnets" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
+                        <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
+                        <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
                         <!--<td><label for="dateOfReceivedStamp">Date Of Result</label></td>
                         <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>-->
                       </tr>

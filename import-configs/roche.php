@@ -19,6 +19,8 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
      $logAndAbsoluteValInSameCol='no';
      $sampleTypeVal = 'F';
      $batchCodeVal = 'G';
+     $flagCol = 'K';
+     //$flagRow = '2';
                 
     
      if($sampleIdCol==$cellName){
@@ -26,6 +28,7 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
             $sampleVal=$cell->getCalculatedValue();
         }
      }
+     
      if($sampleTypeVal==$cellName){
         if($rKey>=$sampleIdRow){
             $sampleType=$cell->getCalculatedValue();
@@ -37,10 +40,30 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
         }
      }
      
+     if($flagCol==$cellName){
+        if($rKey>=$sampleIdRow){
+            $resultFlag=$cell->getCalculatedValue();
+        }
+     }
+     
+     
+
+     
+     
      if($testingDateCol==$cellName){
         if($rKey>=$testingDateRow){
-          $resVal=explode(" ",$cell->getCalculatedValue());
-          $testingDate=str_replace("/","-",$resVal[0]);
+
+          
+          
+          $cellDt = $sheetData->getCell($cellName.$rKey);
+          //$testingDate= $cellDt->getValue();
+          $resVal=explode(" ",$cellDt->getValue());
+          $testingDate=str_replace("/","-",$resVal[0]);          
+          if(PHPExcel_Shared_Date::isDateTime($cellDt)) {
+               $testingDate = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($testingDate)); 
+          }          
+          
+          
         }
      }
      

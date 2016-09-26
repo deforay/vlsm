@@ -22,7 +22,7 @@ if($id >0){
     $query="SELECT * from batch_details where batch_id=$id";
     $bResult=$db->query($query);
     
-    $fQuery="SELECT treament_id,sample_code from vl_request_form where batch_id=$id";
+    $fQuery="SELECT vl_sample_id,sample_code from vl_request_form where batch_id=$id";
     $result=$db->query($fQuery);
     
     

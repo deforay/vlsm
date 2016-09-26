@@ -47,7 +47,7 @@ try {
           'status'=>$_POST['status'],
         );
           //print_r($vldata);die;
-          $db=$db->where('treament_id',$treamentId);
+          $db=$db->where('vl_sample_id',$treamentId);
           $db->update($tableName,$vldata);
           
           $_SESSION['alertMsg']="VL Result updated successfully";

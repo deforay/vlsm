@@ -6,7 +6,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $tableName1="activity_log";
 $id=base64_decode($_GET['id']);
-$vlQuery="SELECT * from vl_request_form where treament_id=$id";
+$vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -54,7 +54,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
 }
 //Add event log
 $eventType = 'view-vl-request-zm';
-$action = ucwords($_SESSION['userName']).' have been viewed a request data with the sample code '.$vlQueryInfo[0]['sample_code'];
+$action = ucwords($_SESSION['userName']).' viewed a request data with the sample code '.$vlQueryInfo[0]['sample_code'];
 $resource = 'vl-request-zm';
 $data=array(
 'event_type'=>$eventType,
@@ -288,7 +288,7 @@ $db->insert($tableName1,$data);
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="labCommnets">Laboratory <br/>Scientist Comments</label></td>
+                        <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
                         <td colspan="5"><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['comments'];?>"/> </td>
                       </tr>
                       <tr>

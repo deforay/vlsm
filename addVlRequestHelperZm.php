@@ -112,7 +112,7 @@ try {
           'absolute_value'=>$_POST['vlResult'],
           'result'=>$_POST['result'],
           'log_value'=>$_POST['vlLog'],
-          'comments'=>$_POST['labCommnets'],
+          'comments'=>$_POST['labComments'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
@@ -120,13 +120,14 @@ try {
           'status'=>$status,
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime(),
+          'modified_by'=>$_SESSION['userId'],
           'modified_on'=>$general->getDateTime()
         );
           $id=$db->insert($tableName,$vldata);
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
           $eventType = 'add-vl-request-zm';
-          $action = ucwords($_SESSION['userName']).' have been added a new request data with the sample code '.$_POST['serialNo'];
+          $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['serialNo'];
           $resource = 'vl-request-zm';
           $data=array(
           'event_type'=>$eventType,

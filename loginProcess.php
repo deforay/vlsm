@@ -18,7 +18,7 @@ try {
         if(count($admin)>0){
             //Add event log
             $eventType = 'login';
-            $action = ucwords($admin[0]['user_name']).' have been logged in';
+            $action = ucwords($admin[0]['user_name']).' logged in';
             $resource = 'user-login';
             $data=array(
             'event_type'=>$eventType,

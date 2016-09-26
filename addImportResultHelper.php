@@ -9,7 +9,7 @@ $confFileName=base64_decode($_POST['machineName']);
 
 include("import-configs".DIRECTORY_SEPARATOR.$confFileName);
 
-//$query="select treament_id,sample_code from vl_request_form";
+//$query="select vl_sample_id,sample_code from vl_request_form";
 //$vlResult=$db->rawQuery($query);
 $configQuery="SELECT * from global_config";
     $configResult=$db->query($configQuery);
@@ -34,7 +34,7 @@ try {
             //set session for controller track id in hold_sample_record table
             $cQuery="select MAX(import_batch_tracking) FROM hold_sample_report";
             $cResult=$db->query($cQuery);
-            //print_r($sResult[0]['MAX(treament_id)']);die;
+            //print_r($sResult[0]['MAX(vl_sample_id)']);die;
             if($cResult[0]['MAX(import_batch_tracking)']!=''){
              $maxId = $cResult[0]['MAX(import_batch_tracking)']+1;
             }else{
@@ -115,6 +115,8 @@ try {
                     //echo $cellRow;
                     $data=array(
                         'lab_id'=>base64_decode($_POST['labId']),
+                        //'vl_test_platform'=>$_POST['machineName'],
+                        'vl_test_platform'=>$_POST['vltestPlatform'],
                         'result_reviewed_by'=>$_SESSION['userId'],
                         'sample_code'=>$sampleVal,
                         'log_value'=>$logVal,
@@ -122,11 +124,25 @@ try {
                         'absolute_value'=>$absVal,
                         'text_value'=>$txtVal,
                         'absolute_decimal_value'=>$absDecimalVal,
-                        'result'=>$resultFlag,
+                        //'result'=>$resultFlag,
                         'lab_tested_date'=>$testingDate,
                         'status'=>'6',
-                        'file_name'=>$fileName
+                        'file_name'=>$fileName,
+                        'comments'=>$resultFlag
                     );
+                    
+                    
+                    if($absVal != ""){
+                      $data['result'] = $absVal;
+                    }else if($logVal != ""){
+                      $data['result'] = $logVal;
+                    }else if($txtVal != ""){
+                      $data['result'] = $txtVal;
+                    }else{
+                      $data['result'] = "";
+                    }
+                    
+                    
                      if($batchCode==''){
                         $data['batch_code']=$newBacthCode;
                         $data['batch_code_key']=$maxBatchCodeKey;
@@ -135,7 +151,7 @@ try {
                         $data['batch_code']=$batchCode;
                     }
                     
-                    $query="select facility_id,treament_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='".$sampleVal."'";
+                    $query="select facility_id,vl_sample_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='".$sampleVal."'";
                     $vlResult=$db->rawQuery($query);
                     if($vlResult && $sampleVal!=''){
                         if($vlResult[0]['log_value']!='' || $vlResult[0]['absolute_value']!='' || $vlResult[0]['text_value']!='' || $vlResult[0]['absolute_decimal_value']!=''){
@@ -163,7 +179,7 @@ try {
         $_SESSION['alertMsg']="Imported results successfully";
         //Add event log
         $eventType = 'import';
-        $action = ucwords($_SESSION['userName']).' have been imported a new test result';
+        $action = ucwords($_SESSION['userName']).' imported a new test result';
         $resource = 'import-result';
         $data=array(
         'event_type'=>$eventType,
