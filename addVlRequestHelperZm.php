@@ -65,6 +65,7 @@ try {
           $_POST['patientPregnant']='';
           $_POST['breastfeeding']='';
      }
+     $_POST['result'] = '';
      if($_POST['vlResult']!=''){
           $_POST['result'] = $_POST['vlResult'];
      }else if($_POST['vlLog']!=''){
@@ -72,6 +73,11 @@ try {
      }
      if(!isset($_POST['approvedBy'])){
           $_POST['approvedBy'] = '';
+     }if(!isset($_POST['noResult'])){
+          $_POST['noResult'] = '';
+     }
+     if(!isset($_POST['patientPhoneNumber'])){
+          $_POST['patientPhoneNumber'] = '';
      }
      
      $vldata=array(
@@ -124,6 +130,7 @@ try {
           'modified_on'=>$general->getDateTime()
         );
           $id=$db->insert($tableName,$vldata);
+          if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
           $eventType = 'add-vl-request-zm';
@@ -136,18 +143,20 @@ try {
           'date_time'=>$general->getDateTime()
           );
           $db->insert($tableName1,$data);
-    if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
-          $_SESSION['treamentId'] = $id;
-          $_SESSION['facilityId'] = $_POST['clinicName'];
-          header("location:addVlRequest.php");
-    }else{
-          $_SESSION['treamentId'] = '';
-          $_SESSION['facilityId'] = '';
-          unset($_SESSION['treamentId']);
-          unset($_SESSION['facilityId']);
-          header("location:vlRequest.php");
-    }
-    
+          if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
+                $_SESSION['treamentId'] = $id;
+                $_SESSION['facilityId'] = $_POST['clinicName'];
+                header("location:addVlRequest.php");
+          }else{
+                $_SESSION['treamentId'] = '';
+                $_SESSION['facilityId'] = '';
+                unset($_SESSION['treamentId']);
+                unset($_SESSION['facilityId']);
+                header("location:vlRequest.php");
+          }
+          }else{
+               $_SESSION['alertMsg']="Please try again later";
+          }
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());

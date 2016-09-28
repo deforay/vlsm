@@ -44,7 +44,7 @@ if(isset($stateResult[0]['province_code']) && $stateResult[0]['province_code']!=
   $stateResult[0]['province_code'] = 0;
 }
 //district details
-$districtQuery="SELECT * from facility_details where state='".$stateName."'";
+$districtQuery="SELECT DISTINCT district from facility_details where state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
 
 $province = '';
@@ -174,7 +174,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="District">District <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;">
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this)">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($districtResult as $districtName){
@@ -528,6 +528,19 @@ facilityName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
       $("#clinicName").html("<?php echo $facility;?>");
+    }
+  }
+  function getfacilityDistrictwise(obj)
+  {
+    var dName = $("#district").val();
+    var cName = $("#clinicName").val();
+    if(dName!=''){
+      $.post("getFacilityForClinic.php", {dName:dName,cliName:cName},
+      function(data){
+	  if(data != ""){
+            $("#clinicName").html(data);
+	  }
+      });
     }
   }
   function getfacilityProvinceDetails(obj)
