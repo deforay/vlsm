@@ -6,6 +6,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 
 $tableName1="activity_log";
+$tableName2 = 'vl_instance';
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
         $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
@@ -16,6 +17,16 @@ try {
         $admin = $db->rawQuery("SELECT ud.user_id,ud.user_name,ud.email,r.role_name,r.role_code,r.role_id FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $params);
         
         if(count($admin)>0){
+            //add random key
+            $instanceQuery="SELECT * FROM vl_instance";
+            $instanceResult=$db->query($instanceQuery);
+            if($instanceResult){
+                $_SESSION['instanceId']=$instanceResult[0]['vl_instance_id'];
+            }else{
+                $id = $general->generateRandomString(30);
+                $db->insert($tableName2,array('vl_instance_id'=>$id));
+                $_SESSION['instanceId']=$id;
+            }
             //Add event log
             $eventType = 'login';
             $action = ucwords($admin[0]['user_name']).' logged in';
