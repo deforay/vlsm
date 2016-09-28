@@ -112,29 +112,55 @@ if($id >0){
         // add a page
         $pdf->AddPage();
     
-        // define barcode style
-        $style = array(
-            'position' => '',
-            'align' => 'C',
-            'stretch' => false,
-            'fitwidth' => true,
-            'cellfitalign' => '',
-            'border' => true,
-            'hpadding' => 'auto',
-            'vpadding' => 'auto',
-            'fgcolor' => array(0,0,0),
-            'bgcolor' => false, //array(255,255,255),
-            'text' => true,
-            'font' => 'helvetica',
-            'fontsize' => 8,
-            'stretchtext' => 4
-        );
+$tbl = '
+<table cellspacing="0" cellpadding="3" border="1">
+<thead>
+    <tr nobr="true" style="background-color:#71b9e2;color:#FFFFFF;">
+        <td align="center" width="8%">S.No.</td>
+        <td align="center" width="27%">Sample ID</td>
+        <td align="center" width="65%">Barcode</td>
+    </tr>
+</thead>
+<tbody>
+    <tr nobr="true">
+        <td align="center" width="8%" >1.</td>
+        <td align="center" width="27%" >CONTROL 1</td>
+        <td align="center" width="65%" ></td>
+    </tr>
+    <tr nobr="true">
+        <td align="center" width="8%" >2.</td>
+        <td align="center" width="27%" >CONTROL 2</td>
+        <td align="center" width="65%" ></td>
+    </tr>
+    <tr nobr="true">
+        <td align="center" width="8%" >3.</td>
+        <td align="center" width="27%">CONTROL 3</td>
+        <td align="center" width="65%"></td>
+    </tr>';
+    
+    $sampleCounter = 4;
+
+   foreach($result as $val){
+    
+            $params = $pdf->serializeTCPDFtagParameters(array($val['sample_code'], 'C39', '', '', 0, 0, 0.25, array('border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2), 'N'));
+
+            $tbl .='<tr>
+                    <td align="center" width="8%">'.$sampleCounter.'.</td>
+                    <td align="center" width="27%">'.$val['sample_code'].'</td>
+                    <td align="center" width="65%">
+                        <tcpdf method="write1DBarcode" params="'.$params.'" />
+                    </td>
+            </tr>';            
+            $sampleCounter++;  
+    } 
         
-        //$b=1;
-        foreach($result as $val){
-            $pdf->write1DBarcode($val['sample_code'], 'C39', '', '', '', 18, 0.4, $style, 'N');
-            $pdf->Ln(8);
-        }
+        
+    $tbl .='</tbody>
+    </table>';
+            
+            $pdf->writeHTML($tbl, true, false, false, false, '');
+        
+        
     
         $filename = trim($bResult[0]['batch_code']).'.pdf';
         $pdf->Output('uploads'. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
