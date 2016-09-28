@@ -17,16 +17,10 @@ if($facilityInfo){
         $state.="<option value=''> -- Select -- </option>";
     }
     
-    $facilityQuery="SELECT * from facility_details where state='".$provinceName."'";
-    $facilityInfo=$db->query($facilityQuery);
     $district = '';
-    if($facilityInfo){
+    if($facilityInfo[0]['district']!=''){
         $district.="<option value=''> -- Select -- </option>";
-        foreach($facilityInfo as $districtName){
-            if($districtName['district']!=''){
-            $district .= "<option value='".$districtName['district']."'>".ucwords($districtName['district'])."</option>";
-            }
-        }
+            $district .= "<option value='".$facilityInfo[0]['district']."'>".ucwords($facilityInfo[0]['district'])."</option>";
     }else{
         $district.="<option value=''> -- Select -- </option>";
     }
@@ -35,7 +29,11 @@ if($facilityInfo){
 }
 if(isset($_POST['pName'])){
    $provinceName=explode("##",$_POST['pName']);
-    $facilityQuery="SELECT * from facility_details where state='".$provinceName[0]."'";
+   $dName = '';
+   if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
+    $dName = " AND district='".$_POST['dName']."'";
+   }
+    $facilityQuery="SELECT * from facility_details where state='".$provinceName[0]."'".$dName;
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
@@ -47,9 +45,11 @@ if(isset($_POST['pName'])){
         $facility.="<option value=''> -- Select -- </option>";
     }
     $district = '';
-    if($facilityInfo){
+    $facilityDistQuery="SELECT DISTINCT district from facility_details where state='".$provinceName[0]."'";
+    $facilityDistInfo=$db->query($facilityDistQuery);
+    if($facilityDistInfo){
         $district.="<option value=''> -- Select -- </option>";
-        foreach($facilityInfo as $districtName){
+        foreach($facilityDistInfo as $districtName){
             if(trim($districtName['district'])!=""){
             $district .= "<option value='".$districtName['district']."'>".ucwords($districtName['district'])."</option>";
             }
@@ -58,6 +58,23 @@ if(isset($_POST['pName'])){
         $district.="<option value=''> -- Select -- </option>";
     }
     echo $facility."###".$district."###".'';
+}
+if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
+   $distName=$_POST['dName'];
+    $facilityQuery="SELECT * from facility_details where district='".$distName."'";
+    $facilityInfo=$db->query($facilityQuery);
+    $facility = '';
+    if($facilityInfo){ ?>
+        <option value=''> -- Select -- </option>
+        <?php
+        foreach($facilityInfo as $fDetails){ ?>
+            <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_POST['cliName']==$fDetails['facility_id'])?'selected="selected"':'';?>><?php echo ucwords($fDetails['facility_name']);?></option>
+            <?php
+        }
+    }else{ ?>
+        <option value=''> -- Select -- </option>
+        <?php
+    }
 }
 
 ?>

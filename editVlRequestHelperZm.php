@@ -60,12 +60,19 @@ try {
           $_POST['patientPregnant']='';
           $_POST['breastfeeding']='';
      }
+     $_POST['result'] = '';
      if($_POST['vlResult']!=''){
           $_POST['result'] = $_POST['vlResult'];
      }else if($_POST['vlLog']!=''){
           $_POST['result'] = $_POST['vlLog'];
      }else if($_POST['textValue']!=''){
           $_POST['result'] = $_POST['textValue'];
+     }
+     if(!isset($_POST['noResult'])){
+          $_POST['noResult'] = '';
+     }
+     if(!isset($_POST['patientPhoneNumber'])){
+          $_POST['patientPhoneNumber'] = '';
      }
      
      $vldata=array(
@@ -114,7 +121,8 @@ try {
           } 
           //print_r($vldata);die;
           $db=$db->where('vl_sample_id',$_POST['treamentId']);
-          $db->update($tableName,$vldata);
+          $id = $db->update($tableName,$vldata);
+          if($id>0){
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log
           $eventType = 'update-vl-request-zm';
@@ -127,6 +135,9 @@ try {
           'date_time'=>$general->getDateTime()
           );
           $db->insert($tableName1,$data);
+          }else{
+               alert("Please try again later");
+          }
           header("location:vlRequest.php");
     
   
