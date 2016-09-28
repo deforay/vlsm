@@ -857,7 +857,7 @@ $("#vlLog").bind("keyup change", function(e) {
         artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
         var artIniDate = splitArtIniDate[0];
         artIniDate = artIniDate+"/"+artIniMonth+"/"+artIniYear;
-        if(artIniDate < dobDate) {
+          if((new Date(artIniDate) < new Date(dobDate))) {
           alert("ART Initiation Date could not be earlier than DOB!");
           $("#dateOfArtInitiation").val("");
         }
