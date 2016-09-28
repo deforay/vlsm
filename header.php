@@ -64,7 +64,7 @@ $formConfigResult=$db->query($formConfigQuery);
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>VL Lab Request</title>
   <!-- Tell the browser to be responsive to screen width -->

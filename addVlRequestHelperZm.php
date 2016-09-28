@@ -134,6 +134,7 @@ try {
           'modified_by'=>$_SESSION['userId'],
           'modified_on'=>$general->getDateTime()
         );
+         //print_r($vldata);die;
           $id=$db->insert($tableName,$vldata);
           if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
