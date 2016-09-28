@@ -27,27 +27,27 @@ if(end($urlLast)=='vlResultUnApproval.php'){
     unset($_SESSION['controllertrack']);
 }
 }
-if(array_intersect($_SESSION['privileges'], array('roles.php', 'users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('roles.php', 'users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php'))) {
   $allAdminMenuAccess = true;
 }else{
   $allAdminMenuAccess = false;  
 }
-if(array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php','batchcode.php','vlRequestMail.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php','batchcode.php','vlRequestMail.php'))) {
   $requestMenuAccess = true;
 }else{
   $requestMenuAccess = false;  
 }
-if(array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlPrintResult.php','vlTestResult.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlPrintResult.php','vlTestResult.php'))) {
   $testResultMenuAccess = true;
 }else{
   $testResultMenuAccess = false;  
 }
-if(array_intersect($_SESSION['privileges'], array('missingResult.php', 'vlResult.php','highViralLoad.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('missingResult.php', 'vlResult.php','highViralLoad.php'))) {
   $managementMenuAccess = true;
 }else{
   $managementMenuAccess = false;  
 }
-if(in_array(('index.php'),$_SESSION['privileges']))
+if(isset($_SESSION['privileges']) && in_array(('index.php'),$_SESSION['privileges']))
 {
   $dashBoardMenuAccess = true;
 }else{
