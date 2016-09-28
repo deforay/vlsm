@@ -522,3 +522,6 @@ ALTER TABLE `vl_request_form` ADD `modified_by` INT NULL DEFAULT NULL AFTER `cre
 -- Amit 25 Sep 2016
 ALTER TABLE `vl_request_form` CHANGE `treament_id` `vl_sample_id` INT(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `temp_sample_report` ADD `vl_test_platform` VARCHAR(255) NULL AFTER `file_name`;
+
+-- Pal 28 Sep 2016
+update global_config set value = 3 where name = "vl_form"
