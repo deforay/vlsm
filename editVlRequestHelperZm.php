@@ -136,7 +136,7 @@ try {
           );
           $db->insert($tableName1,$data);
           }else{
-               alert("Please try again later");
+               $_SESSION['alertMsg']="Please try again later";
           }
           header("location:vlRequest.php");
     
