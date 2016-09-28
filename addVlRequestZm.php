@@ -5,7 +5,7 @@ ob_start();
 include('General.php');
 $general=new Deforay_Commons_General();
 $autoApprovalFieldStatus = 'show';
-if($_SESSION['roleCode'] == "DE"){
+if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE"){
   $configQuery="SELECT value FROM global_config WHERE name = 'auto_approval'";
   $configResult=$db->query($configQuery);
   if(isset($configResult) && count($configResult)> 0 && $configResult[0]['value'] == 'no'){
