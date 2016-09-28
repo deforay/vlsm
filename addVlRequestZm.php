@@ -545,6 +545,7 @@ facilityName = true;
   }
   function getfacilityDetails(obj)
   {
+    $.blockUI();
       var cName = $("#clinicName").val();
       var pName = $("#province").val();
       if(pName!='' && provinceName && facilityName){
@@ -574,9 +575,11 @@ facilityName = true;
       $("#province").html("<?php echo $province;?>");
       $("#clinicName").html("<?php echo $facility;?>");
     }
+    $.unblockUI();
   }
   function getfacilityDistrictwise(obj)
   {
+    $.blockUI();
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
     if(dName!=''){
@@ -587,9 +590,11 @@ facilityName = true;
 	  }
       });
     }
+    $.unblockUI();
   }
   function getfacilityProvinceDetails(obj)
   {
+    $.blockUI();
      //check facility name
       var cName = $("#clinicName").val();
       var pName = $("#province").val();
@@ -612,6 +617,7 @@ facilityName = true;
       $("#province").html("<?php echo $province;?>");
       $("#clinicName").html("<?php echo $facility;?>");
     }
+    $.unblockUI();
   }
   $(document).ready(function() {
     
@@ -873,7 +879,7 @@ $("#vlLog").bind("keyup change", function(e) {
         artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
         var artIniDate = splitArtIniDate[0];
         artIniDate = artIniDate+"/"+artIniMonth+"/"+artIniYear;
-        if(artIniDate < dobDate) {
+        if((new Date(artIniDate) < new Date(dobDate))) {
           alert("ART Initiation Date could not be earlier than DOB!");
           $("#dateOfArtInitiation").val("");
         }
