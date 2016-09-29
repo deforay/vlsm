@@ -525,3 +525,12 @@ ALTER TABLE `temp_sample_report` ADD `vl_test_platform` VARCHAR(255) NULL AFTER 
 
 -- Pal 28 Sep 2016
 update global_config set value = 3 where name = "vl_form"
+
+-- Pal 29 Sep 2016
+ALTER TABLE `vl_request_form` ADD `service` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_test_platform`;
+
+ALTER TABLE `vl_request_form` ADD `support_partner` VARCHAR(255) NULL DEFAULT NULL AFTER `service`;
+
+ALTER TABLE `vl_request_form` ADD `has_changed_regimen` VARCHAR(45) NULL DEFAULT NULL AFTER `support_partner`;
+
+ALTER TABLE `vl_request_form` ADD `reason_for_regimen_change` VARCHAR(255) NULL DEFAULT NULL AFTER `has_changed_regimen`, ADD `date_of_regimen_changed` DATE NULL DEFAULT NULL AFTER `reason_for_regimen_change`;
