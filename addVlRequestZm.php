@@ -667,7 +667,7 @@ $("#vlLog").bind("keyup change", function(e) {
      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
      }).click(function(){
    	$('.ui-datepicker-calendar').show();
-   });
+     });
   
   });
   $("input:radio[name=gender]").click(function() {
