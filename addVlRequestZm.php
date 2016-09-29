@@ -515,8 +515,8 @@ if($urgency==''){
   
   
   <script type="text/javascript">
-provinceName = true;
-facilityName = true;
+  provinceName = true;
+  facilityName = true;
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
