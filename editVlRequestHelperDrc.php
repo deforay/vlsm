@@ -7,10 +7,6 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
-    $instanceId = '';
-    if(isset($_SESSION['instanceId'])){
-        $instanceId = $_SESSION['instanceId'];
-    }
     //Set dob
     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
         $_POST['dob']=$general->dateFormat($_POST['dob']);  
@@ -83,8 +79,6 @@ try {
         $_POST['sampleTestingDateAtLab']=$general->dateFormat($_POST['sampleTestingDateAtLab']);  
     }
     $vldata=array(
-                  'vl_instance_id'=>$instanceId,
-                  'form_id'=>3,
                   'facility_id'=>$_POST['clinicName'],
                   'service'=>$_POST['service'],
                   'request_clinician'=>$_POST['clinicianName'],
@@ -111,17 +105,16 @@ try {
                   'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'result'=>$_POST['vlResult'],
-                  'created_by'=>$_SESSION['userId'],
-                  'created_on'=>$general->getDateTime(),
                   'modified_by'=>$_SESSION['userId'],
                   'modified_on'=>$general->getDateTime()
                 );
-    $id=$db->insert($tableName,$vldata);
+    $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
+    $id = $db->update($tableName,$vldata);
     if($id>0){
-        $_SESSION['alertMsg']="VL request added successfully";
+        $_SESSION['alertMsg']="VL request updated successfully";
         //Add event log
-        $eventType = 'add-vl-request-drc';
-        $action = ucwords($_SESSION['userName']).' added a new request data with the patient code '.$_POST['patientArtNo'];
+        $eventType = 'edit-vl-request-drc';
+        $action = ucwords($_SESSION['userName']).' updated a request data with the patient code '.$_POST['patientArtNo'];
         $resource = 'vl-request-drc';
         $data=array(
         'event_type'=>$eventType,
