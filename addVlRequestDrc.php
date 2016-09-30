@@ -8,12 +8,12 @@
     $fQuery="SELECT * FROM facility_details where status='active'";
     $fResult = $db->rawQuery($fQuery);
     $province = "";
-    $province.="<option value=''> -- Select -- </option>";
+    $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
       $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
     }
     $facility = "";
-    $facility.="<option value=''> -- Select -- </option>";
+    $facility.="<option value=''> -- Sélectionner -- </option>";
     foreach($fResult as $fDetails){
       $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
     }
@@ -163,7 +163,7 @@
                                 <td><label>Régime ARV en cours </label></td>
                                 <td colspan="7">
                                   <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkCurrentRegimen();" style="width:30%;">
-                                    <option value=""> -- Select -- </option>
+                                    <option value=""> -- Sélectionner -- </option>
                                       <?php
                                       foreach($aResult as $arv){
                                       ?>
@@ -171,7 +171,7 @@
                                       <?php
                                       }
                                       ?>
-                                      <option value="other">Other</option>
+                                      <option value="other">Autre</option>
                                   </select>
                                 </td>
                             </tr>
@@ -208,10 +208,10 @@
                                 <td><label for="reasonForRequest">Motif de la demande </label></td>
                                 <td colspan="2">
                                    <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
-                                      <option value=""> -- Select -- </option>
+                                      <option value=""> -- Sélectionner -- </option>
                                       <option value="routine_check">Contrôle de routine</option>
                                       <option value="treatment_failure">Suspicion d’échec Thérapeutique</option>
-                                      <option value="other">Other</option>
+                                      <option value="other">Autre</option>
                                     </select>
                                 </td>
                                 <td><label for="viralLoadN">Charge virale N </label></td>
@@ -255,7 +255,7 @@
                                 <td><label for="specimenType">Type d’échantillon </label></td>
                                 <td colspan="3">
                                   <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d’échantillon" onchange="checkSpecimenType();" style="width:30%;">
-                                    <option value=""> -- Select -- </option>
+                                    <option value=""> -- Sélectionner -- </option>
                                     <?php
                                     foreach($sResult as $type){
                                      ?>
@@ -304,7 +304,7 @@
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
-                                      <option value="">-- Select --</option>
+                                      <option value=""> -- Sélectionner -- </option>
                                       <option value="7">Echantillon accepté</option>
                                       <option value="4">Echantillon rejeté</option>
                                     </select>
@@ -333,9 +333,9 @@
                                 <td><label for="testingPlatform">Technique utilisée </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisée" style="width:30%;">
-                                        <option value=""> -- Select -- </option>
-                                        <option value="plasma protocole 600µl">Plasma protocole 600µl</option>
-                                        <option value="DBS protocole 1000 µl">DBS protocole 1000 µl</option>
+                                        <option value=""> -- Sélectionner -- </option>
+                                        <option value="plasma_protocole_600">Plasma protocole 600µl</option>
+                                        <option value="dbs_protocole_1000">DBS protocole 1000 µl</option>
                                     </select>
                                 </td>
                             </tr>
