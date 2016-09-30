@@ -121,7 +121,7 @@ try {
         $_SESSION['alertMsg']="VL request added successfully";
         //Add event log
         $eventType = 'add-vl-request-drc';
-        $action = ucwords($_SESSION['userName']).' added a new request data with the sample code ';
+        $action = ucwords($_SESSION['userName']).' added a new request data with the patient code '.$_POST['patientArtNo'];
         $resource = 'vl-request-drc';
         $data=array(
         'event_type'=>$eventType,
