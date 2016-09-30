@@ -106,7 +106,7 @@
                                 </td>
                                 <td><label for="clinicanTelephone">Téléphone </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" style="width:100%;"/>
                                 </td>
                                 <td><label for="supportPartner">Partenaire d’appui </label></td>
                                 <td>
@@ -131,11 +131,11 @@
                                 </td>
                                 <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="ageInMonths">Âge en mois </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" style="width:100%;"/>
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
                                 <td style="width:14%;">
@@ -269,7 +269,7 @@
                             <tr class="plasmaElement" style="display:none;">
                                 <td><label for="storageTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="storageTemperature" name="storageTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:80%;"/>°C
+                                    <input type="text" class="form-control checkNum" id="storageTemperature" name="storageTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:80%;"/>°C
                                 </td>
                                 <td><label for="duationOfConservation">Durée de conservation </label></td>
                                 <td>
@@ -319,7 +319,7 @@
                             <tr>
                                 <td><label for="labNo">Code Labo </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control" id="labNo" name="labNo" placeholder="Code Labo" title="Please enter code labo" style="width:30%;"/>
+                                    <input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Code Labo" title="Please enter code labo" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
