@@ -199,7 +199,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTests=[];
    var selectedTestsId=[];
    var oTable = null;
-  $(document).ready(function() {
+   $(document).ready(function() {
      loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',

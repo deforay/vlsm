@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('header.php');
-$id=base64_decode($_GET['id']);
+$id = base64_decode($_GET['id']);
 $configQuery="SELECT * from global_config";
     $configResult=$db->query($configQuery);
     $arr = array();
@@ -11,9 +11,10 @@ $configQuery="SELECT * from global_config";
     }
     if($arr['vl_form']==1){
      include('defaultEditVlRequest.php');
-    }
-    if($arr['vl_form']==2){
+    }else if($arr['vl_form']==2){
      include('editVlRequestZm.php');
+    }else if($arr['vl_form']==3){
+      include('editVlRequestDrc.php');
     }
 include('footer.php');
  ?>
