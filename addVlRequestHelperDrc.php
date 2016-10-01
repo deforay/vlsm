@@ -51,7 +51,14 @@ try {
     if(isset($_POST['vlTestReason']) && trim($_POST['vlTestReason'])!=""){
         if(trim($_POST['vlTestReason']) == 'other'){
             if(isset($_POST['newVlTestReason']) && trim($_POST['newVlTestReason'])!=""){
-                $_POST['vlTestReason'] = str_replace(' ', '_', strtolower($_POST['newVlTestReason']));
+                $data=array(
+                'test_reason_name'=>$_POST['newVlTestReason'],
+                'test_reason_status'=>'active'
+                );
+                $id=$db->insert('r_vl_test_reasons',$data);
+                $_POST['vlTestReason'] = $id;
+            }else{
+                $_POST['vlTestReason'] = '';
             }
         }
     }else{
@@ -64,10 +71,12 @@ try {
     //Sample type section
     if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!=""){
         if(trim($_POST['specimenType'])!= 2){
-            $_POST['storageTemperature'] = '';
+            $_POST['conservationTemperature'] = '';
+            $_POST['durationOfConservation'] = '';
         }
     }else{
-        $_POST['storageTemperature'] = '';
+        $_POST['conservationTemperature'] = '';
+        $_POST['durationOfConservation'] = '';
     }
     //Set sample received date
     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
@@ -119,7 +128,8 @@ try {
                   'last_viral_load_result'=>$_POST['lastViralLoadResult'],
                   'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
                   'sample_id'=>$_POST['specimenType'],
-                  'plasma_storage_temperature'=>$_POST['storageTemperature'],
+                  'plasma_conservation_temperature'=>$_POST['conservationTemperature'],
+                  'duration_of_conservation'=>$_POST['durationOfConservation'],
                   'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
                   'status'=>$_POST['status'],
                   'sample_rejection_reason'=>$_POST['rejectionReason'],

@@ -26,6 +26,9 @@
     //get reason for rejection list
     $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
     $rjctReasonResult=$db->query($rjctReasonQuery);
+    //get vl test reason list
+    $vlTestReasonQuery="SELECT * from r_vl_test_reasons where test_reason_status = 'active'";
+    $vlTestReasonResult=$db->query($vlTestReasonQuery);
     ?>
     <style>
       .ui_tpicker_second_label {
@@ -213,8 +216,11 @@
                                 <td colspan="2">
                                    <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
                                       <option value=""> -- Sélectionner -- </option>
-                                      <option value="routine_check">Contrôle de routine</option>
-                                      <option value="treatment_failure">Suspicion d’échec Thérapeutique</option>
+                                      <?php
+                                      foreach($vlTestReasonResult as $tReason){
+                                      ?>
+                                       <option value="<?php echo $tReason['test_reason_id']; ?>"><?php echo ucwords($tReason['test_reason_name']); ?></option>
+                                      <?php } ?>
                                       <option value="other">Autre</option>
                                     </select>
                                 </td>
@@ -271,13 +277,13 @@
                                 </td>
                             </tr>
                             <tr class="plasmaElement" style="display:none;">
-                                <td><label for="storageTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
+                                <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="storageTemperature" name="storageTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:80%;"/>°C
+                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:80%;"/>°C
                                 </td>
-                                <td><label for="duationOfConservation">Durée de conservation </label></td>
+                                <td><label for="durationOfConservation">Durée de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="duationOfConservation" name="duationOfConservation" placeholder="e.g 05/30" title="Please enter durée de conservation" style="width:60%;"/>Jour/Heures
+                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" style="width:60%;"/>Jour/Heures
                                 </td>
                             </tr>
                             <tr>
