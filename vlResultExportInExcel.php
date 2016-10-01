@@ -155,8 +155,8 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $vlResult;
   
   $row[] = ucwords(str_replace("_"," ",$aRow['rejection']));
-  $row[] = ucwords($aRow['result_reviewed_by']);
-  $row[] = ucwords($aRow['result_approved_by']);
+  $row[] = ucwords($aRow['reviewedBy']);
+  $row[] = ucwords($aRow['approvedBy']);
   $row[] = $aRow['result_approved_on'];
   $row[] = $aRow['comments'];
   $row[] = ucwords($aRow['status_name']);
