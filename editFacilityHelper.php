@@ -30,6 +30,8 @@ try {
 			'state'=>$_POST['state'],
 			'district'=>$_POST['district'],
 			'hub_name'=>$_POST['hubName'],
+			'latitude'=>$_POST['latitude'],
+			'longitude'=>$_POST['longitude'],
 			'email'=>$_POST['email'],
 			'contact_person'=>$_POST['contactPerson'],
 			'facility_type'=>$_POST['facilityType'],
