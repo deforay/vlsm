@@ -140,7 +140,7 @@ $pResult = $db->rawQuery($pQuery);
                         <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" />
                         </div>
                     </div>
-                  </div>
+                </div>
                 </div>
                <div class="row">
                 <div class="col-md-6">
@@ -160,6 +160,24 @@ $pResult = $db->rawQuery($pQuery);
                     </div>
                   </div>
                </div>
+               <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="latitude" class="col-lg-4 control-label">Latitude</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude"/>
+                        </div>
+                    </div>
+                  </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="longitude" class="col-lg-4 control-label">Longitude</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" />
+                        </div>
+                    </div>
+                </div>
+              </div>
                
               </div>
               <!-- /.box-body -->

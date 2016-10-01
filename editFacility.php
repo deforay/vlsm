@@ -128,7 +128,7 @@ $pResult = $db->rawQuery($pQuery);
                   </div>
                 </div>
                
-               <div class="row">
+              <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
@@ -145,7 +145,7 @@ $pResult = $db->rawQuery($pQuery);
                         </div>
                     </div>
                   </div>
-                  </div>
+              </div>
                <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -164,6 +164,24 @@ $pResult = $db->rawQuery($pQuery);
                     </div>
                 </div>
                </div>
+              <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="latitude" class="col-lg-4 control-label">Latitude</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude" value="<?php echo $facilityInfo[0]['latitude']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="longitude" class="col-lg-4 control-label">Longitude</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" value="<?php echo $facilityInfo[0]['longitude']; ?>" />
+                        </div>
+                    </div>
+                </div>
+              </div>
                <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
