@@ -71,8 +71,23 @@ try {
         $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDate[0])." ".$sampleReceivedDate[1];
     }
     //Set sample rejection reason
-    if(isset($_POST['status']) && trim($_POST['status']) == 4){
-        
+    if(isset($_POST['status']) && trim($_POST['status']) != ''){
+        if($_POST['status'] == 4){
+            if(trim($_POST['rejectionReason']) == "other" && trim($_POST['newRejectionReason']!= '')){
+                $data=array(
+                'rejection_reason_name'=>$_POST['newRejectionReason'],
+                'rejection_reason_status'=>'active'
+                );
+                $id=$db->insert('r_sample_rejection_reasons',$data);
+                $_POST['rejectionReason'] = $id;
+            }else{
+                $_POST['rejectionReason'] = '';
+            }
+        }elseif($_POST['status'] == 7){
+            $_POST['rejectionReason'] = '';
+        }
+    }else{
+        $_POST['rejectionReason'] = '';
     }
     //Set sample testing date
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
@@ -101,6 +116,7 @@ try {
                   'plasma_storage_temperature'=>$_POST['storageTemperature'],
                   'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
                   'status'=>$_POST['status'],
+                  'sample_rejection_reason'=>$_POST['rejectionReason'],
                   'lab_no'=>$_POST['labNo'],
                   'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
@@ -108,6 +124,7 @@ try {
                   'modified_by'=>$_SESSION['userId'],
                   'modified_on'=>$general->getDateTime()
                 );
+    //var_dump($vldata);die;
     $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
     $id = $db->update($tableName,$vldata);
     if($id>0){
