@@ -20,8 +20,12 @@
     //get ART list
     $aQuery="SELECT * from r_art_code_details where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
+    //get Sample type
     $sQuery="SELECT * from r_sample_type where form_identification='2'";
     $sResult=$db->query($sQuery);
+    //get reason for rejection list
+    $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
+    $rjctReasonResult=$db->query($rjctReasonQuery);
     ?>
     <style>
       .ui_tpicker_second_label {
@@ -75,7 +79,7 @@
                 <div class="box box-default">
                     <div class="box-body">
                         <div class="box-header with-border">
-                            <h3 class="box-title">1. Réservé à la structure de soins</h3>
+                            <h3 class="box-title" lang="fr">1. Réservé à la structure de soins</h3>
                         </div>
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
@@ -88,7 +92,7 @@
                                         <?php echo $province; ?>
                                     </select>
                                 </td>
-                                <td><label for="clinicName">Zone de santé </label></td>
+                                <td><label for="clinicName" lang="fr">Zone de santé </label></td>
                                 <td>
                                     <select class="form-control" name="clinicName" id="clinicName" title="Please choose Zone de santé" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
                                         <?php echo $facility; ?>
@@ -310,11 +314,21 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr class="reasonForRejection" style="display:none;">
-                                <td><label for="reasonForRejection">Motifs de rejet </label></td>
-                                <td colspan="3">
-                                    <textarea class="form-control" id="reasonForRejection" name="reasonForRejection" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:60%;height:60px !important;"></textarea>
+                            <tr class="rejectionReason" style="display:none;">
+                                <td><label for="rejectionReason">Motifs de rejet </label></td>
+                                <td>
+                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($rjctReasonResult as $rjctReason){
+                                      ?>
+                                       <option value="<?php echo $rjctReason['rejection_reason_id']; ?>"><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
+                                      <?php } ?>
+                                       <option value="other">Autre</option>
+                                    </select>
                                 </td>
+                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser </label></td>
+                                <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:90%;display:none;"/></td>
                             </tr>
                             <tr>
                                 <td><label for="labNo">Code Labo </label></td>
@@ -487,9 +501,18 @@
     function checkTestStatus(){
       var status = $("#status").val();
       if(status == 4){
-        $(".reasonForRejection").show();
+        $(".rejectionReason").show();
       }else{
-        $(".reasonForRejection").hide();
+        $(".rejectionReason").hide();
+      }
+    }
+    
+    function checkRejectionReason(){
+      var rejectionReason = $("#rejectionReason").val();
+      if(rejectionReason == "other"){
+        $(".newRejectionReason").show();
+      }else{
+        $(".newRejectionReason").hide();
       }
     }
     
