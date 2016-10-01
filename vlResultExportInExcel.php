@@ -75,7 +75,8 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }
   
   if(isset($aRow['sample_testing_date']) && trim($aRow['sample_testing_date'])!='' && $aRow['sample_testing_date']!='0000-00-00'){
- $aRow['sample_testing_date']=$general->humanDateFormat($aRow['sample_testing_date']);
+   $expStr=explode(" ",$aRow['sample_testing_date']);
+   $aRow['sample_testing_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
    $aRow['sample_testing_date']='';
   }
