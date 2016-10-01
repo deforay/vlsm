@@ -77,16 +77,15 @@
     }else{
       $vlQueryInfo[0]['date_sample_received_at_testing_lab']='';
     }
-    //Set rejection msg.
-    if(!isset($vlQueryInfo[0]['status']) || $vlQueryInfo[0]['status']!= 4){
-
-    }
     //Set sample test date
     if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && $vlQueryInfo[0]['sample_testing_date']!='0000-00-00'){
       $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($vlQueryInfo[0]['sample_testing_date']);
     }else{
       $vlQueryInfo[0]['sample_testing_date']='';
     }
+    //get reason for rejection list
+    $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
+    $rjctReasonResult=$db->query($rjctReasonQuery);
     ?>
     <style>
       .ui_tpicker_second_label {
@@ -383,11 +382,21 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr class="reasonForRejection" style="display:<?php echo($vlQueryInfo[0]['status'] == 4)?'':'none'; ?>;">
-                                <td><label for="reasonForRejection">Motifs de rejet </label></td>
-                                <td colspan="3">
-                                    <textarea class="form-control" id="reasonForRejection" name="reasonForRejection" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:60%;height:60px !important;"></textarea>
+                            <tr class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['status'] == 4)?'':'none'; ?>;">
+                                <td><label for="rejectionReason">Motifs de rejet </label></td>
+                                <td>
+                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($rjctReasonResult as $rjctReason){
+                                      ?>
+                                       <option value="<?php echo $rjctReason['rejection_reason_id']; ?>" <?php echo($vlQueryInfo[0]['sample_rejection_reason'] == $rjctReason['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
+                                      <?php } ?>
+                                       <option value="other">Autre</option>
+                                    </select>
                                 </td>
+                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser </label></td>
+                                <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:90%;display:none;"/></td>
                             </tr>
                             <tr>
                                 <td><label for="labNo">Code Labo </label></td>
@@ -560,9 +569,18 @@
     function checkTestStatus(){
       var status = $("#status").val();
       if(status == 4){
-        $(".reasonForRejection").show();
+        $(".rejectionReason").show();
       }else{
-        $(".reasonForRejection").hide();
+        $(".rejectionReason").hide();
+      }
+    }
+    
+    function checkRejectionReason(){
+      var rejectionReason = $("#rejectionReason").val();
+      if(rejectionReason == "other"){
+        $(".newRejectionReason").show();
+      }else{
+        $(".newRejectionReason").hide();
       }
     }
     

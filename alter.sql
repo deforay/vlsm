@@ -535,7 +535,7 @@ CREATE TABLE IF NOT EXISTS `vl_instance` (
   UNIQUE KEY `vl_instance_id` (`vl_instance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Pal 29 Sep 2016
+-- Pal 30 Sep 2016
 ALTER TABLE `vl_request_form` ADD `service` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_test_platform`;
 
 ALTER TABLE `vl_request_form` ADD `support_partner` VARCHAR(255) NULL DEFAULT NULL AFTER `service`;
@@ -545,3 +545,7 @@ ALTER TABLE `vl_request_form` ADD `has_patient_changed_regimen` VARCHAR(45) NULL
 ALTER TABLE `vl_request_form` ADD `reason_for_regimen_change` VARCHAR(255) NULL DEFAULT NULL AFTER `has_patient_changed_regimen`, ADD `date_of_regimen_changed` DATE NULL DEFAULT NULL AFTER `reason_for_regimen_change`;
 
 ALTER TABLE `vl_request_form` ADD `plasma_storage_temperature` FLOAT NULL DEFAULT NULL AFTER `date_of_regimen_changed`;
+
+
+-- Pal 01 Oct 2016
+ALTER TABLE `vl_request_form` CHANGE `age_in_mnts` `age_in_mnts` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
