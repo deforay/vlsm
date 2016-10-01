@@ -10,7 +10,11 @@ $tableName1="activity_log";
 try {
      
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
-          $_POST['sampleTestingDateAtLab']=$general->dateFormat($_POST['sampleTestingDateAtLab']);  
+          $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
+     }
+     if(!isset($_POST['noResult'])){
+          $_POST['noResult'] = '';
      }
      $vldata=array(
           'serial_no'=>$_POST['serialNo'],

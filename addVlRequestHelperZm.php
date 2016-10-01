@@ -36,7 +36,8 @@ try {
           $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);  
      }
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
-          $_POST['sampleTestingDateAtLab']=$general->dateFormat($_POST['sampleTestingDateAtLab']);  
+          $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
      }
     
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){

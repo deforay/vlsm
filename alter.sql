@@ -553,3 +553,16 @@ ALTER TABLE `vl_request_form` CHANGE `age_in_mnts` `age_in_mnts` VARCHAR(255) CH
 --ilahir 01-Oct-2016
 ALTER TABLE  `facility_details` ADD  `latitude` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `hub_name` ,
 ADD  `longitude` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `latitude` ;
+
+--saravanan -01-oct-2016
+ALTER TABLE  `vl_request_form` CHANGE  `sample_testing_date`  `sample_testing_date` DATETIME NULL DEFAULT NULL ;
+
+INSERT INTO `r_vl_test_reasons` (`test_reason_id`, `test_reason_name`, `test_reason_status`) VALUES
+(1, 'routine VL', 'active'),
+(2, 'Confirmation Of Treatment Failure(repeat VL at 3M)', 'active'),
+(3, 'clinical failure', 'active'),
+(4, 'immunological failure', 'active'),
+(5, 'single drug substitution', 'active'),
+(6, 'Pregnant Mother', 'active'),
+(7, 'Lactating Mother', 'active'),
+(8, 'Baseline VL', 'active');

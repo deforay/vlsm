@@ -18,6 +18,10 @@ $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
+//get vltest reason details
+$testRQuery="SELECT * FROM r_vl_test_reasons";
+$testReason = $db->rawQuery($testRQuery);
+
 //get lab facility details
 $lQuery="SELECT * FROM facility_details where facility_type='2'";
 $lResult = $db->rawQuery($lQuery);
@@ -80,8 +84,9 @@ if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_
 }else{
  $vlQueryInfo[0]['last_viral_load_date']='';
 }
-if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && trim($vlQueryInfo[0]['sample_testing_date'])!='0000-00-00'){
- $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($vlQueryInfo[0]['sample_testing_date']);
+if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && trim($vlQueryInfo[0]['sample_testing_date'])!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlQueryInfo[0]['sample_testing_date']);
+ $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
  $vlQueryInfo[0]['sample_testing_date']='';
 }
@@ -357,14 +362,13 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
                             <option value=""> -- Select -- </option>
-                            <option value="routine_VL" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='routine_VL')?"selected='selected'":""?>>Routine VL</option>
-                            <option value="confirmation_of_treatment_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='confirmation_of_treatment_failure')?"selected='selected'":""?>>Confirmation Of Treatment Failure(repeat VL at 3M)</option>
-                            <option value="clinical_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='clinical_failure')?"selected='selected'":""?>>Clinical Failure</option>
-                            <option value="immunological_failure" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='immunological_failure')?"selected='selected'":""?>>Immunological Failure</option>
-                            <option value="single_drug_substitution" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='single_drug_substitution')?"selected='selected'":""?>>Single Drug Substitution</option>
-                            <option value="pregnant_mother" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='pregnant_mother')?"selected='selected'":""?>>Pregnant Mother</option>
-                            <option value="lactating_mother" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='lactating_mother')?"selected='selected'":""?>>Lactating Mother</option>
-                            <option value="baseline_VL" <?php echo ($vlQueryInfo[0]['vl_test_reason']=='baseline_VL')?"selected='selected'":""?>>Baseline VL</option>                            
+                            <?php
+                            foreach($testReason as $reason){
+                              ?>
+                              <option value="<?php echo $reason['test_reason_name'];?>"  <?php echo ($vlQueryInfo[0]['vl_test_reason']==$reason['test_reason_name'])?"selected='selected'":""?>><?php echo ucwords($reason['test_reason_name']);?></option>
+                              <?php
+                            }
+                            ?>
                            </select>
                         </td>
                         <td></td>
@@ -430,7 +434,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_testing_date'];?>" onchange="checkSampleTestingDate();"/></td>
+                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_testing_date'];?>" onchange="checkSampleTestingDate();"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td>
                           <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" />
@@ -631,9 +635,9 @@ $("#vlLog").bind("keyup change", function(e) {
    });
    
    $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate,#sampleReceivedDate').mask('99-aaa-9999 99:99');
+   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
    
-   $('#sampleCollectionDate,#sampleReceivedDate').datetimepicker({
+   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').datetimepicker({
      changeMonth: true,
      changeYear: true,
      dateFormat: 'dd-M-yy',
@@ -838,9 +842,10 @@ $("#vlLog").bind("keyup change", function(e) {
         var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
         var smplCollDate = splitSampleCollDate[0];
-        sampleCollDate = smplCollDate+"/"+smplCollMonth+"/"+smplCollYear;
+        sampleCollDate = smplCollDate+"/"+smplCollMonth+"/"+smplCollYear+" "+splitSampleCollDateTime[1]+":00";
         //Set sample testing date
-        splitSampleTestedDate = sampleTestingDate.split("-");
+        splitSampleTestedDateTime = sampleTestingDate.split(" ");
+        splitSampleTestedDate = splitSampleTestedDateTime[0].split("-");
         var sampleTestingOn = new Date(splitSampleTestedDate[1] + splitSampleTestedDate[2]+", "+splitSampleTestedDate[0]);
   
         var monthDigit = sampleTestingOn.getMonth();
@@ -848,9 +853,9 @@ $("#vlLog").bind("keyup change", function(e) {
         var smplTestingMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
         var smplTestingDate = splitSampleTestedDate[0];
-        sampleTestingAtLabDate = smplTestingDate+"/"+smplTestingMonth+"/"+smplTestingYear;
-        //console.log(sampleTestingAtLabDate);
-        //console.log(sampleCollDate);
+        sampleTestingAtLabDate = smplTestingDate+"/"+smplTestingMonth+"/"+smplTestingYear+" "+splitSampleTestedDateTime[1]+":00";
+        console.log(sampleTestingAtLabDate);
+        console.log(sampleCollDate);
         if(sampleTestingAtLabDate < sampleCollDate) {
           alert("Sample Testing Date could not be earlier than Sample Collection Date!");
           $("#sampleTestingDateAtLab").val("");

@@ -72,8 +72,9 @@ if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_
 }else{
  $vlQueryInfo[0]['last_viral_load_date']='';
 }
-if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && trim($vlQueryInfo[0]['sample_testing_date'])!='0000-00-00'){
- $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($vlQueryInfo[0]['sample_testing_date']);
+if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && trim($vlQueryInfo[0]['sample_testing_date'])!='0000-00-00 00:00:00'){
+ $sampleTestingDateLab = explode(" ",$vlQueryInfo[0]['sample_testing_date']);
+ $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
 }else{
  $vlQueryInfo[0]['sample_testing_date']='';
 }
@@ -91,6 +92,25 @@ $tsResult = $db->rawQuery($tsQuery);
 <style>
  :disabled {background:white;}
  .form-control{background: #fff !important;}
+  .ui_tpicker_second_label {
+       display: none !important;
+      }.ui_tpicker_second_slider {
+       display: none !important;
+      }.ui_tpicker_millisec_label {
+       display: none !important;
+      }.ui_tpicker_millisec_slider {
+       display: none !important;
+      }.ui_tpicker_microsec_label {
+       display: none !important;
+      }.ui_tpicker_microsec_slider {
+       display: none !important;
+      }.ui_tpicker_timezone_label {
+       display: none !important;
+      }.ui_tpicker_timezone {
+       display: none !important;
+      }.ui_tpicker_time_input{
+       width:100%;
+      }
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -412,7 +432,7 @@ $tsResult = $db->rawQuery($tsQuery);
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_testing_date'];?>" /></td>
+                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_testing_date'];?>" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
@@ -602,9 +622,9 @@ $("#vlLog").bind("keyup change", function(e) {
    });
    
    $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate,#sampleReceivedDate').mask('99-aaa-9999 99:99');
+   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
    
-   $('#sampleCollectionDate,#sampleReceivedDate').datetimepicker({
+   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').datetimepicker({
      changeMonth: true,
      changeYear: true,
      dateFormat: 'dd-M-yy',
