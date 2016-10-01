@@ -549,3 +549,7 @@ ALTER TABLE `vl_request_form` ADD `plasma_storage_temperature` FLOAT NULL DEFAUL
 
 -- Pal 01 Oct 2016
 ALTER TABLE `vl_request_form` CHANGE `age_in_mnts` `age_in_mnts` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+--ilahir 01-Oct-2016
+ALTER TABLE  `facility_details` ADD  `latitude` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `hub_name` ,
+ADD  `longitude` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `latitude` ;

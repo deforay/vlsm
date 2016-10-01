@@ -12,8 +12,8 @@ if($_SESSION['roleCode'] == "DE"){
     $autoApprovalFieldStatus = 'hide';
   }
 }
-//$userQuery="SELECT * FROM user_details where status='active'";
-//$userResult = $db->rawQuery($userQuery);
+$userQuery="SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
 $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -450,11 +450,35 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                           </label>
                         </td>
                         <td><label>Reviewed By</label></td>
-                        <td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>
+                        <!--<td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="< ?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>-->
+                        <td>
+                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
+                            <option value="">-- Select --</option>
+                            <?php
+                            foreach($userResult as $uName){
+                              ?>
+                              <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$vlQueryInfo[0]['result_reviewed_by'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                         </td>
                         <?php
                         if($autoApprovalFieldStatus == 'show'){ ?>
                           <td><label>Approved By</label></td>
-                          <td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>
+                          <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="< ?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>-->
+                          <td>
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                            <option value="">-- Select --</option>
+                            <?php
+                            foreach($userResult as $uName){
+                              ?>
+                              <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$vlQueryInfo[0]['result_approved_by'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                         </td>
                         <?php } else { ?>
                           <td colspan="2"></td>
                         <?php } ?>

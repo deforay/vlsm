@@ -199,13 +199,13 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['gender']) || trim($result['gender'])== ''){
           $result['gender'] = 'not reported';
         }
-        if(isset($result['result_reviewed_by']) && trim($result['result_reviewed_by'])!= ''){
-          $resultReviewedBy = ucwords($result['result_reviewed_by']);
+        if(isset($result['reviewedBy']) && trim($result['reviewedBy'])!= ''){
+          $resultReviewedBy = ucwords($result['reviewedBy']);
         }else{
           $resultReviewedBy  = '';
         }
-        if(isset($result['result_approved_by']) && trim($result['result_approved_by'])!= ''){
-          $resultApprovedBy = ucwords($result['result_approved_by']);
+        if(isset($result['approvedBy']) && trim($result['approvedBy'])!= ''){
+          $resultApprovedBy = ucwords($result['approvedBy']);
         }else{
           $resultApprovedBy  = '';
         }
