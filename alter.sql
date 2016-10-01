@@ -545,3 +545,9 @@ ALTER TABLE `vl_request_form` ADD `has_patient_changed_regimen` VARCHAR(45) NULL
 ALTER TABLE `vl_request_form` ADD `reason_for_regimen_change` VARCHAR(255) NULL DEFAULT NULL AFTER `has_patient_changed_regimen`, ADD `date_of_regimen_changed` DATE NULL DEFAULT NULL AFTER `reason_for_regimen_change`;
 
 ALTER TABLE `vl_request_form` ADD `plasma_storage_temperature` FLOAT NULL DEFAULT NULL AFTER `date_of_regimen_changed`;
+
+
+--ilahir 01-Oct-2016
+ALTER TABLE  `facility_details` ADD  `latitude` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `hub_name` ,
+ADD  `longitude` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `latitude` ;
+

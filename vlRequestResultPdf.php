@@ -141,8 +141,11 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
   $result[0]['sample_collection_date']='';
   $sampleCollectionTime = '';
 }
-
-
+$sampleReceivedDate='';
+if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && $result[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
+  $sampleReceivedDate=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+}
 
 if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && $result[0]['lab_tested_date']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$result[0]['lab_tested_date']);
@@ -262,11 +265,13 @@ $html .= '<div style="">';
          $html .='</tr>';
          $html .='<tr>';
           $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Lab number</td>';
-          $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Barcode number</td>';
+          $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Barcode number</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
          $html .='</tr>';
          $html .='<tr>';
           $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['lab_no'].'</td>';
-          $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result[0]['serial_no'].'</td>';
+          $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result[0]['serial_no'].'</td>';
+          $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result[0]['sample_collection_date']." ".$sampleCollectionTime.'</td>';
          $html .='</tr>';
          $html .='<tr>';
           $html .='<td colspan="5" style="line-height:2px;border-bottom:2px solid #333;"></td>';
@@ -308,12 +313,12 @@ $html .= '<div style="">';
      $html .='<td colspan="3">';
       $html .='<table cellspacing="6" style="border:2px solid #333;">';
         $html .='<tr>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Received Date</td>';
           $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date of Viral Load Result</td>';
         $html .='</tr>';
         $html .='<tr>';
-          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['sample_collection_date'].'</td>';
-          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleCollectionTime.'</td>';
+          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
+          $html .='<td style="line-height:22px;font-size:12px;text-align:left;"></td>';
           $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['lab_tested_date'].'</td>';
         $html .='</tr>';
         $html .='<tr>';
