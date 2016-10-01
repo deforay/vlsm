@@ -142,9 +142,11 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
   $sampleCollectionTime = '';
 }
 $sampleReceivedDate='';
+$sampleReceivedTime='';
 if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && $result[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
-  $sampleReceivedDate=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
+  $sampleReceivedTime =$expStr[1];
 }
 
 if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && $result[0]['lab_tested_date']!='0000-00-00 00:00:00'){
@@ -301,7 +303,7 @@ $html .= '<div style="">';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result[0]['patient_receive_sms']).'</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['patient_phone_number'].'</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords($result[0]['gender']).'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords(str_replace("_"," ",$result[0]['gender'])).'</td>';
          $html .='</tr>';
        $html .='</table>';
       $html .='</td>';
@@ -318,7 +320,7 @@ $html .= '<div style="">';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
-          $html .='<td style="line-height:22px;font-size:12px;text-align:left;"></td>';
+          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
           $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['lab_tested_date'].'</td>';
         $html .='</tr>';
         $html .='<tr>';
