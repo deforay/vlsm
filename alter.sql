@@ -573,3 +573,5 @@ INSERT INTO `r_vl_test_reasons` (`test_reason_id`, `test_reason_name`, `test_rea
 
 --saravanan 03-oct-2016
 ALTER TABLE  `hold_sample_report` ADD  `vl_test_platform` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `import_batch_tracking` ;
+
+INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Sample Code', 'sample_code', 'numeric');

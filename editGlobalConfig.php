@@ -153,6 +153,18 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="auto_approval" class="col-lg-4 control-label">Sample Code </label>
+                      <div class="col-lg-8">
+                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>Auto&nbsp;&nbsp;
+                        <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>Numeric
+                        <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>Alpha Numeric
+                      </div>
+                    </div>
+                   </div>
+                </div>
                 
               </div>
               <!-- /.box-body -->
