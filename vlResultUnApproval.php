@@ -83,11 +83,31 @@ $userResult = $db->rawQuery($userQuery);
 		  </td>
 		<td>
 		  <b>Reviewed By&nbsp;</b>
-		  <input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>
+		  <!--<input type="text" name="reviewedBy" id="reviewedBy" class="form-control" title="Please enter Reviewed By" placeholder ="Reviewed By"/>-->
+		  <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
+		      <option value="">-- Select --</option>
+		      <?php
+		      foreach($userResult as $uName){
+			?>
+			<option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+			<?php
+		      }
+		      ?>
+                  </select>
 		</td>
 		<td>
 		  <b>Approved By&nbsp;</b>
-		  <input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>
+		  <!--<input type="text" name="approvedBy" id="approvedBy" class="form-control" title="Please enter Approved By" placeholder ="Approved By"/>-->
+		  <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+		    <option value="">-- Select --</option>
+		    <?php
+		    foreach($userResult as $uName){
+		      ?>
+		      <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+		      <?php
+		    }
+		    ?>
+		  </select>
 		</td>
 		  <td><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
 	    </tr>
