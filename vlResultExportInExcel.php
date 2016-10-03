@@ -14,7 +14,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Serial No.","Batch Code","Urgency","Province","District","Clinic Name","Clinician Name","Sample Collection Date","Sample Received Date","Collected By","Patient Name","Gender","DOB","Age In Years","Age In Months","Patient Pregnant","Patient BreastFeeding","ART Number","ART Initiation","ART Regimen","SMS Notification","Mobile Number","Date Of Last Viral Load Test","Result Of Last Viral Load","Viral Load Log","Reason For VL Test","LAB Name","LAB No.","VL Testing Platform","Specimen Type","Sample Testing Date","Last Print On","Viral Load Result","No Result","Reviewed By","Approved By","Approved On","Comments","Status");
+ $headings = array("Serial No.","Batch Code","Urgency","Province","District","Clinic Name","Clinician Name","Sample Collection Date","Sample Received Date","Collected By","Patient Name","Gender","DOB","Age In Years","Age In Months","Patient Pregnant","Patient BreastFeeding","ART Number","ART Initiation","ART Regimen","SMS Notification","Mobile Number","Date Of Last Viral Load Test","Result Of Last Viral Load","Viral Load Log","Reason For VL Test","LAB Name","LAB No.","VL Testing Platform","Specimen Type","Sample Testing Date","Last Print On","Viral Load Result","No Result","Rejection Reason","Reviewed By","Approved By","Approved On","Comments","Status");
  
  $colNo = 0;
  
@@ -51,7 +51,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $colNo++;
   
  }
- $sheet->getStyle('A1:AM1')->applyFromArray($styleArray);
+ $sheet->getStyle('A1:AN1')->applyFromArray($styleArray);
  
  foreach ($rResult as $aRow) {
   $row = array();
@@ -156,6 +156,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $vlResult;
   
   $row[] = ucwords(str_replace("_"," ",$aRow['rejection']));
+  $row[] = ucwords($aRow['rejection_reason_name']);
   $row[] = ucwords($aRow['reviewedBy']);
   $row[] = ucwords($aRow['approvedBy']);
   $row[] = $aRow['result_approved_on'];
