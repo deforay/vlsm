@@ -693,6 +693,7 @@ $("#vlResult").bind("keyup change", function(e) {
       $( "#noResultRejected" ).prop( "checked", false );
       $( "#noResultError" ).prop( "checked", false );
       $("#rejectionReason").removeClass("isRequired");
+      $("#rejectionReason").val("");
       $(".noResult").hide();
     }
 });
@@ -703,6 +704,7 @@ $("#vlLog").bind("keyup change", function(e) {
       $( "#noResultRejected" ).prop( "checked", false );
       $( "#noResultError" ).prop( "checked", false );
       $("#rejectionReason").removeClass("isRequired");
+      $("#rejectionReason").val("");
       $(".noResult").hide();
     }
 });
