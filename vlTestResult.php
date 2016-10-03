@@ -79,6 +79,16 @@ $batResult = $db->rawQuery($batQuery);
 		    
 		</tr>
 		<tr>
+		  <td><b>Status&nbsp;:</b></td>
+		  <td>
+		      <select style="width: 220px;" name="status" id="status" class="form-control" title="Please choose status">
+			<option value="">-- Select --</option>
+			<option value="7">Accepted</option>
+			<option value="4">Rejected</option>
+		      </select>
+		    </td>
+		</tr>
+		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 			&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf();"><span>Result PDF</span></button>
@@ -241,6 +251,7 @@ $batResult = $db->rawQuery($batQuery);
 		aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
 		aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 	        aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+		aoData.push({"name": "status", "value": $("#status").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
