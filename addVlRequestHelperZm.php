@@ -80,6 +80,10 @@ try {
      if(!isset($_POST['patientPhoneNumber'])){
           $_POST['patientPhoneNumber'] = '';
      }
+     if(!isset($_POST['sampleCodeFormat'])){
+          $_POST['sampleCodeFormat'] = '';
+          $_POST['sampleCodeKey'] = '';
+     }
      $instanceId = '';
      if(isset($_SESSION['instanceId'])){
           $instanceId = $_SESSION['instanceId'];
@@ -88,8 +92,8 @@ try {
      $vldata=array(
           'urgency'=>$_POST['urgency'],
           'vl_instance_id'=>$instanceId,
-          //'sample_code_format'=>$_POST['sampleCodeFormat'],
-          //'sample_code_key'=>$_POST['sampleCodeKey'],
+          'sample_code_format'=>$_POST['sampleCodeFormat'],
+          'sample_code_key'=>$_POST['sampleCodeKey'],
           'form_id'=>'2',
           'serial_no'=>$_POST['serialNo'],
           'sample_code'=>$_POST['serialNo'],
