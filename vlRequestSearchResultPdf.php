@@ -242,6 +242,9 @@ if(sizeof($requestResult)> 0){
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
           $smileyContent = '';
         }
+        if($result['status']=='4'){
+        $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/cross.png" alt="rejected"/>';
+      }
         
         $html = '';
         $html .= '<div style="">';

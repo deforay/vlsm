@@ -12,6 +12,16 @@ if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE"){
     $autoApprovalFieldStatus = 'hide';
   }
 }
+//global config
+$cSampleQuery="SELECT value FROM global_config WHERE name = 'sample_code'";
+$cSampleResult=$db->query($cSampleQuery);
+if($cSampleResult[0]['value']=='auto' || $cSampleResult[0]['value']=='alphanumeric')
+{
+  $numeric = '';
+}else{
+  $numeric = 'checkNum';
+}
+
 $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 $query="SELECT * FROM roles where status='active'";
@@ -92,10 +102,10 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $cBy = $vlResult[0]['collected_by'];
  $clinicianName = $vlResult[0]['lab_contact_person'];
  $labNameId = $vlResult[0]['lab_id'];
- //$sKey = $vlResult[0]['sample_code_key']+1;
- //$sKey = "00".$sKey;
- //$sFormat = $vlResult[0]['sample_code_format'];
- //$sCodeValue = $vlResult[0]['sample_code_format'].$sKey; 
+ $sKey = $vlResult[0]['sample_code_key']+1;
+ $sKey = "00".$sKey;
+ $sFormat = $vlResult[0]['sample_code_format'];
+ $sCodeValue = $vlResult[0]['sample_code_format'].$sKey;
  
  if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
@@ -169,7 +179,7 @@ if($urgency==''){
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo checkNum isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" />
+                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -408,10 +418,10 @@ if($urgency==''){
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 checkNum isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control  reqBarcode checkNum isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This barcode already exists.Try another barcode',null)">
+                          <input type="text" class="form-control  reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This barcode already exists.Try another barcode',null)">
                           <!--<input type="hidden" class="form-control  sampleCode " name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $sCodeValue;?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -522,9 +532,10 @@ if($urgency==''){
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="2"/>
-                <!--<input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="< ?php echo $sFormat;?>"/>-->
-                <!--<input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="< ?php echo $sKey;?>"/>-->
-                
+                <?php if($cSampleResult[0]['value']=='auto'){ ?>
+                <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
+                <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
+                <?php } ?>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -590,12 +601,18 @@ if($urgency==''){
 	  }
       });
       }
-      //pNameVal = pName.split("##");
-      //sCode = '<?php echo date('Ymd');?>';
-      //sCodeKey = '<?php echo $maxId;?>';
-      //$("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-      //$("#sampleCodeFormat").val(pNameVal[1]+sCode);
-      //$("#sampleCodeKey").val(sCodeKey);
+      <?php
+      if($cSampleResult[0]['value']=='auto'){
+        ?>
+        pNameVal = pName.split("##");
+        sCode = '<?php echo date('Ymd');?>';
+        sCodeKey = '<?php echo $maxId;?>';
+        $(".serialNo1,.serialNo,.reqBarcode").val(pNameVal[1]+sCode+sCodeKey);
+        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+        $("#sampleCodeKey").val(sCodeKey);
+        <?php
+      }
+      ?>
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
