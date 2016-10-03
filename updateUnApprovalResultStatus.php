@@ -8,6 +8,8 @@ $tableName="temp_sample_report";
 $tableName1="vl_request_form";
 $tableName2="hold_sample_report";
 try {
+    $instanceQuery="SELECT * FROM vl_instance";
+    $instanceResult=$db->query($instanceQuery);
     $result ='';
     $id= explode(",",$_POST['value']);
     $status= explode(",",$_POST['status']);
@@ -93,6 +95,7 @@ try {
                 }else{
                     $data['sample_code']=$rResult[0]['sample_code'];
                     $data['form_id']='2';
+                    $data['vl_instance_id'] = $instanceResult[0]['vl_instance_id'];
                     $db->insert($tableName1,$data);
                 }
             }
