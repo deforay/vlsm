@@ -165,6 +165,9 @@ $primaryKey="vl_sample_id";
 	   if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
 	        $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'];
 	    }
+	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
+	        $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
+	    }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 		$setWhr = 'where';
@@ -227,8 +230,17 @@ $primaryKey="vl_sample_id";
 		if(isset($setWhr)){
 		    $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'];
 		}else{
+		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
 	        $sWhere = $sWhere.' vl.result '.$_POST['vLoad'];
+		}
+	    }
+	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
+		}else{
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' vl.status ='.$_POST['status'];
 		}
 	    }
 	}
