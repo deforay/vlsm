@@ -204,7 +204,7 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
+                                <td style="width:14%;text-align:center;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
                                     <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" value="<?php echo $vlQueryInfo[0]['age_in_yrs']; ?>" style="width:100%;"/>
                                 </td>
@@ -213,7 +213,7 @@
                                     <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" value="<?php echo $vlQueryInfo[0]['age_in_mnts']; ?>" style="width:100%;"/>
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
-                                <td style="width:14%;">
+                                <td style="width:16%;">
                                     <label class="radio-inline">M</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check sexe" <?php echo (trim($vlQueryInfo[0]['gender']) == "male")?'checked="checked"':''; ?>>
