@@ -367,6 +367,10 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
                   $html .='</tr>';
+                  $html .='<tr>';
+                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Rejected Reason</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['rejection_reason_name']).'</td>';
+                  $html .='</tr>';
                   if(trim($showMessage)!= ''){
                     $html .='<tr>';
                       $html .='<td colspan="4" style="line-height:22px;font-size:'.$messageTextSize.';text-align:left;">'.$showMessage.'</td>';
