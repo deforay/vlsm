@@ -201,7 +201,7 @@
                         <table class="table" style="width:100%">
                             <tr>
                                 <td style="width:14%;"><label for="">Date de naissance </label></td>
-                                <td style="width:16%;">
+                                <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
