@@ -21,6 +21,12 @@ if($cSampleResult[0]['value']=='auto' || $cSampleResult[0]['value']=='alphanumer
 }else{
   $numeric = 'checkNum';
 }
+//sample rejection reason
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
+$userQuery="SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
 
 $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
@@ -471,16 +477,30 @@ if($urgency==''){
                         <td><label for="vlLog">Viral Load Log</label></td>
                         <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" /></td>
                       </tr>
-                      <tr>
-                        <td><label class="noResult">If no result</label></td>
-                        <td>
+                      <tr class="noResult">
+                        <td><label>If no result</label></td>
+                        <td colspan="2">
                           <label class="radio-inline noResult">
-                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result"> Sample Rejected
+                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" onclick="checkRejectedReason();"> Sample Rejected
                           </label>
                           <label class="radio-inline noResult" style="margin-left: 0px;">
-                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"> Lab testing Technical Error
+                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" onclick="checkRejectedReason();"> Lab testing Technical Error
                           </label>
                         </td>
+                        <td><label class="noResult">Rejection Reason</label></td>
+                        <td><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <option value="">-- Select --</option>
+                          <?php
+                          foreach($rejectionResult as $reject){
+                            ?>
+                            <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
+                            <?php
+                          }
+                          ?>
+                        </select></td>
+                        
+                      </tr>
+                      <tr>
                         <td><label>Reviewed By</label></td>
                         <!--<td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" /></td>-->
                         <td>
@@ -672,6 +692,7 @@ $("#vlResult").bind("keyup change", function(e) {
     }else{
       $( "#noResultRejected" ).prop( "checked", false );
       $( "#noResultError" ).prop( "checked", false );
+      $("#rejectionReason").removeClass("isRequired");
       $(".noResult").hide();
     }
 });
@@ -681,6 +702,7 @@ $("#vlLog").bind("keyup change", function(e) {
     }else{
       $( "#noResultRejected" ).prop( "checked", false );
       $( "#noResultError" ).prop( "checked", false );
+      $("#rejectionReason").removeClass("isRequired");
       $(".noResult").hide();
     }
 });
@@ -714,6 +736,11 @@ $("#vlLog").bind("keyup change", function(e) {
      });
   
   });
+  
+function checkRejectedReason()
+{
+  $("#rejectionReason").addClass("isRequired");
+}
   $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'male'){
          $(".femaleElements").hide();
