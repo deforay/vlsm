@@ -82,7 +82,7 @@
                 <div class="box box-default">
                     <div class="box-body">
                         <div class="box-header with-border">
-                            <h3 class="box-title" lang="fr">1. Réservé à la structure de soins</h3>
+                          <h3 class="box-title" lang="fr">1. Réservé à la structure de soins</h3>
                         </div>
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
@@ -95,7 +95,7 @@
                                         <?php echo $province; ?>
                                     </select>
                                 </td>
-                                <td><label for="clinicName" lang="fr">Zone de santé </label></td>
+                                <td><label for="clinicName">Zone de santé </label></td>
                                 <td>
                                     <select class="form-control" name="clinicName" id="clinicName" title="Please choose Zone de santé" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
                                         <?php echo $facility; ?>
@@ -136,7 +136,7 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
+                                <td style="width:14%;text-align:center;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
                                     <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
                                 </td>
@@ -145,7 +145,7 @@
                                     <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" style="width:100%;"/>
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
-                                <td style="width:14%;">
+                                <td style="width:16%;">
                                     <label class="radio-inline">M</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check sexe">
