@@ -99,6 +99,14 @@ $batResult = $db->rawQuery($batQuery);
 		    <td>
 		      <input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
+		    <td><b>Status&nbsp;:</b></td>
+		    <td>
+		      <select name="status" id="status" class="form-control" title="Please choose status">
+			<option value="">-- Select --</option>
+			<option value="7">Accepted</option>
+			<option value="4">Rejected</option>
+		      </select>
+		    </td>
 		</tr>
 		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -183,7 +191,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
-     $('#sampleCollectionDate').daterangepicker({
+     $('#sampleCollectionDate,#sampleTestDate,#printDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
             startDate: moment().subtract('days', 29),
@@ -202,44 +210,7 @@ $batResult = $db->rawQuery($batQuery);
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
-     $('#sampleTestDate').daterangepicker({
-            format: 'DD-MMM-YYYY',
-	    separator: ' to ',
-            startTestDate: moment().subtract('days', 29),
-            endTestDate: moment(),
-            maxDate: moment(),
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            }
-        },
-        function(start, end) {
-            startTestDate = start.format('YYYY-MM-DD');
-            endTestDate = end.format('YYYY-MM-DD');
-      });
-     $('#printDate').daterangepicker({
-            format: 'DD-MMM-YYYY',
-	    separator: ' to ',
-            startPrintDate: moment().subtract('days', 29),
-            endPrintDate: moment(),
-            maxDate: moment(),
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            }
-        },
-        function(start, end) {
-            startPrintDate = start.format('YYYY-MM-DD');
-            endPrintDate = end.format('YYYY-MM-DD');
-      });
+    
      $('#printDate').val("");
      $('#sampleCollectionDate').val("");
      $('#sampleTestDate').val("");
@@ -310,6 +281,7 @@ $batResult = $db->rawQuery($batQuery);
 			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 			  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
+			  aoData.push({"name": "status", "value": $("#status").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
