@@ -74,8 +74,10 @@ try {
      }
      if(!isset($_POST['approvedBy'])){
           $_POST['approvedBy'] = '';
-     }if(!isset($_POST['noResult'])){
+     }
+     if(!isset($_POST['noResult'])){
           $_POST['noResult'] = '';
+          $_POST['rejectionReason'] = '';
      }
      if(!isset($_POST['patientPhoneNumber'])){
           $_POST['patientPhoneNumber'] = '';
@@ -125,6 +127,7 @@ try {
           'vl_test_platform'=>$_POST['testingPlatform'],
           'sample_id'=>$_POST['specimenType'],
           'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
+          'sample_rejection_reason'=>$_POST['rejectionReason'],
           'absolute_value'=>$_POST['vlResult'],
           'result'=>$_POST['result'],
           'log_value'=>$_POST['vlLog'],

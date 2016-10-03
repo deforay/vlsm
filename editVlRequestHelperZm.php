@@ -71,6 +71,7 @@ try {
      }
      if(!isset($_POST['noResult'])){
           $_POST['noResult'] = '';
+          $_POST['rejectionReason'] = '';
      }
      if(!isset($_POST['patientPhoneNumber'])){
           $_POST['patientPhoneNumber'] = '';
@@ -115,6 +116,7 @@ try {
           'result_reviewed_by'=>$_POST['reviewedBy'],
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
+          'sample_rejection_reason'=>$_POST['rejectionReason'],
           'modified_on'=>$general->getDateTime()
         );
           if(isset($_POST['approvedBy'])){
