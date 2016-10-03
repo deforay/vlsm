@@ -72,8 +72,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="show_smiley" class="col-lg-4 control-label">Do you want to show smiley in the result PDF? </label>
                       <div class="col-lg-8">
-                        <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>Yes&nbsp;&nbsp;
-                        <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>No
+                        <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
                       </div>
                     </div>
                    </div>
@@ -117,8 +117,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="show_date" class="col-lg-4 control-label">Date For Patient ART NO. </label>
                       <div class="col-lg-8">
-                        <input type="radio" class="" id="show_full_date_yes" name="show_date" value="yes" <?php echo($arr['show_date'] == 'yes')?'checked':''; ?>>Full Date&nbsp;&nbsp;
-                        <input type="radio" class="" id="show_full_date_no" name="show_date" value="no" <?php echo($arr['show_date'] == 'no' || $arr['show_date'] == '')?'checked':''; ?>>Month and Year
+                        <input type="radio" class="" id="show_full_date_yes" name="show_date" value="yes" <?php echo($arr['show_date'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Full Date&nbsp;&nbsp;
+                        <input type="radio" class="" id="show_full_date_no" name="show_date" value="no" <?php echo($arr['show_date'] == 'no' || $arr['show_date'] == '')?'checked':''; ?>>&nbsp;&nbsp;Month and Year
                       </div>
                     </div>
                    </div>
@@ -128,8 +128,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="auto_approval" class="col-lg-4 control-label">Auto Approval </label>
                       <div class="col-lg-8">
-                        <input type="radio" class="" id="auto_approval_yes" name="auto_approval" value="yes" <?php echo($arr['auto_approval'] == 'yes')?'checked':''; ?>>Yes&nbsp;&nbsp;
-                        <input type="radio" class="" id="auto_approval_no" name="auto_approval" value="no" <?php echo($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '')?'checked':''; ?>>No
+                        <input type="radio" class="" id="auto_approval_yes" name="auto_approval" value="yes" <?php echo($arr['auto_approval'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_approval_no" name="auto_approval" value="no" <?php echo($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
                       </div>
                     </div>
                    </div>
@@ -158,9 +158,9 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="auto_approval" class="col-lg-4 control-label">Sample Code </label>
                       <div class="col-lg-8">
-                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>Auto&nbsp;&nbsp;
-                        <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>Numeric
-                        <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>Alpha Numeric
+                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>&nbsp;&nbsp;Auto&nbsp;&nbsp;
+                        <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>&nbsp;&nbsp;Numeric
+                        <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>&nbsp;&nbsp;Alpha Numeric
                       </div>
                     </div>
                    </div>
