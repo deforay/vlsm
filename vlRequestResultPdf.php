@@ -196,16 +196,29 @@ if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
     $smileyContent = '';
     $showMessage = '';
     $messageTextSize = '14px';
-  }else if(trim($result[0]['result']) > 1000){
+  }else if(trim($result[0]['result']) > 1000 && $result[0]['result']<=10000000){
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-    $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
+    $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.';
     $messageTextSize = '16px';
-  }else if(trim($result[0]['result']) <= 1000){
+  }else if(trim($result[0]['result']) <= 1000 && $result[0]['result']>=20){
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
     $showMessage = 'Viral load adequately controlled : continue current regimen';
+  }else if(trim($result[0]['result']=='<20')){
+    $vlResult = '&lt;20';
+    $smileyContent = '';
+    $showMessage = 'Viral load adequately controlled : continue current regimen.<br/>Value is outside machine testing limit, cannot be less than 20';
+  }else if(trim($result[0]['result']=='>10000000')){
+    $vlResult = $result[0]['result'];
+    $smileyContent = '';
+    $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
   }
+}
+if($result[0]['rejection_reason_name']!=NULL){
+  $result[0]['rejection_reason_name'] = $result[0]['rejection_reason_name'];
+}else{
+  $result[0]['rejection_reason_name'] = '';
 }
 if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
   $smileyContent = '';
@@ -349,6 +362,7 @@ $html .= '<div style="">';
             $html .='<td colspan="4" style="line-height:4px;"></td>';
           $html .='</tr>';
         }
+        
         if(trim($tndMessage)!= ''){
           $html .='<tr>';
             $html .='<td colspan="4" style="line-height:22px;font-size:18px;text-align:left;">'.$tndMessage.'</td>';
@@ -357,6 +371,7 @@ $html .= '<div style="">';
             $html .='<td colspan="4" style="line-height:6px;"></td>';
           $html .='</tr>';
         }
+        
         $html .='<tr>';
           $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
         $html .='</tr>';
@@ -364,9 +379,11 @@ $html .= '<div style="">';
           $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result[0]['comments']).'</td>';
         $html .='</tr>';
       $html .='</table>';
+      
      $html .='</td>';
      $html .='<td style="text-align:left;">';
        $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
+       
      $html .='</td>';
     $html .='</tr>';
     $html .='<tr>';
@@ -376,6 +393,7 @@ $html .= '<div style="">';
      $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Previous Sample Collection Date</td>';
      $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result[0]['last_viral_load_date'].'</td>';
     $html .='</tr>';
+    
     $html .='<tr>';
      $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Result of previous viral load(copies/ml)</td>';
      $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result[0]['last_viral_load_result'].'</td>';
@@ -393,6 +411,7 @@ $html .= '<div style="">';
           $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:10px;height:10px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
           $html .='<td style="font-size:10px;text-align:left;">Printed on : '.$printDate.'&nbsp;&nbsp;'.$printDateTime.'</td>';
         $html .='</tr>';
+        
         $html .='<tr>';
           $html .='<td colspan="2" style="line-height:4px;"></td>';
         $html .='</tr>';
