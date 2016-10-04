@@ -181,13 +181,6 @@ if(sizeof($requestResult)> 0){
           $result['lab_tested_date']='';
         }
         
-        
-        
-        if(isset($result['sample_testing_date']) && trim($result['sample_testing_date'])!='' && $result['sample_testing_date']!='0000-00-00'){
-          $result['sample_testing_date']=$general->humanDateFormat($result['sample_testing_date']);
-        }else{
-          $result['sample_testing_date']='';
-        }
         if(isset($result['last_viral_load_date']) && trim($result['last_viral_load_date'])!='' && $result['last_viral_load_date']!='0000-00-00'){
           $result['last_viral_load_date']=$general->humanDateFormat($result['last_viral_load_date']);
         }else{
@@ -308,8 +301,8 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="5" style="line-height:2px;"></td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient Id</td>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['art_no'].'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient OI / ART Number</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">First Name</td>';
