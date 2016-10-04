@@ -53,25 +53,26 @@ if(isset($_SESSION['vlPatientQuery']) && trim($_SESSION['vlPatientQuery'])!=""){
  $sheet->getStyle('A1:J1')->applyFromArray($styleArray);
  
  foreach ($rResult as $aRow) {
-  $row = array();
-  if(isset($aRow['patient_dob']) && trim($aRow['patient_dob'])!='' && $aRow['patient_dob']!='0000-00-00'){
-   $aRow['patient_dob']=$general->humanDateFormat($aRow['patient_dob']);
-  }else{
-   $aRow['patient_dob']='';
+  if(isset($aRow['patient_name']) && trim($aRow['patient_name'])!= ''){
+    $row = array();
+    if(isset($aRow['patient_dob']) && trim($aRow['patient_dob'])!='' && $aRow['patient_dob']!='0000-00-00'){
+     $aRow['patient_dob']=$general->humanDateFormat($aRow['patient_dob']);
+    }else{
+     $aRow['patient_dob']='';
+    }
+    $row[] = ucwords($aRow['patient_name']." ".$aRow['surname']);
+    $row[] = ucwords(str_replace("_"," ",$aRow['gender']));
+    $row[] = $aRow['patient_dob'];
+    $row[] = $aRow['age_in_yrs'];
+    $row[] = $aRow['age_in_mnts'];
+    $row[] = ucwords($aRow['is_patient_pregnant']);
+    $row[] = ucwords($aRow['is_patient_breastfeeding']);
+    $row[] = $aRow['art_no'];
+    $row[] = ucwords($aRow['patient_receive_sms']);
+    $row[] = $aRow['patient_phone_number'];
+    
+    $output[] = $row;
   }
-  
-  $row[] = ucwords($aRow['patient_name']." ".$aRow['surname']);
-  $row[] = ucwords(str_replace("_"," ",$aRow['gender']));
-  $row[] = $aRow['patient_dob'];
-  $row[] = $aRow['age_in_yrs'];
-  $row[] = $aRow['age_in_mnts'];
-  $row[] = ucwords($aRow['is_patient_pregnant']);
-  $row[] = ucwords($aRow['is_patient_breastfeeding']);
-  $row[] = $aRow['art_no'];
-  $row[] = ucwords($aRow['patient_receive_sms']);
-  $row[] = $aRow['patient_phone_number'];
-  
-  $output[] = $row;
  }
 
  $start = (count($output));

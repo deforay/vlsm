@@ -504,7 +504,7 @@ if($urgency==''){
                         <td><label>Reviewed By</label></td>
                         <!--<td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" /></td>-->
                         <td>
-                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
+                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" onchange="checkReviewedApprovedBy();">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -520,7 +520,7 @@ if($urgency==''){
                          <td><label>Approved By</label></td>
                          <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>-->
                          <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" onchange="checkReviewedApprovedBy();">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -982,6 +982,16 @@ function checkRejectedReason()
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
           alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
           $("#lastViralLoadTestDate").val("");
+        }
+      }
+    }
+    
+    function checkReviewedApprovedBy(){
+      var reviewedBy = $("#reviewedBy").val();
+      var approvedBy = $("#approvedBy").val();
+      if($.trim(reviewedBy)!= '' && $.trim(approvedBy)!= ''){
+        if($.trim(reviewedBy) == $.trim(approvedBy)!= ''){
+          alert("Same person is reviewing and approving result!");
         }
       }
     }

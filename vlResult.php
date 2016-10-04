@@ -24,7 +24,6 @@ $batResult = $db->rawQuery($batQuery);
       <button class="btn btn-info pull-right" type="button" onclick="exportInexcel()">Export to excel</button>
       </h1>
     </section>
-
      <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -105,6 +104,7 @@ $batResult = $db->rawQuery($batQuery);
 			<option value="">-- Select --</option>
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
+			<option value="6">Awaiting Clinic Approval</option>
 		      </select>
 		    </td>
 		</tr>
