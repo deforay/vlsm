@@ -216,8 +216,8 @@ if(sizeof($requestResult)> 0){
             $showMessage = 'Viral load adequately controlled : continue current regimen';
             $tndMessage = 'TND* - Target not Detected';
             $resultTextSize = '18px';
-          }else if(in_array(strtolower(trim($result[0]['result'])), array("failed","fail","no_sample"))){
-            $vlResult = $result[0]['result'];
+          }else if(in_array(strtolower(trim($result['result'])), array("failed","fail","no_sample"))){
+            $vlResult = $result['result'];
             $smileyContent = '';
             $showMessage = '';
             $messageTextSize = '14px';
@@ -322,7 +322,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_receive_sms']).'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['patient_phone_number'].'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords(str_replace("_"," ",$result[0]['gender'])).'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords(str_replace("_"," ",$result['gender'])).'</td>';
                    $html .='</tr>';
                  $html .='</table>';
                 $html .='</td>';
