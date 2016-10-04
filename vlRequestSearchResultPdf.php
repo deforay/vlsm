@@ -209,15 +209,14 @@ if(sizeof($requestResult)> 0){
         $resultTextSize = '12px';
         $messageTextSize = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
-          
           if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
             $vlResult = 'TND*';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen';
             $tndMessage = 'TND* - Target not Detected';
             $resultTextSize = '18px';
-          }else if(in_array(strtolower(trim($result[0]['result'])), array("failed","fail","no_sample"))){
-            $vlResult = $result[0]['result'];
+          }else if(in_array(strtolower(trim($result['result'])), array("failed","fail","no_sample"))){
+            $vlResult = $result['result'];
             $smileyContent = '';
             $showMessage = '';
             $messageTextSize = '14px';
