@@ -301,8 +301,8 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="5" style="line-height:2px;"></td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient Id</td>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['art_no'].'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient OI / ART Number</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">First Name</td>';
