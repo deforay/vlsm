@@ -173,6 +173,13 @@ if(sizeof($requestResult)> 0){
           $result['sample_collection_date']='';
           $sampleCollectionTime = '';
         }
+        $sampleReceivedDate='';
+        $sampleReceivedTime='';
+        if(isset($result['date_sample_received_at_testing_lab']) && trim($result['date_sample_received_at_testing_lab'])!='' && $result['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
+          $expStr=explode(" ",$result['date_sample_received_at_testing_lab']);
+          $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
+          $sampleReceivedTime =$expStr[1];
+        }
         
         if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00 00:00:00'){
           $expStr=explode(" ",$result['lab_tested_date']);
@@ -220,15 +227,23 @@ if(sizeof($requestResult)> 0){
             $smileyContent = '';
             $showMessage = '';
             $messageTextSize = '14px';
-          }else if(trim($result['result']) > 1000){
+          }else if(trim($result['result']) > 1000 && $result['result']<=10000000){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
             $messageTextSize = '16px';
-          }else if(trim($result['result']) <= 1000){
+          }else if(trim($result['result']) <= 1000 && $result['result']>=20){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen';
+          }else if(trim($result['result']=='<20')){
+            $vlResult = '&lt;20';
+            $smileyContent = '';
+            $showMessage = 'Viral load adequately controlled : continue current regimen <br/> Value is outside machine testing limit, cannot be less than 20';
+          }else if(trim($result['result']=='>10000000')){
+            $vlResult = $result['result'];
+            $smileyContent = '';
+            $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
           }
         }
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
@@ -287,11 +302,13 @@ if(sizeof($requestResult)> 0){
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Lab number</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Barcode number</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Barcode number</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_no'].'</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['serial_no'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['serial_no'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="5" style="line-height:2px;border-bottom:2px solid #333;"></td>';
@@ -333,13 +350,13 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="3">';
                 $html .='<table cellspacing="6" style="border:2px solid #333;">';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Received Date</td>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date of Viral Load Result</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_collection_date'].'</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleCollectionTime.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_tested_date'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
+          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_tested_date'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
