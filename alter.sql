@@ -575,3 +575,5 @@ INSERT INTO `r_vl_test_reasons` (`test_reason_id`, `test_reason_name`, `test_rea
 ALTER TABLE  `hold_sample_report` ADD  `vl_test_platform` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `import_batch_tracking` ;
 
 INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Sample Code', 'sample_code', 'numeric');
+
+INSERT INTO `vl_lab_request`.`form_details` (`form_id`, `form_name`) VALUES (NULL, 'French Form');
