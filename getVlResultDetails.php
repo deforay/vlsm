@@ -163,7 +163,11 @@ $primaryKey="vl_sample_id";
 		}
            }
 	   if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
-	        $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'];
+		  $vLoad ='';
+		  if($_POST['vLoad']=='<=1000'){
+		    $vLoad = " AND vl.status != '4'";
+		  }
+	        $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].$vLoad;
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 	        $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
@@ -227,12 +231,16 @@ $primaryKey="vl_sample_id";
 		}
 	    }
 	    if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
+		  $vLoad ='';
+		  if($_POST['vLoad']=='<=1000'){
+		    $vLoad = " AND vl.status != '4'";
+		  }
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'];
+		    $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].$vLoad;
 		}else{
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' vl.result '.$_POST['vLoad'];
+	        $sWhere = $sWhere.' vl.result '.$_POST['vLoad'].$vLoad;
 		}
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
