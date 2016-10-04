@@ -164,6 +164,7 @@ $primaryKey="vl_sample_id";
            }
 	   if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
 		  $vLoad ='';
+		  //just comment if condition
 		  if($_POST['vLoad']=='<=1000'){
 		    $vLoad = " AND vl.status != '4'";
 		  }
@@ -232,6 +233,7 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
 		  $vLoad ='';
+		  //just comment if condition
 		  if($_POST['vLoad']=='<=1000'){
 		    $vLoad = " AND vl.status != '4'";
 		  }
