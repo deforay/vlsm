@@ -136,7 +136,7 @@ $primaryKey="vl_sample_id";
 	    }
             $row = array();
 	    $row[] = ucwords($aRow['patient_name']." ".$aRow['surname']);
-	    $row[] = $aRow['gender'];
+	    $row[] = ucwords(str_replace("_"," ",$aRow['gender']));
 	    $row[] = $humanDate;
 	    $row[] = $aRow['art_no'];
 	    $row[] = $aRow['patient_phone_number'];
