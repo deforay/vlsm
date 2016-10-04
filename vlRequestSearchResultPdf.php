@@ -216,7 +216,6 @@ if(sizeof($requestResult)> 0){
         $resultTextSize = '12px';
         $messageTextSize = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
-          
           if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
             $vlResult = 'TND*';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';

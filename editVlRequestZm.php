@@ -483,7 +483,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><label>Reviewed By</label></td>
                         <!--<td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="< ?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>-->
                         <td>
-                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
+                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" onchange="checkReviewedApprovedBy();">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -499,7 +499,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                           <td><label>Approved By</label></td>
                           <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="< ?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>-->
                           <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" onchange="checkReviewedApprovedBy();">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -949,6 +949,16 @@ $("#vlLog").bind("keyup change", function(e) {
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
           alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
           $("#lastViralLoadTestDate").val("");
+        }
+      }
+    }
+    
+    function checkReviewedApprovedBy(){
+      var reviewedBy = $("#reviewedBy").val();
+      var approvedBy = $("#approvedBy").val();
+      if($.trim(reviewedBy)!= '' && $.trim(approvedBy)!= ''){
+        if($.trim(reviewedBy) == $.trim(approvedBy)!= ''){
+          alert("Same person is reviewing and approving result!");
         }
       }
     }
