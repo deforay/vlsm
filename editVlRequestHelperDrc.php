@@ -128,7 +128,7 @@ try {
                   'status'=>$_POST['status'],
                   'sample_rejection_reason'=>$_POST['rejectionReason'],
                   'lab_no'=>$_POST['labNo'],
-                  'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
+                  'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'result'=>$_POST['vlResult'],
                   'modified_by'=>$_SESSION['userId'],

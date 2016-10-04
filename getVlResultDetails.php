@@ -150,9 +150,9 @@ $primaryKey="vl_sample_id";
            }
 	   if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 		if (trim($sTestDate) == trim($eTestDate)) {
-		    $sWhere = $sWhere.' AND DATE(vl.sample_testing_date) = "'.$sTestDate.'"';
+		    $sWhere = $sWhere.' AND DATE(vl.lab_tested_date) = "'.$sTestDate.'"';
 		}else{
-		   $sWhere = $sWhere.' AND DATE(vl.sample_testing_date) >= "'.$sTestDate.'" AND DATE(vl.sample_testing_date) <= "'.$eTestDate.'"';
+		   $sWhere = $sWhere.' AND DATE(vl.lab_tested_date) >= "'.$sTestDate.'" AND DATE(vl.lab_tested_date) <= "'.$eTestDate.'"';
 		}
            }
 	   if(isset($_POST['printDate']) && trim($_POST['printDate'])!= ''){
@@ -210,11 +210,11 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND DATE(vl.sample_testing_date) >= "'.$sTestDate.'" AND DATE(vl.sample_testing_date) <= "'.$eTestDate.'"';
+		    $sWhere = $sWhere.' AND DATE(vl.lab_tested_date) >= "'.$sTestDate.'" AND DATE(vl.lab_tested_date) <= "'.$eTestDate.'"';
 		}else{
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' DATE(vl.sample_testing_date) >= "'.$sTestDate.'" AND DATE(vl.sample_testing_date) <= "'.$eTestDate.'"';
+	        $sWhere = $sWhere.' DATE(vl.lab_tested_date) >= "'.$sTestDate.'" AND DATE(vl.lab_tested_date) <= "'.$eTestDate.'"';
 		}
 	    }
 	    if(isset($_POST['printDate']) && trim($_POST['printDate'])!= ''){

@@ -8,6 +8,19 @@ include('header.php');
   
   $facilityTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details");
   $facilityCount = $facilityTotal[0]['total'];
+//  //Update Query
+//  $uQ = "select * FROM vl_request_form";
+//  $uResult = $db->rawQuery($uQ);
+//  foreach($uResult as $rlt){
+//    if(isset($rlt['sample_testing_date']) && trim($rlt['sample_testing_date'])!= '' && trim($rlt['sample_testing_date'])!= "0000-00-00 00:00:00"){
+//      $db=$db->where('vl_sample_id',$rlt['vl_sample_id']);
+//      //print_r($data);die;
+//      $data = array(
+//		    'lab_tested_date'=>$rlt['sample_testing_date'],
+//		  );
+//      $db->update("vl_request_form",$data);
+//    }
+//  }
 ?>
 
   <!-- Content Wrapper. Contains page content -->

@@ -72,11 +72,11 @@ if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_
 }else{
  $vlQueryInfo[0]['last_viral_load_date']='';
 }
-if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && trim($vlQueryInfo[0]['sample_testing_date'])!='0000-00-00 00:00:00'){
- $sampleTestingDateLab = explode(" ",$vlQueryInfo[0]['sample_testing_date']);
- $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
+if(isset($vlQueryInfo[0]['lab_tested_date']) && trim($vlQueryInfo[0]['lab_tested_date'])!='' && trim($vlQueryInfo[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
+ $sampleTestingDateLab = explode(" ",$vlQueryInfo[0]['lab_tested_date']);
+ $vlQueryInfo[0]['lab_tested_date']=$general->humanDateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
 }else{
- $vlQueryInfo[0]['sample_testing_date']='';
+ $vlQueryInfo[0]['lab_tested_date']='';
 }
 if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQueryInfo[0]['date_sample_received_at_testing_lab'])!='' && $vlQueryInfo[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$vlQueryInfo[0]['date_sample_received_at_testing_lab']);
@@ -432,7 +432,7 @@ $tsResult = $db->rawQuery($tsQuery);
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_testing_date'];?>" /></td>
+                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_tested_date'];?>" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
