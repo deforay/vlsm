@@ -238,11 +238,11 @@ if(sizeof($requestResult)> 0){
             $showMessage = 'Viral load adequately controlled : continue current regimen';
           }else if(trim($result['result']=='<20')){
             $vlResult = '&lt;20';
-            $smileyContent = '';
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen <br/> Value is outside machine testing limit, cannot be less than 20';
           }else if(trim($result['result']=='>10000000')){
             $vlResult = $result['result'];
-            $smileyContent = '';
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
           }
         }
