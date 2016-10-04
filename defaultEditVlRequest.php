@@ -71,10 +71,11 @@ if(isset($result[0]['missing_last_vl_date']) && trim($result[0]['missing_last_vl
  $result[0]['missing_last_vl_date']='';
 }
 
-if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_date'])!='' && trim($result[0]['sample_testing_date'])!='0000-00-00'){
- $result[0]['sample_testing_date']=$general->humanDateFormat($result[0]['sample_testing_date']);
+if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['lab_tested_date']);
+ $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['sample_testing_date']='';
+ $result[0]['lab_tested_date']='';
 }
 
 if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00 00:00:00'){
@@ -423,7 +424,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Sample Testing Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['sample_testing_date']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['lab_tested_date']; ?>"/>
                         </div>
                     </div>
                   </div>

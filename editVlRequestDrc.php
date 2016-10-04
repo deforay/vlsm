@@ -78,10 +78,11 @@
       $vlQueryInfo[0]['date_sample_received_at_testing_lab']='';
     }
     //Set sample test date
-    if(isset($vlQueryInfo[0]['sample_testing_date']) && trim($vlQueryInfo[0]['sample_testing_date'])!='' && $vlQueryInfo[0]['sample_testing_date']!='0000-00-00'){
-      $vlQueryInfo[0]['sample_testing_date']=$general->humanDateFormat($vlQueryInfo[0]['sample_testing_date']);
+    if(isset($vlQueryInfo[0]['lab_tested_date']) && trim($vlQueryInfo[0]['lab_tested_date'])!='' && $vlQueryInfo[0]['lab_tested_date']!='0000-00-00 00:00:00'){
+      $expStr=explode(" ",$vlQueryInfo[0]['lab_tested_date']);
+      $vlQueryInfo[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
     }else{
-      $vlQueryInfo[0]['sample_testing_date']='';
+      $vlQueryInfo[0]['lab_tested_date']='';
     }
     //get reason for rejection list
     $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
@@ -414,7 +415,7 @@
                             <tr>
                                 <td><label for="">Date de réalisation de la charge virale </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['sample_testing_date']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>

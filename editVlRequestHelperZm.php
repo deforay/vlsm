@@ -108,7 +108,7 @@ try {
           'lab_id'=>$_POST['labId'],
           'vl_test_platform'=>$_POST['testingPlatform'],
           'sample_id'=>$_POST['specimenType'],
-          'sample_testing_date'=>$_POST['sampleTestingDateAtLab'],
+          'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
           'absolute_value'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
           'result'=>$_POST['result'],

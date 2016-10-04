@@ -159,7 +159,7 @@ try {
           //'missing_sample_type'=>$_POST['missingSampleType'],
           'request_clinician'=>$_POST['requestClinician'],
           'clinician_ph_no'=>$_POST['clinicianPhone'],
-          'sample_testing_date'=>$_POST['requestDate'],
+          'lab_tested_date'=>$_POST['requestDate'],
           'vl_focal_person'=>$_POST['vlFocalPerson'],
           'focal_person_phone_number'=>$_POST['vlPhoneNumber'],
           'email_for_HF'=>$_POST['emailHf'],
