@@ -91,12 +91,15 @@ include('header.php');
   }
   
   function exportInexcel() {
+    $.blockUI();
     $.post("vlPatientExportInExcel.php",
     function(data){
 	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
+	    $.unblockUI();
+	    alert('Unable to generate download');
 	  }else{
-	      window.open('temporary/'+data,'_blank');
+	    $.unblockUI();
+	    window.open('temporary/'+data,'_blank');
 	  }
     });
   }
