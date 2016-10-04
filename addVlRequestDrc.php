@@ -82,7 +82,7 @@
                 <div class="box box-default">
                     <div class="box-body">
                         <div class="box-header with-border">
-                          <h3 class="box-title" lang="fr">1. Réservé à la structure de soins</h3>
+                          <h3 class="box-title">1. Réservé à la structure de soins</h3>
                         </div>
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
