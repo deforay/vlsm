@@ -152,10 +152,11 @@ if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result
 // $result[0]['missing_last_vl_date']='';
 //}
 
-if(isset($result[0]['sample_testing_date']) && trim($result[0]['sample_testing_date'])!='' && trim($result[0]['sample_testing_date'])!='0000-00-00'){
- $result[0]['sample_testing_date']=$general->humanDateFormat($result[0]['sample_testing_date']);
+if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['lab_tested_date']);
+ $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['sample_testing_date']='';
+ $result[0]['lab_tested_date']='';
 }
 
 if(trim($result[0]['current_regimen'])!=''){
@@ -313,7 +314,7 @@ $rejectionrResult = $db->rawQuery($rejectionrQuery);
         $html.='<tr><td>Patient consent to receive SMS?</td><td>&nbsp;'.$sms.'</td><td>Ph Number</td><td>:&nbsp;'.$result[0]['patient_phone_number'].'</td></tr>';
         $html.='<tr><td>Location</td><td colspan="3">:&nbsp;'.$result[0]['location'].'</td></tr>';
         $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
-        $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['sample_testing_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
+        $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['lab_tested_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
         $html.='<tr><td>Phone Number</td><td>:&nbsp;'.$result[0]['focal_person_phone_number'].'</td><td>Email for HF</td><td>:&nbsp;'.$result[0]['email_for_HF'].'</td></tr>';
         $html.='<tr><td>Justification</td><td>:&nbsp;'.$result[0]['justification'].'</td><td>Rejection</td><td>&nbsp;'.$reject.'</td></tr>';
         $html.='<tr><td>Rejection Facility</td><td>:&nbsp;'.ucwords($rejectionfResult[0]['facility_name']).'</td><td>Rejection Reason</td><td>:&nbsp;'.ucwords($rejectionrResult[0]['rejection_reason_name']).'</td></tr>';
