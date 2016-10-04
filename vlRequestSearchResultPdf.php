@@ -181,13 +181,6 @@ if(sizeof($requestResult)> 0){
           $result['lab_tested_date']='';
         }
         
-        
-        
-        if(isset($result['sample_testing_date']) && trim($result['sample_testing_date'])!='' && $result['sample_testing_date']!='0000-00-00'){
-          $result['sample_testing_date']=$general->humanDateFormat($result['sample_testing_date']);
-        }else{
-          $result['sample_testing_date']='';
-        }
         if(isset($result['last_viral_load_date']) && trim($result['last_viral_load_date'])!='' && $result['last_viral_load_date']!='0000-00-00'){
           $result['last_viral_load_date']=$general->humanDateFormat($result['last_viral_load_date']);
         }else{
@@ -329,7 +322,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_receive_sms']).'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['patient_phone_number'].'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords($result['gender']).'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords(str_replace("_"," ",$result[0]['gender'])).'</td>';
                    $html .='</tr>';
                  $html .='</table>';
                 $html .='</td>';
