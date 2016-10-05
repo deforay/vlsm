@@ -244,6 +244,23 @@ if(sizeof($requestResult)> 0){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
+          }else if(trim($result['result'] > '10000000') || trim($result['result'] < '20')){
+            $vlResult = $result['result'];
+            $showMessage = 'Value outside machine detection limit';
+            if($result['vl_test_platform']=='Roche' || $result['vl_test_platform']=='roche'){
+            $chkSign = '';
+            $chkSign = strchr($result['result'],'>');
+            if($chkSign!=''){
+              $vlResult = $result['result'];
+              $showMessage = 'Invalid value';
+            }
+            $chkSign = '';
+            $chkSign = strchr($result['result'],'<');
+            if($chkSign!=''){
+              $vlResult = str_replace("<","&lt;",$result['result']);
+              $showMessage = 'Invalid value';
+            }
+            }
           }
         }
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
