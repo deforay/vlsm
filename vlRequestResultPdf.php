@@ -183,8 +183,11 @@ $showMessage = '';
 $tndMessage = '';
 $resultTextSize = '12px';
 $messageTextSize = '12px';
+
 if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
+  
   if(in_array(strtolower(trim($result[0]['result'])), array("tnd","target not detected"))){
+    
     $vlResult = 'TND*';
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
     $showMessage = 'Viral load adequately controlled : continue current regimen';
@@ -212,7 +215,25 @@ if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
     $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
+  }else if(trim($result[0]['result'] > '10000000') || trim($result[0]['result'] < '20')){
+    $vlResult = $result[0]['result'];
+    $showMessage = 'Value outside machine detection limit';
+    if($result[0]['vl_test_platform']=='Roche' || $result[0]['vl_test_platform']=='roche'){
+    $chkSign = '';
+    $chkSign = strchr($result[0]['result'],'>');
+    if($chkSign!=''){
+      $vlResult = $result[0]['result'];
+      $showMessage = 'Invalid value';
+    }
+    $chkSign = '';
+    $chkSign = strchr($result[0]['result'],'<');
+    if($chkSign!=''){
+      $vlResult = str_replace("<","&lt;",$result[0]['result']);
+      $showMessage = 'Invalid value';
+    }
+    }
   }
+  
 }
 if($result[0]['rejection_reason_name']!=NULL){
   $result[0]['rejection_reason_name'] = $result[0]['rejection_reason_name'];
