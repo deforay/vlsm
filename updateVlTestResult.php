@@ -11,9 +11,10 @@ $configQuery="SELECT * from global_config";
     }
     if($arr['vl_form']==1){
      include('defaultupdateVlTestResult.php');
-    }
-    if($arr['vl_form']==2){
+    }else if($arr['vl_form']==2){
      include('updateVlTestResultZm.php');
+    }else if($arr['vl_form']==3){
+     include('updateVlTestResultDrc.php');
     }
 include('footer.php');
  ?>
