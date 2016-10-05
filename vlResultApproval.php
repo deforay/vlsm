@@ -90,6 +90,7 @@ $batResult = $db->rawQuery($batQuery);
 		      <option value="">-- Select at least one sample to apply bulk action --</option>
 		      <option value="7">Accepted</option>
 		      <option value="4">Rejected</option>
+		      <option value="2">Lost</option>
 		    </select>
 		</div>
 		<div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Bulk Action" class="btn btn-success btn-sm"></div>
