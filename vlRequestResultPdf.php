@@ -335,7 +335,7 @@ $html .= '<div style="">';
           $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result[0]['sample_name']).'</td>';
           $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Testing Platform</td>';
-          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result[0]['vl_test_platform']).'</td>';
+          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords(str_replace("_"," ",$result[0]['vl_test_platform'])).'</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
