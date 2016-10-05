@@ -367,7 +367,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Type d’échantillon</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Technique utilisée</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords(str_replace("_"," ",$result['vl_test_platform'])).'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Résultat(copies/ml)</td>';
