@@ -134,14 +134,15 @@ try {
                         'result_approved_by'=>$_POST['appBy'],
                         'result_approved_on'=>$general->getDateTime(),
                         'file_name'=>$accResult[$i]['file_name'],
-                        'status'=>'7'
+                        'status'=>'7',
+                        'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
                     );
                 if($accResult[$i]['absolute_value']!=''){
-                    $data['result'] = $rResult[0]['absolute_value'];
+                    $data['result'] = $accResult[$i]['absolute_value'];
                 }else if($accResult[$i]['log_value']!=''){
-                    $data['result'] = $rResult[0]['log_value'];
+                    $data['result'] = $accResult[$i]['log_value'];
                 }else if($accResult[$i]['text_value']!=''){
-                    $data['result'] = $rResult[0]['text_value'];
+                    $data['result'] = $accResult[$i]['text_value'];
                 }
             //get bacth code
                 $bquery="select * from batch_details where batch_code='".$accResult[$i]['batch_code']."'";
