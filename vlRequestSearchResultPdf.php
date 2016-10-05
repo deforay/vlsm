@@ -216,6 +216,7 @@ if(sizeof($requestResult)> 0){
         $resultTextSize = '12px';
         $messageTextSize = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
+          $resultType = is_numeric($result['result']);
           if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
             $vlResult = 'TND*';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
@@ -236,31 +237,45 @@ if(sizeof($requestResult)> 0){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen';
-          }else if(trim($result['result']=='<20')){
+          }else if(trim($result['result'] > 10000000) && $resultType && $result['vl_test_platform']=='Roche'){
+            $vlResult = $result['result'];
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+            $showMessage = 'Value outside machine detection limit';
+          }else if(trim($result['result'] < 20) && $resultType && $result['vl_test_platform']=='Roche'){
+            $vlResult = $result['result'];
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+            $showMessage = 'Value outside machine detection limit';
+          }else if(trim($result['result']=='<20') && $result['vl_test_platform']=='Roche'){
             $vlResult = '&lt;20';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen <br/> Value is outside machine testing limit, cannot be less than 20';
-          }else if(trim($result['result']=='>10000000')){
+          }else if(trim($result['result']=='>10000000') && $result['vl_test_platform']=='Roche'){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
-          }else if(trim($result['result'] > '10000000') || trim($result['result'] < '20')){
-            $vlResult = $result['result'];
-            $showMessage = 'Value outside machine detection limit';
-            if($result['vl_test_platform']=='Roche' || $result['vl_test_platform']=='roche'){
+          }else if($result['vl_test_platform']=='Roche'){
+            //
             $chkSign = '';
-            $chkSign = strchr($result['result'],'>');
-            if($chkSign!=''){
-              $vlResult = $result['result'];
-              $showMessage = 'Invalid value';
-            }
-            $chkSign = '';
-            $chkSign = strchr($result['result'],'<');
-            if($chkSign!=''){
-              $vlResult = str_replace("<","&lt;",$result['result']);
-              $showMessage = 'Invalid value';
-            }
-            }
+              $smileyShow = '';
+              $chkSign = strchr($result['result'],'>');
+              if($chkSign!=''){
+                $smileyShow =str_replace(">","",$result['result']);
+                $vlResult = $result['result'];
+                $showMessage = 'Invalid value';
+              }
+              $chkSign = '';
+              $chkSign = strchr($result['result'],'<');
+              if($chkSign!=''){
+                $smileyShow =str_replace("<","",$result['result']);
+                $vlResult = str_replace("<","&lt;",$result['result']);
+                $showMessage = 'Invalid value';
+              }
+              if($smileyShow!='' && $smileyShow <= 1000){
+                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+              }else if($smileyShow!='' && $smileyShow > 1000){
+                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+              }
+              //
           }
         }
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
@@ -324,7 +339,7 @@ if(sizeof($requestResult)> 0){
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_no'].'</td>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['serial_no'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result['serial_no'].'</td>';
                     $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
@@ -355,7 +370,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_receive_sms']).'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['patient_phone_number'].'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords(str_replace("_"," ",$result['gender'])).'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords(str_replace("_"," ",$result['gender'])).'</td>';
                    $html .='</tr>';
                  $html .='</table>';
                 $html .='</td>';
@@ -460,12 +475,14 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
           $html.='</table>';
         $html .= "</div>";
-        $pdf->writeHTML($html);
-        $pdf->lastPage();
-        $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
-        $pdf->Output($filename,"F");
-        $pages[] = $filename;
-      $page++;
+        if($result['result']!=''){
+          $pdf->writeHTML($html);
+          $pdf->lastPage();
+          $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
+          $pdf->Output($filename,"F");
+          $pages[] = $filename;
+        $page++;
+        }
       if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
         //Add event log
         $eventType = 'print-result';
