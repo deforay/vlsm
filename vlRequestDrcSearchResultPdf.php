@@ -183,7 +183,7 @@ if(sizeof($requestResult)> 0){
           
           if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00 00:00:00'){
             $expStr=explode(" ",$result['lab_tested_date']);
-            $result['lab_tested_date']=$general->humanDateFormat($expStr[0]);
+            $result['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
           }else{
             $result['lab_tested_date']='';
           }
