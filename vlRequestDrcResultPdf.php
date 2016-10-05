@@ -324,7 +324,7 @@ $html .= '<div style="">';
       $html .='<table cellspacing="6" style="border:2px solid #333;">';
         $html .='<tr>';
           $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Received Date</td>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date of Viral Load Result</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date de remise du résultat</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
@@ -335,7 +335,7 @@ $html .= '<div style="">';
           $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Type d’échantillon</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result[0]['sample_name']).'</td>';
           $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Technique utilisée</td>';
-          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result[0]['vl_test_platform']).'</td>';
+          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords(str_replace("_"," ",$result[0]['vl_test_platform'])).'</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Résultat(copies/ml)</td>';
@@ -422,7 +422,7 @@ $html .= '<div style="">';
     $html .='</tr>';
   $html.='</table>';
 $html .= "</div>";
-$pdf->writeHTML($html);
+$pdf->writeHTML(utf8_encode($html));
 $pdf->lastPage();
 $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
 $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
@@ -430,7 +430,7 @@ $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
 if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
   //Add event log
   $eventType = 'print-result';
-  $action = ucwords($_SESSION['userName']).' print the test result with patient CCC no. '.$result[0]['art_no'];
+  $action = ucwords($_SESSION['userName']).' print the test result with patient code '.$result[0]['art_no'];
   $resource = 'print-test-result';
   $data=array(
   'event_type'=>$eventType,

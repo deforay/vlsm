@@ -577,3 +577,6 @@ ALTER TABLE  `hold_sample_report` ADD  `vl_test_platform` VARCHAR( 255 ) NULL DE
 INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Sample Code', 'sample_code', 'numeric');
 
 INSERT INTO `vl_lab_request`.`form_details` (`form_id`, `form_name`) VALUES (NULL, 'French Form');
+
+-- Pal 05 Oct 2016
+UPDATE `form_details` SET `form_name` = 'DRC Form' WHERE `form_details`.`form_id` = 3;

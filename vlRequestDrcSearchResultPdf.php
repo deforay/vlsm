@@ -133,128 +133,133 @@ if(sizeof($requestResult)> 0){
         
         $pdf->AddPage();
         if(!isset($result['facility_code']) || trim($result['facility_code']) == ''){
-           $result['facility_code'] = '';
-        }
-        if(!isset($result['state']) || trim($result['state']) == ''){
-           $result['state'] = '';
-        }
-        if(!isset($result['district']) || trim($result['district']) == ''){
-           $result['district'] = '';
-        }
-        if(!isset($result['facility_name']) || trim($result['facility_name']) == ''){
-           $result['facility_name'] = '';
-        }
-        if(!isset($result['labName']) || trim($result['labName']) == ''){
-           $result['labName'] = '';
-        }
-        //Set Age
-        $age = 'Unknown';
-        if(isset($result['patient_dob']) && trim($result['patient_dob'])!='' && $result['patient_dob']!='0000-00-00'){
-          $todayDate = strtotime(date('Y-m-d'));
-          $dob = strtotime($result['patient_dob']);
-          $difference = $todayDate - $dob;
-          $seconds_per_year = 60*60*24*365;
-          $age = round($difference / $seconds_per_year);
-        }elseif(isset($result['age_in_yrs']) && trim($result['age_in_yrs'])!='' && trim($result['age_in_yrs']) >0){
-          $age = $result['age_in_yrs'];
-        }elseif(isset($result['age_in_mnts']) && trim($result['age_in_mnts'])!='' && trim($result['age_in_mnts']) >0){
-          if($result['age_in_mnts'] > 1){
-            $age = $result['age_in_mnts'].' months';
+            $result['facility_code'] = '';
+          }
+          if(!isset($result['state']) || trim($result['state']) == ''){
+            $result['state'] = '';
+          }
+          if(!isset($result['district']) || trim($result['district']) == ''){
+            $result['district'] = '';
+          }
+          if(!isset($result['facility_name']) || trim($result['facility_name']) == ''){
+            $result['facility_name'] = '';
+          }
+          if(!isset($result['labName']) || trim($result['labName']) == ''){
+            $result['labName'] = '';
+          }
+          //Set Age
+          $age = 'Unknown';
+          if(isset($result['patient_dob']) && trim($result['patient_dob'])!='' && $result['patient_dob']!='0000-00-00'){
+            $todayDate = strtotime(date('Y-m-d'));
+            $dob = strtotime($result['patient_dob']);
+            $difference = $todayDate - $dob;
+            $seconds_per_year = 60*60*24*365;
+            $age = round($difference / $seconds_per_year);
+          }elseif(isset($result['age_in_yrs']) && trim($result['age_in_yrs'])!='' && trim($result['age_in_yrs']) >0){
+            $age = $result['age_in_yrs'];
+          }elseif(isset($result['age_in_mnts']) && trim($result['age_in_mnts'])!='' && trim($result['age_in_mnts']) >0){
+            if($result['age_in_mnts'] > 1){
+              $age = $result['age_in_mnts'].' months';
+            }else{
+              $age = $result['age_in_mnts'].' month';
+            }
+          }
+          
+          if(isset($result['sample_collection_date']) && trim($result['sample_collection_date'])!='' && $result['sample_collection_date']!='0000-00-00 00:00:00'){
+            $expStr=explode(" ",$result['sample_collection_date']);
+            $result['sample_collection_date']=$general->humanDateFormat($expStr[0]);
+            $sampleCollectionTime = $expStr[1];
           }else{
-            $age = $result['age_in_mnts'].' month';
+            $result['sample_collection_date']='';
+            $sampleCollectionTime = '';
           }
-        }
-        
-        if(isset($result['sample_collection_date']) && trim($result['sample_collection_date'])!='' && $result['sample_collection_date']!='0000-00-00 00:00:00'){
-          $expStr=explode(" ",$result['sample_collection_date']);
-          $result['sample_collection_date']=$general->humanDateFormat($expStr[0]);
-          $sampleCollectionTime = $expStr[1];
-        }else{
-          $result['sample_collection_date']='';
-          $sampleCollectionTime = '';
-        }
-        $sampleReceivedDate='';
-        $sampleReceivedTime='';
-        if(isset($result['date_sample_received_at_testing_lab']) && trim($result['date_sample_received_at_testing_lab'])!='' && $result['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-          $expStr=explode(" ",$result['date_sample_received_at_testing_lab']);
-          $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
-          $sampleReceivedTime =$expStr[1];
-        }
-        
-        if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00 00:00:00'){
-          $expStr=explode(" ",$result['lab_tested_date']);
-          $result['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-        }else{
-          $result['lab_tested_date']='';
-        }
-        
-        if(isset($result['last_viral_load_date']) && trim($result['last_viral_load_date'])!='' && $result['last_viral_load_date']!='0000-00-00'){
-          $result['last_viral_load_date']=$general->humanDateFormat($result['last_viral_load_date']);
-        }else{
-          $result['last_viral_load_date']='';
-        }
-        if(!isset($result['patient_receive_sms']) || trim($result['patient_receive_sms'])== ''){
-          $result['patient_receive_sms'] = 'missing';
-        }
-        if(!isset($result['gender']) || trim($result['gender'])== ''){
-          $result['gender'] = 'not reported';
-        }
-        if(isset($result['reviewedBy']) && trim($result['reviewedBy'])!= ''){
-          $resultReviewedBy = ucwords($result['reviewedBy']);
-        }else{
-          $resultReviewedBy  = '';
-        }
-        if(isset($result['approvedBy']) && trim($result['approvedBy'])!= ''){
-          $resultApprovedBy = ucwords($result['approvedBy']);
-        }else{
-          $resultApprovedBy  = '';
-        }
-        $vlResult = '';
-        $smileyContent = '';
-        $showMessage = '';
-        $tndMessage = '';
-        $resultTextSize = '12px';
-        $messageTextSize = '12px';
-        if($result['result']!= NULL && trim($result['result'])!= '') {
-          if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
-            $vlResult = 'TND*';
-            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-            $showMessage = 'Viral load adequately controlled : continue current regimen';
-            $tndMessage = 'TND* - Target not Detected';
-            $resultTextSize = '18px';
-          }else if(in_array(strtolower(trim($result['result'])), array("failed","fail","no_sample"))){
-            $vlResult = $result['result'];
-            $smileyContent = '';
-            $showMessage = '';
-            $messageTextSize = '14px';
-          }else if(trim($result['result']) > 1000 && $result['result']<=10000000){
-            $vlResult = $result['result'];
-            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-            $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
-            $messageTextSize = '16px';
-          }else if(trim($result['result']) <= 1000 && $result['result']>=20){
-            $vlResult = $result['result'];
-            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-            $showMessage = 'Viral load adequately controlled : continue current regimen';
-          }else if(trim($result['result']=='<20')){
-            $vlResult = '&lt;20';
-            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-            $showMessage = 'Viral load adequately controlled : continue current regimen <br/> Value is outside machine testing limit, cannot be less than 20';
-          }else if(trim($result['result']=='>10000000')){
-            $vlResult = $result['result'];
-            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-            $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
+          $sampleReceivedDate='';
+          $sampleReceivedTime='';
+          if(isset($result['date_sample_received_at_testing_lab']) && trim($result['date_sample_received_at_testing_lab'])!='' && $result['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
+            $expStr=explode(" ",$result['date_sample_received_at_testing_lab']);
+            $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
+            $sampleReceivedTime =$expStr[1];
           }
-        }
-        if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
+          
+          if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00 00:00:00'){
+            $expStr=explode(" ",$result['lab_tested_date']);
+            $result['lab_tested_date']=$general->humanDateFormat($expStr[0]);
+          }else{
+            $result['lab_tested_date']='';
+          }
+          
+          if(isset($result['last_viral_load_date']) && trim($result['last_viral_load_date'])!='' && $result['last_viral_load_date']!='0000-00-00'){
+            $result['last_viral_load_date']=$general->humanDateFormat($result['last_viral_load_date']);
+          }else{
+            $result['last_viral_load_date']='';
+          }
+          if(!isset($result['patient_receive_sms']) || trim($result['patient_receive_sms'])== ''){
+            $result['patient_receive_sms'] = 'missing';
+          }
+          if(!isset($result['gender']) || trim($result['gender'])== ''){
+            $result['gender'] = 'not reported';
+          }
+          if(isset($result['reviewedBy']) && trim($result['reviewedBy'])!= ''){
+            $resultReviewedBy = ucwords($result['reviewedBy']);
+          }else{
+            $resultReviewedBy  = '';
+          }
+          if(isset($result['approvedBy']) && trim($result['approvedBy'])!= ''){
+            $resultApprovedBy = ucwords($result['approvedBy']);
+          }else{
+            $resultApprovedBy  = '';
+          }
+          $vlResult = '';
           $smileyContent = '';
-        }
-        if($result['status']=='4'){
-        $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/cross.png" alt="rejected"/>';
-      }
-        
-        $html = '';
-        $html .= '<div style="">';
+          $showMessage = '';
+          $tndMessage = '';
+          $resultTextSize = '12px';
+          $messageTextSize = '12px';
+          if($result['result']!= NULL && trim($result['result'])!= '') {
+            if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
+              $vlResult = 'TND*';
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+              $showMessage = 'Viral load adequately controlled : continue current regimen';
+              $tndMessage = 'TND* - Target not Detected';
+              $resultTextSize = '18px';
+            }else if(in_array(strtolower(trim($result['result'])), array("failed","fail","no_sample"))){
+              $vlResult = $result['result'];
+              $smileyContent = '';
+              $showMessage = '';
+              $messageTextSize = '14px';
+            }else if(trim($result['result']) > 1000 && $result['result']<=10000000){
+              $vlResult = $result['result'];
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+              $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.';
+              $messageTextSize = '16px';
+            }else if(trim($result['result']) <= 1000 && $result['result']>=20){
+              $vlResult = $result['result'];
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+              $showMessage = 'Viral load adequately controlled : continue current regimen';
+            }else if(trim($result['result']=='<20')){
+              $vlResult = '&lt;20';
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+              $showMessage = 'Viral load adequately controlled : continue current regimen.<br/>Value is outside machine testing limit, cannot be less than 20';
+            }else if(trim($result['result']=='>10000000')){
+              $vlResult = $result['result'];
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+              $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
+            }
+          }
+          if($result['rejection_reason_name']!=NULL){
+            $result['rejection_reason_name'] = $result['rejection_reason_name'];
+          }else{
+            $result['rejection_reason_name'] = '';
+          }
+          if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
+            $smileyContent = '';
+          }
+          if($result['status']=='4'){
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/cross.png" alt="rejected"/>';
+          }
+          
+          $html = '';
+          $html .= '<div style="">';
             $html.='<table style="padding:2px;">';
               if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
                 $html .='<tr>';
@@ -265,7 +270,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="4" style="text-align:left;"><h4>Viral Load Results</h4></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic code</td>';
+               $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Code Clinique</td>';
                $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['facility_code'].'</td>';
                $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Province</td>';
                $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['state']).'</td>';
@@ -280,14 +285,14 @@ if(sizeof($requestResult)> 0){
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="width:50%;"></td>';
-                   $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Clinic Name</td>';
+                   $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Zone de santé</td>';
                   $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['facility_name']).'</td>';
                 $html .='</tr>';
                 $html .='</table>';
                 $html .='</td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
+               $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Nom clinicien</td>';
                $html .='<td colspan="3" style="line-height:22px;font-size:10px;font-weight:bold;text-align:left;">'.ucwords($result['lab_contact_person']).'</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -301,7 +306,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['labName']).'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Lab number</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Code Labo</td>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Barcode number</td>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
                    $html .='</tr>';
@@ -317,7 +322,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="5" style="line-height:2px;"></td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient OI / ART Number</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Code du patient</td>';
                     $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
@@ -331,8 +336,8 @@ if(sizeof($requestResult)> 0){
                    $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Consent to SMS</td>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Mobile number</td>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Age</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sex</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Âge</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sexe</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_receive_sms']).'</td>';
@@ -351,21 +356,21 @@ if(sizeof($requestResult)> 0){
                 $html .='<table cellspacing="6" style="border:2px solid #333;">';
                   $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Received Date</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date of Viral Load Result</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date de remise du résultat</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
-          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_tested_date'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_tested_date'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Type d’échantillon</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Testing Platform</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Technique utilisée</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords(str_replace("_"," ",$result['vl_test_platform'])).'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Résultat(copies/ml)</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:22px;font-size:'.$resultTextSize.';text-align:left;">'.$vlResult.'</td>';
@@ -377,7 +382,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Rejected Reason</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Motifs de rejet</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['rejection_reason_name']).'</td>';
                   $html .='</tr>';
                   if(trim($showMessage)!= ''){
@@ -388,6 +393,7 @@ if(sizeof($requestResult)> 0){
                       $html .='<td colspan="4" style="line-height:4px;"></td>';
                     $html .='</tr>';
                   }
+                  
                   if(trim($tndMessage)!= ''){
                     $html .='<tr>';
                       $html .='<td colspan="4" style="line-height:22px;font-size:18px;text-align:left;">'.$tndMessage.'</td>';
@@ -396,6 +402,7 @@ if(sizeof($requestResult)> 0){
                       $html .='<td colspan="4" style="line-height:6px;"></td>';
                     $html .='</tr>';
                   }
+                  
                   $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
                   $html .='</tr>';
@@ -403,20 +410,23 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['comments']).'</td>';
                   $html .='</tr>';
                 $html .='</table>';
+                
                $html .='</td>';
                $html .='<td style="text-align:left;">';
-                $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
+                 $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
+                 
                $html .='</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Previous results</td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Previous Sample Collection Date</td>';
+               $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Date dernière charge virale (demande)</td>';
                $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result['last_viral_load_date'].'</td>';
               $html .='</tr>';
+              
               $html .='<tr>';
-               $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Result of previous viral load(copies/ml)</td>';
+               $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Résultat dernière charge virale(copies/ml)</td>';
                $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result['last_viral_load_result'].'</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -432,6 +442,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:10px;height:10px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
                     $html .='<td style="font-size:10px;text-align:left;">Printed on : '.$printDate.'&nbsp;&nbsp;'.$printDateTime.'</td>';
                   $html .='</tr>';
+                  
                   $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:4px;"></td>';
                   $html .='</tr>';
@@ -441,9 +452,9 @@ if(sizeof($requestResult)> 0){
                  $html .='</table>';
                 $html .='</td>';
               $html .='</tr>';
-          $html.='</table>';
-        $html .= "</div>";
-        $pdf->writeHTML($html);
+            $html.='</table>';
+           $html .= "</div>";
+        $pdf->writeHTML(utf8_encode($html));
         $pdf->lastPage();
         $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
         $pdf->Output($filename,"F");

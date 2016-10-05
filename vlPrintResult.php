@@ -290,7 +290,7 @@ $batResult = $db->rawQuery($batQuery);
   
   function convertSearchResultToPdf(){
     $.blockUI();
-    $.post("vlRequestSearchResultPdf.php", { source:'print'},
+    $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print'},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      $.unblockUI();
