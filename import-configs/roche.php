@@ -55,7 +55,7 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
           //print_r($resVal);die;
           $testingDate=str_replace("/","-",$resVal[0]);
           if(PHPExcel_Shared_Date::isDateTime($cellDt)) {
-               $testingDate = date("Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
+               $testingDate = date("Y-m-d H:i", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
           }
         }
      }
