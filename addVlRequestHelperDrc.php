@@ -104,7 +104,8 @@ try {
     }
     //Set sample testing date
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
-        $_POST['sampleTestingDateAtLab']=$general->dateFormat($_POST['sampleTestingDateAtLab']);  
+        $sampleTestedDate = explode(" ",$_POST['sampleTestingDateAtLab']);
+        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestedDate[0])." ".$sampleTestedDate[1];
     }
     $vldata=array(
                   'vl_instance_id'=>$instanceId,
