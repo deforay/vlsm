@@ -415,7 +415,7 @@
                             <tr>
                                 <td><label for="">Date de réalisation de la charge virale </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control date" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -442,7 +442,7 @@
                             <tr>
                                 <td><label for="">Date de remise du résultat </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control date" id="dateOfResult" name="dateOfResult" placeholder="e.g 09-Jan-1992" title="Please enter date de remise du résultat" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                         </table>
