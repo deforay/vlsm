@@ -430,7 +430,7 @@ $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
 if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
   //Add event log
   $eventType = 'print-result';
-  $action = ucwords($_SESSION['userName']).' print the test result with patient CCC no. '.$result[0]['art_no'];
+  $action = ucwords($_SESSION['userName']).' print the test result with patient code '.$result[0]['art_no'];
   $resource = 'print-test-result';
   $data=array(
   'event_type'=>$eventType,
