@@ -983,18 +983,36 @@ $("#vlLog").bind("keyup change", function(e) {
         if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
           var lowLimit = result[1];
           var highLimit = result[2];
-            if(lowLimit!='' && lowLimit!=0 && absValue < 20){
+            if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
               alert("Value outside machine detection limit");
               machineName = false;
-            }else if(highLimit!='' && highLimit!=0 && absValue > 10000000){
+            }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
               alert("Value outside machine detection limit");
               machineName  = false;
             }else{
-              var lessSign = absValue.lastIndexOf("<");
-              var greaterSign = absValue.lastIndexOf(">");
-              if(lessSign=='-1' && greaterSign=='-1'){
-              }else{
-                alert("Invalid value");
+              lessSign = absValue.split("<");
+              greaterSign = absValue.split(">");
+              if(lessSign.length>1)
+              {
+                if(parseInt(lessSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(lessSign[1])>parseInt(highLimit))
+                {
+                  alert("Invalid value.Value Greater than machine detection limit.");  
+                }else{
+                  alert("Invalid value.");  
+                }
+                machineName = false;
+              }else if(greaterSign.length>1)
+              {
+                if(parseInt(greaterSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(greaterSign[1])>parseInt(highLimit))
+                {
+                  alert("Invalid value.Value Greater than machine detection limit.");  
+                }else{
+                  alert("Invalid value.");  
+                }
                 machineName = false;
               }
             }
