@@ -10,6 +10,8 @@ try {
     $importConfigData=array(
     'machine_name'=>$_POST['configurationName'],
     'file_name'=>$_POST['configurationFile'],
+    'lower_limit'=>$_POST['lowerLimit'],
+    'higher_limit'=>$_POST['higherLimit'],
     'status'=>$_POST['status']
     );
     //print_r($importConfigData);die;

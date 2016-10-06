@@ -49,6 +49,26 @@ $sInfo=$db->query($sQuery);
                     </div>
                   </div>
                 </div>
+		<div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="configurationFileName" class="col-lg-4 control-label">Lower Limit</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control checkNum" id="lowerLimit" name="lowerLimit" placeholder="eg. 20" title="Please enter lower limit" value="<?php echo $sInfo[0]['lower_limit']; ?>" />
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="configurationFileName" class="col-lg-4 control-label">Higher Limit</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control checkNum" id="higherLimit" name="higherLimit" placeholder="eg. 10000000" title="Please enter lower limit"  value="<?php echo $sInfo[0]['higher_limit']; ?>"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
                 
 		<div class="row">
                    <div class="col-md-6" style="padding-top:20px;">

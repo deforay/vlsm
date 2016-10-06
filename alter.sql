@@ -580,3 +580,9 @@ INSERT INTO `vl_lab_request`.`form_details` (`form_id`, `form_name`) VALUES (NUL
 
 -- Pal 05 Oct 2016
 UPDATE `form_details` SET `form_name` = 'DRC Form' WHERE `form_details`.`form_id` = 3;
+
+--saravanan 06-oct-2016
+ALTER TABLE  `import_config` ADD  `lower_limt` INT NULL DEFAULT NULL AFTER  `file_name` ,
+ADD  `higer_limit` INT NULL DEFAULT NULL AFTER  `lower_limt` ;
+ALTER TABLE  `import_config` CHANGE  `lower_limt`  `lower_limit` INT( 11 ) NULL DEFAULT NULL ;
+ALTER TABLE  `import_config` CHANGE  `higer_limit`  `higher_limit` INT( 11 ) NULL DEFAULT NULL ;
