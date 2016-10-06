@@ -604,7 +604,7 @@ if($urgency==''){
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     $("#saveNext").val('next');
-    if(flag){
+    if(flag && machineName){
     $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }

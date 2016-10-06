@@ -76,6 +76,10 @@ try {
      if(!isset($_POST['patientPhoneNumber'])){
           $_POST['patientPhoneNumber'] = '';
      }
+     if($_POST['testingPlatform']!=''){
+          $platForm = explode("##",$_POST['testingPlatform']);
+          $_POST['testingPlatform'] = $platForm[0];
+          }
      
      $vldata=array(
           'urgency'=>$_POST['urgency'],
