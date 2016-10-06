@@ -448,7 +448,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Previous results</td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Previous Sample Collection Date</td>';
+               $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Date Of Last Viral Load Test</td>';
                $html .='<td colspan="2" style="font-size:10px;text-align:left;">'.$result['last_viral_load_date'].'</td>';
               $html .='</tr>';
               $html .='<tr>';
