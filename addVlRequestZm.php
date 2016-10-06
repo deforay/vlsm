@@ -511,7 +511,7 @@ if($urgency==''){
                         <td><label>Reviewed By</label></td>
                         <!--<td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" /></td>-->
                         <td>
-                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" onchange="checkReviewedApprovedBy();">
+                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" >
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -527,7 +527,7 @@ if($urgency==''){
                          <td><label>Approved By</label></td>
                          <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>-->
                          <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" onchange="checkReviewedApprovedBy();">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -597,8 +597,11 @@ if($urgency==''){
         //check approve and review by name
         rBy = $("#reviewedBy").val();
         aBy = $("#approvedBy").val();
-        if(aBy==rBy){
-          alert("Approved and Reviewed By having same name.");
+        if(aBy==rBy && (rBy!='' && aBy!='')){
+          conf = confirm("Same person is reviewing and approving result!");
+          if(conf){}else{
+            return false;
+          }
         }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
@@ -619,8 +622,11 @@ if($urgency==''){
         //check approve and review by name
         rBy = $("#reviewedBy").val();
         aBy = $("#approvedBy").val();
-        if(aBy==rBy){
-          alert("Approved and Reviewed By having same name.");
+        if(aBy==rBy && (rBy!='' && aBy!='')){
+          conf = confirm("Same person is reviewing and approving result!");
+          if(conf){}else{
+            return false;
+          }
         }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
@@ -1014,15 +1020,15 @@ function checkRejectedReason()
       }
     }
     
-    function checkReviewedApprovedBy(){
-      var reviewedBy = $("#reviewedBy").val();
-      var approvedBy = $("#approvedBy").val();
-      if($.trim(reviewedBy)!= '' && $.trim(approvedBy)!= ''){
-        if($.trim(reviewedBy) == $.trim(approvedBy)!= ''){
-          alert("Same person is reviewing and approving result!");
-        }
-      }
-    }
+    //function checkReviewedApprovedBy(){
+    //  var reviewedBy = $("#reviewedBy").val();
+    //  var approvedBy = $("#approvedBy").val();
+    //  if($.trim(reviewedBy)!= '' && $.trim(approvedBy)!= ''){
+    //    if($.trim(reviewedBy) == $.trim(approvedBy)!= ''){
+    //      alert("Same person is reviewing and approving result!");
+    //    }
+    //  }
+    //}
     //check machine name and limit
     function getMachineName(){
       machineName = true;
