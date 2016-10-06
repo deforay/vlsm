@@ -232,7 +232,7 @@ if(sizeof($requestResult)> 0){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
-            $messageTextSize = '16px';
+            $messageTextSize = '15px';
           }else if(trim($result['result']) <= 1000 && $result['result']>=20){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
@@ -320,7 +320,7 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
-               $html .='<td colspan="3" style="line-height:22px;font-size:10px;font-weight:bold;text-align:left;">'.ucwords($result['lab_contact_person']).'</td>';
+               $html .='<td colspan="3" style="line-height:22px;font-size:10px;text-align:left;">'.ucwords($result['lab_contact_person']).'</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="4" style="line-height:2px;border-bottom:2px solid #333;"></td>';
@@ -350,15 +350,15 @@ if(sizeof($requestResult)> 0){
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient OI / ART Number</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['art_no'].'</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;text-align:left;">'.$result['art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">First Name</td>';
                     $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Surname</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords($result['patient_name']).'</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords($result['surname']).'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_name']).'</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['surname']).'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Consent to SMS</td>';
@@ -408,10 +408,14 @@ if(sizeof($requestResult)> 0){
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
                   $html .='</tr>';
+                  
+                  if(isset($result['rejection_reason_name']) && $result['rejection_reason_name'] != null && trim($result['rejection_reason_name']) != ""){
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Rejected Reason</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['rejection_reason_name']).'</td>';
                   $html .='</tr>';
+                  }
+                  
                   if(trim($showMessage)!= ''){
                     $html .='<tr>';
                       $html .='<td colspan="4" style="line-height:22px;font-size:'.$messageTextSize.';text-align:left;">'.$showMessage.'</td>';
