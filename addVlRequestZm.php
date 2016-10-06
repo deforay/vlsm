@@ -1024,13 +1024,11 @@ function checkRejectedReason()
       }
     }
     //check machine name and limit
-    function getMachineName()
-    {
+    function getMachineName(){
       machineName = true;
       var mName = $("#testingPlatform").val();
       var absValue = $("#vlResult").val();
-      if(mName!='' && absValue!='')
-      {
+      if(mName!='' && absValue!=''){
         //split the value
         var result = mName.split("##");
         if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
@@ -1047,13 +1045,11 @@ function checkRejectedReason()
             }else{
               lessSign = absValue.split("<");
               greaterSign = absValue.split(">");
-              if(lessSign.length>1)
-              {
+              if(lessSign.length>1){
                 if(parseInt(lessSign[1])<parseInt(lowLimit)){
                 alert("Invalid value.Value Lesser than machine detection limit.");
                 $("#vlResult").css('background-color', '#FFFF99');
-                }else if(parseInt(lessSign[1])>parseInt(highLimit))
-                {
+                }else if(parseInt(lessSign[1])>parseInt(highLimit)){
                   alert("Invalid value.Value Greater than machine detection limit.");
                   $("#vlResult").css('background-color', '#FFFF99');
                 }else{
@@ -1061,12 +1057,10 @@ function checkRejectedReason()
                 }
                 $("#vlResult").css('background-color', '#FFFF99');
                 machineName = false;
-              }else if(greaterSign.length>1)
-              {
+              }else if(greaterSign.length>1){
                 if(parseInt(greaterSign[1])<parseInt(lowLimit)){
                 alert("Invalid value.Value Lesser than machine detection limit.");  
-                }else if(parseInt(greaterSign[1])>parseInt(highLimit))
-                {
+                }else if(parseInt(greaterSign[1])>parseInt(highLimit)){
                   alert("Invalid value.Value Greater than machine detection limit");  
                 }else{
                   alert("Invalid value.");  
