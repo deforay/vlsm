@@ -429,7 +429,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_no'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" onchange="getMachineName();">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
@@ -457,7 +457,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_tested_date'];?>" onchange="checkSampleTestingDate();"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td>
-                          <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" onchange="getMachineName();" />
+                          <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" />
                           <input type="hidden" name="textValue" value="<?php echo $vlQueryInfo[0]['text_value'];?>" />
                         </td>
                         <td><label for="vlLog">Viral Load Log</label></td>
@@ -559,9 +559,12 @@ machineName = true;
     $('.isRequired').each(function () {
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
-    if(flag && machineName){
+    if(flag){
+      getMachineName();
+      if(machineName){
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
+      }
     }
   }
   function getfacilityDetails(obj)
@@ -985,9 +988,11 @@ $("#vlLog").bind("keyup change", function(e) {
           var highLimit = result[2];
             if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
               alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
               machineName = false;
             }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
               alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
               machineName  = false;
             }else{
               lessSign = absValue.split("<");
@@ -1002,6 +1007,7 @@ $("#vlLog").bind("keyup change", function(e) {
                 }else{
                   alert("Invalid value.");  
                 }
+                $("#vlResult").css('background-color', '#FFFF99');
                 machineName = false;
               }else if(greaterSign.length>1)
               {
@@ -1013,6 +1019,7 @@ $("#vlLog").bind("keyup change", function(e) {
                 }else{
                   alert("Invalid value.");  
                 }
+                $("#vlResult").css('background-color', '#FFFF99');
                 machineName = false;
               }
             }

@@ -453,7 +453,7 @@ if($urgency==''){
                         <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $maxLabId;?>"/></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" onchange="getMachineName();">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -480,7 +480,7 @@ if($urgency==''){
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" onchange="checkSampleTestingDate();" style="width:100%;" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" onchange="getMachineName();" /></td>
+                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
                         <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" /></td>
                       </tr>
@@ -591,9 +591,12 @@ if($urgency==''){
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     $("#saveNext").val('save');
-    if(flag && machineName){
+    if(flag){
+      getMachineName();
+      if(machineName){
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
+    }
     }
   }
   function validateSaveNow(){
@@ -604,9 +607,12 @@ if($urgency==''){
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     $("#saveNext").val('next');
-    if(flag && machineName){
-    $.blockUI();
+    if(flag){
+      getMachineName();
+      if(machineName){
+      $.blockUI();
       document.getElementById('vlRequestForm').submit();
+      }
     }
   }
   function getfacilityDetails(obj)
@@ -1018,9 +1024,11 @@ function checkRejectedReason()
           var highLimit = result[2];
             if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
               alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
               machineName = false;
             }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
               alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
               machineName  = false;
             }else{
               lessSign = absValue.split("<");
@@ -1028,13 +1036,16 @@ function checkRejectedReason()
               if(lessSign.length>1)
               {
                 if(parseInt(lessSign[1])<parseInt(lowLimit)){
-                alert("Invalid value.Value Lesser than machine detection limit.");  
+                alert("Invalid value.Value Lesser than machine detection limit.");
+                $("#vlResult").css('background-color', '#FFFF99');
                 }else if(parseInt(lessSign[1])>parseInt(highLimit))
                 {
-                  alert("Invalid value.Value Greater than machine detection limit.");  
+                  alert("Invalid value.Value Greater than machine detection limit.");
+                  $("#vlResult").css('background-color', '#FFFF99');
                 }else{
                   alert("Invalid value.");  
                 }
+                $("#vlResult").css('background-color', '#FFFF99');
                 machineName = false;
               }else if(greaterSign.length>1)
               {
@@ -1046,6 +1057,7 @@ function checkRejectedReason()
                 }else{
                   alert("Invalid value.");  
                 }
+                $("#vlResult").css('background-color', '#FFFF99')
                 machineName = false;
               }
             }
