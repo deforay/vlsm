@@ -10,6 +10,8 @@ try {
         $data=array(
         'machine_name'=>$_POST['configurationName'],
         'file_name'=>$_POST['configurationFile'],
+        'lower_limit'=>$_POST['lowerLimit'],
+        'higher_limit'=>$_POST['higherLimit'],
         'status' => 'active'
         );
         //print_r($data);die;
