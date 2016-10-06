@@ -90,6 +90,10 @@ try {
      if(isset($_SESSION['instanceId'])){
           $instanceId = $_SESSION['instanceId'];
      }
+     if($_POST['testingPlatform']!=''){
+          $platForm = explode("##",$_POST['testingPlatform']);
+          $_POST['testingPlatform'] = $platForm[0];
+     }
      
      $vldata=array(
           'urgency'=>$_POST['urgency'],

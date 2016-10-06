@@ -12,6 +12,10 @@ if($_SESSION['roleCode'] == "DE"){
     $autoApprovalFieldStatus = 'hide';
   }
 }
+//get import config
+$importQuery="SELECT * FROM import_config WHERE status = 'active'";
+$importResult=$db->query($importQuery);
+
 //global config
 $cSampleQuery="SELECT value FROM global_config WHERE name = 'sample_code'";
 $cSampleResult=$db->query($cSampleQuery);
@@ -425,10 +429,13 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_no'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
-                              <option value=""> -- Select -- </option>
-                              <option value="Roche" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='Roche')?"selected='selected'":""?>>Roche</option>
-                              <option value="Biomerieux" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='Biomerieux')?"selected='selected'":""?>>Biomerieux</option>
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" onchange="getMachineName();">
+                            <option value="">-- Select --</option>
+                            <?php foreach($importResult as $mName) { ?>
+                              <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
+                              <?php
+                            }
+                            ?>
                           </select>
                         </td>
                         <td><label for="specimenType">Specimen type</label></td>
@@ -450,7 +457,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_tested_date'];?>" onchange="checkSampleTestingDate();"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td>
-                          <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" />
+                          <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" onchange="getMachineName();" />
                           <input type="hidden" name="textValue" value="<?php echo $vlQueryInfo[0]['text_value'];?>" />
                         </td>
                         <td><label for="vlLog">Viral Load Log</label></td>
@@ -544,6 +551,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
   <script type="text/javascript">
 provinceName = true;
 facilityName = true;
+machineName = true;
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
@@ -551,7 +559,7 @@ facilityName = true;
     $('.isRequired').each(function () {
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
-    if(flag){
+    if(flag && machineName){
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }
@@ -959,6 +967,37 @@ $("#vlLog").bind("keyup change", function(e) {
       if($.trim(reviewedBy)!= '' && $.trim(approvedBy)!= ''){
         if($.trim(reviewedBy) == $.trim(approvedBy)!= ''){
           alert("Same person is reviewing and approving result!");
+        }
+      }
+    }
+    //check machine name and limit
+    function getMachineName()
+    {
+      machineName = true;
+      var mName = $("#testingPlatform").val();
+      var absValue = $("#vlResult").val();
+      if(mName!='' && absValue!='')
+      {
+        //split the value
+        var result = mName.split("##");
+        if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
+          var lowLimit = result[1];
+          var highLimit = result[2];
+            if(lowLimit!='' && lowLimit!=0 && absValue < 20){
+              alert("Value outside machine detection limit");
+              machineName = false;
+            }else if(highLimit!='' && highLimit!=0 && absValue > 10000000){
+              alert("Value outside machine detection limit");
+              machineName  = false;
+            }else{
+              var lessSign = absValue.lastIndexOf("<");
+              var greaterSign = absValue.lastIndexOf(">");
+              if(lessSign=='-1' && greaterSign=='-1'){
+              }else{
+                alert("Invalid value");
+                machineName = false;
+              }
+            }
         }
       }
     }
