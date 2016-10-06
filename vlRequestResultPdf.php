@@ -183,11 +183,9 @@ $showMessage = '';
 $tndMessage = '';
 $resultTextSize = '12px';
 $messageTextSize = '12px';
-
 if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
   $resultType = is_numeric($result[0]['result']);
   if(in_array(strtolower(trim($result[0]['result'])), array("tnd","target not detected"))){
-    
     $vlResult = 'TND*';
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
     $showMessage = 'Viral load adequately controlled : continue current regimen';
