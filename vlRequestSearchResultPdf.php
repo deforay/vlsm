@@ -245,37 +245,37 @@ if(sizeof($requestResult)> 0){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             //$showMessage = 'Value outside machine detection limit';
-          }else if(trim($result['result']=='<20')){
+          }else if(trim($result['result'])=='<20'){
             $vlResult = '&lt;20';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = 'Viral load adequately controlled : continue current regimen <br/> Value is outside machine testing limit, cannot be less than 20';
-          }else if(trim($result['result']=='>10000000')){
+          }else if(trim($result['result'])=='>10000000'){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
           }else if($result['vl_test_platform']=='Roche'){
             //
             $chkSign = '';
-              $smileyShow = '';
-              $chkSign = strchr($result['result'],'>');
-              if($chkSign!=''){
-                $smileyShow =str_replace(">","",$result['result']);
-                $vlResult = $result['result'];
-                //$showMessage = 'Invalid value';
-              }
-              $chkSign = '';
-              $chkSign = strchr($result['result'],'<');
-              if($chkSign!=''){
-                $smileyShow =str_replace("<","",$result['result']);
-                $vlResult = str_replace("<","&lt;",$result['result']);
-                //$showMessage = 'Invalid value';
-              }
-              if($smileyShow!='' && $smileyShow <= 1000){
-                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-              }else if($smileyShow!='' && $smileyShow > 1000){
-                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-              }
-              //
+            $smileyShow = '';
+            $chkSign = strchr($result['result'],'>');
+            if($chkSign!=''){
+              $smileyShow =str_replace(">","",$result['result']);
+              $vlResult = $result['result'];
+              //$showMessage = 'Invalid value';
+            }
+            $chkSign = '';
+            $chkSign = strchr($result['result'],'<');
+            if($chkSign!=''){
+              $smileyShow =str_replace("<","",$result['result']);
+              $vlResult = str_replace("<","&lt;",$result['result']);
+              //$showMessage = 'Invalid value';
+            }
+            if($smileyShow!='' && $smileyShow <= 1000){
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
+            }else if($smileyShow!='' && $smileyShow > 1000){
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
+            }
+            //
           }
         }
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){

@@ -213,18 +213,17 @@ if($result[0]['result']!= NULL && trim($result[0]['result'])!= '') {
     $vlResult = $result[0]['result'];
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
     //$showMessage = 'Value outside machine detection limit';
-  }else if(trim($result[0]['result']=='<20')){
+  }else if(trim($result[0]['result'])=='<20'){
     $vlResult = '&lt;20';
     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
     $showMessage = 'Viral load adequately controlled : continue current regimen.<br/>Value is outside machine testing limit, cannot be less than 20';
-  }else if(trim($result[0]['result']=='>10000000')){
+  }else if(trim($result[0]['result'])=='>10000000'){
       $vlResult = $result[0]['result'];
       $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
       $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
   }else if($result[0]['vl_test_platform']=='Roche'){
-    
       //--//
-    $chkSign = '';
+      $chkSign = '';
       $smileyShow = '';
       $chkSign = strchr($result[0]['result'],'>');
       if($chkSign!=''){
