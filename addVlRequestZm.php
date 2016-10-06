@@ -594,6 +594,12 @@ if($urgency==''){
     if(flag){
       getMachineName();
       if(machineName){
+        //check approve and review by name
+        rBy = $("#reviewedBy").val();
+        aBy = $("#approvedBy").val();
+        if(aBy==rBy){
+          alert("Approved and Reviewed By having same name.");
+        }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }
@@ -610,6 +616,12 @@ if($urgency==''){
     if(flag){
       getMachineName();
       if(machineName){
+        //check approve and review by name
+        rBy = $("#reviewedBy").val();
+        aBy = $("#approvedBy").val();
+        if(aBy==rBy){
+          alert("Approved and Reviewed By having same name.");
+        }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
       }
@@ -987,11 +999,13 @@ function checkRejectedReason()
         splitLastVLTestDate = dateOfLastVLTest.split("-");
         var lastVLTestOn = new Date(splitLastVLTestDate[1] + splitLastVLTestDate[2]+", "+splitLastVLTestDate[0]);
         var monthDigit = lastVLTestOn.getMonth();
-        var lastVLTestYear = splitArtIniDate[2];
+        var lastVLTestYear = splitLastVLTestDate[2];
         var lastVLTestMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
         lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
         var lastVLTestDate = splitLastVLTestDate[0];
         lastVLTestDate = lastVLTestYear+"-"+lastVLTestMonth+"-"+lastVLTestDate;
+        console.log(artIniDate);
+        console.log(lastVLTestDate);
         //Check diff
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
           alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
