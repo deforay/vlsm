@@ -17,9 +17,15 @@ $importQuery="SELECT * FROM import_config WHERE status = 'active'";
 $importResult=$db->query($importQuery);
 
 //global config
-$cSampleQuery="SELECT value FROM global_config WHERE name = 'sample_code'";
+$cSampleQuery="SELECT * FROM global_config";
 $cSampleResult=$db->query($cSampleQuery);
-if($cSampleResult[0]['value']=='auto' || $cSampleResult[0]['value']=='alphanumeric')
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($cSampleResult); $i++) {
+  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+}
+
+if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric')
 {
   $numeric = '';
 }else{
@@ -597,11 +603,15 @@ if($urgency==''){
         //check approve and review by name
         rBy = $("#reviewedBy").val();
         aBy = $("#approvedBy").val();
-        if(aBy==rBy && (rBy!='' && aBy!='')){
+        globalValue = '<?php echo $arr["user_review_approve"];?>';
+        if(aBy==rBy && (rBy!='' && aBy!='') && globalValue=='yes'){
           conf = confirm("Same person is reviewing and approving result!");
           if(conf){}else{
             return false;
           }
+        }else if(aBy==rBy && (rBy!='' && aBy!='') && globalValue=='no'){
+          alert("Same person is reviewing and approving result!");
+          return false;
         }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
@@ -622,11 +632,15 @@ if($urgency==''){
         //check approve and review by name
         rBy = $("#reviewedBy").val();
         aBy = $("#approvedBy").val();
-        if(aBy==rBy && (rBy!='' && aBy!='')){
+        globalValue = '<?php echo $arr["user_review_approve"];?>';
+        if(aBy==rBy && (rBy!='' && aBy!='') && globalValue=='yes'){
           conf = confirm("Same person is reviewing and approving result!");
           if(conf){}else{
             return false;
           }
+        }else if(aBy==rBy && (rBy!='' && aBy!='') && globalValue=='no'){
+          alert("Same person is reviewing and approving result!");
+          return false;
         }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
