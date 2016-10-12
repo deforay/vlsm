@@ -586,3 +586,6 @@ ALTER TABLE  `import_config` ADD  `lower_limt` INT NULL DEFAULT NULL AFTER  `fil
 ADD  `higer_limit` INT NULL DEFAULT NULL AFTER  `lower_limt` ;
 ALTER TABLE  `import_config` CHANGE  `lower_limt`  `lower_limit` INT( 11 ) NULL DEFAULT NULL ;
 ALTER TABLE  `import_config` CHANGE  `higer_limit`  `higher_limit` INT( 11 ) NULL DEFAULT NULL ;
+
+--saravanan 12-oct-2016
+INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Same user can Review and Approve', 'user_review_approve', 'yes');

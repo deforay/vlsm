@@ -16,6 +16,18 @@ try {
      if(!isset($_POST['noResult'])){
           $_POST['noResult'] = '';
      }
+     $_POST['result'] = '';
+     if($_POST['vlResult']!=''){
+          $_POST['result'] = $_POST['vlResult'];
+     }else if($_POST['vlLog']!=''){
+          $_POST['result'] = $_POST['vlLog'];
+     }else if($_POST['textValue']!=''){
+          $_POST['result'] = $_POST['textValue'];
+     }
+     if($_POST['testingPlatform']!=''){
+          $platForm = explode("##",$_POST['testingPlatform']);
+          $_POST['testingPlatform'] = $platForm[0];
+          }
      $vldata=array(
           'serial_no'=>$_POST['serialNo'],
           'sample_code'=>$_POST['serialNo'],
@@ -25,6 +37,7 @@ try {
           'sample_id'=>$_POST['specimenType'],
           'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
           'absolute_value'=>$_POST['vlResult'],
+          'result'=>$_POST['result'],
           'log_value'=>$_POST['vlLog'],
           'comments'=>$_POST['labComments'],
           'result_approved_by'=>$_POST['approvedBy'],
