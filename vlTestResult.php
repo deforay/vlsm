@@ -36,7 +36,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
+		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
 		        <option value=""> -- Select -- </option>
 			 <?php
 			 foreach($batResult as $code){
@@ -65,7 +65,7 @@ $batResult = $db->rawQuery($batQuery);
 		
 		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){

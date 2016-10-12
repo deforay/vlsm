@@ -175,6 +175,9 @@ $primaryKey="vl_sample_id";
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 	        $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
 	    }
+	    if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
+	        $sWhere = $sWhere.' AND vl.gender ="'.$_POST['gender'].'"';
+	    }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 		$setWhr = 'where';
@@ -255,6 +258,14 @@ $primaryKey="vl_sample_id";
 		}else{
 		$sWhere=' where '.$sWhere;
 	        $sWhere = $sWhere.' vl.status ='.$_POST['status'];
+		}
+	    }
+	    if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND vl.gender ="'.$_POST['gender'].'"';
+		}else{
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' vl.gender ="'.$_POST['gender'].'"';
 		}
 	    }
 	}
