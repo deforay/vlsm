@@ -37,7 +37,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
+		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
 		         <option value=""> -- Select -- </option>
 			 <?php
 			 foreach($batResult as $code){
@@ -66,7 +66,7 @@ $batResult = $db->rawQuery($batQuery);
 		
 		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -86,7 +86,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		    <td>&nbsp;<b>Viral Load &nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="vLoad" name="vLoad" title="Please select batch code">
+		      <select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 		         <option value=""> -- Select -- </option>
 			 <option value="<=1000"><= 1000 cp/ml</option>
 			 <option value=">1000">> 1000 cp/ml</option>
@@ -98,10 +98,20 @@ $batResult = $db->rawQuery($batQuery);
 		    <td>
 		      <input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
-		    <td><b>Status&nbsp;:</b></td>
+		    <td><b>Gender&nbsp;:</b></td>
 		    <td>
-		      <select name="status" id="status" class="form-control" title="Please choose status">
-			<option value="">-- Select --</option>
+		      <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
+			<option value=""> -- Select -- </option>
+			<option value="male">Male</option>
+			<option value="female">Female</option>
+		      </select>
+		    </td>
+		</tr>
+		<tr>
+		    <td><b>Status&nbsp;:</b></td>
+		    <td colspan="3">
+		      <select name="status" id="status" class="form-control" title="Please choose status" style="width:26%;">
+			<option value=""> -- Select -- </option>
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
 			<option value="6">Awaiting Clinic Approval</option>
@@ -282,6 +292,7 @@ $batResult = $db->rawQuery($batQuery);
 			  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
 			  aoData.push({"name": "status", "value": $("#status").val()});
+			  aoData.push({"name": "gender", "value": $("#gender").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",

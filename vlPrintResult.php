@@ -36,7 +36,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
+		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
 		        <option value=""> -- Select -- </option>
 			 <?php
 			 foreach($batResult as $code){
@@ -65,7 +65,7 @@ $batResult = $db->rawQuery($batQuery);
 		
 		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -79,10 +79,18 @@ $batResult = $db->rawQuery($batQuery);
 		    
 		</tr>
 		<tr>
+		  <td><b>Gender&nbsp;:</b></td>
+		  <td>
+		    <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
+		      <option value=""> -- Select -- </option>
+		      <option value="male">Male</option>
+		      <option value="female">Female</option>
+		    </select>
+		  </td>
 		  <td><b>Status&nbsp;:</b></td>
 		  <td>
-		      <select style="width: 220px;" name="status" id="status" class="form-control" title="Please choose status">
-			<option value="">-- Select --</option>
+		      <select name="status" id="status" class="form-control" title="Please choose status" style="width:220px;">
+			<option value=""> -- Select -- </option>
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
 		      </select>
@@ -134,11 +142,11 @@ $batResult = $db->rawQuery($batQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-				  <th>Sample Code</th>
+		  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-				  <th>Facility Name</th>
+		  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Last Modified On</th>
@@ -256,6 +264,7 @@ $batResult = $db->rawQuery($batQuery);
 			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});
 			      aoData.push({"name": "status", "value": $("#status").val()});
+			      aoData.push({"name": "gender", "value": $("#gender").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
