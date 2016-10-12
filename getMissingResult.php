@@ -40,7 +40,7 @@ foreach($tsResult as $tsId){
    $i++;
 }
 ?>
-<h4>Missing Result</h4>
+<h4>Samples Overview</h4>
 <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 <script>
     <?php
