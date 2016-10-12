@@ -165,6 +165,17 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="auto_approval" class="col-lg-4 control-label">Same user can Review and Approve </label>
+                      <div class="col-lg-8">
+                        <input type="radio" class="" id="user_review_yes" name="user_review_approve" value="yes" <?php echo($arr['user_review_approve'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="user_review_no" name="user_review_approve" value="no" <?php echo($arr['user_review_approve'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
+                      </div>
+                    </div>
+                   </div>
+                </div>
                 
               </div>
               <!-- /.box-body -->
