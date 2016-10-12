@@ -104,6 +104,7 @@ $batResult = $db->rawQuery($batQuery);
 			<option value=""> -- Select -- </option>
 			<option value="male">Male</option>
 			<option value="female">Female</option>
+			<option value="not_recorded">Not Recorded</option>
 		      </select>
 		    </td>
 		</tr>
