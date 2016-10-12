@@ -21,6 +21,26 @@ $sResult=$db->query($sQuery);
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 
+//get import config
+$importQuery="SELECT * FROM import_config WHERE status = 'active'";
+$importResult=$db->query($importQuery);
+
+//global config
+$cSampleQuery="SELECT * FROM global_config";
+$cSampleResult=$db->query($cSampleQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($cSampleResult); $i++) {
+  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+}
+
+if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric')
+{
+  $numeric = '';
+}else{
+  $numeric = 'checkNum';
+}
+
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
@@ -382,10 +402,10 @@ $tsResult = $db->rawQuery($tsQuery);
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 checkNum isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This serial number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This serial number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control reqBarcode checkNum isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This barcode already exists.Try another barcode',null)"/>
+                          <input type="text" class="form-control reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This barcode already exists.Try another barcode',null)"/>
                           <!--<input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -409,11 +429,11 @@ $tsResult = $db->rawQuery($tsQuery);
                         <td>
                           <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
                               <option value=""> -- Select -- </option>
-                              <option value="roche" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='roche')?"selected='selected'":""?>>ROCHE</option>
-                              <option value="abbott" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='abbott')?"selected='selected'":""?>>ABBOTT</option>
-                              <option value="poor" <?php echo ($vlQueryInfo[0]['vl_test_platform']=='poor')?"selected='selected'":""?>>BIOMEREUX</option>
-                              <option value="poc"<?php echo ($vlQueryInfo[0]['vl_test_platform']=='poc')?"selected='selected'":""?>>POC</option>
-                              <option value="other">OTHER</option>
+                              <?php foreach($importResult as $mName) { ?>
+                              <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
+                              <?php
+                            }
+                            ?>
                           </select>
                         </td>
                         <td><label for="specimenType">Specimen type</label></td>
@@ -434,7 +454,7 @@ $tsResult = $db->rawQuery($tsQuery);
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_tested_date'];?>" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" /></td>
+                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
                         <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['log_value'];?>" /></td>
                       </tr>
@@ -517,6 +537,7 @@ $tsResult = $db->rawQuery($tsQuery);
   <script type="text/javascript">
 provinceName = true;
 facilityName = true;
+machineName = true;
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
@@ -525,8 +546,24 @@ facilityName = true;
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     if(flag){
+      getMachineName();
+      if(machineName){
+        //check approve and review by name
+        rBy = $("#reviewedBy").val();
+        aBy = $("#approvedBy").val();
+        globalValue = '<?php echo $arr["user_review_approve"];?>';
+        if(aBy==rBy && (rBy!='' && aBy!='') && globalValue=='yes'){
+          conf = confirm("Same person is reviewing and approving result!");
+          if(conf){}else{
+            return false;
+          }
+        }else if(aBy==rBy && (rBy!='' && aBy!='') && globalValue=='no'){
+          alert("Same person is reviewing and approving result!");
+          return false;
+        }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
+      }
     }
   }
   function getfacilityDetails(obj)
@@ -766,6 +803,59 @@ $("#vlLog").bind("keyup change", function(e) {
                 $(".removeValue").val('');
             }
         });
+    }
+    //check machine name and limit
+    function getMachineName()
+    {
+      machineName = true;
+      var mName = $("#testingPlatform").val();
+      var absValue = $("#vlResult").val();
+      if(mName!='' && absValue!='')
+      {
+        //split the value
+        var result = mName.split("##");
+        if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
+          var lowLimit = result[1];
+          var highLimit = result[2];
+            if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName = false;
+            }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName  = false;
+            }else{
+              lessSign = absValue.split("<");
+              greaterSign = absValue.split(">");
+              if(lessSign.length>1)
+              {
+                if(parseInt(lessSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(lessSign[1])>parseInt(highLimit))
+                {
+                  alert("Invalid value.Value Greater than machine detection limit.");  
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99');
+                machineName = false;
+              }else if(greaterSign.length>1)
+              {
+                if(parseInt(greaterSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(greaterSign[1])>parseInt(highLimit))
+                {
+                  alert("Invalid value.Value Greater than machine detection limit.");  
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99');
+                machineName = false;
+              }
+            }
+        }
+      }
     }
 </script>
   

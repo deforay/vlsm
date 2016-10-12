@@ -260,6 +260,7 @@ $primaryKey="vl_sample_id";
 		if(isset($setWhr)){
 		    $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
 		}else{
+		  $setWhr = 'where';
 		$sWhere=' where '.$sWhere;
 	        $sWhere = $sWhere.' vl.status ='.$_POST['status'];
 		}
