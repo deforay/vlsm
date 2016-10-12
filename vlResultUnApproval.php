@@ -4,6 +4,15 @@ $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
+
+//global config
+$cSampleQuery="SELECT * FROM global_config";
+$cSampleResult=$db->query($cSampleQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($cSampleResult); $i++) {
+  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+}
 ?>
 <style>
     .dataTables_wrapper{
@@ -205,6 +214,17 @@ $userResult = $db->rawQuery($userQuery);
     comments = $("#comments").val();
     appBy = $("#approvedBy").val();
     reviewedBy = $("#reviewedBy").val();
+    globalValue = '<?php echo $arr["user_review_approve"];?>';
+    if(appBy==reviewedBy && (reviewedBy!='' && appBy!='') && globalValue=='yes'){
+      conf = confirm("Same person is reviewing and approving result!");
+      if(conf){}else{
+	return false;
+      }
+    }else if(appBy==reviewedBy && (reviewedBy!='' && appBy!='') && globalValue=='no'){
+      alert("Same person is reviewing and approving result!");
+      return false;
+    }
+    
     if(appBy!=''){
 		conf=confirm("Are you sure you want to continue ?");
 		if(conf){
@@ -252,6 +272,7 @@ $userResult = $db->rawQuery($userQuery);
       alert("Please select the status.");
     }
    }
+   
   
  
 </script>
