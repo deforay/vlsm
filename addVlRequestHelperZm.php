@@ -13,6 +13,17 @@ try {
      if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
           $status = 7;
      }
+     //set lab no
+     $start_date = date('Y-m-01');
+     $end_date = date('Y-m-31');
+     $labvlQuery='select MAX(lab_no) FROM vl_request_form as vl where vl.form_id="2" AND DATE(vl.created_on) >= "'.$start_date.'" AND DATE(vl.created_on) <= "'.$end_date.'"';
+     $labvlResult = $db->rawQuery($labvlQuery);
+     if($labvlResult[0]['MAX(lab_no)']!='' && $labvlResult[0]['MAX(lab_no)']!=NULL){
+     $_POST['labNo'] = $labvlResult[0]['MAX(lab_no)']+1;
+    }else{
+     $_POST['labNo'] = '1';
+    }
+     
      //var_dump($_POST);die;
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
