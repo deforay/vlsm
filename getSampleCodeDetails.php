@@ -4,6 +4,9 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $fName = $_POST['fName'];
 $sample = $_POST['sName'];
+$gender = $_POST['gender'];
+$pregnant = $_POST['pregnant'];
+$urgent = $_POST['urgent'];
 
 $start_date = '';
 $end_date = '';
@@ -18,7 +21,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 
-if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']==''){
+if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']=='' && $gender=='' && $pregnant=='' && $urgent==''){
     $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id=''";
 }else{
 if(isset($_POST['sCode']) && $_POST['sCode']!=''){
@@ -32,6 +35,12 @@ if($fName!=''){
 }
 if($sample!=''){
     $query = $query." AND vl.sample_id='".$sample."'";
+}if($gender!=''){
+    $query = $query." AND vl.gender='".$gender."'";
+}if($pregnant!=''){
+    $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
+}if($urgent!=''){
+    $query = $query." AND vl.urgency='".$urgent."'";
 }
 
 $query." ORDER BY f.facility_name ASC";
@@ -44,7 +53,6 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
     }
 }
 }
-
 $result = $db->rawQuery($query);
 $sResult = array();
 if($_POST['sCode']!=''){
