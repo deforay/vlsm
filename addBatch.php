@@ -41,6 +41,7 @@ $batchResult=$db->query($batchQuery);
 	color:#000000 !important;
   }
   #ms-sampleCode{width: 110%;}
+  .showPregnant{display: none;}
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -92,11 +93,33 @@ $batchResult=$db->query($batchQuery);
 			     <?php
 			    }
 			    ?>
-			  </select>
+		      </select>
 		    </td>
+		    <td><b>Gender&nbsp;:</b></td>
+		    <td>
+		      <select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
+			<option value=""> -- Select -- </option>
+			<option value="male">Male</option>
+			<option value="female">Female</option>
+			<option value="not_recorded">Not Recorded</option>
+		      </select>
+		    </td>
+		</tr>
+		<tr>
+		  <td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
+		  <td class="showPregnant">
+		    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
+		    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
+		  </td>
+		  <td class=""><b>Urgency&nbsp;:</b></td>
+		  <td class="">
+		    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
+		    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+		  </td>
+		</tr>
+		<tr>
 		  <td>&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		    
 		    </td>
 		</tr>
 	    </table>
@@ -283,14 +306,33 @@ $batchResult=$db->query($batchQuery);
       $.blockUI();
       var fName = $("#facilityName").val();
       var sName = $("#sampleType").val();
-      var sCode= $("#sampleCode").val();
-      $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val()},
+      var sCode = $("#sampleCode").val();
+      var gender= $("#gender").val();
+      var prg =   $("input:radio[name=pregnant]");
+      if(prg[0].checked==false && prg[1].checked==false){
+	pregnant = '';
+      }else{
+	pregnant = $('input[name=pregnant]:checked').val();
+      }
+      var urgent = $('input[name=urgency]:checked').val();
+      $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);
 	  }
       });
       $.unblockUI();
+    }
+    function enablePregnant(obj)
+    {
+      if(obj.value=="female"){
+	$(".showPregnant").show();
+	$(".pregnant").prop("disabled",false);
+      }else{
+	$(".showPregnant").hide();
+	$(".pregnant").prop("checked",false);
+	$(".pregnant").attr("disabled","");
+      }
     }
   </script>
   
