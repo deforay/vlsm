@@ -589,3 +589,7 @@ ALTER TABLE  `import_config` CHANGE  `higer_limit`  `higher_limit` INT( 11 ) NUL
 
 --saravanan 12-oct-2016
 INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Same user can Review and Approve', 'user_review_approve', 'yes');
+
+
+-- Pal 18 Oct 2016
+UPDATE `form_details` SET `form_name` = 'South Sudan Form' WHERE `form_details`.`form_id` = 1;
