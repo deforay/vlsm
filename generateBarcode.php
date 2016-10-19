@@ -142,7 +142,7 @@ $tbl = '
 
    foreach($result as $val){
     
-            $params = $pdf->serializeTCPDFtagParameters(array($val['sample_code'], 'C39', '', '', 0, 0, 0.25, array('border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2), 'N'));
+            $params = $pdf->serializeTCPDFtagParameters(array($val['sample_code'], 'C39', '', '', 0, 0, 0.25, array('border'=>false, 'padding'=>4, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2), 'N'));
 
             $tbl .='<tr>
                     <td align="center" width="8%">'.$sampleCounter.'.</td>

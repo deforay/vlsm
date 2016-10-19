@@ -76,6 +76,7 @@ $formConfigResult=$db->query($formConfigQuery);
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="assets/css/font-awesome.min.4.5.0.css">
+  <link rel="stylesheet" href="https://vlsmartconnect.com/assets/global/css/components-rounded.min.css">
   <!-- Ionicons -->
   <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">-->
   <!-- DataTables -->
@@ -116,6 +117,7 @@ $formConfigResult=$db->query($formConfigQuery);
     overflow-y: visible !important;
     padding: 15px 0 !important;
   }
+  .input-mini{width:100% !important;}
 </style>
 </head>
 
