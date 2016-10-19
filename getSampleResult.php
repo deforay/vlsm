@@ -94,13 +94,13 @@ foreach($vlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $receivedTotal; ?>"><?php echo $receivedTotal; ?></span>
                 </h3>
                 <small class="font-green-sharp">SAMPLES ACCESSION</small><br>
-                <small class="font-green-sharp"><?php echo $dFormat;?></small>
+                <!--<small class="font-green-sharp"><?php echo $dFormat;?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesReceivedChart" width="210" height="150"></div>
+        <div id="samplesReceivedChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -111,13 +111,13 @@ foreach($vlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
                 </h3>
                 <small class="font-purple-soft">SAMPLES WAITING</small><br>
-                <small class="font-purple-soft"><?php echo $waitingDate;?></small>
+                <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesWaitingChart" width="210" height="150"></div>
+        <div id="samplesWaitingChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -128,13 +128,13 @@ foreach($vlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $acceptedTotal; ?>"><?php echo $acceptedTotal; ?></span>
                 </h3>
                 <small class="font-blue-sharp">SAMPLES TESTED</small><br>
-                <small class="font-blue-sharp"><?php echo $acceptedDate;?></small>
+                <!--<small class="font-blue-sharp"><?php echo $acceptedDate;?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesTestedChart" width="210" height="150"></div>
+        <div id="samplesTestedChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -145,13 +145,13 @@ foreach($vlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $rejectedTotal; ?>"><?php echo $rejectedTotal; ?></span>
                 </h3>
                 <small class="font-red-haze">SAMPLES REJECTED</small><br>
-                <small class="font-red-haze"><?php echo $rejectedDate;?></small>
+                <!--<small class="font-red-haze"><?php echo $rejectedDate;?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesRejectedChart" width="210" height="150"></div>
+        <div id="samplesRejectedChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 <script>

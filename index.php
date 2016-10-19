@@ -119,7 +119,7 @@ include('header.php');
     $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
-            startDate: moment().subtract('days', 7),
+            startDate: moment().subtract('days', 30),
             endDate: moment(),
             maxDate: moment(),
             ranges: {
