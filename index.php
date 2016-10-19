@@ -23,6 +23,12 @@ include('header.php');
 //  }
 ?>
 
+<style>
+    .bluebox, .dashboard-stat2{
+        border:1px solid #3598DC;
+    }
+</style>
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -40,12 +46,28 @@ include('header.php');
     <!-- Main content -->
     <section class="content">
       <!-- Small boxes (Stat box) -->
+      <div class="row" style="padding-top:10px;padding-bottom:20px;">
+	<div class="col-lg-7">
+	  <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+		<tr>
+		    <td style=""><b>Sample Collection Date&nbsp;:</b></td>
+		    <td>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
+		    </td>
+		    <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		    &nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData();"><span>Reset</span></button>
+		    </td>
+		</tr>
+	  </table>
+	  </div>
+      </div>
       <div class="row">
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
+	<div id="sampleResultDetails"></div>
+	
+        <!--<div class="col-lg-3 col-xs-6">
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3><?php echo $facilityCount;?></h3>
+              <h3>< ?php echo $facilityCount;?></h3>
               <p>Facilities</p>
             </div>
             <div class="icon">
@@ -54,12 +76,10 @@ include('header.php');
             <a href="facilities.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3><?php echo $labCount; ?></h3>
+              <h3>< ?php echo $labCount; ?></h3>
 
               <p>Lab Requests</p>
             </div>
@@ -68,7 +88,7 @@ include('header.php');
             </div>
             <a href="vlRequest.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
-        </div>
+        </div>-->
         <div class="col-xs-12">
           <div class="box">
             <div class="box-body" id="pieChartDiv">
@@ -84,6 +104,8 @@ include('header.php');
     </section>
     <!-- /.content -->
   </div>
+  <script type="text/javascript" src="assets/plugins/daterangepicker/moment.min.js"></script>
+  <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script src="assets/js/highchart.js"></script>
   <script>
     $(function () {
@@ -93,7 +115,61 @@ include('header.php');
 	    $("#pieChartDiv").html(data);
 	  }
       });
+    
+    $('#sampleCollectionDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+	    separator: ' to ',
+            startDate: moment().subtract('days', 7),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+      });
+    searchVlRequestData();
     });
+    function searchVlRequestData()
+    {
+      $.post("getSampleResult.php",{sampleCollectionDate:$("#sampleCollectionDate").val()},
+      function(data){
+	  if(data!=''){
+	    $("#sampleResultDetails").html(data);
+	  }
+      });
+    }
+    function resetSearchVlRequestData()
+    {
+      $('#sampleCollectionDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+	    separator: ' to ',
+            startDate: moment().subtract('days', 7),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
+        },
+        function(start, end) {
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
+      });
+      searchVlRequestData();
+    }
+    
   </script>
  <?php
  include('footer.php');
