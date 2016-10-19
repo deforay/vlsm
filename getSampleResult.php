@@ -47,6 +47,7 @@ foreach($vlResult as $vlData){
     if($waitingResult[$i][0]['total']!=0){
     $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
     $waitingResult[$i]['date'] = $dFormat;
+    $waitingDate = $dFormat;
     }else{
     unset($waitingResult[$i]);
     }
@@ -57,6 +58,7 @@ foreach($vlResult as $vlData){
     if($acceptedResult[$i][0]['total']!=0){
     $acceptedTotal = $acceptedTotal + $acceptedResult[$i][0]['total'];
     $acceptedResult[$i]['date'] = $dFormat;
+    $acceptedDate = $dFormat;
     }else{
     unset($acceptedResult[$i]);
     }
@@ -67,6 +69,7 @@ foreach($vlResult as $vlData){
     if($rejectedResult[$i][0]['total']!=0){
     $rejectedTotal = $rejectedTotal + $rejectedResult[$i][0]['total'];
     $rejectedResult[$i]['date'] = $dFormat;
+    $rejectedDate = $dFormat;
     }else{
     unset($rejectedResult[$i]);
     }
@@ -108,7 +111,7 @@ foreach($vlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
                 </h3>
                 <small class="font-purple-soft">SAMPLES WAITING</small><br>
-                <small class="font-purple-soft"><?php echo $dFormat;?></small>
+                <small class="font-purple-soft"><?php echo $waitingDate;?></small>
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
@@ -125,7 +128,7 @@ foreach($vlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $acceptedTotal; ?>"><?php echo $acceptedTotal; ?></span>
                 </h3>
                 <small class="font-blue-sharp">SAMPLES TESTED</small><br>
-                <small class="font-blue-sharp"><?php echo $dFormat;?></small>
+                <small class="font-blue-sharp"><?php echo $acceptedDate;?></small>
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
@@ -142,7 +145,7 @@ foreach($vlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $rejectedTotal; ?>"><?php echo $rejectedTotal; ?></span>
                 </h3>
                 <small class="font-red-haze">SAMPLES REJECTED</small><br>
-                <small class="font-red-haze"><?php echo $dFormat;?></small>
+                <small class="font-red-haze"><?php echo $rejectedDate;?></small>
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
@@ -172,7 +175,7 @@ foreach($vlResult as $vlData){
             categories: [
             <?php
             foreach($tResult as $total){
-                echo "'".ucwords($total['date'])."',";
+                echo '"'.ucwords($total['date']).'",';
             }
             ?>],
             crosshair: true
