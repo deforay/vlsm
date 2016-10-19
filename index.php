@@ -139,12 +139,14 @@ include('header.php');
     });
     function searchVlRequestData()
     {
+      $.blockUI();
       $.post("getSampleResult.php",{sampleCollectionDate:$("#sampleCollectionDate").val()},
       function(data){
 	  if(data!=''){
 	    $("#sampleResultDetails").html(data);
 	  }
       });
+      $.unblockUI();
     }
     function resetSearchVlRequestData()
     {
