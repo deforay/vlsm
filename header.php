@@ -255,6 +255,7 @@ $formConfigResult=$db->query($formConfigQuery);
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultApprovalMenu"><a href="vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+                <li class="allMenu"><a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Email Results</a></li>
 		<?php }  ?>
             </ul>
         </li>
