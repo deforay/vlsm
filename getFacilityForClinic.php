@@ -12,7 +12,7 @@ if($facilityInfo){
     $state = '';
     if($facilityInfo[0]['state']!=''){
         $state.="<option value=''> -- Select -- </option>";
-            $state .= "<option value='".$facilityInfo[0]['state']."##".$pdResult[0]['province_code']."'>".ucwords($facilityInfo[0]['state'])."</option>";
+            $state .= "<option value='".$facilityInfo[0]['state']."##".$pdResult[0]['province_code']."' selected='selected'>".ucwords($facilityInfo[0]['state'])."</option>";
     }else{
         $state.="<option value=''> -- Select -- </option>";
     }
@@ -20,7 +20,7 @@ if($facilityInfo){
     $district = '';
     if($facilityInfo[0]['district']!=''){
         $district.="<option value=''> -- Select -- </option>";
-            $district .= "<option value='".$facilityInfo[0]['district']."'>".ucwords($facilityInfo[0]['district'])."</option>";
+            $district .= "<option value='".$facilityInfo[0]['district']."' selected='selected'>".ucwords($facilityInfo[0]['district'])."</option>";
     }else{
         $district.="<option value=''> -- Select -- </option>";
     }
