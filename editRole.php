@@ -64,6 +64,19 @@ if($priInfo){
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
+                        <label for="landingPage" class="col-lg-4 control-label">Landing Page</label>
+                        <div class="col-lg-7">
+                          <select class="form-control isRequired" name='landingPage' id='landingPage' title="Please select landing page">
+                            <option value=""> -- Select -- </option>
+                            <option value="index.php" <?php echo ($roleInfo[0]['landing_page']=='index.php')?"selected='selected'":""?>>Dashboard</option>
+                            <option value="addVlRequest.php" <?php echo ($roleInfo[0]['landing_page']=='addVlRequest.php')?"selected='selected'":""?>>Add New Request</option>
+                            <option value="addImportResult.php" <?php echo ($roleInfo[0]['landing_page']=='addImportResult.php')?"selected='selected'":""?>>Add Import Result</option>
+                          </select>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                           <select class="form-control isRequired" name='status' id='status' title="Please select the status">

@@ -14,7 +14,7 @@ try {
         $adminUsername=$db->escape($_POST['username']);
         $adminPassword=$db->escape($password);
         $params = array($adminUsername,$adminPassword,'active');
-        $admin = $db->rawQuery("SELECT ud.user_id,ud.user_name,ud.email,r.role_name,r.role_code,r.role_id FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $params);
+        $admin = $db->rawQuery("SELECT ud.user_id,ud.user_name,ud.email,r.role_name,r.role_code,r.role_id,r.landing_page FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $params);
         
         if(count($admin)>0){
             //add random key
@@ -54,11 +54,15 @@ try {
                 $priId[] = $id['privilege_name'];
               }
               
-              $fileNameList = array('index.php','addVlRequest.php','vlRequest.php','batchcode.php','vlRequestMail.php','addImportResult.php','vlPrintResult.php','vlTestResult.php','missingResult.php','vlResult.php','highViralLoad.php','roles.php','users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php');
-              foreach($fileNameList as $redirectFile){
-                if(in_array($redirectFile,$priId)){
-                    $redirect = $redirectFile;
-                    break;
+              if($admin[0]['landing_page']!=''){
+                 $redirect= $admin[0]['landing_page'];
+              }else{
+                $fileNameList = array('index.php','addVlRequest.php','vlRequest.php','batchcode.php','vlRequestMail.php','addImportResult.php','vlPrintResult.php','vlTestResult.php','missingResult.php','vlResult.php','highViralLoad.php','roles.php','users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php');
+                foreach($fileNameList as $redirectFile){
+                  if(in_array($redirectFile,$priId)){
+                      $redirect = $redirectFile;
+                      break;
+                  }
                 }
               }
             }

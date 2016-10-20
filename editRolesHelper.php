@@ -11,7 +11,8 @@ try {
                 $data=array(
                             'role_name'=>$_POST['roleName'],
                             'role_code'=>$_POST['roleCode'],
-                            'status'=>$_POST['status']
+                            'status'=>$_POST['status'],
+                            'landing_page'=>$_POST['landingPage']
                         );
                 $db=$db->where('role_id',$lastId);
                 $db->update($tableName1,$data);
