@@ -84,7 +84,7 @@ include('header.php');
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            "bStateSave" : true,
+            //"bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
@@ -94,7 +94,7 @@ include('header.php');
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-            "aaSorting": [[ 0, "asc" ]],
+            "aaSorting": [[ 2, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getBatchCodeDetails.php",
