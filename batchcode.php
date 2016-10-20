@@ -84,8 +84,8 @@ include('header.php');
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            "bStateSave" : true,
-            "bRetrieve": true,
+            //"bStateSave" : true,
+            "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
 	        {"sClass":"center","bSortable":false},
