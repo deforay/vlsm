@@ -593,3 +593,6 @@ INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) V
 
 -- Pal 18 Oct 2016
 UPDATE `form_details` SET `form_name` = 'South Sudan Form' WHERE `form_details`.`form_id` = 1;
+
+--saraanna 20-oct-2016
+ALTER TABLE `roles` ADD `landing_page` VARCHAR(255) NULL DEFAULT NULL AFTER `status`;
