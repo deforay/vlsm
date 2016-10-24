@@ -18,7 +18,7 @@ if($id <=0 || !isset($rResult) || count($rResult) ==0){
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Send Test Request for <strong><?php echo $rResult[0]['batch_code']; ?></strong></h1>
+      <h1><i class="fa fa-edit"></i> Send Test Request for <strong><?php echo $rResult[0]['batch_code']; ?></strong></h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Email Request</li>

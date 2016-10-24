@@ -8,7 +8,7 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>General Configuration</h1>
+      <h1><i class="fa fa-gears"></i> General Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">General Configuration</li>
