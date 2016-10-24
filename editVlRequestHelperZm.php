@@ -69,6 +69,12 @@ try {
      }else if($_POST['textValue']!=''){
           $_POST['result'] = $_POST['textValue'];
      }
+     //check vl result textbox changes
+     $viralLoadData = array('absolute_value'=>$_POST['vlResult'],'log_value'=>$_POST['vlLog']);
+     $db = $db->where('vl_sample_id',$_POST['treamentId']);
+     $vloadResultUpdate = $db->update($tableName,$viralLoadData);
+     
+     //
      if(!isset($_POST['noResult'])){
           $_POST['noResult'] = '';
           $_POST['rejectionReason'] = '';
@@ -125,7 +131,11 @@ try {
         );
           if(isset($_POST['approvedBy'])){
             $vldata['result_approved_by'] = $_POST['approvedBy'];
-          } 
+          }
+          if($vloadResultUpdate){
+          $vldata['result_coming_from']='manual';
+          $vldata['file_name']='';
+          }
           //print_r($vldata);die;
           $db=$db->where('vl_sample_id',$_POST['treamentId']);
           $id = $db->update($tableName,$vldata);

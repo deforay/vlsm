@@ -155,7 +155,8 @@ try {
           'created_by'=>$_SESSION['userId'],
           'created_on'=>$general->getDateTime(),
           'modified_by'=>$_SESSION['userId'],
-          'modified_on'=>$general->getDateTime()
+          'modified_on'=>$general->getDateTime(),
+          'result_coming_from'=>'manual'
         );
          //print_r($vldata);die;
           $id=$db->insert($tableName,$vldata);

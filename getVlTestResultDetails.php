@@ -277,7 +277,6 @@ $primaryKey="vl_sample_id";
 			$row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
-			
 			if(isset($aRow['modified_on']) && trim($aRow['modified_on'])!= '' && $aRow['modified_on']!= '0000-00-00 00:00:00'){
 			   $xplodDate = explode(" ",$aRow['modified_on']);
 			   $aRow['modified_on'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];

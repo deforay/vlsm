@@ -49,6 +49,7 @@ try {
                         'lab_tested_date'=>$rResult[0]['lab_tested_date'],
                         'lab_id'=>$rResult[0]['lab_id'],
                         'file_name'=>$rResult[0]['file_name'],
+                        'result_coming_from'=>'report'
                     );
             if($status[$i]=='1'){
                 $data['result_reviewed_by']=$_POST['reviewedBy'];
@@ -134,6 +135,7 @@ try {
                         'result_approved_by'=>$_POST['appBy'],
                         'result_approved_on'=>$general->getDateTime(),
                         'file_name'=>$accResult[$i]['file_name'],
+                        'result_coming_from'=>'report',
                         'status'=>'7',
                         'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
                     );
