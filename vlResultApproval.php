@@ -111,7 +111,7 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Last Modified on</th>
                   <th>Status</th>
 		  <?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
-                  <th>Action</th>
+                  <!--<th>Action</th>-->
 		  <?php } ?>
                 </tr>
                 </thead>
@@ -189,7 +189,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center","bSortable":false},
+                //{"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 9, "desc" ]],
 	    "fnDrawCallback": function() {

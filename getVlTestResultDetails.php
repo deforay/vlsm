@@ -225,11 +225,11 @@ $primaryKey="vl_sample_id";
 		    $dWhere = "WHERE (vl.status =7 OR vl.status=4) AND vl.form_id='".$arr['vl_form']."'";
 		}else{
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND (vl.status =7 OR vl.status=4 OR vl.status =1) AND vl.form_id='".$arr['vl_form']."'";
+		        $sWhere = $sWhere." AND vl.form_id='".$arr['vl_form']."'";
 		    }else{
-		        $sWhere = "WHERE (vl.status =7 OR vl.status=4 OR vl.status =1)  AND vl.form_id='".$arr['vl_form']."'";
+		        $sWhere = "WHERE vl.form_id='".$arr['vl_form']."'";
 		    }
-		    $dWhere = "WHERE (vl.status =7 OR vl.status=4 OR vl.status =1) AND vl.form_id='".$arr['vl_form']."'";
+		    $dWhere = "WHERE vl.form_id='".$arr['vl_form']."'";
 		}
 		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
@@ -292,7 +292,7 @@ $primaryKey="vl_sample_id";
             //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
             //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
 	    $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
-                      <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
+                      ';
 	    }
            
             $output['aaData'][] = $row;

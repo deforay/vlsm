@@ -258,7 +258,7 @@ $batResult = $db->rawQuery($batQuery);
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            "bStateSave" : true,
+            //"bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
 		//{"sClass":"center","bSortable":false},
@@ -277,7 +277,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-            //"aaSorting": [[ 1, "asc" ]],
+            "aaSorting": [[ 1, "desc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;
