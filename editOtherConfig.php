@@ -15,10 +15,10 @@ for ($i = 0; $i < sizeof($otherConfigResult); $i++) {
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Edit Other Configuration</h1>
+      <h1 class="fa fa-gears"> Edit Email/SMS Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Manage Other Config</li>
+        <li class="active">Manage Email/SMS Config</li>
       </ol>
     </section>
 
