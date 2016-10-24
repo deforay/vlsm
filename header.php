@@ -71,7 +71,7 @@ $formConfigResult=$db->query($formConfigQuery);
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
-<link rel="stylesheet" href="assets/css/components-rounded.min.css">
+
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -117,7 +117,7 @@ $formConfigResult=$db->query($formConfigQuery);
     overflow-y: visible !important;
     padding: 15px 0 !important;
   }
-  .input-mini{width:100% !important;}
+  
 </style>
 </head>
 
@@ -207,7 +207,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } if(isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("otherConfig.php", $_SESSION['privileges'])){ ?>
-		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
+		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Email/SMS Configuration</a></li>
 		<?php } ?>
 	      </ul>
 	    </li>

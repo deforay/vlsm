@@ -94,7 +94,7 @@ $rejectReason = '';
    </style>
    
     <section class="content-header">
-      <h1>Add VL Request</h1>
+      <h1><i class="fa fa-edit"></i> Add VL Request</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Vl Request</li>

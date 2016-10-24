@@ -599,6 +599,7 @@ ALTER TABLE `roles` ADD `landing_page` VARCHAR(255) NULL DEFAULT NULL AFTER `sta
 
 --saravanan 24-oct-2016
 ALTER TABLE `vl_request_form` ADD `result_coming_from` VARCHAR(255) NULL DEFAULT NULL AFTER `file_name`;
+ALTER TABLE `facility_details` ADD `report_email` TEXT NULL DEFAULT NULL AFTER `email`;
 
 -- Pal 24 Oct 2016
 ALTER TABLE `vl_request_form` ADD `date_of_demand` DATE NULL DEFAULT NULL AFTER `duration_of_conservation`, ADD `viral_load_no` VARCHAR(45) NULL DEFAULT NULL AFTER `date_of_demand`, ADD `date_dispatched_from_clinic_to_lab` DATETIME NULL DEFAULT NULL AFTER `viral_load_no`;

@@ -20,6 +20,20 @@ try {
             $result=$db->insert($tableName1,$data);
             }
         }
+	if(trim($_POST['reportEmail'])!=''){
+	    $expEmail = explode(",",$_POST['reportEmail']);
+	    $email = '';
+	    for($i=0;$i<count($expEmail);$i++){
+		$reportEmail = filter_var($expEmail[$i], FILTER_VALIDATE_EMAIL);
+		if($reportEmail!=''){
+		if($email!=''){
+		$email.= ",".$reportEmail;
+		}else{
+		$email.= $reportEmail;    
+		}
+		}
+	    }
+	}
         $data=array(
 			'facility_name'=>$_POST['facilityName'],
 			'facility_code'=>$_POST['facilityCode'],
@@ -33,6 +47,7 @@ try {
 			'latitude'=>$_POST['latitude'],
 			'longitude'=>$_POST['longitude'],
 			'email'=>$_POST['email'],
+			'report_email'=>$email,
 			'contact_person'=>$_POST['contactPerson'],
 			'facility_type'=>$_POST['facilityType'],
 			'status'=>$_POST['status']
