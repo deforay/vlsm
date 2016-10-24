@@ -121,7 +121,7 @@ $tsResult = $db->rawQuery($tsQuery);
    <link rel="stylesheet" media="all" type="text/css" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" />
    <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
     <section class="content-header">
-      <h1>Update VL Test Result</h1>
+      <h1><i class="fa fa-edit"></i> Update VL Test Result</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Update VL Test Result</li>

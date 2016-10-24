@@ -16,7 +16,7 @@ $batResult = $db->rawQuery($batQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>High VL Result</h1>
+      <h1> <i class="fa fa-book"></i> High VL Result</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">High VL Report</li>
