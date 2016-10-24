@@ -71,7 +71,7 @@ $formConfigResult=$db->query($formConfigQuery);
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui.1.11.0.css" />
   <link rel="stylesheet" media="all" type="text/css" href="assets/css/jquery-ui-timepicker-addon.css" />
-<link rel="stylesheet" href="assets/css/components-rounded.min.css">
+
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="assets/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -117,7 +117,7 @@ $formConfigResult=$db->query($formConfigQuery);
     overflow-y: visible !important;
     padding: 15px 0 !important;
   }
-  .input-mini{width:100% !important;}
+  
 </style>
 </head>
 

@@ -599,3 +599,5 @@ ALTER TABLE `roles` ADD `landing_page` VARCHAR(255) NULL DEFAULT NULL AFTER `sta
 
 --saravanan 24-oct-2016
 ALTER TABLE `vl_request_form` ADD `result_coming_from` VARCHAR(255) NULL DEFAULT NULL AFTER `file_name`;
+
+ALTER TABLE `facility_details` ADD `report_email` TEXT NULL DEFAULT NULL AFTER `email`;
