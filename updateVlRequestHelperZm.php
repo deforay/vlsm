@@ -24,6 +24,11 @@ try {
      }else if($_POST['textValue']!=''){
           $_POST['result'] = $_POST['textValue'];
      }
+     //check vl result textbox changes
+     $viralLoadData = array('absolute_value'=>$_POST['vlResult'],'log_value'=>$_POST['vlLog']);
+     $db = $db->where('vl_sample_id',$_POST['treamentId']);
+     $vloadResultUpdate = $db->update($tableName,$viralLoadData);
+     
      if($_POST['testingPlatform']!=''){
           $platForm = explode("##",$_POST['testingPlatform']);
           $_POST['testingPlatform'] = $platForm[0];
@@ -47,6 +52,10 @@ try {
           'modified_on'=>$general->getDateTime()
         );
           //print_r($vldata);die;
+          if($vloadResultUpdate){
+          $vldata['result_coming_from']='manual';
+          $vldata['file_name']='';
+          }
           $db=$db->where('vl_sample_id',$_POST['treamentId']);
           $db->update($tableName,$vldata);
           $_SESSION['alertMsg']="VL result updated successfully";

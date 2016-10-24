@@ -596,3 +596,6 @@ UPDATE `form_details` SET `form_name` = 'South Sudan Form' WHERE `form_details`.
 
 --saraanna 20-oct-2016
 ALTER TABLE `roles` ADD `landing_page` VARCHAR(255) NULL DEFAULT NULL AFTER `status`;
+
+--saravanan 24-oct-2016
+ALTER TABLE `vl_request_form` ADD `result_coming_from` VARCHAR(255) NULL DEFAULT NULL AFTER `file_name`;

@@ -149,6 +149,7 @@ $batResult = $db->rawQuery($batQuery);
 		  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
+                  <th>Modified On</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
@@ -249,6 +250,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 0, "asc" ]],
