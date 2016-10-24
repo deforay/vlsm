@@ -21,7 +21,7 @@ $batResult = $db->rawQuery($batQuery);
       <!--  <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
       <!--</ol>-->
-      <button class="btn btn-info pull-right" type="button" onclick="exportInexcel()">Export to excel</button>
+      
       </h1>
     </section>
      <!-- Main content -->
@@ -124,6 +124,7 @@ $batResult = $db->rawQuery($batQuery);
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 			
 			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+			&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
 			</td>
 		</tr>
 		
@@ -320,11 +321,12 @@ $batResult = $db->rawQuery($batQuery);
 	  }else{
 	      window.open('uploads/'+data,'_blank');
 	  }
-	  
       });
   }
   
   function exportInexcel() {
+    $.blockUI();
+    oTable.fnDraw();
     $.post("vlResultExportInExcel.php",
     function(data){
 	  if(data == "" || data == null || data == undefined){
@@ -333,6 +335,7 @@ $batResult = $db->rawQuery($batQuery);
 	      window.open('temporary/'+data,'_blank');
 	  }
     });
+    $.unblockUI();
   }
   
 </script>

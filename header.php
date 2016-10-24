@@ -281,7 +281,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php }  if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlHighMenu"><a href="highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>
+                <!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
 		<?php } ?>
             </ul>
         </li>
