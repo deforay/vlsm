@@ -4,7 +4,7 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 $cDate = date('Y-m-d');
-$lastSevenDay = date('Y-m-d', strtotime('-30 days'));
+$lastSevenDay = date('Y-m-d', strtotime('-7 days'));
 
 if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
    $s_c_date = explode("to", $_POST['sampleCollectionDate']);
@@ -27,9 +27,6 @@ $waitingTotal = 0;
 $acceptedTotal = 0;
 $rejectedTotal = 0;
 $receivedTotal = 0;
-$acceptedDate = '';
-$waitingDate = '';
-$rejectedDate = '';
 foreach($vlResult as $vlData){
    $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl";
    $date = $vlData['YEAR(sample_collection_date)']."-".$vlData['MONTH(sample_collection_date)']."-".$vlData['DAY(sample_collection_date)'];

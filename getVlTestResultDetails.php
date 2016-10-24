@@ -102,7 +102,7 @@ $primaryKey="vl_sample_id";
 	
 	//$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
-        //echo $sQuery;die;
+//        echo $sQuery;die;
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
