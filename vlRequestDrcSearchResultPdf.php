@@ -138,9 +138,6 @@ if(sizeof($requestResult)> 0){
           if(!isset($result['state']) || trim($result['state']) == ''){
             $result['state'] = '';
           }
-          if(!isset($result['district']) || trim($result['district']) == ''){
-            $result['district'] = '';
-          }
           if(!isset($result['facility_name']) || trim($result['facility_name']) == ''){
             $result['facility_name'] = '';
           }
@@ -278,11 +275,6 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                 $html .='<td colspan="4">';
                 $html .='<table>';
-                 $html .='<tr>';
-                  $html .='<td style="width:50%;"></td>';
-                   $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">District</td>';
-                  $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['district']).'</td>';
-                $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="width:50%;"></td>';
                    $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Zone de santé</td>';
@@ -293,7 +285,7 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Nom clinicien</td>';
-               $html .='<td colspan="3" style="line-height:22px;font-size:10px;font-weight:bold;text-align:left;">'.ucwords($result['lab_contact_person']).'</td>';
+               $html .='<td colspan="3" style="line-height:22px;font-size:10px;font-weight:bold;text-align:left;">'.ucwords($result['request_clinician']).'</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="4" style="line-height:2px;border-bottom:2px solid #333;"></td>';
@@ -301,18 +293,14 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                 $html .='<td colspan="4">';
                  $html .='<table>';
-                  $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Testing Lab</td>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['labName']).'</td>';
-                   $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Code Labo</td>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Barcode number</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;"></td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date du prélèvement</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_no'].'</td>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['serial_no'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;"></td>';
                     $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
@@ -326,24 +314,12 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result['art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">First Name</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Surname</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Âge</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sexe</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords($result['patient_name']).'</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords($result['surname']).'</td>';
-                   $html .='</tr>';
-                   $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Consent to SMS</td>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Mobile number</td>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Âge</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sexe</td>';
-                   $html .='</tr>';
-                   $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_receive_sms']).'</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['patient_phone_number'].'</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords(str_replace("_"," ",$result['gender'])).'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">'.ucwords(str_replace("_"," ",$result['gender'])).'</td>';
                    $html .='</tr>';
                  $html .='</table>';
                 $html .='</td>';
@@ -355,7 +331,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="3">';
                 $html .='<table cellspacing="6" style="border:2px solid #333;">';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Received Date</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date de réception de léchantillon</td>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date de remise du résultat</td>';
                   $html .='</tr>';
                   $html .='<tr>';
@@ -374,12 +350,6 @@ if(sizeof($requestResult)> 0){
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:22px;font-size:'.$resultTextSize.';text-align:left;">'.$vlResult.'</td>';
-                  $html .='</tr>';
-                  $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Reviewed by</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultReviewedBy.'</td>';
-                    $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Motifs de rejet</td>';
@@ -402,13 +372,6 @@ if(sizeof($requestResult)> 0){
                       $html .='<td colspan="4" style="line-height:6px;"></td>';
                     $html .='</tr>';
                   }
-                  
-                  $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
-                  $html .='</tr>';
-                  $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['comments']).'</td>';
-                  $html .='</tr>';
                 $html .='</table>';
                 
                $html .='</td>';
@@ -418,7 +381,7 @@ if(sizeof($requestResult)> 0){
                $html .='</td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Previous results</td>';
+               $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Résultats précédents</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="2" style="font-size:10px;font-weight:bold;text-align:left;">Date dernière charge virale (demande)</td>';
