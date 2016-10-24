@@ -22,11 +22,12 @@ include('header.php');
 //    }
 //  }
 ?>
-
+<link rel="stylesheet" href="assets/css/components-rounded.min.css">
 <style>
     .bluebox, .dashboard-stat2{
         border:1px solid #3598DC;
     }
+    .input-mini{width:100% !important;}
 </style>
 
   <!-- Content Wrapper. Contains page content -->

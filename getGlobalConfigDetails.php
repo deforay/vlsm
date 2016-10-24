@@ -125,19 +125,19 @@ $tableName="global_config";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = ucwords($aRow['display_name']);
-	    if($aRow['display_name']=='Patient ART No. Date' && $aRow['value']=='no'){
-		$aRow['value'] = 'Month and Year';
-	    }else if($aRow['display_name']=='Patient ART No. Date' && $aRow['value']=='yes'){
-		$aRow['value'] = 'Full Date';
-	    }
-		if($aRow['name']=='vl_form' && trim($aRow['value'])!=''){
-			$query ="SELECT * from form_details where form_id=".$aRow['value'];
-			$formResult=$db->query($query);
-			$aRow['value']=$formResult[0]['form_name'];
+			$row[] = $aRow['display_name'];
+			if($aRow['display_name']=='Patient ART No. Date' && $aRow['value']=='no'){
+			$aRow['value'] = 'Month and Year';
+			}else if($aRow['display_name']=='Patient ART No. Date' && $aRow['value']=='yes'){
+			$aRow['value'] = 'Full Date';
+			}
+			if($aRow['name']=='vl_form' && trim($aRow['value'])!=''){
+				$query ="SELECT * from form_details where form_id=".$aRow['value'];
+				$formResult=$db->query($query);
+				$aRow['value']=$formResult[0]['form_name'];
+			}
+			$row[] = $aRow['value'];
+				$output['aaData'][] = $row;
 		}
-	    $row[] = ucwords($aRow['value']);
-            $output['aaData'][] = $row;
-        }
         echo json_encode($output);
 ?>
