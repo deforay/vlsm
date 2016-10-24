@@ -78,6 +78,16 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
+		    <td style="">&nbsp;<b>State/Province&nbsp;:</b></td>
+		    <td>
+		      <input style="width:220px;" type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()"/>
+		    </td>
+		    <td>&nbsp;<b>District&nbsp;:</b></td>
+		    <td>
+			<input type="text" id="district" name="district" class="form-control" placeholder="Enter District" onkeyup="loadVlRequestStateDistrict()"/>
+		    </td>
+		</tr>
+		<tr>
 		  <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
@@ -295,6 +305,8 @@ $batResult = $db->rawQuery($batQuery);
 	      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
 	      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+	      aoData.push({"name": "district", "value": $("#district").val()});
+	      aoData.push({"name": "state", "value": $("#state").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -311,7 +323,10 @@ $batResult = $db->rawQuery($batQuery);
     oTable.fnDraw();
     $.unblockUI();
   }
-    
+  function loadVlRequestStateDistrict()
+  {
+    oTable.fnDraw();
+  }
   function convertPdf(id){
       $.post("vlRequestPdf.php", { id : id, format: "html"},
       function(data){
