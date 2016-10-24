@@ -11,22 +11,33 @@ try {
     if(isset($_SESSION['instanceId'])){
         $instanceId = $_SESSION['instanceId'];
     }
+    //Set Date of demand
+    if(isset($_POST['dateOfDemand']) && trim($_POST['dateOfDemand'])!=""){
+        $_POST['dateOfDemand']=$general->dateFormat($_POST['dateOfDemand']);  
+    }else{
+        $_POST['dateOfDemand'] = NULL;
+    }
     //Set dob
     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
         $_POST['dob']=$general->dateFormat($_POST['dob']);  
+    }else{
+        $_POST['dob'] = NULL;
     }
     //Set gender
     if(!isset($_POST['gender']) || trim($_POST['gender'])==''){
-        $_POST['gender']='';
+        $_POST['gender'] = NULL;
     }
     //Ser ARV initiation date
     if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
         $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
+    }else{
+       $_POST['dateOfArtInitiation'] = NULL; 
     }
     //Set ARV current regimen
     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
+            'parent_art'=>3,
             'nation_identifier'=>'drc'
           );
           
@@ -35,13 +46,13 @@ try {
     }
     //Regimen change section
     if(!isset($_POST['hasChangedRegimen']) || trim($_POST['hasChangedRegimen'])==''){
-        $_POST['hasChangedRegimen']='';
-        $_POST['reasonForArvRegimenChange']='';
-        $_POST['dateOfArvRegimenChange']='';
+        $_POST['hasChangedRegimen']=NULL;
+        $_POST['reasonForArvRegimenChange']=NULL;
+        $_POST['dateOfArvRegimenChange']=NULL;
     }
     if(trim($_POST['hasChangedRegimen']) == "no"){
-        $_POST['reasonForArvRegimenChange']='';
-        $_POST['dateOfArvRegimenChange']='';
+        $_POST['reasonForArvRegimenChange']=NULL;
+        $_POST['dateOfArvRegimenChange']=NULL;
     }else if(trim($_POST['hasChangedRegimen']) == "yes"){
         if(isset($_POST['dateOfArvRegimenChange']) && trim($_POST['dateOfArvRegimenChange'])!=""){
           $_POST['dateOfArvRegimenChange']=$general->dateFormat($_POST['dateOfArvRegimenChange']);  
@@ -58,30 +69,45 @@ try {
                 $id=$db->insert('r_vl_test_reasons',$data);
                 $_POST['vlTestReason'] = $id;
             }else{
-                $_POST['vlTestReason'] = '';
+                $_POST['vlTestReason'] = NULL;
             }
         }
     }else{
-        $_POST['vlTestReason'] = '';
+        $_POST['vlTestReason'] = NULL;
+    }
+   //Set Viral load no.
+    if(!isset($_POST['viralLoadNo']) || trim($_POST['viralLoadNo'])==''){
+        $_POST['viralLoadNo'] = NULL;
     }
    //Set last VL test date
     if(isset($_POST['lastViralLoadTestDate']) && trim($_POST['lastViralLoadTestDate'])!=""){
         $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);  
+    }else{
+        $_POST['lastViralLoadTestDate'] = NULL;
+    }
+    //Set sample collection date
+    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
+        $sampleCollectionDate = explode(" ",$_POST['sampleCollectionDate']);
+        $_POST['sampleCollectionDate']=$general->dateFormat($sampleCollectionDate[0])." ".$sampleCollectionDate[1];
+    }else{
+        $_POST['sampleCollectionDate'] = NULL;
     }
     //Sample type section
     if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!=""){
         if(trim($_POST['specimenType'])!= 2){
-            $_POST['conservationTemperature'] = '';
-            $_POST['durationOfConservation'] = '';
+            $_POST['conservationTemperature'] = NULL;
+            $_POST['durationOfConservation'] = NULL;
         }
     }else{
-        $_POST['conservationTemperature'] = '';
-        $_POST['durationOfConservation'] = '';
+        $_POST['conservationTemperature'] = NULL;
+        $_POST['durationOfConservation'] = NULL;
     }
     //Set sample received date
     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
         $sampleReceivedDate = explode(" ",$_POST['sampleReceivedDate']);
         $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDate[0])." ".$sampleReceivedDate[1];
+    }else{
+        $_POST['sampleReceivedDate'] = NULL;
     }
     //Set sample rejection reason
     if(isset($_POST['status']) && trim($_POST['status']) != ''){
@@ -94,18 +120,27 @@ try {
                 $id=$db->insert('r_sample_rejection_reasons',$data);
                 $_POST['rejectionReason'] = $id;
             }else{
-                $_POST['rejectionReason'] = '';
+                $_POST['rejectionReason'] = NULL;
             }
         }elseif($_POST['status'] == 7){
-            $_POST['rejectionReason'] = '';
+            $_POST['rejectionReason'] = NULL;
         }
     }else{
-        $_POST['rejectionReason'] = '';
+        $_POST['rejectionReason'] = NULL;
     }
     //Set sample testing date
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
         $sampleTestedDate = explode(" ",$_POST['sampleTestingDateAtLab']);
         $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestedDate[0])." ".$sampleTestedDate[1];
+    }else{
+        $_POST['sampleTestingDateAtLab'] = NULL;
+    }
+    //Set sample testing date
+    if(isset($_POST['dateDispatchedFromClinicToLab']) && trim($_POST['dateDispatchedFromClinicToLab'])!=""){
+        $dispatchedFromClinicToLabDate = explode(" ",$_POST['dateDispatchedFromClinicToLab']);
+        $_POST['dateDispatchedFromClinicToLab']=$general->dateFormat($dispatchedFromClinicToLabDate[0])." ".$dispatchedFromClinicToLabDate[1];
+    }else{
+        $_POST['dateDispatchedFromClinicToLab'] = NULL;
     }
     $vldata=array(
                   'vl_instance_id'=>$instanceId,
@@ -138,6 +173,10 @@ try {
                   'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'result'=>$_POST['vlResult'],
+                  'date_of_demand'=>$_POST['dateOfDemand'],
+                  'viral_load_no'=>$_POST['viralLoadNo'],
+                  'sample_collection_date'=>$_POST['sampleCollectionDate'],
+                  'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],
                   'created_by'=>$_SESSION['userId'],
                   'created_on'=>$general->getDateTime(),
                   'modified_by'=>$_SESSION['userId'],
