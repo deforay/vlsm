@@ -239,7 +239,7 @@ $batResult = $db->rawQuery($batQuery);
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            "bStateSave" : true,
+            //"bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},
@@ -253,7 +253,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 0, "asc" ]],
+            "aaSorting": [[ 7, "DESC" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
