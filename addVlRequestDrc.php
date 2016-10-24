@@ -60,7 +60,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>VIRAL LOAD LABORATORY REQUEST FORM</h1>
+      <h1><i class="fa fa-edit"></i> VIRAL LOAD LABORATORY REQUEST FORM</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Add Vl Request</li>
@@ -224,9 +224,9 @@
                                       <option value="other">Autre</option>
                                     </select>
                                 </td>
-                                <td><label for="viralLoadN">Charge virale N </label></td>
+                                <td><label for="viralLoadNo">Charge virale N </label></td>
                                 <td colspan="4">
-                                    <input type="text" class="form-control" id="viralLoadN" name="viralLoadN" placeholder="Charge virale N" title="Please enter charge virale N" style="width:60%;"/>
+                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" style="width:60%;"/>
                                 </td>
                             </tr>
                             <tr class="newVlTestReason" style="display:none;">
@@ -258,7 +258,7 @@
                             <tr>
                                 <td style="width:20%;"><label for="">Date du prélèvement </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="dateOfWithdrawal" name="dateOfWithdrawal" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -289,7 +289,7 @@
                             <tr>
                                 <td><label for="">Date de départ au Labo biomol </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="departureDateInLaboBiomol" name="departureDateInLaboBiomol" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>

@@ -43,6 +43,12 @@
     }else{
       $vlQueryInfo[0]['patient_dob']='';
     }
+     //Set Date of demand
+    if(isset($vlQueryInfo[0]['date_of_demand']) && trim($vlQueryInfo[0]['date_of_demand'])!='' && $vlQueryInfo[0]['date_of_demand']!='0000-00-00'){
+      $vlQueryInfo[0]['date_of_demand']=$general->humanDateFormat($vlQueryInfo[0]['date_of_demand']);
+    }else{
+      $vlQueryInfo[0]['date_of_demand']='';
+    }
     //Set ARV initiation date
     if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo[0]['date_of_initiation_of_current_regimen'])!='' && $vlQueryInfo[0]['date_of_initiation_of_current_regimen']!='0000-00-00'){
       $vlQueryInfo[0]['date_of_initiation_of_current_regimen']=$general->humanDateFormat($vlQueryInfo[0]['date_of_initiation_of_current_regimen']);
@@ -65,6 +71,20 @@
       $vlQueryInfo[0]['last_viral_load_date']=$general->humanDateFormat($vlQueryInfo[0]['last_viral_load_date']);
     }else{
       $vlQueryInfo[0]['last_viral_load_date']='';
+    }
+    //Set Sample Collection Date
+     if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00'){
+      $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
+      $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+    }else{
+      $vlQueryInfo[0]['sample_collection_date']='';
+    }
+    //Set Dispatched From Clinic To Lab Date
+     if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00'){
+      $expStr=explode(" ",$vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
+      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+    }else{
+      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
     }
     //Set plasma storage temp.
     if(isset($vlQueryInfo[0]['sample_id']) && $vlQueryInfo[0]['sample_id']!= 2){
@@ -121,7 +141,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>VIRAL LOAD LABORATORY REQUEST FORM</h1>
+      <h1><i class="fa fa-edit"></i> VIRAL LOAD LABORATORY REQUEST FORM</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Edit Vl Request</li>
@@ -192,7 +212,7 @@
                             <tr>
                                 <td><label for="">Date de la demande </label></td>
                                 <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" style="width:21%;"/>
+                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" value="<?php echo $vlQueryInfo[0]['date_of_demand']; ?>" style="width:21%;"/>
                                 </td>
                             </tr>
                         </table>
@@ -293,9 +313,9 @@
                                       <option value="other">Autre</option>
                                     </select>
                                 </td>
-                                <td><label for="viralLoadN">Charge virale N </label></td>
+                                <td><label for="viralLoadNo">Charge virale N </label></td>
                                 <td colspan="4">
-                                    <input type="text" class="form-control" id="viralLoadN" name="viralLoadN" placeholder="Charge virale N" title="Please enter charge virale N" style="width:60%;"/>
+                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" value="<?php echo $vlQueryInfo[0]['viral_load_no']; ?>" style="width:60%;"/>
                                 </td>
                             </tr>
                             <tr class="newVlTestReason" style="display:none;">
@@ -327,7 +347,7 @@
                             <tr>
                                 <td style="width:20%;"><label for="">Date du prélèvement </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="dateOfWithdrawal" name="dateOfWithdrawal" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -358,7 +378,7 @@
                             <tr>
                                 <td><label for="">Date de départ au Labo biomol </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="departureDateInLaboBiomol" name="departureDateInLaboBiomol" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" value="<?php echo $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>

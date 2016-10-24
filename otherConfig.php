@@ -5,10 +5,10 @@ include('header.php');
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Other Configuration</h1>
+      <h1><i class="fa fa-gears"></i> Email/SMS Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Other Configuration</li>
+        <li class="active">Email/SMS Configuration</li>
       </ol>
     </section>
 

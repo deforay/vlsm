@@ -207,7 +207,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } if(isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu importConfigMenu"><a href="importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("otherConfig.php", $_SESSION['privileges'])){ ?>
-		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Other Configuration</a></li>
+		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Email/SMS Configuration</a></li>
 		<?php } ?>
 	      </ul>
 	    </li>
