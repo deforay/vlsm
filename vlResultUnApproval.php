@@ -174,11 +174,11 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 //			checkBoxes[c].setAttribute("checked",true);
 //                    }
 //                }
-	      var oSettings = this.fnSettings();
+			  var oSettings = this.fnSettings();
               var iTotalRecords = oSettings.fnRecordsTotal();
-	      if(iTotalRecords==0){
-		window.location.href="vlPrintResult.php";
-	      }
+			  if(iTotalRecords==0){
+				  window.location.href="vlPrintResult.php";
+			  }
 	    },
             "bProcessing": true,
             "bServerSide": true,

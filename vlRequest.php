@@ -30,11 +30,11 @@ $batResult = $db->rawQuery($batQuery);
           <div class="box">
 	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
 		<tr>
-		    <td style=""><b>Sample Collection Date&nbsp;:</b></td>
+		    <td><b>Sample Collection Date :</b></td>
 		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="background:#fff;"/>
 		    </td>
-		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
+		    <td><b>Batch Code :</b></td>
 		    <td>
 		       <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code">
 		         <option value=""> -- Select -- </option>
@@ -47,11 +47,10 @@ $batResult = $db->rawQuery($batQuery);
 			 ?>
 		       </select>
 		    </td>
-		</tr>
-		<tr>
-		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+		
+		    <td><b>Sample Type :</b></td>
 		    <td>
-		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
+		      <select style="" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
 		       <option value=""> -- Select -- </option>
 			<?php
 			foreach($sResult as $type){
@@ -62,8 +61,9 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		
-		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+		</tr>
+		<tr>
+		    <td><b>Facility :</b></td>
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
 		      <option value=""> -- Select -- </option>
@@ -76,22 +76,28 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		</tr>
-		<tr>
-		    <td style="">&nbsp;<b>State/Province&nbsp;:</b></td>
+		
+		    <td style=""><b>State/Province&nbsp;:</b></td>
 		    <td>
-		      <input style="width:220px;" type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()"/>
+		      <input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()"/>
 		    </td>
-		    <td>&nbsp;<b>District&nbsp;:</b></td>
+		    <td><b>District :</b></td>
 		    <td>
 			<input type="text" id="district" name="district" class="form-control" placeholder="Enter District" onkeyup="loadVlRequestStateDistrict()"/>
 		    </td>
 		</tr>
 		<tr>
-		  <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		  <td colspan="5"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		    </td>
+		  <td>
+						  <?php 
+			  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
+			      <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
+			  <?php }
+			  ?>
+		  </td>
 		</tr>
 		
 	    </table>
@@ -135,13 +141,6 @@ $batResult = $db->rawQuery($batQuery);
 				</div>
 			    </div>
 			</span>
-			<div class="box-header with-border">
-			  <?php 
-			  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
-			      <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
-			  <?php }
-			  ?>
-			</div>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
