@@ -785,10 +785,10 @@ $("#vlLog").bind("keyup change", function(e) {
   
   });
   
-function checkRejectedReason()
-{
-  $("#rejectionReason").addClass("isRequired");
-}
+  function checkRejectedReason(){
+    $("#rejectionReason").addClass("isRequired");
+  }
+  
   $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'male'){
          $(".femaleElements").hide();
