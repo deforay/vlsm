@@ -115,8 +115,6 @@ try {
                 );
                 $id=$db->insert('r_sample_rejection_reasons',$data);
                 $_POST['rejectionReason'] = $id;
-            }else{
-                $_POST['rejectionReason'] = NULL;
             }
         }elseif($_POST['status'] == 7){
             $_POST['rejectionReason'] = NULL;
@@ -137,6 +135,12 @@ try {
         $_POST['dateDispatchedFromClinicToLab']=$general->dateFormat($dispatchedFromClinicToLabDate[0])." ".$dispatchedFromClinicToLabDate[1];
     }else{
         $_POST['dateDispatchedFromClinicToLab'] = NULL;
+    }
+    //Set Date of Completion of Viral Load
+    if(isset($_POST['dateOfCompletionOfViralLoad']) && trim($_POST['dateOfCompletionOfViralLoad'])!=""){
+        $_POST['dateOfCompletionOfViralLoad']=$general->dateFormat($_POST['dateOfCompletionOfViralLoad']);  
+    }else{
+        $_POST['dateOfCompletionOfViralLoad'] = NULL;
     }
     $vldata=array(
                   'facility_id'=>$_POST['clinicName'],
@@ -171,6 +175,7 @@ try {
                   'viral_load_no'=>$_POST['viralLoadNo'],
                   'sample_collection_date'=>$_POST['sampleCollectionDate'],
                   'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],
+                  'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
                   'modified_by'=>$_SESSION['userId'],
                   'modified_on'=>$general->getDateTime()
                 );
