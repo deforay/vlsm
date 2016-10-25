@@ -603,3 +603,6 @@ ALTER TABLE `facility_details` ADD `report_email` TEXT NULL DEFAULT NULL AFTER `
 
 -- Pal 24 Oct 2016
 ALTER TABLE `vl_request_form` ADD `date_of_demand` DATE NULL DEFAULT NULL AFTER `duration_of_conservation`, ADD `viral_load_no` VARCHAR(45) NULL DEFAULT NULL AFTER `date_of_demand`, ADD `date_dispatched_from_clinic_to_lab` DATETIME NULL DEFAULT NULL AFTER `viral_load_no`;
+
+-- Pal 25 Oct 2016
+ALTER TABLE `vl_request_form` ADD `date_of_completion_of_viral_load` DATE NULL DEFAULT NULL AFTER `date_dispatched_from_clinic_to_lab`;
