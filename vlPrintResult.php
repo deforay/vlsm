@@ -12,6 +12,11 @@ $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
+<style>
+  .select2-selection__choice{
+	color:#000000 !important;
+  }
+</style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -34,7 +39,7 @@ $batResult = $db->rawQuery($batQuery);
 		    <td>
 		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
-		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
+		    <td><b>Batch Code&nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
 		        <option value=""> -- Select -- </option>
@@ -47,9 +52,8 @@ $batResult = $db->rawQuery($batQuery);
 			 ?>
 		      </select>
 		    </td>
-		</tr>
-		<tr>
-		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+		
+		    <td><b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
 		      <option value=""> -- Select -- </option>
@@ -62,8 +66,9 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		
-		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+		</tr>
+		<tr>
+		    <td><b>Facility :</b></td>
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
@@ -77,8 +82,7 @@ $batResult = $db->rawQuery($batQuery);
 		      </select>
 		    </td>
 		    
-		</tr>
-		<tr>
+		
 		  <td><b>Gender&nbsp;:</b></td>
 		  <td>
 		    <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
@@ -90,15 +94,15 @@ $batResult = $db->rawQuery($batQuery);
 		  </td>
 		  <td><b>Status&nbsp;:</b></td>
 		  <td>
-		      <select name="status" id="status" class="form-control" title="Please choose status" style="width:220px;">
-			<option value=""> -- Select -- </option>
+		      <select name="status[]" id="status" class="form-control" title="Please choose status" style="width:220px;" multiple="multiple">
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
+			<option value="2">Lost</option>
 		      </select>
 		    </td>
 		</tr>
 		<tr>
-		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf();"><span>Result PDF</span></button>
 		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
@@ -139,7 +143,7 @@ $batResult = $db->rawQuery($batQuery);
 			</span>
            
             <!-- /.box-header -->
-            <div class="box-body">
+            <div class="box-body" style="margin-top:-30px;">
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -181,6 +185,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
+    $("#status").select2();
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -241,6 +246,7 @@ $batResult = $db->rawQuery($batQuery);
             "bInfo": true,
             "bScrollCollapse": true,
             "bStateSave" : true,
+            "iDisplayLength": 100,
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},

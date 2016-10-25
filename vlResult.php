@@ -35,7 +35,7 @@ $batResult = $db->rawQuery($batQuery);
 		    <td>
 		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
-		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
+		    <td><b>Batch Code&nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
 		         <option value=""> -- Select -- </option>
@@ -48,9 +48,8 @@ $batResult = $db->rawQuery($batQuery);
 			 ?>
 		      </select>
 		    </td>
-		</tr>
-		<tr>
-		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+
+		    <td><b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
 		      <option value=""> -- Select -- </option>
@@ -63,8 +62,9 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		
-		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+		</tr>
+		<tr>		
+		    <td><b>Facility :</b></td>
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
@@ -78,13 +78,11 @@ $batResult = $db->rawQuery($batQuery);
 		      </select>
 		    </td>
 		    
-		</tr>
-		<tr>
 		    <td><b>Sample Test Date&nbsp;:</b></td>
 		    <td>
 		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
-		    <td>&nbsp;<b>Viral Load &nbsp;:</b></td>
+		    <td><b>Viral Load &nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 		         <option value=""> -- Select -- </option>
@@ -107,11 +105,10 @@ $batResult = $db->rawQuery($batQuery);
 			<option value="not_recorded">Not Recorded</option>
 		      </select>
 		    </td>
-		</tr>
-		<tr>
+		
 		    <td><b>Status&nbsp;:</b></td>
-		    <td colspan="3">
-		      <select name="status" id="status" class="form-control" title="Please choose status" style="width:26%;">
+		    <td>
+		      <select name="status" id="status" class="form-control" title="Please choose status">
 			<option value=""> -- Select -- </option>
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
@@ -268,7 +265,8 @@ $batResult = $db->rawQuery($batQuery);
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            "bStateSave" : true,
+            //"bStateSave" : true,
+            "iDisplayLength": 100,
             "bRetrieve": true,                        
             "aoColumns": [
                 {"sClass":"center"},

@@ -175,7 +175,8 @@ $batResult = $db->rawQuery($batQuery);
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            
+            //"bStateSave" : true,
+            "iDisplayLength": 100,            
             "bRetrieve": true,                        
             "aoColumns": [
 		{"sClass":"center","bSortable":false},

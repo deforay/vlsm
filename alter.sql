@@ -606,3 +606,6 @@ ALTER TABLE `vl_request_form` ADD `date_of_demand` DATE NULL DEFAULT NULL AFTER 
 
 -- Pal 25 Oct 2016
 ALTER TABLE `vl_request_form` ADD `date_of_completion_of_viral_load` DATE NULL DEFAULT NULL AFTER `date_dispatched_from_clinic_to_lab`;
+
+--saravanan 25-oct-2016
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Number of In-House Controls', 'number_of_in_house_controls', '3'), ('Number of Manufacturer Controls', 'number_of_manufacturer_controls', '3');
