@@ -42,7 +42,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="max_no_of_samples_in_a_batch" class="col-lg-4 control-label">Maximum No. of Samples In a Batch </label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -52,7 +52,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="number_of_in_house_controls" class="col-lg-4 control-label">Number of In-House Controls </label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control isNumeric" id="number_of_in_house_controls" name="number_of_in_house_controls" placeholder="No. of In-House controls" title="Please enter no. of in-house controls " value="<?php echo $arr['number_of_in_house_controls']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric" id="number_of_in_house_controls" name="number_of_in_house_controls" placeholder="No. of In-House controls" title="Please enter no. of in-house controls " value="<?php echo $arr['number_of_in_house_controls']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -62,7 +62,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     <div class="form-group">
                       <label for="number_of_manufacturer_controls" class="col-lg-4 control-label">Number of Manufacturer Controls </label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control isNumeric" id="number_of_manufacturer_controls" name="number_of_manufacturer_controls" placeholder="No. of Manufacturer controls" title="Please enter no. of manufacturer controls" value="<?php echo $arr['number_of_manufacturer_controls']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric" id="number_of_manufacturer_controls" name="number_of_manufacturer_controls" placeholder="No. of Manufacturer controls" title="Please enter no. of manufacturer controls" value="<?php echo $arr['number_of_manufacturer_controls']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -150,6 +150,16 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                       <div class="col-lg-8">
                         <input type="radio" class="" id="auto_approval_yes" name="auto_approval" value="yes" <?php echo($arr['auto_approval'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
                         <input type="radio" class="" id="auto_approval_no" name="auto_approval" value="no" <?php echo($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="viral_load_threshold_limit" class="col-lg-4 control-label">Viral Load Threshold Limit <span class="mandatory">*</span></label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control checkNum isNumeric isRequired" id="viral_load_threshold_limit" name="viral_load_threshold_limit" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['viral_load_threshold_limit']; ?>"/>
                       </div>
                     </div>
                    </div>
