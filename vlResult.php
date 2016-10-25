@@ -311,8 +311,8 @@ $batResult = $db->rawQuery($batQuery);
     $.unblockUI();
   }
     
-  function convertResultToPdf(id){
-      $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcResultPdf.php':'vlRequestResultPdf.php'; ?>", {source:'print',id : id},
+  function convertSearchResultToPdf(id){
+      $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", {source:'print',id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');

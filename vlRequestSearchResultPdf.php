@@ -20,7 +20,12 @@ $printedTime = date('Y-m-d H:i:s');
 $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
-$requestResult=$db->query($_SESSION['vlRequestSearchResultQuery']);
+if($_POST['id']!=''){
+  $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id='".$_POST['id']."'"; 
+}else{
+  $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
+}
+$requestResult=$db->query($searchQuery);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
 //print_r($requestResult);die;
