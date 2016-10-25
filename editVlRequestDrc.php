@@ -79,13 +79,6 @@
     }else{
       $vlQueryInfo[0]['sample_collection_date']='';
     }
-    //Set Dispatched From Clinic To Lab Date
-     if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
-      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
-    }
     //Set plasma storage temp.
     if(isset($vlQueryInfo[0]['sample_id']) && $vlQueryInfo[0]['sample_id']!= 2){
       $vlQueryInfo[0]['plasma_storage_temperature'] = '';
@@ -103,6 +96,19 @@
       $vlQueryInfo[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
     }else{
       $vlQueryInfo[0]['lab_tested_date']='';
+    }
+    //Set Dispatched From Clinic To Lab Date
+     if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00 00:00:00'){
+      $expStr=explode(" ",$vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
+      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+    }else{
+      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
+    }
+    //Set Date of Completion of Viral Load
+    if(isset($vlQueryInfo[0]['date_of_completion_of_viral_load']) && trim($vlQueryInfo[0]['date_of_completion_of_viral_load'])!="" && $vlQueryInfo[0]['date_of_completion_of_viral_load']!='0000-00-00'){
+        $vlQueryInfo[0]['date_of_completion_of_viral_load']=$general->humanDateFormat($vlQueryInfo[0]['date_of_completion_of_viral_load']);  
+    }else{
+        $vlQueryInfo[0]['date_of_completion_of_viral_load'] = '';
     }
     //get reason for rejection list
     $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
@@ -225,7 +231,7 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;text-align:center;"><label for="ageInYears">Âge en années </label></td>
+                                <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
                                     <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" value="<?php echo $vlQueryInfo[0]['age_in_yrs']; ?>" style="width:100%;"/>
                                 </td>
@@ -235,11 +241,11 @@
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
                                 <td style="width:16%;">
-                                    <label class="radio-inline">M</label>
+                                    <label class="radio-inline" style="padding-left:12px !important;margin-left:0;">M</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check sexe" <?php echo (trim($vlQueryInfo[0]['gender']) == "male")?'checked="checked"':''; ?>>
                                     </label>
-                                    <label class="radio-inline">F</label>
+                                    <label class="radio-inline" style="padding-left:12px !important;margin-left:0;">F</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check sexe" <?php echo (trim($vlQueryInfo[0]['gender']) == "female")?'checked="checked"':''; ?>>
                                     </label>
@@ -435,7 +441,7 @@
                             <tr>
                                 <td><label for="">Date de réalisation de la charge virale </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['date_of_completion_of_viral_load']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
