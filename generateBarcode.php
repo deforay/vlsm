@@ -6,6 +6,16 @@ include ('./includes/tcpdf/tcpdf.php');
 $id=base64_decode($_POST['id']);
 
 if($id >0){
+    
+    //global config
+    $cSampleQuery="SELECT * FROM global_config";
+    $cSampleResult=$db->query($cSampleQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
+      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+    }
+    
     if (!file_exists('uploads') && !is_dir('uploads')) {
         mkdir('uploads');
     }
@@ -121,24 +131,28 @@ $tbl = '
         <td align="center" width="65%">Barcode</td>
     </tr>
 </thead>
-<tbody>
-    <tr nobr="true">
-        <td align="center" width="8%" >1.</td>
-        <td align="center" width="27%" >CONTROL 1</td>
-        <td align="center" width="65%" ></td>
-    </tr>
-    <tr nobr="true">
-        <td align="center" width="8%" >2.</td>
-        <td align="center" width="27%" >CONTROL 2</td>
-        <td align="center" width="65%" ></td>
-    </tr>
-    <tr nobr="true">
-        <td align="center" width="8%" >3.</td>
-        <td align="center" width="27%">CONTROL 3</td>
-        <td align="center" width="65%"></td>
-    </tr>';
+<tbody>';
+    if($arr['number_of_in_house_controls'] !='' && $arr['number_of_in_house_controls']!=NULL){
+        for($i=1;$i<=$arr['number_of_in_house_controls'];$i++){
+            $tbl.='<tr nobr="true">
+                <td align="center" width="8%" >'.$i.'.</td>
+                <td align="center" width="27%" >In-House Controls '. $i.'</td>
+                <td align="center" width="65%" ></td>
+            </tr>';
+        }
+    }
+    if($arr['number_of_manufacturer_controls'] !='' && $arr['number_of_manufacturer_controls']!=NULL){
+        for($i=1;$i<=$arr['number_of_manufacturer_controls'];$i++){
+            $sNo = $arr['number_of_in_house_controls']+$i;
+            $tbl.='<tr nobr="true">
+                <td align="center" width="8%" >'.$sNo.'.</td>
+                <td align="center" width="27%" >Manufacturer Controls '. $i.'</td>
+                <td align="center" width="65%" ></td>
+            </tr>';
+        }
+    }
     
-    $sampleCounter = 4;
+    $sampleCounter = ($arr['number_of_manufacturer_controls']+$arr['number_of_in_house_controls']+1);
 
    foreach($result as $val){
     
