@@ -47,9 +47,8 @@ $batResult = $db->rawQuery($batQuery);
 			 ?>
 		      </select>
 		    </td>
-		</tr>
-		<tr>
-		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+		
+		    <td><b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
 		      <option value=""> -- Select -- </option>
@@ -62,8 +61,9 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		
-		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+		</tr>
+		<tr>
+		    <td><b>Facility :</b></td>
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
@@ -77,8 +77,7 @@ $batResult = $db->rawQuery($batQuery);
 		      </select>
 		    </td>
 		    
-		</tr>
-		<tr>
+		
 		  <td><b>Gender&nbsp;:</b></td>
 		  <td>
 		    <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
@@ -98,7 +97,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 			&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf();"><span>Result PDF</span></button>
 			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
@@ -240,7 +239,8 @@ $batResult = $db->rawQuery($batQuery);
             "bInfo": true,
             "bScrollCollapse": true,
             //"bStateSave" : true,
-            "bRetrieve": true,                        
+            "iDisplayLength": 100,
+            "bRetrieve": true,                             
             "aoColumns": [
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -253,7 +253,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 7, "DESC" ]],
+            "aaSorting": [[ 7, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",

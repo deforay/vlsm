@@ -102,7 +102,7 @@ $primaryKey="vl_sample_id";
 	
 	//$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
-        //echo $sQuery;die;
+//        echo $sQuery;die;
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -136,7 +136,7 @@ $primaryKey="vl_sample_id";
 				$sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-			    $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
+			    $sWhere = $sWhere.' AND vl.status  IN ('.$_POST['status'].')';
 			}
 			if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
 			    if(trim($_POST['gender']) == "not_recorded"){
@@ -190,11 +190,11 @@ $primaryKey="vl_sample_id";
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 			    if(isset($setWhr)){
-				$sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
+				$sWhere = $sWhere.' AND vl.status IN ('.$_POST['status'].')';
 			    }else{
 			      $setWhr = 'where';
 			      $sWhere=' where '.$sWhere;
-			      $sWhere = $sWhere.' vl.status ='.$_POST['status'];
+			      $sWhere = $sWhere.' vl.status IN ('.$_POST['status'].')';
 			    }
 		        }
 			if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
@@ -217,12 +217,15 @@ $primaryKey="vl_sample_id";
 		$dWhere = '';
 		// Only approved results can be printed
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
+		  if(trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND (vl.status =7 OR vl.status=4) AND vl.form_id='".$arr['vl_form']."'";
+		        $sWhere = $sWhere." AND (vl.status =7 OR vl.status=4 OR vl.status=2)";
 		    }else{
-		       $sWhere = "WHERE (vl.status =7 OR vl.status=4) AND vl.form_id='".$arr['vl_form']."'";
+		       $sWhere = "WHERE (vl.status =7 OR vl.status=4 OR vl.status=2)";
 		    }
-		    $dWhere = "WHERE (vl.status =7 OR vl.status=4) AND vl.form_id='".$arr['vl_form']."'";
+		  }
+		    $sWhere = $sWhere." AND vl.form_id='".$arr['vl_form']."'";
+		    $dWhere = "WHERE (vl.status =7 OR vl.status=4 OR vl.status=2) AND vl.form_id='".$arr['vl_form']."'";
 		}else{
 		    if(trim($sWhere)!= ''){
 		        $sWhere = $sWhere." AND vl.form_id='".$arr['vl_form']."'";

@@ -130,6 +130,11 @@ $primaryKey="vl_sample_id";
 	   if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
 	    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
 	   }
+	   if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		$sWhere = $sWhere." AND f.district LIKE '%" . $_POST['district'] . "%' ";
+	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		$sWhere = $sWhere." AND f.state LIKE '%" . $_POST['state'] . "%' ";
+	    }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 		$setWhr = 'where';
@@ -165,9 +170,26 @@ $primaryKey="vl_sample_id";
 		if(isset($setWhr)){
 		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
 		}else{
+		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
 	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
 		}
+	    }
+	    if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		if(isset($setWhr)){
+		$sWhere = $sWhere." AND f.district LIKE '%" . $_POST['district'] . "%' ";
+		}else{
+		  $setWhr = 'where';
+		  $sWhere=' where '.$sWhere;
+		  $sWhere = $sWhere." f.district LIKE '%" . $_POST['district'] . "%' ";
+		}
+	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+	      if(isset($setWhr)){
+		$sWhere = $sWhere." AND f.state LIKE '%" . $_POST['state'] . "%' ";
+	      }else{
+		$sWhere=' where '.$sWhere;
+		$sWhere = $sWhere." f.state LIKE '%" . $_POST['state'] . "%' ";
+	      }
 	    }
 	}
 	if($sWhere!=''){
