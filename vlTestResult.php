@@ -99,7 +99,7 @@ $batResult = $db->rawQuery($batQuery);
 		<tr>
 		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-			&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf();"><span>Result PDF</span></button>
+			&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf('');"><span>Result PDF</span></button>
 			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		    </td>
 		</tr>
@@ -294,8 +294,8 @@ $batResult = $db->rawQuery($batQuery);
       });
   }
   
-  function convertSearchResultToPdf(){
-    $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print'},
+  function convertSearchResultToPdf(id){
+    $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id:id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
