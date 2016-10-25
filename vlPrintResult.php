@@ -81,8 +81,6 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		    
-		
 		  <td><b>Gender&nbsp;:</b></td>
 		  <td>
 		    <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
@@ -100,6 +98,10 @@ $batResult = $db->rawQuery($batQuery);
 			<option value="2">Lost</option>
 		      </select>
 		    </td>
+		</tr>
+		<tr>
+		  <td><b>ART Number&nbsp;:</b></td>
+		  <td><input type="text" id="artNo" name="artNo" class="form-control" placeholder="ART Number" style="width:220px;" onkeyup="searchVlRequestData()"/></td>
 		</tr>
 		<tr>
 		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -149,7 +151,7 @@ $batResult = $db->rawQuery($batQuery);
                 <tr>
 		  <th>Sample Code</th>
                   <th>Batch Code</th>
-                  <th>Unique ART No</th>
+                  <th>Unique ART No.</th>
                   <th>Patient's Name</th>
 		  <th>Facility Name</th>
                   <th>Sample Type</th>
@@ -272,6 +274,7 @@ $batResult = $db->rawQuery($batQuery);
 			      aoData.push({"name": "vlPrint", "value": 'print'});
 			      aoData.push({"name": "status", "value": $("#status").val()});
 			      aoData.push({"name": "gender", "value": $("#gender").val()});
+			      aoData.push({"name": "artNo", "value": $("#artNo").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
