@@ -457,7 +457,7 @@
                             <tr>
                                 <td><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" style="width:80%;"/>copies/ml
+                                    <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" style="width:70%;"/>copies/ml
                                 </td>
                                 <td colspan="2" style="vertical-align:middle;">Limite de détection : < 40 Copies/ml ou  log  < 1.6 ( pour DBS )</td>
                             </tr>
