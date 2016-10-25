@@ -68,13 +68,13 @@ $batResult = $db->rawQuery($batQuery);
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
-			<?php
-			foreach($fResult as $name){
-			 ?>
-			 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
-			 <?php
-			}
-			?>
+						<?php
+						foreach($fResult as $name){
+						 ?>
+						 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+						 <?php
+						}
+						?>
 		      </select>
 		    </td>
 		    
@@ -86,8 +86,8 @@ $batResult = $db->rawQuery($batQuery);
 		    <td>
 		      <select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 		         <option value=""> -- Select -- </option>
-			 <option value="<=1000"><= 1000 cp/ml</option>
-			 <option value=">1000">> 1000 cp/ml</option>
+			       <option value="<=1000"><= 1000 cp/ml</option>
+			       <option value=">1000">> 1000 cp/ml</option>
 		      </select>
 		    </td>
 		</tr>
