@@ -138,6 +138,9 @@ $primaryKey="vl_sample_id";
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 			    $sWhere = $sWhere.' AND vl.status  IN ('.$_POST['status'].')';
 			}
+			if(isset($_POST['artNo']) && trim($_POST['artNo'])!= ''){
+			    $sWhere = $sWhere." AND vl.art_no LIKE '%" . $_POST['artNo'] . "%' ";
+			}
 			if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
 			    if(trim($_POST['gender']) == "not_recorded"){
 				$sWhere = $sWhere.' AND (vl.gender = "not_recorded" OR vl.gender ="" OR vl.gender IS NULL)';
@@ -186,6 +189,15 @@ $primaryKey="vl_sample_id";
 					$setWhr = 'where';
 					$sWhere=' where '.$sWhere;
 					$sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
+				}
+			}
+			if(isset($_POST['artNo']) && trim($_POST['artNo'])!= ''){
+				if(isset($setWhr)){
+					$sWhere = $sWhere.' AND vl.art_no = "'.$_POST['artNo'].'"';
+				}else{
+					$setWhr = 'where';
+					$sWhere=' where '.$sWhere;
+					$sWhere = $sWhere.' vl.art_no = "'.$_POST['artNo'].'"';
 				}
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
