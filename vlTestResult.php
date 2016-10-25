@@ -295,6 +295,7 @@ $batResult = $db->rawQuery($batQuery);
   }
   
   function convertSearchResultToPdf(id){
+    $.blockUI();
     $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id:id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
@@ -304,6 +305,7 @@ $batResult = $db->rawQuery($batQuery);
 	  }
 	  
       });
+    $.unblockUI();
   }
 </script>
  <?php

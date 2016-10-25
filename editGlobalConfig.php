@@ -157,7 +157,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="vl_form" class="col-lg-4 control-label">Viral Load Form <span class="mandatory">*</span> </label>
+                      <label for="vl_form" class="col-lg-4 control-label">Viral Load Test Request and Result Form <span class="mandatory">*</span> </label>
                       <div class="col-lg-8">
                         <select class="form-control isRequired" name="vl_form" id="vl_form" title="Please select the viral load form">
                             <option value=""> -- Select -- </option>
