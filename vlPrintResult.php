@@ -12,6 +12,11 @@ $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
+<style>
+  .select2-selection__choice{
+	color:#000000 !important;
+  }
+</style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -89,10 +94,10 @@ $batResult = $db->rawQuery($batQuery);
 		  </td>
 		  <td><b>Status&nbsp;:</b></td>
 		  <td>
-		      <select name="status" id="status" class="form-control" title="Please choose status" style="width:220px;">
-			<option value=""> -- Select -- </option>
+		      <select name="status[]" id="status" class="form-control" title="Please choose status" style="width:220px;" multiple="multiple">
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
+			<option value="2">Lost</option>
 		      </select>
 		    </td>
 		</tr>
@@ -180,6 +185,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
+    $("#status").select2();
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
