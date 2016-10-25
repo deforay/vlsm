@@ -136,7 +136,7 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;text-align:center;"><label for="ageInYears">Âge en années </label></td>
+                                <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
                                     <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
                                 </td>
@@ -146,11 +146,11 @@
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
                                 <td style="width:16%;">
-                                    <label class="radio-inline">M</label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">M</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check sexe">
                                     </label>
-                                    <label class="radio-inline">F</label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">F</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check sexe">
                                     </label>
