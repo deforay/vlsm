@@ -183,11 +183,19 @@ try {
     $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
     $id = $db->update($tableName,$vldata);
     if($id>0){
-        $_SESSION['alertMsg']="VL request updated successfully";
-        //Add event log
-        $eventType = 'edit-vl-request-drc';
-        $action = ucwords($_SESSION['userName']).' updated a request data with the patient code '.$_POST['patientArtNo'];
-        $resource = 'vl-request-drc';
+        if(isset($_POST['rSrc']) && trim($_POST['rSrc']) == "er"){
+            $_SESSION['alertMsg']="VL result updated successfully";
+            //Add event log
+            $eventType = 'update-vl-result-drc';
+            $action = ucwords($_SESSION['userName']).' updated a result data with the patient code '.$_POST['patientArtNo'];
+            $resource = 'vl-result-drc';
+        }else{
+            $_SESSION['alertMsg']="VL request updated successfully";
+            //Add event log
+            $eventType = 'edit-vl-request-drc';
+            $action = ucwords($_SESSION['userName']).' updated a request data with the patient code '.$_POST['patientArtNo'];
+            $resource = 'vl-request-drc'; 
+        }
         $data=array(
         'event_type'=>$eventType,
         'action'=>$action,
@@ -198,7 +206,11 @@ try {
     }else{
         $_SESSION['alertMsg']="Please try again later";
     }
-    header("location:vlRequest.php");
+    if(isset($_POST['rSrc']) && trim($_POST['rSrc']) == "er"){
+        header("location:vlTestResult.php");
+    }else{
+        header("location:vlRequest.php");
+    }
 }catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
