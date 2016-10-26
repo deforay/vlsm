@@ -146,20 +146,16 @@ if(sizeof($requestResult)> 0){
           }
           //Set Age
           $age = 'Unknown';
-          if(isset($result['patient_dob']) && trim($result['patient_dob'])!='' && $result['patient_dob']!='0000-00-00'){
+          if(isset($result['age_in_yrs']) && trim($result['age_in_yrs'])!='' && trim($result['age_in_yrs']) >0){
+            $age = $result['age_in_yrs'];
+          }elseif(isset($result['age_in_mnts']) && trim($result['age_in_mnts'])!='' && trim($result['age_in_mnts']) >0){
+              $age = "0.".$result['age_in_mnts'];
+          }elseif(isset($result['patient_dob']) && trim($result['patient_dob'])!='' && $result['patient_dob']!='0000-00-00'){
             $todayDate = strtotime(date('Y-m-d'));
             $dob = strtotime($result['patient_dob']);
             $difference = $todayDate - $dob;
             $seconds_per_year = 60*60*24*365;
             $age = round($difference / $seconds_per_year);
-          }elseif(isset($result['age_in_yrs']) && trim($result['age_in_yrs'])!='' && trim($result['age_in_yrs']) >0){
-            $age = $result['age_in_yrs'];
-          }elseif(isset($result['age_in_mnts']) && trim($result['age_in_mnts'])!='' && trim($result['age_in_mnts']) >0){
-            if($result['age_in_mnts'] > 1){
-              $age = $result['age_in_mnts'].' months';
-            }else{
-              $age = $result['age_in_mnts'].' month';
-            }
           }
           
           if(isset($result['sample_collection_date']) && trim($result['sample_collection_date'])!='' && $result['sample_collection_date']!='0000-00-00 00:00:00'){
