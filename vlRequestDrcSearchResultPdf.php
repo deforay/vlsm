@@ -216,8 +216,8 @@ if(sizeof($requestResult)> 0){
             if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
               $vlResult = 'TND*';
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-              $showMessage = 'Viral load adequately controlled : continue current regimen';
-              $tndMessage = 'TND* - Target not Detected';
+              $showMessage = 'Charge Virale correctement validée: continuer le régime en cours';
+              $tndMessage = 'TND* - Cible non détectée';
               $resultTextSize = '18px';
             }else if(in_array(strtolower(trim($result['result'])), array("failed","fail","no_sample"))){
               $vlResult = $result['result'];
@@ -227,20 +227,20 @@ if(sizeof($requestResult)> 0){
             }else if(trim($result['result']) > 1000 && $result['result']<=10000000){
               $vlResult = $result['result'];
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-              $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.';
+              $showMessage = 'Charge Virale élevée - evaluation pour un renforcement de l?adhérence ou une évaluation Clinique pour un éventuel passage à la seconde ligne.';
               $messageTextSize = '16px';
             }else if(trim($result['result']) <= 1000 && $result['result']>=20){
               $vlResult = $result['result'];
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-              $showMessage = 'Viral load adequately controlled : continue current regimen';
+              $showMessage = 'Charge Virale correctement validée: continuer le régime en cours';
             }else if(trim($result['result']=='<20')){
               $vlResult = '&lt;20';
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-              $showMessage = 'Viral load adequately controlled : continue current regimen.<br/>Value is outside machine testing limit, cannot be less than 20';
+              $showMessage = 'Charge Virale correctement validée: continuer le régime en cours.<br/>La valeur est inférieure à la limite de detection ou moins de 20.';
             }else if(trim($result['result']=='>10000000')){
               $vlResult = $result['result'];
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
-              $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible    switch to second line.<br/>Value is outside machine testing limit, cannot be greater than 10M';
+              $showMessage = 'Charge Virale élevée: Evaluation pour un renforcement de l?adhérence ou une évaluation clinique pour un éventuel passage à la seconde ligne.<br/>La valeur est supérieure à 10 000.';
             }
           }
           if($result['rejection_reason_name']!=NULL){
@@ -402,15 +402,15 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="2" style="line-height:4px;"></td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:10px;height:10px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
-                    $html .='<td style="font-size:10px;text-align:left;">Printed on : '.$printDate.'&nbsp;&nbsp;'.$printDateTime.'</td>';
+                    $html .='<td style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_smile.png" alt="smile_face" style="width:10px;height:10px;"/> = VL < = 1000 copies/ml: Continuer le régime en cours</td>';
+                    $html .='<td style="font-size:10px;text-align:left;">Imprimé : '.$printDate.'&nbsp;&nbsp;'.$printDateTime.'</td>';
                   $html .='</tr>';
                   
                   $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:4px;"></td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_frown.png" alt="frown_face" style="width:10px;height:10px;"/> = VL > 1000 copies/ml: copies/ml: Clinical and counselling action required</td>';
+                    $html .='<td colspan="2" style="font-size:10px;text-align:left;width:60%;"><img src="assets/img/smiley_frown.png" alt="frown_face" style="width:10px;height:10px;"/> = VL > 1000 copies/ml: Une visite pour conseil et bilan clinique est requise</td>';
                   $html .='</tr>';
                  $html .='</table>';
                 $html .='</td>';
