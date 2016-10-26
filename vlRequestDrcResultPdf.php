@@ -114,20 +114,16 @@ if(!isset($result[0]['labName']) || trim($result[0]['labName']) == ''){
 }
 //Set Age
 $age = 'Unknown';
-if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
+if(isset($result[0]['age_in_yrs']) && trim($result[0]['age_in_yrs'])!='' && trim($result[0]['age_in_yrs']) >0){
+  $age = $result[0]['age_in_yrs'];
+}elseif(isset($result[0]['age_in_mnts']) && trim($result[0]['age_in_mnts'])!='' && trim($result[0]['age_in_mnts']) >0){
+    $age = "0.".$result[0]['age_in_mnts'];
+}elseif(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!='' && $result[0]['patient_dob']!='0000-00-00'){
   $todayDate = strtotime(date('Y-m-d'));
   $dob = strtotime($result[0]['patient_dob']);
   $difference = $todayDate - $dob;
   $seconds_per_year = 60*60*24*365;
   $age = round($difference / $seconds_per_year);
-}elseif(isset($result[0]['age_in_yrs']) && trim($result[0]['age_in_yrs'])!='' && trim($result[0]['age_in_yrs']) >0){
-  $age = $result[0]['age_in_yrs'];
-}elseif(isset($result[0]['age_in_mnts']) && trim($result[0]['age_in_mnts'])!='' && trim($result[0]['age_in_mnts']) >0){
-  if($result[0]['age_in_mnts'] > 1){
-    $age = $result[0]['age_in_mnts'].' months';
-  }else{
-    $age = $result[0]['age_in_mnts'].' month';
-  }
 }
 
 if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collection_date'])!='' && $result[0]['sample_collection_date']!='0000-00-00 00:00:00'){
