@@ -3,6 +3,7 @@ ob_start();
 session_start();
 include('./includes/MysqliDb.php');
 include ('./includes/tcpdf/tcpdf.php');
+include ('./includes/barcode39.php');
 $id=base64_decode($_POST['id']);
 
 if($id >0){
@@ -23,6 +24,7 @@ if($id >0){
     if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "barcode") && !is_dir('uploads'. DIRECTORY_SEPARATOR."barcode")) {
         mkdir('uploads'. DIRECTORY_SEPARATOR."barcode");
     }
+    
     $lQuery="SELECT * from global_config where name='logo'";
     $lResult=$db->query($lQuery);
     
@@ -151,31 +153,49 @@ $tbl = '
             </tr>';
         }
     }
+    $tbl.='</table>';
+    $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
     
     $sampleCounter = ($arr['number_of_manufacturer_controls']+$arr['number_of_in_house_controls']+1);
 
    foreach($result as $val){
-    
-            $params = $pdf->serializeTCPDFtagParameters(array($val['sample_code'], 'C39', '', '', 0, 0, 0.25, array('border'=>false, 'padding'=>4, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2), 'N'));
-
-            $tbl .='<tr>
-                    <td align="center" width="8%">'.$sampleCounter.'.</td>
-                    <td align="center" width="27%">'.$val['sample_code'].'</td>
-                    <td align="center" width="65%">
-                        <tcpdf method="write1DBarcode" params="'.$params.'" />
-                    </td>
-            </tr>';            
-            $sampleCounter++;  
-    } 
+        if($pdf->getY()>=250){
+            $pdf->AddPage();
+        }
+        $fileName=$val['sample_code'].'.gif';
+        $bc = new Barcode39($val['sample_code']);
+        // set barcode bar thickness (thick bars) 
+        $bc->barcode_height = 50;
+        $bc->barcode_text = false;
         
-        
-    $tbl .='</tbody>
-    </table>';
+        $sampleCodeTable='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">';
+        $sampleCodeTable.='<tr>';
+        $sampleCodeTable.='<td align="center" width="8%">'.$sampleCounter.'.</td>';
+        $sampleCodeTable.='<td align="center" width="27%">'.$val['sample_code'].'</td>';
+             
+        $sampleCodeTable.='<td align="center" width="65%">';
+            // save barcode GIF file 
+            $res=$bc->draw($fileName);
+            if($res==1){
+                if (copy($fileName, 'uploads'. DIRECTORY_SEPARATOR ."barcode" . DIRECTORY_SEPARATOR . $fileName)) {
+                  unlink($fileName);
+                  $sampleCodeTable.='<img src="uploads/barcode/'.$fileName.'" border="0" />';
+                }
+            }
+        $sampleCodeTable.='</td>';
+             
+        $sampleCodeTable.='</tr>';
+        $sampleCodeTable .='</table>';
+         
+        $img='<table cellspacing="0" cellpadding="3" border="1">';
+        $img.='<tr><td>'.$tbl.'</td></tr>';
+        $img .='</table>';
+        $sampleCounter++;
             
-            $pdf->writeHTML($tbl, true, false, false, false, '');
+        $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$sampleCodeTable, 0, 1, 0, true, 'C', true);
         
-        
-    
+     
+    } 
         $filename = trim($bResult[0]['batch_code']).'.pdf';
         $pdf->Output('uploads'. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
         echo $filename;
