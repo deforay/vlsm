@@ -9,10 +9,16 @@ define('UPLOAD_PATH','uploads');
 $tableName1="activity_log";
 $tableName2="vl_request_form";
 $general=new Deforay_Commons_General();
-$configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
+
+$configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);
-if(isset($configResult) && count($configResult)> 0){
-  date_default_timezone_set($configResult[0]['value']);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
+if(isset($arr['default_time_zone']) && $arr['default_time_zone']!=''){
+  date_default_timezone_set($arr['default_time_zone']);
 }else{
   date_default_timezone_set("Europe/London");
 }
@@ -21,10 +27,11 @@ $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
 if($_POST['id']!=''){
-  $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id='".$_POST['id']."'"; 
+  $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id='".$_POST['id']."'";
 }else{
   $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
 }
+//error_log($searchQuery);
 $requestResult=$db->query($searchQuery);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
@@ -76,13 +83,7 @@ class Pdf_concat extends FPDI {
 }
 
 if(sizeof($requestResult)> 0){
-    $configQuery="SELECT * from global_config";
-    $configResult=$db->query($configQuery);
-    $arr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($configResult); $i++) {
-      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-    }
+    
     
     $_SESSION['rVal'] = $general->generateRandomString(6);
     if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
@@ -275,9 +276,9 @@ if(sizeof($requestResult)> 0){
               $vlResult = str_replace("<","&lt;",$result['result']);
               //$showMessage = 'Invalid value';
             }
-            if($smileyShow!='' && $smileyShow <= 1000){
+            if($smileyShow!='' && $smileyShow <= $arr['viral_load_threshold_limit']){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_smile.png" alt="smile_face"/>';
-            }else if($smileyShow!='' && $smileyShow > 1000){
+            }else if($smileyShow!='' && $smileyShow > $arr['viral_load_threshold_limit']){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="assets/img/smiley_frown.png" alt="frown_face"/>';
             }
             //
