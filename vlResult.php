@@ -3,9 +3,15 @@ include('header.php');
 //include('./includes/MysqliDb.php');
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
-$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
-$sQuery="SELECT * FROM r_sample_type where form_identification='".$configFormResult[0]['value']."'";
+//config  query
+$configQuery="SELECT * from global_config";
+$configResult=$db->query($configQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
+$sQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -86,8 +92,8 @@ $batResult = $db->rawQuery($batQuery);
 		    <td>
 		      <select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
 		         <option value=""> -- Select -- </option>
-			       <option value="<=1000"><= 1000 cp/ml</option>
-			       <option value=">1000">> 1000 cp/ml</option>
+			       <option value="<=<?php echo $arr['viral_load_threshold_limit'];?>"><= <?php echo $arr['viral_load_threshold_limit'];?> cp/ml</option>
+			       <option value="><?php echo $arr['viral_load_threshold_limit'];?>">> <?php echo $arr['viral_load_threshold_limit'];?> cp/ml</option>
 		      </select>
 		    </td>
 		</tr>
@@ -311,8 +317,8 @@ $batResult = $db->rawQuery($batQuery);
     $.unblockUI();
   }
     
-  function convertResultToPdf(id){
-      $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcResultPdf.php':'vlRequestResultPdf.php'; ?>", {source:'print',id : id},
+  function convertSearchResultToPdf(id){
+      $.post("<?php echo($arr['vl_form'] == 3)?'vlRequestDrcResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", {source:'print',id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');

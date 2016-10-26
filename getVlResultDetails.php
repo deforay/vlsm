@@ -244,9 +244,9 @@ $primaryKey="vl_sample_id";
 		  $vLoad ='';
 		  //just comment if condition
 		  if($_POST['vLoad']=='<=1000'){
-		    $vLoad = " AND vl.status != '4' AND vl.result!='>10000000'";
+		    $vLoad = " AND vl.status != '4'";
 		  }else{
-		    $vLoad = " OR (vl.result = '>10000000')";
+		    //$vLoad = " OR (vl.result = '>10000000')";
 		  }
 		if(isset($setWhr)){
 		    $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
