@@ -24,7 +24,6 @@ try {
                 if($_POST['comments'] != ""){
                     $comments .=" - " .$_POST['comments'];
                 }
-                
             }else{
                 $comments = $_POST['comments'];
             }

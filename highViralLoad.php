@@ -3,9 +3,15 @@ include('header.php');
 //include('./includes/MysqliDb.php');
 $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
-$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
-$sQuery="SELECT * FROM r_sample_type where form_identification='".$configFormResult[0]['value']."'";
+//config  query
+$configQuery="SELECT * from global_config";
+$configResult=$db->query($configQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
+$sQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -136,7 +142,7 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Patient Code</th>
                   <th>Patient Name</th>
                   <th>Patient Phone</th>
-                  <th>Viral Load (result > 1000 cp/ml3)</th>
+                  <th>Viral Load (result > <?php echo $arr['viral_load_threshold_limit'];?> cp/ml3)</th>
                   <th>Contact Notes</th>
                   <th>Contact Completed</th>
 		  <?php if(isset($_SESSION['privileges']) && in_array("addContactNotes.php", $_SESSION['privileges'])){ ?>

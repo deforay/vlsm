@@ -5,7 +5,15 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
-
+//config  query
+$configQuery="SELECT * from global_config";
+$configResult=$db->query($configQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
+$thresholdLimit = $arr['viral_load_threshold_limit'];
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
@@ -90,7 +98,7 @@ $primaryKey="vl_sample_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > 1000";
+	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > ".$thresholdLimit;
 	//$sWhere = ' where vl.status=7 AND vl.result > 1000';
 	$start_date = '';
 	$end_date = '';
@@ -138,7 +146,7 @@ $primaryKey="vl_sample_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > 1000 $sWhere group by vl.vl_sample_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > $thresholdLimit $sWhere group by vl.vl_sample_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
