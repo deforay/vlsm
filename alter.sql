@@ -611,3 +611,18 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Viral Loa
 
 --saravanan 25-oct-2016
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Number of In-House Controls', 'number_of_in_house_controls', '3'), ('Number of Manufacturer Controls', 'number_of_manufacturer_controls', '3');
+
+--saravanan 27-oct-2016
+CREATE TABLE `log_result_updates` (
+  `result_log_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `vl_sample_id` int(11) NOT NULL,
+  `updated_on` datetime DEFAULT NULL
+)
+
+ALTER TABLE `log_result_updates`
+  ADD PRIMARY KEY (`result_log_id`);
+  
+--
+ALTER TABLE `log_result_updates`
+  MODIFY `result_log_id` int(11) NOT NULL AUTO_INCREMENT;

@@ -4,11 +4,10 @@ ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
-
 $tableName="vl_request_form";
 $tableName1="activity_log";
+$tableName2="log_result_updates";
 try {
-     
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
           $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
           $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
@@ -53,12 +52,19 @@ try {
         );
           //print_r($vldata);die;
           if($vloadResultUpdate){
-          $vldata['result_coming_from']='manual';
-          $vldata['file_name']='';
+            $vldata['result_coming_from']='manual';
+            $vldata['file_name']='';
           }
           $db=$db->where('vl_sample_id',$_POST['treamentId']);
           $db->update($tableName,$vldata);
           $_SESSION['alertMsg']="VL result updated successfully";
+          //Add update result log
+          $data=array(
+          'user_id'=>$_SESSION['userId'],
+          'vl_sample_id'=>$_POST['treamentId'],
+          'updated_on'=>$general->getDateTime()
+          );
+          $db->insert($tableName2,$data);
           header("location:vlResultApproval.php");
     
 } catch (Exception $exc) {
