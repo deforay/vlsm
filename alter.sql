@@ -612,7 +612,7 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Viral Loa
 --saravanan 25-oct-2016
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Number of In-House Controls', 'number_of_in_house_controls', '3'), ('Number of Manufacturer Controls', 'number_of_manufacturer_controls', '3');
 
---saravanan 27-oct-2016
+--Pal 27-oct-2016
 CREATE TABLE `log_result_updates` (
   `result_log_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -623,6 +623,17 @@ CREATE TABLE `log_result_updates` (
 ALTER TABLE `log_result_updates`
   ADD PRIMARY KEY (`result_log_id`);
   
---
 ALTER TABLE `log_result_updates`
   MODIFY `result_log_id` int(11) NOT NULL AUTO_INCREMENT;
+  
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '5', 'editRequestEmailConfig.php', 'Edit Request Email Config');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '5', 'editResultEmailConfig.php', 'Edit Result Email Config');
+
+ALTER TABLE `other_config` CHANGE `value` `value` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+INSERT INTO `other_config` (`name`, `value`) VALUES ('request_email_field', NULL), ('result_email_field', NULL);
+
+ALTER TABLE other_config ADD display_name VARCHAR(255);
+
+UPDATE `other_config` SET `display_name` = 'Email' WHERE `other_config`.`name` = 'email'; UPDATE `other_config` SET `display_name` = 'Password' WHERE `other_config`.`name` = 'password'; UPDATE `other_config` SET `display_name` = 'Result Email Fields' WHERE `other_config`.`name` = 'result_email_field'; UPDATE `other_config` SET `display_name` = 'Request Email Fields' WHERE `other_config`.`name` = 'request_email_field';

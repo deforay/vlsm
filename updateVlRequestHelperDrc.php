@@ -26,7 +26,7 @@ try {
                 $id=$db->insert('r_sample_rejection_reasons',$data);
                 $_POST['rejectionReason'] = $id;
             }
-        }elseif($_POST['status'] == 7){
+        }else{
             $_POST['rejectionReason'] = NULL;
         }
     }else{
@@ -45,11 +45,14 @@ try {
     }else{
         $_POST['dateOfCompletionOfViralLoad'] = NULL;
     }
+    if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
+        $_POST['sampleCode'] = NULL;
+    }
      $vldata=array(
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'status'=>$_POST['status'],
           'sample_rejection_reason'=>$_POST['rejectionReason'],
-          'lab_no'=>$_POST['labNo'],
+          'sample_code'=>$_POST['sampleCode'],
           'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
           'vl_test_platform'=>$_POST['testingPlatform'],
           'result'=>$_POST['vlResult'],

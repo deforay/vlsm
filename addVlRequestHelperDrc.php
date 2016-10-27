@@ -122,7 +122,7 @@ try {
             }else{
                 $_POST['rejectionReason'] = NULL;
             }
-        }elseif($_POST['status'] == 7){
+        }else{
             $_POST['rejectionReason'] = NULL;
         }
     }else{
@@ -148,6 +148,10 @@ try {
     }else{
         $_POST['dateOfCompletionOfViralLoad'] = NULL;
     }
+    if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
+        $_POST['sampleCode'] = NULL;
+    }
+    //print_r($_POST);die;
     $vldata=array(
                   'vl_instance_id'=>$instanceId,
                   'form_id'=>3,
@@ -175,7 +179,7 @@ try {
                   'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
                   'status'=>$_POST['status'],
                   'sample_rejection_reason'=>$_POST['rejectionReason'],
-                  'lab_no'=>$_POST['labNo'],
+                  'sample_code'=>$_POST['sampleCode'],
                   'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'result'=>$_POST['vlResult'],

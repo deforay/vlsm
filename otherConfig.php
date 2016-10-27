@@ -18,14 +18,16 @@ include('header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-              <a href="editOtherConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit Other Config</a>
+							<a href="editOtherConfig.php" class="btn btn-primary pull-right"> <i class="fa fa-pencil"></i> Edit Other Config</a>
+							<!--<a href="editResultEmailConfig.php" class="btn btn-warning pull-right" style="margin-right:10px;"> <i class="fa fa-pencil"></i> Edit Result Email Config</a>
+							<a href="editRequestEmailConfig.php" class="btn btn-default pull-right" style="margin-right:10px;"> <i class="fa fa-pencil"></i> Edit Request Email Config</a>-->
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <table id="otherConfigDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th>Config Name</th>
+		              <th>Config Name</th>
                   <th>Value</th>
                 </tr>
                 </thead>
