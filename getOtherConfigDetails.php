@@ -6,7 +6,7 @@ $tableName="other_config";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('name','value');
+        $aColumns = array('display_name','value');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         //$sIndexColumn = $primaryKey;
@@ -125,8 +125,8 @@ $tableName="other_config";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = ucwords($aRow['name']);
-	    $row[] = $aRow['value'];
+	        $row[] = ucwords($aRow['display_name']);
+	        $row[] = $aRow['value'];
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

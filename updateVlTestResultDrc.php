@@ -412,7 +412,7 @@
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
-                                      <option value=""> -- Sélectionner -- </option>
+                                      <option value="6" <?php echo($vlQueryInfo[0]['status'] == 6)?'selected="selected"':''; ?>> En attente d'approbation Clinique </option>
                                       <option value="7" <?php echo($vlQueryInfo[0]['status'] == 7)?'selected="selected"':''; ?>>Echantillon accepté</option>
                                       <option value="4" <?php echo($vlQueryInfo[0]['status'] == 4)?'selected="selected"':''; ?>>Echantillon rejeté</option>
                                     </select>
@@ -435,9 +435,9 @@
                                 <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:90%;display:none;"/></td>
                             </tr>
                             <tr>
-                                <td><label for="labNo">Code Labo </label></td>
+                                <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['lab_no']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
