@@ -1,15 +1,16 @@
 <?php
 session_start();
 include('./includes/MysqliDb.php');
+include('General.php');
 $tableName="batch_details";
 $primaryKey="batch_id";
-
+$general=new Deforay_Commons_General();
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
         
         $aColumns = array('b.batch_code',"DATE_FORMAT(b.created_on,'%d-%b-%Y %H:%i:%s')");
-        $orderColumns = array('b.batch_code','','b.created_on');
+        $orderColumns = array('b.batch_code','','','','','','b.created_on');
 		
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -137,10 +138,34 @@ $primaryKey="batch_id";
 		$date = $aRow['created_on'];
 		$humanDate =  date("d-M-Y H:i:s",strtotime($date));
 	    }
+	    //get no. of sample tested.
+	    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' and vl.status=7";
+	    $noOfSampleResultCount = $db->rawQuery($noOfSampleTested);
+	    error_log($noOfSampleTested);
+	    //get no. of sample tested low level.
+	    $noOfSampleLowTested = "select count(vl.sample_code) as no_of_sample_low_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result < 1000";
+	    $noOfSampleLowResultCount = $db->rawQuery($noOfSampleLowTested);
+	    //get no. of sample tested high level.
+	    $noOfSampleHighTested = "select count(vl.sample_code) as no_of_sample_high_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result > 1000";
+	    $noOfSampleHighResultCount = $db->rawQuery($noOfSampleHighTested);
+	    //get no. of sample tested high level.
+	    $noOfSampleLastDateTested = "select max(vl.sample_testing_date) as last_tested_date from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."'";
+	    $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
+	    
+	    
             $row = array();
 	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+	    $date = '';
+	    if($noOfSampleLastDateTested[0]['last_tested_date']!='0000-00-00 00:00:00' && $noOfSampleLastDateTested[0]['last_tested_date']!=null){
+		$exp = explode(" ",$noOfSampleLastDateTested[0]['last_tested_date']);
+		$date = $general->humanDateFormat($exp[0]);
+	    }
 	    $row[] = ucwords($aRow['batch_code']);
 	    $row[] = $aRow['sample_code'];
+	    $row[] = $noOfSampleResultCount[0]['no_of_sample_tested'];
+	    $row[] = $noOfSampleLowResultCount[0]['no_of_sample_low_tested'];
+	    $row[] = $noOfSampleHighResultCount[0]['no_of_sample_high_tested'];
+	    $row[] = $date;
 	    $row[] = $humanDate;
 	//    $row[] = '<select class="form-control" name="status" id=' . $aRow['batch_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
 	//		    <option value="pending" ' . ($aRow['batch_status'] == "pending" ? "selected=selected" : "") . '>Pending</option>
