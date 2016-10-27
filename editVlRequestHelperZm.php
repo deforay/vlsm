@@ -133,8 +133,8 @@ try {
             $vldata['result_approved_by'] = $_POST['approvedBy'];
           }
           if($vloadResultUpdate){
-          $vldata['result_coming_from']='manual';
-          $vldata['file_name']='';
+            $vldata['result_coming_from']='manual';
+            $vldata['file_name']='';
           }
           //print_r($vldata);die;
           $db=$db->where('vl_sample_id',$_POST['treamentId']);

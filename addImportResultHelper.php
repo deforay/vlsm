@@ -22,6 +22,7 @@ $general=new Deforay_Commons_General();
 
 $tableName="temp_sample_report";
 $tableName1="activity_log";
+$tableName2="log_result_updates";
 try {
         //$configId=base64_decode($_POST['machineName']);
         //$query="SELECT * FROM import_config where status='active' AND config_id=".$configId;
@@ -93,9 +94,7 @@ try {
                 $m=0;
                 foreach($sheetData->getRowIterator() as $rKey=>$row){
                     if($rKey < $skipTillRow) continue;
-                    
                     if($sheetData->getCell($orderNumberColumn.$rKey)->getValue() == "") break;
-                    
                     $sampleVal = "";
                     $batchCode = "";
                     $sampleType = "";
@@ -142,11 +141,9 @@ try {
                       $data['result'] = "";
                     }
                     
-                    
-                     if($batchCode==''){
+                    if($batchCode==''){
                         $data['batch_code']=$newBacthCode;
                         $data['batch_code_key']=$maxBatchCodeKey;
-                        
                     }else{
                         $data['batch_code']=$batchCode;
                     }
@@ -165,7 +162,7 @@ try {
                     }
                     
                     if($sampleVal!='' || $batchCode!='' || $sampleType!='' || $logVal!='' || $absVal!='' || $absDecimalVal!=''){
-                      $db->insert($tableName,$data);
+                      $id = $db->insert($tableName,$data);
                     }
                     //if(isset($vlResult[$m]['sample_code'])){
                     //$db=$db->where('sample_code',$sampleVal);
@@ -179,7 +176,7 @@ try {
         $_SESSION['alertMsg']="Imported results successfully";
         //Add event log
         $eventType = 'import';
-        $action = ucwords($_SESSION['userName']).' imported a new test result';
+        $action = ucwords($_SESSION['userName']).' imported a new test result with the sample code '.$sampleVal;
         $resource = 'import-result';
         $data=array(
         'event_type'=>$eventType,
@@ -188,7 +185,13 @@ try {
         'date_time'=>$general->getDateTime()
         );
         $db->insert($tableName1,$data);
-        
+        //Add update result log
+        $data=array(
+        'user_id'=>$_SESSION['userId'],
+        'vl_sample_id'=>$id,
+        'updated_on'=>$general->getDateTime()
+        );
+        $db->insert($tableName2,$data);
         header("location:vlResultUnApproval.php");
   
 } catch (Exception $exc) {

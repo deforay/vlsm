@@ -6,6 +6,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
+$tableName2="log_result_updates";
 try {
      //Set sample received date
     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
@@ -69,6 +70,13 @@ try {
         'date_time'=>$general->getDateTime()
         );
         $db->insert($tableName1,$data);
+        //Add update result log
+        $data=array(
+        'user_id'=>$_SESSION['userId'],
+        'vl_sample_id'=>$_POST['vlSampleId'],
+        'updated_on'=>$general->getDateTime()
+        );
+        $db->insert($tableName2,$data);
         header("location:vlTestResult.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
