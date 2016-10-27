@@ -463,11 +463,11 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_tested_date'];?>" onchange="checkSampleTestingDate();"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td>
-                          <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" />
+                          <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" onchange="calculateLogValue(this)"/>
                           <input type="hidden" name="textValue" value="<?php echo $vlQueryInfo[0]['text_value'];?>" />
                         </td>
                         <td><label for="vlLog">Viral Load Log</label></td>
-                        <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['log_value'];?>" /></td>
+                        <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['log_value'];?>" onchange="calculateLogValue(this)"/></td>
                       </tr>
                       <tr class="noResult">
                         <td><label class="noResult">If no result</label></td>
@@ -1042,6 +1042,27 @@ $("#vlLog").bind("keyup change", function(e) {
                 machineName = false;
               }
             }
+        }
+      }
+    }
+    
+    function calculateLogValue(obj)
+    {
+      if(obj.id=="vlResult") {
+        absValue = $("#vlResult").val();
+        if(absValue!='' && absValue!=0){
+          $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+        }
+      }
+      if(obj.id=="vlLog") {
+        logValue = $("#vlLog").val();
+        if(logValue!='' && logValue!=0){
+          var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+          if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+          }else{
+            $("#vlResult").val('');
+          }
         }
       }
     }

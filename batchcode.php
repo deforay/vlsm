@@ -48,6 +48,10 @@ include('header.php');
                 <tr>
                   <th>Batch Code</th>
                   <th>No. of Samples</th>
+                  <th>No. of Samples Tested</th>
+                  <th>No. of Samples Low Level</th>
+                  <th>No. of Samples High Level</th>
+                  <th>Last Tested Date</th>
                   <th>Created On</th>
 		  <?php if(isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
@@ -59,7 +63,6 @@ include('header.php');
                     <td colspan="3" class="dataTables_empty">Loading data from server</td>
 		  </tr>
                 </tbody>
-                
               </table>
             </div>
             <!-- /.box-body -->
@@ -85,16 +88,20 @@ include('header.php');
             "bInfo": true,
             "bScrollCollapse": true,
             //"bStateSave" : true,
-            "bRetrieve": true,                        
+            "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
+	        {"sClass":"center","bSortable":false},
+	        {"sClass":"center","bSortable":false},
+	        {"sClass":"center","bSortable":false},
+	        {"sClass":"center","bSortable":false},
 	        {"sClass":"center","bSortable":false},
                 {"sClass":"center"},
 		<?php if(isset($_SESSION['privileges']) && in_array("editBatch.php", $_SESSION['privileges'])){ ?>
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-            "aaSorting": [[ 2, "desc" ]],
+            "aaSorting": [[ 6, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getBatchCodeDetails.php",

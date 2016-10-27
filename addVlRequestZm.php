@@ -486,9 +486,9 @@ if($urgency==''){
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" onchange="checkSampleTestingDate();" style="width:100%;" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
-                        <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this)"/></td>
                       </tr>
                       <tr class="noResult">
                         <td><label>If no result</label></td>
@@ -1089,6 +1089,26 @@ $("#vlLog").bind("keyup change", function(e) {
                 machineName = false;
               }
             }
+        }
+      }
+    }
+    function calculateLogValue(obj)
+    {
+      if(obj.id=="vlResult") {
+        absValue = $("#vlResult").val();
+        if(absValue!='' && absValue!=0){
+          $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+        }
+      }
+      if(obj.id=="vlLog") {
+        logValue = $("#vlLog").val();
+        if(logValue!='' && logValue!=0){
+          var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+          if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+          }else{
+            $("#vlResult").val('');
+          }
         }
       }
     }
