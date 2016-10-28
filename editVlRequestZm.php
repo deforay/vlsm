@@ -25,8 +25,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
 
-if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric')
-{
+if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $numeric = '';
 }else{
   $numeric = 'checkNum';
@@ -444,18 +443,20 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                             ?>
                           </select>
                         </td>
-                        <td><label for="specimenType">Specimen type</label></td>
+                        <td><?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
                         <td>
-                          <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
-                              <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($sResult as $name){
-                               ?>
-                               <option value="<?php echo $name['sample_id'];?>" <?php echo ($vlQueryInfo[0]['sample_id']==$name['sample_id'])?"selected='selected'":""?>><?php echo ucwords($name['sample_name']);?></option>
-                               <?php
-                              }
-                              ?>
-                          </select>
+                          <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
+                            <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
+                                <option value=""> -- Select -- </option>
+                                <?php
+                                foreach($sResult as $name){
+                                 ?>
+                                 <option value="<?php echo $name['sample_id'];?>" <?php echo ($vlQueryInfo[0]['sample_id']==$name['sample_id'])?"selected='selected'":""?>><?php echo ucwords($name['sample_name']);?></option>
+                                 <?php
+                                }
+                                ?>
+                            </select>
+                          <?php } ?>
                         </td>
                       </tr>
                       <tr>

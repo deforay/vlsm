@@ -11,6 +11,16 @@ try {
     if(isset($_SESSION['instanceId'])){
         $instanceId = $_SESSION['instanceId'];
     }
+     //Set Lab no
+     $start_date = date('Y-m-01');
+     $end_date = date('Y-m-31');
+     $labVlQuery='select MAX(lab_no) FROM vl_request_form as vl where vl.form_id="3" AND DATE(vl.created_on) >= "'.$start_date.'" AND DATE(vl.created_on) <= "'.$end_date.'"';
+     $labVlResult = $db->rawQuery($labVlQuery);
+     if(isset($labVlResult) && trim($labVlResult[0]['MAX(lab_no)'])!='' && $labVlResult[0]['MAX(lab_no)']!=NULL){
+        $_POST['labNo'] = $labVlResult[0]['MAX(lab_no)']+1;
+     }else{
+        $_POST['labNo'] = 1;
+     }
     //Set Date of demand
     if(isset($_POST['dateOfDemand']) && trim($_POST['dateOfDemand'])!=""){
         $_POST['dateOfDemand']=$general->dateFormat($_POST['dateOfDemand']);  
@@ -99,6 +109,7 @@ try {
             $_POST['durationOfConservation'] = NULL;
         }
     }else{
+        $_POST['specimenType'] = NULL;
         $_POST['conservationTemperature'] = NULL;
         $_POST['durationOfConservation'] = NULL;
     }
@@ -126,6 +137,7 @@ try {
             $_POST['rejectionReason'] = NULL;
         }
     }else{
+        $_POST['status'] = 6;
         $_POST['rejectionReason'] = NULL;
     }
     //Set sample testing date
@@ -165,6 +177,7 @@ try {
                   'age_in_mnts'=>$_POST['ageInMonths'],
                   'gender'=>$_POST['gender'],
                   'art_no'=>$_POST['patientArtNo'],
+                  'lab_no'=>$_POST['labNo'],
                   'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
                   'current_regimen'=>$_POST['artRegimen'],
                   'has_patient_changed_regimen'=>$_POST['hasChangedRegimen'],

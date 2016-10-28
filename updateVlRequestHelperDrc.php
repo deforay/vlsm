@@ -29,8 +29,6 @@ try {
         }else{
             $_POST['rejectionReason'] = NULL;
         }
-    }else{
-        $_POST['rejectionReason'] = NULL;
     }
      //Set sample testing date
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
@@ -48,10 +46,8 @@ try {
     if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
         $_POST['sampleCode'] = NULL;
     }
-     $vldata=array(
+        $vldata=array(
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
-          'status'=>$_POST['status'],
-          'sample_rejection_reason'=>$_POST['rejectionReason'],
           'sample_code'=>$_POST['sampleCode'],
           'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
           'vl_test_platform'=>$_POST['testingPlatform'],
@@ -59,6 +55,12 @@ try {
           'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
           'modified_on'=>$general->getDateTime()
         );
+        if(isset($_POST['status']) && trim($_POST['status'])!= ''){
+            $vldata['status'] = $_POST['status'];
+            if(isset($_POST['rejectionReason'])){
+                $vldata['sample_rejection_reason'] = $_POST['rejectionReason'];
+            }
+        }
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $db->update($tableName,$vldata);
         $_SESSION['alertMsg']="VL result updated successfully";

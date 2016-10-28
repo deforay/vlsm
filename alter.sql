@@ -637,3 +637,6 @@ INSERT INTO `other_config` (`name`, `value`) VALUES ('request_email_field', NULL
 ALTER TABLE other_config ADD display_name VARCHAR(255);
 
 UPDATE `other_config` SET `display_name` = 'Email' WHERE `other_config`.`name` = 'email'; UPDATE `other_config` SET `display_name` = 'Password' WHERE `other_config`.`name` = 'password'; UPDATE `other_config` SET `display_name` = 'Result Email Fields' WHERE `other_config`.`name` = 'result_email_field'; UPDATE `other_config` SET `display_name` = 'Request Email Fields' WHERE `other_config`.`name` = 'request_email_field';
+
+--Pal 28-oct-2016
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Sample Type', 'sample_type', 'enabled'), ('Testing Status', 'testing_status', 'enabled');

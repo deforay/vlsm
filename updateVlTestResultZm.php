@@ -436,9 +436,10 @@ $tsResult = $db->rawQuery($tsQuery);
                             ?>
                           </select>
                         </td>
-                        <td><label for="specimenType">Specimen type</label></td>
+                        <td><?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
                         <td>
-                          <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
+                          <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
+                            <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
                               <option value=""> -- Select -- </option>
                               <?php
                               foreach($sResult as $name){
@@ -447,7 +448,8 @@ $tsResult = $db->rawQuery($tsQuery);
                                <?php
                               }
                               ?>
-                          </select>
+                            </select>
+                          <?php } ?>
                         </td>
                       </tr>
                       <tr>
@@ -501,16 +503,18 @@ $tsResult = $db->rawQuery($tsQuery);
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
                         <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo $vlQueryInfo[0]['comments'];?></textarea></td>
                       </tr>
-                      <tr>
-                       <td><label for="labComments">Status</label></td>
-                       <td colspan="5">
-                        <select class="form-control" id="status" name="status" title="Please select test status">
+                      <?php if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){ ?>
+                       <tr>
+                        <td><label for="status">Status</label></td>
+                        <td colspan="5">
+                         <select class="form-control" id="status" name="status" title="Please select test status">
                          <option value="">-- Select --</option>
                          <option value="7"<?php echo (7==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>>Accepted</option>
- 			 <option value="4"<?php echo (4==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>>Rejected</option>
-			  </select>
-                       </td>
-                      </tr>
+ 			                   <option value="4"<?php echo (4==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>>Rejected</option>
+			                   </select>
+                        </td>
+                       </tr>
+                      <?php } ?>
                     </table>
                   </div>
                 </div>

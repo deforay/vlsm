@@ -105,7 +105,10 @@ try {
           $platForm = explode("##",$_POST['testingPlatform']);
           $_POST['testingPlatform'] = $platForm[0];
      }
-     
+     //Sample type section
+    if(!isset($_POST['specimenType']) || trim($_POST['specimenType'])==""){
+       $_POST['specimenType'] = NULL;
+    }
      $vldata=array(
           'urgency'=>$_POST['urgency'],
           'vl_instance_id'=>$instanceId,
