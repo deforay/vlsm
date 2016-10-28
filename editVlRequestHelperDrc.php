@@ -94,9 +94,6 @@ try {
             $_POST['conservationTemperature'] = NULL;
             $_POST['durationOfConservation'] = NULL;
         }
-    }else{
-        $_POST['conservationTemperature'] = NULL;
-        $_POST['durationOfConservation'] = NULL;
     }
     //Set sample received date
     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
@@ -119,8 +116,6 @@ try {
         }else{
             $_POST['rejectionReason'] = NULL;
         }
-    }else{
-        $_POST['rejectionReason'] = NULL;
     }
     //Set sample testing date
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
@@ -164,12 +159,7 @@ try {
                   'vl_test_reason'=>$_POST['vlTestReason'],
                   'last_viral_load_result'=>$_POST['lastViralLoadResult'],
                   'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
-                  'sample_id'=>$_POST['specimenType'],
-                  'plasma_conservation_temperature'=>$_POST['conservationTemperature'],
-                  'duration_of_conservation'=>$_POST['durationOfConservation'],
                   'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
-                  'status'=>$_POST['status'],
-                  'sample_rejection_reason'=>$_POST['rejectionReason'],
                   'sample_code'=>$_POST['sampleCode'],
                   'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
@@ -182,6 +172,17 @@ try {
                   'modified_by'=>$_SESSION['userId'],
                   'modified_on'=>$general->getDateTime()
                 );
+    if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
+        $vldata['sample_id'] = $_POST['specimenType'];
+        $vldata['plasma_conservation_temperature'] = $_POST['conservationTemperature'];
+        $vldata['duration_of_conservation'] = $_POST['durationOfConservation'];
+    }
+    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
+        $vldata['status'] = $_POST['status'];
+        if(isset($_POST['rejectionReason'])){
+            $vldata['sample_rejection_reason'] = $_POST['rejectionReason'];
+        }
+    }
     //var_dump($vldata);die;
     $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
     $id = $db->update($tableName,$vldata);

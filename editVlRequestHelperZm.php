@@ -117,7 +117,6 @@ try {
           'lab_no'=>$_POST['labNo'],
           'lab_id'=>$_POST['labId'],
           'vl_test_platform'=>$_POST['testingPlatform'],
-          'sample_id'=>$_POST['specimenType'],
           'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
           'absolute_value'=>$_POST['vlResult'],
           'log_value'=>$_POST['vlLog'],
@@ -135,6 +134,9 @@ try {
           if($vloadResultUpdate){
             $vldata['result_coming_from']='manual';
             $vldata['file_name']='';
+          }
+          if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
+            $vldata['sample_id'] = $_POST['specimenType'];
           }
           //print_r($vldata);die;
           $db=$db->where('vl_sample_id',$_POST['treamentId']);

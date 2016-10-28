@@ -29,6 +29,13 @@
     //get vl test reason list
     $vlTestReasonQuery="SELECT * from r_vl_test_reasons where test_reason_status = 'active'";
     $vlTestReasonResult=$db->query($vlTestReasonQuery);
+    //global config
+    $cSampleQuery="SELECT * FROM global_config";
+    $cSampleResult=$db->query($cSampleQuery);
+    $arr = array();
+    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
+      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+    }
     ?>
     <style>
       .ui_tpicker_second_label {
@@ -261,7 +268,10 @@
                                     <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" style="width:30%;"/>
                                 </td>
                             </tr>
-                            <tr>
+                            <?php
+                            if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){
+                            ?>
+                              <tr>
                                 <td><label for="specimenType">Type d’échantillon </label></td>
                                 <td colspan="3">
                                   <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d’échantillon" onchange="checkSpecimenType();" style="width:30%;">
@@ -275,7 +285,8 @@
                                     ?>
                                   </select>
                                 </td>
-                            </tr>
+                              </tr>
+                            <?php } ?>
                             <tr class="plasmaElement" style="display:none;">
                                 <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
@@ -310,7 +321,10 @@
                                     <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de l’échantillon" style="width:30%;"/>
                                 </td>
                             </tr>
-                            <tr>
+                            <?php
+                            if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){
+                            ?>
+                              <tr>
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
@@ -319,7 +333,8 @@
                                       <option value="4">Echantillon rejeté</option>
                                     </select>
                                 </td>
-                            </tr>
+                              </tr>
+                            <?php } ?>
                             <tr class="rejectionReason" style="display:none;">
                                 <td><label for="rejectionReason">Motifs de rejet </label></td>
                                 <td>

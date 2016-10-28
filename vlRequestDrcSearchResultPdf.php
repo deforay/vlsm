@@ -295,7 +295,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date du prélèvement</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_no'].'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_code'].'</td>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;"></td>';
                     $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
