@@ -161,6 +161,8 @@ try {
                   'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
                   'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
                   'sample_code'=>$_POST['sampleCode'],
+                  'lab_no'=>$_POST['sampleCode'],
+                  'serial_no'=>$_POST['sampleCode'],
                   'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'result'=>$_POST['vlResult'],

@@ -193,6 +193,8 @@ try {
                   'status'=>$_POST['status'],
                   'sample_rejection_reason'=>$_POST['rejectionReason'],
                   'sample_code'=>$_POST['sampleCode'],
+                  'lab_no'=>$_POST['sampleCode'],
+                  'serial_no'=>$_POST['sampleCode'],
                   'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'result'=>$_POST['vlResult'],
