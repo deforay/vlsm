@@ -15,10 +15,10 @@ $result = $db->rawQuery($query);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1 class="fa fa-envelope"> Mail</h1>
+      <h1 class="fa fa-envelope"> Request E-mail</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Mail</li>
+        <li class="active">Request E-mail</li>
       </ol>
     </section>
 
