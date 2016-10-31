@@ -57,7 +57,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 	    <li><i class="fa fa-square" aria-hidden="true" style="color: #7d8388"></i> - Control</li>
 	    </ul>
             </div>
-	      <span><b style="color: #f03033;">Note:-</b>When you leave from this page,these records will be deleted.</span>
+	      <span><b style="color: #f03033;">Note:-</b>When you leave from this page, these temporary records will be deleted from the system.</span>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
