@@ -249,7 +249,6 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
             $message.='</tr>';
            }
         $message.='</table>';
-        echo $message;die;
     }
     
     $mail->Subject = $subject;
