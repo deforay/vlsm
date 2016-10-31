@@ -209,6 +209,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php }  if(isset($_SESSION['privileges']) && in_array("otherConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Email/SMS Configuration</a></li>
 		<?php } ?>
+        <li class="allMenu vlMailMenu"><a href="vlMail.php"><i class="fa fa-circle-o"></i> Mail</a></li>
 	      </ul>
 	    </li>
 	<?php }
