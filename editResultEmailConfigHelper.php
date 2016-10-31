@@ -5,13 +5,13 @@ include('./includes/MysqliDb.php');
 $tableName="other_config";
 try {
     $fieldValue = '';
-    if(isset($_POST['request_email_field'])){
-        $fieldValue = implode(',',$_POST['request_email_field']);
+    if(isset($_POST['result_email_field'])){
+        $fieldValue = implode(',',$_POST['result_email_field']);
     }
     $data=array('value'=>$fieldValue);
-    $db=$db->where('name','request_email_field');
+    $db=$db->where('name','result_email_field');
     $db->update($tableName,$data);
-    $_SESSION['alertMsg']="Request Email Config values updated successfully.";
+    $_SESSION['alertMsg']="Result Email Config values updated successfully.";
     header("location:otherConfig.php");
 }catch (Exception $exc) {
     error_log($exc->getMessage());
