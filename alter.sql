@@ -640,3 +640,6 @@ UPDATE `other_config` SET `display_name` = 'Email' WHERE `other_config`.`name` =
 
 --Pal 28-oct-2016
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Sample Type', 'sample_type', 'enabled'), ('Testing Status', 'testing_status', 'enabled');
+
+--Pal 31st-oct-2016
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlMail.php', 'Email');
