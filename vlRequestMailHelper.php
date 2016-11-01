@@ -3,6 +3,7 @@ ob_start();
 session_start();
 include('./includes/MysqliDb.php');
 require './includes/mail/PHPMailerAutoload.php';
+$tableName="vl_request_form";
 //get & set email details
 $geQuery="SELECT * FROM other_config";
 $geResult = $db->rawQuery($geQuery);
@@ -153,7 +154,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                $fValueResult = $db->rawQuery($fValueQuery);
                $fieldValue = '';
                if(isset($fValueResult) && count($fValueResult)>0){
-                    if($field ==  'vl_test_platform'){
+                    if($field ==  'vl_test_platform' || $field ==  'gender'){
                       $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                     }elseif($field ==  'result_reviewed_by'){
                       $fieldValue = $fValueResult[0]['reviewedBy'];
@@ -196,8 +197,26 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                error_log("Mailer Error: " . $mail->ErrorInfo);
                header('location:vlMail.php');
           }else{
-               $_SESSION['alertMsg']='Email sent successfully';
-               header('location:vlMail.php');
+               //Update request/result mail flag
+               if(isset($_POST['type']) && trim($_POST['type'])=="request"){
+                    for($s=0;$s<count($_POST['sample']);$s++){
+                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                         $sampleResult = $db->rawQuery($sampleQuery);
+                         $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+                         $db->update($tableName,array('request_mail_sent'=>'yes')); 
+                    }
+                 $_SESSION['alertMsg']='Email sent successfully';
+                 header('location:vlRequestMail.php');
+               }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
+                   for($s=0;$s<count($_POST['sample']);$s++){
+                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                         $sampleResult = $db->rawQuery($sampleQuery);
+                         $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+                         $db->update($tableName,array('result_mail_sent'=>'yes')); 
+                    }
+                 $_SESSION['alertMsg']='Email sent successfully';
+                 header('location:vlResultMail.php');
+               }
           }
      }
  }
