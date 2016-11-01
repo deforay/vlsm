@@ -222,6 +222,21 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                  header('location:vlResultMail.php');
                }
           }
+     }else{
+          if(isset($_POST['type']) && trim($_POST['type'])=="request"){
+             $_SESSION['alertMsg']='Unable to send mail. Please check the request fields.';  
+             header('location:vlRequestMail.php');
+          }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
+             $_SESSION['alertMsg']='Unable to send mail. Please check the result fields.';  
+             header('location:vlResultMail.php');
+          }
+     }
+ }else{
+     $_SESSION['alertMsg']='Unable to send mail. Please try later.';
+     if(isset($_POST['type']) && trim($_POST['type'])=="request"){  
+          header('location:vlRequestMail.php');
+     }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){ 
+          header('location:vlResultMail.php');
      }
  }
 ?>
