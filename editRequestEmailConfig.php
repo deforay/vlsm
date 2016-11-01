@@ -94,7 +94,7 @@ if(isset($requestEmailConfigResult) && trim($requestEmailConfigResult[0]['value'
                                 <option value="Log Value" <?php echo(in_array("Log Value",$requestArr)?"selected='selected'":""); ?>>Log Value</option>
                                 <option value="If no result" <?php echo(in_array("If no result",$requestArr)?"selected='selected'":""); ?>>If no result</option>
                                 <option value="Rejection Reason" <?php echo(in_array("Rejection Reason",$requestArr)?"selected='selected'":""); ?>>Rejection Reason</option>
-                                <option value="Reviewed By" <?php echo(in_array("Reviewed B",$requestArr)?"selected='selected'":""); ?>>Reviewed By</option>
+                                <option value="Reviewed By" <?php echo(in_array("Reviewed By",$requestArr)?"selected='selected'":""); ?>>Reviewed By</option>
                                 <option value="Approved By" <?php echo(in_array("Approved By",$requestArr)?"selected='selected'":""); ?>>Approved By</option>
                                 <option value="Laboratory Scientist Comments" <?php echo(in_array("Laboratory Scientist Comments",$requestArr)?"selected='selected'":""); ?>>Laboratory Scientist Comments</option>
                             </select>
