@@ -27,7 +27,7 @@ $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
 if($_POST['id']!=''){
-  $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id='".$_POST['id']."'";
+  $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
 }else{
   $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
 }

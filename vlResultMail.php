@@ -2,8 +2,11 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
+$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormResult = $db->rawQuery($configFormQuery);
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='".$configFormResult[0]['value']."' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
+
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
@@ -108,7 +111,8 @@ $result = $db->rawQuery($query);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-				<input type="hidden" id="type" name="type" value="result"/>
+		<input type="hidden" id="type" name="type" value="result"/>
+                <input type="hidden" name="pdfFileName" id="pdfFileName"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="otherConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -173,6 +177,23 @@ $result = $db->rawQuery($query);
      });
    });
   
+  function convertSearchResultToPdf(){
+    $.blockUI();
+    var sampleId = $("#sample").val();
+    var id = sampleId.toString();
+    $.post("<?php echo($configFormResult[0]['value'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      $.unblockUI();
+	      alert('Something went wrong.Please try again later');
+	  }else{
+            $.blockUI();
+              $("#pdfFileName").val(data);
+	      document.getElementById('mailForm').submit();
+	  }
+      });
+  }
+  
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'mailForm'
@@ -180,7 +201,8 @@ $result = $db->rawQuery($query);
     
     if(flag){
         $.blockUI();
-      document.getElementById('mailForm').submit();
+        convertSearchResultToPdf()
+      
     }
   }
 </script>
