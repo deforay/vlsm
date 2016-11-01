@@ -86,7 +86,7 @@ if(isset($requestEmailConfigResult) && trim($requestEmailConfigResult[0]['value'
                                 <option value="Viral Load Log" <?php echo(in_array("Viral Load Log",$requestArr)?"selected='selected'":""); ?>>Viral Load Log</option>
                                 <option value="Reason For VL Test" <?php echo(in_array("Reason For VL Test",$requestArr)?"selected='selected'":""); ?>>Reason For VL Test</option>
                                 <option value="Lab Name" <?php echo(in_array("Lab Name",$requestArr)?"selected='selected'":""); ?>>Lab Name</option>
-                                <option value="LAB No" <?php echo(in_array("lab_no",$requestArr)?"selected='selected'":""); ?>>LAB No</option>
+                                <option value="LAB No" <?php echo(in_array("LAB No",$requestArr)?"selected='selected'":""); ?>>LAB No</option>
                                 <option value="VL Testing Platform" <?php echo(in_array("VL Testing Platform",$requestArr)?"selected='selected'":""); ?>>VL Testing Platform</option>
                                 <option value="Specimen type" <?php echo(in_array("Specimen type",$requestArr)?"selected='selected'":""); ?>>Specimen type</option>
                                 <option value="Sample Testing Date" <?php echo(in_array("Sample Testing Date",$requestArr)?"selected='selected'":""); ?>>Sample Testing Date</option>
