@@ -195,7 +195,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           if (!$mail->send()){
                $_SESSION['alertMsg']='Unable to send mail. Please try later.';
                error_log("Mailer Error: " . $mail->ErrorInfo);
-               header('location:vlMail.php');
+               if(isset($_POST['type']) && trim($_POST['type'])=="request"){
+                  header('location:vlRequestMail.php');
+               }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
+                  header('location:vlResultMail.php');
+               }
           }else{
                //Update request/result mail flag
                if(isset($_POST['type']) && trim($_POST['type'])=="request"){
