@@ -7,9 +7,9 @@ $configResult = $db->rawQuery($configQuery);
 if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   $configResult[0]['value'] = 0;
 }
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND result_mail_sent ='no' ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =2 AND result_mail_sent ='no' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
-$sTypeQuery="SELECT * FROM r_sample_type where form_identification=3";
+$sTypeQuery="SELECT * FROM r_sample_type where form_identification=2";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 $facilityQuery="SELECT * FROM facility_details where status='active'";
 $facilityResult = $db->rawQuery($facilityQuery);
@@ -179,9 +179,11 @@ $facilityResult = $db->rawQuery($facilityQuery);
                             <select id="sample" name="sample[]" multiple="multiple" class="search isRequired" title="Please select sample(s)">
                                 <?php
                                 foreach($result as $sample){
+                                   if(trim($sample['sample_code'])!= ''){
                                   ?>
-                                  <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code']);?></option>
+                                   <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code']);?></option>
                                   <?php
+                                   }
                                 }
                                 ?>
                             </select>
@@ -314,7 +316,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
       var urgent = $('input[name=urgency]:checked').val();
       var sampleMailSentStatus = $('#sampleMailSentStatus').val();
       var type = $('#type').val();
-      $.post("getSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,mailSentStatus:sampleMailSentStatus,type:type},
+      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,mailSentStatus:sampleMailSentStatus,type:type},
       function(data){
         if($.trim(data) !== ""){
           $("#sampleDetails").html(data);

@@ -2,18 +2,17 @@
 include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
-$facilityName = $_POST['facility'];
-$sampleType = $_POST['sType'];
+$fName = $_POST['fName'];
+$sample = $_POST['sName'];
 $gender = $_POST['gender'];
 $pregnant = $_POST['pregnant'];
 $urgent = $_POST['urgent'];
-$mailSentStatus = $_POST['mailSentStatus'];
-$type = $_POST['type'];
-//print_r($_POST);die;
+
 $start_date = '';
 $end_date = '';
 if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
    $s_c_date = explode("to", $_POST['sampleCollectionDate']);
+   //print_r($s_c_date);die;
    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
      $start_date = $general->dateFormat(trim($s_c_date[0]));
    }
@@ -22,58 +21,72 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 
-if(trim($facilityName)=='' && trim($sampleType)== '' && trim($gender)=='' && trim($pregnant)=='' && trim($urgent)=='' && trim($_POST['sampleCollectionDate'])=='' && trim($mailSentStatus)==''){
-    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id=''";
+if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']=='' && $gender=='' && $pregnant=='' && $urgent==''){
+    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id=''";
 }else{
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='')";
-   if(trim($facilityName)!=''){
-       $query = $query." AND vl.facility_id IN (".implode(',',$facilityName).")";
-   }
-   if(trim($sampleType)!=''){
-       $query = $query." AND vl.sample_id='".$sampleType."'";
-   }if(trim($gender)!=''){
-       $query = $query." AND vl.gender='".$gender."'";
-   }if(trim($pregnant)!=''){
-       $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
-   }if(trim($urgent)!=''){
-       $query = $query." AND vl.urgency='".$urgent."'";
-   }if(trim($mailSentStatus)!=''){
-      if(trim($type)== 'request'){
-        $query = $query." AND vl.	request_mail_sent='".$mailSentStatus."'";
-      }elseif(trim($type)== 'result'){
-         $query = $query." AND vl.	result_mail_sent='".$mailSentStatus."'";
-      }
-   }
-   
-   $query." ORDER BY f.facility_name ASC";
-   if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-       if (trim($start_date) == trim($end_date)) {
-           $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
-       }else{
-          $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
-       }
-   }
+if(isset($_POST['sCode']) && $_POST['sCode']!=''){
+    $ids = implode(",",$_POST['sCode']);
+    $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id NOT IN (".$ids.") AND batch_id is NULL";
+}else{
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL";
+}
+if($fName!=''){
+    $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
+}
+if($sample!=''){
+    $query = $query." AND vl.sample_id='".$sample."'";
+}if($gender!=''){
+    $query = $query." AND vl.gender='".$gender."'";
+}if($pregnant!=''){
+    $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
+}if($urgent!=''){
+    $query = $query." AND vl.urgency='".$urgent."'";
+}
+
+$query." ORDER BY f.facility_name ASC";
+
+if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+    if (trim($start_date) == trim($end_date)) {
+        $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
+    }else{
+       $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
+    }
+}
 }
 $result = $db->rawQuery($query);
+$sResult = array();
+if($_POST['sCode']!=''){
+    $ids = implode(",",$_POST['sCode']);
+    $sQuery="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id IN (".$ids.") ";
+    $sResult = $db->rawQuery($sQuery);
+}else{
+   $_POST['sCode'] = array();
+}
+$merge = array_merge($sResult, $result);
 ?>
-<div class="col-md-9">
-  <div class="form-group">
-    <label for="sample" class="col-lg-3 control-label">Choose Sample(s) <span class="mandatory">*</span></label>
-    <div class="col-lg-9">
-       <div style="width:100%;margin:0 auto;clear:both;">
-        <a href="#" id="select-all-sample" style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href="#" id="deselect-all-sample" style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
-        </div><br/><br/>
-        <select id="sample" name="sample[]" multiple="multiple" class="search isRequired" title="Please select sample(s)">
-            <?php
-            foreach($result as $sample){
-              ?>
-              <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code']);?></option>
-              <?php
+<div class="col-md-8">
+<div class="form-group">
+    <div class="col-md-12">
+      <div class="col-md-12">
+         <div style="width:60%;margin:0 auto;clear:both;">
+          <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+          </div><br/><br/>
+        <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
+        <?php
+        foreach($merge as $sample){
+            $selected = '';
+            if (in_array($sample['vl_sample_id'], $_POST['sCode'])){
+              $selected = "selected=selected";
             }
-            ?>
-        </select>
+          ?>
+          <option value="<?php echo $sample['vl_sample_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
+          <?php
+        }
+        ?>
+      </select>
+      </div>
     </div>
-   </div>
+</div>
 </div>
 <script>
     $(document).ready(function() {
@@ -112,12 +125,12 @@ $result = $db->rawQuery($query);
           this.qs2.cache();
         }
       });
-      $('#select-all-sample').click(function(){
-        $('#sample').multiSelect('select_all');
+      $('#select-all-samplecode').click(function(){
+        $('#sampleCode').multiSelect('select_all');
         return false;
       });
-      $('#deselect-all-sample').click(function(){
-        $('#sample').multiSelect('deselect_all');
+      $('#deselect-all-samplecode').click(function(){
+        $('#sampleCode').multiSelect('deselect_all');
         return false;
       });
    });
