@@ -641,7 +641,10 @@ UPDATE `other_config` SET `display_name` = 'Email' WHERE `other_config`.`name` =
 --Pal 28-oct-2016
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Sample Type', 'sample_type', 'enabled'), ('Testing Status', 'testing_status', 'enabled');
 
---Pal 31st-oct-2016
+--Pal 31-oct-2016
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlMail.php', 'Request Email');
 -- Amit 31 Oct 2016
 ALTER TABLE `global_config` ADD PRIMARY KEY(`name`);
+
+--Pal 1st-Nov-2016
+ALTER TABLE `vl_request_form` CHANGE `facility_id` `facility_id` INT(11) NULL DEFAULT NULL, CHANGE `sample_id` `sample_id` INT(11) NULL DEFAULT NULL;
