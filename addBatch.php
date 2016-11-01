@@ -61,67 +61,67 @@ $batchResult=$db->query($batchQuery);
         <div class="box-header with-border">
           <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
         </div>
-	<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
-		<tr>
-		  <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
-		  <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
-		    </td>
-		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
-		    <td>
-		      <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-			<option value=""> -- Select -- </option>
-			  <?php
-			  foreach($sResult as $type){
-			   ?>
-			   <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
-			   <?php
-			  }
-			  ?>
-			</select>
-		    </td>
-		</tr>
-		<tr>
-		   <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
-		    <td>
-		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name"  multiple="multiple">
-			  <!--<option value="">-- Select --</option>-->
-			    <?php
-			    foreach($fResult as $name){
-			     ?>
-			     <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
-			     <?php
-			    }
-			    ?>
-		      </select>
-		    </td>
-		    <td><b>Gender&nbsp;:</b></td>
-		    <td>
-		      <select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
-			<option value=""> -- Select -- </option>
-			<option value="male">Male</option>
-			<option value="female">Female</option>
-			<option value="not_recorded">Not Recorded</option>
-		      </select>
-		    </td>
-		</tr>
-		<tr>
-		  <td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
-		  <td class="showPregnant">
-		    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
-		    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
-		  </td>
-		  <td class=""><b>Urgency&nbsp;:</b></td>
-		  <td class="">
-		    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
-		    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
-		  </td>
-		</tr>
-		<tr>
-		  <td>&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
-		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		    </td>
-		</tr>
+				<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
+					<tr>
+						<td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
+						<td>
+								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
+							</td>
+							<td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+							<td>
+								<select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
+						<option value=""> -- Select -- </option>
+							<?php
+							foreach($sResult as $type){
+							 ?>
+							 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
+							 <?php
+							}
+							?>
+						</select>
+							</td>
+					</tr>
+					<tr>
+						 <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+							<td>
+								<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name"  multiple="multiple">
+							<!--<option value="">-- Select --</option>-->
+								<?php
+								foreach($fResult as $name){
+								 ?>
+								 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+								 <?php
+								}
+								?>
+								</select>
+							</td>
+							<td><b>Gender&nbsp;:</b></td>
+							<td>
+								<select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
+						<option value=""> -- Select -- </option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+						<option value="not_recorded">Not Recorded</option>
+								</select>
+							</td>
+					</tr>
+					<tr>
+						<td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
+						<td class="showPregnant">
+							<input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
+							<input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
+						</td>
+						<td class=""><b>Urgency&nbsp;:</b></td>
+						<td class="">
+							<input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
+							<input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
+							&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+							</td>
+					</tr>
 	    </table>
         <!-- /.box-header -->
         <div class="box-body">
@@ -189,7 +189,7 @@ $batchResult=$db->query($batchQuery);
   var startDate = "";
   var endDate = "";
   $(document).ready(function() {
-	  $("#facilityName").select2();
+	   $("#facilityName").select2();
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -310,9 +310,9 @@ $batchResult=$db->query($batchQuery);
       var gender= $("#gender").val();
       var prg =   $("input:radio[name=pregnant]");
       if(prg[0].checked==false && prg[1].checked==false){
-	pregnant = '';
+	       pregnant = '';
       }else{
-	pregnant = $('input[name=pregnant]:checked').val();
+	       pregnant = $('input[name=pregnant]:checked').val();
       }
       var urgent = $('input[name=urgency]:checked').val();
       $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
