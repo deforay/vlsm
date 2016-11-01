@@ -32,7 +32,7 @@ $result = $db->rawQuery($query);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="mailConfigHelper.php">
+            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="vlRequestMailHelper.php">
               <div class="box-body">
                 <div class="row">
                     <div class="col-md-9">
