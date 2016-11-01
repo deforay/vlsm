@@ -648,3 +648,9 @@ ALTER TABLE `global_config` ADD PRIMARY KEY(`name`);
 
 --Pal 1st-Nov-2016
 ALTER TABLE `vl_request_form` CHANGE `facility_id` `facility_id` INT(11) NULL DEFAULT NULL, CHANGE `sample_id` `sample_id` INT(11) NULL DEFAULT NULL;
+
+UPDATE `privileges` SET `privilege_name` = 'vlRequestMail.php', `display_name` = 'Email Test Request' WHERE `privileges`.`privilege_id` = 44;
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlResultMail.php', 'Email Test Result');
+
+ALTER TABLE `vl_request_form` ADD `request_mail_sent` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `date_result_printed`, ADD `result_mail_sent` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `request_mail_sent`;

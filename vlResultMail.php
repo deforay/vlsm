@@ -15,10 +15,10 @@ $result = $db->rawQuery($query);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1 class="fa fa-envelope"> Request E-mail</h1>
+      <h1 class="fa fa-envelope"> E-mail Test Result</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Request E-mail</li>
+        <li class="active">E-mail Test Result</li>
       </ol>
     </section>
 
@@ -32,22 +32,8 @@ $result = $db->rawQuery($query);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="mailConfigHelper.php">
+            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="vlRequestMailHelper.php">
               <div class="box-body">
-                 <div class="row">
-                    <div class="col-md-9">
-                    <div class="form-group">
-                        <label for="type" class="col-lg-3 control-label">Choose Type <span class="mandatory">*</span></label>
-                        <div class="col-lg-9">
-                           <select id="type" name="type" class="form-control isRequired" title="Please select type">
-                            <option value="">Select</option>
-                            <option value="request">Request</option>
-                            <option value="result">Result</option>
-                           </select>
-                        </div>
-                    </div>
-                  </div>
-                </div>
                 <div class="row">
                     <div class="col-md-9">
                     <div class="form-group">
@@ -122,6 +108,7 @@ $result = $db->rawQuery($query);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+				<input type="hidden" id="type" name="type" value="result"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="otherConfig.php" class="btn btn-default"> Cancel</a>
               </div>

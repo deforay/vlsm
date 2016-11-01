@@ -141,7 +141,7 @@
                             <tr>
                                 <td style="width:14%;"><label for="">Date de naissance </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();" style="width:100%;"/>
+                                    <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();checkARTInitiationDate();" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
@@ -170,7 +170,7 @@
                                 </td>
                                 <td><label for="">Date du début des ARV </label></td>
                                 <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" style="width:40%;"/> (Jour/Mois/Année) </span>
+                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/Année) </span>
                                 </td>
                             </tr>
                             <tr>
@@ -251,7 +251,7 @@
                             <tr>
                                 <td><label for="">Date dernière charge virale (demande) </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" onchange="checkLastVLTestDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -265,7 +265,7 @@
                             <tr>
                                 <td style="width:20%;"><label for="">Date du prélèvement </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
@@ -318,7 +318,7 @@
                             <tr>
                                 <td style="width:20%;"><label for="">Date de réception de l’échantillon </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de l’échantillon" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de l’échantillon" onchange="checkSampleReceviedDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
@@ -388,7 +388,7 @@
                             <tr>
                                 <td><label for="">Date de remise du résultat </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" onchange="checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                         </table>
@@ -573,6 +573,132 @@
         $("#ageInMonths").val("");
       }
       $("#ageInYears").val((diff.getUTCFullYear() - 1970 > 0)? (diff.getUTCFullYear() - 1970) : ''); // Gives difference as year
+    }
+    
+    function checkSampleReceviedDate(){
+      var sampleCollectionDate = $("#sampleCollectionDate").val();
+      var sampleReceivedDate = $("#sampleReceivedDate").val();
+      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= '') {
+        //Set sample coll. datetime
+        splitSampleCollDateTime = sampleCollectionDate.split(" ");
+        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
+        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
+        var monthDigit = sampleCollOn.getMonth();
+        var smplCollYear = splitSampleCollDate[2];
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
+        var smplCollDate = splitSampleCollDate[0];
+        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
+        //Set sample rece. datetime
+        splitSampleReceivedDateTime = sampleReceivedDate.split(" ");
+        splitSampleReceivedDate = splitSampleReceivedDateTime[0].split("-");
+        var sampleReceivedOn = new Date(splitSampleReceivedDate[1] + splitSampleReceivedDate[2]+", "+splitSampleReceivedDate[0]);
+        var monthDigit = sampleReceivedOn.getMonth();
+        var smplReceivedYear = splitSampleReceivedDate[2];
+        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplReceivedMonth = (smplReceivedMonth<10) ? '0'+smplReceivedMonth: smplReceivedMonth;
+        var smplReceivedDate = splitSampleReceivedDate[0];
+        sampleReceivedDateTime = smplReceivedYear+"-"+smplReceivedMonth+"-"+smplReceivedDate+" "+splitSampleReceivedDateTime[1]+":00";
+        //Check diff
+        if(moment(sampleCollDateTime).diff(moment(sampleReceivedDateTime)) > 0) {
+          alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
+          $("#sampleReceivedDate").val("");
+        }
+      }
+    }
+    
+    function checkSampleTestingDate(){
+      var sampleCollectionDate = $("#sampleCollectionDate").val();
+      var sampleTestingDate = $("#sampleTestingDateAtLab").val();
+      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= '') {
+        //Set sample coll. date
+        splitSampleCollDateTime = sampleCollectionDate.split(" ");
+        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
+        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
+        var monthDigit = sampleCollOn.getMonth();
+        var smplCollYear = splitSampleCollDate[2];
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
+        var smplCollDate = splitSampleCollDate[0];
+        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
+        //Set sample testing date
+        splitSampleTestedDateTime = sampleTestingDate.split(" ");
+        splitSampleTestedDate = splitSampleTestedDateTime[0].split("-");
+        var sampleTestingOn = new Date(splitSampleTestedDate[1] + splitSampleTestedDate[2]+", "+splitSampleTestedDate[0]);
+        var monthDigit = sampleTestingOn.getMonth();
+        var smplTestingYear = splitSampleTestedDate[2];
+        var smplTestingMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
+        var smplTestingDate = splitSampleTestedDate[0];
+        sampleTestingAtLabDateTime = smplTestingYear+"-"+smplTestingMonth+"-"+smplTestingDate+" "+splitSampleTestedDateTime[1]+":00";
+        //Check diff
+        if(moment(sampleCollDateTime).diff(moment(sampleTestingAtLabDateTime)) > 0) {
+          alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
+          $("#sampleTestingDateAtLab").val("");
+        }
+      }
+    }
+    
+    function checkARTInitiationDate(){
+      var dob = $("#dob").val();
+      var artInitiationDate = $("#dateOfArtInitiation").val();
+      if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
+        //Set DOB date
+        splitDob = dob.split("-");
+        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
+        var monthDigit = dobDate.getMonth();
+        var dobYear = splitDob[2];
+        var dobMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+        var dobDate = splitDob[0];
+        dobDate = dobYear+"-"+dobMonth+"-"+dobDate;
+        //Set ART initiation date
+        splitArtIniDate = artInitiationDate.split("-");
+        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
+        var monthDigit = artInigOn.getMonth();
+        var artIniYear = splitArtIniDate[2];
+        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
+        var artIniDate = splitArtIniDate[0];
+        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
+        //Check diff
+        if(moment(dobDate).isAfter(artIniDate)) {
+          alert("La date d'ouverture de l'ART ne peut pas être antérieure à!");
+          $("#dateOfArtInitiation").val("");
+        }
+      }
+    }
+    
+    function checkLastVLTestDate(){
+      var artInitiationDate = $("#dateOfArtInitiation").val();
+      var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
+      if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
+        //Set ART initiation date
+        splitArtIniDate = artInitiationDate.split("-");
+        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
+        var monthDigit = artInigOn.getMonth();
+        var artIniYear = splitArtIniDate[2];
+        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
+        var artIniDate = splitArtIniDate[0];
+        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
+        //Set Last VL Test date
+        splitLastVLTestDate = dateOfLastVLTest.split("-");
+        var lastVLTestOn = new Date(splitLastVLTestDate[1] + splitLastVLTestDate[2]+", "+splitLastVLTestDate[0]);
+        var monthDigit = lastVLTestOn.getMonth();
+        var lastVLTestYear = splitLastVLTestDate[2];
+        var lastVLTestMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
+        var lastVLTestDate = splitLastVLTestDate[0];
+        lastVLTestDate = lastVLTestYear+"-"+lastVLTestMonth+"-"+lastVLTestDate;
+        console.log(artIniDate);
+        console.log(lastVLTestDate);
+        //Check diff
+        if(moment(artIniDate).isAfter(lastVLTestDate)) {
+          alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
+          $("#lastViralLoadTestDate").val("");
+        }
+      }
     }
     
     function validateNow(){

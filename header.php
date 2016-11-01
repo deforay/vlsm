@@ -209,7 +209,6 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php }  if(isset($_SESSION['privileges']) && in_array("otherConfig.php", $_SESSION['privileges'])){ ?>
 		<li class="allMenu otherConfigMenu"><a href="otherConfig.php"><i class="fa fa-circle-o"></i> Email/SMS Configuration</a></li>
 		<?php } ?>
-        <li class="allMenu vlMailMenu"><a href="vlMail.php"><i class="fa fa-circle-o"></i> Request E-mail</a></li>
 	      </ul>
 	    </li>
 	<?php }
@@ -256,8 +255,9 @@ $formConfigResult=$db->query($formConfigQuery);
                 <li class="allMenu vlTestResultMenu"><a href="vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultApprovalMenu"><a href="vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
-                <li class="allMenu"><a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Email Results</a></li>
-		<?php }  ?>
+		<?php }  if(isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])){ ?>
+               <li class="allMenu vlResultMailMenu"><a href="vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+        <?php } ?>
             </ul>
         </li>
         <?php }
