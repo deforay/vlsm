@@ -16,8 +16,6 @@ $facilityResult = $db->rawQuery($facilityQuery);
 
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='".$configFormResult[0]['value']."' ORDER BY f.facility_name ASC";
-$result = $db->rawQuery($query);
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
