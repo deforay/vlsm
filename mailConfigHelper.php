@@ -57,16 +57,16 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
          $filedGroup = explode(",",$requestResult[0]['value']);
          $message.='<table style="width;100%;border:1px solid #333;" cellspacing="0" cellpadding="2">';
            $message.='<tr>';
-            $message.='<td style="border:1px solid #333;">Sample</td>';
+            $message.='<td style="border:1px solid #333;"><strong>Sample</strong></td>';
             for($f=0;$f<count($filedGroup);$f++){
-              $message.='<td style="border:1px solid #333;">'.$filedGroup[$f].'</td>';
+              $message.='<td style="border:1px solid #333;"><strong>'.$filedGroup[$f].'</strong></td>';
             }
            $message.='</tr>';
            for($s=0;$s<count($_POST['sample']);$s++){
             $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
             $sampleResult = $db->rawQuery($sampleQuery);
             $message.='<tr>';
-            $message.='<td style="border:1px solid #333;">'.ucwords($sampleResult[0]['sample_code']).'</td>';
+            $message.='<td style="border:1px solid #333;"><strong>'.ucwords($sampleResult[0]['sample_code']).'</strong></td>';
             for($f=0;$f<count($filedGroup);$f++){
               if($filedGroup[$f] == "Form Serial No"){
                     $field = 'serial_no';
