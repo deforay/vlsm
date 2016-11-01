@@ -3,6 +3,7 @@ ob_start();
 session_start();
 include('./includes/MysqliDb.php');
 require './includes/mail/PHPMailerAutoload.php';
+include ('./includes/tcpdf/tcpdf.php');
 $tableName="vl_request_form";
 //get & set email details
 $geQuery="SELECT * FROM other_config";
@@ -12,6 +13,78 @@ foreach($geResult as $row){
      $mailconf[$row['name']] = $row['value'];
 }
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
+     //pdf generation
+     // create new PDF document
+class MYPDF extends TCPDF {
+
+    //Page header
+    public function Header() {
+        // Logo
+        //$image_file = K_PATH_IMAGES.'logo_example.jpg';
+        //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        // Set font
+        //$this->SetFont('helvetica', 'B', 20);
+        // Title
+        //$this->Cell(0, 15, 'VL Request Form Report', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+    }
+
+    // Page footer
+    public function Footer() {
+        // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
+        $this->SetFont('helvetica', '', 8);
+        // Page number
+        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+    }
+}
+$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+//$pdf->SetAuthor('Saravanan');
+$pdf->SetTitle('Vl Request Result Form');
+//$pdf->SetSubject('TCPDF Tutorial');
+//$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+// set default header data
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+//$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_RIGHT);
+//$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set some language-dependent strings (optional)
+//if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+//    require_once(dirname(__FILE__).'/lang/eng.php');
+//    $pdf->setLanguageArray($l);
+//}
+
+// ---------------------------------------------------------
+
+// set font
+$pdf->SetFont('helvetica', '', 18);
+
+$pathFront=realpath('./uploads');
+//$pdf = new TCPDF();
+$pdf->AddPage();
+
+//pdf end
+     
     //Create a new PHPMailer instance
     $mail = new PHPMailer();
     //Tell PHPMailer to use SMTP
@@ -56,18 +129,18 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
      $filedGroup = array();
      if(isset($requestResult) && trim($requestResult[0]['value'])!= ''){
          $filedGroup = explode(",",$requestResult[0]['value']);
-         $message.='<table style="width;100%;border:1px solid #333;" cellspacing="0" cellpadding="2">';
-           $message.='<tr>';
-            $message.='<td style="border:1px solid #333;"><strong>Sample</strong></td>';
+         $message1.='<table style="width;100%;border:1px solid #333;" cellspacing="0" cellpadding="2">';
+           $message1.='<tr>';
+            $message1.='<td style="border:1px solid #333;"><strong>Sample</strong></td>';
             for($f=0;$f<count($filedGroup);$f++){
-              $message.='<td style="border:1px solid #333;"><strong>'.$filedGroup[$f].'</strong></td>';
+              $message1.='<td style="border:1px solid #333;"><strong>'.$filedGroup[$f].'</strong></td>';
             }
-           $message.='</tr>';
+           $message1.='</tr>';
            for($s=0;$s<count($_POST['sample']);$s++){
-            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
+            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
             $sampleResult = $db->rawQuery($sampleQuery);
-            $message.='<tr>';
-            $message.='<td style="border:1px solid #333;"><strong>'.ucwords($sampleResult[0]['sample_code']).'</strong></td>';
+            $message1.='<tr>';
+            $message1.='<td style="border:1px solid #333;"><strong>'.ucwords($sampleResult[0]['sample_code']).'</strong></td>';
             for($f=0;$f<count($filedGroup);$f++){
               if($filedGroup[$f] == "Form Serial No"){
                     $field = 'serial_no';
@@ -145,11 +218,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                     $field = 'comments';
                }
                if($field ==  'result_reviewed_by'){
-                    $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }elseif($field ==  'result_approved_by'){
-                    $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }else{
-                 $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                 $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }
                $fValueResult = $db->rawQuery($fValueQuery);
                $fieldValue = '';
@@ -164,11 +237,22 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                       $fieldValue = $fValueResult[0][$field];
                     }
                }
-              $message.='<td style="border:1px solid #333;">'.$fieldValue.'</td>';
+              $message1.='<td style="border:1px solid #333;">'.$fieldValue.'</td>';
             }
-            $message.='</tr>';
+            $message1.='</tr>';
            }
-          $message.='</table>';
+          $message1.='</table>';
+          $pdf->writeHTML($message1);
+          $pdf->lastPage();
+          $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
+          $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
+
+          //pdf file attach
+          $file_to_attach = 'uploads/'.$filename;
+          $mail->AddAttachment($file_to_attach);
+          $file_to_attach1 = 'uploads/'.$_POST['pdfFileName'];
+          $mail->AddAttachment($file_to_attach1);
+          
           $mail->Subject = $subject;
           //Set To EmailId(s)
           if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= ''){
@@ -204,7 +288,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                //Update request/result mail flag
                if(isset($_POST['type']) && trim($_POST['type'])=="request"){
                     for($s=0;$s<count($_POST['sample']);$s++){
-                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                          $sampleResult = $db->rawQuery($sampleQuery);
                          $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
                          $db->update($tableName,array('request_mail_sent'=>'yes')); 
@@ -213,7 +297,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                  header('location:vlRequestMail.php');
                }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
                    for($s=0;$s<count($_POST['sample']);$s++){
-                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                          $sampleResult = $db->rawQuery($sampleQuery);
                          $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
                          $db->update($tableName,array('result_mail_sent'=>'yes')); 
