@@ -12,7 +12,7 @@ $geQuery="SELECT * FROM other_config";
 $geResult = $db->rawQuery($geQuery);
 $mailconf = array();
 foreach($geResult as $row){
-     $mailconf[$row['name']] = $row['value'];
+   $mailconf[$row['name']] = $row['value'];
 }
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
      $requestQuery="SELECT * FROM other_config WHERE name='request_email_field'";
@@ -192,7 +192,8 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           $filename = '';
           $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
           $filename = 'vl-request-mail' . date('d-M-Y-H-i-s') . '.xls';
-          $writer->save("./temporary". DIRECTORY_SEPARATOR . $filename);
+          $pathFront=realpath('./temporary');
+          $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
           //Excel code end
           //Mail code start
           //Create a new PHPMailer instance
@@ -225,10 +226,6 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           if(isset($_POST['subject']) && trim($_POST['subject'])!=""){
                $subject=$_POST['subject'];
           }
-          $message='';
-          if(isset($_POST['message']) && trim($_POST['message'])!=""){
-             $message =ucfirst($_POST['message']);
-          }
           $mail->Subject = $subject;
           //Set To EmailId(s)
           if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= ''){
@@ -251,8 +248,12 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                  $mail->AddBCC($xplodBcc[$bcc]);
               }
           }
-          $file_to_attach = "temporary". DIRECTORY_SEPARATOR . $filename;
+          $file_to_attach = $pathFront. DIRECTORY_SEPARATOR . $filename;
           $mail->AddAttachment($file_to_attach);
+          $message='';
+          if(isset($_POST['message']) && trim($_POST['message'])!=""){
+             $message =ucfirst($_POST['message']);
+          }
           $mail->msgHTML($message);
           if ($mail->send()){
                 //Update request mail sent flag

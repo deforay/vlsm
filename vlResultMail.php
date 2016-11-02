@@ -159,7 +159,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                 </td>
                             </tr>
                             <tr>
-                                <td class=""><b>Sample Mail Sent Status&nbsp;:</b></td>
+                                <td class=""><b>Mail Sent Status&nbsp;:</b></td>
                                 <td colspan="3">
                                     <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:50%;">
                                             <option value="no">Samples Not yet Mailed</option>
@@ -202,8 +202,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-		<input type="hidden" id="type" name="type" value="result"/>
-                <input type="hidden" name="pdfFileName" id="pdfFileName"/>
+		            <input type="hidden" id="type" name="type" value="result"/>
+                <input type="hidden" name="pdfFile" id="pdfFile"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="otherConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -252,7 +252,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
        selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
        selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
        afterInit: function(ms){
-	 var that = this,
+	    var that = this,
 	     $selectableSearch = that.$selectableUl.prev(),
 	     $selectionSearch = that.$selectionUl.prev(),
 	     selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
@@ -336,18 +336,18 @@ $facilityResult = $db->rawQuery($facilityQuery);
   
   function convertSearchResultToPdf(){
     $.blockUI();
-    var sampleId = $("#sample").val();
-    var id = sampleId.toString();
+    var sample = $("#sample").val();
+    var id = sample.toString();
     $.post("<?php echo($arr['vl_form'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id},
       function(data){
-	  if(data == "" || data == null || data == undefined){
-	      $.unblockUI();
-	      alert('Something went wrong.Please try again later');
-	  }else{
-            $.blockUI();
-              $("#pdfFileName").val(data);
-	      document.getElementById('mailForm').submit();
-	  }
+				if(data === "" || data === null || data === undefined){
+						$.unblockUI();
+						alert('Something went wrong.Please try again later');
+				}else{
+						$.blockUI();
+						$("#pdfFile").val(data);
+						document.getElementById('mailForm').submit();
+				}
       });
   }
   
@@ -358,8 +358,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
     
     if(flag){
         $.blockUI();
-        convertSearchResultToPdf()
-      
+        convertSearchResultToPdf();
     }
   }
 </script>
