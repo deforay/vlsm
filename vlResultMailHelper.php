@@ -2,10 +2,8 @@
 ob_start();
 session_start();
 include('./includes/MysqliDb.php');
-include ('./includes/PHPExcel.php');
-include('General.php');
 require './includes/mail/PHPMailerAutoload.php';
-$general=new Deforay_Commons_General();
+include ('./includes/tcpdf/tcpdf.php');
 $tableName="vl_request_form";
 //get & set email details
 $geQuery="SELECT * FROM other_config";
@@ -15,60 +13,132 @@ foreach($geResult as $row){
      $mailconf[$row['name']] = $row['value'];
 }
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
-     $requestQuery="SELECT * FROM other_config WHERE name='request_email_field'";
-     $requestResult = $db->rawQuery($requestQuery);
+     //pdf generation
+     // create new PDF document
+class MYPDF extends TCPDF {
+
+    //Page header
+    public function Header() {
+        // Logo
+        //$image_file = K_PATH_IMAGES.'logo_example.jpg';
+        //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        // Set font
+        //$this->SetFont('helvetica', 'B', 20);
+        // Title
+        //$this->Cell(0, 15, 'VL Request Form Report', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+    }
+
+    // Page footer
+    public function Footer() {
+        // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
+        $this->SetFont('helvetica', '', 8);
+        // Page number
+        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+    }
+}
+$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+//$pdf->SetAuthor('Saravanan');
+$pdf->SetTitle('Vl Request Result Form');
+//$pdf->SetSubject('TCPDF Tutorial');
+//$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+// set default header data
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+//$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_RIGHT);
+//$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set some language-dependent strings (optional)
+//if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+//    require_once(dirname(__FILE__).'/lang/eng.php');
+//    $pdf->setLanguageArray($l);
+//}
+
+// ---------------------------------------------------------
+
+// set font
+$pdf->SetFont('helvetica', '', 18);
+
+$pathFront=realpath('./uploads');
+//$pdf = new TCPDF();
+$pdf->AddPage();
+
+//pdf end
+    //Create a new PHPMailer instance
+    $mail = new PHPMailer();
+    //Tell PHPMailer to use SMTP
+    $mail->isSMTP();
+    //Enable SMTP debugging
+    // 0 = off (for production use)
+    // 1 = client messages
+    // 2 = client and server messages
+    $mail->SMTPDebug = 2;
+    //Ask for HTML-friendly debug output
+    $mail->Debugoutput = 'html';
+    //Set the hostname of the mail server
+    $mail->Host = 'smtp.gmail.com';
+    //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+    $mail->Port = 587;
+    //Set the encryption system to use - ssl (deprecated) or tls
+    $mail->SMTPSecure = 'tls';
+    //Whether to use SMTP authentication
+    $mail->SMTPAuth = true;
+    $mail->SMTPKeepAlive = true; 
+    //Username to use for SMTP authentication - use full email address for gmail
+    $mail->Username = $mailconf['email'];
+    //Password to use for SMTP authentication
+    $mail->Password = $mailconf['password'];
+    //Set who the message is to be sent from
+    $mail->setFrom($mailconf['email']);
+          
+    $subject="";
+    if(isset($_POST['subject']) && trim($_POST['subject'])!=""){
+         $subject=$_POST['subject'];
+    }
+    
+    $message='';
+    $message1 = '';
+    $message.=ucfirst($_POST['message']).'<br><br>';
+    
+        $requestQuery="SELECT * FROM other_config WHERE name='result_email_field'";
+        $requestResult = $db->rawQuery($requestQuery);
      $filedGroup = array();
      if(isset($requestResult) && trim($requestResult[0]['value'])!= ''){
-          //Excel code start
-          $excel = new PHPExcel();
-          $sheet = $excel->getActiveSheet();
-          $styleArray = array(
-          'font' => array(
-              'bold' => true,
-              'size' => '13',
-          ),
-          'alignment' => array(
-              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-              'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
-          ),
-          'borders' => array(
-              'outline' => array(
-                  'style' => \PHPExcel_Style_Border::BORDER_THIN,
-              ),
-          )
-         );
-         $borderStyle = array(
-               'alignment' => array(
-                   'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-               ),
-               'borders' => array(
-                   'outline' => array(
-                       'style' => \PHPExcel_Style_Border::BORDER_THIN,
-                   ),
-               )
-          );
          $filedGroup = explode(",",$requestResult[0]['value']);
-         $headings = $filedGroup;
-         //Set heading row
-          $sheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode('Sample'), PHPExcel_Cell_DataType::TYPE_STRING);
-          $cellName = $sheet->getCellByColumnAndRow(0,1)->getColumn();
-          $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
-          $colNo = 1;
-         foreach ($headings as $field => $value) {
-          $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-          $cellName = $sheet->getCellByColumnAndRow($colNo,1)->getColumn();
-          $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
-          $colNo++;
-         }
-         //Set values
-         $output = array();
-         for($s=0;$s<count($_POST['sample']);$s++){
-            $row = array();
-            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
-            $sampleResult = $db->rawQuery($sampleQuery);
-            $row[] = $sampleResult[0]['sample_code'];
+         $message1.='<table style="width;100%;border:1px solid #333;" cellspacing="0" cellpadding="2">';
+           $message1.='<tr>';
+            $message1.='<td style="border:1px solid #333;"><strong>Sample</strong></td>';
             for($f=0;$f<count($filedGroup);$f++){
-               if($filedGroup[$f] == "Form Serial No"){
+              $message1.='<td style="border:1px solid #333;"><strong>'.$filedGroup[$f].'</strong></td>';
+            }
+           $message1.='</tr>';
+           for($s=0;$s<count($_POST['sample']);$s++){
+            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
+            $sampleResult = $db->rawQuery($sampleQuery);
+            $message1.='<tr>';
+            $message1.='<td style="border:1px solid #333;"><strong>'.ucwords($sampleResult[0]['sample_code']).'</strong></td>';
+            for($f=0;$f<count($filedGroup);$f++){
+              if($filedGroup[$f] == "Form Serial No"){
                     $field = 'serial_no';
                }elseif($filedGroup[$f] == "Urgency"){
                     $field = 'urgency';
@@ -153,16 +223,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                $fValueResult = $db->rawQuery($fValueQuery);
                $fieldValue = '';
                if(isset($fValueResult) && count($fValueResult)>0){
-                    if($field == 'sample_collection_date' || $field == 'date_sample_received_at_testing_lab' || $field == 'lab_tested_date'){
-                         if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
-                             $xplodDate = explode(" ",$fValueResult[0][$field]);
-                             $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];  
-                         }
-                    }elseif($field == 'patient_dob' || $field == 'date_of_initiation_of_current_regimen' || $field == 'last_viral_load_date'){
-                         if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
-                             $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
-                         }
-                    }elseif($field ==  'vl_test_platform' || $field ==  'gender'){
+                    if($field ==  'vl_test_platform' || $field ==  'gender'){
                       $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                     }elseif($field ==  'result_reviewed_by'){
                       $fieldValue = $fValueResult[0]['reviewedBy'];
@@ -172,63 +233,22 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                       $fieldValue = $fValueResult[0][$field];
                     }
                }
-              $row[] = $fieldValue;
+              $message1.='<td style="border:1px solid #333;">'.$fieldValue.'</td>';
             }
-           $output[] = $row;
-         }
-          $start = (count($output));
-          foreach ($output as $rowNo => $rowData) {
-               $colNo = 0;
-               foreach ($rowData as $field => $value) {
-                 $rRowCount = $rowNo + 2;
-                 $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
-                 $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
-                 $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
-                 $sheet->getDefaultRowDimension()->setRowHeight(15);
-                 $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-                 $colNo++;
-               }
-          }
-          $filename = '';
-          $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-          $filename = 'vl-request-mail' . date('d-M-Y-H-i-s') . '.xls';
-          $writer->save("./temporary". DIRECTORY_SEPARATOR . $filename);
-          //Excel code end
-          //Mail code start
-          //Create a new PHPMailer instance
-          $mail = new PHPMailer();
-          //Tell PHPMailer to use SMTP
-          $mail->isSMTP();
-          //Enable SMTP debugging
-          // 0 = off (for production use)
-          // 1 = client messages
-          // 2 = client and server messages
-          $mail->SMTPDebug = 2;
-          //Ask for HTML-friendly debug output
-          $mail->Debugoutput = 'html';
-          //Set the hostname of the mail server
-          $mail->Host = 'smtp.gmail.com';
-          //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-          $mail->Port = 587;
-          //Set the encryption system to use - ssl (deprecated) or tls
-          $mail->SMTPSecure = 'tls';
-          //Whether to use SMTP authentication
-          $mail->SMTPAuth = true;
-          $mail->SMTPKeepAlive = true; 
-          //Username to use for SMTP authentication - use full email address for gmail
-          $mail->Username = $mailconf['email'];
-          //Password to use for SMTP authentication
-          $mail->Password = $mailconf['password'];
-          //Set who the message is to be sent from
-          $mail->setFrom($mailconf['email']);
-          $subject="";
-          if(isset($_POST['subject']) && trim($_POST['subject'])!=""){
-               $subject=$_POST['subject'];
-          }
-          $message='';
-          if(isset($_POST['message']) && trim($_POST['message'])!=""){
-             $message =ucfirst($_POST['message']);
-          }
+            $message1.='</tr>';
+           }
+          $message1.='</table>';
+          $pdf->writeHTML($message1);
+          $pdf->lastPage();
+          $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
+          $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
+
+          //pdf file attach
+          $file_to_attach = 'uploads/'.$filename;
+          $mail->AddAttachment($file_to_attach);
+          $file_to_attach1 = 'uploads/'.$_POST['pdfFileName'];
+          $mail->AddAttachment($file_to_attach1);
+          
           $mail->Subject = $subject;
           //Set To EmailId(s)
           if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= ''){
@@ -251,30 +271,28 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                  $mail->AddBCC($xplodBcc[$bcc]);
               }
           }
-          $file_to_attach = "temporary". DIRECTORY_SEPARATOR . $filename;
-          $mail->AddAttachment($file_to_attach);
           $mail->msgHTML($message);
-          if ($mail->send()){
-                //Update request mail sent flag
-                for($s=0;$s<count($_POST['sample']);$s++){
+          if (!$mail->send()){
+               $_SESSION['alertMsg']='Unable to send mail. Please try later.';
+               error_log("Mailer Error: " . $mail->ErrorInfo);
+               header('location:vlResultMail.php');
+          }else{
+               //Update result mail flag
+               for($s=0;$s<count($_POST['sample']);$s++){
                     $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                     $sampleResult = $db->rawQuery($sampleQuery);
                     $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
-                    $db->update($tableName,array('request_mail_sent'=>'yes')); 
-               }
-               $_SESSION['alertMsg']='Email sent successfully';
-               header('location:vlRequestMail.php');
-          }else{
-               $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-               error_log("Mailer Error: " . $mail->ErrorInfo);
-               header('location:vlRequestMail.php');
+                    $db->update($tableName,array('result_mail_sent'=>'yes')); 
+                }
+             $_SESSION['alertMsg']='Email sent successfully';
+             header('location:vlResultMail.php');
           }
      }else{
-          $_SESSION['alertMsg']='Unable to send mail. Please check the request fields.';  
-          header('location:vlRequestMail.php');
+             $_SESSION['alertMsg']='Unable to send mail. Please check the result fields.';  
+             header('location:vlResultMail.php');
      }
-}else{
+ }else{
      $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-     header('location:vlRequestMail.php');
-}
+     header('location:vlResultMail.php');
+ }
 ?>
