@@ -338,7 +338,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
     $.blockUI();
     var sample = $("#sample").val();
     var id = sample.toString();
-    $.post("<?php echo($arr['vl_form'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id},
+    $.post("<?php echo($arr['vl_form'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id,resultMail:'resultMail'},
       function(data){
 				if(data === "" || data === null || data === undefined){
 						$.unblockUI();

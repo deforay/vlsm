@@ -82,7 +82,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
       // ---------------------------------------------------------
      
       // set font
-      $pdf->SetFont('helvetica', '', 18);
+      $pdf->SetFont('helvetica', '', 8);
       //$pdf = new TCPDF();
       $pdf->AddPage();
       $pdfContent = '';
@@ -183,7 +183,9 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                }else{
                  $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }
+               
                $fValueResult = $db->rawQuery($fValueQuery);
+               
                $fieldValue = '';
                if(isset($fValueResult) && count($fValueResult)>0){
                     if($field == 'sample_collection_date' || $field == 'date_sample_received_at_testing_lab' || $field == 'lab_tested_date'){
