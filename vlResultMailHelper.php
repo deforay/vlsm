@@ -84,7 +84,6 @@ $pathFront=realpath('./uploads');
 $pdf->AddPage();
 
 //pdf end
-     
     //Create a new PHPMailer instance
     $mail = new PHPMailer();
     //Tell PHPMailer to use SMTP
@@ -118,14 +117,11 @@ $pdf->AddPage();
     }
     
     $message='';
+    $message1 = '';
     $message.=ucfirst($_POST['message']).'<br><br>';
-    if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-        $requestQuery="SELECT * FROM other_config WHERE name='request_email_field'";
-        $requestResult = $db->rawQuery($requestQuery);
-    }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
+    
         $requestQuery="SELECT * FROM other_config WHERE name='result_email_field'";
         $requestResult = $db->rawQuery($requestQuery);
-    }
      $filedGroup = array();
      if(isset($requestResult) && trim($requestResult[0]['value'])!= ''){
          $filedGroup = explode(",",$requestResult[0]['value']);
@@ -279,48 +275,24 @@ $pdf->AddPage();
           if (!$mail->send()){
                $_SESSION['alertMsg']='Unable to send mail. Please try later.';
                error_log("Mailer Error: " . $mail->ErrorInfo);
-               if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-                  header('location:vlRequestMail.php');
-               }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
-                  header('location:vlResultMail.php');
-               }
+               header('location:vlResultMail.php');
           }else{
-               //Update request/result mail flag
-               if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-                    for($s=0;$s<count($_POST['sample']);$s++){
-                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
-                         $sampleResult = $db->rawQuery($sampleQuery);
-                         $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
-                         $db->update($tableName,array('request_mail_sent'=>'yes')); 
-                    }
-                 $_SESSION['alertMsg']='Email sent successfully';
-                 header('location:vlRequestMail.php');
-               }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
-                   for($s=0;$s<count($_POST['sample']);$s++){
-                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
-                         $sampleResult = $db->rawQuery($sampleQuery);
-                         $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
-                         $db->update($tableName,array('result_mail_sent'=>'yes')); 
-                    }
-                 $_SESSION['alertMsg']='Email sent successfully';
-                 header('location:vlResultMail.php');
-               }
-          }
-     }else{
-          if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-             $_SESSION['alertMsg']='Unable to send mail. Please check the request fields.';  
-             header('location:vlRequestMail.php');
-          }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
-             $_SESSION['alertMsg']='Unable to send mail. Please check the result fields.';  
+               //Update result mail flag
+               for($s=0;$s<count($_POST['sample']);$s++){
+                    $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $sampleResult = $db->rawQuery($sampleQuery);
+                    $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+                    $db->update($tableName,array('result_mail_sent'=>'yes')); 
+                }
+             $_SESSION['alertMsg']='Email sent successfully';
              header('location:vlResultMail.php');
           }
+     }else{
+             $_SESSION['alertMsg']='Unable to send mail. Please check the result fields.';  
+             header('location:vlResultMail.php');
      }
  }else{
      $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-     if(isset($_POST['type']) && trim($_POST['type'])=="request"){  
-          header('location:vlRequestMail.php');
-     }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){ 
-          header('location:vlResultMail.php');
-     }
+     header('location:vlResultMail.php');
  }
 ?>
