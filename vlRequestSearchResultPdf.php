@@ -27,11 +27,10 @@ $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
 if(isset($_POST['id']) && trim($_POST['id'])!=''){
-  if(isset($_POST['resultMail']))
-  {
+  if(isset($_POST['resultMail'])){
     $searchQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_id where vl.vl_sample_id IN(".$_POST['id'].")";
   }else{
-  $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
+    $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
   }
 }else{
   $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
