@@ -342,7 +342,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
       function(data){
 				if(data === "" || data === null || data === undefined){
 						$.unblockUI();
-						alert('Something went wrong.Please try again later');
+						alert('Please seelct the result sample!');
 				}else{
 						$.blockUI();
 						$("#pdfFile").val(data);
