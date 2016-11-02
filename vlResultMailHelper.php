@@ -297,7 +297,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                header('location:vlResultMail.php');
           }
      }else{
-             $_SESSION['alertMsg']='Unable to send mail. Please check the result fields.';  
+             $_SESSION['alertMsg']='Unable to send mail. Please check the result fields.';
              header('location:vlResultMail.php');
      }
  }else{
