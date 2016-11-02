@@ -2,12 +2,17 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$configQuery="SELECT * FROM global_config WHERE name ='max_no_of_samples_in_a_batch'";
-$configResult = $db->rawQuery($configQuery);
-if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
-  $configResult[0]['value'] = 0;
+$configQuery="SELECT * from global_config";
+$configResult=$db->query($configQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =2 AND result_mail_sent ='no' ORDER BY f.facility_name ASC";
+if(trim($arr['max_no_of_samples_in_a_batch']) == ''){
+  $arr['max_no_of_samples_in_a_batch'] = 0;
+}
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id = ".$arr['vl_form']." AND result_mail_sent ='no' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $sTypeQuery="SELECT * FROM r_sample_type where form_identification=2";
 $sTypeResult = $db->rawQuery($sTypeQuery);
@@ -19,6 +24,9 @@ $facilityResult = $db->rawQuery($facilityQuery);
     .ms-container{
         width:100%;
     }
+    .select2-selection__choice{
+	color:#000000 !important;
+  }
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -41,7 +49,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="vlRequestMailHelper.php">
+            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="vlResultMailHelper.php">
               <div class="box-body">
                 <div class="row">
                     <div class="col-md-9">
@@ -194,7 +202,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-				<input type="hidden" id="type" name="type" value="result"/>
+		<input type="hidden" id="type" name="type" value="result"/>
+                <input type="hidden" name="pdfFileName" id="pdfFileName"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="otherConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -285,9 +294,9 @@ $facilityResult = $db->rawQuery($facilityQuery);
      });
      
      <?php
-      if($configResult[0]['value'] == 0){ ?>
+      if($arr['max_no_of_samples_in_a_batch'] == 0){ ?>
 	    $(".ms-selectable,#select-all-sample").css("pointer-events","none");
-     <?php } else if(count($result) >= $configResult[0]['value']) { ?>
+     <?php } else if(count($result) >= $arr['max_no_of_samples_in_a_batch']) { ?>
         $("#select-all-sample").css("pointer-events","none");
      <?php }
      ?>
@@ -325,6 +334,23 @@ $facilityResult = $db->rawQuery($facilityQuery);
       $.unblockUI();
   }
   
+  function convertSearchResultToPdf(){
+    $.blockUI();
+    var sampleId = $("#sample").val();
+    var id = sampleId.toString();
+    $.post("<?php echo($arr['vl_form'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      $.unblockUI();
+	      alert('Something went wrong.Please try again later');
+	  }else{
+            $.blockUI();
+              $("#pdfFileName").val(data);
+	      document.getElementById('mailForm').submit();
+	  }
+      });
+  }
+  
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'mailForm'
@@ -332,7 +358,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
     
     if(flag){
         $.blockUI();
-      document.getElementById('mailForm').submit();
+        convertSearchResultToPdf()
+      
     }
   }
 </script>
