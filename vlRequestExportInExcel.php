@@ -9,7 +9,6 @@ $general=new Deforay_Commons_General();
 $batchId=base64_decode($_POST['batchId']);
 
 if($batchId>0){
- 
  $query="SELECT vl.*,f.*,s.sample_name,b.*,ts.*,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName  FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id where vl.batch_id=".$batchId;
  $rResult = $db->rawQuery($query);
  

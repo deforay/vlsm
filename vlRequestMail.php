@@ -151,7 +151,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                 </td>
                             </tr>
                             <tr>
-                                <td class=""><b>Sample Mail Sent Status&nbsp;:</b></td>
+                                <td class=""><b>Mail Sent Status&nbsp;:</b></td>
                                 <td colspan="3">
                                     <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:50%;">
                                             <option value="no">Samples Not yet Mailed</option>
