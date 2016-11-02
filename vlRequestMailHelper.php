@@ -2,7 +2,10 @@
 ob_start();
 session_start();
 include('./includes/MysqliDb.php');
+include ('./includes/PHPExcel.php');
+include('General.php');
 require './includes/mail/PHPMailerAutoload.php';
+$general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 //get & set email details
 $geQuery="SELECT * FROM other_config";
@@ -12,64 +15,60 @@ foreach($geResult as $row){
      $mailconf[$row['name']] = $row['value'];
 }
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
-    //Create a new PHPMailer instance
-    $mail = new PHPMailer();
-    //Tell PHPMailer to use SMTP
-    $mail->isSMTP();
-    //Enable SMTP debugging
-    // 0 = off (for production use)
-    // 1 = client messages
-    // 2 = client and server messages
-    $mail->SMTPDebug = 2;
-    //Ask for HTML-friendly debug output
-    $mail->Debugoutput = 'html';
-    //Set the hostname of the mail server
-    $mail->Host = 'smtp.gmail.com';
-    //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-    $mail->Port = 587;
-    //Set the encryption system to use - ssl (deprecated) or tls
-    $mail->SMTPSecure = 'tls';
-    //Whether to use SMTP authentication
-    $mail->SMTPAuth = true;
-    $mail->SMTPKeepAlive = true; 
-    //Username to use for SMTP authentication - use full email address for gmail
-    $mail->Username = $mailconf['email'];
-    //Password to use for SMTP authentication
-    $mail->Password = $mailconf['password'];
-    //Set who the message is to be sent from
-    $mail->setFrom($mailconf['email']);
-          
-    $subject="";
-    if(isset($_POST['subject']) && trim($_POST['subject'])!=""){
-         $subject=$_POST['subject'];
-    }
-    
-    $message='';
-    $message.=ucfirst($_POST['message']).'<br><br>';
-    if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-        $requestQuery="SELECT * FROM other_config WHERE name='request_email_field'";
-        $requestResult = $db->rawQuery($requestQuery);
-    }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
-        $requestQuery="SELECT * FROM other_config WHERE name='result_email_field'";
-        $requestResult = $db->rawQuery($requestQuery);
-    }
+     $requestQuery="SELECT * FROM other_config WHERE name='request_email_field'";
+     $requestResult = $db->rawQuery($requestQuery);
      $filedGroup = array();
      if(isset($requestResult) && trim($requestResult[0]['value'])!= ''){
+          //Excel code start
+          $excel = new PHPExcel();
+          $sheet = $excel->getActiveSheet();
+          $styleArray = array(
+          'font' => array(
+              'bold' => true,
+              'size' => '13',
+          ),
+          'alignment' => array(
+              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+              'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+          ),
+          'borders' => array(
+              'outline' => array(
+                  'style' => \PHPExcel_Style_Border::BORDER_THIN,
+              ),
+          )
+         );
+         $borderStyle = array(
+               'alignment' => array(
+                   'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+               ),
+               'borders' => array(
+                   'outline' => array(
+                       'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                   ),
+               )
+          );
          $filedGroup = explode(",",$requestResult[0]['value']);
-         $message.='<table style="width;100%;border:1px solid #333;" cellspacing="0" cellpadding="2">';
-           $message.='<tr>';
-            $message.='<td style="border:1px solid #333;"><strong>Sample</strong></td>';
-            for($f=0;$f<count($filedGroup);$f++){
-              $message.='<td style="border:1px solid #333;"><strong>'.$filedGroup[$f].'</strong></td>';
-            }
-           $message.='</tr>';
-           for($s=0;$s<count($_POST['sample']);$s++){
+         $headings = $filedGroup;
+         //Set heading row
+          $sheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode('Sample'), PHPExcel_Cell_DataType::TYPE_STRING);
+          $cellName = $sheet->getCellByColumnAndRow(0,1)->getColumn();
+          $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
+          $colNo = 1;
+         foreach ($headings as $field => $value) {
+          $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+          $cellName = $sheet->getCellByColumnAndRow($colNo,1)->getColumn();
+          $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
+          $colNo++;
+         }
+         //Set values
+         $output = array();
+         for($s=0;$s<count($_POST['sample']);$s++){
+            $row = array();
             $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
             $sampleResult = $db->rawQuery($sampleQuery);
-            $message.='<tr>';
-            $message.='<td style="border:1px solid #333;"><strong>'.ucwords($sampleResult[0]['sample_code']).'</strong></td>';
+            $row[] = $sampleResult[0]['sample_code'];
             for($f=0;$f<count($filedGroup);$f++){
-              if($filedGroup[$f] == "Form Serial No"){
+               if($filedGroup[$f] == "Form Serial No"){
                     $field = 'serial_no';
                }elseif($filedGroup[$f] == "Urgency"){
                     $field = 'urgency';
@@ -154,7 +153,16 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                $fValueResult = $db->rawQuery($fValueQuery);
                $fieldValue = '';
                if(isset($fValueResult) && count($fValueResult)>0){
-                    if($field ==  'vl_test_platform' || $field ==  'gender'){
+                    if($field == 'sample_collection_date' || $field == 'date_sample_received_at_testing_lab' || $field == 'lab_tested_date'){
+                         if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
+                             $xplodDate = explode(" ",$fValueResult[0][$field]);
+                             $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];  
+                         }
+                    }elseif($field == 'patient_dob' || $field == 'date_of_initiation_of_current_regimen' || $field == 'last_viral_load_date'){
+                         if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
+                             $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
+                         }
+                    }elseif($field ==  'vl_test_platform' || $field ==  'gender'){
                       $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                     }elseif($field ==  'result_reviewed_by'){
                       $fieldValue = $fValueResult[0]['reviewedBy'];
@@ -164,11 +172,63 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                       $fieldValue = $fValueResult[0][$field];
                     }
                }
-              $message.='<td style="border:1px solid #333;">'.$fieldValue.'</td>';
+              $row[] = $fieldValue;
             }
-            $message.='</tr>';
-           }
-          $message.='</table>';
+           $output[] = $row;
+         }
+          $start = (count($output));
+          foreach ($output as $rowNo => $rowData) {
+               $colNo = 0;
+               foreach ($rowData as $field => $value) {
+                 $rRowCount = $rowNo + 2;
+                 $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
+                 $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+                 $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
+                 $sheet->getDefaultRowDimension()->setRowHeight(15);
+                 $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+                 $colNo++;
+               }
+          }
+          $filename = '';
+          $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+          $filename = 'vl-request-mail' . date('d-M-Y-H-i-s') . '.xls';
+          $writer->save("./temporary". DIRECTORY_SEPARATOR . $filename);
+          //Excel code end
+          //Mail code start
+          //Create a new PHPMailer instance
+          $mail = new PHPMailer();
+          //Tell PHPMailer to use SMTP
+          $mail->isSMTP();
+          //Enable SMTP debugging
+          // 0 = off (for production use)
+          // 1 = client messages
+          // 2 = client and server messages
+          $mail->SMTPDebug = 2;
+          //Ask for HTML-friendly debug output
+          $mail->Debugoutput = 'html';
+          //Set the hostname of the mail server
+          $mail->Host = 'smtp.gmail.com';
+          //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+          $mail->Port = 587;
+          //Set the encryption system to use - ssl (deprecated) or tls
+          $mail->SMTPSecure = 'tls';
+          //Whether to use SMTP authentication
+          $mail->SMTPAuth = true;
+          $mail->SMTPKeepAlive = true; 
+          //Username to use for SMTP authentication - use full email address for gmail
+          $mail->Username = $mailconf['email'];
+          //Password to use for SMTP authentication
+          $mail->Password = $mailconf['password'];
+          //Set who the message is to be sent from
+          $mail->setFrom($mailconf['email']);
+          $subject="";
+          if(isset($_POST['subject']) && trim($_POST['subject'])!=""){
+               $subject=$_POST['subject'];
+          }
+          $message='';
+          if(isset($_POST['message']) && trim($_POST['message'])!=""){
+             $message =ucfirst($_POST['message']);
+          }
           $mail->Subject = $subject;
           //Set To EmailId(s)
           if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= ''){
@@ -191,52 +251,30 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                  $mail->AddBCC($xplodBcc[$bcc]);
               }
           }
+          $file_to_attach = "temporary". DIRECTORY_SEPARATOR . $filename;
+          $mail->AddAttachment($file_to_attach);
           $mail->msgHTML($message);
-          if (!$mail->send()){
+          if ($mail->send()){
+                //Update request mail sent flag
+                for($s=0;$s<count($_POST['sample']);$s++){
+                    $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $sampleResult = $db->rawQuery($sampleQuery);
+                    $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+                    $db->update($tableName,array('request_mail_sent'=>'yes')); 
+               }
+               $_SESSION['alertMsg']='Email sent successfully';
+               header('location:vlRequestMail.php');
+          }else{
                $_SESSION['alertMsg']='Unable to send mail. Please try later.';
                error_log("Mailer Error: " . $mail->ErrorInfo);
-               if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-                  header('location:vlRequestMail.php');
-               }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
-                  header('location:vlResultMail.php');
-               }
-          }else{
-               //Update request/result mail flag
-               if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-                    for($s=0;$s<count($_POST['sample']);$s++){
-                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
-                         $sampleResult = $db->rawQuery($sampleQuery);
-                         $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
-                         $db->update($tableName,array('request_mail_sent'=>'yes')); 
-                    }
-                 $_SESSION['alertMsg']='Email sent successfully';
-                 header('location:vlRequestMail.php');
-               }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
-                   for($s=0;$s<count($_POST['sample']);$s++){
-                         $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
-                         $sampleResult = $db->rawQuery($sampleQuery);
-                         $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
-                         $db->update($tableName,array('result_mail_sent'=>'yes')); 
-                    }
-                 $_SESSION['alertMsg']='Email sent successfully';
-                 header('location:vlResultMail.php');
-               }
+               header('location:vlRequestMail.php');
           }
      }else{
-          if(isset($_POST['type']) && trim($_POST['type'])=="request"){
-             $_SESSION['alertMsg']='Unable to send mail. Please check the request fields.';  
-             header('location:vlRequestMail.php');
-          }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){
-             $_SESSION['alertMsg']='Unable to send mail. Please check the result fields.';  
-             header('location:vlResultMail.php');
-          }
-     }
- }else{
-     $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-     if(isset($_POST['type']) && trim($_POST['type'])=="request"){  
+          $_SESSION['alertMsg']='Unable to send mail. Please check the request fields.';  
           header('location:vlRequestMail.php');
-     }elseif(isset($_POST['type']) && trim($_POST['type'])=="result"){ 
-          header('location:vlResultMail.php');
      }
- }
+}else{
+     $_SESSION['alertMsg']='Unable to send mail. Please try later.';
+     header('location:vlRequestMail.php');
+}
 ?>
