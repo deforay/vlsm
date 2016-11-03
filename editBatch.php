@@ -136,8 +136,9 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 																	$dsiabled = '';
 																	if(isset($sample['batch_id']) && trim($sample['batch_id']) == $id){
 																		$selected = "selected=selected";
-																	}if(isset($sample['result']) && trim($sample['result'])!= ''){
-																		$dsiabled = 'disabled';
+																		if(isset($sample['result']) && trim($sample['result'])!= ''){
+																		  $dsiabled = 'disabled';
+																	  }
 																	}
 																	?>
 																	  <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo $selected;?> <?php echo $dsiabled; ?>><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
@@ -154,6 +155,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 						<!-- /.box-body -->
 						<div class="box-footer">
 								 <input type="hidden" name="batchId" id="batchId" value="<?php echo $batchInfo[0]['batch_id'];?>"/>
+								 <input type="hidden" name="resultSample" id="resultSample"/>
 								 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
 								 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
 						</div>
@@ -174,6 +176,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   <script type="text/javascript">
   var startDate = "";
   var endDate = "";
+	var resultSampleArray = [];
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'editBatchForm'
@@ -276,12 +279,20 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
 	}
 	<?php
+	$r=1;
 	foreach($result as $sample){
-		if(isset($sample['result']) && trim($sample['result'])!= ''){ ?>
-			$("#deselect-all-samplecode").css("pointer-events","none");
-		<?php break; }
+		if(isset($sample['batch_id']) && trim($sample['batch_id']) == $id){
+			if(isset($sample['result']) && trim($sample['result'])!= ''){
+				if($r == 1){
+				?>
+				$("#deselect-all-samplecode").remove();
+				<?php } ?>
+				resultSampleArray.push('<?php echo $sample['vl_sample_id']; ?>');
+			<?php $r++; }
+		}
 	}
 	?>
+	  $("#resultSample").val(resultSampleArray);
    });
    
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
