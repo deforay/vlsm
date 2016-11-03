@@ -5,7 +5,7 @@ include('header.php');
 $id=base64_decode($_GET['id']);
 $batchQuery="SELECT * from batch_details where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
-$query="SELECT vl.sample_code,vl.batch_id,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' OR batch_id=$id ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.batch_id,vl.vl_sample_id,vl.facility_id,vl.result,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' OR batch_id=$id ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -121,40 +121,42 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
                     </div>
                   </div>
                 </div>
-		<div class="row" id="sampleDetails">
-		  <div class="col-md-8">
-                    <div class="form-group">
-                        <div class="col-md-12">
-			  <div class="col-md-12">
-			     <div style="width:60%;margin:0 auto;clear:both;">
-			      <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
-			      </div><br/><br/>
-			      <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
-			      <?php
-			      foreach($result as $sample){
-				$selected = '';
-				if($sample['batch_id']==$id){
-				  $selected = "selected=selected";
-				}
-				?>
-				<option value="<?php echo $sample['vl_sample_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);;?></option>
-				<?php
-			      }
-			      ?>
-			     </select>
-			  </div>
-                        </div>
-                    </div>
-                  </div>
-		</div>
-               
-              </div>
-              <!-- /.box-body -->
-              <div class="box-footer">
-		<input type="hidden" name="batchId" id="batchId" value="<?php echo $batchInfo[0]['batch_id'];?>"/>
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                <a href="batchcode.php" class="btn btn-default"> Cancel</a>
-              </div>
+								<div class="row" id="sampleDetails">
+									<div class="col-md-8">
+											<div class="form-group">
+												<div class="col-md-12">
+														<div class="col-md-12">
+															 <div style="width:60%;margin:0 auto;clear:both;">
+																<a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+																</div><br/><br/>
+																<select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
+																<?php
+																foreach($result as $key=>$sample){
+																	$selected = '';
+																	$dsiabled = '';
+																	if(isset($sample['batch_id']) && trim($sample['batch_id']) == $id){
+																		$selected = "selected=selected";
+																	}if(isset($sample['result']) && trim($sample['result'])!= ''){
+																		$dsiabled = 'disabled';
+																	}
+																	?>
+																	  <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo $selected;?> <?php echo $dsiabled; ?>><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
+																	<?php
+																}
+																?>
+															 </select>
+														</div>
+												</div>
+											</div>
+										</div>
+								</div>
+							</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
+								 <input type="hidden" name="batchId" id="batchId" value="<?php echo $batchInfo[0]['batch_id'];?>"/>
+								 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
+								 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
+						</div>
               <!-- /.box-footer -->
             </form>
           <!-- /.row -->
@@ -273,6 +275,13 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	if(parseInt(selectedSampleCount) >= parseInt(maxNoOfSampleCount)){
 	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
 	}
+	<?php
+	foreach($result as $sample){
+		if(isset($sample['result']) && trim($sample['result'])!= ''){ ?>
+			$("#deselect-all-samplecode").css("pointer-events","none");
+		<?php break; }
+	}
+	?>
    });
    
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
@@ -283,8 +292,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 
       $.post("checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
       function(data){
-	  if(data==='1')
-	  {
+	  if(data==='1'){
 	      alert(alrt);
 	      duplicateName=false;
 	      document.getElementById(obj.id).value="";

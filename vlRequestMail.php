@@ -58,7 +58,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="toEmail" class="col-lg-3 control-label">To Email <span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="a@yahoo.com,b@yahoo.com" title="Please enter To email"/>
+                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter To email"/>
                         </div>
                     </div>
                   </div>
@@ -68,7 +68,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="cc" class="col-lg-3 control-label">CC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="cc" name="cc" class="form-control" placeholder="a@yahoo.com,b@yahoo.com" title="Please enter CC"/>
+                           <input type="text" id="cc" name="cc" class="form-control" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter CC"/>
                         </div>
                     </div>
                   </div>
@@ -78,7 +78,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="bcc" class="col-lg-3 control-label">BCC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="a@yahoo.com,b@yahoo.com" title="Please enter BCC"/>
+                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter BCC"/>
                         </div>
                     </div>
                   </div>
@@ -97,8 +97,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="col-md-12">
                         <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
                             <tr>
-                                <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
-                                <td>
+                                   <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
+                                   <td>
                                         <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
                                     </td>
                                     <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
@@ -116,7 +116,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                     </td>
                             </tr>
                             <tr>
-                                 <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+                                 <td>&nbsp;<b>Facility&nbsp;:</b></td>
                                     <td>
                                         <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name"  multiple="multiple">
                                         <?php
@@ -151,9 +151,19 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                 </td>
                             </tr>
                             <tr>
+                                <td>&nbsp;<b>State/Province &nbsp;:</b></td>
+                                <td>
+                                    <input type="text" id="state" name="state" class="form-control" placeholder="State" style="width:275px;"/>
+                                </td>
+                                <td>&nbsp;<b>District&nbsp;:</b></td>
+                                <td>
+                                    <input type="text" id="district" name="district" class="form-control" placeholder="District" style="width:275px;"/>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class=""><b>Mail Sent Status&nbsp;:</b></td>
                                 <td colspan="3">
-                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:50%;">
+                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:42.5%;">
                                             <option value="no">Samples Not yet Mailed</option>
                                             <option value="">All Samples</option>
                                             <option value="yes">Already Mailed Samples</option>
@@ -194,7 +204,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-				<input type="hidden" id="type" name="type" value="request"/>
+				        <input type="hidden" id="type" name="type" value="request"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
                 <a href="otherConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -311,9 +321,10 @@ $facilityResult = $db->rawQuery($facilityQuery);
 	       pregnant = $('input[name=pregnant]:checked').val();
       }
       var urgent = $('input[name=urgency]:checked').val();
-      var sampleMailSentStatus = $('#sampleMailSentStatus').val();
+      var state = $('#state').val();
+      var district = $('#district').val();
       var type = $('#type').val();
-      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,mailSentStatus:sampleMailSentStatus,type:type},
+      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,mailSentStatus:sampleMailSentStatus,type:type},
       function(data){
         if($.trim(data) !== ""){
           $("#sampleDetails").html(data);
