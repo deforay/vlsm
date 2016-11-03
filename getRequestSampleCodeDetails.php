@@ -7,6 +7,9 @@ $sampleType = $_POST['sType'];
 $gender = $_POST['gender'];
 $pregnant = $_POST['pregnant'];
 $urgent = $_POST['urgent'];
+$state = $_POST['state'];
+$district = $_POST['district'];
+$status = $_POST['status'];
 $mailSentStatus = $_POST['mailSentStatus'];
 $type = $_POST['type'];
 //print_r($_POST);die;
@@ -36,11 +39,17 @@ if(!isset($facility) && count(array_filter($facility))==0 && trim($sampleType)==
        $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
    }if(trim($urgent)!=''){
        $query = $query." AND vl.urgency='".$urgent."'";
+   }if(trim($state)!=''){
+       $query = $query." AND f.state LIKE '%" .$state . "%' ";
+   }if(trim($district)!=''){
+       $query = $query." AND f.district LIKE '%" .$district . "%' ";
+   }if(trim($status)!=''){
+       $query = $query." AND vl.status='".$status."'";
    }if(trim($mailSentStatus)!=''){
       if(trim($type)== 'request'){
-        $query = $query." AND vl.	request_mail_sent='".$mailSentStatus."'";
+        $query = $query." AND vl.request_mail_sent='".$mailSentStatus."'";
       }elseif(trim($type)== 'result'){
-         $query = $query." AND vl.	result_mail_sent='".$mailSentStatus."'";
+         $query = $query." AND vl.result_mail_sent='".$mailSentStatus."'";
       }
    }
    
