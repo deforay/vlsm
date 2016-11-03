@@ -323,6 +323,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
       var urgent = $('input[name=urgency]:checked').val();
       var state = $('#state').val();
       var district = $('#district').val();
+      var sampleMailSentStatus = $('#sampleMailSentStatus').val();
       var type = $('#type').val();
       $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,mailSentStatus:sampleMailSentStatus,type:type},
       function(data){
