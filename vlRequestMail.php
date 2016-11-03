@@ -195,7 +195,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
               <!-- /.box-body -->
               <div class="box-footer">
 				<input type="hidden" id="type" name="type" value="request"/>
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Send</a>
                 <a href="otherConfig.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
