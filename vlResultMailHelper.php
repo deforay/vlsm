@@ -5,6 +5,7 @@ include('./includes/MysqliDb.php');
 include ('./includes/tcpdf/tcpdf.php');
 include('General.php');
 require './includes/mail/PHPMailerAutoload.php';
+define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 //get & set email details
@@ -14,6 +15,9 @@ $mailconf = array();
 foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
+//get global config logo value
+$configQuery="SELECT * from global_config WHERE name='logo'";
+$configResult=$db->query($configQuery);
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
      $requestQuery="SELECT * FROM other_config WHERE name='result_email_field'";
      $requestResult = $db->rawQuery($requestQuery);
@@ -88,6 +92,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
       $pdfContent = '';
       $filedGroup = array();
          $filedGroup = explode(",",$requestResult[0]['value']);
+         $pdfContent .= '<div style="">';
+         if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['logo'])){
+              $pdfContent .='<div style="width:100%;text-align:center;"><img src="uploads/logo/'.$configResult[0]['value'].'" style="width:80px;height:80px;" alt="logo"></div>';
+         }
+         $pdfContent .='<div style="width:100%;text-align:left;font-size:16px;"><strong>Viral Load Results</strong></div>';
          $pdfContent.='<table style="width;100%;border:1px solid #333;" cellspacing="0" cellpadding="2">';
            $pdfContent.='<tr>';
             $pdfContent.='<td style="border:1px solid #333;"><strong>Sample</strong></td>';
@@ -99,7 +108,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
             $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
             $sampleResult = $db->rawQuery($sampleQuery);
             $pdfContent.='<tr>';
-            $pdfContent.='<td style="border:1px solid #333;"><strong>'.ucwords($sampleResult[0]['sample_code']).'</strong></td>';
+            $pdfContent.='<td style="border:1px solid #333;"><strong>'.$sampleResult[0]['sample_code'].'</strong></td>';
             for($f=0;$f<count($filedGroup);$f++){
               if($filedGroup[$f] == "Form Serial No"){
                     $field = 'serial_no';
@@ -211,6 +220,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
             $pdfContent.='</tr>';
            }
           $pdfContent.='</table>';
+          $pdfContent .= '</div>';
           $pdf->writeHTML($pdfContent);
           $pdf->lastPage();
           $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
