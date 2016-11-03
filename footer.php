@@ -59,7 +59,7 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importConfigMenu").addClass('active');
-  }else if (splitsUrl=='otherConfig.php' || splitsUrl=='editOtherConfig.php') {
+  }else if (splitsUrl=='otherConfig.php' || splitsUrl=='editOtherConfig.php' || splitsUrl=='editRequestEmailConfig.php' || splitsUrl=='editResultEmailConfig.php') {
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".otherConfigMenu").addClass('active');
@@ -83,6 +83,10 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlRequestMailMenu").addClass('active');
+  }else if (splitsUrl=='vlResultMail.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlResultMailMenu").addClass('active');
   }else if (splitsUrl=='addImportResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
@@ -91,18 +95,15 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlPrintResultMenu").addClass('active');
-  }
-  else if (splitsUrl=='vlTestResult.php') {
+  }else if (splitsUrl=='vlTestResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlTestResultMenu").addClass('active');
-  }
-  else if (splitsUrl=='vlResultApproval.php') {
+  }else if (splitsUrl=='vlResultApproval.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlResultApprovalMenu").addClass('active');
-  }
-  else if (splitsUrl=='missingResult.php') {
+  }else if (splitsUrl=='missingResult.php') {
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".missingResultMenu").addClass('active');
