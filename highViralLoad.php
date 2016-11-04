@@ -11,7 +11,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-$sQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
+$sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);

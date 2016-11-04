@@ -126,7 +126,7 @@ $configQuery="SELECT * from global_config";
       $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
     }
     
-$sampleTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
+$sampleTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value=""> -- Select -- </option>';
 //get test status values

@@ -85,7 +85,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
     
-$sTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
+$sTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 
 $fQuery="SELECT * from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id=$id";

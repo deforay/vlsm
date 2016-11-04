@@ -654,3 +654,6 @@ UPDATE `privileges` SET `privilege_name` = 'vlRequestMail.php', `display_name` =
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlResultMail.php', 'Email Test Result');
 
 ALTER TABLE `vl_request_form` ADD `request_mail_sent` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `date_result_printed`, ADD `result_mail_sent` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `request_mail_sent`;
+
+--Pal 4th-Nov-2016
+ALTER TABLE `r_sample_type` CHANGE `form_identification` `status` VARCHAR(45) NULL DEFAULT NULL;
