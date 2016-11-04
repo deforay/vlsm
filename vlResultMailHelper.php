@@ -8,20 +8,18 @@ require './includes/mail/PHPMailerAutoload.php';
 define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
-//get & set email details
+//get other config values
 $geQuery="SELECT * FROM other_config";
 $geResult = $db->rawQuery($geQuery);
 $mailconf = array();
 foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
-//get global config logo value
+//get logo
 $configQuery="SELECT * from global_config WHERE name='logo'";
 $configResult=$db->query($configQuery);
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
-     $requestQuery="SELECT * FROM other_config WHERE name='result_email_field'";
-     $requestResult = $db->rawQuery($requestQuery);
-     if(isset($requestResult) && trim($requestResult[0]['value'])!= ''){
+     if(isset($mailconf['result_email_field']) && trim($mailconf['result_email_field'])!= ''){
        //Pdf code start
        // create new PDF document
        class MYPDF extends TCPDF {
@@ -91,7 +89,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
       $pdf->AddPage();
       $pdfContent = '';
       $filedGroup = array();
-         $filedGroup = explode(",",$requestResult[0]['value']);
+         $filedGroup = explode(",",$mailconf['result_email_field']);
          $pdfContent .= '<div style="">';
          if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['logo'])){
               $pdfContent .='<div style="width:100%;text-align:center;"><img src="uploads/logo/'.$configResult[0]['value'].'" style="width:80px;height:80px;" alt="logo"></div>';
@@ -105,7 +103,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
             }
            $pdfContent.='</tr>';
            for($s=0;$s<count($_POST['sample']);$s++){
-            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id='2' AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
+            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
             $sampleResult = $db->rawQuery($sampleQuery);
             $pdfContent.='<tr>';
             $pdfContent.='<td style="border:1px solid #333;"><strong>'.$sampleResult[0]['sample_code'].'</strong></td>';
@@ -186,11 +184,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                     $field = 'comments';
                }
                if($field ==  'result_reviewed_by'){
-                    $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }elseif($field ==  'result_approved_by'){
-                    $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }else{
-                 $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                 $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }
                $fValueResult = $db->rawQuery($fValueQuery);
                
@@ -294,7 +292,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           if ($mail->send()){
                //Update result mail sent flag
                for($s=0;$s<count($_POST['sample']);$s++){
-                    $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                     $sampleResult = $db->rawQuery($sampleQuery);
                     $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
                     $db->update($tableName,array('result_mail_sent'=>'yes')); 

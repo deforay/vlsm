@@ -2,19 +2,15 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$configQuery="SELECT * from global_config";
-$configResult=$db->query($configQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+$configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configResult = $db->rawQuery($configQuery);
+$formId = 0;
+if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
+  $formId = intval($configResult[0]['value']);
 }
-if(trim($arr['max_no_of_samples_in_a_batch']) == ''){
-  $arr['max_no_of_samples_in_a_batch'] = 0;
-}
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id = ".$arr['vl_form']." AND result_mail_sent ='no' ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id = $formId AND result_mail_sent ='no' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
-$sTypeQuery="SELECT * FROM r_sample_type where form_identification=2";
+$sTypeQuery="SELECT * FROM r_sample_type where form_identification=$formId";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 $facilityQuery="SELECT * FROM facility_details where status='active'";
 $facilityResult = $db->rawQuery($facilityQuery);
@@ -329,14 +325,6 @@ $batchResult = $db->rawQuery($batchQuery);
        $('#sample').multiSelect('deselect_all');
        return false;
      });
-     
-     <?php
-      if($arr['max_no_of_samples_in_a_batch'] == 0){ ?>
-	    $(".ms-selectable,#select-all-sample").css("pointer-events","none");
-     <?php } else if(count($result) >= $arr['max_no_of_samples_in_a_batch']) { ?>
-        $("#select-all-sample").css("pointer-events","none");
-     <?php }
-     ?>
    });
   
   function enablePregnant(obj){
@@ -379,7 +367,7 @@ $batchResult = $db->rawQuery($batchQuery);
     $.blockUI();
     var sample = $("#sample").val();
     var id = sample.toString();
-    $.post("<?php echo($arr['vl_form'] == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id,resultMail:'resultMail'},
+    $.post("<?php echo($formId == 3)?'vlRequestDrcSearchResultPdf.php':'vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id,resultMail:'resultMail'},
       function(data){
 				if(data === "" || data === null || data === undefined){
 						$.unblockUI();

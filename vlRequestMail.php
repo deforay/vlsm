@@ -2,14 +2,15 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$configQuery="SELECT * FROM global_config WHERE name ='max_no_of_samples_in_a_batch'";
+$configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configResult = $db->rawQuery($configQuery);
-if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
-  $configResult[0]['value'] = 0;
+$formId = 0;
+if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
+  $formId = intval($configResult[0]['value']);
 }
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =2 AND request_mail_sent ='no' ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =$formId AND request_mail_sent ='no' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
-$sTypeQuery="SELECT * FROM r_sample_type where form_identification=2";
+$sTypeQuery="SELECT * FROM r_sample_type where form_identification=$formId";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 $facilityQuery="SELECT * FROM facility_details where status='active'";
 $facilityResult = $db->rawQuery($facilityQuery);
@@ -309,13 +310,6 @@ $batchResult = $db->rawQuery($batchQuery);
        $('#sample').multiSelect('deselect_all');
        return false;
      });
-     <?php
-      if($configResult[0]['value'] == 0){ ?>
-	    $(".ms-selectable,#select-all-sample").css("pointer-events","none");
-     <?php } else if(count($result) >= $configResult[0]['value']) { ?>
-        $("#select-all-sample").css("pointer-events","none");
-     <?php }
-     ?>
    });
   
   function enablePregnant(obj){

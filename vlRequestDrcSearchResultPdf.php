@@ -16,11 +16,22 @@ if(isset($configResult) && count($configResult)> 0){
 }else{
   date_default_timezone_set("Europe/London");
 }
+//set print time
 $printedTime = date('Y-m-d H:i:s');
 $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
-$requestResult=$db->query($_SESSION['vlRequestSearchResultQuery']);
+//set query
+if(isset($_POST['id']) && trim($_POST['id'])!=''){
+  if(isset($_POST['resultMail'])){
+    $searchQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_id where vl.vl_sample_id IN(".$_POST['id'].")";
+  }else{
+    $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
+  }
+}else{
+  $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
+}
+$requestResult=$db->query($searchQuery);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
 //print_r($requestResult);die;

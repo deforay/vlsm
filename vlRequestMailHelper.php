@@ -7,7 +7,7 @@ include('General.php');
 require './includes/mail/PHPMailerAutoload.php';
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
-//get & set email details
+//get other config details
 $geQuery="SELECT * FROM other_config";
 $geResult = $db->rawQuery($geQuery);
 $mailconf = array();
@@ -15,10 +15,8 @@ foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
-     $requestQuery="SELECT * FROM other_config WHERE name='request_email_field'";
-     $requestResult = $db->rawQuery($requestQuery);
      $filedGroup = array();
-     if(isset($requestResult) && trim($requestResult[0]['value'])!= ''){
+     if(isset($mailconf['request_email_field']) && trim($mailconf['request_email_field'])!= ''){
           //Excel code start
           $excel = new PHPExcel();
           $sheet = $excel->getActiveSheet();
@@ -47,7 +45,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                    ),
                )
           );
-         $filedGroup = explode(",",$requestResult[0]['value']);
+         $filedGroup = explode(",",$mailconf['request_email_field']);
          $headings = $filedGroup;
          //Set heading row
           $sheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode('Sample'), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -64,7 +62,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
          $output = array();
          for($s=0;$s<count($_POST['sample']);$s++){
             $row = array();
-            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where (batch_id is NULL OR batch_id='') AND vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
+            $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
             $sampleResult = $db->rawQuery($sampleQuery);
             $row[] = $sampleResult[0]['sample_code'];
             for($f=0;$f<count($filedGroup);$f++){
@@ -144,11 +142,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                     $field = 'comments';
                }
                if($field ==  'result_reviewed_by'){
-                    $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }elseif($field ==  'result_approved_by'){
-                    $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }else{
-                 $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                 $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }
                $fValueResult = $db->rawQuery($fValueQuery);
                $fieldValue = '';
@@ -258,7 +256,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           if ($mail->send()){
                 //Update request mail sent flag
                 for($s=0;$s<count($_POST['sample']);$s++){
-                    $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id=2 AND vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                    $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                     $sampleResult = $db->rawQuery($sampleQuery);
                     $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
                     $db->update($tableName,array('request_mail_sent'=>'yes')); 
