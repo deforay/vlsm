@@ -22,7 +22,7 @@ foreach($qResult as $val){
   $artCode[$val['art_code']][$vl['art_id']]=$vl['art_code'];
  }
 }
-$sampleTypeQuery="SELECT * FROM r_sample_type where form_identification='".$arr['vl_form']."'";
+$sampleTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value=""> -- Select -- </option>';
 foreach ($sampleTypeResult as $row) {

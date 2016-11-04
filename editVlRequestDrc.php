@@ -35,7 +35,7 @@
     //get ART list
     $aQuery="SELECT * from r_art_code_details where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
-    $sQuery="SELECT * from r_sample_type where form_identification='2'";
+    $sQuery="SELECT * from r_sample_type where status='active'";
     $sResult=$db->query($sQuery);
     //Set DOB
     if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){

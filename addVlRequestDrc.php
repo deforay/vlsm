@@ -21,7 +21,7 @@
     $aQuery="SELECT * from r_art_code_details where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
     //get Sample type
-    $sQuery="SELECT * from r_sample_type where form_identification='2'";
+    $sQuery="SELECT * from r_sample_type where status='active'";
     $sResult=$db->query($sQuery);
     //get reason for rejection list
     $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";

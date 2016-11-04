@@ -5,7 +5,7 @@ $tsQuery="SELECT * FROM testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
-$sQuery="SELECT * FROM r_sample_type where form_identification='".$configFormResult[0]['value']."'";
+$sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);

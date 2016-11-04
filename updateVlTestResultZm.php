@@ -16,7 +16,7 @@ $lResult = $db->rawQuery($lQuery);
 
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
-$sQuery="SELECT * from r_sample_type where form_identification='2'";
+$sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
