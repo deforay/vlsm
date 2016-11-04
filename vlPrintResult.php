@@ -149,11 +149,11 @@ $batResult = $db->rawQuery($batQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th>Sample Code</th>
+		              <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No.</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
+		              <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Last Modified On</th>
@@ -187,10 +187,10 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
-    $("#status").select2();
+     $("#status").select2({placeholder:"Select Status"});
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+	          separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),

@@ -81,23 +81,23 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 		    <td><b>Gender&nbsp;:</b></td>
 		    <td>
 		      <select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
-			<option value=""> -- Select -- </option>
-			<option value="male">Male</option>
-			<option value="female">Female</option>
-			<option value="not_recorded">Not Recorded</option>
+						<option value=""> -- Select -- </option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+						<option value="not_recorded">Not Recorded</option>
 		      </select>
 		    </td>
 		</tr>
 		<tr>
 		  <td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
 		  <td class="showPregnant">
-		    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
-		    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
+		    <input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
+		    <input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
 		  </td>
 		  <td class=""><b>Urgency&nbsp;:</b></td>
 		  <td class="">
-		    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
-		    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+		    <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
+		    <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
 		  </td>
 		</tr>
 		<tr>
@@ -189,7 +189,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   }
    //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
    $(document).ready(function() {
-		$("#facilityName").select2();
+		$("#facilityName").select2({placeholder:"Select Facilities"});
         $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',

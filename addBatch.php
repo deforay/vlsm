@@ -98,23 +98,23 @@ $batchResult=$db->query($batchQuery);
 							<td><b>Gender&nbsp;:</b></td>
 							<td>
 								<select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
-						<option value=""> -- Select -- </option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-						<option value="not_recorded">Not Recorded</option>
+									<option value=""> -- Select -- </option>
+									<option value="male">Male</option>
+									<option value="female">Female</option>
+									<option value="not_recorded">Not Recorded</option>
 								</select>
 							</td>
 					</tr>
 					<tr>
 						<td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
 						<td class="showPregnant">
-							<input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
-							<input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
+							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
+							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
 						</td>
 						<td class=""><b>Urgency&nbsp;:</b></td>
 						<td class="">
-							<input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
-							<input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
+							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
 						</td>
 					</tr>
 					<tr>
@@ -128,39 +128,39 @@ $batchResult=$db->query($batchQuery);
           <!-- form start -->
             <form class="form-horizontal" method='post'  name='addBatchForm' id='addBatchForm' autocomplete="off" action="addBatchCodeHelper.php">
               <div class="box-body">
-		<div class="row" id="sampleDetails">
-		  <div class="col-md-8">
-                    <div class="form-group">
-                        <div class="col-md-12">
-			  <div class="col-md-12">
-			     <div style="width:60%;margin:0 auto;clear:both;">
-			      <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
-			      </div><br/><br/>
-			    <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
-			    <?php
-			    foreach($result as $sample){
-			      ?>
-			      <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
-			      <?php
-			    }
-			    ?>
-			  </select>
-			  </div>
-                        </div>
-                    </div>
-                  </div>
-		</div>
-		<div class="row">
+								<div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="batchCode" class="col-lg-4 control-label">Enter Batch Code <span class="mandatory">*</span></label>
+                        <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
                         <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo date('Ymd').$maxId;?>" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already exists.Try another batch code',null)" />
-			<input type="hidden" name="batchCodeKey" id="batchCodeKey" value="<?php echo $maxId;?>"/>
+			                  <input type="hidden" name="batchCodeKey" id="batchCodeKey" value="<?php echo $maxId;?>"/>
                         </div>
                     </div>
                   </div>
-              </div>
+               </div>
+							 <div class="row" id="sampleDetails">
+								<div class="col-md-8">
+										<div class="form-group">
+												<div class="col-md-12">
+													<div class="col-md-12">
+														 <div style="width:60%;margin:0 auto;clear:both;">
+															<a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+															</div><br/><br/>
+														<select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
+														<?php
+														foreach($result as $sample){
+															?>
+															<option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
+															<?php
+														}
+														?>
+													</select>
+													</div>
+											</div>
+										</div>
+									</div>
+							</div>
                
               </div>
               <!-- /.box-body -->
@@ -189,10 +189,10 @@ $batchResult=$db->query($batchQuery);
   var startDate = "";
   var endDate = "";
   $(document).ready(function() {
-	   $("#facilityName").select2();
+	   $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+	          separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
