@@ -170,7 +170,6 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                       <label for="vl_form" class="col-lg-4 control-label">Viral Load Form <span class="mandatory">*</span> </label>
                       <div class="col-lg-8">
                         <select class="form-control isRequired" name="vl_form" id="vl_form" title="Please select the viral load form">
-                            <option value=""> -- Select -- </option>
                             <?php
                             foreach($formResult as $val){
                             ?>

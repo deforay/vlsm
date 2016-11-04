@@ -2,6 +2,12 @@
 include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
+$configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configResult = $db->rawQuery($configQuery);
+$formId = 0;
+if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
+  $formId = intval($configResult[0]['value']);
+}
 $facility = $_POST['facility'];
 $sampleType = $_POST['sType'];
 $gender = $_POST['gender'];
@@ -25,7 +31,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =2";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =$formId";
 if(isset($facility) && count(array_filter($facility))>0){
     $query = $query." AND vl.facility_id IN (".implode(',',$facility).")";
 }if(trim($sampleType)!=''){
