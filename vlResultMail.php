@@ -18,6 +18,9 @@ $sTypeQuery="SELECT * FROM r_sample_type where form_identification=2";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 $facilityQuery="SELECT * FROM facility_details where status='active'";
 $facilityResult = $db->rawQuery($facilityQuery);
+//Get batches
+$batchQuery="SELECT * FROM batch_details";
+$batchResult = $db->rawQuery($batchQuery);
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
@@ -25,8 +28,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
         width:100%;
     }
     .select2-selection__choice{
-	color:#000000 !important;
-  }
+		  color:#000000 !important;
+		}
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -66,7 +69,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="toEmail" class="col-lg-3 control-label">To Email <span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter To email"/>
+                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter To email"/>
                         </div>
                     </div>
                   </div>
@@ -76,7 +79,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="cc" class="col-lg-3 control-label">CC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="cc" name="cc" class="form-control" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter CC"/>
+                           <input type="text" id="cc" name="cc" class="form-control" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter CC"/>
                         </div>
                     </div>
                   </div>
@@ -86,7 +89,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="bcc" class="col-lg-3 control-label">BCC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter BCC"/>
+                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter BCC"/>
                         </div>
                     </div>
                   </div>
@@ -103,7 +106,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
+                        <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:90%;">
                             <tr>
                                 <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
                                 <td>
@@ -168,8 +171,19 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                     <input type="text" id="district" name="district" class="form-control" placeholder="District" style="width:275px;"/>
                                 </td>
                             </tr>
-                            <tr>
-															  <td class=""><b>Sample Status&nbsp;:</b></td>
+														<tr>
+                                <td class=""><b>Batch&nbsp;:</b></td>
+                                <td>
+                                    <select name="batch" id="batch" class="form-control" title="Please choose batch" style="width:275px;" multiple="multiple">
+                                          <option value=""> -- Select -- </option>
+                                          <?php
+                                          foreach($batchResult as $batch){
+                                          ?>
+                                           <option value="<?php echo $batch['batch_id']; ?>"><?php echo $batch['batch_code']; ?></option>
+                                          <?php } ?>
+                                    </select>
+                                </td>
+																<td class=""><b>Sample Status&nbsp;:</b></td>
                                 <td>
                                     <select name="sampleStatus" id="sampleStatus" class="form-control" title="Please choose sample status" style="width:275px;">
                                             <option value=""> -- Select -- </option>
@@ -177,6 +191,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                             <option value="4">Rejected</option>
                                     </select>
                                 </td>
+														</tr>
+                            <tr>
                                 <td class=""><b>Mail Sent Status&nbsp;:</b></td>
                                 <td>
                                     <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:275px;">
@@ -185,6 +201,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                             <option value="yes">Already Mailed Samples</option>
                                     </select>
                                 </td>
+																<td></td>
+																<td></td>
                             </tr>
                             <tr>
                                 <td colspan="4" style="text-align:center;">&nbsp;<input type="button" class="btn btn-success btn-sm" onclick="getSampleDetails();" value="Search"/>
@@ -244,7 +262,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
   var startDate = "";
   var endDate = ""; 
   $(document).ready(function() {
-      $('#facilityName').select2();
+      $('#facilityName').select2({placeholder:"Select Facilities"});
+      $('#batch').select2({placeholder:"Select Batches"});
       $('#sampleCollectionDate').daterangepicker({
         format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -343,10 +362,11 @@ $facilityResult = $db->rawQuery($facilityQuery);
       var urgent = $('input[name=urgency]:checked').val();
 			var state = $('#state').val();
       var district = $('#district').val();
+      var batch = $('#batch').val();
       var status = $('#sampleStatus').val();
       var sampleMailSentStatus = $('#sampleMailSentStatus').val();
       var type = $('#type').val();
-      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,status:status,mailSentStatus:sampleMailSentStatus,type:type},
+      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,batch:batch,status:status,mailSentStatus:sampleMailSentStatus,type:type},
       function(data){
         if($.trim(data) !== ""){
           $("#sampleDetails").html(data);

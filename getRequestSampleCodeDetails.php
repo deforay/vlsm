@@ -9,7 +9,7 @@ $pregnant = $_POST['pregnant'];
 $urgent = $_POST['urgent'];
 $state = $_POST['state'];
 $district = $_POST['district'];
-$status = $_POST['status'];
+$batch = $_POST['batch'];
 $mailSentStatus = $_POST['mailSentStatus'];
 $type = $_POST['type'];
 //print_r($_POST);die;
@@ -25,43 +25,39 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 
-if(!isset($facility) && count(array_filter($facility))==0 && trim($sampleType)== '' && trim($gender)=='' && trim($pregnant)=='' && trim($urgent)=='' && trim($_POST['sampleCollectionDate'])=='' && trim($mailSentStatus)==''){
-    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =2";
-}else{
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =2";
-   if(isset($facility) && count(array_filter($facility))>0){
-       $query = $query." AND vl.facility_id IN (".implode(',',$facility).")";
-   }if(trim($sampleType)!=''){
-       $query = $query." AND vl.sample_id='".$sampleType."'";
-   }if(trim($gender)!=''){
-       $query = $query." AND vl.gender='".$gender."'";
-   }if(trim($pregnant)!=''){
-       $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
-   }if(trim($urgent)!=''){
-       $query = $query." AND vl.urgency='".$urgent."'";
-   }if(trim($state)!=''){
-       $query = $query." AND f.state LIKE '%" .$state . "%' ";
-   }if(trim($district)!=''){
-       $query = $query." AND f.district LIKE '%" .$district . "%' ";
-   }if(trim($status)!=''){
-       $query = $query." AND vl.status='".$status."'";
-   }if(trim($mailSentStatus)!=''){
-      if(trim($type)== 'request'){
-        $query = $query." AND vl.request_mail_sent='".$mailSentStatus."'";
-      }elseif(trim($type)== 'result'){
-         $query = $query." AND vl.result_mail_sent='".$mailSentStatus."'";
-      }
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =2";
+if(isset($facility) && count(array_filter($facility))>0){
+    $query = $query." AND vl.facility_id IN (".implode(',',$facility).")";
+}if(trim($sampleType)!=''){
+    $query = $query." AND vl.sample_id='".$sampleType."'";
+}if(trim($gender)!=''){
+    $query = $query." AND vl.gender='".$gender."'";
+}if(trim($pregnant)!=''){
+    $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
+}if(trim($urgent)!=''){
+    $query = $query." AND vl.urgency='".$urgent."'";
+}if(trim($state)!=''){
+    $query = $query." AND f.state LIKE '%" .$state . "%' ";
+}if(trim($district)!=''){
+    $query = $query." AND f.district LIKE '%" .$district . "%' ";
+}if(isset($batch) && count(array_filter($batch))>0){
+    $query = $query." AND vl.batch_id IN (".implode(',',$batch).")";
+}if(isset($_POST['status']) && trim($_POST['status'])!=''){
+    $query = $query." AND vl.status='".$_POST['status']."'";
+}if(trim($mailSentStatus)!=''){
+   if(trim($type)== 'request'){
+     $query = $query." AND vl.request_mail_sent='".$mailSentStatus."'";
+   }elseif(trim($type)== 'result'){
+      $query = $query." AND vl.result_mail_sent='".$mailSentStatus."'";
    }
-   
-   $query." ORDER BY f.facility_name ASC";
-   if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-       if (trim($start_date) == trim($end_date)) {
-           $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
-       }else{
-          $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
-       }
-   }
+}if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+    if (trim($start_date) == trim($end_date)) {
+        $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
+    }else{
+       $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
+    }
 }
+$query = $query." ORDER BY f.facility_name ASC";
 //echo $query;die;
 $result = $db->rawQuery($query);
 ?>
