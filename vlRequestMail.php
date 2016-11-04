@@ -13,11 +13,17 @@ $sTypeQuery="SELECT * FROM r_sample_type where form_identification=2";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 $facilityQuery="SELECT * FROM facility_details where status='active'";
 $facilityResult = $db->rawQuery($facilityQuery);
+//Get batches
+$batchQuery="SELECT * FROM batch_details";
+$batchResult = $db->rawQuery($batchQuery);
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
     .ms-container{
         width:100%;
+    }
+    .select2-selection__choice{
+	    color:#000000 !important;
     }
 </style>
   <!-- Content Wrapper. Contains page content -->
@@ -58,7 +64,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="toEmail" class="col-lg-3 control-label">To Email <span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter To email"/>
+                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter To email"/>
                         </div>
                     </div>
                   </div>
@@ -68,7 +74,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="cc" class="col-lg-3 control-label">CC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="cc" name="cc" class="form-control" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter CC"/>
+                           <input type="text" id="cc" name="cc" class="form-control" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter CC"/>
                         </div>
                     </div>
                   </div>
@@ -78,7 +84,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                     <div class="form-group">
                         <label for="bcc" class="col-lg-3 control-label">BCC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="id1@yahoo.com,id2@yahoo.com" title="Please enter BCC"/>
+                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter BCC"/>
                         </div>
                     </div>
                   </div>
@@ -95,7 +101,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
+                        <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:90%;">
                             <tr>
                                    <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
                                    <td>
@@ -161,9 +167,20 @@ $facilityResult = $db->rawQuery($facilityQuery);
                                 </td>
                             </tr>
                             <tr>
+                                <td class=""><b>Batch&nbsp;:</b></td>
+                                <td>
+                                    <select name="batch" id="batch" class="form-control" title="Please choose batch" style="width:275px;" multiple="multiple">
+                                          <option value=""> -- Select -- </option>
+                                          <?php
+                                          foreach($batchResult as $batch){
+                                          ?>
+                                           <option value="<?php echo $batch['batch_id']; ?>"><?php echo $batch['batch_code']; ?></option>
+                                          <?php } ?>
+                                    </select>
+                                </td>
                                 <td class=""><b>Mail Sent Status&nbsp;:</b></td>
-                                <td colspan="3">
-                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:42.5%;">
+                                <td>
+                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:275px;">
                                             <option value="no">Samples Not yet Mailed</option>
                                             <option value="">All Samples</option>
                                             <option value="yes">Already Mailed Samples</option>
@@ -225,7 +242,8 @@ $facilityResult = $db->rawQuery($facilityQuery);
   <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
   $(document).ready(function() {
-      $('#facilityName').select2();
+      $('#facilityName').select2({placeholder: "Select Facilities"});
+      $('#batch').select2({placeholder: "Select Batches"});
       $('#sampleCollectionDate').daterangepicker({
         format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -251,7 +269,7 @@ $facilityResult = $db->rawQuery($facilityQuery);
        selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
        selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
        afterInit: function(ms){
-	 var that = this,
+	     var that = this,
 	     $selectableSearch = that.$selectableUl.prev(),
 	     $selectionSearch = that.$selectionUl.prev(),
 	     selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
@@ -323,9 +341,10 @@ $facilityResult = $db->rawQuery($facilityQuery);
       var urgent = $('input[name=urgency]:checked').val();
       var state = $('#state').val();
       var district = $('#district').val();
+      var batch = $('#batch').val();
       var sampleMailSentStatus = $('#sampleMailSentStatus').val();
       var type = $('#type').val();
-      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,mailSentStatus:sampleMailSentStatus,type:type},
+      $.post("getRequestSampleCodeDetails.php", { facility : facilityName,sType:sTypeName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent,state:state,district:district,batch:batch,mailSentStatus:sampleMailSentStatus,type:type},
       function(data){
         if($.trim(data) !== ""){
           $("#sampleDetails").html(data);
