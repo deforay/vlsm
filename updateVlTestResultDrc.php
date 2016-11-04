@@ -363,7 +363,7 @@
                             <tr>
                                 <td style="width:20%;"><label for="">Date du prélèvement </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
@@ -416,7 +416,7 @@
                             <tr>
                                 <td style="width:20%;"><label for="">Date de réception de léchantillon </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab']; ?>" onchange="checkSampleReceviedDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
@@ -486,7 +486,7 @@
                             <tr>
                                 <td><label for="">Date de remise du résultat </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" onchange="checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                         </table>
@@ -673,6 +673,70 @@
         $("#ageInMonths").val("");
       }
       $("#ageInYears").val((diff.getUTCFullYear() - 1970 > 0)? (diff.getUTCFullYear() - 1970) : ''); // Gives difference as year
+    }
+    
+    function checkSampleReceviedDate(){
+      var sampleCollectionDate = $("#sampleCollectionDate").val();
+      var sampleReceivedDate = $("#sampleReceivedDate").val();
+      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= '') {
+        //Set sample coll. datetime
+        splitSampleCollDateTime = sampleCollectionDate.split(" ");
+        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
+        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
+        var monthDigit = sampleCollOn.getMonth();
+        var smplCollYear = splitSampleCollDate[2];
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
+        var smplCollDate = splitSampleCollDate[0];
+        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
+        //Set sample rece. datetime
+        splitSampleReceivedDateTime = sampleReceivedDate.split(" ");
+        splitSampleReceivedDate = splitSampleReceivedDateTime[0].split("-");
+        var sampleReceivedOn = new Date(splitSampleReceivedDate[1] + splitSampleReceivedDate[2]+", "+splitSampleReceivedDate[0]);
+        var monthDigit = sampleReceivedOn.getMonth();
+        var smplReceivedYear = splitSampleReceivedDate[2];
+        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplReceivedMonth = (smplReceivedMonth<10) ? '0'+smplReceivedMonth: smplReceivedMonth;
+        var smplReceivedDate = splitSampleReceivedDate[0];
+        sampleReceivedDateTime = smplReceivedYear+"-"+smplReceivedMonth+"-"+smplReceivedDate+" "+splitSampleReceivedDateTime[1]+":00";
+        //Check diff
+        if(moment(sampleCollDateTime).diff(moment(sampleReceivedDateTime)) > 0) {
+          alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
+          $("#sampleReceivedDate").val("");
+        }
+      }
+    }
+    
+    function checkSampleTestingDate(){
+      var sampleCollectionDate = $("#sampleCollectionDate").val();
+      var sampleTestingDate = $("#sampleTestingDateAtLab").val();
+      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= '') {
+        //Set sample coll. date
+        splitSampleCollDateTime = sampleCollectionDate.split(" ");
+        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
+        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
+        var monthDigit = sampleCollOn.getMonth();
+        var smplCollYear = splitSampleCollDate[2];
+        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
+        var smplCollDate = splitSampleCollDate[0];
+        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
+        //Set sample testing date
+        splitSampleTestedDateTime = sampleTestingDate.split(" ");
+        splitSampleTestedDate = splitSampleTestedDateTime[0].split("-");
+        var sampleTestingOn = new Date(splitSampleTestedDate[1] + splitSampleTestedDate[2]+", "+splitSampleTestedDate[0]);
+        var monthDigit = sampleTestingOn.getMonth();
+        var smplTestingYear = splitSampleTestedDate[2];
+        var smplTestingMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
+        smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
+        var smplTestingDate = splitSampleTestedDate[0];
+        sampleTestingAtLabDateTime = smplTestingYear+"-"+smplTestingMonth+"-"+smplTestingDate+" "+splitSampleTestedDateTime[1]+":00";
+        //Check diff
+        if(moment(sampleCollDateTime).diff(moment(sampleTestingAtLabDateTime)) > 0) {
+          alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
+          $("#sampleTestingDateAtLab").val("");
+        }
+      }
     }
     
     function validateNow(){

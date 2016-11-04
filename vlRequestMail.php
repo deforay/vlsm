@@ -148,19 +148,19 @@ $batchResult = $db->rawQuery($batchQuery);
                             <tr>
                                 <td><b class="showPregnant">Pregnant&nbsp;:</b></td>
                                 <td>
-                                    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant showPregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
-                                    <input type="radio" name="pregnant" title="Please choose pregnant" class="pregnant showPregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
+                                    <input type="radio" name="pregnant" title="Please choose type" class="pregnant showPregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
+                                    <input type="radio" name="pregnant" title="Please choose type" class="pregnant showPregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
                                 </td>
                                 <td class=""><b>Urgency&nbsp;:</b></td>
                                 <td class="">
-                                    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
-                                    <input type="radio" name="urgency" title="Please choose urgent" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+                                    <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
+                                    <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
                                 </td>
                             </tr>
                             <tr>
                                 <td>&nbsp;<b>State/Province &nbsp;:</b></td>
                                 <td>
-                                    <input type="text" id="state" name="state" class="form-control" placeholder="State" style="width:275px;"/>
+                                    <input type="text" id="state" name="state" class="form-control" placeholder="State/Province" style="width:275px;"/>
                                 </td>
                                 <td>&nbsp;<b>District&nbsp;:</b></td>
                                 <td>

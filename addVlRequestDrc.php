@@ -691,8 +691,8 @@
         lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
         var lastVLTestDate = splitLastVLTestDate[0];
         lastVLTestDate = lastVLTestYear+"-"+lastVLTestMonth+"-"+lastVLTestDate;
-        console.log(artIniDate);
-        console.log(lastVLTestDate);
+        //console.log(artIniDate);
+        //console.log(lastVLTestDate);
         //Check diff
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
           alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
