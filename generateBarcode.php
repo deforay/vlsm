@@ -6,15 +6,6 @@ include ('./includes/tcpdf/tcpdf.php');
 $id=base64_decode($_POST['id']);
 
 if($id >0){
-    //global config
-    $cSampleQuery="SELECT * FROM global_config";
-    $cSampleResult=$db->query($cSampleQuery);
-    $arr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-    }
-    
     if (!file_exists('uploads') && !is_dir('uploads')) {
         mkdir('uploads');
     }
@@ -27,15 +18,13 @@ if($id >0){
     
     $hQuery="SELECT * from global_config where name='header'";
     $hResult=$db->query($hQuery);
-
-    $query="SELECT * from batch_details where batch_id=$id";
-    $bResult=$db->query($query);
     
     $fQuery="SELECT vl_sample_id,sample_code from vl_request_form where batch_id=$id";
     $result=$db->query($fQuery);
-    
-    
     if(count($result)>0){
+        $query="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
+        //print_r($query);die;
+        $bResult=$db->query($query);
         // Extend the TCPDF class to create custom Header and Footer
         class MYPDF extends TCPDF {
             public function setHeading($logo,$header) {
@@ -130,8 +119,10 @@ if($id >0){
             <td align="center" width="65%">Barcode</td>
         </tr>
     </thead>';
-    if($arr['number_of_in_house_controls'] !='' && $arr['number_of_in_house_controls']!=NULL){
-        for($i=1;$i<=$arr['number_of_in_house_controls'];$i++){
+    $noOfInHouseControls = 0;
+    if(isset($bResult[0]['number_of_in_house_controls']) && $bResult[0]['number_of_in_house_controls'] !='' && $bResult[0]['number_of_in_house_controls']!=NULL){
+        $noOfInHouseControls = $bResult[0]['number_of_in_house_controls'];
+        for($i=1;$i<=$bResult[0]['number_of_in_house_controls'];$i++){
             $tbl.='<tr nobr="true">
                 <td align="center" width="8%" >'.$i.'.</td>
                 <td align="center" width="27%" >In-House Controls '. $i.'</td>
@@ -139,9 +130,12 @@ if($id >0){
             </tr>';
         }
     }
-    if($arr['number_of_manufacturer_controls'] !='' && $arr['number_of_manufacturer_controls']!=NULL){
-        for($i=1;$i<=$arr['number_of_manufacturer_controls'];$i++){
-            $sNo = $arr['number_of_in_house_controls']+$i;
+    
+    $noOfManufacturerControls = 0;
+    if(isset($bResult[0]['number_of_manufacturer_controls']) && $bResult[0]['number_of_manufacturer_controls'] !='' && $bResult[0]['number_of_manufacturer_controls']!=NULL){
+        $noOfManufacturerControls = $bResult[0]['number_of_manufacturer_controls'];
+        for($i=1;$i<=$bResult[0]['number_of_manufacturer_controls'];$i++){
+            $sNo = $noOfInHouseControls+$i;
             $tbl.='<tr nobr="true">
                 <td align="center" width="8%" >'.$sNo.'.</td>
                 <td align="center" width="27%" >Manufacturer Controls '. $i.'</td>
@@ -151,7 +145,7 @@ if($id >0){
     }
     $tbl.='</table>';
     $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
-    $sampleCounter = ($arr['number_of_manufacturer_controls']+$arr['number_of_in_house_controls']+1);
+    $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+1);
 
     foreach($result as $val){
         if($pdf->getY()>=250){
