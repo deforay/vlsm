@@ -143,9 +143,22 @@ if($id >0){
             </tr>';
         }
     }
+    
+    $noOfCalibrators = 0;
+    if(isset($bResult[0]['number_of_calibrators']) && $bResult[0]['number_of_calibrators'] !='' && $bResult[0]['number_of_calibrators']!=NULL){
+        $noOfCalibrators = $bResult[0]['number_of_calibrators'];
+        for($i=1;$i<=$bResult[0]['number_of_calibrators'];$i++){
+            $sNo = $noOfInHouseControls+$noOfManufacturerControls+$i;
+            $tbl.='<tr nobr="true">
+                <td align="center" width="8%" >'.$sNo.'.</td>
+                <td align="center" width="27%" >Calibrators '. $i.'</td>
+                <td align="center" width="65%" ></td>
+            </tr>';
+        }
+    }
     $tbl.='</table>';
     $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
-    $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+1);
+    $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
 
     foreach($result as $val){
         if($pdf->getY()>=250){
