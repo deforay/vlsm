@@ -28,7 +28,7 @@ include('header.php');
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="configurationName" class="col-lg-4 control-label">Configuration Name<span class="mandatory">*</span></label>
+                        <label for="configurationName" class="col-lg-4 control-label">Configuration Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired" id="configurationName" name="configurationName" placeholder="eg. Roche or Abbott" title="Please enter configuration name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null);setConfigFileName();"onkeypress="setConfigFileName();"/>
                         </div>
@@ -39,7 +39,7 @@ include('header.php');
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="configurationFileName" class="col-lg-4 control-label">Configuration File<span class="mandatory">*</span></label>
+                        <label for="configurationFileName" class="col-lg-4 control-label">Configuration File <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter machine name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null)"/>
                         </div>
@@ -66,7 +66,46 @@ include('header.php');
                     </div>
                   </div>
                 </div>
-                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="maxNOfSamplesInBatch" class="col-lg-4 control-label">Maximum No. of Samples In a Batch <span class="mandatory">*</span></label>
+                      <div class="col-lg-7">
+                        <input type="text" class="form-control checkNum isRequired" id="maxNOfSamplesInBatch" name="maxNOfSamplesInBatch" placeholder="Max. no of samples" title="Please enter max no of samples in a row"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="noOfInHouseControls" class="col-lg-4 control-label">Number of In-House Controls </label>
+                      <div class="col-lg-7">
+                        <input type="text" class="form-control checkNum" id="noOfInHouseControls" name="noOfInHouseControls" placeholder="No. of In-House controls" title="Please enter no. of in-house controls"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="noOfManufacturerControls" class="col-lg-4 control-label">Number of Manufacturer Controls </label>
+                      <div class="col-lg-7">
+                        <input type="text" class="form-control checkNum" id="noOfManufacturerControls" name="noOfManufacturerControls" placeholder="No. of Manufacturer controls" title="Please enter no. of manufacturer controls"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="numberOfCalibrators" class="col-lg-4 control-label">No. Of Calibrators </label>
+                      <div class="col-lg-7">
+                        <input type="text" class="form-control checkNum" id="numberOfCalibrators" name="numberOfCalibrators" placeholder="No. of Calibrators" title="Please enter no. of calibrators"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">

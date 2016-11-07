@@ -2,11 +2,9 @@
 ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
-$configQuery="SELECT * FROM global_config WHERE name ='max_no_of_samples_in_a_batch'";
-$configResult = $db->rawQuery($configQuery);
-if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
-  $configResult[0]['value'] = 0;
-}
+//Get active machines
+$importConfigQuery="SELECT * FROM import_config WHERE status ='active'";
+$importConfigResult = $db->rawQuery($importConfigQuery);
 $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -21,15 +19,15 @@ $end_date = date('Y-m-d');
 $batchQuery='select MAX(batch_code_key) FROM batch_details as bd where DATE(bd.created_on) >= "'.$start_date.'" AND DATE(bd.created_on) <= "'.$end_date.'"';
 $batchResult=$db->query($batchQuery);
 
-  if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code_key)']!=NULL){
+if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code_key)']!=NULL){
  $maxId = $batchResult[0]['MAX(batch_code_key)']+1;
  $lngth = strlen($maxId);
  if($lngth==1){
- $maxId = "00".$maxId;
+    $maxId = "00".$maxId;
  }else if($lngth==2){
- $maxId = "0".$maxId; 
+    $maxId = "0".$maxId; 
  }else if($lngth==3){
- $maxId = $maxId; 
+    $maxId = $maxId; 
  }
 }else{
  $maxId = '001';
@@ -38,7 +36,7 @@ $batchResult=$db->query($batchQuery);
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
   .select2-selection__choice{
-	color:#000000 !important;
+	  color:#000000 !important;
   }
   #ms-sampleCode{width: 110%;}
   .showPregnant{display: none;}
@@ -138,29 +136,46 @@ $batchResult=$db->query($batchQuery);
                         </div>
                     </div>
                   </div>
-               </div>
-							 <div class="row" id="sampleDetails">
-								<div class="col-md-8">
-										<div class="form-group">
-												<div class="col-md-12">
-													<div class="col-md-12">
-														 <div style="width:60%;margin:0 auto;clear:both;">
-															<a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
-															</div><br/><br/>
-														<select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
+                </div>
+								<div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="machine" class="col-lg-4 control-label">Choose Machine <span class="mandatory">*</span></label>
+                        <div class="col-lg-7" style="margin-left:3%;">
+													<select name="machine" id="machine" class="form-control isRequired" title="Please choose machine">
+														<option value=""> -- Select -- </option>
 														<?php
-														foreach($result as $sample){
-															?>
-															<option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
-															<?php
-														}
+														foreach($importConfigResult as $machine) {
 														?>
+														   <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
+														<?php } ?>
 													</select>
-													</div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+							  <div class="row" id="sampleDetails">
+									<div class="col-md-8">
+											<div class="form-group">
+													<div class="col-md-12">
+														<div class="col-md-12">
+															 <div style="width:60%;margin:0 auto;clear:both;">
+																<a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+																</div><br/><br/>
+															<select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
+															<?php
+															foreach($result as $sample){
+																?>
+																<option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
+																<?php
+															}
+															?>
+														</select>
+														</div>
+												</div>
 											</div>
 										</div>
-									</div>
-							</div>
+							  </div>
                
               </div>
               <!-- /.box-body -->
@@ -185,9 +200,9 @@ $batchResult=$db->query($batchQuery);
   <script type="text/javascript" src="assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
-
   var startDate = "";
   var endDate = "";
+	noOfSamples = 0;
   $(document).ready(function() {
 	   $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate').daterangepicker({
@@ -211,6 +226,7 @@ $batchResult=$db->query($batchQuery);
       });
      $('#sampleCollectionDate').val("");
   } );
+	
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'addBatchForm'
@@ -221,6 +237,7 @@ $batchResult=$db->query($batchQuery);
       document.getElementById('addBatchForm').submit();
     }
   }
+	
    //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
    $(document).ready(function() {
       $('.search').multiSelect({
@@ -250,21 +267,20 @@ $batchResult=$db->query($batchQuery);
 	 });
        },
        afterSelect: function(){
-	var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
-	if(this.qs2.cache().matchedResultsCount == maxNoOfSample){
-	  alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
-	  $(".ms-selectable").css("pointer-events","none");
-	}
-	 this.qs1.cache();
-	 this.qs2.cache();
+				//console.log(noOfSamples);
+				if(this.qs2.cache().matchedResultsCount == noOfSamples){
+					alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+					$(".ms-selectable").css("pointer-events","none");
+				}
+				 this.qs1.cache();
+				 this.qs2.cache();
        },
        afterDeselect: function(){
-	 var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
-	if(this.qs2.cache().matchedResultsCount < maxNoOfSample){
-	  $(".ms-selectable").css("pointer-events","auto");
-	}
-	 this.qs1.cache();
-	 this.qs2.cache();
+				if(this.qs2.cache().matchedResultsCount < noOfSamples){
+					$(".ms-selectable").css("pointer-events","auto");
+				}
+				 this.qs1.cache();
+				 this.qs2.cache();
        }
      });
       
@@ -277,13 +293,11 @@ $batchResult=$db->query($batchQuery);
        return false;
      });
      
-     <?php
-      if($configResult[0]['value'] == 0){ ?>
-	$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
-     <?php } else if(count($result) >= $configResult[0]['value']) { ?>
+      if(noOfSamples == 0){
+	      $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+      } else if(<?php echo count($result); ?> >= noOfSamples) {
         $("#select-all-samplecode").css("pointer-events","none");
-     <?php }
-     ?>
+      }
    });
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
     {
@@ -323,17 +337,46 @@ $batchResult=$db->query($batchQuery);
       });
       $.unblockUI();
     }
-    function enablePregnant(obj)
-    {
+    function enablePregnant(obj){
       if(obj.value=="female"){
-	$(".showPregnant").show();
-	$(".pregnant").prop("disabled",false);
-      }else{
-	$(".showPregnant").hide();
-	$(".pregnant").prop("checked",false);
-	$(".pregnant").attr("disabled","");
+				$(".showPregnant").show();
+				$(".pregnant").prop("disabled",false);
+				}else{
+				$(".showPregnant").hide();
+				$(".pregnant").prop("checked",false);
+				$(".pregnant").attr("disabled","");
       }
     }
+		
+		$("#machine").change(function(){
+			var self = this.value;
+			if(self!= ''){
+        var selected = $(this).find('option:selected');
+        noOfSamples = selected.data('no-of-samples');
+				if(noOfSamples == 0){
+					$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+					$(".ms-selectable").css("pointer-events","none");
+					$('#sampleCode').multiSelect('deselect_all');
+				}else if(<?php echo count($result); ?> >= noOfSamples) {
+					if($("#sampleCode :selected").length < noOfSamples){
+							$("#select-all-samplecode").css("pointer-events","none");
+							$(".ms-selectable").css("pointer-events","auto");
+					}else{
+							$("#select-all-samplecode").css("pointer-events","none");
+							$(".ms-selectable").css("pointer-events","none");
+					}
+				}else{
+					$(".ms-selectable,#select-all-samplecode").css("pointer-events","auto");
+					$("#select-all-samplecode").css("pointer-events","auto");
+					$(".ms-selectable").css("pointer-events","auto");
+				}
+			}else{
+				noOfSamples = 0;
+				$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+				$(".ms-selectable").css("pointer-events","none");
+				$('#sampleCode').multiSelect('deselect_all');
+			}
+    });
   </script>
   
  <?php

@@ -3,7 +3,7 @@ ob_start();
 include('header.php');
 //include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
-$batchQuery="SELECT * from batch_details where batch_id=$id";
+$batchQuery="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
 $query="SELECT vl.sample_code,vl.batch_id,vl.vl_sample_id,vl.facility_id,vl.result,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' OR batch_id=$id ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
@@ -13,11 +13,9 @@ $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 $sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-$configQuery="SELECT * FROM global_config WHERE name ='max_no_of_samples_in_a_batch'";
-$configResult = $db->rawQuery($configQuery);
-if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
-  $configResult[0]['value'] = 0;
-}
+//Get active machines
+$importConfigQuery="SELECT * FROM import_config WHERE status ='active'";
+$importConfigResult = $db->rawQuery($importConfigQuery);
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet"/>
 <style>
@@ -45,66 +43,66 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
         <div class="box-header with-border">
           <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
         </div>
-	<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
-		<tr>
-		  <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
-		  <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
-		    </td>
-		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
-		    <td>
-		      <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-			<option value=""> -- Select -- </option>
-			  <?php
-			  foreach($sResult as $type){
-			   ?>
-			   <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
-			   <?php
-			  }
-			  ?>
-			</select>
-		    </td>
-		</tr>
-		<tr>
-		   <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
-		    <td>
-		      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
-			    <?php
-			    foreach($fResult as $name){
-			     ?>
-			     <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
-			     <?php
-			    }
-			    ?>
-			  </select>
-		    </td>
-		    <td><b>Gender&nbsp;:</b></td>
-		    <td>
-		      <select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
+				<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
+					<tr>
+						<td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
+						<td>
+								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
+							</td>
+							<td>&nbsp;<b>Sample Type&nbsp;:</b></td>
+							<td>
+								<select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
 						<option value=""> -- Select -- </option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-						<option value="not_recorded">Not Recorded</option>
-		      </select>
-		    </td>
-		</tr>
-		<tr>
-		  <td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
-		  <td class="showPregnant">
-		    <input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
-		    <input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
-		  </td>
-		  <td class=""><b>Urgency&nbsp;:</b></td>
-		  <td class="">
-		    <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
-		    <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
-		  </td>
-		</tr>
-		<tr>
-		  <td>&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
-		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		  </td>
-		</tr>
+							<?php
+							foreach($sResult as $type){
+							 ?>
+							 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
+							 <?php
+							}
+							?>
+						</select>
+							</td>
+					</tr>
+					<tr>
+						 <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+							<td>
+								<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
+								<?php
+								foreach($fResult as $name){
+								 ?>
+								 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+								 <?php
+								}
+								?>
+							</select>
+							</td>
+							<td><b>Gender&nbsp;:</b></td>
+							<td>
+								<select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
+									<option value=""> -- Select -- </option>
+									<option value="male">Male</option>
+									<option value="female">Female</option>
+									<option value="not_recorded">Not Recorded</option>
+								</select>
+							</td>
+					</tr>
+					<tr>
+						<td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
+						<td class="showPregnant">
+							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
+							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
+						</td>
+						<td class=""><b>Urgency&nbsp;:</b></td>
+						<td class="">
+							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
+							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
+							&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+						</td>
+					</tr>
 	    </table>
         <!-- /.box-header -->
         <div class="box-body">
@@ -117,6 +115,23 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
                         <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
                         <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo $batchInfo[0]['batch_code'];?>" onblur="checkNameValidation('batch_details','batch_code',this,'<?php echo "batch_id##".$id;?>','This batch code already exists.Try another code',null)"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+								<div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="machine" class="col-lg-4 control-label">Choose Machine <span class="mandatory">*</span></label>
+                        <div class="col-lg-7" style="margin-left:3%;">
+													<select name="machine" id="machine" class="form-control isRequired" title="Please choose machine">
+														<option value=""> -- Select -- </option>
+														<?php
+														foreach($importConfigResult as $machine) {
+														?>
+														   <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>" <?php echo($batchInfo[0]['machine'] == $machine['config_id'])?'selected="selected"':''; ?>><?php echo ucwords($machine['machine_name']); ?></option>
+														<?php } ?>
+													</select>
                         </div>
                     </div>
                   </div>
@@ -189,10 +204,18 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
   }
    //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
    $(document).ready(function() {
+		noOfSamples = 0;
+		<?php
+			if(isset($batchInfo[0]['max_no_of_samples_in_a_batch']) && trim($batchInfo[0]['max_no_of_samples_in_a_batch'])>0){
+				?>
+				noOfSamples = <?php echo intval($batchInfo[0]['max_no_of_samples_in_a_batch']); ?>;
+		<?php }
+		?>
+		//console.log(noOfSamples);
 		$("#facilityName").select2({placeholder:"Select Facilities"});
         $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+	          separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
@@ -238,8 +261,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	   });
 	 },
 	 afterSelect: function(){
-	  var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
-	  if(this.qs2.cache().matchedResultsCount >= maxNoOfSample){
+	  if(this.qs2.cache().matchedResultsCount >= noOfSamples){
 	    alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 	    $(".ms-selectable").css("pointer-events","none");
 	  }
@@ -247,8 +269,7 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	   this.qs2.cache();
 	 },
 	 afterDeselect: function(){
-	  var maxNoOfSample = '<?php echo $configResult[0]['value']; ?>';
-	  if(this.qs2.cache().matchedResultsCount < maxNoOfSample){
+	  if(this.qs2.cache().matchedResultsCount < noOfSamples){
 	    $(".ms-selectable").css("pointer-events","auto");
 	  }
 	   this.qs1.cache();
@@ -264,18 +285,16 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
 	 return false;
        });
        
-       <?php
-	if($configResult[0]['value'] == 0){ ?>
+      
+	if(noOfSamples == 0){
 	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
-       <?php } else if(count($result) >= $configResult[0]['value']) { ?>
-	  $("#select-all-samplecode").css("pointer-events","none");
-       <?php }
-       ?>
+	 } else if('<?php echo count($result); ?>' >= noOfSamples) {
+	   $("#select-all-samplecode").css("pointer-events","none");
+	 }
        
-       var selectedSampleCount = $("#sampleCode :selected").length;
-       var maxNoOfSampleCount = '<?php echo $configResult[0]['value']; ?>';
+    var selectedSampleCount = $("#sampleCode :selected").length;
 	
-	if(parseInt(selectedSampleCount) >= parseInt(maxNoOfSampleCount)){
+	if(parseInt(selectedSampleCount) >= parseInt(noOfSamples)){
 	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
 	}
 	<?php
@@ -332,17 +351,46 @@ if(!isset($configResult[0]['value']) || trim($configResult[0]['value']) == ''){
     });
     $.unblockUI();
   }
-  function enablePregnant(obj)
-    {
+  function enablePregnant(obj){
       if(obj.value=="female"){
-	$(".showPregnant").show();
-	$(".pregnant").prop("disabled",false);
-      }else{
-	$(".showPregnant").hide();
-	$(".pregnant").prop("checked",false);
-	$(".pregnant").attr("disabled","");
-      }
+				$(".showPregnant").show();
+				$(".pregnant").prop("disabled",false);
+			}else{
+				$(".showPregnant").hide();
+				$(".pregnant").prop("checked",false);
+				$(".pregnant").attr("disabled","");
+			}
     }
+		
+		$("#machine").change(function(){
+			var self = this.value;
+			if(self!= ''){
+        var selected = $(this).find('option:selected');
+        noOfSamples = selected.data('no-of-samples');
+				if(noOfSamples == 0){
+					$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+					$(".ms-selectable").css("pointer-events","none");
+					$('#sampleCode').multiSelect('deselect_all');
+				}else if(<?php echo count($result); ?> >= noOfSamples) {
+					if($("#sampleCode :selected").length < noOfSamples){
+							$("#select-all-samplecode").css("pointer-events","none");
+							$(".ms-selectable").css("pointer-events","auto");
+					}else{
+							$("#select-all-samplecode").css("pointer-events","none");
+							$(".ms-selectable").css("pointer-events","none");
+					}
+				}else{
+					$(".ms-selectable,#select-all-samplecode").css("pointer-events","auto");
+					$("#select-all-samplecode").css("pointer-events","auto");
+					$(".ms-selectable").css("pointer-events","auto");
+				}
+			}else{
+				noOfSamples = 0;
+				$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+				$(".ms-selectable").css("pointer-events","none");
+				$('#sampleCode').multiSelect('deselect_all');
+			}
+    });
   </script>
   
  <?php

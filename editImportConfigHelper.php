@@ -12,12 +12,16 @@ try {
     'file_name'=>$_POST['configurationFile'],
     'lower_limit'=>$_POST['lowerLimit'],
     'higher_limit'=>$_POST['higherLimit'],
+    'max_no_of_samples_in_a_batch'=>$_POST['maxNOfSamplesInBatch'],
+    'number_of_in_house_controls'=>$_POST['noOfInHouseControls'],
+    'number_of_manufacturer_controls'=>$_POST['noOfManufacturerControls'],
+    'number_of_calibrators'=>$_POST['numberOfCalibrators'],
     'status'=>$_POST['status']
     );
     //print_r($importConfigData);die;
     $db=$db->where('config_id',$configId);
     //print_r($vldata);die;
-    $db->update($tableName,$importConfigData);        
+    $db->update($tableName,$importConfigData);     
     
         $_SESSION['alertMsg']="Import config details updated successfully";
     

@@ -126,9 +126,9 @@ $primaryKey="config_id";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = ucwords($aRow['machine_name']);
-	    $row[] = ucwords($aRow['status']);
-	    $row[] = '<a href="editImportConfig.php?id=' . base64_encode($aRow['config_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+	        $row[] = ucwords($aRow['machine_name']);
+	        $row[] = ucwords($aRow['status']);
+	        $row[] = '<a href="editImportConfig.php?id=' . base64_encode($aRow['config_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

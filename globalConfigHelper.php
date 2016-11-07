@@ -7,7 +7,6 @@ include('ImageResize.php');
 define('UPLOAD_PATH','uploads');
 $general = new Deforay_Commons_General();
 $tableName="global_config";
-
 try {
     if(isset($_POST['removedLogoImage']) && trim($_POST['removedLogoImage']) != "" && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage'])){
         unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage']);
