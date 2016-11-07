@@ -6,7 +6,6 @@ include ('./includes/tcpdf/tcpdf.php');
 $id=base64_decode($_POST['id']);
 
 if($id >0){
-    
     //global config
     $cSampleQuery="SELECT * FROM global_config";
     $cSampleResult=$db->query($cSampleQuery);
@@ -122,15 +121,15 @@ if($id >0){
         // add a page
         $pdf->AddPage();
     
-$tbl = '
-<table cellspacing="0" cellpadding="3" border="1">
-<thead>
-    <tr nobr="true" style="background-color:#71b9e2;color:#FFFFFF;">
-        <td align="center" width="8%">S.No.</td>
-        <td align="center" width="27%">Sample ID</td>
-        <td align="center" width="65%">Barcode</td>
-    </tr>
-</thead>';
+    $tbl = '
+    <table cellspacing="0" cellpadding="3" border="1">
+    <thead>
+        <tr nobr="true" style="background-color:#71b9e2;color:#FFFFFF;">
+            <td align="center" width="8%">S.No.</td>
+            <td align="center" width="27%">Sample ID</td>
+            <td align="center" width="65%">Barcode</td>
+        </tr>
+    </thead>';
     if($arr['number_of_in_house_controls'] !='' && $arr['number_of_in_house_controls']!=NULL){
         for($i=1;$i<=$arr['number_of_in_house_controls'];$i++){
             $tbl.='<tr nobr="true">

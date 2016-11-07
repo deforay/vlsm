@@ -40,36 +40,6 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="max_no_of_samples_in_a_batch" class="col-lg-4 control-label">Maximum No. of Samples In a Batch </label>
-                      <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric" id="max_no_of_samples_in_a_batch" name="max_no_of_samples_in_a_batch" placeholder="Max. no of samples" title="Please enter max no of samples in a row" value="<?php echo $arr['max_no_of_samples_in_a_batch']; ?>"/>
-                      </div>
-                    </div>
-                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="number_of_in_house_controls" class="col-lg-4 control-label">Number of In-House Controls </label>
-                      <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric" id="number_of_in_house_controls" name="number_of_in_house_controls" placeholder="No. of In-House controls" title="Please enter no. of in-house controls " value="<?php echo $arr['number_of_in_house_controls']; ?>"/>
-                      </div>
-                    </div>
-                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="number_of_manufacturer_controls" class="col-lg-4 control-label">Number of Manufacturer Controls </label>
-                      <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric" id="number_of_manufacturer_controls" name="number_of_manufacturer_controls" placeholder="No. of Manufacturer controls" title="Please enter no. of manufacturer controls" value="<?php echo $arr['number_of_manufacturer_controls']; ?>"/>
-                      </div>
-                    </div>
-                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
                       <label for="default_time_zone" class="col-lg-4 control-label">Default Time Zone </label>
                       <div class="col-lg-8">
                         <input type="text" class="form-control" id="default_time_zone" name="default_time_zone" placeholder="eg: Africa/Harare" title="Please enter default time zone" value="<?php echo $arr['default_time_zone']; ?>"/>

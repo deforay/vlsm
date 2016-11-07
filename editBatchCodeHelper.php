@@ -8,7 +8,7 @@ $tableName2="vl_request_form";
 try {
         if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=""){
                 $sample = array();
-                $data=array('batch_code'=>$_POST['batchCode']);
+                $data=array('batch_code'=>$_POST['batchCode'],'machine'=>$_POST['machine']);
                 $db=$db->where('batch_id',$_POST['batchId']);
                 $db->update($tableName1,$data);
                 $lastId = $_POST['batchId'];
