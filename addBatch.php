@@ -30,6 +30,18 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
 }else{
  $maxId = '001';
 }
+//Set last machine label order
+$machinesLabelOrder = array();
+foreach($importConfigResult as $machine) {
+	$lastOrderQuery = "SELECT label_order from batch_details WHERE machine ='". $machine['config_id']."' ORDER BY created_on DESC";
+	$lastOrderInfo=$db->query($lastOrderQuery);
+	if(isset($lastOrderInfo[0]['label_order']) && trim($lastOrderInfo[0]['label_order'])!=''){
+			$machinesLabelOrder[$machine['config_id']] = implode(",",json_decode($lastOrderInfo[0]['label_order'],true));
+	}else{
+		$machinesLabelOrder[$machine['config_id']] = '';
+	}
+}
+//print_r($machinesLabelOrder);
 ?>
 <link href="assets/css/multi-select.css" rel="stylesheet" />
 <style>
@@ -149,8 +161,9 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
 														<option value=""> -- Select -- </option>
 														<?php
 														foreach($importConfigResult as $machine) {
+															$labelOrder = $machinesLabelOrder[$machine['config_id']];
 														?>
-														   <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>" data-no-of-in-house-controls="<?php echo $machine['number_of_in_house_controls']; ?>" data-no-of-manufacturer-controls="<?php echo $machine['number_of_manufacturer_controls']; ?>" data-no-of-calibrators="<?php echo $machine['number_of_calibrators']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
+														   <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>" data-no-of-in-house-controls="<?php echo $machine['number_of_in_house_controls']; ?>" data-no-of-manufacturer-controls="<?php echo $machine['number_of_manufacturer_controls']; ?>" data-no-of-calibrators="<?php echo $machine['number_of_calibrators']; ?>" data-label-order="<?php echo $labelOrder; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
 														<?php } ?>
 													</select>
                         </div>
@@ -390,6 +403,7 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
         noOfInHouseControls = selected.data('no-of-in-house-controls');
         noOfManufactuterControls = selected.data('no-of-manufacturer-controls');
         noOfCalibrators = selected.data('no-of-calibrators');
+        labelOrder = selected.data('label-order');
 						if(noOfSamples == 0){
 							$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
 							$(".ms-selectable").css("pointer-events","none");
@@ -408,32 +422,46 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
 							$(".ms-selectable").css("pointer-events","auto");
 						}
 						//Set display order
-							//No.of In House Controls
-							if(typeof noOfInHouseControls !== 'undefined' && noOfInHouseControls >0){
-								 for(var i=1;i<=noOfInHouseControls;i++){
-								    content+='<li class="ui-state-default" id="no_of_in_house_controls_'+i+'">In-House Controls '+i+'<li>';
-												sortedTitle.push('no_of_in_house_controls_'+i);
+						if($.trim(labelOrder)!= ''){
+								splitLabelOrder = labelOrder.split(",");
+								for(var o=0;o<splitLabelOrder.length;o++){
+									 label = splitLabelOrder[o].replace(/_/g," ");
+									 label = label.replace("in house","In-House");
+									 label = label.replace("no of "," ");
+										label = label.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+														return letter.toUpperCase();
+										});
+									 content+='<li class="ui-state-default" id="'+splitLabelOrder[o]+'">'+label+'<li>';
+										sortedTitle.push(splitLabelOrder[o]);
+								}
+			    }else{
+								 	//No.of In House Controls
+									if(typeof noOfInHouseControls !== 'undefined' && noOfInHouseControls >0){
+											for(var i=1;i<=noOfInHouseControls;i++){
+														content+='<li class="ui-state-default" id="no_of_in_house_controls_'+i+'">In-House Controls '+i+'<li>';
+														sortedTitle.push('no_of_in_house_controls_'+i);
+											}
+									}else{
+											noOfInHouseControls = 0;
 									}
-							}else{
-								 noOfInHouseControls = 0;
-							}
-							//No.of Manufacturer controls
-							if(typeof noOfManufactuterControls !== 'undefined' && noOfManufactuterControls >0){
-								 for(var i=1;i<=noOfManufactuterControls;i++){
-								    content+='<li class="ui-state-default" id="no_of_manufactuter_controls_'+i+'">Manufactuter Controls '+i+'<li>';
-												sortedTitle.push('no_of_manufactuter_controls_'+i);
+									//No.of Manufacturer controls
+									if(typeof noOfManufactuterControls !== 'undefined' && noOfManufactuterControls >0){
+											for(var i=1;i<=noOfManufactuterControls;i++){
+														content+='<li class="ui-state-default" id="no_of_manufactuter_controls_'+i+'">Manufactuter Controls '+i+'<li>';
+														sortedTitle.push('no_of_manufactuter_controls_'+i);
+											}
+									}else{
+											noOfManufactuterControls = 0;
 									}
-							}else{
-								 noOfManufactuterControls = 0;
-							}
-							//No.of Calibrators
-							if(typeof noOfCalibrators !== 'undefined' && noOfCalibrators >0){
-								 for(var i=1;i<=noOfCalibrators;i++){
-								    content+='<li class="ui-state-default" id="no_of_calibrators_'+i+'">Calibrators '+i+'<li>';
-												sortedTitle.push('no_of_calibrators_'+i);
+									//No.of Calibrators
+									if(typeof noOfCalibrators !== 'undefined' && noOfCalibrators >0){
+											for(var i=1;i<=noOfCalibrators;i++){
+														content+='<li class="ui-state-default" id="no_of_calibrators_'+i+'">Calibrators '+i+'<li>';
+														sortedTitle.push('no_of_calibrators_'+i);
+											}
+									}else{
+											noOfCalibrators = 0;
 									}
-							}else{
-								 noOfCalibrators = 0;
 							}
 						$("#sortableRow").html(content);
 						$("#sortOrders").val("");
