@@ -661,10 +661,13 @@ ALTER TABLE `r_sample_type` CHANGE `form_identification` `status` VARCHAR(45) NU
 --Pal 7th-Nov-2016
 ALTER TABLE `import_config` ADD `max_no_of_samples_in_a_batch` INT(11) NOT NULL AFTER `higher_limit`, ADD `number_of_in_house_controls` INT(11) NULL DEFAULT NULL AFTER `max_no_of_samples_in_a_batch`, ADD `number_of_manufacturer_controls` INT(11) NULL DEFAULT NULL AFTER `number_of_in_house_controls`, ADD `number_of_calibrators` INT(11) NULL DEFAULT NULL AFTER `number_of_manufacturer_controls`;
 
-DELETE FROM `global_config` WHERE `global_config`.`name` = \'max_no_of_samples_in_a_batch\'"
+DELETE FROM `global_config` WHERE `global_config`.`name` = \'max_no_of_samples_in_a_batch\'
 
-DELETE FROM `global_config` WHERE `global_config`.`name` = \'number_of_in_house_controls\'"
+DELETE FROM `global_config` WHERE `global_config`.`name` = \'number_of_in_house_controls\'
 
-DELETE FROM `global_config` WHERE `global_config`.`name` = \'number_of_manufacturer_controls\'"
+DELETE FROM `global_config` WHERE `global_config`.`name` = \'number_of_manufacturer_controls\'
 
 ALTER TABLE `batch_details` ADD `machine` INT(11) NOT NULL AFTER `batch_id`;
+
+--Pal 8th-Nov-2016
+ALTER TABLE `batch_details` ADD `label_order` TEXT NULL DEFAULT NULL AFTER `sent_mail`;
