@@ -119,46 +119,61 @@ if($id >0){
             <td align="center" width="65%">Barcode</td>
         </tr>
     </thead>';
-    $noOfInHouseControls = 0;
-    if(isset($bResult[0]['number_of_in_house_controls']) && $bResult[0]['number_of_in_house_controls'] !='' && $bResult[0]['number_of_in_house_controls']!=NULL){
-        $noOfInHouseControls = $bResult[0]['number_of_in_house_controls'];
-        for($i=1;$i<=$bResult[0]['number_of_in_house_controls'];$i++){
+    $sampleCounter = 0;
+    if(isset($bResult[0]['label_order']) && trim($bResult[0]['label_order'])!= ''){
+        $jsonToArray = json_decode($bResult[0]['label_order'],true);
+        for($j=0;$j<count($jsonToArray);$j++){
+            $displayOrder[] = $jsonToArray[$j];
+            $label = str_replace("_"," ",$jsonToArray[$j]);
+            $label = str_replace("in house","In-House",$label);
+            $label = ucwords(str_replace("no of "," ",$label));
             $tbl.='<tr nobr="true">
-                <td align="center" width="8%" >'.$i.'.</td>
-                <td align="center" width="27%" >In-House Controls '. $i.'</td>
-                <td align="center" width="65%" ></td>
-            </tr>';
+                    <td align="center" width="8%" >'.($j+1).'.</td>
+                    <td align="center" width="27%" >'.$label.'</td>
+                    <td align="center" width="65%" ></td>
+                </tr>';
         }
-    }
-    
-    $noOfManufacturerControls = 0;
-    if(isset($bResult[0]['number_of_manufacturer_controls']) && $bResult[0]['number_of_manufacturer_controls'] !='' && $bResult[0]['number_of_manufacturer_controls']!=NULL){
-        $noOfManufacturerControls = $bResult[0]['number_of_manufacturer_controls'];
-        for($i=1;$i<=$bResult[0]['number_of_manufacturer_controls'];$i++){
-            $sNo = $noOfInHouseControls+$i;
-            $tbl.='<tr nobr="true">
-                <td align="center" width="8%" >'.$sNo.'.</td>
-                <td align="center" width="27%" >Manufacturer Controls '. $i.'</td>
-                <td align="center" width="65%" ></td>
-            </tr>';
+      $sampleCounter = count($jsonToArray)+1;
+    }else{
+        $noOfInHouseControls = 0;
+        if(isset($bResult[0]['number_of_in_house_controls']) && $bResult[0]['number_of_in_house_controls'] !='' && $bResult[0]['number_of_in_house_controls']!=NULL){
+            $noOfInHouseControls = $bResult[0]['number_of_in_house_controls'];
+            for($i=1;$i<=$bResult[0]['number_of_in_house_controls'];$i++){
+                $tbl.='<tr nobr="true">
+                    <td align="center" width="8%" >'.$i.'.</td>
+                    <td align="center" width="27%" >In-House Controls '. $i.'</td>
+                    <td align="center" width="65%" ></td>
+                </tr>';
+            }
         }
-    }
-    
-    $noOfCalibrators = 0;
-    if(isset($bResult[0]['number_of_calibrators']) && $bResult[0]['number_of_calibrators'] !='' && $bResult[0]['number_of_calibrators']!=NULL){
-        $noOfCalibrators = $bResult[0]['number_of_calibrators'];
-        for($i=1;$i<=$bResult[0]['number_of_calibrators'];$i++){
-            $sNo = $noOfInHouseControls+$noOfManufacturerControls+$i;
-            $tbl.='<tr nobr="true">
-                <td align="center" width="8%" >'.$sNo.'.</td>
-                <td align="center" width="27%" >Calibrators '. $i.'</td>
-                <td align="center" width="65%" ></td>
-            </tr>';
+        $noOfManufacturerControls = 0;
+        if(isset($bResult[0]['number_of_manufacturer_controls']) && $bResult[0]['number_of_manufacturer_controls'] !='' && $bResult[0]['number_of_manufacturer_controls']!=NULL){
+            $noOfManufacturerControls = $bResult[0]['number_of_manufacturer_controls'];
+            for($i=1;$i<=$bResult[0]['number_of_manufacturer_controls'];$i++){
+                $sNo = $noOfInHouseControls+$i;
+                $tbl.='<tr nobr="true">
+                    <td align="center" width="8%" >'.$sNo.'.</td>
+                    <td align="center" width="27%" >Manufacturer Controls '. $i.'</td>
+                    <td align="center" width="65%" ></td>
+                </tr>';
+            }
         }
+        $noOfCalibrators = 0;
+        if(isset($bResult[0]['number_of_calibrators']) && $bResult[0]['number_of_calibrators'] !='' && $bResult[0]['number_of_calibrators']!=NULL){
+            $noOfCalibrators = $bResult[0]['number_of_calibrators'];
+            for($i=1;$i<=$bResult[0]['number_of_calibrators'];$i++){
+                $sNo = $noOfInHouseControls+$noOfManufacturerControls+$i;
+                $tbl.='<tr nobr="true">
+                    <td align="center" width="8%" >'.$sNo.'.</td>
+                    <td align="center" width="27%" >Calibrators '. $i.'</td>
+                    <td align="center" width="65%" ></td>
+                </tr>';
+            }
+        }
+      $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
     }
     $tbl.='</table>';
     $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
-    $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
 
     foreach($result as $val){
         if($pdf->getY()>=250){

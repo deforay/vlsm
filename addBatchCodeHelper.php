@@ -5,15 +5,25 @@ include('./includes/MysqliDb.php');
 //include('header.php');
 include('General.php');
 $general=new Deforay_Commons_General();
-
 $tableName1="batch_details";
 $tableName2="vl_request_form";
 try {
         if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=""){
+                $labelOrder = '';
+                if(isset($_POST['sortOrders']) && trim($_POST['sortOrders'])!= ''){
+                     $xplodSortOrders = explode(",",$_POST['sortOrders']);
+                     $orderArray = array();
+                     for($o=0;$o<count($xplodSortOrders);$o++){
+                        $orderArray[$o] = $xplodSortOrders[$o];
+                     }
+                  $labelOrder = json_encode($orderArray,JSON_FORCE_OBJECT);
+                }
+
                 $data=array(
                             'machine'=>$_POST['machine'],
                             'batch_code'=>$_POST['batchCode'],
                             'batch_code_key'=>$_POST['batchCodeKey'],
+                            'label_order'=>$labelOrder,
                             'created_on'=>$general->getDateTime()
                             );
                 $db->insert($tableName1,$data);

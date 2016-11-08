@@ -7,8 +7,21 @@ $tableName1="batch_details";
 $tableName2="vl_request_form";
 try {
         if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=""){
-                $sample = array();
-                $data=array('batch_code'=>$_POST['batchCode'],'machine'=>$_POST['machine']);
+                $labelOrder = '';
+                if(isset($_POST['sortOrders']) && trim($_POST['sortOrders'])!= ''){
+                     $xplodSortOrders = explode(",",$_POST['sortOrders']);
+                     $orderArray = array();
+                     for($o=0;$o<count($xplodSortOrders);$o++){
+                        $orderArray[$o] = $xplodSortOrders[$o];
+                     }
+                  $labelOrder = json_encode($orderArray,JSON_FORCE_OBJECT);
+                }
+                
+                $data=array(
+                            'batch_code'=>$_POST['batchCode'],
+                            'machine'=>$_POST['machine'],
+                            'label_order'=>$labelOrder,
+                        );
                 $db=$db->where('batch_id',$_POST['batchId']);
                 $db->update($tableName1,$data);
                 $lastId = $_POST['batchId'];
@@ -20,6 +33,7 @@ try {
                     if(isset($_POST['resultSample']) && trim($_POST['resultSample'])!=""){
                         $xplodResultSample = explode(",",$_POST['resultSample']);
                     }
+                    $sample = array();
                     //Mergeing disabled samples into existing samples
                     if(isset($_POST['sampleCode']) && count($_POST['sampleCode'])>0){
                         if(count($xplodResultSample)>0){

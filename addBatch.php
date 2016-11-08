@@ -9,8 +9,6 @@ $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.f
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
-$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
-$configFormResult = $db->rawQuery($configFormQuery);
 $sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 
@@ -40,6 +38,11 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
   }
   #ms-sampleCode{width: 110%;}
   .showPregnant{display: none;}
+		#sortableRow { list-style-type: none; margin: 30px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
+		#sortableRow li{
+			  color:#333 !important;
+					font-size:16px;
+		}
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -147,13 +150,19 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
 														<?php
 														foreach($importConfigResult as $machine) {
 														?>
-														   <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
+														   <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>" data-no-of-in-house-controls="<?php echo $machine['number_of_in_house_controls']; ?>" data-no-of-manufacturer-controls="<?php echo $machine['number_of_manufacturer_controls']; ?>" data-no-of-calibrators="<?php echo $machine['number_of_calibrators']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
 														<?php } ?>
 													</select>
                         </div>
                     </div>
                   </div>
                 </div>
+								<div class="row" id="displayOrderDetails">
+									 	<div class="col-md-8">
+												 <ul id="sortableRow">
+													</ul>
+										 </div>
+								</div>
 							  <div class="row" id="sampleDetails">
 									<div class="col-md-8">
 											<div class="form-group">
@@ -180,6 +189,7 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+															 <input type="hidden" name="sortOrders" id="sortOrders"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -202,7 +212,8 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
   <script type="text/javascript">
   var startDate = "";
   var endDate = "";
-	noOfSamples = 0;
+	 noOfSamples = 0;
+		sortedTitle = [];
   $(document).ready(function() {
 	   $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate').daterangepicker({
@@ -225,6 +236,27 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
             endDate = end.format('YYYY-MM-DD');
       });
      $('#sampleCollectionDate').val("");
+					// Will remove all falsy values: undefined, null, 0, false, NaN and "" (empty string)
+					function cleanArray(actual) {
+							var newArray = new Array();
+							for (var i = 0; i < actual.length; i++) {
+									if (actual[i]) {
+											newArray.push(actual[i]);
+									}
+							}
+							return newArray;
+					}
+
+					$("#sortableRow").sortable({
+        opacity: 0.6,
+								cursor: 'move',
+								update: function() {
+           sortedTitle = cleanArray($(this).sortable("toArray"));
+											$("#sortOrders").val("");
+											$("#sortOrders").val(sortedTitle);
+        }	
+     } ).disableSelection();
+  
   } );
 	
   function validateNow(){
@@ -349,32 +381,70 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
     }
 		
 		$("#machine").change(function(){
+			sortedTitle = [];
 			var self = this.value;
+			content = '';
 			if(self!= ''){
         var selected = $(this).find('option:selected');
         noOfSamples = selected.data('no-of-samples');
-				if(noOfSamples == 0){
-					$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
-					$(".ms-selectable").css("pointer-events","none");
-					$('#sampleCode').multiSelect('deselect_all');
-				}else if(<?php echo count($result); ?> >= noOfSamples) {
-					if($("#sampleCode :selected").length < noOfSamples){
-							$("#select-all-samplecode").css("pointer-events","none");
-							$(".ms-selectable").css("pointer-events","auto");
-					}else{
-							$("#select-all-samplecode").css("pointer-events","none");
+        noOfInHouseControls = selected.data('no-of-in-house-controls');
+        noOfManufactuterControls = selected.data('no-of-manufacturer-controls');
+        noOfCalibrators = selected.data('no-of-calibrators');
+						if(noOfSamples == 0){
+							$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
 							$(".ms-selectable").css("pointer-events","none");
-					}
-				}else{
-					$(".ms-selectable,#select-all-samplecode").css("pointer-events","auto");
-					$("#select-all-samplecode").css("pointer-events","auto");
-					$(".ms-selectable").css("pointer-events","auto");
-				}
+							$('#sampleCode').multiSelect('deselect_all');
+						}else if(<?php echo count($result); ?> >= noOfSamples) {
+							if($("#sampleCode :selected").length < noOfSamples){
+									$("#select-all-samplecode").css("pointer-events","none");
+									$(".ms-selectable").css("pointer-events","auto");
+							}else{
+									$("#select-all-samplecode").css("pointer-events","none");
+									$(".ms-selectable").css("pointer-events","none");
+							}
+						}else{
+							$(".ms-selectable,#select-all-samplecode").css("pointer-events","auto");
+							$("#select-all-samplecode").css("pointer-events","auto");
+							$(".ms-selectable").css("pointer-events","auto");
+						}
+						//Set display order
+							//No.of In House Controls
+							if(typeof noOfInHouseControls !== 'undefined' && noOfInHouseControls >0){
+								 for(var i=1;i<=noOfInHouseControls;i++){
+								    content+='<li class="ui-state-default" id="no_of_in_house_controls_'+i+'">In-House Controls '+i+'<li>';
+												sortedTitle.push('no_of_in_house_controls_'+i);
+									}
+							}else{
+								 noOfInHouseControls = 0;
+							}
+							//No.of Manufacturer controls
+							if(typeof noOfManufactuterControls !== 'undefined' && noOfManufactuterControls >0){
+								 for(var i=1;i<=noOfManufactuterControls;i++){
+								    content+='<li class="ui-state-default" id="no_of_manufactuter_controls_'+i+'">Manufactuter Controls '+i+'<li>';
+												sortedTitle.push('no_of_manufactuter_controls_'+i);
+									}
+							}else{
+								 noOfManufactuterControls = 0;
+							}
+							//No.of Calibrators
+							if(typeof noOfCalibrators !== 'undefined' && noOfCalibrators >0){
+								 for(var i=1;i<=noOfCalibrators;i++){
+								    content+='<li class="ui-state-default" id="no_of_calibrators_'+i+'">Calibrators '+i+'<li>';
+												sortedTitle.push('no_of_calibrators_'+i);
+									}
+							}else{
+								 noOfCalibrators = 0;
+							}
+						$("#sortableRow").html(content);
+						$("#sortOrders").val("");
+						$("#sortOrders").val(sortedTitle);
 			}else{
 				noOfSamples = 0;
 				$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
 				$(".ms-selectable").css("pointer-events","none");
 				$('#sampleCode').multiSelect('deselect_all');
+				$("#sortableRow").html(content);
+				$("#sortOrders").val("");
 			}
     });
   </script>
