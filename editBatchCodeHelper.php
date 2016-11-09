@@ -7,20 +7,9 @@ $tableName1="batch_details";
 $tableName2="vl_request_form";
 try {
         if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=""){
-                $labelOrder = '';
-                if(isset($_POST['sortOrders']) && trim($_POST['sortOrders'])!= ''){
-                     $xplodSortOrders = explode(",",$_POST['sortOrders']);
-                     $orderArray = array();
-                     for($o=0;$o<count($xplodSortOrders);$o++){
-                        $orderArray[$o] = $xplodSortOrders[$o];
-                     }
-                  $labelOrder = json_encode($orderArray,JSON_FORCE_OBJECT);
-                }
-                
                 $data=array(
                             'batch_code'=>$_POST['batchCode'],
-                            'machine'=>$_POST['machine'],
-                            'label_order'=>$labelOrder,
+                            'machine'=>$_POST['machine']
                         );
                 $db=$db->where('batch_id',$_POST['batchId']);
                 $db->update($tableName1,$data);

@@ -4,7 +4,6 @@ session_start();
 include('./includes/MysqliDb.php');
 include ('./includes/tcpdf/tcpdf.php');
 $id=base64_decode($_POST['id']);
-
 if($id >0){
     if (!file_exists('uploads') && !is_dir('uploads')) {
         mkdir('uploads');
@@ -19,12 +18,9 @@ if($id >0){
     $hQuery="SELECT * from global_config where name='header'";
     $hResult=$db->query($hQuery);
     
-    $fQuery="SELECT vl_sample_id,sample_code from vl_request_form where batch_id=$id";
-    $result=$db->query($fQuery);
-    if(count($result)>0){
-        $query="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
-        //print_r($query);die;
-        $bResult=$db->query($query);
+    $bQuery="SELECT * from batch_details as b_d INNER JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
+    $bResult=$db->query($bQuery);
+    if(count($bResult)>0){
         // Extend the TCPDF class to create custom Header and Footer
         class MYPDF extends TCPDF {
             public function setHeading($logo,$header) {
@@ -110,40 +106,61 @@ if($id >0){
         // add a page
         $pdf->AddPage();
     
-    $tbl = '
-    <table cellspacing="0" cellpadding="3" border="1">
-    <thead>
-        <tr nobr="true" style="background-color:#71b9e2;color:#FFFFFF;">
-            <td align="center" width="8%">S.No.</td>
-            <td align="center" width="27%">Sample ID</td>
-            <td align="center" width="65%">Barcode</td>
-        </tr>
-    </thead>';
-    $sampleCounter = 0;
+    $tbl = '<table cellspacing="0" cellpadding="3" border="1" style="width:100%">
+            <thead>
+                <tr nobr="true" style="background-color:#71b9e2;color:#FFFFFF;">
+                    <td align="center" width="8%">S.No.</td>
+                    <td align="center" width="27%">Sample ID</td>
+                    <td align="center" width="65%">Barcode</td>
+                </tr>
+            </thead>';
+    $tbl.='</table>';
     if(isset($bResult[0]['label_order']) && trim($bResult[0]['label_order'])!= ''){
         $jsonToArray = json_decode($bResult[0]['label_order'],true);
+        $sampleCounter = 1;
         for($j=0;$j<count($jsonToArray);$j++){
-            $displayOrder[] = $jsonToArray[$j];
-            $label = str_replace("_"," ",$jsonToArray[$j]);
-            $label = str_replace("in house","In-House",$label);
-            $label = ucwords(str_replace("no of "," ",$label));
-            $tbl.='<tr nobr="true">
-                    <td align="center" width="8%" >'.($j+1).'.</td>
-                    <td align="center" width="27%" >'.$label.'</td>
-                    <td align="center" width="65%" ></td>
-                </tr>';
-        }
-      $sampleCounter = count($jsonToArray)+1;
+            if($pdf->getY()>=250){
+                $pdf->AddPage();
+            }
+            $xplodJsonToArray = explode("_",$jsonToArray[$j]);
+            if(count($xplodJsonToArray)>1 && $xplodJsonToArray[0] == "s"){
+                $sampleQuery="SELECT sample_code from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
+                $sampleResult=$db->query($sampleQuery);
+                
+                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], 'C39', '', '','' ,15, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+                
+                $tbl.='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">';
+                $tbl.='<tr>';
+                $tbl.='<td align="center" width="8%">'.$sampleCounter.'.</td>';
+                $tbl.='<td align="center" width="27%">'.$sampleResult[0]['sample_code'].'</td>';
+                $tbl.='<td align="center" width="65%"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+                $tbl.='</tr>';
+                $tbl.='</table>';
+            }else{
+                $label = str_replace("_"," ",$jsonToArray[$j]);
+                $label = str_replace("in house","In-House",$label);
+                $label = ucwords(str_replace("no of "," ",$label));
+                $tbl.='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">';
+                $tbl.='<tr>';
+                $tbl.='<td align="center" width="8%">'.$sampleCounter.'.</td>';
+                $tbl.='<td align="center" width="27%">'.$label.'</td>';
+                $tbl.='<td align="center" width="65%"></td>';
+                $tbl.='</tr>';
+                $tbl.='</table>';
+            }
+         $sampleCounter++;
+        } 
     }else{
         $noOfInHouseControls = 0;
         if(isset($bResult[0]['number_of_in_house_controls']) && $bResult[0]['number_of_in_house_controls'] !='' && $bResult[0]['number_of_in_house_controls']!=NULL){
             $noOfInHouseControls = $bResult[0]['number_of_in_house_controls'];
             for($i=1;$i<=$bResult[0]['number_of_in_house_controls'];$i++){
-                $tbl.='<tr nobr="true">
+                $tbl.='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">
+                     <tr nobr="true">
                     <td align="center" width="8%" >'.$i.'.</td>
                     <td align="center" width="27%" >In-House Controls '. $i.'</td>
                     <td align="center" width="65%" ></td>
-                </tr>';
+                </tr></table>';
             }
         }
         $noOfManufacturerControls = 0;
@@ -151,11 +168,12 @@ if($id >0){
             $noOfManufacturerControls = $bResult[0]['number_of_manufacturer_controls'];
             for($i=1;$i<=$bResult[0]['number_of_manufacturer_controls'];$i++){
                 $sNo = $noOfInHouseControls+$i;
-                $tbl.='<tr nobr="true">
+                $tbl.='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">
+                    <tr nobr="true">
                     <td align="center" width="8%" >'.$sNo.'.</td>
                     <td align="center" width="27%" >Manufacturer Controls '. $i.'</td>
                     <td align="center" width="65%" ></td>
-                </tr>';
+                </tr></table>';
             }
         }
         $noOfCalibrators = 0;
@@ -163,41 +181,37 @@ if($id >0){
             $noOfCalibrators = $bResult[0]['number_of_calibrators'];
             for($i=1;$i<=$bResult[0]['number_of_calibrators'];$i++){
                 $sNo = $noOfInHouseControls+$noOfManufacturerControls+$i;
-                $tbl.='<tr nobr="true">
+                $tbl.='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">
+                    <tr nobr="true">
                     <td align="center" width="8%" >'.$sNo.'.</td>
                     <td align="center" width="27%" >Calibrators '. $i.'</td>
                     <td align="center" width="65%" ></td>
-                </tr>';
+                </tr></table>';
             }
         }
-      $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
+        $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
+        $sQuery="SELECT sample_code from vl_request_form where batch_id=$id";
+        $result=$db->query($sQuery);
+        foreach($result as $sample){
+            if($pdf->getY()>=250){
+              $pdf->AddPage();
+            }
+            $params = $pdf->serializeTCPDFtagParameters(array($sample['sample_code'], 'C39', '', '','' ,15, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+            
+            $tbl.='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">';
+            $tbl.='<tr>';
+            $tbl.='<td align="center" width="8%">'.$sampleCounter.'.</td>';
+            $tbl.='<td align="center" width="27%">'.$sample['sample_code'].'</td>';
+            $tbl.='<td align="center" width="65%"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+            $tbl.='</tr>';
+            $tbl .='</table>';
+          $sampleCounter++;
+       } 
     }
-    $tbl.='</table>';
     $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
-
-    foreach($result as $val){
-        if($pdf->getY()>=250){
-          $pdf->AddPage();
-        }
-        $params = $pdf->serializeTCPDFtagParameters(array($val['sample_code'], 'C39', '', '','' ,15, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
-        
-        $sampleCodeTable='<table cellspacing="0" cellpadding="3" border="1" style="width:100%">';
-        $sampleCodeTable.='<tr>';
-        $sampleCodeTable.='<td align="center" width="8%">'.$sampleCounter.'.</td>';
-        $sampleCodeTable.='<td align="center" width="27%">'.$val['sample_code'].'</td>';
-        $sampleCodeTable.='<td align="center" width="65%">';
-        $sampleCodeTable.='<tcpdf method="write1DBarcode" params="'.$params.'" />';
-        $sampleCodeTable.='</td>';
-        $sampleCodeTable.='</tr>';
-        $sampleCodeTable .='</table>';
-                 
-        $sampleCounter++;
-        $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$sampleCodeTable, 0, 1, 0, true, 'C', true);
-    } 
-    
-        $filename = trim($bResult[0]['batch_code']).'.pdf';
-        $pdf->Output('uploads'. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
-        echo $filename;
+    $filename = trim($bResult[0]['batch_code']).'.pdf';
+    $pdf->Output('uploads'. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
+    echo $filename;
   }
 }
 ?>

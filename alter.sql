@@ -671,3 +671,8 @@ ALTER TABLE `batch_details` ADD `machine` INT(11) NOT NULL AFTER `batch_id`;
 
 --Pal 8th-Nov-2016
 ALTER TABLE `batch_details` ADD `label_order` TEXT NULL DEFAULT NULL AFTER `sent_mail`;
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '7', 'addBatchControlsPosition.php', 'Add Controls Position');
+
+--Pal 9th-Nov-2016
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '7', 'editBatchControlsPosition.php', 'Edit Controls Position');
