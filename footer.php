@@ -75,7 +75,7 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".addVlRequestZmMenu").addClass('active');
-  }else if (splitsUrl=='batchcode.php' || splitsUrl=='addBatch.php' || splitsUrl=='editBatch.php') {
+  }else if (splitsUrl=='batchcode.php' || splitsUrl=='addBatch.php' || splitsUrl=='editBatch.php' || splitsUrl=='addBatchControlsPosition.php' || splitsUrl=='editBatchControlsPosition.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".batchCodeMenu").addClass('active');

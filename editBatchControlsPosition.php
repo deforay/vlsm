@@ -55,7 +55,7 @@ if(isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order'])!= '
 }
 ?>
 <style>
-    #sortableRow { list-style-type: none; margin: 30px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
+    #sortableRow { list-style-type: none; margin:0px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
     #sortableRow li{
         color:#333 !important;
         font-size:16px;
@@ -76,8 +76,9 @@ if(isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order'])!= '
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
       <div class="box box-default">
-       <!-- <div class="box-header with-border">
-        </div>-->
+        <div class="box-header with-border">
+			<h4><strong>Batch Code : <?php echo $batchInfo[0]['batch_code']; ?></strong></h4>
+        </div>
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
