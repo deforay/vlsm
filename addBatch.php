@@ -196,7 +196,7 @@ foreach($importConfigResult as $machine) {
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save and Next</a>
                 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
