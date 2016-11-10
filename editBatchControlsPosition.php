@@ -55,10 +55,18 @@ if(isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order'])!= '
 }
 ?>
 <style>
-    #sortableRow { list-style-type: none; margin:0px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
+    #sortableRow {
+		list-style-type: none;
+		margin:0px 0px 30px 0px;
+		padding: 0;
+		width: 100%;
+		text-align:center;
+	}
     #sortableRow li{
         color:#333 !important;
         font-size:16px;
+		border-radius: 10px;
+        margin-bottom: 4px;
     }
 </style>
   <!-- Content Wrapper. Contains page content -->
