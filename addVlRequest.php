@@ -15,6 +15,8 @@ $configQuery="SELECT * from global_config";
      include('addVlRequestZm.php');
     }else if($arr['vl_form']==3){
       include('addVlRequestDrc.php');
+    }else if($arr['vl_form']==4){
+      include('addVlRequestMz.php');
     }
 
 include('footer.php');
