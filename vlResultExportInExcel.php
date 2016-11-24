@@ -99,13 +99,6 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['result_approved_on']='';
   }
   
-  if(isset($aRow['lab_tested_date']) && trim($aRow['lab_tested_date'])!='' && $aRow['lab_tested_date']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['lab_tested_date']);
-   $aRow['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['lab_tested_date']='';
-  }
-  
   if(isset($aRow['date_result_printed']) && trim($aRow['date_result_printed'])!='' && $aRow['date_result_printed']!='0000-00-00 00:00:00'){
    $expStr=explode(" ",$aRow['date_result_printed']);
    $aRow['date_result_printed']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -138,7 +131,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['last_viral_load_date'];
   $row[] = $aRow['last_viral_load_result'];
   $row[] = $aRow['viral_load_log'];
-  $row[] = ucwords(str_replace("_"," ",$aRow['vl_test_reason']));
+  $row[] = ucwords($aRow['test_reason_name']);
   $row[] = ucwords($aRow['labName']);
   $row[] = $aRow['lab_no'];
   $row[] = ucwords($aRow['vl_test_platform']);
