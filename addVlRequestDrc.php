@@ -8,12 +8,12 @@
     $fQuery="SELECT * FROM facility_details where status='active'";
     $fResult = $db->rawQuery($fQuery);
     $province = "";
-    $province.="<option value=''> -- Sélectionner -- </option>";
+    $province.="<option value=''> -- SÃ©lectionner -- </option>";
     foreach($pdResult as $provinceName){
       $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
     }
     $facility = "";
-    $facility.="<option value=''> -- Sélectionner -- </option>";
+    $facility.="<option value=''> -- SÃ©lectionner -- </option>";
     foreach($fResult as $fDetails){
       $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
     }
@@ -71,7 +71,7 @@
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Add Vl Request</li>
-      </ol>
+      </ol> 
     </section>
 
     <!-- Main content -->
@@ -89,7 +89,7 @@
                 <div class="box box-default">
                     <div class="box-body">
                         <div class="box-header with-border">
-                          <h3 class="box-title">1. Réservé à la structure de soins</h3>
+                          <h3 class="box-title">1. RÃ©servÃ© Ã  la structure de soins</h3>
                         </div>
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
@@ -102,9 +102,9 @@
                                         <?php echo $province; ?>
                                     </select>
                                 </td>
-                                <td><label for="clinicName">Zone de santé </label></td>
+                                <td><label for="clinicName">Zone de santÃ© </label></td>
                                 <td>
-                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose Zone de santé" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
+                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose Zone de santÃ©" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
                                         <?php echo $facility; ?>
                                     </select>
                                 </td>
@@ -118,13 +118,13 @@
                                 <td>
                                     <input type="text" class="form-control" id="clinicianName" name="clinicianName" placeholder="Demandeur" title="Please enter demandeur" style="width:100%;"/>
                                 </td>
-                                <td><label for="clinicanTelephone">Téléphone </label></td>
+                                <td><label for="clinicanTelephone">TÃ©lÃ©phone </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="TÃ©lÃ©phone" title="Please enter tÃ©lÃ©phone" style="width:100%;"/>
                                 </td>
-                                <td><label for="supportPartner">Partenaire d’appui </label></td>
+                                <td><label for="supportPartner">Partenaire dÂ’appui </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire d’appui" title="Please enter partenaire d’appui" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dÂ’appui" title="Please enter partenaire dÂ’appui" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -143,13 +143,13 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();checkARTInitiationDate();" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
+                                <td style="width:14%;"><label for="ageInYears">Ã‚ge en annÃ©es </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="AannÃ©es" title="Please enter Ã ge en annÃ©es" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInMonths">Âge en mois </label></td>
+                                <td style="width:14%;"><label for="ageInMonths">Ã‚ge en mois </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter Ã ge en mois" style="width:100%;"/>
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
                                 <td style="width:16%;">
@@ -168,16 +168,16 @@
                                 <td>
                                     <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"/>
                                 </td>
-                                <td><label for="">Date du début des ARV </label></td>
+                                <td><label for="">Date du dÃ©but des ARV </label></td>
                                 <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/Année) </span>
+                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du dÃ©but des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/AnnÃ©e) </span>
                                 </td>
                             </tr>
                             <tr>
-                                <td><label>Régime ARV en cours </label></td>
+                                <td><label>RÃ©gime ARV en cours </label></td>
                                 <td colspan="7">
-                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkCurrentRegimen();" style="width:30%;">
-                                    <option value=""> -- Sélectionner -- </option>
+                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose rÃ©gime ARV en cours" onchange="checkCurrentRegimen();" style="width:30%;">
+                                    <option value=""> -- SÃ©lectionner -- </option>
                                       <?php
                                       foreach($aResult as $arv){
                                       ?>
@@ -190,13 +190,13 @@
                                 </td>
                             </tr>
                             <tr class="newArtRegimen" style="display:none;">
-                                <td><label for="newArtRegimen">Autre, à préciser </label></td>
+                                <td><label for="newArtRegimen">Autre, Ã  prÃ©ciser </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control" name="newArtRegimen" id="newArtRegimen" placeholder="Régime ARV" title="Please enter régime ARV" style="width:30%;" >
+                                    <input type="text" class="form-control" name="newArtRegimen" id="newArtRegimen" placeholder="RÃ©gime ARV" title="Please enter rÃ©gime ARV" style="width:30%;" >
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2"><label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime de traitement? </label></td>
+                                <td colspan="2"><label for="hasChangedRegimen">Ce patient a-t-il dÃ©jÃ  changÃ© de rÃ©gime de traitement? </label></td>
                                 <td colspan="2">
                                     <label class="radio-inline">Oui </label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
@@ -207,22 +207,22 @@
                                         <input type="radio" class="" id="changedRegimenNo" name="hasChangedRegimen" value="no" title="Please check any of one option">
                                     </label>
                                 </td>
-                                <td><label for="reasonForArvRegimenChange" class="arvChangedElement" style="display:none;">Motif de changement de régime ARV </label></td>
+                                <td><label for="reasonForArvRegimenChange" class="arvChangedElement" style="display:none;">Motif de changement de rÃ©gime ARV </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control arvChangedElement" id="reasonForArvRegimenChange" name="reasonForArvRegimenChange" placeholder="Motif de changement de régime ARV" title="Please enter motif de changement de régime ARV" style="width:100%;display:none;"/>
+                                    <input type="text" class="form-control arvChangedElement" id="reasonForArvRegimenChange" name="reasonForArvRegimenChange" placeholder="Motif de changement de rÃ©gime ARV" title="Please enter motif de changement de rÃ©gime ARV" style="width:100%;display:none;"/>
                                 </td>
                             </tr>
                             <tr class="arvChangedElement" style="display:none;">
-                                <td><label for="">Date du changement de régime ARV </label></td>
+                                <td><label for="">Date du changement de rÃ©gime ARV </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" style="width:30%;"/> (Jour/Mois/Année)
+                                    <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de rÃ©gime ARV" style="width:30%;"/> (Jour/Mois/AnnÃ©e)
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="reasonForRequest">Motif de la demande </label></td>
                                 <td colspan="2">
                                    <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
-                                      <option value=""> -- Sélectionner -- </option>
+                                      <option value=""> -- SÃ©lectionner -- </option>
                                       <?php
                                       foreach($vlTestReasonResult as $tReason){
                                       ?>
@@ -237,21 +237,21 @@
                                 </td>
                             </tr>
                             <tr class="newVlTestReason" style="display:none;">
-                                <td><label for="newVlTestReason">Autre, à préciser </label></td>
+                                <td><label for="newVlTestReason">Autre, Ã  prÃ©ciser </label></td>
                                 <td colspan="7">
                                     <input type="text" class="form-control" name="newVlTestReason" id="newVlTestReason" placeholder="Virale Demande Raison" title="Please enter virale demande raison" style="width:30%;" >
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="lastViralLoadResult">Résultat dernière charge virale </label></td>
+                                <td><label for="lastViralLoadResult">RÃ©sultat derniÃ¨re charge virale </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Résultat dernière charge virale" title="Please enter résultat dernière charge virale" style="width:30%;"/> copies/ml
+                                    <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="RÃ©sultat derniÃ¨re charge virale" title="Please enter rÃ©sultat derniÃ¨re charge virale" style="width:30%;"/> copies/ml
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="">Date dernière charge virale (demande) </label></td>
+                                <td><label for="">Date derniÃ¨re charge virale (demande) </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" onchange="checkLastVLTestDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date derniÃ¨re charge virale" onchange="checkLastVLTestDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -259,23 +259,23 @@
                             </tr>
                         </table>
                         <div class="box-header with-border">
-                            <h3 class="box-title">Informations sur le prélèvement </h3>
+                            <h3 class="box-title">Informations sur le prÃ©lÃ¨vement </h3>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:20%;"><label for="">Date du prélèvement </label></td>
+                                <td style="width:20%;"><label for="">Date du prÃ©lÃ¨vement </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prÃ©lÃ¨vement" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
                             if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){
                             ?>
                               <tr>
-                                <td><label for="specimenType">Type d’échantillon </label></td>
+                                <td><label for="specimenType">Type dÂ’Ã©chantillon </label></td>
                                 <td colspan="3">
-                                  <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d’échantillon" onchange="checkSpecimenType();" style="width:30%;">
-                                    <option value=""> -- Sélectionner -- </option>
+                                  <select name="specimenType" id="specimenType" class="form-control" title="Please choose type dÂ’Ã©chantillon" onchange="checkSpecimenType();" style="width:30%;">
+                                    <option value=""> -- SÃ©lectionner -- </option>
                                     <?php
                                     foreach($sResult as $type){
                                      ?>
@@ -288,23 +288,23 @@
                               </tr>
                             <?php } ?>
                             <tr class="plasmaElement" style="display:none;">
-                                <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
+                                <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TempÃ©rature de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:80%;"/>°C
+                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="TempÃ©rature de conservation" title="Please enter tempÃ©rature de conservation" style="width:80%;"/>Â°C
                                 </td>
-                                <td><label for="durationOfConservation">Durée de conservation </label></td>
+                                <td><label for="durationOfConservation">DurÃ©e de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" style="width:60%;"/>Jour/Heures
+                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durÃ©e de conservation" style="width:60%;"/>Jour/Heures
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="">Date de départ au Labo biomol </label></td>
+                                <td><label for="">Date de dÃ©part au Labo biomol </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de dÃ©part au Labo biomol" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le préleveur </label></td>
+                                <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le prÃ©leveur </label></td>
                             </tr>
                         </table>
                     </div>
@@ -312,25 +312,25 @@
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="box-header with-border">
-                            <h3 class="box-title">2. Réservé au Laboratoire de biologie moléculaire </h3>
+                            <h3 class="box-title">2. RÃ©servÃ© au Laboratoire de biologie molÃ©culaire </h3>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:20%;"><label for="">Date de réception de l’échantillon </label></td>
+                                <td style="width:20%;"><label for="">Date de rÃ©ception de lÂ’Ã©chantillon </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de l’échantillon" onchange="checkSampleReceviedDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de rÃ©ception de lÂ’Ã©chantillon" onchange="checkSampleReceviedDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
                             if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){
                             ?>
                               <tr>
-                                <td><label for="">Décision prise </label></td>
+                                <td><label for="">DÃ©cision prise </label></td>
                                 <td colspan="3">
-                                    <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
+                                    <select class="form-control" id="status" name="status" title="Please select dÃ©cision prise" onchange="checkTestStatus();" style="width:30%;">
                                       <option value="6"> En attente d'approbation Clinique </option>
-                                      <option value="7">Echantillon accepté</option>
-                                      <option value="4">Echantillon rejeté</option>
+                                      <option value="7">Echantillon acceptÃ©</option>
+                                      <option value="4">Echantillon rejetÃ©</option>
                                     </select>
                                 </td>
                               </tr>
@@ -339,7 +339,7 @@
                                 <td><label for="rejectionReason">Motifs de rejet </label></td>
                                 <td>
                                     <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
-                                      <option value=""> -- Sélectionner -- </option>
+                                      <option value=""> -- SÃ©lectionner -- </option>
                                       <?php
                                       foreach($rjctReasonResult as $rjctReason){
                                       ?>
@@ -348,7 +348,7 @@
                                        <option value="other">Autre</option>
                                     </select>
                                 </td>
-                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser </label></td>
+                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, Ã  prÃ©ciser </label></td>
                                 <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:90%;display:none;"/></td>
                             </tr>
                             <tr>
@@ -359,43 +359,43 @@
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
-                                <td><label for="">Date de réalisation de la charge virale </label></td>
+                                <td><label for="">Date de rÃ©alisation de la charge virale </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de rÃ©alisation de la charge virale" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="testingPlatform">Technique utilisée </label></td>
+                                <td><label for="testingPlatform">Technique utilisÃ©e </label></td>
                                 <td colspan="3">
-                                    <select class="form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisée" style="width:30%;">
-                                        <option value=""> -- Sélectionner -- </option>
-                                        <option value="plasma_protocole_600">Plasma protocole 600µl</option>
-                                        <option value="dbs_protocole_1000">DBS protocole 1000 µl</option>
+                                    <select class="form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisÃ©e" style="width:30%;">
+                                        <option value=""> -- SÃ©lectionner -- </option>
+                                        <option value="plasma_protocole_600">Plasma protocole 600Âµl</option>
+                                        <option value="dbs_protocole_1000">DBS protocole 1000 Âµl</option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="vlResult">Résultat </label></td>
+                                <td><label for="vlResult">RÃ©sultat </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" style="width:70%;"/>copies/ml
+                                    <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="RÃ©sultat" title="Please enter rÃ©sultat" style="width:70%;"/>copies/ml
                                 </td>
-                                <td colspan="2" style="vertical-align:middle;">Limite de détection : < 40 Copies/ml ou  log  < 1.6 ( pour DBS )</td>
+                                <td colspan="2" style="vertical-align:middle;">Limite de dÃ©tection : < 40 Copies/ml ou  log  < 1.6 ( pour DBS )</td>
                             </tr>
                             <tr>
                                 <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le service effectuant la charge virale </label></td>
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
-                                <td><label for="">Date de remise du résultat </label></td>
+                                <td><label for="">Date de remise du rÃ©sultat </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" onchange="checkSampleTestingDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du rÃ©sultat" onchange="checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 <div class="box-header with-border">
-                  <label class="radio-inline" style="margin:0;padding:0;">1. Biffer la mention inutile <br>2. Sélectionner un seul régime de traitement </label>
+                  <label class="radio-inline" style="margin:0;padding:0;">1. Biffer la mention inutile <br>2. SÃ©lectionner un seul rÃ©gime de traitement </label>
                 </div>
               </div>
               <!-- /.box-body -->
@@ -601,7 +601,7 @@
         sampleReceivedDateTime = smplReceivedYear+"-"+smplReceivedMonth+"-"+smplReceivedDate+" "+splitSampleReceivedDateTime[1]+":00";
         //Check diff
         if(moment(sampleCollDateTime).diff(moment(sampleReceivedDateTime)) > 0) {
-          alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
+          alert("L'Ã©chantillon de donnÃ©es reÃ§ues ne peut pas Ãªtre antÃ©rieur Ã  la date de collecte de l'Ã©chantillon!");
           $("#sampleReceivedDate").val("");
         }
       }
@@ -633,7 +633,7 @@
         sampleTestingAtLabDateTime = smplTestingYear+"-"+smplTestingMonth+"-"+smplTestingDate+" "+splitSampleTestedDateTime[1]+":00";
         //Check diff
         if(moment(sampleCollDateTime).diff(moment(sampleTestingAtLabDateTime)) > 0) {
-          alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
+          alert("La date d'essai de l'Ã©chantillon ne peut pas Ãªtre antÃ©rieure Ã  la date de collecte de l'Ã©chantillon!");
           $("#sampleTestingDateAtLab").val("");
         }
       }
@@ -663,7 +663,7 @@
         artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
         //Check diff
         if(moment(dobDate).isAfter(artIniDate)) {
-          alert("La date d'ouverture de l'ART ne peut pas être antérieure à!");
+          alert("La date d'ouverture de l'ART ne peut pas Ãªtre antÃ©rieure Ã !");
           $("#dateOfArtInitiation").val("");
         }
       }
@@ -695,7 +695,7 @@
         //console.log(lastVLTestDate);
         //Check diff
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
-          alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
+          alert("Dernier test de charge virale Les donnÃ©es ne peuvent pas Ãªtre antÃ©rieures Ã  la date d'initiation de l'ARV!");
           $("#lastViralLoadTestDate").val("");
         }
       }
