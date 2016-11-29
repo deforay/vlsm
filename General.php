@@ -61,7 +61,7 @@ class Deforay_Commons_General {
 
     public function humanDateFormat($date) {
 
-        if ($date == null || $date == "" || $date == "0000-00-00") {
+        if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
             return "";
         } else {
             $dateArray = explode('-', $date);

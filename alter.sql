@@ -676,3 +676,8 @@ ALTER TABLE `batch_details` ADD `label_order` TEXT NULL DEFAULT NULL AFTER `sent
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '7', 'addBatchControlsPosition.php', 'Add Controls Position');
 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '7', 'editBatchControlsPosition.php', 'Edit Controls Position');
+
+--saravanan 24-nov-2016
+INSERT INTO `form_details` (`form_id`, `form_name`) VALUES (NULL, 'Mozambique Form');
+ALTER TABLE `vl_request_form` ADD `consultation` VARCHAR(255) NULL DEFAULT NULL AFTER `result_coming_from`, ADD `first_line` VARCHAR(255) NULL DEFAULT NULL AFTER `consultation`, ADD `second_line` VARCHAR(255) NULL DEFAULT NULL AFTER `first_line`, ADD `first_viral_load` VARCHAR(255) NULL DEFAULT NULL AFTER `second_line`, ADD `collection_type` VARCHAR(255) NULL DEFAULT NULL AFTER `first_viral_load`, ADD `sample_processed` VARCHAR(255) NULL DEFAULT NULL AFTER `collection_type`;
+ALTER TABLE `vl_request_form` ADD `patient_below_five_years` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_dob`;
