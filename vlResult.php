@@ -331,7 +331,8 @@ $batResult = $db->rawQuery($batQuery);
   function exportInexcel() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("vlResultExportInExcel.php",
+    //$.post("vlResultExportInExcel.php",
+    $.post("vlResultAllFieldExportInExcel.php",
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
