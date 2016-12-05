@@ -63,6 +63,14 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".otherConfigMenu").addClass('active');
+  }else if (splitsUrl=='testRequestEmailConfig.php' || splitsUrl=='editTestRequestEmailConfig.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".requestEmailConfigMenu").addClass('active');
+  }else if (splitsUrl=='testResultEmailConfig.php' || splitsUrl=='editTestResultEmailConfig.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".resultEmailConfigMenu").addClass('active');
   }else if (splitsUrl=='vlRequest.php' || splitsUrl=='editVlRequest.php' || splitsUrl=='viewVlRequest.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');

@@ -13,7 +13,7 @@ try {
         }
     }
     $_SESSION['alertMsg']="Other Config values updated successfully";
-    header("location:otherConfig.php");
+    header("location:testResultEmailConfig.php");
 }catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

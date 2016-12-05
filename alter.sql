@@ -681,3 +681,22 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 INSERT INTO `form_details` (`form_id`, `form_name`) VALUES (NULL, 'Mozambique Form');
 ALTER TABLE `vl_request_form` ADD `consultation` VARCHAR(255) NULL DEFAULT NULL AFTER `result_coming_from`, ADD `first_line` VARCHAR(255) NULL DEFAULT NULL AFTER `consultation`, ADD `second_line` VARCHAR(255) NULL DEFAULT NULL AFTER `first_line`, ADD `first_viral_load` VARCHAR(255) NULL DEFAULT NULL AFTER `second_line`, ADD `collection_type` VARCHAR(255) NULL DEFAULT NULL AFTER `first_viral_load`, ADD `sample_processed` VARCHAR(255) NULL DEFAULT NULL AFTER `collection_type`;
 ALTER TABLE `vl_request_form` ADD `patient_below_five_years` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_dob`;
+
+--Pal 5th-Dec-2016
+UPDATE `privileges` SET `privilege_name` = 'testRequestEmailConfig.php', `display_name` = 'Access' WHERE `privileges`.`privilege_id` = 28;
+
+UPDATE `resources` SET `resource_name` = 'test_request_email_config' WHERE `resources`.`resource_id` = 5;
+
+UPDATE `resources` SET `display_name` = 'Manage Test Request Email Config' WHERE `resources`.`resource_id` = 5;
+
+UPDATE `privileges` SET `privilege_name` = 'editTestRequestEmailConfig.php' WHERE `privileges`.`privilege_id` = 43;
+
+UPDATE `privileges` SET `display_name` = 'Edit' WHERE `privileges`.`privilege_id` = 43;
+
+ALTER TABLE `other_config` ADD `type` VARCHAR(45) NULL DEFAULT NULL FIRST;
+
+INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'test_result_email_config', 'Manage Test Result Email Config');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '17', 'testResultEmailConfig.php', 'Access');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '17', 'editTestResultEmailConfig.php', 'Edit');

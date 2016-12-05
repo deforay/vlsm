@@ -87,9 +87,13 @@ $tableName="other_config";
        $sQuery="SELECT * FROM other_config";
         
         if (isset($sWhere) && $sWhere != "") {
-            $sWhere=' where '.$sWhere;
+            $sWhere=' WHERE '.$sWhere;
+            $sWhere=$sWhere.' AND type = "request"';
             $sQuery = $sQuery.' '.$sWhere;
-        }
+        }else{
+	    $sWhere =' WHERE type = "request"';
+	    $sQuery = $sQuery.' '.$sWhere;
+	}
         
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
@@ -106,10 +110,10 @@ $tableName="other_config";
         /* Data set length after filtering */
         
         $aResultFilterTotal =$db->rawQuery("SELECT * FROM other_config $sWhere order by $sOrder");
-        $iFilteredTotal = count($aResultFilterTotal);
+        $iFilteredTotal = count($rResult);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("SELECT * FROM other_config");
+        $aResultTotal =  $db->rawQuery("SELECT * FROM other_config WHERE type ='request'");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
@@ -125,8 +129,8 @@ $tableName="other_config";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	        $row[] = ucwords($aRow['display_name']);
-	        $row[] = $aRow['value'];
+	    $row[] = ucwords($aRow['display_name']);
+	    $row[] = $aRow['value'];
             $output['aaData'][] = $row;
         }
         echo json_encode($output);
