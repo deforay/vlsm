@@ -51,9 +51,9 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="rs_email" class="col-lg-3 control-label">Email Id</label>
+                      <label for="rs_email" class="col-lg-3 control-label">Email Id *</label>
                       <div class="col-lg-9">
-                        <input type="text" class="form-control" id="rs_email" name="rs_email" placeholder="Email" title="Please enter email" value="<?php echo $arr['rs_email']; ?>">
+                        <input type="text" class="form-control isRequired" id="rs_email" name="rs_email" placeholder="Email" title="Please enter email" value="<?php echo $arr['rs_email']; ?>">
                       </div>
                     </div>
                    </div>
@@ -61,9 +61,9 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="rs_password" class="col-lg-3 control-label">Password </label>
+                      <label for="rs_password" class="col-lg-3 control-label">Password *</label>
                       <div class="col-lg-9">
-                        <input type="text" class="form-control" id="rs_password" name="rs_password" placeholder="Password" title="Please enter password" value="<?php echo $arr['rs_password']; ?>">
+                        <input type="text" class="form-control isRequired" id="rs_password" name="rs_password" placeholder="Password" title="Please enter password" value="<?php echo $arr['rs_password']; ?>">
                       </div>
                     </div>
                    </div>
@@ -71,12 +71,12 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="rs_field" class="col-lg-3 control-label">Choose Fields</label>
+                        <label for="rs_field" class="col-lg-3 control-label">Choose Fields *</label>
                         <div class="col-lg-9">
                            <div style="width:100%;margin:0 auto;clear:both;">
                             <a href="#" id="select-all-field" style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href="#" id="deselect-all-field" style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
                             </div><br/><br/>
-                            <select id="rs_field" name="rs_field[]" multiple="multiple" class="search">
+                            <select id="rs_field" name="rs_field[]" multiple="multiple" class="search isRequired" title="Please select email fields">
                                 <option value="Form Serial No" <?php echo(in_array("Form Serial No",$requestArr)?"selected='selected'":""); ?>>Form Serial No</option>
                                 <option value="Urgency" <?php echo(in_array("Urgency",$requestArr)?"selected='selected'":""); ?>>Urgency</option>
                                 <option value="Province" <?php echo(in_array("Province",$requestArr)?"selected='selected'":""); ?>>Province</option>
