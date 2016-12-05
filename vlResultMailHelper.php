@@ -9,7 +9,7 @@ define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 //get other config values
-$geQuery="SELECT * FROM other_config";
+$geQuery="SELECT * FROM other_config WHERE type = 'result'";
 $geResult = $db->rawQuery($geQuery);
 $mailconf = array();
 foreach($geResult as $row){
@@ -19,7 +19,7 @@ foreach($geResult as $row){
 $configQuery="SELECT * from global_config WHERE name='logo'";
 $configResult=$db->query($configQuery);
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
-     if(isset($mailconf['result_email_field']) && trim($mailconf['result_email_field'])!= ''){
+     if(isset($mailconf['rs_field']) && trim($mailconf['rs_field'])!= ''){
        //Pdf code start
        // create new PDF document
        class MYPDF extends TCPDF {
@@ -89,7 +89,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
       $pdf->AddPage();
       $pdfContent = '';
       $filedGroup = array();
-         $filedGroup = explode(",",$mailconf['result_email_field']);
+         $filedGroup = explode(",",$mailconf['rs_field']);
          $pdfContent .= '<div style="">';
          if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['logo'])){
               $pdfContent .='<div style="width:100%;text-align:center;"><img src="uploads/logo/'.$configResult[0]['value'].'" style="width:80px;height:80px;" alt="logo"></div>';
@@ -247,11 +247,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           $mail->SMTPAuth = true;
           $mail->SMTPKeepAlive = true; 
           //Username to use for SMTP authentication - use full email address for gmail
-          $mail->Username = $mailconf['email'];
+          $mail->Username = $mailconf['rs_email'];
           //Password to use for SMTP authentication
-          $mail->Password = $mailconf['password'];
+          $mail->Password = $mailconf['rs_password'];
           //Set who the message is to be sent from
-          $mail->setFrom($mailconf['email']);
+          $mail->setFrom($mailconf['rs_email']);
                 
           $subject="";
           if(isset($_POST['subject']) && trim($_POST['subject'])!=""){

@@ -1,20 +1,18 @@
 <?php
 ob_start();
 include('header.php');
-//include('./includes/MysqliDb.php');
-$otherConfigQuery ="SELECT * from other_config";
+$otherConfigQuery ="SELECT * from other_config WHERE type='result'";
 $otherConfigResult=$db->query($otherConfigQuery);
-$requestEmailConfigQuery ="SELECT * from other_config WHERE name ='request_email_field'";
-$requestEmailConfigResult=$db->query($requestEmailConfigQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($otherConfigResult); $i++) {
     $arr[$otherConfigResult[$i]['name']] = $otherConfigResult[$i]['value'];
 }
+
 $requestArr = array();
 //Set selected field
-if(isset($requestEmailConfigResult) && trim($requestEmailConfigResult[0]['value'])!= ''){
-  $explodField = explode(",",$requestEmailConfigResult[0]['value']);
+if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
+  $explodField = explode(",",$arr['rs_field']);
   for($f=0;$f<count($explodField); $f++){
     $requestArr[] = $explodField[$f];
   }
@@ -30,11 +28,11 @@ if(isset($requestEmailConfigResult) && trim($requestEmailConfigResult[0]['value'
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1 class="fa fa-gears"> Edit Request Email Configuration</h1>
+      <h1 class="fa fa-gears"> Edit Test Result Email Configuration</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="otherConfig.php"><i class="fa fa-dashboard"></i> Manage Email/SMS Config</a></li>
-        <li class="active">Edit Request Email Configuration</li>
+        <li><a href="testResultEmailConfig.php"><i class="fa fa-dashboard"></i> Manage Test Result Email/SMS Config</a></li>
+        <li class="active">Edit Test Result Email Configuration</li>
       </ol>
     </section>
 
@@ -48,17 +46,37 @@ if(isset($requestEmailConfigResult) && trim($requestEmailConfigResult[0]['value'
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method="post" name="editRequestEmailConfigForm" id="editRequestEmailConfigForm" autocomplete="off" action="editRequestEmailConfigHelper.php">
+            <form class="form-horizontal" name="editTestResultEmailConfigForm" id="editTestResultEmailConfigForm" method="post"  autocomplete="off" action="editTestResultEmailConfigHelper.php">
               <div class="box-body">
                 <div class="row">
-                    <div class="col-md-9">
+                  <div class="col-md-6">
                     <div class="form-group">
-                        <label for="request_email_field" class="col-lg-3 control-label">Choose VL Fields</label>
+                      <label for="rs_email" class="col-lg-3 control-label">Email Id</label>
+                      <div class="col-lg-9">
+                        <input type="text" class="form-control" id="rs_email" name="rs_email" placeholder="Email" title="Please enter email" value="<?php echo $arr['rs_email']; ?>">
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="rs_password" class="col-lg-3 control-label">Password </label>
+                      <div class="col-lg-9">
+                        <input type="text" class="form-control" id="rs_password" name="rs_password" placeholder="Password" title="Please enter password" value="<?php echo $arr['rs_password']; ?>">
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="rs_field" class="col-lg-3 control-label">Choose Fields</label>
                         <div class="col-lg-9">
                            <div style="width:100%;margin:0 auto;clear:both;">
                             <a href="#" id="select-all-field" style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href="#" id="deselect-all-field" style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
                             </div><br/><br/>
-                            <select id="request_email_field" name="request_email_field[]" multiple="multiple" class="search">
+                            <select id="rs_field" name="rs_field[]" multiple="multiple" class="search">
                                 <option value="Form Serial No" <?php echo(in_array("Form Serial No",$requestArr)?"selected='selected'":""); ?>>Form Serial No</option>
                                 <option value="Urgency" <?php echo(in_array("Urgency",$requestArr)?"selected='selected'":""); ?>>Urgency</option>
                                 <option value="Province" <?php echo(in_array("Province",$requestArr)?"selected='selected'":""); ?>>Province</option>
@@ -106,7 +124,7 @@ if(isset($requestEmailConfigResult) && trim($requestEmailConfigResult[0]['value'
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                <a href="otherConfig.php" class="btn btn-default"> Cancel</a>
+                <a href="testResultEmailConfig.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -160,23 +178,23 @@ if(isset($requestEmailConfigResult) && trim($requestEmailConfigResult[0]['value'
      });
       
       $('#select-all-field').click(function(){
-       $('#request_email_field').multiSelect('select_all');
+       $('#rs_field').multiSelect('select_all');
        return false;
      });
      $('#deselect-all-field').click(function(){
-       $('#request_email_field').multiSelect('deselect_all');
+       $('#rs_field').multiSelect('deselect_all');
        return false;
      });
    });
   
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'editRequestEmailConfigForm'
+        formId: 'editTestResultEmailConfigForm'
     });
     
     if(flag){
         $.blockUI();
-      document.getElementById('editRequestEmailConfigForm').submit();
+      document.getElementById('editTestResultEmailConfigForm').submit();
     }
   }
 </script>

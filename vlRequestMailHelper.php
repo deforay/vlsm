@@ -8,7 +8,7 @@ require './includes/mail/PHPMailerAutoload.php';
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 //get other config details
-$geQuery="SELECT * FROM other_config";
+$geQuery="SELECT * FROM other_config WHERE type = 'request'";
 $geResult = $db->rawQuery($geQuery);
 $mailconf = array();
 foreach($geResult as $row){
@@ -16,7 +16,7 @@ foreach($geResult as $row){
 }
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
      $filedGroup = array();
-     if(isset($mailconf['request_email_field']) && trim($mailconf['request_email_field'])!= ''){
+     if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
           //Excel code start
           $excel = new PHPExcel();
           $sheet = $excel->getActiveSheet();
@@ -45,7 +45,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                    ),
                )
           );
-         $filedGroup = explode(",",$mailconf['request_email_field']);
+         $filedGroup = explode(",",$mailconf['rq_field']);
          $headings = $filedGroup;
          //Set heading row
           $sheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode('Sample'), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -215,11 +215,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           $mail->SMTPAuth = true;
           $mail->SMTPKeepAlive = true; 
           //Username to use for SMTP authentication - use full email address for gmail
-          $mail->Username = $mailconf['email'];
+          $mail->Username = $mailconf['rq_email'];
           //Password to use for SMTP authentication
-          $mail->Password = $mailconf['password'];
+          $mail->Password = $mailconf['rq_password'];
           //Set who the message is to be sent from
-          $mail->setFrom($mailconf['email']);
+          $mail->setFrom($mailconf['rq_email']);
           $subject="";
           if(isset($_POST['subject']) && trim($_POST['subject'])!=""){
                $subject=$_POST['subject'];
