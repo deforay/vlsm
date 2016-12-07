@@ -382,7 +382,7 @@
                                 <td>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "yes")?'checked="checked"':''; ?> title="Please check Si Ou enceinte ">
+                                        <input type="radio" class="" id="pregYes" name="patientPregnant" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "yes")?'checked="checked"':''; ?> value="yes" title="Please check Si Ou enceinte ">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
