@@ -53,6 +53,7 @@ try {
           'serial_no'=>$_POST['sampleCode'],
           'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
           'vl_test_platform'=>$_POST['testingPlatform'],
+          'log_value'=>$_POST['vlLog'],
           'result'=>$_POST['vlResult'],
           'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
           'modified_on'=>$general->getDateTime()
