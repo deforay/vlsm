@@ -17,8 +17,13 @@
     foreach($fResult as $fDetails){
       $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
     }
+    
+    //get import config
+    $importQuery="SELECT * FROM import_config WHERE status = 'active'";
+    $importResult=$db->query($importQuery);
+    
     //get ART list
-    $aQuery="SELECT * from r_art_code_details where nation_identifier='drc'";
+    $aQuery="SELECT * from r_art_code_details";// where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
     //get Sample type
     $sQuery="SELECT * from r_sample_type where status='active'";
@@ -170,8 +175,7 @@
                                 <td>
                                     <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"/>
                                 </td>
-                                <td><label for="isPatientNew">Si S/ ARV </label></td>
-                                <td>
+                                <td colspan="2"><label for="isPatientNew">Si S/ ARV </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="isPatientNewYes" name="isPatientNew" value="yes" title="Please check Si S/ ARV">
@@ -181,7 +185,7 @@
                                         <input type="radio" class="" id="isPatientNewNo" name="isPatientNew" value="no">
                                     </label>
                                 </td>
-                                <td class="du"><label for="" style="visibility:hidden;">Date du début des ARV </label></td>
+                                <td class="du" style="visibility:hidden;"><label for="">Date du début des ARV </label></td>
                                 <td class="du" colspan="3" style="visibility:hidden;">
                                     <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;"/> (Jour/Mois/Année)
                                 </td>
@@ -250,8 +254,9 @@
                                 </td>
                             </tr>
                             <tr id="femaleElements" style="display:none;">
-                                <td><label for="breastfeeding">Si Femme : allaitante ? </label></td>
-                                <td>
+                                <td><strong>Si Femme : </strong></td>
+                                <td colspan="2">
+                                    <label for="breastfeeding">allaitante ?</label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check Si allaitante">
@@ -261,8 +266,7 @@
                                         <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no">
                                     </label>
                                 </td>
-                                <td><label for="patientPregnant">Ou enceinte ? </label></td>
-                                <td>
+                                <td colspan="2"><label for="patientPregnant">Ou enceinte ? </label> 
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Si Ou enceinte ">
@@ -273,7 +277,7 @@
                                     </label>
                                 </td>
                                 <td><label for="trimestre">Si Femme  enceinte </label></td>
-                                <td colspan="3">
+                                <td colspan="2">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="trimestre1" name="trimestre" value="1" title="Please check trimestre">
@@ -311,7 +315,7 @@
                             </tr>
                         </table>
                         <div class="box-header with-border">
-                            <h3 class="box-title">Informations sur le prélèvement </h3>
+                            <h3 class="box-title">Informations sur le prélèvement <small>(A remplir par le préleveur)</small> </h3>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
@@ -324,9 +328,9 @@
                             if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){
                             ?>
                               <tr>
-                                <td><label for="specimenType">Type déchantillon </label></td>
+                                <td><label for="specimenType">Type d'échantillon </label></td>
                                 <td colspan="3">
-                                  <select name="specimenType" id="specimenType" class="form-control" title="Please choose type déchantillon" onchange="checkSpecimenType();" style="width:30%;">
+                                  <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d'échantillon" onchange="checkSpecimenType();" style="width:30%;">
                                     <option value=""> -- Sélectionner -- </option>
                                     <?php
                                     foreach($sResult as $type){
@@ -419,14 +423,17 @@
                             <tr>
                                 <td><label for="testingPlatform">Technique utilisée </label></td>
                                 <td colspan="3">
-                                    <select class="form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisée" style="width:30%;">
-                                        <option value=""> -- Sélectionner -- </option>
-                                        <option value="plasma_protocole_600">Plasma protocole 600µl</option>
-                                        <option value="dbs_protocole_1000">DBS protocole 1000 µl</option>
+                                    <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:230px;">
+                                      <option value="">-- Select --</option>
+                                      <?php foreach($importResult as $mName) { ?>
+                                        <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
+                                        <?php
+                                      }
+                                      ?>
                                     </select>
-                                </td>
-                            </tr>
-                            <tr>
+                                        </td>
+                                  </tr>
+                                <tr>
                                 <td><label for="vlResult">Résultat </label></td>
                                 <td>
                                     <input type="text" class="form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
