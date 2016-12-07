@@ -9,15 +9,21 @@
     $pdQuery="SELECT * from province_details";
     $pdResult=$db->query($pdQuery);
     $province = "";
-    $province.="<option value=''> -- Sélectionner -- </option>";
+    $province.="<option value=''> -- SÃ©lectionner -- </option>";
     foreach($pdResult as $provinceName){
       $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
     }
+    
+    
+    //get import config
+    $importQuery="SELECT * FROM import_config WHERE status = 'active'";
+    $importResult=$db->query($importQuery);
+    
     //get lab facility list
     $fQuery="SELECT * FROM facility_details where status='active'";
     $fResult = $db->rawQuery($fQuery);
     $facility = "";
-    $facility.="<option value=''> -- Sélectionner -- </option>";
+    $facility.="<option value=''> -- SÃ©lectionner -- </option>";
     foreach($fResult as $fDetails){
       $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
     }
@@ -36,7 +42,7 @@
       $provinceResult[0]['province_code'] = 0;
     }
     //get ART list
-    $aQuery="SELECT * from r_art_code_details where nation_identifier='drc'";
+    $aQuery="SELECT * from r_art_code_details"; // where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
     $sQuery="SELECT * from r_sample_type where status='active'";
     $sResult=$db->query($sQuery);
@@ -191,7 +197,7 @@
                 <div class="box box-default">
                     <div class="box-body">
                         <div class="box-header with-border">
-                            <h3 class="box-title">1. Réservé à la structure de soins</h3>
+                            <h3 class="box-title">1. RÃ©servÃ© Ã  la structure de soins</h3>
                         </div>
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
@@ -201,17 +207,17 @@
                                 <td><label for="province">Province </label></td>
                                 <td>
                                     <select class="form-control" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
-                                      <option value=""> -- Sélectionner -- </option>
+                                      <option value=""> -- SÃ©lectionner -- </option>
                                       <?php
                                       foreach($pdResult as $provinceName){ ?>
                                         <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
                                       <?php } ?>
                                     </select>
                                 </td>
-                                <td><label for="district">Zone de santé </label></td>
+                                <td><label for="district">Zone de santÃ© </label></td>
                                 <td>
                                   <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
-                                    <option value=""> -- Sélectionner -- </option>
+                                    <option value=""> -- SÃ©lectionner -- </option>
                                     <?php
                                     foreach($districtResult as $districtName){
                                       ?>
@@ -224,7 +230,7 @@
                                 <td><label for="clinicName">Structure/Service </label></td>
                                 <td>
                                     <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
-                                        <option value=""> -- Sélectionner -- </option>
+                                        <option value=""> -- SÃ©lectionner -- </option>
                                         <?php
                                         foreach($fResult as $fDetails){ ?>
                                           <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
@@ -237,13 +243,13 @@
                                 <td>
                                     <input type="text" class="form-control" id="clinicianName" name="clinicianName" placeholder="Demandeur" title="Please enter demandeur" value="<?php echo $vlQueryInfo[0]['request_clinician']; ?>" style="width:100%;"/>
                                 </td>
-                                <td><label for="clinicanTelephone">Téléphone </label></td>
+                                <td><label for="clinicanTelephone">TÃ©lÃ©phone </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" value="<?php echo $vlQueryInfo[0]['clinician_ph_no']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="TÃ©lÃ©phone" title="Please enter tÃ©lÃ©phone" value="<?php echo $vlQueryInfo[0]['clinician_ph_no']; ?>" style="width:100%;"/>
                                 </td>
-                                <td><label for="supportPartner">Partenaire d’appui </label></td>
+                                <td><label for="supportPartner">Partenaire dÂ’appui </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire d’appui" title="Please enter partenaire d’appui" value="<?php echo $vlQueryInfo[0]['support_partner']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dÂ’appui" title="Please enter partenaire dÂ’appui" value="<?php echo $vlQueryInfo[0]['support_partner']; ?>" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -262,13 +268,13 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();checkARTInitiationDate();" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
+                                <td style="width:14%;"><label for="ageInYears">Ã‚ge en annÃ©es </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" value="<?php echo $vlQueryInfo[0]['age_in_yrs']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="AannÃ©es" title="Please enter Ã ge en annÃ©es" value="<?php echo $vlQueryInfo[0]['age_in_yrs']; ?>" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInMonths">Âge en mois </label></td>
+                                <td style="width:14%;"><label for="ageInMonths">Ã‚ge en mois </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" value="<?php echo $vlQueryInfo[0]['age_in_mnts']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter Ã ge en mois" value="<?php echo $vlQueryInfo[0]['age_in_mnts']; ?>" style="width:100%;"/>
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
                                 <td style="width:16%;">
@@ -287,8 +293,7 @@
                                 <td>
                                     <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" value="<?php echo $vlQueryInfo[0]['art_no']; ?>" style="width:100%;"/>
                                 </td>
-                                <td><label for="isPatientNew">Si S/ ARV </label></td>
-                                <td>
+                                <td colspan="2"><label for="isPatientNew">Si S/ ARV </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="isPatientNewYes" name="isPatientNew" <?php echo($vlQueryInfo[0]['is_patient_new'] == 'yes')?'checked="checked"':''; ?> value="yes" title="Please check Si S/ ARV">
@@ -298,16 +303,16 @@
                                         <input type="radio" class="" id="isPatientNewNo" name="isPatientNew" <?php echo($vlQueryInfo[0]['is_patient_new'] == 'no')?'checked="checked"':''; ?> value="no">
                                     </label>
                                 </td>
-                                <td class="du"><label for="">Date du début des ARV </label></td>
+                                <td class="du"><label for="">Date du dÃ©but des ARV </label></td>
                                 <td class="du" colspan="3">
-                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen']; ?>" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/Année)
+                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du dÃ©but des ARV" value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen']; ?>" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/AnnÃ©e)
                                 </td>
                             </tr>
                             <tr>
-                                <td><label>Régime ARV en cours </label></td>
+                                <td><label>RÃ©gime ARV en cours </label></td>
                                 <td colspan="7">
-                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkCurrentRegimen();" style="width:30%;">
-                                    <option value=""> -- Sélectionner -- </option>
+                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose rÃ©gime ARV en cours" onchange="checkCurrentRegimen();" style="width:30%;">
+                                    <option value=""> -- SÃ©lectionner -- </option>
                                       <?php
                                       foreach($aResult as $arv){
                                       ?>
@@ -320,13 +325,13 @@
                                 </td>
                             </tr>
                             <tr class="newArtRegimen" style="display:none;">
-                                <td><label for="newArtRegimen">Autre, à préciser </label></td>
+                                <td><label for="newArtRegimen">Autre, Ã  prÃ©ciser </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control" name="newArtRegimen" id="newArtRegimen" placeholder="Régime ARV" title="Please enter régime ARV" style="width:30%;" >
+                                    <input type="text" class="form-control" name="newArtRegimen" id="newArtRegimen" placeholder="RÃ©gime ARV" title="Please enter rÃ©gime ARV" style="width:30%;" >
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2"><label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime de traitement? </label></td>
+                                <td colspan="2"><label for="hasChangedRegimen">Ce patient a-t-il dÃ©jÃ  changÃ© de rÃ©gime de traitement? </label></td>
                                 <td colspan="2">
                                     <label class="radio-inline">Oui </label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
@@ -337,22 +342,22 @@
                                         <input type="radio" class="" id="changedRegimenNo" name="hasChangedRegimen" value="no" title="Please check any of one option" <?php echo(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "no")?'checked="checked"':''; ?>>
                                     </label>
                                 </td>
-                                <td><label for="reasonForArvRegimenChange" class="arvChangedElement" style="display:<?php echo(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes")?'':'none'; ?>;">Motif de changement de régime ARV </label></td>
+                                <td><label for="reasonForArvRegimenChange" class="arvChangedElement" style="display:<?php echo(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes")?'':'none'; ?>;">Motif de changement de rÃ©gime ARV </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control arvChangedElement" id="reasonForArvRegimenChange" name="reasonForArvRegimenChange" placeholder="Motif de changement de régime ARV" title="Please enter motif de changement de régime ARV" value="<?php echo $vlQueryInfo[0]['reason_for_regimen_change']; ?>" style="width:100%;display:<?php echo(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes")?'':'none'; ?>;"/>
+                                    <input type="text" class="form-control arvChangedElement" id="reasonForArvRegimenChange" name="reasonForArvRegimenChange" placeholder="Motif de changement de rÃ©gime ARV" title="Please enter motif de changement de rÃ©gime ARV" value="<?php echo $vlQueryInfo[0]['reason_for_regimen_change']; ?>" style="width:100%;display:<?php echo(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes")?'':'none'; ?>;"/>
                                 </td>
                             </tr>
                             <tr class="arvChangedElement" style="display:<?php echo(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes")?'':'none'; ?>;">
-                                <td><label for="">Date du changement de régime ARV </label></td>
+                                <td><label for="">Date du changement de rÃ©gime ARV </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" value="<?php echo $vlQueryInfo[0]['date_of_regimen_changed']; ?>" style="width:30%;"/> (Jour/Mois/Année)
+                                    <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de rÃ©gime ARV" value="<?php echo $vlQueryInfo[0]['date_of_regimen_changed']; ?>" style="width:30%;"/> (Jour/Mois/AnnÃ©e)
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="reasonForRequest">Motif de la demande </label></td>
                                 <td colspan="2">
                                    <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
-                                      <option value=""> -- Sélectionner -- </option>
+                                      <option value=""> -- SÃ©lectionner -- </option>
                                       <?php
                                       foreach($vlTestReasonResult as $tReason){
                                       ?>
@@ -367,8 +372,9 @@
                                 </td>
                             </tr>
                             <tr id="femaleElements">
-                                <td><label for="breastfeeding">Si Femme : allaitante ? </label></td>
-                                <td>
+                                <td><strong>Si Femme : </strong></td>
+                                <td colspan="2">
+                                    <label for="breastfeeding">allaitanteÂ ?</label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" <?php echo(trim($vlQueryInfo[0]['is_patient_breastfeeding']) == "yes")?'checked="checked"':''; ?> value="yes" title="Please check Si allaitante">
@@ -378,8 +384,8 @@
                                         <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" <?php echo(trim($vlQueryInfo[0]['is_patient_breastfeeding']) == "no")?'checked="checked"':''; ?> value="no">
                                     </label>
                                 </td>
-                                <td><label for="patientPregnant">Ou enceinte ? </label></td>
-                                <td>
+                                <td colspan="2"><label for="patientPregnant">Ou enceinte ? </label> 
+                                
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="pregYes" name="patientPregnant" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "yes")?'checked="checked"':''; ?> value="yes" title="Please check Si Ou enceinte ">
@@ -389,8 +395,8 @@
                                         <input type="radio" class="" id="pregNo" name="patientPregnant" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "no")?'checked="checked"':''; ?> value="no">
                                     </label>
                                 </td>
-                                <td><label for="trimestre">Si Femme  enceinte </label></td>
-                                <td colspan="3">
+                                <td><label for="trimestre">Si Femme enceinte </label></td>
+                                <td colspan="2">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="trimestre1" name="trimestre" <?php echo(trim($vlQueryInfo[0]['trimestre']) == "1")?'checked="checked"':''; ?> value="1" title="Please check trimestre">
@@ -406,21 +412,21 @@
                                 </td>
                             </tr>
                             <tr class="newVlTestReason" style="display:none;">
-                                <td><label for="newVlTestReason">Autre, à préciser </label></td>
+                                <td><label for="newVlTestReason">Autre, Ã  prÃ©ciser </label></td>
                                 <td colspan="7">
                                     <input type="text" class="form-control" name="newVlTestReason" id="newVlTestReason" placeholder="Virale Demande Raison" title="Please enter virale demande raison" style="width:30%;" >
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="lastViralLoadResult">Résultat dernière charge virale </label></td>
+                                <td><label for="lastViralLoadResult">RÃ©sultat derniÃ¨re charge virale </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Résultat dernière charge virale" title="Please enter résultat dernière charge virale" value="<?php echo $vlQueryInfo[0]['last_viral_load_result']; ?>" style="width:30%;"/> copies/ml
+                                    <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="RÃ©sultat derniÃ¨re charge virale" title="Please enter rÃ©sultat derniÃ¨re charge virale" value="<?php echo $vlQueryInfo[0]['last_viral_load_result']; ?>" style="width:30%;"/> copies/ml
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="">Date dernière charge virale (demande) </label></td>
+                                <td><label for="">Date derniÃ¨re charge virale (demande) </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" value="<?php echo $vlQueryInfo[0]['last_viral_load_date']; ?>" onchange="checkLastVLTestDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date derniÃ¨re charge virale" value="<?php echo $vlQueryInfo[0]['last_viral_load_date']; ?>" onchange="checkLastVLTestDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -428,23 +434,23 @@
                             </tr>
                         </table>
                         <div class="box-header with-border">
-                            <h3 class="box-title">Informations sur le prélèvement </h3>
+                            <h3 class="box-title">Informations sur le prÃ©lÃ¨vement <small>(A remplir par le prÃ©leveur)</small> </h3>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:20%;"><label for="">Date du prélèvement </label></td>
+                                <td style="width:20%;"><label for="">Date du prÃ©lÃ¨vement </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prÃ©lÃ¨vement" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
                             if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){
                             ?>
                               <tr>
-                                <td><label for="specimenType">Type d’échantillon </label></td>
+                                <td><label for="specimenType">Type d'Ã©chantillon </label></td>
                                 <td colspan="3">
-                                  <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d’échantillon" onchange="checkSpecimenType();" style="width:30%;">
-                                    <option value=""> -- Sélectionner -- </option>
+                                  <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d'Ã©chantillon" onchange="checkSpecimenType();" style="width:30%;">
+                                    <option value=""> -- SÃ©lectionner -- </option>
                                     <?php
                                     foreach($sResult as $type){
                                      ?>
@@ -457,23 +463,23 @@
                               </tr>
                             <?php } ?>
                             <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_id'] == 2)?'':'none'; ?>;">
-                                <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
+                                <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TempÃ©rature de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" value="<?php echo $vlQueryInfo[0]['plasma_conservation_temperature']; ?>" style="width:80%;"/>°C
+                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="TempÃ©rature de conservation" title="Please enter tempÃ©rature de conservation" value="<?php echo $vlQueryInfo[0]['plasma_conservation_temperature']; ?>" style="width:80%;"/>Â°C
                                 </td>
-                                <td><label for="durationOfConservation">Durée de conservation </label></td>
+                                <td><label for="durationOfConservation">DurÃ©e de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" value="<?php echo $vlQueryInfo[0]['duration_of_conservation']; ?>" style="width:60%;"/>Jour/Heures
+                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durÃ©e de conservation" value="<?php echo $vlQueryInfo[0]['duration_of_conservation']; ?>" style="width:60%;"/>Jour/Heures
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="">Date de départ au Labo biomol </label></td>
+                                <td><label for="">Date de dÃ©part au Labo biomol </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" value="<?php echo $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de dÃ©part au Labo biomol" value="<?php echo $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le préleveur </label></td>
+                                <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le prÃ©leveur </label></td>
                             </tr>
                         </table>
                     </div>
@@ -481,25 +487,25 @@
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="box-header with-border">
-                            <h3 class="box-title">2. Réservé au Laboratoire de biologie moléculaire </h3>
+                            <h3 class="box-title">2. RÃ©servÃ© au Laboratoire de biologie molÃ©culaire </h3>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:20%;"><label for="">Date de réception de l’échantillon </label></td>
+                                <td style="width:20%;"><label for="">Date de rÃ©ception de lÂ’Ã©chantillon </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de l’échantillon" onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de rÃ©ception de lÂ’Ã©chantillon" onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
                             if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){
                             ?>
                               <tr>
-                                <td><label for="">Décision prise </label></td>
+                                <td><label for="">DÃ©cision prise </label></td>
                                 <td colspan="3">
-                                    <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
+                                    <select class="form-control" id="status" name="status" title="Please select dÃ©cision prise" onchange="checkTestStatus();" style="width:30%;">
                                       <option value="6" <?php echo($vlQueryInfo[0]['status'] == 6)?'selected="selected"':''; ?>> En attente d'approbation Clinique </option>
-                                      <option value="7" <?php echo($vlQueryInfo[0]['status'] == 7)?'selected="selected"':''; ?>>Echantillon accepté</option>
-                                      <option value="4" <?php echo($vlQueryInfo[0]['status'] == 4)?'selected="selected"':''; ?>>Echantillon rejeté</option>
+                                      <option value="7" <?php echo($vlQueryInfo[0]['status'] == 7)?'selected="selected"':''; ?>>Echantillon acceptÃ©</option>
+                                      <option value="4" <?php echo($vlQueryInfo[0]['status'] == 4)?'selected="selected"':''; ?>>Echantillon rejetÃ©</option>
                                     </select>
                                 </td>
                               </tr>
@@ -508,7 +514,7 @@
                                 <td><label for="rejectionReason">Motifs de rejet </label></td>
                                 <td>
                                     <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
-                                      <option value=""> -- Sélectionner -- </option>
+                                      <option value=""> -- SÃ©lectionner -- </option>
                                       <?php
                                       foreach($rjctReasonResult as $rjctReason){
                                       ?>
@@ -517,7 +523,7 @@
                                        <option value="other">Autre</option>
                                     </select>
                                 </td>
-                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser </label></td>
+                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, Ã  prÃ©ciser </label></td>
                                 <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:90%;display:none;"/></td>
                             </tr>
                             <tr>
@@ -528,25 +534,28 @@
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
-                                <td><label for="">Date de réalisation de la charge virale </label></td>
+                                <td><label for="">Date de rÃ©alisation de la charge virale </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['date_of_completion_of_viral_load']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de rÃ©alisation de la charge virale" value="<?php echo $vlQueryInfo[0]['date_of_completion_of_viral_load']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="testingPlatform">Technique utilisée </label></td>
+                                <td><label for="testingPlatform">Technique utilisÃ©e </label></td>
                                 <td colspan="3">
-                                    <select class="form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisée" style="width:30%;">
-                                        <option value=""> -- Sélectionner -- </option>
-                                        <option value="plasma_protocole_600" <?php echo($vlQueryInfo[0]['vl_test_platform'] == "plasma_protocole_600")?'selected="selected"':''; ?>>Plasma protocole 600µl</option>
-                                        <option value="dbs_protocole_1000" <?php echo($vlQueryInfo[0]['vl_test_platform'] == "dbs_protocole_1000")?'selected="selected"':''; ?>>DBS protocole 1000 µl</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label for="vlResult">Résultat </label></td>
+                                  <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:230px;">
+                                    <option value="">-- Select --</option>
+                                    <?php foreach($importResult as $mName) { ?>
+                                      <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
+                                      <?php
+                                    }
+                                    ?>
+                                  </select>
+                                      </td>
+                                </tr>
+                              <tr>
+                                <td><label for="vlResult">RÃ©sultat </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                    <input type="text" class="form-control checkNum" id="vlResult" name="vlResult" placeholder="RÃ©sultat" title="Please enter rÃ©sultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
                                 <td><label for="vlLog">Log </label></td>
                                 <td>
@@ -558,16 +567,16 @@
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
-                                <td><label for="">Date de remise du résultat </label></td>
+                                <td><label for="">Date de remise du rÃ©sultat </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" onchange="checkSampleTestingDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du rÃ©sultat" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" onchange="checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
                 <div class="box-header with-border">
-                  <label class="radio-inline" style="margin:0;padding:0;">1. Biffer la mention inutile <br>2. Sélectionner un seul régime de traitement </label>
+                  <label class="radio-inline" style="margin:0;padding:0;">1. Biffer la mention inutile <br>2. SÃ©lectionner un seul rÃ©gime de traitement </label>
                 </div>
               </div>
               <!-- /.box-body -->
@@ -624,7 +633,7 @@
                 }
             });
       }else{
-        $("#district").html("<option value=''> -- Sélectionner -- </option>");
+        $("#district").html("<option value=''> -- SÃ©lectionner -- </option>");
       }
        $.unblockUI();
     }
@@ -641,7 +650,7 @@
             }
         });
       }else{
-         $("#clinicName").html("<option value=''> -- Sélectionner -- </option>");
+         $("#clinicName").html("<option value=''> -- SÃ©lectionner -- </option>");
       }
       $.unblockUI();
     }
@@ -779,7 +788,7 @@
         sampleReceivedDateTime = smplReceivedYear+"-"+smplReceivedMonth+"-"+smplReceivedDate+" "+splitSampleReceivedDateTime[1]+":00";
         //Check diff
         if(moment(sampleCollDateTime).diff(moment(sampleReceivedDateTime)) > 0) {
-          alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
+          alert("L'Ã©chantillon de donnÃ©es reÃ§ues ne peut pas Ãªtre antÃ©rieur Ã  la date de collecte de l'Ã©chantillon!");
           $("#sampleReceivedDate").val("");
         }
       }
@@ -811,7 +820,7 @@
         sampleTestingAtLabDateTime = smplTestingYear+"-"+smplTestingMonth+"-"+smplTestingDate+" "+splitSampleTestedDateTime[1]+":00";
         //Check diff
         if(moment(sampleCollDateTime).diff(moment(sampleTestingAtLabDateTime)) > 0) {
-          alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
+          alert("La date d'essai de l'Ã©chantillon ne peut pas Ãªtre antÃ©rieure Ã  la date de collecte de l'Ã©chantillon!");
           $("#sampleTestingDateAtLab").val("");
         }
       }
@@ -841,7 +850,7 @@
         artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
         //Check diff
         if(moment(dobDate).isAfter(artIniDate)) {
-          alert("La date d'ouverture de l'ART ne peut pas être antérieure à!");
+          alert("La date d'ouverture de l'ART ne peut pas Ãªtre antÃ©rieure Ã !");
           $("#dateOfArtInitiation").val("");
         }
       }
@@ -873,7 +882,7 @@
         //console.log(lastVLTestDate);
         //Check diff
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
-          alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
+          alert("Dernier test de charge virale Les donnÃ©es ne peuvent pas Ãªtre antÃ©rieures Ã  la date d'initiation de l'ARV!");
           $("#lastViralLoadTestDate").val("");
         }
       }
@@ -913,3 +922,4 @@
  <?php
  //include('footer.php');
  ?>
+
