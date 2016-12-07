@@ -8,14 +8,14 @@
     //get province list
     $pdQuery="SELECT * from province_details";
     $pdResult=$db->query($pdQuery);
-    //get lab facility list
-    $fQuery="SELECT * FROM facility_details where status='active'";
-    $fResult = $db->rawQuery($fQuery);
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
       $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
     }
+    //get lab facility list
+    $fQuery="SELECT * FROM facility_details where status='active'";
+    $fResult = $db->rawQuery($fQuery);
     $facility = "";
     $facility.="<option value=''> -- Sélectionner -- </option>";
     foreach($fResult as $fDetails){
@@ -27,6 +27,9 @@
     if(!isset($stateResult[0]['state']) || $stateResult[0]['state']==''){
       $stateResult[0]['state'] = 0;
     }
+    //district details
+    $districtQuery="SELECT DISTINCT district from facility_details where state='".$stateResult[0]['state']."'";
+    $districtResult=$db->query($districtQuery);
     $provinceQuery="SELECT * from province_details where province_name='".$stateResult[0]['state']."'";
     $provinceResult=$db->query($provinceQuery);
     if(!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_code']==''){
@@ -196,13 +199,22 @@
                                       <?php } ?>
                                     </select>
                                 </td>
-                                <td><label for="zone">Zone de santé </label></td>
+                                <td><label for="district">Zone de santé </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone de santé" title="Please enter zone de santé" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['zone']; ?>" style="width:100%;"/>
+                                    <select class="form-control isRequired" name="district" id="district" title="Please choose district" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($districtResult as $districtName){
+                                        ?>
+                                        <option value="<?php echo $districtName['district'];?>" <?php echo ($stateResult[0]['district']==$districtName['district'])?"selected='selected'":""?>><?php echo ucwords($districtName['district']);?></option>
+                                        <?php
+                                      }
+                                      ?>
+                                  </select>
                                 </td>
                                 <td><label for="clinicName">Structure/Service </label></td>
                                 <td>
-                                     <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" <?php echo $disable; ?> onchange="getfacilityProvinceDetails(this);" style="width:100%;">
+                                     <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" <?php echo $disable; ?> style="width:100%;">
                                         <option value=""> -- Sélectionner -- </option>
                                         <?php
                                         foreach($fResult as $fDetails){ ?>
@@ -540,48 +552,38 @@
         $('.dateTime').mask('99-aaa-9999 99:99');
      });
      
-     function getfacilityDetails(obj){
+    function getfacilityDetails(obj){
+      $.blockUI();
       var pName = $("#province").val();
-      var cName = $("#clinicName").val();
-      if($.trim(pName)!='' && changeProvince && changeFacility){
-        changeFacility = false;
-      }
-      if($.trim(pName)!='' && changeProvince){
+      if($.trim(pName)!=''){
             $.post("getFacilityForClinic.php", { pName : pName},
             function(data){
-                if(data!= ""){   
+                if(data!= ""){
                   details = data.split("###");
-                  $("#clinicName").html(details[0]);
+                  $("#district").html(details[1]);
                 }
             });
-      }else if($.trim(pName)=='' && $.trim(cName)==''){
-        changeProvince = true;
-        changeFacility = true; 
-        $("#province").html("<?php echo $province;?>");
-        $("#clinicName").html("<?php echo $facility;?>");
+      }else{
+        $("#district").html("<option value=''> -- Sélectionner -- </option>");
       }
+       $.unblockUI();
     }
     
-    function getfacilityProvinceDetails(obj){
-        var pName = $("#province").val();
-        var cName = $("#clinicName").val();
-        if($.trim(cName)!='' && changeProvince && changeFacility){
-          changeProvince = false;
-        }
-        if($.trim(cName)!='' && changeFacility){
-          $.post("getFacilityForClinic.php", { cName : cName},
-          function(data){
-              if(data!= ""){
-                details = data.split("###");
-                $("#province").html(details[0]);
-              }
-          });
-        }else if($.trim(pName)=='' && $.trim(cName)==''){
-           changeFacility = true;
-           changeProvince = true;
-           $("#province").html("<?php echo $province;?>");
-           $("#clinicName").html("<?php echo $facility;?>");
-        }
+    function getfacilityDistrictwise(obj){
+      $.blockUI();
+      var dName = $("#district").val();
+      var cName = $("#clinicName").val();
+      if(dName!=''){
+        $.post("getFacilityForClinic.php", {dName:dName,cliName:cName},
+        function(data){
+            if(data != ""){
+              $("#clinicName").html(data);
+            }
+        });
+      }else{
+         $("#clinicName").html("<option value=''> -- Sélectionner -- </option>");
+      }
+      $.unblockUI();
     }
     
     function checkCurrentRegimen(){

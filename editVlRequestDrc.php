@@ -8,14 +8,14 @@
     //get province list
     $pdQuery="SELECT * from province_details";
     $pdResult=$db->query($pdQuery);
-    //get lab facility list
-    $fQuery="SELECT * FROM facility_details where status='active'";
-    $fResult = $db->rawQuery($fQuery);
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
       $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
     }
+    //get lab facility list
+    $fQuery="SELECT * FROM facility_details where status='active'";
+    $fResult = $db->rawQuery($fQuery);
     $facility = "";
     $facility.="<option value=''> -- Sélectionner -- </option>";
     foreach($fResult as $fDetails){
@@ -27,6 +27,9 @@
     if(!isset($stateResult[0]['state']) || $stateResult[0]['state']==''){
       $stateResult[0]['state'] = 0;
     }
+    //district details
+    $districtQuery="SELECT DISTINCT district from facility_details where state='".$stateResult[0]['state']."'";
+    $districtResult=$db->query($districtQuery);
     $provinceQuery="SELECT * from province_details where province_name='".$stateResult[0]['state']."'";
     $provinceResult=$db->query($provinceQuery);
     if(!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_code']==''){
@@ -149,6 +152,18 @@
         color:#0000FF;
         font-size:12.5px;
       }
+      .du{
+        <?php
+        if(trim($vlQueryInfo[0]['is_patient_new']) == "" || trim($vlQueryInfo[0]['is_patient_new']) == "no"){ ?>
+          visibility:hidden;
+        <?php } ?>
+      }
+      #femaleElements{
+        <?php
+        if(trim($vlQueryInfo[0]['gender']) == "" || trim($vlQueryInfo[0]['gender']) == "male"){ ?>
+          display:none;
+        <?php } ?>
+      }
    </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -193,9 +208,18 @@
                                       <?php } ?>
                                     </select>
                                 </td>
-                                <td><label for="zone">Zone de santé </label></td>
+                                <td><label for="district">Zone de santé </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone de santé" title="Please enter zone de santé" value="<?php echo $vlQueryInfo[0]['zone']; ?>" style="width:100%;"/>
+                                  <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                    <option value=""> -- Sélectionner -- </option>
+                                    <?php
+                                    foreach($districtResult as $districtName){
+                                      ?>
+                                      <option value="<?php echo $districtName['district'];?>" <?php echo ($stateResult[0]['district']==$districtName['district'])?"selected='selected'":""?>><?php echo ucwords($districtName['district']);?></option>
+                                      <?php
+                                    }
+                                    ?>
+                                  </select>
                                 </td>
                                 <td><label for="clinicName">Structure/Service </label></td>
                                 <td>
@@ -263,9 +287,20 @@
                                 <td>
                                     <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" value="<?php echo $vlQueryInfo[0]['art_no']; ?>" style="width:100%;"/>
                                 </td>
-                                <td><label for="">Date du début des ARV </label></td>
-                                <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen']; ?>" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/Année) </span>
+                                <td><label for="isPatientNew">Si S/ ARV </label></td>
+                                <td>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="isPatientNewYes" name="isPatientNew" <?php echo($vlQueryInfo[0]['is_patient_new'] == 'yes')?'checked="checked"':''; ?> value="yes" title="Please check Si S/ ARV">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="isPatientNewNo" name="isPatientNew" <?php echo($vlQueryInfo[0]['is_patient_new'] == 'no')?'checked="checked"':''; ?> value="no">
+                                    </label>
+                                </td>
+                                <td class="du"><label for="">Date du début des ARV </label></td>
+                                <td class="du" colspan="3">
+                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen']; ?>" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/Année)
                                 </td>
                             </tr>
                             <tr>
@@ -329,6 +364,45 @@
                                 <td><label for="viralLoadNo">Charge virale N </label></td>
                                 <td colspan="4">
                                     <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" value="<?php echo $vlQueryInfo[0]['viral_load_no']; ?>" style="width:60%;"/>
+                                </td>
+                            </tr>
+                            <tr id="femaleElements">
+                                <td><label for="breastfeeding">Si Femme : allaitante ? </label></td>
+                                <td>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" <?php echo(trim($vlQueryInfo[0]['is_patient_breastfeeding']) == "yes")?'checked="checked"':''; ?> value="yes" title="Please check Si allaitante">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" <?php echo(trim($vlQueryInfo[0]['is_patient_breastfeeding']) == "no")?'checked="checked"':''; ?> value="no">
+                                    </label>
+                                </td>
+                                <td><label for="patientPregnant">Ou enceinte ? </label></td>
+                                <td>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "yes")?'checked="checked"':''; ?> title="Please check Si Ou enceinte ">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="pregNo" name="patientPregnant" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "no")?'checked="checked"':''; ?> value="no">
+                                    </label>
+                                </td>
+                                <td><label for="trimestre">Si Femme  enceinte </label></td>
+                                <td colspan="3">
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="trimestre1" name="trimestre" <?php echo(trim($vlQueryInfo[0]['trimestre']) == "1")?'checked="checked"':''; ?> value="1" title="Please check trimestre">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 2</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="trimestre2" name="trimestre" <?php echo(trim($vlQueryInfo[0]['trimestre']) == "2")?'checked="checked"':''; ?> value="2">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 3</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="trimestre3" name="trimestre" <?php echo(trim($vlQueryInfo[0]['trimestre']) == "3")?'checked="checked"':''; ?> value="3">
+                                    </label>
                                 </td>
                             </tr>
                             <tr class="newVlTestReason" style="display:none;">
@@ -472,9 +546,12 @@
                             <tr>
                                 <td><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" style="width:70%;"/>copies/ml
+                                    <input type="text" class="form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
-                                <td colspan="2" style="vertical-align:middle;">Limite de détection : < 40 Copies/ml ou  log  < 1.6 ( pour DBS )</td>
+                                <td><label for="vlLog">Log </label></td>
+                                <td>
+                                    <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" value="<?php echo $vlQueryInfo[0]['log_value']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le service effectuant la charge virale </label></td>
@@ -535,48 +612,38 @@
         $('.dateTime').mask('99-aaa-9999 99:99');
      });
      
-     function getfacilityDetails(obj){
+    function getfacilityDetails(obj){
+      $.blockUI();
       var pName = $("#province").val();
-      var cName = $("#clinicName").val();
-      if($.trim(pName)!='' && changeProvince && changeFacility){
-        changeFacility = false;
-      }
-      if($.trim(pName)!='' && changeProvince){
+      if($.trim(pName)!=''){
             $.post("getFacilityForClinic.php", { pName : pName},
             function(data){
-                if(data!= ""){   
+                if(data!= ""){
                   details = data.split("###");
-                  $("#clinicName").html(details[0]);
+                  $("#district").html(details[1]);
                 }
             });
-      }else if($.trim(pName)=='' && $.trim(cName)==''){
-        changeProvince = true;
-        changeFacility = true; 
-        $("#province").html("<?php echo $province;?>");
-        $("#clinicName").html("<?php echo $facility;?>");
+      }else{
+        $("#district").html("<option value=''> -- Sélectionner -- </option>");
       }
+       $.unblockUI();
     }
     
-    function getfacilityProvinceDetails(obj){
-        var pName = $("#province").val();
-        var cName = $("#clinicName").val();
-        if($.trim(cName)!='' && changeProvince && changeFacility){
-          changeProvince = false;
-        }
-        if($.trim(cName)!='' && changeFacility){
-          $.post("getFacilityForClinic.php", { cName : cName},
-          function(data){
-              if(data!= ""){
-                details = data.split("###");
-                $("#province").html(details[0]);
-              }
-          });
-        }else if($.trim(pName)=='' && $.trim(cName)==''){
-           changeFacility = true;
-           changeProvince = true;
-           $("#province").html("<?php echo $province;?>");
-           $("#clinicName").html("<?php echo $facility;?>");
-        }
+    function getfacilityDistrictwise(obj){
+      $.blockUI();
+      var dName = $("#district").val();
+      var cName = $("#clinicName").val();
+      if(dName!=''){
+        $.post("getFacilityForClinic.php", {dName:dName,cliName:cName},
+        function(data){
+            if(data != ""){
+              $("#clinicName").html(data);
+            }
+        });
+      }else{
+         $("#clinicName").html("<option value=''> -- Sélectionner -- </option>");
+      }
+      $.unblockUI();
     }
     
     function checkCurrentRegimen(){
@@ -593,6 +660,22 @@
          $(".arvChangedElement").show();
       }else if($(this).val() == 'no'){
         $(".arvChangedElement").hide();
+      }
+    });
+    
+    $("input:radio[name=isPatientNew]").click(function() {
+      if($(this).val() == 'yes'){
+        $(".du").css("visibility","visible");
+      }else if($(this).val() == 'no'){
+        $(".du").css("visibility","hidden");
+      }
+    });
+     
+    $("input:radio[name=gender]").click(function() {
+      if($(this).val() == 'female'){
+         $("#femaleElements").show();
+      }else if($(this).val() == 'male'){
+        $("#femaleElements").hide();
       }
     });
     
@@ -792,6 +875,26 @@
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
           alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
           $("#lastViralLoadTestDate").val("");
+        }
+      }
+    }
+    
+    function calculateLogValue(obj){
+      if(obj.id=="vlResult") {
+        absValue = $("#vlResult").val();
+        if(absValue!='' && absValue!=0){
+          $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+        }
+      }
+      if(obj.id=="vlLog") {
+        logValue = $("#vlLog").val();
+        if(logValue!='' && logValue!=0){
+          var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+          if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+          }else{
+            $("#vlResult").val('');
+          }
         }
       }
     }

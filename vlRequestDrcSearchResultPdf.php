@@ -285,7 +285,7 @@ if(sizeof($requestResult)> 0){
                 $html .='<tr>';
                   $html .='<td style="width:50%;"></td>';
                    $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Zone de santé</td>';
-                  $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['zone']).'</td>';
+                  $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['district']).'</td>';
                 $html .='</tr>';
                 $html .='</table>';
                 $html .='</td>';

@@ -58,11 +58,11 @@ $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
             }
-            $facility = '';
-            $facility.="<option value=''> -- Select -- </option>";
-            foreach($fResult as $fDetails){
-              $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
-            }
+$facility = '';
+$facility.="<option value=''> -- Select -- </option>";
+foreach($fResult as $fDetails){
+  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+}
 //sample code
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');

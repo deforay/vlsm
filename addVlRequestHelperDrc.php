@@ -33,16 +33,40 @@ try {
     }else{
         $_POST['dob'] = NULL;
     }
-    //Set gender
+    //Set is patient new
+    if(!isset($_POST['isPatientNew']) || trim($_POST['isPatientNew'])==''){
+        $_POST['isPatientNew'] = NULL;
+        $_POST['dateOfArtInitiation'] = NULL;
+    }else if($_POST['isPatientNew'] =="yes"){
+        //Ser ARV initiation date
+        if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
+            $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
+        }else{
+           $_POST['dateOfArtInitiation'] = NULL; 
+        }
+    }else if($_POST['isPatientNew'] =="no"){
+        $_POST['dateOfArtInitiation'] = NULL; 
+    }
+    //Set gender/it's realted values
     if(!isset($_POST['gender']) || trim($_POST['gender'])==''){
         $_POST['gender'] = NULL;
+        $_POST['breastfeeding'] = NULL;
+        $_POST['patientPregnant'] = NULL;
+        $_POST['trimestre'] = NULL;
+    }else if($_POST['gender'] == "female"){
+        if(!isset($_POST['breastfeeding']) || trim($_POST['breastfeeding'])==""){
+            $_POST['breastfeeding'] = NULL;
+        } if(!isset($_POST['patientPregnant']) || trim($_POST['patientPregnant'])==""){
+            $_POST['patientPregnant'] = NULL;
+        } if(!isset($_POST['trimestre']) || trim($_POST['trimestre'])==""){
+            $_POST['trimestre'] = NULL;
+        }
+    }else if($_POST['gender'] == "male"){
+        $_POST['breastfeeding'] = NULL;
+        $_POST['patientPregnant'] = NULL;
+        $_POST['trimestre'] = NULL;
     }
-    //Ser ARV initiation date
-    if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
-        $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
-    }else{
-       $_POST['dateOfArtInitiation'] = NULL; 
-    }
+    
     //Set ARV current regimen
     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
@@ -168,7 +192,6 @@ try {
                   'vl_instance_id'=>$instanceId,
                   'form_id'=>3,
                   'facility_id'=>$_POST['clinicName'],
-                  'zone'=>$_POST['zone'],
                   'request_clinician'=>$_POST['clinicianName'],
                   'clinician_ph_no'=>$_POST['clinicanTelephone'],
                   'support_partner'=>$_POST['supportPartner'],
@@ -176,8 +199,12 @@ try {
                   'age_in_yrs'=>$_POST['ageInYears'],
                   'age_in_mnts'=>$_POST['ageInMonths'],
                   'gender'=>$_POST['gender'],
+                  'is_patient_breastfeeding'=>$_POST['breastfeeding'],
+                  'is_patient_pregnant'=>$_POST['patientPregnant'],
+                  'trimestre'=>$_POST['trimestre'],
                   'art_no'=>$_POST['patientArtNo'],
                   'lab_no'=>$_POST['labNo'],
+                  'is_patient_new'=>$_POST['isPatientNew'],
                   'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
                   'current_regimen'=>$_POST['artRegimen'],
                   'has_patient_changed_regimen'=>$_POST['hasChangedRegimen'],
@@ -197,6 +224,7 @@ try {
                   'serial_no'=>$_POST['sampleCode'],
                   'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
+                  'log_value'=>$_POST['vlLog'],
                   'result'=>$_POST['vlResult'],
                   'date_of_demand'=>$_POST['dateOfDemand'],
                   'viral_load_no'=>$_POST['viralLoadNo'],

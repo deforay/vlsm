@@ -704,3 +704,9 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 --Pal 7th-Dec-2016
 ALTER TABLE `vl_request_form` CHANGE `service` `zone` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` DROP `zone`;
+
+ALTER TABLE `vl_request_form` ADD `is_patient_new` VARCHAR(45) NULL DEFAULT NULL AFTER `sample_id`;
+
+ALTER TABLE `vl_request_form` ADD `trimestre` INT(11) NULL DEFAULT NULL AFTER `is_patient_breastfeeding`;
