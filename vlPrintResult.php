@@ -70,7 +70,7 @@ $batResult = $db->rawQuery($batQuery);
 		<tr>
 		    <td><b>Facility :</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facility" name="facility" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -149,11 +149,11 @@ $batResult = $db->rawQuery($batQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		              <th>Sample Code</th>
+		  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No.</th>
                   <th>Patient's Name</th>
-		              <th>Facility Name</th>
+		  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Last Modified On</th>
@@ -269,7 +269,7 @@ $batResult = $db->rawQuery($batQuery);
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
 			      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-			      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+			      aoData.push({"name": "facility", "value": $("#facility").val()});
 			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});
 			      aoData.push({"name": "status", "value": $("#status").val()});

@@ -142,7 +142,7 @@ try {
     }
     $vldata=array(
                   'facility_id'=>$_POST['clinicName'],
-                  'service'=>$_POST['service'],
+                  'zone'=>$_POST['zone'],
                   'request_clinician'=>$_POST['clinicianName'],
                   'clinician_ph_no'=>$_POST['clinicanTelephone'],
                   'support_partner'=>$_POST['supportPartner'],

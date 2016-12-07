@@ -700,3 +700,7 @@ INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '17', 'testResultEmailConfig.php', 'Access');
 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '17', 'editTestResultEmailConfig.php', 'Edit');
+
+
+--Pal 7th-Dec-2016
+ALTER TABLE `vl_request_form` CHANGE `service` `zone` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
