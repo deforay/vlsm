@@ -102,14 +102,16 @@
                                         <?php echo $province; ?>
                                     </select>
                                 </td>
-                                <td><label for="zone">Zone de santé </label></td>
+                                <td><label for="district">Zone de santé </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone de santé" title="Please enter zone de santé" style="width:100%;"/>
+                                    <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                      <option value=""> -- Sélectionner -- </option>
+                                    </select>
                                 </td>
                                 <td><label for="clinicName">Structure/Service </label></td>
                                 <td>
-                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
-                                        <?php echo $facility; ?>
+                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
                                     </select>
                                 </td>
                             </tr>
@@ -168,9 +170,20 @@
                                 <td>
                                     <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"/>
                                 </td>
-                                <td><label for="">Date du début des ARV </label></td>
-                                <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:40%;"/> (Jour/Mois/Année) </span>
+                                <td><label for="isPatientNew">Si S/ ARV </label></td>
+                                <td>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="isPatientNewYes" name="isPatientNew" value="yes" title="Please check Si S/ ARV">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="isPatientNewNo" name="isPatientNew" value="no">
+                                    </label>
+                                </td>
+                                <td class="du"><label for="" style="visibility:hidden;">Date du début des ARV </label></td>
+                                <td class="du" colspan="3" style="visibility:hidden;">
+                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;"/> (Jour/Mois/Année)
                                 </td>
                             </tr>
                             <tr>
@@ -234,6 +247,45 @@
                                 <td><label for="viralLoadNo">Charge virale N </label></td>
                                 <td colspan="4">
                                     <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" style="width:60%;"/>
+                                </td>
+                            </tr>
+                            <tr id="femaleElements" style="display:none;">
+                                <td><label for="breastfeeding">Si Femme : allaitante ? </label></td>
+                                <td>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check Si allaitante">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no">
+                                    </label>
+                                </td>
+                                <td><label for="patientPregnant">Ou enceinte ? </label></td>
+                                <td>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Si Ou enceinte ">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="pregNo" name="patientPregnant" value="no">
+                                    </label>
+                                </td>
+                                <td><label for="trimestre">Si Femme  enceinte </label></td>
+                                <td colspan="3">
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="trimestre1" name="trimestre" value="1" title="Please check trimestre">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 2</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="trimestre2" name="trimestre" value="2">
+                                    </label>
+                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 3</label>
+                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                        <input type="radio" class="" id="trimestre3" name="trimestre" value="3">
+                                    </label>
                                 </td>
                             </tr>
                             <tr class="newVlTestReason" style="display:none;">
@@ -377,9 +429,12 @@
                             <tr>
                                 <td><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" style="width:70%;"/>copies/ml
+                                    <input type="text" class="form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
-                                <td colspan="2" style="vertical-align:middle;">Limite de détection : < 40 Copies/ml ou  log  < 1.6 ( pour DBS )</td>
+                                <td><label for="vlLog">Log </label></td>
+                                <td>
+                                    <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le service effectuant la charge virale </label></td>
@@ -440,48 +495,38 @@
         $('.dateTime').mask('99-aaa-9999 99:99');
      });
      
-     function getfacilityDetails(obj){
+    function getfacilityDetails(obj){
+       $.blockUI();
       var pName = $("#province").val();
-      var cName = $("#clinicName").val();
-      if($.trim(pName)!='' && changeProvince && changeFacility){
-        changeFacility = false;
-      }
-      if($.trim(pName)!='' && changeProvince){
+      if($.trim(pName)!=''){
             $.post("getFacilityForClinic.php", { pName : pName},
             function(data){
-                if(data!= ""){   
+                if(data!= ""){
                   details = data.split("###");
-                  $("#clinicName").html(details[0]);
+                  $("#district").html(details[1]);
                 }
             });
-      }else if($.trim(pName)=='' && $.trim(cName)==''){
-        changeProvince = true;
-        changeFacility = true; 
-        $("#province").html("<?php echo $province;?>");
-        $("#clinicName").html("<?php echo $facility;?>");
+      }else{
+        $("#district").html("<option value=''> -- Sélectionner -- </option>");
       }
+       $.unblockUI();
     }
     
-    function getfacilityProvinceDetails(obj){
-        var pName = $("#province").val();
-        var cName = $("#clinicName").val();
-        if($.trim(cName)!='' && changeProvince && changeFacility){
-          changeProvince = false;
-        }
-        if($.trim(cName)!='' && changeFacility){
-          $.post("getFacilityForClinic.php", { cName : cName},
-          function(data){
-              if(data!= ""){
-                details = data.split("###");
-                $("#province").html(details[0]);
-              }
-          });
-        }else if($.trim(pName)=='' && $.trim(cName)==''){
-           changeFacility = true;
-           changeProvince = true;
-           $("#province").html("<?php echo $province;?>");
-           $("#clinicName").html("<?php echo $facility;?>");
-        }
+    function getfacilityDistrictwise(obj){
+      $.blockUI();
+      var dName = $("#district").val();
+      var cName = $("#clinicName").val();
+      if(dName!=''){
+        $.post("getFacilityForClinic.php", {dName:dName,cliName:cName},
+        function(data){
+            if(data != ""){
+              $("#clinicName").html(data);
+            }
+        });
+      }else{
+         $("#clinicName").html("<option value=''> -- Sélectionner -- </option>");
+      }
+      $.unblockUI();
     }
     
     function checkCurrentRegimen(){
@@ -492,6 +537,22 @@
         $(".newArtRegimen").hide();
       }
     }
+    
+    $("input:radio[name=isPatientNew]").click(function() {
+      if($(this).val() == 'yes'){
+        $(".du").css("visibility","visible");
+      }else if($(this).val() == 'no'){
+        $(".du").css("visibility","hidden");
+      }
+    });
+    
+    $("input:radio[name=gender]").click(function() {
+      if($(this).val() == 'female'){
+         $("#femaleElements").show();
+      }else if($(this).val() == 'male'){
+        $("#femaleElements").hide();
+      }
+    });
     
     $("input:radio[name=hasChangedRegimen]").click(function() {
       if($(this).val() == 'yes'){
@@ -697,6 +758,26 @@
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
           alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
           $("#lastViralLoadTestDate").val("");
+        }
+      }
+    }
+    
+    function calculateLogValue(obj){
+      if(obj.id=="vlResult") {
+        absValue = $("#vlResult").val();
+        if(absValue!='' && absValue!=0){
+          $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+        }
+      }
+      if(obj.id=="vlLog") {
+        logValue = $("#vlLog").val();
+        if(logValue!='' && logValue!=0){
+          var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+          if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+          }else{
+            $("#vlResult").val('');
+          }
         }
       }
     }
