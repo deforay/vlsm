@@ -1,7 +1,6 @@
 <?php
 ob_start();
 include('header.php');
-//include('./includes/MysqliDb.php');
 $id=(int)base64_decode($_GET['id']);
 
 $sQuery="SELECT * FROM batch_details where batch_id=$id";

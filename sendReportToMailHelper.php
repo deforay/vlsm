@@ -15,7 +15,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  'encrypt'=>$_POST['encrypt'],
 		  'password'=>$_POST['password'],
 		  'comment'=>$_POST['comment'],
-		  'batch_id'=>$batchId,
+		  'batch_id'=>$batchId
 	 );
 	 $reportId = $db->insert('report_to_mail',$reportData);
 	 

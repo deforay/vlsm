@@ -193,19 +193,19 @@
                                       <?php } ?>
                                     </select>
                                 </td>
-                                <td><label for="clinicName">Zone de santé </label></td>
+                                <td><label for="zone">Zone de santé </label></td>
                                 <td>
-                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose Zone de santé" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
+                                    <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone de santé" title="Please enter zone de santé" value="<?php echo $vlQueryInfo[0]['zone']; ?>" style="width:100%;"/>
+                                </td>
+                                <td><label for="clinicName">Structure/Service </label></td>
+                                <td>
+                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
                                         <option value=""> -- Sélectionner -- </option>
                                         <?php
                                         foreach($fResult as $fDetails){ ?>
                                           <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
                                         <?php } ?>
                                     </select>
-                                </td>
-                                <td><label for="service">Structure/Service </label></td>
-                                <td>
-                                    <input type="text" class="form-control" id="service" name="service" placeholder="Structure/Service" title="Please enter structure/service" value="<?php echo $vlQueryInfo[0]['service']; ?>" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>

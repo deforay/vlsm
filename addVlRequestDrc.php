@@ -102,15 +102,15 @@
                                         <?php echo $province; ?>
                                     </select>
                                 </td>
-                                <td><label for="clinicName">Zone de santé </label></td>
+                                <td><label for="zone">Zone de santé </label></td>
                                 <td>
-                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose Zone de santé" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
+                                    <input type="text" class="form-control" id="zone" name="zone" placeholder="Zone de santé" title="Please enter zone de santé" style="width:100%;"/>
+                                </td>
+                                <td><label for="clinicName">Structure/Service </label></td>
+                                <td>
+                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" onchange="getfacilityProvinceDetails(this);" style="width:100%;">
                                         <?php echo $facility; ?>
                                     </select>
-                                </td>
-                                <td><label for="service">Structure/Service </label></td>
-                                <td>
-                                    <input type="text" class="form-control" id="service" name="service" placeholder="Structure/Service" title="Please enter structure/service" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>
