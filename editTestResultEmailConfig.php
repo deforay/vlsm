@@ -53,7 +53,7 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                     <div class="form-group">
                       <label for="rs_email" class="col-lg-3 control-label">Email Id *</label>
                       <div class="col-lg-9">
-                        <input type="text" class="form-control isRequired" id="rs_email" name="rs_email" placeholder="Email" title="Please enter email" value="<?php echo $arr['rs_email']; ?>">
+                        <input type="text" class="form-control isEmail isRequired" id="rs_email" name="rs_email" placeholder="Email" title="Please enter email" value="<?php echo $arr['rs_email']; ?>">
                       </div>
                     </div>
                    </div>
