@@ -128,10 +128,10 @@ $primaryKey="batch_id";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-			$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-			$row[] = ucwords($aRow['batch_code']);
-			$row[] = ucwords($aRow['sent_mail']);
-			$row[] = '<a href="sendRequestToMail.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Send Request"><i class="fa fa-file"> Send Request</i></a>';
+	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+	    $row[] = ucwords($aRow['batch_code']);
+	    $row[] = ucwords($aRow['sent_mail']);
+	    $row[] = '<a href="sendRequestToMail.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Send Request"><i class="fa fa-file"> Send Request</i></a>';
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

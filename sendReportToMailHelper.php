@@ -20,7 +20,7 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 	 $reportId = $db->insert('report_to_mail',$reportData);
 	 
 	 //get email id
-	 $geQuery="SELECT * FROM other_config";
+	 $geQuery="SELECT * FROM other_config WHERE type = 'request'";
 	 $geResult = $db->rawQuery($geQuery);
 	 
 	 $mailconf = array();
@@ -51,11 +51,11 @@ if(isset($_POST['fileName']) && trim($_POST['fileName'])!="" && $batchId>0){
 		  $mail->SMTPAuth = true;
 		  $mail->SMTPKeepAlive = true; 
 		  //Username to use for SMTP authentication - use full email address for gmail
-		  $mail->Username = $mailconf['email'];
+		  $mail->Username = $mailconf['rq_email'];
 		  //Password to use for SMTP authentication
-		  $mail->Password = $mailconf['password'];
+		  $mail->Password = $mailconf['rq_password'];
 		  //Set who the message is to be sent from
-		  $mail->setFrom($mailconf['email']);
+		  $mail->setFrom($mailconf['rq_email']);
                 
           //Admin Mail
 		  if(isset($_POST['mailSubject']) && trim($_POST['mailSubject'])!=""){
