@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION['userId'])){
-    header("location:index.php");
+    header("location:../dashboard/index.php");
 }
 include('./includes/MysqliDb.php');
 $globalConfigQuery ="SELECT * from global_config where name='logo'";
