@@ -58,7 +58,7 @@ try {
                  $redirect= $admin[0]['landing_page'];
               }else{
                 $fileNameList = array('index.php','addVlRequest.php','vlRequest.php','batchcode.php','vlRequestMail.php','addImportResult.php','vlPrintResult.php','vlTestResult.php','missingResult.php','vlResult.php','highViralLoad.php','roles.php','users.php','facilities.php','globalConfig.php','importConfig.php');
-                $fileName = array('dashboard/index.php','vl-request/addVlRequest.php','vl-request/vlRequest.php','batch/batchcode.php','mail-test-result/vlRequestMail.php','import-result/addImportResult.php','vl-print/vlPrintResult.php','vl-print/vlTestResult.php','sample-status-report/missingResult.php','export-result/vlResult.php','high-viral-load/highViralLoad.php','roles/roles.php','users/users.php','facilities/facilities.php','global-config/globalConfig.php','import-configuration/importConfig.php');
+                $fileName = array('dashboard/index.php','vl-request/addVlRequest.php','vl-request/vlRequest.php','batch/batchcode.php','mail/vlRequestMail.php','import-result/addImportResult.php','vl-print/vlPrintResult.php','vl-print/vlTestResult.php','program-management/missingResult.php','program-management/vlResult.php','program-management/highViralLoad.php','roles/roles.php','users/users.php','facilities/facilities.php','global-config/globalConfig.php','import-configs/importConfig.php');
                 foreach($fileNameList as $redirectFile){
                   if(in_array($redirectFile,$priId)){
                     $arrIndex = array_search($redirectFile,$fileNameList);
