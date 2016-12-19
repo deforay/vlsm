@@ -3,14 +3,15 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 include ('../includes/tcpdf/tcpdf.php');
+define('UPLOAD_PATH','../uploads');
 $id=base64_decode($_POST['id']);
 if($id >0){
-    if (!file_exists('uploads') && !is_dir('uploads')) {
-        mkdir('uploads');
-    }
+    //if (!file_exists('uploads') && !is_dir('uploads')) {
+    //    mkdir('uploads');
+    //}
         
-    if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "barcode") && !is_dir('uploads'. DIRECTORY_SEPARATOR."barcode")) {
-        mkdir('uploads'. DIRECTORY_SEPARATOR."barcode");
+    if (!file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . "barcode") && !is_dir(UPLOAD_PATH. DIRECTORY_SEPARATOR."barcode")) {
+        mkdir(UPLOAD_PATH. DIRECTORY_SEPARATOR."barcode");
     }
     $lQuery="SELECT * from global_config where name='logo'";
     $lResult=$db->query($lQuery);

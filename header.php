@@ -232,7 +232,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu batchCodeMenu"><a href="../batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu vlRequestMailMenu"><a href="../mail-test-result/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
+                  <li class="allMenu vlRequestMailMenu"><a href="../mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
 		<?php } ?>
             </ul>
         </li>
@@ -257,7 +257,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultApprovalMenu"><a href="../vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])){ ?>
-               <li class="allMenu vlResultMailMenu"><a href="../mail-test-result/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+               <li class="allMenu vlResultMailMenu"><a href="../mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
         <?php } ?>
             </ul>
         </li>
@@ -274,14 +274,14 @@ $formConfigResult=$db->query($formConfigQuery);
             </a>
             <ul class="treeview-menu">
 		<?php if(isset($_SESSION['privileges']) && in_array("missingResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu missingResultMenu"><a href="../sample-status-report/missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+                <li class="allMenu missingResultMenu"><a href="../program-management/missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
 		<?php } ?>
                 <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
 		<?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlResultMenu"><a href="../export-result/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+                <li class="allMenu vlResultMenu"><a href="../program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlHighMenu"><a href="../high-viral-load/highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
+                <li class="allMenu vlHighMenu"><a href="../program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])){ ?>
                 <!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
 		<?php } ?>
