@@ -15,6 +15,8 @@ $configQuery="SELECT * from global_config";
      include('updateVlTestResultZm.php');
     }else if($arr['vl_form']==3){
      include('updateVlTestResultDrc.php');
+    }else if($arr['vl_form']==4){
+     include('updateVlTestResultZam.php');
     }
 include('../footer.php');
  ?>

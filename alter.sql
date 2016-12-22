@@ -710,3 +710,7 @@ ALTER TABLE `vl_request_form` DROP `zone`;
 ALTER TABLE `vl_request_form` ADD `is_patient_new` VARCHAR(45) NULL DEFAULT NULL AFTER `sample_id`;
 
 ALTER TABLE `vl_request_form` ADD `trimestre` INT(11) NULL DEFAULT NULL AFTER `is_patient_breastfeeding`;
+
+--saravanan 21-dec-2016
+INSERT INTO `form_details` (`form_id`, `form_name`) VALUES (NULL, 'Zambia Form');
+ALTER TABLE `vl_request_form` ADD `poor_adherence` VARCHAR(255) NULL DEFAULT NULL AFTER `arv_adherence`;

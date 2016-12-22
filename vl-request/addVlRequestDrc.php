@@ -115,8 +115,8 @@
                                 </td>
                                 <td><label for="clinicName">Structure/Service </label></td>
                                 <td>
-                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;">
-                                      <option value=""> -- Sélectionner -- </option>
+                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                                      <?php echo $facility;  ?>
                                     </select>
                                 </td>
                             </tr>
@@ -478,6 +478,9 @@
   <script type="text/javascript">
      changeProvince = true;
      changeFacility = true;
+      provinceName = true;
+      facilityName = true;
+      machineName = true;
      $(document).ready(function() {
         $('.date').datepicker({
         changeMonth: true,
@@ -504,15 +507,28 @@
      
     function getfacilityDetails(obj){
        $.blockUI();
+       var cName = $("#clinicName").val();
       var pName = $("#province").val();
+      if(pName!='' && provinceName && facilityName){
+        facilityName = false;
+      }
       if($.trim(pName)!=''){
+        if(provinceName){
             $.post("../includes/getFacilityForClinic.php", { pName : pName},
             function(data){
                 if(data!= ""){
                   details = data.split("###");
+                  $("#clinicName").html(details[0]);
                   $("#district").html(details[1]);
+                  $("#clinicianName").val(details[2]);
                 }
             });
+        }
+      }else if(pName=='' && cName==''){
+        provinceName = true;
+        facilityName = true;
+        $("#province").html("<?php echo $province;?>");
+        $("#clinicName").html("<?php echo $facility;?>");
       }else{
         $("#district").html("<option value=''> -- Sélectionner -- </option>");
       }
@@ -532,6 +548,33 @@
         });
       }else{
          $("#clinicName").html("<option value=''> -- Sélectionner -- </option>");
+      }
+      $.unblockUI();
+    }
+    function getfacilityProvinceDetails(obj)
+    {
+      $.blockUI();
+       //check facility name
+        var cName = $("#clinicName").val();
+        var pName = $("#province").val();
+        if(cName!='' && provinceName && facilityName){
+          provinceName = false;
+        }
+      if(cName!='' && facilityName){
+        $.post("../includes/getFacilityForClinic.php", { cName : cName},
+        function(data){
+            if(data != ""){
+              details = data.split("###");
+              $("#province").html(details[0]);
+              $("#district").html(details[1]);
+              $("#clinicianName").val(details[2]);
+            }
+        });
+      }else if(pName=='' && cName==''){
+        provinceName = true;
+        facilityName = true;
+        $("#province").html("<?php echo $province;?>");
+        $("#clinicName").html("<?php echo $facility;?>");
       }
       $.unblockUI();
     }
