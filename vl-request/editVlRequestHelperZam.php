@@ -7,9 +7,6 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
-     $configQuery ="SELECT value FROM global_config where name='auto_approval'";
-     $configResult = $db->rawQuery($configQuery);
-     $status = 6;
      //var_dump($_POST);die;
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
@@ -42,17 +39,17 @@ try {
      }else{
         $_POST['lastViralLoadTestDate'] = NULL;
      }
-     if(isset($_POST['dateOfProcessing']) && trim($_POST['dateOfProcessing'])!=""){
-          $sampleTestingDateLab = explode(" ",$_POST['dateOfProcessing']);
-          $_POST['dateOfProcessing']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
+     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
+          $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
      }else{
-        $_POST['dateOfProcessing'] = NULL;
+        $_POST['sampleTestingDateAtLab'] = NULL;
      }
     
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
-            'nation_identifier'=>'mz',
+            'nation_identifier'=>'zam',
             'parent_art'=>'4'
           );
           $result=$db->insert('r_art_code_details',$data);
@@ -66,65 +63,61 @@ try {
      $_POST['result'] = '';
      if($_POST['vlResult']!=''){
           $_POST['result'] = $_POST['vlResult'];
-     }else if($_POST['vlLog']!=''){
-          $_POST['result'] = $_POST['vlLog'];
      }
      $instanceId = '';
-     if(isset($_SESSION['instanceId'])){
+    if(isset($_SESSION['instanceId'])){
           $instanceId = $_SESSION['instanceId'];
-     }
+    }
+    if($_POST['testingPlatform']!=''){
+        $platForm = explode("##",$_POST['testingPlatform']);
+        $_POST['testingPlatform'] = $platForm[0];
+    }
     
      $vldata=array(
-          'vl_instance_id'=>$instanceId,
-          'form_id'=>'5',
-          'serial_no'=>(isset($_POST['orderNo']) && $_POST['orderNo']!='' ? $_POST['orderNo'] :  NULL) ,
-          'sample_code'=>(isset($_POST['labNumber']) && $_POST['labNumber']!='' ? $_POST['labNumber'] :  NULL),
+          'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL) ,
+          'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
           'facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='' ? $_POST['clinicName'] :  NULL),
-          'lab_contact_person'=>(isset($_POST['technologistName']) && $_POST['technologistName']!='' ? $_POST['technologistName'] :  NULL),
+          'lab_contact_person'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
-          'collected_by'=>(isset($_POST['sampleReceivedBy']) && $_POST['sampleReceivedBy']!='' ? $_POST['sampleReceivedBy'] :  NULL),
           'patient_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
           'surname'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
           'gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
           'patient_dob'=>$_POST['dob'],
           'age_in_yrs'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='' ? $_POST['ageInYears'] :  NULL),
-          'patient_below_five_years'=>(isset($_POST['lessThanFiveYears']) && $_POST['lessThanFiveYears']!='' ? $_POST['lessThanFiveYears'] :  NULL),
+          'age_in_mnts'=>(isset($_POST['ageInMonths']) && $_POST['ageInMonths']!='' ? $_POST['ageInMonths'] :  NULL),
           'is_patient_pregnant'=>(isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='' ? $_POST['patientPregnant'] :  NULL),
           'is_patient_breastfeeding'=>(isset($_POST['breastfeeding']) && $_POST['breastfeeding']!='' ? $_POST['breastfeeding'] :  NULL),
           'art_no'=>(isset($_POST['patientNo']) && $_POST['patientNo']!='' ? $_POST['patientNo'] :  NULL),
           'current_regimen'=>(isset($_POST['artRegimen']) && $_POST['artRegimen']!='' ? $_POST['artRegimen'] :  NULL),
           'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
-          'patient_receive_sms'=>(isset($_POST['receiveSms']) && $_POST['receiveSms']!='' ? $_POST['receiveSms'] :  NULL),
           'patient_phone_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='' ? $_POST['patientPhoneNumber'] :  NULL),
           'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
           'last_viral_load_result'=>(isset($_POST['lastViralLoadResult']) && $_POST['lastViralLoadResult']!='' ? $_POST['lastViralLoadResult'] :  NULL),
-          'viral_load_log'=>(isset($_POST['viralLoadLog']) && $_POST['viralLoadLog']!='' ? $_POST['viralLoadLog'] :  NULL),
           'vl_test_reason'=>(isset($_POST['vlTestReason']) && $_POST['vlTestReason']!='' ? $_POST['vlTestReason'] :  NULL),
-          'sample_id'=>(isset($_POST['sampleType']) && $_POST['sampleType']!='' ? $_POST['sampleType'] :  NULL),
-          'lab_tested_date'=>$_POST['dateOfProcessing'],
-          'sample_rejection_reason'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
+          'sample_id'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='' ? $_POST['specimenType'] :  NULL),
+          'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
           'absolute_value'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
           'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
-          'log_value'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='' ? $_POST['vlLog'] :  NULL),
           'comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='' ? $_POST['labComments'] :  NULL),
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
-          //'result_reviewed_by'=>$_POST['reviewedBy'],
+          'vl_test_platform'=>$_POST['testingPlatform'],
+          'rejection'=>(isset($_POST['noResult']) && $_POST['noResult']!='' ? $_POST['noResult'] :  NULL),
+          'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='' ? $_POST['testMethods'] :  NULL),
+          'enhance_session'=>(isset($_POST['enhanceSession']) && $_POST['enhanceSession']!='' ? $_POST['enhanceSession'] :  NULL),
+          'poor_adherence'=>(isset($_POST['poorAdherence']) && $_POST['poorAdherence']!='' ? $_POST['poorAdherence'] :  NULL),
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='' ? $_POST['approvedBy'] :  NULL),
-          'status'=>$status,
-          'created_by'=>$_SESSION['userId'],
-          'created_on'=>$general->getDateTime(),
-          'modified_by'=>$_SESSION['userId'],
           'modified_on'=>$general->getDateTime(),
           'result_coming_from'=>'manual'
         );
      //print_r($vldata);die;
-          $id=$db->insert($tableName,$vldata);
+          $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
+          $id = $db->update($tableName,$vldata);
           if($id>0){
-          $_SESSION['alertMsg']="VL request added successfully";
+          $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log
-          $eventType = 'add-vl-request-zm';
-          $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['orderNo'];
-          $resource = 'vl-request-zm';
+          $eventType = 'update-vl-request-zam';
+          $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
+          $resource = 'vl-request-zam';
           $data=array(
           'event_type'=>$eventType,
           'action'=>$action,
@@ -132,20 +125,12 @@ try {
           'date_time'=>$general->getDateTime()
           );
           $db->insert($tableName1,$data);
-          if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
-                $_SESSION['treamentId'] = $id;
-                $_SESSION['facilityId'] = $_POST['clinicName'];
-                header("location:addVlRequest.php");
+          header("location:vlRequest.php");
           }else{
-                $_SESSION['treamentId'] = '';
-                $_SESSION['facilityId'] = '';
-                unset($_SESSION['treamentId']);
-                unset($_SESSION['facilityId']);
-                header("location:vlRequest.php");
-          }
-          }else{
+               header("location:vlRequest.php");
                $_SESSION['alertMsg']="Please try again later";
           }
+          
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());
