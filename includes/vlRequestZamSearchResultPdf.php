@@ -325,7 +325,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:'.$resultTextSize.';text-align:left;">'.$vlResult.'</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:'.$resultTextSize.';text-align:left;">'.$result['result'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
