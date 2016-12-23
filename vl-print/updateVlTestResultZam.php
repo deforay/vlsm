@@ -412,12 +412,7 @@ $disable = "disabled = 'disabled'";
                       <tr class="noResult">
                         <td><label>If no result</label></td>
                         <td>
-                          <label class="radio-inline noResult">
-                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" > Sample Rejected
-                          </label>
-                          <label class="radio-inline noResult" style="margin-left: 0px;">
-                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" > Lab testing Technical Error
-                          </label>
+                          <input type="text" class="form-control" id="noResult" name="noResult" placeholder="If no result" title="If no result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['rejection'];?>"/>
                         </td>
                         <td><label>Approved By</label></td>
                          <td>
