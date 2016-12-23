@@ -150,7 +150,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','This sample code already exists.Try another number',null)" />
+                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','This sample code already exists.Try another number',null)" />
                         </div>
                       </div>
                     </div>
@@ -257,8 +257,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td>
                           <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" value="<?php echo $vlQueryInfo[0]['age_in_mnts'];?>">
                         </td>
-                        <td class="femaleElements"><label for="patientPregnant">Is Patient Pregnant ?</label></td>
-                        <td class="femaleElements">
+                        <td class="femaleElements" <?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>><label for="patientPregnant">Is Patient Pregnant ?</label></td>
+                        <td class="femaleElements" <?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
                           <label class="radio-inline">
                            <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='yes')?"checked='checked'":""?>> Yes
                           </label>
@@ -267,7 +267,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                           </label>
                         </td>
                         
-                         <td colspan="2" class="femaleElements"><label for="breastfeeding">Is Patient Breastfeeding?</label>
+                         <td colspan="2" class="femaleElements"<?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>><label for="breastfeeding">Is Patient Breastfeeding?</label>
                         
                           <label class="radio-inline">
                              <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?> >Yes
@@ -314,11 +314,11 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       </tr>
                       
                       <tr>
-                        <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>
+                        <td><label for="lastViralLoadResult">Result Of Last Viral Load<br/>(copies/ml)</label></td>
                         <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>"/></td>
                         <td><label for="vlTestReason">Reason VL Requested</label></td>
                         <td>
-                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
+                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;" onchange="ReasonVLTest()">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($testReason as $reason){
@@ -327,7 +327,13 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                               <?php
                             }
                             ?>
+                            <option value="other">Other</option>
                            </select>
+                          
+                        </td>
+                        <td class="newVlTestReason" style="display: none;"><label for="newVlTestReason">Reason VL Requested</label><span class="mandatory">*</span></td>
+                        <td class="newVlTestReason" style="display: none;">
+                          <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;" >
                         </td>
                       </tr>
                       <tr>
@@ -401,19 +407,14 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_tested_date'];?>" onchange="checkSampleTestingDate();" /></td>
-                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
+                        <td><label for="vlResult">Viral Load Result<br/> (copies/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['absolute_value'];?>" /></td>
                         
                       </tr>
                       <tr class="noResult">
                         <td><label>If no result</label></td>
                         <td>
-                          <label class="radio-inline noResult">
-                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" > Sample Rejected
-                          </label>
-                          <label class="radio-inline noResult" style="margin-left: 0px;">
-                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" > Lab testing Technical Error
-                          </label>
+                          <input type="text" class="form-control" id="noResult" name="noResult" placeholder="If no result" title="If no result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['rejection'];?>"/>
                         </td>
                         <td><label>Approved By</label></td>
                          <td>
@@ -431,7 +432,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       </tr>
                       <tr>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo $vlQueryInfo[0]['comments'];?></textarea></td>
+                        <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo trim($vlQueryInfo[0]['comments']);?></textarea></td>
                       </tr>
                     </table>
                   </div>
@@ -597,6 +598,19 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
+  
+  function ReasonVLTest()
+  {
+    var reason = $("#vlTestReason").val();
+    if(reason=='other'){
+      $(".newVlTestReason").show();
+      $("#newVlTestReason").addClass("isRequired");
+    }else{
+      $(".newVlTestReason").hide();
+      $("#newVlTestReason").removeClass("isRequired");
+    }
+  }
+  
   $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'male'){
          $(".femaleElements").hide();

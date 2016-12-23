@@ -318,7 +318,16 @@ $batResult = $db->rawQuery($batQuery);
   }
     
   function convertSearchResultToPdf(id){
-      $.post("<?php echo($arr['vl_form'] == 3)?'../includes/vlRequestDrcResultPdf.php':'../includes/vlRequestSearchResultPdf.php'; ?>", {source:'print',id : id},
+    <?php
+    if($arr['vl_form'] == 3){
+      $path = '../includes/vlRequestDrcResultPdf.php';
+    }else if($arr['vl_form'] == 2){
+     $path = '../includes/vlRequestSearchResultPdf.php'; 
+    }else if($arr['vl_form'] == 4){
+     $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }
+    ?>
+      $.post("<?php echo $path; ?>", {source:'print',id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
