@@ -455,7 +455,7 @@ $disable = "disabled = 'disabled'";
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
-                <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
+                <a href="vlTestResult.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>

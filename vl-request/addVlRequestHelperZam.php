@@ -6,6 +6,7 @@ include('../General.php');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
+$vlTestReasonTable="r_vl_test_reasons";
 try {
      $status = 6;
      //var_dump($_POST);die;
@@ -56,6 +57,14 @@ try {
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
      }
+     if(isset($_POST['newVlTestReason']) && trim($_POST['newVlTestReason'])!=""){
+          $data=array(
+            'test_reason_name'=>$_POST['newVlTestReason'],
+            'test_reason_status'=>'active'
+          );
+          $result=$db->insert('r_vl_test_reasons',$data);
+          $_POST['vlTestReason'] = $_POST['newVlTestReason'];
+     }
      
      if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
           $_POST['patientPregnant']='';
@@ -90,7 +99,7 @@ try {
           'age_in_mnts'=>(isset($_POST['ageInMonths']) && $_POST['ageInMonths']!='' ? $_POST['ageInMonths'] :  NULL),
           'is_patient_pregnant'=>(isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='' ? $_POST['patientPregnant'] :  NULL),
           'is_patient_breastfeeding'=>(isset($_POST['breastfeeding']) && $_POST['breastfeeding']!='' ? $_POST['breastfeeding'] :  NULL),
-          'art_no'=>(isset($_POST['patientNo']) && $_POST['patientNo']!='' ? $_POST['patientNo'] :  NULL),
+          'art_no'=>(isset($_POST['patientArtNo']) && $_POST['patientArtNo']!='' ? $_POST['patientArtNo'] :  NULL),
           'current_regimen'=>(isset($_POST['artRegimen']) && $_POST['artRegimen']!='' ? $_POST['artRegimen'] :  NULL),
           'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
           'patient_phone_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='' ? $_POST['patientPhoneNumber'] :  NULL),
@@ -101,7 +110,7 @@ try {
           'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
           'absolute_value'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
           'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
-          'comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='' ? $_POST['labComments'] :  NULL),
+          'comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='' ? trim($_POST['labComments']) :  NULL),
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'vl_test_platform'=>$_POST['testingPlatform'],
           'rejection'=>(isset($_POST['noResult']) && $_POST['noResult']!='' ? $_POST['noResult'] :  NULL),
@@ -122,7 +131,7 @@ try {
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
           $eventType = 'add-vl-request-zam';
-          $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['serialNo'];
+          $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
           $resource = 'vl-request-zam';
           $data=array(
           'event_type'=>$eventType,

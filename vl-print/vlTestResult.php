@@ -283,7 +283,16 @@ $batResult = $db->rawQuery($batQuery);
   }
   
   function convertResultToPdf(id){
-      $.post("<?php echo($configFormResult[0]['value'] == 3)?'../includes/vlRequestDrcResultPdf.php':'../includes/vlRequestResultPdf.php'; ?>", { source:'print', id : id},
+    <?php
+    if($configFormResult[0]['value'] == 3){
+      $path = '../includes/vlRequestDrcResultPdf.php';
+    }else if($configFormResult[0]['value'] == 2){
+     $path = '../includes/vlRequestResultPdf.php'; 
+    }else if($configFormResult[0]['value'] == 4){
+     $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }
+    ?>
+      $.post("<?php echo$path; ?>", { source:'print', id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
@@ -295,7 +304,16 @@ $batResult = $db->rawQuery($batQuery);
   
   function convertSearchResultToPdf(id){
     $.blockUI();
-    $.post("<?php echo($configFormResult[0]['value'] == 3)?'../includes/vlRequestDrcSearchResultPdf.php':'../includes/vlRequestSearchResultPdf.php'; ?>", { source:'print',id:id},
+    <?php
+    if($configFormResult[0]['value'] == 3){
+      $path = '../includes/vlRequestDrcSearchResultPdf.php';
+    }else if($configFormResult[0]['value'] == 2){
+     $path = '../includes/vlRequestSearchResultPdf.php'; 
+    }else if($configFormResult[0]['value'] == 4){
+     $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }
+    ?>
+    $.post("<?php echo $path;?>", { source:'print',id:id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');

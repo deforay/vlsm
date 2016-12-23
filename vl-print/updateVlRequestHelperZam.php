@@ -24,21 +24,19 @@ try {
             'comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='' ? $_POST['labComments'] :  NULL) ,
             'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='' ? $_POST['approvedBy'] :  NULL) ,
             'sample_id'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='' ? $_POST['specimenType'] :  NULL) ,
+            'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='' ? $_POST['testMethods'] :  NULL),
             'status'=>(isset($_POST['status']) && $_POST['status']!='' ? $_POST['status'] :  NULL) ,
             'rejection'=>(isset($_POST['noResult']) && $_POST['noResult']!='' ? $_POST['noResult'] :  NULL) ,
             'modified_on'=>$general->getDateTime()
         );
-          if($vloadResultUpdate){
-            $vldata['result_coming_from']='manual';
-            $vldata['file_name']='';
-          }
+          
           $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
           $db->update($tableName,$vldata);
           $_SESSION['alertMsg']="VL result updated successfully";
           //Add update result log
           $data=array(
           'user_id'=>$_SESSION['userId'],
-          'vl_sample_id'=>$_POST['treamentId'],
+          'vl_sample_id'=>$_POST['vlSampleId'],
           'updated_on'=>$general->getDateTime()
           );
           $db->insert($tableName2,$data);

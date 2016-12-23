@@ -94,7 +94,7 @@ foreach($fResult as $fDetails){
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)" />
+                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)" />
                         </div>
                       </div>
                     </div>
@@ -245,11 +245,11 @@ foreach($fResult as $fDetails){
                       </tr>
                       
                       <tr>
-                        <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>
+                        <td><label for="lastViralLoadResult">Result Of Last Viral Load<br/>(copies/ml)</label></td>
                         <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" /></td>
                         <td><label for="vlTestReason">Reason VL Requested</label></td>
                         <td>
-                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
+                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;" onchange="ReasonVLTest()">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($testReason as $reason){
@@ -258,7 +258,12 @@ foreach($fResult as $fDetails){
                               <?php
                             }
                             ?>
+                            <option value="other">Other</option>
                            </select>
+                        </td>
+                        <td class="newVlTestReason" style="display: none;"><label for="newVlTestReason">Reason VL Requested</label><span class="mandatory">*</span></td>
+                        <td class="newVlTestReason" style="display: none;">
+                          <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;" >
                         </td>
                       </tr>
                       <tr>
@@ -337,14 +342,7 @@ foreach($fResult as $fDetails){
                       </tr>
                       <tr class="noResult">
                         <td><label>If no result</label></td>
-                        <td >
-                          <label class="radio-inline noResult">
-                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" > Sample Rejected
-                          </label>
-                          <label class="radio-inline noResult" style="margin-left: 0px;">
-                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" > Lab testing Technical Error
-                          </label>
-                        </td>
+                        <td><input type="text" class="form-control" id="noResult" name="noResult" placeholder="If no result" title="If no result" style="width:100%;" /></td>
                         <td><label>Approved By</label></td>
                          <td>
                           <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
@@ -527,6 +525,17 @@ foreach($fResult as $fDetails){
     }else{
       $(".newArtRegimen").hide();
       $("#newArtRegimen").removeClass("isRequired");
+    }
+  }
+  function ReasonVLTest()
+  {
+    var reason = $("#vlTestReason").val();
+    if(reason=='other'){
+      $(".newVlTestReason").show();
+      $("#newVlTestReason").addClass("isRequired");
+    }else{
+      $(".newVlTestReason").hide();
+      $("#newVlTestReason").removeClass("isRequired");
     }
   }
   $("input:radio[name=gender]").click(function() {
