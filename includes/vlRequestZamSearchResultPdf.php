@@ -217,7 +217,76 @@ if(sizeof($requestResult)> 0){
         $tndMessage = '';
         $resultTextSize = '12px';
         $messageTextSize = '12px';
-        
+        if($result['result']!= NULL && trim($result['result'])!= '') {
+          $resultType = is_numeric($result['result']);
+          if(in_array(strtolower(trim($result['result'])), array("tnd","target not detected"))){
+            $vlResult = 'TND*';
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
+            $showMessage = 'Viral load adequately controlled : continue current regimen';
+            $tndMessage = 'TND* - Target not Detected';
+            $resultTextSize = '18px';
+          }else if(in_array(strtolower(trim($result['result'])), array("failed","fail","no_sample"))){
+            $vlResult = $result['result'];
+            $smileyContent = '';
+            $showMessage = '';
+            $messageTextSize = '14px';
+          }else if(trim($result['result']) > 1000 && $result['result']<=10000000){
+            $vlResult = $result['result'];
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
+            $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
+            $messageTextSize = '15px';
+          }else if(trim($result['result']) <= 1000 && $result['result']>=20){
+            $vlResult = $result['result'];
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
+            $showMessage = 'Viral load adequately controlled : continue current regimen';
+          }else if(trim($result['result'] > 10000000) && $resultType){
+            $vlResult = $result['result'];
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
+            //$showMessage = 'Value outside machine detection limit';
+          }else if(trim($result['result'] < 20) && $resultType){
+            $vlResult = $result['result'];
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
+            //$showMessage = 'Value outside machine detection limit';
+          }else if(trim($result['result'])=='<20'){
+            $vlResult = '&lt;20';
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
+            $showMessage = 'Viral load adequately controlled : continue current regimen ';
+          }else if(trim($result['result'])=='>10000000'){
+            $vlResult = $result['result'];
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
+            $showMessage = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.';
+          }else if($result['vl_test_platform']=='Roche'){
+            //
+            $chkSign = '';
+            $smileyShow = '';
+            $chkSign = strchr($result['result'],'>');
+            if($chkSign!=''){
+              $smileyShow =str_replace(">","",$result['result']);
+              $vlResult = $result['result'];
+              //$showMessage = 'Invalid value';
+            }
+            $chkSign = '';
+            $chkSign = strchr($result['result'],'<');
+            if($chkSign!=''){
+              $smileyShow =str_replace("<","",$result['result']);
+              $vlResult = str_replace("<","&lt;",$result['result']);
+              //$showMessage = 'Invalid value';
+            }
+            if($smileyShow!='' && $smileyShow <= $arr['viral_load_threshold_limit']){
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
+            }else if($smileyShow!='' && $smileyShow > $arr['viral_load_threshold_limit']){
+              $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
+            }
+            //
+          }
+        }
+        if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
+          $smileyContent = '';
+        }
+        if($result['status']=='4'){
+        $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
+      }
+      
         $html = '';
         $html .= '<div style="">';
             $html.='<table style="padding:2px;">';
@@ -347,6 +416,16 @@ if(sizeof($requestResult)> 0){
                       $html .='<td colspan="4" style="line-height:4px;"></td>';
                     $html .='</tr>';
                   }
+                  
+                  if(trim($tndMessage)!= ''){
+                    $html .='<tr>';
+                      $html .='<td colspan="4" style="line-height:22px;font-size:18px;text-align:left;">'.$tndMessage.'</td>';
+                    $html .='</tr>';
+                    $html .='<tr>';
+                      $html .='<td colspan="4" style="line-height:6px;"></td>';
+                    $html .='</tr>';
+                  }
+                  
                   $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
                   $html .='</tr>';
@@ -354,6 +433,9 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['comments']).'</td>';
                   $html .='</tr>';
                 $html .='</table>';
+               $html .='</td>';
+               $html .='<td style="text-align:left;">';
+                $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
                $html .='</td>';
               $html .='</tr>';
               $html .='<tr>';

@@ -497,24 +497,13 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
     $('.isRequired').each(function () {
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
-    $("#saveNext").val('save');
     if(flag){
-      $.blockUI();
-      document.getElementById('vlRequestForm').submit();
-    }
-    }
-    function validateSaveNow(){
-    flag = deforayValidator.init({
-        formId: 'vlRequestForm'
-    });
-    $('.isRequired').each(function () {
-            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
-    });
-    $("#saveNext").val('next');
-    if(flag){
+      getMachineName();
+      if(machineName){
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
       }
+    }
     }
   function getfacilityDetails(obj)
   {
@@ -797,6 +786,55 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
         if(moment(artIniDate).isAfter(lastVLTestDate)) {
           alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
           $("#lastViralLoadTestDate").val("");
+        }
+      }
+    }
+    //check machine name and limit
+    function getMachineName(){
+      machineName = true;
+      var mName = $("#testingPlatform").val();
+      var absValue = $("#vlResult").val();
+      if(mName!='' && absValue!=''){
+        //split the value
+        var result = mName.split("##");
+        if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
+          var lowLimit = result[1];
+          var highLimit = result[2];
+            if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName = false;
+            }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName  = false;
+            }else{
+              lessSign = absValue.split("<");
+              greaterSign = absValue.split(">");
+              if(lessSign.length>1){
+                if(parseInt(lessSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");
+                $("#vlResult").css('background-color', '#FFFF99');
+                }else if(parseInt(lessSign[1])>parseInt(highLimit)){
+                  alert("Invalid value.Value Greater than machine detection limit.");
+                  $("#vlResult").css('background-color', '#FFFF99');
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99');
+                machineName = false;
+              }else if(greaterSign.length>1){
+                if(parseInt(greaterSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(greaterSign[1])>parseInt(highLimit)){
+                  alert("Invalid value.Value Greater than machine detection limit");  
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99')
+                machineName = false;
+              }
+            }
         }
       }
     }

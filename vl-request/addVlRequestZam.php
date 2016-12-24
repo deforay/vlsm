@@ -42,6 +42,19 @@ $facility.="<option value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
   $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
+//sample code
+$start_date = date('Y-m-01');
+$end_date = date('Y-m-31');
+$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.form_id="2" AND DATE(vl.created_on) >= "'.$start_date.'" AND DATE(vl.created_on) <= "'.$end_date.'"';
+$svlResult=$db->query($svlQuery);
+  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
+ $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+ $maxId = "00".$maxId;
+}else{
+ $maxId = '001';
+}
+$sKey = '';
+$sFormat = '';
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -69,7 +82,7 @@ foreach($fResult as $fDetails){
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-edit"></i> VIRAL LOAD LABORATORY REQUEST FORM</h1>
+      <h1><i class="fa fa-edit"></i> VIRAL LOAD LABORATORY REQUEST FORM </h1>
       <ol class="breadcrumb">
         <li><a href="../dashboard/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Add Vl Request</li>
@@ -370,6 +383,10 @@ foreach($fResult as $fDetails){
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="4"/>
+                <?php if($arr['sample_code']=='auto'){ ?>
+                <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
+                <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
+                <?php } ?>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -428,8 +445,11 @@ foreach($fResult as $fDetails){
     });
     $("#saveNext").val('save');
     if(flag){
+      getMachineName();
+      if(machineName){
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
+      }
     }
     }
     function validateSaveNow(){
@@ -441,8 +461,11 @@ foreach($fResult as $fDetails){
     });
     $("#saveNext").val('next');
     if(flag){
-      $.blockUI();
-      document.getElementById('vlRequestForm').submit();
+      getMachineName();
+      if(machineName){
+        $.blockUI();
+        document.getElementById('vlRequestForm').submit();
+      }
       }
     }
   function getfacilityDetails(obj)
@@ -465,6 +488,18 @@ foreach($fResult as $fDetails){
 	  }
       });
       }
+      <?php
+      if($arr['sample_code']=='auto'){
+        ?>
+        pNameVal = pName.split("##");
+        sCode = '<?php echo date('Ymd');?>';
+        sCodeKey = '<?php echo $maxId;?>';
+        $(".sampleCode").val(pNameVal[1]+sCode+sCodeKey);
+        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+        $("#sampleCodeKey").val(sCodeKey);
+        <?php
+      }
+      ?>
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -726,5 +761,53 @@ foreach($fResult as $fDetails){
         }
       }
     }
-    
+    //check machine name and limit
+    function getMachineName(){
+      machineName = true;
+      var mName = $("#testingPlatform").val();
+      var absValue = $("#vlResult").val();
+      if(mName!='' && absValue!=''){
+        //split the value
+        var result = mName.split("##");
+        if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
+          var lowLimit = result[1];
+          var highLimit = result[2];
+            if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName = false;
+            }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName  = false;
+            }else{
+              lessSign = absValue.split("<");
+              greaterSign = absValue.split(">");
+              if(lessSign.length>1){
+                if(parseInt(lessSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");
+                $("#vlResult").css('background-color', '#FFFF99');
+                }else if(parseInt(lessSign[1])>parseInt(highLimit)){
+                  alert("Invalid value.Value Greater than machine detection limit.");
+                  $("#vlResult").css('background-color', '#FFFF99');
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99');
+                machineName = false;
+              }else if(greaterSign.length>1){
+                if(parseInt(greaterSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(greaterSign[1])>parseInt(highLimit)){
+                  alert("Invalid value.Value Greater than machine detection limit");  
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99')
+                machineName = false;
+              }
+            }
+        }
+      }
+    }
   </script>
