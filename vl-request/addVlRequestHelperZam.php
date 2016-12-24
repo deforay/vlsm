@@ -8,7 +8,12 @@ $tableName="vl_request_form";
 $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 try {
+     $configQuery ="SELECT value FROM global_config where name='auto_approval'";
+     $configResult = $db->rawQuery($configQuery);
      $status = 6;
+     if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
+          $status = 7;
+     }
      //var_dump($_POST);die;
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
@@ -88,6 +93,8 @@ try {
           'form_id'=>'4',
           'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL) ,
           'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
+          'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='' ? $_POST['sampleCodeFormat'] :  NULL),
+          'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
           'facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='' ? $_POST['clinicName'] :  NULL),
           'lab_contact_person'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
