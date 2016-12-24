@@ -685,52 +685,6 @@ $("#vlLog").bind("keyup change", function(e) {
      <?php }
      ?>
   });
-  $("input:radio[name=gender]").click(function() {
-      if($(this).val() == 'male'){
-         $(".femaleElements").hide();
-      }else if($(this).val() == 'female'){
-        $(".femaleElements").show();
-      }else if($(this).val() == 'not_recorded'){
-        $(".femaleElements").show();
-      }
-    });
-  
-  
-  if($("input:radio[name=receiveSms]:checked") && $("input:radio[name=receiveSms]:checked").val() =='yes'){
-    $("#patientPhoneNumber").removeAttr("disabled");
-  }else{
-    $("#patientPhoneNumber").attr("disabled","disabled");
-  }
-
-  //$(".patientMob").hide();
-  
-  $("input:radio[name=receiveSms]").click(function() {
-      if($(this).val() == 'no'){
-         $("#patientPhoneNumber").attr("disabled","disabled");
-      }else if($(this).val() == 'yes'){
-        $("#patientPhoneNumber").removeAttr("disabled");
-      }
-  });  
-  
-  function checkValue()
-  {
-    var artRegimen = $("#artRegimen").val();
-    if(artRegimen=='other'){
-      $(".newArtRegimen").show();
-      $("#newArtRegimen").addClass("isRequired");
-    }else{
-      $(".newArtRegimen").hide();
-      $("#newArtRegimen").removeClass("isRequired");
-    }
-  }
-  function checkPatientReceivesms(val)
-  {
-   if(val=='yes'){
-    $('#patientPhoneNumber').addClass('isRequired');
-   }else{
-     $('#patientPhoneNumber').removeClass('isRequired');
-   }
-  }
   $(".serialNo").keyup(function(){
     $(".serialNo1").val($(".serialNo").val());
     $(".reqBarcode").val($(".serialNo").val());
@@ -744,48 +698,6 @@ $("#vlLog").bind("keyup change", function(e) {
     $(".serialNo1").val($(".reqBarcode").val());
   });
   
-  function getDateOfBirth(formSource){
-      var today = new Date();
-      if(formSource == "ld") {
-        var dob = "<?php echo $vlQueryInfo[0]['patient_dob']; ?>";
-      }else{
-        var dob = $("#dob").val();
-      }
-      if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
-      }
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      } 
-      
-      if(mm<10) {
-       mm='0'+mm
-      }
-     
-      splitDob = dob.split("-");
-      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-      var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      var dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
-      }else{
-        $("#ageInMonths").val("");
-      }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
-      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
-    }
     function setFacilityLabDetails(fDetails){
       $("#labId").val("");
       facilityArray = fDetails.split("##");

@@ -18,7 +18,7 @@ try {
         }
        $vldata=array(
             'vl_test_platform'=>(isset($_POST['testingPlatform']) && $_POST['testingPlatform']!='' ? $_POST['testingPlatform'] :  NULL) ,
-            'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
+            'lab_tested_date'=>(isset($_POST['sampleTestingDateAtLab']) && $_POST['sampleTestingDateAtLab']!='' ? $_POST['sampleTestingDateAtLab'] :  NULL) ,
             'absolute_value'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL) ,
             'result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL) ,
             'comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='' ? $_POST['labComments'] :  NULL) ,
@@ -29,7 +29,6 @@ try {
             'rejection'=>(isset($_POST['noResult']) && $_POST['noResult']!='' ? $_POST['noResult'] :  NULL) ,
             'modified_on'=>$general->getDateTime()
         );
-          
           $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
           $db->update($tableName,$vldata);
           $_SESSION['alertMsg']="VL result updated successfully";
