@@ -503,8 +503,11 @@ $disable = "disabled = 'disabled'";
         formId: 'vlRequestForm'
     });
     if(flag){
-      $.blockUI();
-      document.getElementById('vlRequestForm').submit();
+      getMachineName();
+      if(machineName){
+        $.blockUI();
+        document.getElementById('vlRequestForm').submit();
+      }
     }
     }
     function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
@@ -554,5 +557,57 @@ $disable = "disabled = 'disabled'";
         }
       }
     }
-    
+    //check machine name and limit
+    function getMachineName()
+    {
+      machineName = true;
+      var mName = $("#testingPlatform").val();
+      var absValue = $("#vlResult").val();
+      if(mName!='' && absValue!='')
+      {
+        //split the value
+        var result = mName.split("##");
+        if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
+          var lowLimit = result[1];
+          var highLimit = result[2];
+            if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName = false;
+            }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
+              alert("Value outside machine detection limit");
+              $("#vlResult").css('background-color', '#FFFF99');
+              machineName  = false;
+            }else{
+              lessSign = absValue.split("<");
+              greaterSign = absValue.split(">");
+              if(lessSign.length>1)
+              {
+                if(parseInt(lessSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(lessSign[1])>parseInt(highLimit))
+                {
+                  alert("Invalid value.Value Greater than machine detection limit.");  
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99');
+                machineName = false;
+              }else if(greaterSign.length>1)
+              {
+                if(parseInt(greaterSign[1])<parseInt(lowLimit)){
+                alert("Invalid value.Value Lesser than machine detection limit.");  
+                }else if(parseInt(greaterSign[1])>parseInt(highLimit))
+                {
+                  alert("Invalid value.Value Greater than machine detection limit.");  
+                }else{
+                  alert("Invalid value.");  
+                }
+                $("#vlResult").css('background-color', '#FFFF99');
+                machineName = false;
+              }
+            }
+        }
+      }
+    }
   </script>
