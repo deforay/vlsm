@@ -287,12 +287,14 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } ?>
             </ul>
         </li>
+        <?php if($formConfigResult[0]['value']=='4'){ ?>
         <li class="allMenu">
             <a href="javascript:void(0)" onclick="downloadZambiaForm();">
               <i class="fa fa-circle-o"></i> <span>Download Zambia Form</span>
             </a>
 	</li>
-        <?php } ?>
+        <?php }
+        }?>
         <!---->
         
         
