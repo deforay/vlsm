@@ -157,6 +157,24 @@
 		      e.preventDefault();
 	      }
       });
+  
+    function downloadZambiaForm(){
+    $.blockUI();
+    <?php
+    $path = '../includes/downloadZambiaForm.php';  
+    ?>
+    $.post("<?php echo $path; ?>", { source:'print'},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      $.unblockUI();
+	      alert('Unable to generate download');
+	  }else{
+	      $.unblockUI();
+	      window.open('../uploads/'+data,'_blank');
+	  }
+	  
+      });
+  }
 </script>
 </body>
 </html>
