@@ -83,11 +83,11 @@ $configResult=$db->query($globalConfigQuery);
     </div>
     <div style="opacity: 0.9;bottom:10vh;padding-left:1%;width:100%;position:fixed;">
         <a id="download-form" href="#" style="color:#fff;text-decoration:underline;"><h3>Download VL Form</h3></a>
-        <select id="country" name="country" class="form-control" style="width:14%;display:none;">
+        <select id="country" name="country" class="form-control" style="width:220px;display:none;">
             <option value=""> -- Select Country -- </option>
             <option value="3">DRC</option>
             <option value="4">Zambia</option>
-        </select>
+        </select><br>
         <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h4>Clik here to download</h4></a>
     </div>
     <script src="assets/js/deforayValidation.js"></script>
