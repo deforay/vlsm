@@ -24,6 +24,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 $html.='<td></td>';
                 if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
                   $html .='<td rowspan="2"><img src="../uploads/logo/'.$arr['logo'].'" style="width:50px;height:50px;float:right;" alt="logo"></td>';
+                }else{
+                  $html.='<td rowspan="2"></td>';
                 }
             $html.='</tr>';
             $html.='<tr>';
@@ -100,12 +102,11 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 $html.='<td colspan="2" style="line-height:25px;font-size:10px;font-weight:100;text-align:left;width:55%;">If no result ------------------------------------------------------------------</td>';
                 $html.='<td style="line-height:25px;font-size:10px;font-weight:100;text-align:left;width:45%;">Date Received stamp  -------/-------/-------</td>';
             $html.='</tr><hr/>';
-            $html.='<tr>';
-                $html.='<td colspan="2" style="line-height:25px;font-size:10px;font-weight:100;text-align:left;width:75%;">Laboratory Officer comments ------------------------------------------------------</td>';
+            $html.='<tr style="">';
+                $html.='<td colspan="2" style="height:45px;line-height:25px;font-size:10px;font-weight:100;text-align:left;width:75%;">Laboratory Officer comments ------------------------------------------------------</td>';
                 $html.='<td></td>';
             $html.='</tr>';
-            $html.='<tr><td></td></tr>';
-            $html.='<tr><td style="border-top-style:dotted;border-width:1px;width:100%;">tear here</td></tr>';
+            $html.='<tr><td colspan="3" style="border-top-style:dotted;border-width:1px;width:100%;">tear here</td></tr>';
             $html.='<tr>';
                 $html.='<td style="line-height:25px;font-size:10px;font-weight:100;text-align:left;width:50%;">Sample Collection date --------/-------/------ Time ----- ------ -----</td>';
                 $html.='<td style="line-height:25px;font-size:10px;font-weight:100;text-align:left;width:50%;">Patient name and surname ------------------------</td>';
