@@ -156,14 +156,18 @@
 	      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
 		      e.preventDefault();
 	      }
-      });
+  });
   
-    function downloadZambiaForm(){
+  function downloadVLForm(country){
     $.blockUI();
-    <?php
-    $path = '../includes/downloadZambiaForm.php';  
-    ?>
-    $.post("<?php echo $path; ?>", { source:'print'},
+    var downloadURL = '#';
+    if(country == 'drc'){
+      downloadURL = '../includes/downloadDRCForm.php';
+    }else if(country == 'zambia'){
+      downloadURL = '../includes/downloadZambiaForm.php';
+    }
+    
+    $.post(downloadURL, { },
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      $.unblockUI();

@@ -126,7 +126,7 @@ $formConfigResult=$db->query($formConfigQuery);
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="index.php" class="logo">
+    <a href="<?php echo($dashBoardMenuAccess == true)?'../dashboard/index.php':'#'; ?>" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>VL</b></span>
       <!-- logo for regular state and mobile devices -->
@@ -287,17 +287,21 @@ $formConfigResult=$db->query($formConfigQuery);
 		<?php } ?>
             </ul>
         </li>
-        <?php if($formConfigResult[0]['value']=='4'){ ?>
-        <li class="allMenu">
-            <a href="javascript:void(0)" onclick="downloadZambiaForm();">
-              <i class="fa fa-circle-o"></i> <span>Download Zambia Form</span>
-            </a>
-	</li>
+        <?php if($formConfigResult[0]['value']=='3'){ ?>
+            <li class="allMenu">
+                <a href="javascript:void(0)" onclick="downloadVLForm('drc');">
+                  <i class="fa fa-download"></i> <span>Download DRC Form</span>
+                </a>
+            </li>
+        <?php } else if($formConfigResult[0]['value']=='4'){ ?>
+            <li class="allMenu">
+                <a href="javascript:void(0)" onclick="downloadVLForm('zambia');">
+                  <i class="fa fa-download"></i> <span>Download Zambia Form</span>
+                </a>
+            </li>
         <?php }
         }?>
         <!---->
-        
-        
       </ul>
       
     </section>
