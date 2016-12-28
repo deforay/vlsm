@@ -65,7 +65,7 @@ $batchResult = $db->rawQuery($batchQuery);
                     <div class="form-group">
                         <label for="toEmail" class="col-lg-3 control-label">To Email <span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter To email"/>
+                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="email1@gmail.com,email2@gmail.com" title="Please enter To email"/>
                         </div>
                     </div>
                   </div>
@@ -75,7 +75,7 @@ $batchResult = $db->rawQuery($batchQuery);
                     <div class="form-group">
                         <label for="cc" class="col-lg-3 control-label">CC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="cc" name="cc" class="form-control" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter CC"/>
+                           <input type="text" id="cc" name="cc" class="form-control" placeholder="email1@gmail.com,email2@gmail.com" title="Please enter CC"/>
                         </div>
                     </div>
                   </div>
@@ -85,7 +85,7 @@ $batchResult = $db->rawQuery($batchQuery);
                     <div class="form-group">
                         <label for="bcc" class="col-lg-3 control-label">BCC</label>
                         <div class="col-lg-9">
-                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="email1@yahoo.com,email2@yahoo.com" title="Please enter BCC"/>
+                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="email1@gmail.com,email2@gmail.com" title="Please enter BCC"/>
                         </div>
                     </div>
                   </div>
