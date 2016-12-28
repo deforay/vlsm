@@ -157,28 +157,6 @@
 		      e.preventDefault();
 	      }
   });
-  
-  function downloadVLForm(country){
-    $.blockUI();
-    var downloadURL = '#';
-    if(country == 'drc'){
-      downloadURL = '../includes/downloadDRCForm.php';
-    }else if(country == 'zambia'){
-      downloadURL = '../includes/downloadZambiaForm.php';
-    }
-    
-    $.post(downloadURL, { },
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      $.unblockUI();
-	      alert('Unable to generate download');
-	  }else{
-	      $.unblockUI();
-	      window.open('../uploads/'+data,'_blank');
-	  }
-	  
-      });
-  }
 </script>
 </body>
 </html>

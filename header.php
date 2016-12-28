@@ -264,42 +264,30 @@ $formConfigResult=$db->query($formConfigQuery);
         <?php }
         if($managementMenuAccess == true){
         ?>
-        <li class="treeview program">
-            <a href="#">
-                <i class="fa fa-book"></i>
-                <span>Program Management</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-		<?php if(isset($_SESSION['privileges']) && in_array("missingResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu missingResultMenu"><a href="../program-management/missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
-		<?php } ?>
-                <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
-                <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
-		<?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlResultMenu"><a href="../program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlHighMenu"><a href="../program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])){ ?>
-                <!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
-		<?php } ?>
-            </ul>
-        </li>
-        <?php if($formConfigResult[0]['value']=='3'){ ?>
-            <li class="allMenu">
-                <a href="javascript:void(0)" onclick="downloadVLForm('drc');">
-                  <i class="fa fa-download"></i> <span>Download DRC Form</span>
+            <li class="treeview program">
+                <a href="#">
+                    <i class="fa fa-book"></i>
+                    <span>Program Management</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
                 </a>
+                <ul class="treeview-menu">
+                    <?php if(isset($_SESSION['privileges']) && in_array("missingResult.php", $_SESSION['privileges'])){ ?>
+                    <li class="allMenu missingResultMenu"><a href="../program-management/missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+                    <?php } ?>
+                    <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
+                    <?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
+                    <li class="allMenu vlResultMenu"><a href="../program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+                    <?php }  if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
+                    <li class="allMenu vlHighMenu"><a href="../program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
+                    <?php }  if(isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])){ ?>
+                    <!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
+                    <?php } ?>
+                </ul>
             </li>
-        <?php } else if($formConfigResult[0]['value']=='4'){ ?>
-            <li class="allMenu">
-                <a href="javascript:void(0)" onclick="downloadVLForm('zambia');">
-                  <i class="fa fa-download"></i> <span>Download Zambia Form</span>
-                </a>
-            </li>
-        <?php }
+        <?php
         }?>
         <!---->
       </ul>
