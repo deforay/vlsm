@@ -328,9 +328,9 @@ $batchResult = $db->rawQuery($batchQuery);
       var gender= $("#gender").val();
       var prg =   $("input:radio[name=pregnant]");
       if(prg[0].checked==false && prg[1].checked==false){
-	       pregnant = "";
+	pregnant = "";
       }else{
-	       pregnant = $('input[name=pregnant]:checked').val();
+	pregnant = $('input[name=pregnant]:checked').val();
       }
       var urgent = $('input[name=urgency]:checked').val();
       var state = $('#state').val();
