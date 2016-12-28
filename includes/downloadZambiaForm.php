@@ -123,7 +123,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
         $html.='</table>';
 $pdf->writeHTML($html);
 $pdf->lastPage();
-$filename = 'zambiaform.pdf';
+$filename = 'vl-zambia-form.pdf';
 $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
 echo $filename;
 ?>
