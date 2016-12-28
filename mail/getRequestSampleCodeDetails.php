@@ -8,6 +8,15 @@ $formId = 0;
 if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
   $formId = intval($configResult[0]['value']);
 }
+if(!is_array($_POST['facility']) || count($_POST['facility']) ==0){
+  $_POST['facility'] = array();
+}
+if(!is_array($_POST['batch']) || count($_POST['batch']) ==0){
+  $_POST['batch'] = array();
+}
+if(!isset($_POST['urgent'])){
+  $_POST['urgent'] = '';
+}
 $facility = $_POST['facility'];
 $sampleType = $_POST['sType'];
 $gender = $_POST['gender'];
