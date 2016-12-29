@@ -47,7 +47,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
          }
       }
       $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-     $pdf->setPageOrientation('L');
+      $pdf->setPageOrientation('L');
       // set document information
       $pdf->SetCreator(PDF_CREATOR);
       //$pdf->SetAuthor('Saravanan');

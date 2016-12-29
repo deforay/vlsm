@@ -81,13 +81,13 @@ $configResult=$db->query($globalConfigQuery);
             </div>  
         </div>
     </div>
-    <div style="opacity: 0.9;bottom:10vh;padding-left:1%;width:100%;position:fixed;">
+    <div style="opacity: 0.9;bottom:7vh;padding-left:1%;width:100%;position:fixed;">
         <a id="download-form" href="#" style="color:#fff;text-decoration:underline;"><h3>Download VL Form</h3></a>
         <select id="country" name="country" class="form-control" style="width:220px;display:none;">
             <option value=""> -- Select Country -- </option>
             <option value="3">DRC</option>
             <option value="4">Zambia</option>
-        </select><br>
+        </select>
         <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h4>Clik here to download</h4></a>
     </div>
     <script src="assets/js/deforayValidation.js"></script>
@@ -139,12 +139,11 @@ $configResult=$db->query($globalConfigQuery);
         $.blockUI();
         var downloadURL = '#';
         if(country == 'drc'){
-          downloadURL = '../includes/downloadDRCForm.php';
+          $.unblockUI();
+          window.open('../uploads/vl-drc-form.pdf','_blank');
         }else if(country == 'zambia'){
           downloadURL = '../includes/downloadZambiaForm.php';
-        }
-        
-        $.post(downloadURL, { },
+          $.post(downloadURL, { },
           function(data){
               if(data == "" || data == null || data == undefined){
                   $.unblockUI();
@@ -155,6 +154,7 @@ $configResult=$db->query($globalConfigQuery);
               }
               
           });
+        }
     }
     </script>
 </body>
