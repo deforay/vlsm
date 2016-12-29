@@ -34,12 +34,12 @@ class MYPDF extends TCPDF {
 
     // Page footer
     public function Footer() {
-        // Position at 15 mm from bottom
-        $this->SetY(-15);
-        // Set font
-        $this->SetFont('times', '', 8);
-        // Page number
-        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        //// Position at 15 mm from bottom
+        //$this->SetY(-15);
+        //// Set font
+        //$this->SetFont('times', '', 8);
+        //// Page number
+        //$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 // create new PDF document
@@ -90,9 +90,9 @@ $pdf->AddPage();
       $html.='<td style="width:18%;">';
         $html.='<table style="width:100%;padding:2px;">';
           $html.='<tr><td style="line-height:140px;"></td></tr>';
-          $html.='<tr><td style="line-height:25px;">Date of Sample Collection</td></tr>';
+          $html.='<tr><td style="line-height:25px;">Date of sample collection</td></tr>';
           $html.='<tr><td style="line-height:25px;">--------/---------/----------------</td></tr>';
-          $html.='<tr><td style="line-height:25px;">Time of Sample Collection</td></tr>';
+          $html.='<tr><td style="line-height:25px;">Time of sample collection</td></tr>';
           $html.='<tr><td style="line-height:25px;">-----------------/-----------------</td></tr>';
           $html.='<tr><td style="line-height:25px;">Patient name and surname</td></tr>';
           $html.='<tr><td style="line-height:25px;">-----------------------------------</td></tr>';
@@ -111,7 +111,7 @@ $pdf->AddPage();
           $html.='<tr>';
               $html.='<td colspan="2" style="margin-top:-80px;width:88%;"><h1>Viral Load Laboratory Request Form</h1></td>';
               if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
-                $html .='<td rowspan="2"><img src="../uploads/logo/'.$arr['logo'].'" style="width:50px;height:50px;float:right;" alt="logo"></td>';
+                $html .='<td rowspan="2"><img src="../uploads/logo/'.$arr['logo'].'" style="width:60px;height:60px;float:right;" alt="logo"></td>';
               }else{
                 $html.='<td rowspan="2"></td>';
               }
@@ -121,25 +121,25 @@ $pdf->AddPage();
             $html.='<td style="line-height:25px;text-align:left;">District &nbsp;&nbsp;---------------------------------------------------</td>';
           $html.='</tr>';
           $html.='<tr>';
-            $html.='<td style="line-height:25px;text-align:left;">Clinic Name &nbsp;&nbsp;---------------------------------------------------</td>';
-            $html.='<td style="line-height:25px;text-align:left;">Sample Collection Date &nbsp;&nbsp;--------/---------/----------------</td>';
+            $html.='<td style="line-height:25px;text-align:left;">Clinic name &nbsp;&nbsp;---------------------------------------------------</td>';
+            $html.='<td style="line-height:25px;text-align:left;">Sample collection date &nbsp;&nbsp;--------/---------/----------------</td>';
             $html.='<td style="line-height:25px;text-align:left;">Time &nbsp;&nbsp;--------/--------</td>';
           $html.='</tr>';
           $html.='<tr>';
-            $html.='<td style="line-height:25px;text-align:left;">Clinician Name &nbsp;&nbsp;-----------------------------------------------</td>';
+            $html.='<td style="line-height:25px;text-align:left;">Clinician name &nbsp;&nbsp;-----------------------------------------------</td>';
             $html.='<td style="line-height:25px;text-align:left;">First Name &nbsp;&nbsp;---------------------------------------------------</td>';
             $html.='<td style="line-height:25px;text-align:left;">Surname &nbsp;&nbsp;-------------</td>';
           $html.='</tr>';
           $html.='<tr><td colspan="3" style="line-height:10px;"></td></tr>';
           $html.='<tr>';
-             $html.='<td colspan="3" style="line-height:25px;text-align:left;">Patient ART Number &nbsp;&nbsp;--------------------------------------------</td>';
+             $html.='<td colspan="3" style="line-height:25px;text-align:left;">Patient ART number &nbsp;&nbsp;--------------------------------------------</td>';
           $html.='</tr>';
           $html.='<tr>';
             $html.='<td colspan="3">';
             $html.='<table style="width:100%;">';
                $html.='<tr>';
                 $html.='<td style="line-height:25px;text-align:left;width:25%;">Sex <input type="checkbox" name="gender" value="male"/>Male&nbsp;<input type="checkbox" name="gender" value="female" />Female</td>';
-                $html.='<td style="line-height:25px;text-align:left;width:35%;">Date Of ART initiation &nbsp;&nbsp;--------/---------/----------------</td>';
+                $html.='<td style="line-height:25px;text-align:left;width:35%;">Date of ART initiation &nbsp;&nbsp;--------/---------/----------------</td>';
                 $html.='<td style="line-height:25px;text-align:left;width:40%;">Current ART regimen &nbsp;&nbsp;-----------------------</td>';
               $html.='</tr>';
               $html.='<tr>';
@@ -169,38 +169,39 @@ $pdf->AddPage();
                   $html.='<td colspan="2" style="line-height:25px;text-align:left;">Other -------------------------------------------------------------------------</td>';
                 $html.='</tr>';
                 $html.='<tr>';
-                  $html.='<td style="line-height:25px;text-align:left;">If After Enhanced Adherence: Poor Adherence was identified <input type="checkbox" name="x" value="yes"/>Yes &nbsp;<input type="checkbox" name="x" value="no" />No</td>';
-                  $html.='<td style="line-height:25px;text-align:left;">Number of Enhanced Sessions &nbsp;<input type="checkbox" name="x" value="1"/>1&nbsp;<input type="checkbox" name="x" value="2" />2&nbsp;<input type="checkbox" name="x" value="3"/>3&nbsp;<input type="checkbox" name="x" value="4" />4</td>';
+                  $html.='<td style="line-height:25px;text-align:left;">If after enhanced adherence: Poor adherence was identified <input type="checkbox" name="x" value="yes"/>Yes &nbsp;<input type="checkbox" name="x" value="no" />No</td>';
+                  $html.='<td style="line-height:25px;text-align:left;">Number of enhanced sessions &nbsp;<input type="checkbox" name="x" value="1"/>1&nbsp;<input type="checkbox" name="x" value="2" />2&nbsp;<input type="checkbox" name="x" value="3"/>3&nbsp;<input type="checkbox" name="x" value="4" />4</td>';
                 $html.='</tr>';
             $html.='</table>';
             $html.='</td>';
           $html.='</tr>';
+          $html.='<tr><td colspan="3" style="line-height:10px;"></td></tr>';
           $html.='<tr>';
-             $html.='<td colspan="3" style="font-size:13px;text-align:center;"><strong>FOR LABORATORY USE ONLY</strong></td>';
-          $html.='</tr><hr/>';
+            $html.='<td colspan="3" style="font-size:13px;text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>FOR LABORATORY USE ONLY</strong></td>';
+          $html.='</tr>';
           $html.='<tr>';
             $html.='<td colspan="3">';
             $html.='<table style="width:100%;">';
               $html.='<tr>';
-                $html.='<td colspan="2" style="line-height:30px;text-align:left;width:60%;">VL Platform <input type="checkbox" name="request" value="routine"/>BioMerieux &nbsp;<input type="checkbox" name="request" value="targetfail" />Roche &nbsp;<input type="checkbox" name="request" value="targetfail" />Abbott &nbsp;<input type="checkbox" name="request" value="poc" />POC</td><td rowspan="3"></td>';
-              $html.='</tr><hr style="width:60%;"/>';
+                $html.='<td colspan="2" style="line-height:30px;text-align:left;width:60%;">VL platform <input type="checkbox" name="request" value="routine"/>BioMerieux &nbsp;<input type="checkbox" name="request" value="targetfail" />Roche &nbsp;<input type="checkbox" name="request" value="targetfail" />Abbott &nbsp;<input type="checkbox" name="request" value="poc" />POC</td><td rowspan="3"></td>';
+              $html.='</tr>';
               $html.='<tr>';
-                $html.='<td colspan="2" style="line-height:30px;text-align:left;">Specimen Type <input type="checkbox" name="request" value="routine"/>EDTA DBS &nbsp;<input type="checkbox" name="request" value="targetfail" />PP DBS &nbsp;<input type="checkbox" name="request" value="targetfail" />DBS &nbsp;<input type="checkbox" name="request" value="poc" />PLASMA &nbsp;<input type="checkbox" name="request" value="blood" />WHOLE BLOOD</td>';
-              $html.='</tr><hr style="width:60%;"/>';
+                $html.='<td colspan="2" style="line-height:30px;text-align:left;">Specimen type <input type="checkbox" name="specimenType" value="edadbs"/>EDTA DBS &nbsp;<input type="checkbox" name="specimenType" value="ppdbs" />PP DBS &nbsp;<input type="checkbox" name="specimenType" value="dbs" />DBS &nbsp;<input type="checkbox" name="specimenType" value="plasma" />PLASMA &nbsp;<input type="checkbox" name="specimenType" value="blood" />WHOLE BLOOD</td>';
+              $html.='</tr>';
               $html.='<tr>';
-                $html.='<td colspan="2" style="line-height:30px;text-align:left;">Test Method<input type="checkbox" name="request" value="routine"/>Individual &nbsp;<input type="checkbox" name="request" value="targetfail" />Minipool &nbsp;<input type="checkbox" name="request" value="targetfail" />Other Pooling algorithm</td>';
-              $html.='</tr><hr style="width:81%;"/>';
+                $html.='<td colspan="2" style="line-height:30px;text-align:left;">Test method<input type="checkbox" name="testMethod" value="individual"/>Individual &nbsp;<input type="checkbox" name="testMethod" value="minipool" />Minipool &nbsp;<input type="checkbox" name="testMethod" value="other" />Other pooling algorithm</td>';
+              $html.='</tr>';
               $html.='<tr>';
                 $html.='<td style="line-height:40px;text-align:left;">Date of result  &nbsp;&nbsp;--------/---------/----------------</td>';
-                $html.='<td colspan="2" style="line-height:40px;text-align:left;">Viral Load result &nbsp;&nbsp;----------------------- copies/ml</td>';
+                $html.='<td colspan="2" style="line-height:40px;text-align:left;">Viral load result &nbsp;&nbsp;----------------------- copies/ml</td>';
               $html.='</tr>';
               $html.='<tr>';
                 $html.='<td colspan="2" style="line-height:25px;text-align:left;">If no result &nbsp;&nbsp;-----------------------------------------------------------------------------------------------------</td>';
                 $html.='<td style="line-height:25px;text-align:left;">Approved by &nbsp;&nbsp;---------------------------------</td>';
-              $html.='</tr><hr/>';
+              $html.='</tr>';
               $html.='<tr><td colspan="3" style="line-height:10px;"></td></tr>';
               $html.='<tr>';
-                $html.='<td style="text-align:left;">Laboratory Officer comments </td>';
+                $html.='<td style="text-align:left;">Laboratory officer comments </td>';
                 $html.='<td colspan="2" style="text-align:left;">Date received stamp</td>';
               $html.='</tr>';
                $html.='<tr>';
