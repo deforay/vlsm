@@ -142,18 +142,20 @@ $configResult=$db->query($globalConfigQuery);
           $.unblockUI();
           window.open('../uploads/vl-drc-form.pdf','_blank');
         }else if(country == 'zambia'){
-          downloadURL = '../includes/downloadZambiaForm.php';
-          $.post(downloadURL, { },
-          function(data){
-              if(data == "" || data == null || data == undefined){
-                  $.unblockUI();
-                  alert('Unable to generate download');
-              }else{
-                  $.unblockUI();
-                  window.open('../uploads/'+data,'_blank');
-              }
-              
-          });
+          $.unblockUI();
+          window.open('../uploads/vl-zambia-form.pdf','_blank');
+          //downloadURL = '../includes/downloadZambiaForm.php';
+          //$.post(downloadURL, { },
+          //function(data){
+          //    if(data == "" || data == null || data == undefined){
+          //        $.unblockUI();
+          //        alert('Unable to generate download');
+          //    }else{
+          //        $.unblockUI();
+          //        window.open('../uploads/'+data,'_blank');
+          //    }
+          //    
+          //});
         }
     }
     </script>
