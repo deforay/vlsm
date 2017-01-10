@@ -78,7 +78,7 @@ $batchResult = $db->rawQuery($batchQuery);
                   </div>
                 </div>
 		<div class="row">
-                    <div class="col-md-12 toEmail" style="text-align:center;margin-bottom:10px;"></div>
+                    <div class="col-md-12 emailSection" style="text-align:center;margin-bottom:10px;"></div>
 		</div>
                 <div class="row">
                     <div class="col-md-9">
@@ -342,7 +342,11 @@ $batchResult = $db->rawQuery($batchQuery);
   $('#facility').change(function(e){
     var toEmailId = $(this).find(':selected').data('email');
     var reportEmailId = $(this).find(':selected').data('report-email');
-    $('.toEmail').html('This email will be sent to the facility with an email id : '+toEmailId);
+    if($.trim(toEmailId) == '' || $.trim(reportEmailId) == ''){
+      $('.emailSection').html('No valid Email id available. Please add valid email for this facility..');
+    }else{
+      $('.emailSection').html('This email will be sent to the facility with an email id : '+toEmailId);
+    }
     $('#toEmail').val(toEmailId);
     $('#reportEmail').val(reportEmailId);
   });
