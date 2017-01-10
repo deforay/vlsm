@@ -63,33 +63,23 @@ $batchResult = $db->rawQuery($batchQuery);
                 <div class="row">
                     <div class="col-md-9">
                     <div class="form-group">
-                        <label for="toEmail" class="col-lg-3 control-label">To Email <span class="mandatory">*</span></label>
+                        <label for="facility" class="col-lg-3 control-label">Facility <span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                           <input type="text" id="toEmail" name="toEmail" class="form-control isRequired" placeholder="email1@gmail.com,email2@gmail.com" title="Please enter To email"/>
+                          <select class="form-control isRequired" id="facility" name="facility" title="Please select facility">
+			    <option value=""> -- Select -- </option>
+			    <?php
+			    foreach($facilityResult as $facility){ ?>
+			    ?>
+			      <option data-email="<?php echo $facility['email']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
+			    <?php } ?>
+			  </select>
                         </div>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-9">
-                    <div class="form-group">
-                        <label for="cc" class="col-lg-3 control-label">CC</label>
-                        <div class="col-lg-9">
-                           <input type="text" id="cc" name="cc" class="form-control" placeholder="email1@gmail.com,email2@gmail.com" title="Please enter CC"/>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-9">
-                    <div class="form-group">
-                        <label for="bcc" class="col-lg-3 control-label">BCC</label>
-                        <div class="col-lg-9">
-                           <input type="text" id="bcc" name="bcc" class="form-control" placeholder="email1@gmail.com,email2@gmail.com" title="Please enter BCC"/>
-                        </div>
-                    </div>
-                  </div>
-                </div>
+		<div class="row">
+                    <div class="col-md-12 toEmail" style="text-align:center;margin-bottom:10px;"></div>
+		</div>
                 <div class="row">
                     <div class="col-md-9">
                     <div class="form-group">
@@ -222,7 +212,9 @@ $batchResult = $db->rawQuery($batchQuery);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-				        <input type="hidden" id="type" name="type" value="request"/>
+		<input type="hidden" id="type" name="type" value="request"/>
+		<input type="hidden" id="toEmail" name="toEmail"/>
+		<input type="hidden" id="reportEmail" name="reportEmail"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
                 <a href="../request-mail/testRequestEmailConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -346,6 +338,14 @@ $batchResult = $db->rawQuery($batchQuery);
       });
       $.unblockUI();
   }
+  
+  $('#facility').change(function(e){
+    var toEmailId = $(this).find(':selected').data('email');
+    var reportEmailId = $(this).find(':selected').data('report-email');
+    $('.toEmail').html('This email will be sent to the facility with an email id : '+toEmailId);
+    $('#toEmail').val(toEmailId);
+    $('#reportEmail').val(reportEmailId);
+  });
   
   function validateNow(){
     flag = deforayValidator.init({
