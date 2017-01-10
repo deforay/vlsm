@@ -267,17 +267,10 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
               }
           }
           //Set CC EmailId(s)
-          if(isset($_POST['cc']) && trim($_POST['cc'])!= ''){
-              $xplodCc = explode(",",$_POST['cc']);
+          if(isset($_POST['reportEmail']) && trim($_POST['reportEmail'])!= ''){
+              $xplodCc = explode(",",$_POST['reportEmail']);
               for($cc=0;$cc<count($xplodCc);$cc++){
                  $mail->AddCC($xplodCc[$cc]);
-              }
-          }
-          //Set BCC EmailId(s)
-          if(isset($_POST['bcc']) && trim($_POST['bcc'])!= ''){
-              $xplodBcc = explode(",",$_POST['bcc']);
-              for($bcc=0;$bcc<count($xplodBcc);$bcc++){
-                 $mail->AddBCC($xplodBcc[$bcc]);
               }
           }
           //Pdf file attach
