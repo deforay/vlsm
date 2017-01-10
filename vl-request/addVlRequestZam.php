@@ -10,6 +10,9 @@ $arr = array();
 for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
+//sample rejection reason
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
+$rejectionResult = $db->rawQuery($rejectionQuery);
 
 //get import config
 $importQuery="SELECT * FROM import_config WHERE status = 'active'";
@@ -355,7 +358,27 @@ $sFormat = '';
                       </tr>
                       <tr class="noResult">
                         <td><label>If no result</label></td>
-                        <td><input type="text" class="form-control" id="noResult" name="noResult" placeholder="If no result" title="If no result" style="width:100%;" /></td>
+                        <td colspan="2">
+                          <label class="radio-inline noResult">
+                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" onclick="checkRejectedReason();"> Sample Rejected
+                          </label>
+                          <label class="radio-inline noResult" style="margin-left: 0px;">
+                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" onclick="checkRejectedReason();"> Lab testing Technical Error
+                          </label>
+                        </td>
+                        <td><label class="noResult">Rejection Reason</label></td>
+                        <td><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <option value="">-- Select --</option>
+                          <?php
+                          foreach($rejectionResult as $reject){
+                            ?>
+                            <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
+                            <?php
+                          }
+                          ?>
+                        </select></td>
+                      </tr>
+                      <tr>
                         <td><label>Approved By</label></td>
                          <td>
                           <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
@@ -369,10 +392,8 @@ $sFormat = '';
                             ?>
                           </select>
                          </td>
-                      </tr>
-                      <tr>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
+                        <td colspan="4"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
                       </tr>
                     </table>
                   </div>
@@ -551,6 +572,21 @@ $sFormat = '';
     $.unblockUI();
   }
   
+  $("#vlResult").bind("keyup change", function(e) {
+      if($("#vlResult").val() == ""){
+        $(".noResult").show();
+      }else{
+        $( "#noResultRejected" ).prop( "checked", false );
+        $( "#noResultError" ).prop( "checked", false );
+        $("#rejectionReason").removeClass("isRequired");
+        $("#rejectionReason").val("");
+        $(".noResult").hide();
+      }
+  });
+   function checkRejectedReason()
+{
+  $("#rejectionReason").addClass("isRequired");
+}
   function ARTValue()
   {
     var artRegimen = $("#artRegimen").val();
