@@ -681,7 +681,7 @@ $("#vlLog").bind("keyup change", function(e) {
    });
      <?php
      if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!= ''){ ?>
-       getDateOfBirth("ld");
+       //getDateOfBirth("ld");
      <?php }
      ?>
   });
