@@ -10,6 +10,9 @@ $arr = array();
 for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
+//sample rejection reason
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
+$rejectionResult = $db->rawQuery($rejectionQuery);
 
 //get import config
 $importQuery="SELECT * FROM import_config WHERE status = 'active'";
@@ -412,10 +415,29 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         
                       </tr>
                       <tr class="noResult">
-                        <td><label>If no result</label></td>
-                        <td>
-                          <input type="text" class="form-control" id="noResult" name="noResult" placeholder="If no result" title="If no result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['rejection'];?>"/>
+                        <td><label class="noResult">If no result</label></td>
+                        <td colspan="2">
+                          <label class="radio-inline noResult">
+                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" <?php echo ($vlQueryInfo[0]['rejection']=='sample_rejected')?"checked='checked'":""?> onclick='checkRejectionReason()'> Sample Rejected
+                          </label>
+                          <label class="radio-inline noResult" style="margin-left: 0px;">
+                              <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['rejection']=='technical_error')?"checked='checked'":""?> onclick='checkRejectionReason()'> Lab testing Technical Error
+                          </label>
                         </td>
+                        
+                        <td><label class="noResult">Rejection Reason</label></td>
+                        <td><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <option value="">-- Select --</option>
+                          <?php
+                          foreach($rejectionResult as $reject){
+                            ?>
+                            <option value="<?php echo $reject['rejection_reason_id'];?>"<?php echo ($vlQueryInfo[0]['sample_rejection_reason']==$reject['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
+                            <?php
+                          }
+                          ?>
+                        </select></td>
+                      </tr>
+                      <tr>
                         <td><label>Approved By</label></td>
                          <td>
                           <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
@@ -429,10 +451,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                             ?>
                           </select>
                          </td>
-                      </tr>
-                      <tr>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="5"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo trim($vlQueryInfo[0]['comments']);?></textarea></td>
+                        <td colspan="4"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo trim($vlQueryInfo[0]['comments']);?></textarea></td>
                       </tr>
                     </table>
                   </div>
@@ -489,6 +509,12 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
      }).click(function(){
    	$('.ui-datepicker-calendar').show();
      });
+   
+    if($("#vlResult").val() == ""){
+      $(".noResult").show();
+    }else{
+      $(".noResult").hide();
+    }
   });
     function validateNow(){
     flag = deforayValidator.init({
@@ -599,7 +625,23 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
       $("#newVlTestReason").removeClass("isRequired");
     }
   }
+  $("#vlResult").bind("keyup change", function(e) {
+      if($("#vlResult").val() == ""){
+        $(".noResult").show();
+      }else{
+        $( "#noResultRejected" ).prop( "checked", false );
+        $( "#noResultError" ).prop( "checked", false );
+        $("#rejectionReason").removeClass("isRequired");
+        $("#rejectionReason").val("");
+        $(".noResult").hide();
+      }
+  });
   
+  function checkRejectionReason()
+  {
+    $("#rejectionReason").addClass("isRequired");
+  }
+
   $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'male'){
          $(".femaleElements").hide();
