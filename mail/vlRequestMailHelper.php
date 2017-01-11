@@ -1,5 +1,7 @@
 <?php
+session_start();
 include('../includes/MysqliDb.php');
+require '../includes/mail/PHPMailerAutoload.php';
 $tableName="vl_request_form";
 //get other config details
 $geQuery="SELECT * FROM other_config WHERE type = 'request'";
@@ -57,7 +59,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                  $mail->AddCC($xplodCc[$cc]);
               }
           }
-          $file_to_attach = $pathFront. DIRECTORY_SEPARATOR . $filename;
+          $file_to_attach = $pathFront. DIRECTORY_SEPARATOR . $_POST['fileName'];
           $mail->AddAttachment($file_to_attach);
           $message='';
           if(isset($_POST['message']) && trim($_POST['message'])!=""){
@@ -80,6 +82,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                error_log("Mailer Error: " . $mail->ErrorInfo);
                header('location:vlRequestMail.php');
           }
+}
 }else{
     $_SESSION['alertMsg']='Unable to send mail. Please try later.';
      header('location:vlRequestMail.php');
