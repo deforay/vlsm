@@ -243,7 +243,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlRequestMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmRequestMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
-                      <p style="margin-top:10px;"><a id="send-mail" href="<?php echo $file; ?>" style="text-decoration:none;">Click here to download the test request excel</a></p>
+                      <p style="margin-top:10px;"><a id="send-mail" href="<?php echo $file; ?>" style="text-decoration:none;">Click here to download the excel</a></p>
                   </div>
                </div>
             </form>
