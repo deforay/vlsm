@@ -48,7 +48,7 @@ $batchResult = $db->rawQuery($batchQuery);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="vlRequestMailHelper.php">
+            <form class="form-horizontal" method="post" name="mailForm" id="mailForm" autocomplete="off" action="vlRequestMailConfirm.php">
               <div class="box-body">
                 <div class="row">
                     <div class="col-md-9">
@@ -215,8 +215,8 @@ $batchResult = $db->rawQuery($batchQuery);
 		<input type="hidden" id="type" name="type" value="request"/>
 		<input type="hidden" id="toEmail" name="toEmail"/>
 		<input type="hidden" id="reportEmail" name="reportEmail"/>
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
-                <a href="../request-mail/testRequestEmailConfig.php" class="btn btn-default"> Cancel</a>
+		<a href="../request-mail/testRequestEmailConfig.php" class="btn btn-default"> Cancel</a>&nbsp;
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -340,15 +340,21 @@ $batchResult = $db->rawQuery($batchQuery);
   }
   
   $('#facility').change(function(e){
-    var toEmailId = $(this).find(':selected').data('email');
-    var reportEmailId = $(this).find(':selected').data('report-email');
-    if($.trim(toEmailId) == '' || $.trim(reportEmailId) == ''){
-      $('.emailSection').html('No valid Email id available. Please add valid email for this facility..');
-    }else{
-      $('.emailSection').html('This email will be sent to the facility with an email id : '+toEmailId);
-    }
-    $('#toEmail').val(toEmailId);
-    $('#reportEmail').val(reportEmailId);
+     if($(this).val() == ''){
+        $('.emailSection').html('');
+	$('#toEmail').val(toEmailId);
+	$('#reportEmail').val(reportEmailId);
+     }else{
+        var toEmailId = $(this).find(':selected').data('email');
+	var reportEmailId = $(this).find(':selected').data('report-email');
+	if($.trim(toEmailId) == '' || $.trim(reportEmailId) == ''){
+	  $('.emailSection').html('No valid Email id available. Please add valid email for this facility..');
+	}else{
+	  $('.emailSection').html('This email will be sent to the facility with an email id : '+toEmailId);
+	}
+	$('#toEmail').val(toEmailId);
+	$('#reportEmail').val(reportEmailId);
+     }
   });
   
   function validateNow(){
