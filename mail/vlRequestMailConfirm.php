@@ -239,6 +239,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   <input type="hidden" id="reportEmail" name="reportEmail" value="<?php echo $_POST['reportEmail']; ?>"/>
                   <input type="hidden" id="message" name="message" value="<?php echo $_POST['message']; ?>"/>
                   <input type="hidden" id="sample" name="sample" value="<?php echo implode(',',$_POST['sample']); ?>"/>
+                  <input type="hidden" id="fileName" name="fileName" value="<?php echo $file; ?>"/>
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlRequestMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmRequestMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
