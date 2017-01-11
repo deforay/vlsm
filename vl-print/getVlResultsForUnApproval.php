@@ -11,7 +11,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('tsr.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(tsr.lab_tested_date,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
+        $aColumns = array('tsr.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y H:i')","DATE_FORMAT(tsr.lab_tested_date,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
         $orderColumns = array('tsr.sample_code','vl.sample_collection_date','tsr.lab_tested_date','fd.facility_name','rsrr.rejection_reason_name','tsr.sample_type','tsr.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
@@ -136,7 +136,7 @@ $tsResult = $db->rawQuery($tsQuery);
 	    }
 	    if(isset($aRow['lab_tested_date']) && trim($aRow['lab_tested_date'])!= '' && $aRow['lab_tested_date']!= '0000-00-00 00:00:00'){
 	       $xplodDate = explode(" ",$aRow['lab_tested_date']);
-	       $aRow['lab_tested_date'] = $general->humanDateFormat($xplodDate[0]);
+	       $aRow['lab_tested_date'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
 	    }else{
 	       $aRow['lab_tested_date'] = '';
 	    }
