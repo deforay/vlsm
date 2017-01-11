@@ -58,7 +58,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                  $mail->AddCC($xplodCc[$cc]);
               }
           }
-          $file_to_attach = $pathFront. DIRECTORY_SEPARATOR . $_POST['fileName'];
+          $file_to_attach = $_POST['fileName'];
           $mail->AddAttachment($file_to_attach);
           $message='';
           if(isset($_POST['message']) && trim($_POST['message'])!=""){
