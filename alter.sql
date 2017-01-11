@@ -714,3 +714,6 @@ ALTER TABLE `vl_request_form` ADD `trimestre` INT(11) NULL DEFAULT NULL AFTER `i
 --saravanan 21-dec-2016
 INSERT INTO `form_details` (`form_id`, `form_name`) VALUES (NULL, 'Zambia Form');
 ALTER TABLE `vl_request_form` ADD `poor_adherence` VARCHAR(255) NULL DEFAULT NULL AFTER `arv_adherence`;
+
+--Pal 11-Jan-2017
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlRequestMailConfirm.php', 'Email Test Request Confirm');
