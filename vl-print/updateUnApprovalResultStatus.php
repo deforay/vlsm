@@ -8,6 +8,13 @@ $tableName="temp_sample_report";
 $tableName1="vl_request_form";
 $tableName2="hold_sample_report";
 try {
+    $cSampleQuery="SELECT * FROM global_config";
+    $cSampleResult=$db->query($cSampleQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
+      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+    }
     $instanceQuery="SELECT * FROM vl_instance";
     $instanceResult=$db->query($instanceQuery);
     $result ='';
@@ -89,12 +96,12 @@ try {
                 $data['status']=$_POST['status'];
                 $data['serial_no']=$rResult[0]['sample_code'];
                 if(count($vlResult)>0){
-                    $data['form_id']='2';
+                    $data['form_id']=$arr['vl_form'];
                     $db=$db->where('sample_code',$rResult[0]['sample_code']);
                     $result=$db->update($tableName1,$data);
                 }else{
                     $data['sample_code']=$rResult[0]['sample_code'];
-                    $data['form_id']='2';
+                    $data['form_id']=$arr['vl_form'];
                     $data['vl_instance_id'] = $instanceResult[0]['vl_instance_id'];
                     $db->insert($tableName1,$data);
                 }
@@ -102,8 +109,8 @@ try {
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);
     }
-        if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $rResult[0]['file_name'])) {
-            copy('temporary'. DIRECTORY_SEPARATOR ."import-result". DIRECTORY_SEPARATOR.$rResult[0]['file_name'], 'uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $rResult[0]['file_name']);
+        if (!file_exists('../uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $rResult[0]['file_name'])) {
+            copy('../temporary'. DIRECTORY_SEPARATOR ."import-result". DIRECTORY_SEPARATOR.$rResult[0]['file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $rResult[0]['file_name']);
         }
     }
     //get all accepted data result
@@ -156,8 +163,8 @@ try {
                 }
                 $db=$db->where('sample_code',$accResult[$i]['sample_code']);
                 $result=$db->update($tableName1,$data);
-                if (!file_exists('uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $accResult[$i]['file_name'])) {
-                    copy('temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['file_name'], 'uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['file_name']);
+                if (!file_exists('../uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $accResult[$i]['file_name'])) {
+                    copy('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['file_name']);
                 }
                 $db=$db->where('temp_sample_id',$accResult[$i]['temp_sample_id']);
                 $result=$db->delete($tableName);
