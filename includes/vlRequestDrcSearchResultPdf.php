@@ -250,7 +250,7 @@ if(sizeof($requestResult)> 0){
               $showMessage = 'Charge Virale élevée: Evaluation pour un renforcement de l?adhérence ou une évaluation clinique pour un éventuel passage à la seconde ligne.<br/>La valeur est supérieure à 10 000.';
             }
           }
-          if($result['rejection_reason_name']!=NULL){
+          if(isset($result['rejection_reason_name']) && $result['rejection_reason_name']!=''){
             $result['rejection_reason_name'] = $result['rejection_reason_name'];
           }else{
             $result['rejection_reason_name'] = '';
