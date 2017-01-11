@@ -87,11 +87,11 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".batchCodeMenu").addClass('active');
-  }else if (splitsUrl=='vlRequestMail.php' || splitsUrl=='sendRequestToMail.php') {
+  }else if (splitsUrl=='vlRequestMail.php' || splitsUrl=='vlRequestMailConfirm.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlRequestMailMenu").addClass('active');
-  }else if (splitsUrl=='vlResultMail.php') {
+  }else if (splitsUrl=='vlResultMail.php' || splitsUrl=='vlResultMailConfirm.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlResultMailMenu").addClass('active');

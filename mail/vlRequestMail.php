@@ -63,14 +63,14 @@ $batchResult = $db->rawQuery($batchQuery);
                 <div class="row">
                     <div class="col-md-9">
                     <div class="form-group">
-                        <label for="facility" class="col-lg-3 control-label">Facility <span class="mandatory">*</span></label>
+                        <label for="facility" class="col-lg-3 control-label">Facility (To)<span class="mandatory">*</span></label>
                         <div class="col-lg-9">
                           <select class="form-control isRequired" id="facility" name="facility" title="Please select facility">
 			    <option value=""> -- Select -- </option>
 			    <?php
 			    foreach($facilityResult as $facility){ ?>
 			    ?>
-			      <option data-email="<?php echo $facility['email']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
+			      <option data-name="<?php echo $facility['facility_name']; ?>" data-email="<?php echo $facility['email']; ?>" data-report-email="<?php echo $facility['report_email']; ?>" value="<?php echo base64_encode($facility['facility_id']); ?>"><?php echo ucwords($facility['facility_name']); ?></option>
 			    <?php } ?>
 			  </select>
                         </div>
@@ -213,6 +213,7 @@ $batchResult = $db->rawQuery($batchQuery);
               <!-- /.box-body -->
               <div class="box-footer">
 		<input type="hidden" id="type" name="type" value="request"/>
+		<input type="hidden" id="toName" name="toName"/>
 		<input type="hidden" id="toEmail" name="toEmail"/>
 		<input type="hidden" id="reportEmail" name="reportEmail"/>
 		<a href="../request-mail/testRequestEmailConfig.php" class="btn btn-default"> Cancel</a>&nbsp;
@@ -342,16 +343,19 @@ $batchResult = $db->rawQuery($batchQuery);
   $('#facility').change(function(e){
      if($(this).val() == ''){
         $('.emailSection').html('');
-	$('#toEmail').val(toEmailId);
-	$('#reportEmail').val(reportEmailId);
+	$('#toName').val('');
+	$('#toEmail').val('');
+	$('#reportEmail').val('');
      }else{
+        var toName = $(this).find(':selected').data('name');
         var toEmailId = $(this).find(':selected').data('email');
 	var reportEmailId = $(this).find(':selected').data('report-email');
 	if($.trim(toEmailId) == '' || $.trim(reportEmailId) == ''){
 	  $('.emailSection').html('No valid Email id available. Please add valid email for this facility..');
 	}else{
-	  $('.emailSection').html('This email will be sent to the facility with an email id : '+toEmailId);
+	  $('.emailSection').html('<mark>This email will be sent to the facility with an email id <strong>'+toEmailId+'</strong></mark>');
 	}
+	$('#toName').val(toName);
 	$('#toEmail').val(toEmailId);
 	$('#reportEmail').val(reportEmailId);
      }
