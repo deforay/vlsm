@@ -53,8 +53,12 @@ function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimal
           //$testingDate= $cellDt->getValue();
           $resVal=explode(" ",$cellDt->getValue());
           //print_r($resVal);die;
-          $testingDate=str_replace("/","-",$resVal[0]);
-          if(PHPExcel_Shared_Date::isDateTime($cellDt)) {
+          $testingDate=str_replace("/","-",$resVal[0],$checked);
+          if($checked>0){
+               if(PHPExcel_Shared_Date::isDateTime($cellDt)) {
+                    $testingDate = date("Y-m-d H:i", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
+               }
+          }else{
                $testingDate = date("Y-m-d H:i", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
           }
         }
