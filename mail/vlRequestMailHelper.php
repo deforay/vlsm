@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 require '../includes/mail/PHPMailerAutoload.php';
@@ -11,9 +12,7 @@ foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
-    $filedGroup = array();
      if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
-          //Mail code start
           //Create a new PHPMailer instance
           $mail = new PHPMailer();
           //Tell PHPMailer to use SMTP
@@ -82,7 +81,10 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                error_log("Mailer Error: " . $mail->ErrorInfo);
                header('location:vlRequestMail.php');
           }
-}
+      }else{
+         $_SESSION['alertMsg']='Unable to send mail. Please try later.';
+        header('location:vlRequestMail.php');
+      }
 }else{
     $_SESSION['alertMsg']='Unable to send mail. Please try later.';
      header('location:vlRequestMail.php');
