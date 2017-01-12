@@ -344,9 +344,9 @@ $batResult = $db->rawQuery($batQuery);
     //$.post("vlResultAllFieldExportInExcel.php",
     function(data){
 	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
+	      alert('Unable to generate excel..');
 	  }else{
-	      window.open('../temporary/'+data,'_blank');
+	     location.href = '../temporary/'+data;
 	  }
     });
     $.unblockUI();
