@@ -189,7 +189,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
           $filename = 'vl-request-mail' . date('d-M-Y-H-i-s') . '.xls';
           $pathFront=realpath('../temporary');
           $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
-          $file = $pathFront. DIRECTORY_SEPARATOR . $filename;
+          $downloadFile = '../temporary'. DIRECTORY_SEPARATOR . $filename;
      }else{
           $_SESSION['alertMsg']='Unable to generate the test request excel. Please check the request fields.';
           header('location:vlRequestMail.php');
@@ -239,11 +239,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   <input type="hidden" id="reportEmail" name="reportEmail" value="<?php echo $_POST['reportEmail']; ?>"/>
                   <input type="hidden" id="message" name="message" value="<?php echo $_POST['message']; ?>"/>
                   <input type="hidden" id="sample" name="sample" value="<?php echo implode(',',$_POST['sample']); ?>"/>
-                  <input type="hidden" id="fileName" name="fileName" value="<?php echo $file; ?>"/>
+                  <input type="hidden" id="fileName" name="fileName" value="<?php echo $filename; ?>"/>
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlRequestMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmRequestMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
-                      <p style="margin-top:10px;"><a id="send-mail" href="<?php echo $file; ?>" style="text-decoration:none;">Click here to download the excel</a></p>
+                      <p style="margin-top:10px;"><a id="send-mail" href="<?php echo $downloadFile; ?>" style="text-decoration:none;">Click here to download the excel</a></p>
                   </div>
                </div>
             </form>
