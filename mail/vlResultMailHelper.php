@@ -60,9 +60,10 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
           }
       }
       //Pdf file attach
-      $file_to_attach = $_POST['pdfFile1'];
+      $pathFront=realpath('../uploads');
+      $file_to_attach = $pathFront. DIRECTORY_SEPARATOR .$_POST['pdfFile1'];
       $mail->AddAttachment($file_to_attach);
-      $result_file_to_attach = $_POST['pdfFile2'];
+      $result_file_to_attach = $pathFront. DIRECTORY_SEPARATOR .$_POST['pdfFile2'];
       $mail->AddAttachment($result_file_to_attach);
       $message='';
       if(isset($_POST['message']) && trim($_POST['message'])!=""){

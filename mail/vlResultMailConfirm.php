@@ -220,11 +220,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           $pdfContent .= '</div>';
           $pdf->writeHTML($pdfContent);
           $pdf->lastPage();
-          $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
           $pathFront=realpath('../uploads');
+          $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
           $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
-          $file1 = $pathFront . DIRECTORY_SEPARATOR . $_POST['pdfFile'];
-          $file2 = $pathFront . DIRECTORY_SEPARATOR . $filename;
+          $downloadFile1 = '../uploads' . DIRECTORY_SEPARATOR . $_POST['pdfFile'];
+          $downloadFile2 = '../uploads' . DIRECTORY_SEPARATOR . $filename;
      }else{
         $_SESSION['alertMsg']='Unable to generate test result pdf. Please check the result fields.';
         header('location:vlResultMail.php');
@@ -274,13 +274,13 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                   <input type="hidden" id="reportEmail" name="reportEmail" value="<?php echo $_POST['reportEmail']; ?>"/>
                   <input type="hidden" id="message" name="message" value="<?php echo $_POST['message']; ?>"/>
                   <input type="hidden" id="sample" name="sample" value="<?php echo implode(',',$_POST['sample']); ?>"/>
-                  <input type="hidden" id="pdfFile1" name="pdfFile1" value="<?php echo $file1; ?>"/>
-                  <input type="hidden" id="pdfFile2" name="pdfFile2" value="<?php echo $file2; ?>"/>
+                  <input type="hidden" id="pdfFile1" name="pdfFile1" value="<?php echo $_POST['pdfFile']; ?>"/>
+                  <input type="hidden" id="pdfFile2" name="pdfFile2" value="<?php echo $filename; ?>"/>
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlResultMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmResultMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
-                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $file1; ?>" style="text-decoration:none;">Click here to download the result pdf </a></p>
-                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $file2; ?>" style="text-decoration:none;">Click here to download the result only pdf</a></p>
+                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $downloadFile1; ?>" style="text-decoration:none;">Click here to download the result only pdf</a></p>
+                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $downloadFile2; ?>" style="text-decoration:none;">Click here to download the result pdf </a></p>
                   </div>
                </div>
             </form>
