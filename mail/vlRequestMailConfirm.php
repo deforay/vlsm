@@ -213,7 +213,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
             <form id="vlRequestMailConfirmForm" name="vlRequestMailConfirmForm" method="post" action="vlRequestMailHelper.php">
                <div class="row">
                   <div class="col-lg-12" style="text-align:center !important;">
-                     <table class="table table-bordered table-striped" style="width:18%;margin-left:40%;">
+                     <table class="table table-bordered table-striped" style="width:18%;margin-left:41%;">
                          <thead>
                            <tr>
                              <th style="text-align:center;background-color:#71b9e2;color:#FFFFFF;">Selected Sample(s)</th>
