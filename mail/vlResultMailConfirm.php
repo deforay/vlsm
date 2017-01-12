@@ -279,8 +279,8 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlResultMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmResultMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
-                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $downloadFile1; ?>" style="text-decoration:none;">Click here to download the result only pdf</a></p>
-                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $downloadFile2; ?>" style="text-decoration:none;">Click here to download the result pdf </a></p>
+                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $downloadFile1; ?>" target="_blank" style="text-decoration:none;">Click here to download the result only pdf</a></p>
+                      <p style="margin-top:10px;"><a class="send-mail" href="<?php echo $downloadFile2; ?>" target="_blank" style="text-decoration:none;">Click here to download the result pdf </a></p>
                   </div>
                </div>
             </form>
