@@ -233,7 +233,9 @@ $formConfigResult=$db->query($formConfigQuery);
                   <li class="allMenu batchCodeMenu"><a href="../batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
 		<?php } if(isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu vlRequestMailMenu"><a href="../mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
-		<?php } ?>
+		<?php } if(isset($_SESSION['privileges']) && in_array("addImportTestRequestResult.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu importTestRequestResultMenu"><a href="../vl-request/addImportTestRequestResult.php"><i class="fa fa-circle-o"></i> Import Test Request Result</a></li>
+		<?php }?>
             </ul>
         </li>
         <?php }
@@ -258,7 +260,9 @@ $formConfigResult=$db->query($formConfigQuery);
                 <li class="allMenu vlResultApprovalMenu"><a href="../vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])){ ?>
                <li class="allMenu vlResultMailMenu"><a href="../mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
-        <?php } ?>
+                <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])){ ?>
+               <li class="allMenu importTestRequestMenu"><a href="../import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>
+                <?php }?>
             </ul>
         </li>
         <?php }

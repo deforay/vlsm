@@ -719,3 +719,8 @@ ALTER TABLE `vl_request_form` ADD `poor_adherence` VARCHAR(255) NULL DEFAULT NUL
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlRequestMailConfirm.php', 'Email Test Request Confirm');
 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlResultMailConfirm.php', 'Email Test Result Confirm');
+
+--Pal 13-Jan-2017
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '8', 'addImportTestRequest.php', 'Import Test Request');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'addImportTestRequestResult.php', 'Import Test Request Result');
