@@ -36,7 +36,7 @@ try {
      }
      
      if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-          $_POST['dob']=$general->dateFormat($_POST['dob']);  
+          $_POST['dob']=$general->dateFormat($_POST['dob']); 
      }
      
      if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){

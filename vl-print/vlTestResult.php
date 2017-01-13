@@ -105,6 +105,19 @@ $batResult = $db->rawQuery($batQuery);
 		</tr>
 		
 	    </table>
+	    <table align="left" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;width:50%;">
+	      <tr>
+		<td style="width:34%;"><b>Test Result Sample Type :</b></td>
+		<td style="width:42%;">
+		  <select class="form-control" id="testResultSampleType" name="testResultSampleType" title="Please select test result sample type" style="width:94%;height:28px;padding:0;">
+		    <option value="">All</option>
+		    <option value="result">Sample With Result</option>
+		    <option value="noresult">Sample Without Result</option>
+		  </select>
+		</td>
+		<td style="width:24%;"><a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllVlTestResult();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a></td>
+	      </tr>
+	    </table>
             <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="showhide" class="">
 			<div class="row" style="background:#e0e0e0;padding: 15px;margin-top: -5px;">
 			    <div class="col-md-12" >
@@ -323,6 +336,20 @@ $batResult = $db->rawQuery($batQuery);
 	  
       });
     $.unblockUI();
+  }
+  
+  function exportAllVlTestResult(){
+     $.blockUI();
+     var testResultSampleType = $('#testResultSampleType').val();
+     $.post("generateVlTestResultExcel.php", { rltSampleType:testResultSampleType},
+      function(data){
+	$.unblockUI();
+       if(data === "" || data === null || data === undefined){
+	 alert('Unable to generate excel..');
+       }else{
+	 location.href = '../temporary/'+data;
+       }
+      });
   }
 </script>
  <?php

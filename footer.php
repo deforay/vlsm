@@ -127,6 +127,14 @@
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".patientList").addClass('active');
+  }else if (splitsUrl=='addImportTestRequestResult.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".importTestRequestResultMenu").addClass('active');
+  }else if (splitsUrl=='addImportTestRequest.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".importTestRequestMenu").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');

@@ -43,8 +43,7 @@ $batchResult = $db->rawQuery($batchQuery);
       <!-- SELECT2 EXAMPLE -->
       <div class="box box-default">
         <div class="box-header with-border">
-          <div class="pull-left" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
-          <div class="pull-right" style="font-size:15px;"><a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a></div>
+          <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -361,19 +360,6 @@ $batchResult = $db->rawQuery($batchQuery);
 	$('#reportEmail').val(reportEmailId);
      }
   });
-  
-  function exportAllPendingVlRequest(){
-     $.blockUI();
-     $.post("generatePendingVlRequestExcel.php", { },
-      function(data){
-	$.unblockUI();
-       if(data === "" || data === null || data === undefined){
-	 alert('Unable to generate excel..');
-       }else{
-	 location.href = '../temporary/'+data;
-       }
-      });
-  }
   
   function validateNow(){
     flag = deforayValidator.init({

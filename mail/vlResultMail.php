@@ -21,11 +21,11 @@ $batchResult = $db->rawQuery($batchQuery);
 <link href="../assets/css/multi-select.css" rel="stylesheet" />
 <style>
     .ms-container{
-        width:100%;
+      width:100%;
     }
     .select2-selection__choice{
-		  color:#000000 !important;
-		}
+      color:#000000 !important;
+    }
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

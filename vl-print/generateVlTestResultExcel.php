@@ -5,7 +5,7 @@ include ('../includes/PHPExcel.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
 //get other config details
-$geQuery="SELECT * FROM other_config WHERE type = 'request'";
+$geQuery="SELECT * FROM other_config WHERE type = 'result'";
 $geResult = $db->rawQuery($geQuery);
 $mailconf = array();
 foreach($geResult as $row){
@@ -13,7 +13,7 @@ foreach($geResult as $row){
 }
 
 $filedGroup = array();
-if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
+if(isset($mailconf['rs_field']) && trim($mailconf['rs_field'])!= ''){
      //Excel code start
      $excel = new PHPExcel();
      $sheet = $excel->getActiveSheet();
@@ -42,7 +42,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
               ),
           )
      );
-    $filedGroup = explode(",",$mailconf['rq_field']);
+    $filedGroup = explode(",",$mailconf['rs_field']);
     $headings = $filedGroup;
     //Set heading row
      $sheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode('Sample'), PHPExcel_Cell_DataType::TYPE_STRING);
@@ -55,10 +55,16 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
      $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
      $colNo++;
     }
-    //Set values
-    $output = array();
-    $sampleQuery="SELECT vl_sample_id,sample_code FROM vl_request_form where status = '6'";
+    //Set query and values
+    $where = '';
+    if(isset($_POST['rltSampleType']) && trim($_POST['rltSampleType'])== 'result'){
+      $where = 'where result != ""';
+    }else if(isset($_POST['rltSampleType']) && trim($_POST['rltSampleType'])== 'noresult'){
+      $where = 'where result IS NULL OR result = ""';
+    }
+    $sampleQuery='SELECT vl_sample_id,sample_code FROM vl_request_form '.$where;
     $sampleResult = $db->rawQuery($sampleQuery);
+      $output = array();
       foreach($sampleResult as $sample){
          $row = array();
          $row[] = $sample['sample_code'];
@@ -81,10 +87,6 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
                  $field = 'date_sample_received_at_testing_lab';
             }elseif($filedGroup[$f] == "Collected by (Initials)"){
                  $field = 'collected_by';
-            }elseif($filedGroup[$f] == "Patient First Name"){
-                 $field = 'patient_name';
-            }elseif($filedGroup[$f] == "Surname"){
-                 $field = 'surname';
             }elseif($filedGroup[$f] == "Gender"){
                  $field = 'gender';
             }elseif($filedGroup[$f] == "Date Of Birth"){
@@ -186,7 +188,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
      }
      $filename = '';
      $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-     $filename = 'vl-request-mail' . date('d-M-Y-H-i-s') . '.xls';
+     $filename = 'vl-test-result-' . date('d-M-Y-H-i-s') . '.xls';
      $pathFront=realpath('../temporary');
      $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
     echo $filename;

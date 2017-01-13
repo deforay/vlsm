@@ -92,14 +92,26 @@ $batResult = $db->rawQuery($batQuery);
 		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		    </td>
 		  <td>
-						  <?php 
-			  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
-			      <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
-			  <?php }
-			  ?>
+		      <?php
+		      if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
+			  <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
+		      <?php }
+		      ?>
 		  </td>
 		</tr>
-		
+	    </table>
+	    <table align="left" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;width:46%;">
+	      <tr>
+		<td style="width:32%;"><b>Request Sample Type :</b></td>
+		<td style="width:44%;">
+		  <select class="form-control" id="requestSampleType" name="requestSampleType" title="Please select request sample type" style="width:94%;height:28px;padding:0;">
+		    <option value="">All</option>
+		    <option value="result">Sample With Result</option>
+		    <option value="noresult">Sample Without Result</option>
+		  </select>
+		</td>
+		<td style="width:24%;"><a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a></td>
+	      </tr>
 	    </table>
 	    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="showhide" class="">
 			<div class="row" style="background:#e0e0e0;float: right !important;padding: 15px;">
@@ -419,6 +431,20 @@ $batResult = $db->rawQuery($batQuery);
       alert("Please checked atleast one checkbox.");
     }
    }
+   
+   function exportAllPendingVlRequest(){
+     $.blockUI();
+     var requestSampleType = $('#requestSampleType').val();
+     $.post("generatePendingVlRequestExcel.php", { reqSampleType:requestSampleType},
+      function(data){
+	$.unblockUI();
+       if(data === "" || data === null || data === undefined){
+	 alert('Unable to generate excel..');
+       }else{
+	 location.href = '../temporary/'+data;
+       }
+      });
+  }
 //  
 //  function printBarcode(tId) {
 //    $.post("printBarcode.php",{id:tId},
