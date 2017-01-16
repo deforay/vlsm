@@ -103,7 +103,7 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlPrintResultMenu").addClass('active');
-  }else if (splitsUrl=='vlTestResult.php') {
+  }else if (splitsUrl=='vlTestResult.php' || splitsUrl=='updateVlTestResult.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlTestResultMenu").addClass('active');
