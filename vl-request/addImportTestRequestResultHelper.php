@@ -204,10 +204,10 @@ try {
                               }
                            }
                            
-                            $data['result'] = NULL;
-                            if(trim($data['absolute_value'])!= ''){
+                           $data['result'] = NULL;
+                            if(isset($data['absolute_value']) && trim($data['absolute_value'])!= ''){
                                 $data['result'] = $data['absolute_value'];
-                            }elseif(trim($data['log_value'])!= ''){
+                            }elseif(isset($data['log_value']) && trim($data['log_value'])!= ''){
                                 $data['result'] = $data['log_value'];
                             }
                             
