@@ -724,3 +724,8 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '8', 'addImportTestRequest.php', 'Import Test Request');
 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'addImportTestRequestResult.php', 'Import Test Request Result');
+
+--Pal 16-Jan-2017
+UPDATE `privileges` SET `privilege_name` = 'addImportTestResult.php' WHERE `privileges`.`privilege_id` = 53;
+
+UPDATE `privileges` SET `display_name` = 'Import Test Result' WHERE `privileges`.`privilege_id` = 53;

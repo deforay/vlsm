@@ -177,7 +177,7 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['district']) && trim($_POST['district'])!= ''){
 		if(isset($setWhr)){
-		$sWhere = $sWhere." AND f.district LIKE '%" . $_POST['district'] . "%' ";
+		  $sWhere = $sWhere." AND f.district LIKE '%" . $_POST['district'] . "%' ";
 		}else{
 		  $setWhr = 'where';
 		  $sWhere=' where '.$sWhere;
@@ -192,13 +192,20 @@ $primaryKey="vl_sample_id";
 	      }
 	    }
 	}
+	$whereResult = '';
+	if(isset($_POST['reqSampleType']) && trim($_POST['reqSampleType'])== 'result'){
+	  $whereResult = 'vl.result != "" AND ';
+	}else if(isset($_POST['reqSampleType']) && trim($_POST['reqSampleType'])== 'noresult'){
+	  $whereResult = '(vl.result IS NULL OR vl.result = "") AND ';
+	}
 	if($sWhere!=''){
-	    $sWhere = $sWhere.' AND vl.form_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND '.$whereResult.'vl.form_id="'.$arr['vl_form'].'"';
 	}else{
-	    $sWhere = $sWhere.' where vl.form_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' where '.$whereResult.'vl.form_id="'.$arr['vl_form'].'"';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	$sQuery = $sQuery." ORDER BY vl.modified_on DESC";
+	$_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.",".$sOrder;
@@ -207,7 +214,6 @@ $primaryKey="vl_sample_id";
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-        $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere ORDER BY vl.modified_on DESC, $sOrder");

@@ -1,13 +1,6 @@
 <?php
 ob_start();
 include('../header.php');
-
-$fQuery="SELECT * FROM facility_details where facility_type=2";
-$fResult = $db->rawQuery($fQuery);
-
-$lastQuery="SELECT * FROM vl_request_form ORDER BY vl_sample_id DESC LIMIT 1";
-$lastResult = $db->rawQuery($lastQuery);
-
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -40,25 +33,6 @@ $lastResult = $db->rawQuery($lastQuery);
                                 <div class="col-lg-7">
                                 <input type="file" class="isRequired" name="requestFile" id="requestFile" title="Please choose request file">
                                 (Upload xls, xlsx, csv format)
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="labId" class="col-lg-4 control-label">Lab Name <span class="mandatory">*</span></label>
-                               <div class="col-lg-7">
-                                    <select name="labId" id="labId" class="form-control isRequired" title="Please select the lab">
-                                       <option value=""> -- Select -- </option>
-                                       <?php
-                                       foreach($fResult as $val){
-                                       ?>
-                                         <option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (isset($lastResult[0]['lab_id']) &&  $lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""; ?> ><?php echo ucwords($val['facility_name']); ?></option>
-                                       <?php } ?>
-                                     </select>
                                 </div>
                             </div>
                         </div>

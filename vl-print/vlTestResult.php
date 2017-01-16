@@ -97,26 +97,13 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 			&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf('');"><span>Result PDF</span></button>
+			&nbsp;<a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllVlTestResult();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
 			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		    </td>
 		</tr>
-		
-	    </table>
-	    <table align="left" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;width:50%;">
-	      <tr>
-		<td style="width:34%;"><b>Test Result Sample Type :</b></td>
-		<td style="width:42%;">
-		  <select class="form-control" id="testResultSampleType" name="testResultSampleType" title="Please select test result sample type" style="width:94%;height:28px;padding:0;">
-		    <option value="">All</option>
-		    <option value="result">Sample With Result</option>
-		    <option value="noresult">Sample Without Result</option>
-		  </select>
-		</td>
-		<td style="width:24%;"><a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllVlTestResult();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a></td>
-	      </tr>
 	    </table>
             <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="showhide" class="">
 			<div class="row" style="background:#e0e0e0;padding: 15px;margin-top: -5px;">
@@ -340,8 +327,7 @@ $batResult = $db->rawQuery($batQuery);
   
   function exportAllVlTestResult(){
      $.blockUI();
-     var testResultSampleType = $('#testResultSampleType').val();
-     $.post("generateVlTestResultExcel.php", { rltSampleType:testResultSampleType},
+     $.post("generateVlTestResultExcel.php", { },
       function(data){
 	$.unblockUI();
        if(data === "" || data === null || data === undefined){

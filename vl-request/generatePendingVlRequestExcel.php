@@ -1,4 +1,5 @@
 <?php
+session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include ('../includes/PHPExcel.php');
@@ -56,14 +57,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
      $colNo++;
     }
     //Set query and values
-    $where = '';
-    if(isset($_POST['reqSampleType']) && trim($_POST['reqSampleType'])== 'result'){
-      $where = 'where result != ""';
-    }else if(isset($_POST['reqSampleType']) && trim($_POST['reqSampleType'])== 'noresult'){
-      $where = 'where result IS NULL OR result = ""';
-    }
-    $sampleQuery='SELECT vl_sample_id,sample_code FROM vl_request_form '.$where;
-    $sampleResult = $db->rawQuery($sampleQuery);
+    $sampleResult = $db->rawQuery($_SESSION['vlRequestSearchResultQuery']);
       $output = array();
       foreach($sampleResult as $sample){
          $row = array();
@@ -119,6 +113,8 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
                  $field = 'vl_test_reason';
             }elseif($filedGroup[$f] == "Lab Name"){
                  $field = 'lab_id';
+            }elseif($filedGroup[$f] == "LAB No"){
+                 $field = 'lab_no';
             }elseif($filedGroup[$f] == "VL Testing Platform"){
                  $field = 'vl_test_platform';
             }elseif($filedGroup[$f] == "Specimen type"){

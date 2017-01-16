@@ -92,7 +92,7 @@ $batResult = $db->rawQuery($batQuery);
 		      <option value="2">Lost</option>
 		    </select>
 		</div>
-		<div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Bulk Action" class="btn btn-success btn-sm"></div>
+		<div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Apply" class="btn btn-success btn-sm"></div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -308,7 +308,7 @@ $batResult = $db->rawQuery($batQuery);
       });
       }
     }else{
-      alert("Please checked atleast one checkbox.");
+      alert("Please be checked atleast one checkbox.");
     }
    }
   function updateStatus(obj)

@@ -47,7 +47,6 @@ $batResult = $db->rawQuery($batQuery);
 			 ?>
 		       </select>
 		    </td>
-		
 		    <td><b>Sample Type :</b></td>
 		    <td>
 		      <select style="" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
@@ -76,7 +75,6 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		
 		    <td style=""><b>State/Province&nbsp;:</b></td>
 		    <td>
 		      <input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()"/>
@@ -87,8 +85,19 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		  <td colspan="5"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		  <td><b>Request Sample Type :</b></td>
+		  <td colspan="5">
+		    <select class="form-control" id="requestSampleType" name="requestSampleType" title="Please select request sample type" style="width:38%;">
+		      <option value="">All</option>
+		      <option value="result">Sample With Result</option>
+		      <option value="noresult">Sample Without Result</option>
+		    </select>
+		  </td>
+		</tr>
+		<tr>
+		  <td colspan="5"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+		    &nbsp;<a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
 		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		    </td>
 		  <td>
@@ -100,23 +109,9 @@ $batResult = $db->rawQuery($batQuery);
 		  </td>
 		</tr>
 	    </table>
-	    <table align="left" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;width:46%;">
-	      <tr>
-		<td style="width:32%;"><b>Request Sample Type :</b></td>
-		<td style="width:44%;">
-		  <select class="form-control" id="requestSampleType" name="requestSampleType" title="Please select request sample type" style="width:94%;height:28px;padding:0;">
-		    <option value="">All</option>
-		    <option value="result">Sample With Result</option>
-		    <option value="noresult">Sample Without Result</option>
-		  </select>
-		</td>
-		<td style="width:24%;"><a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a></td>
-	      </tr>
-	    </table>
 	    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="showhide" class="">
 			<div class="row" style="background:#e0e0e0;float: right !important;padding: 15px;">
 			    <div class="col-md-12" >
-			      
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="form_id" class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
 				    </div>
@@ -318,6 +313,7 @@ $batResult = $db->rawQuery($batQuery);
 	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 	      aoData.push({"name": "district", "value": $("#district").val()});
 	      aoData.push({"name": "state", "value": $("#state").val()});
+	      aoData.push({"name": "reqSampleType", "value": $("#requestSampleType").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
