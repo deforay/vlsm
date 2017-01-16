@@ -127,10 +127,10 @@
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".patientList").addClass('active');
-  }else if (splitsUrl=='addImportTestRequestResult.php') {
+  }else if (splitsUrl=='addImportTestResult.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
-    $(".importTestRequestResultMenu").addClass('active');
+    $(".importTestResultMenu").addClass('active');
   }else if (splitsUrl=='addImportTestRequest.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');

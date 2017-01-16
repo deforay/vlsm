@@ -5,6 +5,13 @@ include('../includes/MysqliDb.php');
 include ('../includes/PHPExcel.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
+$formConfigQuery ="SELECT * from global_config where name='vl_form'";
+$configResult=$db->query($formConfigQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
 try {
     if(isset($_FILES['requestFile']['name']) && $_FILES['requestFile']['name'] != ''){
         $allowedExtensions = array('xls','xlsx','csv');
@@ -194,14 +201,26 @@ try {
                                    $data['facility_id'] = $id;
                                 }
                               }
-                           }
-                           $data['lab_id'] = NULL;
-                           if(isset($_POST['labId']) && trim($_POST['labId'])!= ''){
-                              $labQuery = 'select facility_id,facility_code from facility_details where facility_id = "'.base64_decode($_POST['labId']).'"';
-                              $labResult = $db->rawQuery($labQuery);
-                              if(isset($labResult[0]['facility_id'])){
-                                 $data['lab_id'] = $labResult[0]['facility_id'];
+                           }else if($data_heading == 'Lab Name'){
+                              $data['lab_id'] = NULL;
+                              if(trim($data_value)!= ''){
+                                $labQuery = 'select facility_id from facility_details where facility_name = "'.$data_value.'"';
+                                $labResult = $db->rawQuery($labQuery);
+                                if(isset($labResult[0]['facility_id'])){
+                                   $data['lab_id'] = $labResult[0]['facility_id'];
+                                }else{
+                                   $labData = array(
+                                                     'state'=>$state,
+                                                     'district'=>$district,
+                                                     'facility_type'=>2,
+                                                     'status'=>'active'
+                                                 );
+                                   $id = $db->insert('facility_details',$labData);
+                                   $data['lab_id'] = $id;
+                                }
                               }
+                           }else if($data_heading == 'Lab No'){
+                              $data['lab_no'] = $data_value;
                            }
                            
                            $data['result'] = NULL;
@@ -211,7 +230,7 @@ try {
                                 $data['result'] = $data['log_value'];
                             }
                     
-                           $data['form_id'] = 2;
+                           $data['form_id'] = $arr['vl_form'];
                            $data['status'] = 7;
                            $data['created_by'] = $_SESSION['userId'];
                            $data['created_on'] = $general->getDateTime();
