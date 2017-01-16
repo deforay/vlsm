@@ -81,10 +81,6 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                     $field = 'date_sample_received_at_testing_lab';
                }elseif($filedGroup[$f] == "Collected by (Initials)"){
                     $field = 'collected_by';
-               }elseif($filedGroup[$f] == "Patient First Name"){
-                    $field = 'patient_name';
-               }elseif($filedGroup[$f] == "Surname"){
-                    $field = 'surname';
                }elseif($filedGroup[$f] == "Gender"){
                     $field = 'gender';
                }elseif($filedGroup[$f] == "Date Of Birth"){
@@ -116,7 +112,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                }elseif($filedGroup[$f] == "Reason For VL Test"){
                     $field = 'vl_test_reason';
                }elseif($filedGroup[$f] == "Lab Name"){
-                    $field = 'lab_name';
+                    $field = 'lab_id';
                }elseif($filedGroup[$f] == "VL Testing Platform"){
                     $field = 'vl_test_platform';
                }elseif($filedGroup[$f] == "Specimen type"){
@@ -139,11 +135,13 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                     $field = 'comments';
                }
                if($field ==  'result_reviewed_by'){
-                    $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                  $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }elseif($field ==  'result_approved_by'){
-                    $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                  $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+               }elseif($field ==  'lab_id'){
+                  $fValueQuery="SELECT f.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.lab_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }else{
-                 $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+                  $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }
                $fValueResult = $db->rawQuery($fValueQuery);
                $fieldValue = '';
@@ -163,6 +161,8 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                       $fieldValue = $fValueResult[0]['reviewedBy'];
                     }elseif($field ==  'result_approved_by'){
                       $fieldValue = $fValueResult[0]['approvedBy'];
+                    }elseif($field ==  'lab_id'){
+                      $fieldValue = $fValueResult[0]['labName'];
                     }else{
                       $fieldValue = $fValueResult[0][$field];
                     }
