@@ -22,7 +22,7 @@ try {
                 $count = count($sheetData);
                 for($ro = 2; $ro <= $count; $ro++) {
                     $data = array();
-                    $heighestColumn = 38;
+                    $heighestColumn = 36;
                     $state = '';
                     $district = '';
                     for($col = 0; $col <= $heighestColumn; $col++) {
