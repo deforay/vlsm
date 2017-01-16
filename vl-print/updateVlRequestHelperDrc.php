@@ -49,7 +49,6 @@ try {
         $vldata=array(
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
           'sample_code'=>$_POST['sampleCode'],
-          'lab_no'=>$_POST['sampleCode'],
           'serial_no'=>$_POST['sampleCode'],
           'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
           'vl_test_platform'=>$_POST['testingPlatform'],

@@ -86,8 +86,6 @@ if(isset($arr['rq_field']) && trim($arr['rq_field'])!= ''){
                                 <option value="Sample Collection Date" <?php echo(in_array("Sample Collection Date",$requestArr)?"selected='selected'":""); ?>>Sample Collection Date</option>
                                 <option value="Sample Received Date" <?php echo(in_array("Sample Received Date",$requestArr)?"selected='selected'":""); ?>>Sample Received Date</option>
                                 <option value="Collected by (Initials)" <?php echo(in_array("Collected by (Initials)",$requestArr)?"selected='selected'":""); ?>>Collected by (Initials)</option>
-                                <option value="Patient First Name" <?php echo(in_array("Patient First Name",$requestArr)?"selected='selected'":""); ?>>Patient First Name</option>
-                                <option value="Surname" <?php echo(in_array("Surname",$requestArr)?"selected='selected'":""); ?>>Surname</option>
                                 <option value="Gender" <?php echo(in_array("Gender",$requestArr)?"selected='selected'":""); ?>>Gender</option>
                                 <option value="Date Of Birth" <?php echo(in_array("Date Of Birth",$requestArr)?"selected='selected'":""); ?>>Date Of Birth</option>
                                 <option value="Age in years" <?php echo(in_array("Age in years",$requestArr)?"selected='selected'":""); ?>>Age in years</option>
