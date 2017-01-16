@@ -57,10 +57,6 @@ $lastResult = $db->rawQuery($lastQuery);
                                   <option value="<?php echo base64_encode($val['file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
                                   <?php } ?>
                                 </select>
-								
-								<input type="hidden" id="vltestPlatform" name="vltestPlatform" value="" />
-								
-								
                                 </div>
                             </div>
                           </div>
@@ -90,13 +86,13 @@ $lastResult = $db->rawQuery($lastQuery);
                               <label for="labId" class="col-lg-4 control-label">Lab Name <span class="mandatory">*</span></label>
                               <div class="col-lg-7">
                               <select name="labId" id="labId" class="form-control isRequired" title="Please select the lab name">
-								<option value=""> -- Select -- </option>
+				<option value=""> -- Select -- </option>
                                   <?php
                                   foreach($fResult as $val){
                                   ?>
-									<option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (($lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""); ?> ><?php echo ucwords($val['facility_name']); ?></option>
+				     <option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (isset($lastResult[0]['lab_id']) && $lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""; ?> ><?php echo ucwords($val['facility_name']); ?></option>
                                   <?php } ?>
-							  </select>
+			      </select>
                               </div>
                           </div>
                         </div>
@@ -108,6 +104,7 @@ $lastResult = $db->rawQuery($lastQuery);
                      
                       <div class="row form-group">        
                       <div class="box-footer">
+			<input type="hidden" id="vltestPlatform" name="vltestPlatform" value="" />
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                         <a href="../dashboard/index.php" class="btn btn-default"> Cancel</a>
                       </div>

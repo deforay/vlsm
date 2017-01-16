@@ -56,7 +56,7 @@ $lastResult = $db->rawQuery($lastQuery);
                                        <?php
                                        foreach($fResult as $val){
                                        ?>
-                                         <option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (($lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""); ?> ><?php echo ucwords($val['facility_name']); ?></option>
+                                         <option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (isset($lastResult[0]['lab_id']) && $lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""; ?> ><?php echo ucwords($val['facility_name']); ?></option>
                                        <?php } ?>
                                      </select>
                                 </div>
