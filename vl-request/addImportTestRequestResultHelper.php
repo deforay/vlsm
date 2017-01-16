@@ -109,18 +109,21 @@ try {
                            }else if($data_heading == 'If no result'){
                              $data['rejection'] = $data_value;
                            }else if($data_heading == 'Rejection Reason'){
-                             $rrQuery = 'select rejection_reason_id from r_sample_rejection_reasons where rejection_reason_name = "'.$data_value.'" or rejection_reason_name = "'.strtolower($data_value).'"';
-                             $rrResult = $db->rawQuery($rrQuery);
-                             if(isset($rrResult[0]['rejection_reason_id'])){
-                                $data['sample_rejection_reason'] = $rrResult[0]['rejection_reason_id'];
-                             }else{
-                                 $rrData = array(
-                                                 'rejection_reason_name'=>$data_value,
-                                                 'rejection_reason_status'=>'active'
-                                         );
-                                 $id = $db->insert('r_sample_rejection_reasons',$rrData);
-                                 $data['sample_rejection_reason'] = $id;
-                             }
+                                $data['sample_rejection_reason'] = NULL;
+                                if(trim($data_value)!= ''){
+                                    $rrQuery = 'select rejection_reason_id from r_sample_rejection_reasons where rejection_reason_name = "'.$data_value.'" or rejection_reason_name = "'.strtolower($data_value).'"';
+                                    $rrResult = $db->rawQuery($rrQuery);
+                                    if(isset($rrResult[0]['rejection_reason_id'])){
+                                       $data['sample_rejection_reason'] = $rrResult[0]['rejection_reason_id'];
+                                    }else{
+                                        $rrData = array(
+                                                        'rejection_reason_name'=>$data_value,
+                                                        'rejection_reason_status'=>'active'
+                                                );
+                                        $id = $db->insert('r_sample_rejection_reasons',$rrData);
+                                        $data['sample_rejection_reason'] = $id;
+                                    }
+                                }
                            }else if($data_heading == 'Reviewed By'){
                              $data['result_reviewed_by'] = NULL;
                              if(trim($data_value)!= ''){
