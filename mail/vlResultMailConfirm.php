@@ -180,7 +180,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
                     $field = 'comments';
                }elseif($filedGroup[$f] == "Status"){
-                    $field = 'status';
+                    $field = 'status_name';
                }
                
                if($field ==  'result_reviewed_by'){
