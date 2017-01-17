@@ -30,8 +30,6 @@ try {
                 for($ro = 2; $ro <= $count; $ro++) {
                     $data = array();
                     $heighestColumn = 13;
-                    $state = '';
-                    $district = '';
                     for($col = 0; $col <= $heighestColumn; $col++) {
                        $data_heading = $sheet->getCellByColumnAndRow($col, 1)->getValue();
                        $data_value = $sheet->getCellByColumnAndRow($col, $ro)->getValue();
@@ -117,7 +115,7 @@ try {
                                    $data['sample_id'] = $specimenResult[0]['sample_id'];
                                 }else{
                                    $sampleTypeData = array(
-                                                     'sample_name'=>$state,
+                                                     'sample_name'=>$data_value,
                                                      'status'=>'active'
                                                  );
                                    $id = $db->insert('r_sample_type',$sampleTypeData);
@@ -133,8 +131,7 @@ try {
                                    $data['lab_id'] = $labResult[0]['facility_id'];
                                 }else{
                                    $labData = array(
-                                                    'state'=>$state,
-                                                    'district'=>$district,
+                                                    'facility_name'=>$data_value,
                                                     'facility_type'=>2,
                                                     'status'=>'active'
                                                  );
