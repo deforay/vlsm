@@ -135,15 +135,18 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
                  $field = 'result_approved_by';
             }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
                  $field = 'comments';
+            }elseif($filedGroup[$f] == "Status"){
+                 $field = 'status_name';
             }
+            
             if($field ==  'result_reviewed_by'){
                $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }elseif($field ==  'result_approved_by'){
-                $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
+               $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }elseif($field ==  'lab_id'){
-                $fValueQuery="SELECT f.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.lab_id=f.facility_id where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
+               $fValueQuery="SELECT f.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.lab_id=f.facility_id where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }else{
-              $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
+              $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN testing_status as t_s ON t_s.status_id=vl.status where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }
             $fValueResult = $db->rawQuery($fValueQuery);
             $fieldValue = '';
@@ -157,7 +160,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
                     if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
                         $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
                     }
-               }elseif($field ==  'vl_test_platform' || $field ==  'gender'){
+               }elseif($field ==  'vl_test_platform' || $field ==  'gender' || $field == 'rejection'){
                  $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                }elseif($field ==  'result_reviewed_by'){
                  $fieldValue = $fValueResult[0]['reviewedBy'];

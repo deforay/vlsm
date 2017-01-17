@@ -29,7 +29,7 @@ try {
                 $count = count($sheetData);
                 for($ro = 2; $ro <= $count; $ro++) {
                     $data = array();
-                    $heighestColumn = 13;
+                    $heighestColumn = 14;
                     for($col = 0; $col <= $heighestColumn; $col++) {
                        $data_heading = $sheet->getCellByColumnAndRow($col, 1)->getValue();
                        $data_value = $sheet->getCellByColumnAndRow($col, $ro)->getValue();
@@ -53,7 +53,7 @@ try {
                            }else if($data_heading == 'Log Value'){
                              $data['log_value'] = $data_value;
                            }else if($data_heading == 'If no result'){
-                             $data['rejection'] = $data_value;
+                             $data['rejection'] = strtolower(str_replace(' ','_',$data_value));
                            }else if($data_heading == 'Rejection Reason'){
                                 $data['sample_rejection_reason'] = NULL;
                                 if(trim($data_value)!= ''){
@@ -141,6 +141,21 @@ try {
                               }
                            }else if($data_heading == 'LAB No'){
                                $data['lab_no'] = $data_value;
+                           }else if($data_heading == 'Status'){
+                              $data['status'] = NULL;
+                              if(trim($data_value)!= ''){
+                                $statusQuery = 'select status_id from testing_status where status_name = "'.$data_value.'" OR status_name = "'.strtolower($data_value).'"';
+                                $statusResult = $db->rawQuery($statusQuery);
+                                if(isset($statusResult[0]['status_id'])){
+                                   $data['status'] = $statusResult[0]['status_id'];
+                                }else{
+                                   $tStatusData = array(
+                                                     'status_name'=>$data_value
+                                                 );
+                                   $id = $db->insert('testing_status',$tStatusData);
+                                   $data['status'] = $id;
+                                }
+                              }
                            }
                            
                            $data['result'] = NULL;
@@ -151,7 +166,6 @@ try {
                             }
                             
                            $data['form_id'] = $arr['vl_form'];
-                           $data['status'] = 7;
                            $data['modified_by'] = $_SESSION['userId'];
                            $data['modified_on'] = $general->getDateTime();
                        }

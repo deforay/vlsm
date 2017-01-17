@@ -113,6 +113,7 @@ if(isset($arr['rq_field']) && trim($arr['rq_field'])!= ''){
                                 <option value="Reviewed By" <?php echo(in_array("Reviewed By",$requestArr)?"selected='selected'":""); ?>>Reviewed By</option>
                                 <option value="Approved By" <?php echo(in_array("Approved By",$requestArr)?"selected='selected'":""); ?>>Approved By</option>
                                 <option value="Laboratory Scientist Comments" <?php echo(in_array("Laboratory Scientist Comments",$requestArr)?"selected='selected'":""); ?>>Laboratory Scientist Comments</option>
+                                <option value="Status" <?php echo(in_array("Status",$requestArr)?"selected='selected'":""); ?>>Status</option>
                             </select>
                         </div>
                     </div>
