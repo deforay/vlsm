@@ -13,16 +13,16 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 try {
-    if(isset($_FILES['requestFile']['name']) && $_FILES['requestFile']['name'] != ''){
+    if(isset($_FILES['resultFile']['name']) && $_FILES['resultFile']['name'] != ''){
         $allowedExtensions = array('xls','xlsx','csv');
-        $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['requestFile']['name']);
+        $fileName = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['resultFile']['name']);
         $fileName = str_replace(" ", "-", $fileName);
         $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
         if(in_array($extension, $allowedExtensions)) {
             if(!file_exists('../temporary') && !is_dir('../temporary')) {
                 mkdir('../temporary');
             }
-            if(move_uploaded_file($_FILES['requestFile']['tmp_name'], '../temporary' . DIRECTORY_SEPARATOR . $fileName)) {
+            if(move_uploaded_file($_FILES['resultFile']['tmp_name'], '../temporary' . DIRECTORY_SEPARATOR . $fileName)) {
                 $objPHPExcel = \PHPExcel_IOFactory::load('../temporary' . DIRECTORY_SEPARATOR . $fileName);
                 $sheet = $objPHPExcel->getActiveSheet();
                 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
