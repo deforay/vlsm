@@ -176,7 +176,7 @@ try {
                                    $data['sample_id'] = $specimenResult[0]['sample_id'];
                                 }else{
                                    $sampleTypeData = array(
-                                                     'sample_name'=>$state,
+                                                     'sample_name'=>$data_value,
                                                      'status'=>'active'
                                                  );
                                    $id = $db->insert('r_sample_type',$sampleTypeData);
@@ -192,6 +192,7 @@ try {
                                    $data['facility_id'] = $clinicResult[0]['facility_id'];
                                 }else{
                                    $clinicData = array(
+                                                     'facility_name'=>$data_value,
                                                      'state'=>$state,
                                                      'district'=>$district,
                                                      'facility_type'=>1,
@@ -210,8 +211,7 @@ try {
                                    $data['lab_id'] = $labResult[0]['facility_id'];
                                 }else{
                                    $labData = array(
-                                                     'state'=>$state,
-                                                     'district'=>$district,
+                                                     'facility_name'=>$data_value,
                                                      'facility_type'=>2,
                                                      'status'=>'active'
                                                  );
@@ -219,7 +219,7 @@ try {
                                    $data['lab_id'] = $id;
                                 }
                               }
-                           }else if($data_heading == 'Lab No'){
+                           }else if($data_heading == 'LAB No'){
                               $data['lab_no'] = $data_value;
                            }
                            

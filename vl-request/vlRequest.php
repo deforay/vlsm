@@ -85,7 +85,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		  <td><b>Request Sample Type :</b></td>
+		  <td><b>Req. Sample Type :</b></td>
 		  <td colspan="5">
 		    <select class="form-control" id="requestSampleType" name="requestSampleType" title="Please select request sample type" style="width:38%;">
 		      <option value="">All</option>

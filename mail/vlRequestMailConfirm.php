@@ -113,6 +113,8 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                     $field = 'vl_test_reason';
                }elseif($filedGroup[$f] == "Lab Name"){
                     $field = 'lab_id';
+               }elseif($filedGroup[$f] == "LAB No"){
+                    $field = 'lab_no';
                }elseif($filedGroup[$f] == "VL Testing Platform"){
                     $field = 'vl_test_platform';
                }elseif($filedGroup[$f] == "Specimen type"){
