@@ -5,8 +5,23 @@ include('../includes/MysqliDb.php');
 include ('../includes/PHPExcel.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
+$formConfigQuery ="SELECT * from global_config where name='vl_form'";
+$configResult=$db->query($formConfigQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
 $filedGroup = array();
-$rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+if($arr['vl_form'] == 2){
+  $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+}else if($arr['vl_form'] == 4){
+  $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+}else if($arr['vl_form'] == 3){
+  $rs_field = 'Sample Received Date,Date of Viral Load Completion,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+}else{
+  $rs_field = 'Lab,LAB No,Lab Contact Person,Lab Phone No,Sample Received Date,Result Dispatched Date,Test Method,Sample Testing Date,Log Value,Absolute Value,Text Value,Viral Load Result(copiesl/ml),Reviewed By,Reviewed Date,Approved By,Laboratory Scientist Comments,Status';
+}
 if(isset($rs_field) && trim($rs_field)!= ''){
      //Excel code start
      $excel = new PHPExcel();
@@ -56,26 +71,46 @@ if(isset($rs_field) && trim($rs_field)!= ''){
          $row = array();
          $row[] = $sample['sample_code'];
          for($f=0;$f<count($filedGroup);$f++){
-            if($filedGroup[$f] == "Lab Name"){
+            if($filedGroup[$f] == "Lab"){
+                 $field = 'lab_name';
+            }elseif($filedGroup[$f] == "Lab Name"){
                  $field = 'lab_id';
             }elseif($filedGroup[$f] == "LAB No"){
                  $field = 'lab_no';
+            }elseif($filedGroup[$f] == "Lab Contact Person"){
+                 $field = 'lab_contact_person';
+            }elseif($filedGroup[$f] == "Lab Phone No"){
+                 $field = 'lab_phone_no';
+            }elseif($filedGroup[$f] == "Sample Received Date"){
+                 $field = 'date_sample_received_at_testing_lab';
+            }elseif($filedGroup[$f] == "Result Dispatched Date"){
+                 $field = 'date_results_dispatched';
+            }elseif($filedGroup[$f] == "Date of Viral Load Completion"){
+                 $field = 'date_of_completion_of_viral_load';
             }elseif($filedGroup[$f] == "VL Testing Platform"){
                  $field = 'vl_test_platform';
-            }elseif($filedGroup[$f] == "Specimen type"){
+            }elseif($filedGroup[$f] == "Test Method"){
+                 $field = 'test_methods';
+            }elseif($filedGroup[$f] == "Specimen Type"){
                  $field = 'sample_name';
             }elseif($filedGroup[$f] == "Sample Testing Date"){
                  $field = 'lab_tested_date';
-            }elseif($filedGroup[$f] == "Viral Load Result(copiesl/ml)"){
-                 $field = 'absolute_value';
             }elseif($filedGroup[$f] == "Log Value"){
                  $field = 'log_value';
+            }elseif($filedGroup[$f] == "Absolute Value"){
+                 $field = 'absolute_value';
+            }elseif($filedGroup[$f] == "Text Value"){
+                 $field = 'text_value';
+            }elseif($filedGroup[$f] == "Viral Load Result(copiesl/ml)"){
+                 $field = 'result';
             }elseif($filedGroup[$f] == "If no result"){
                  $field = 'rejection';
             }elseif($filedGroup[$f] == "Rejection Reason"){
                  $field = 'rejection_reason_name';
             }elseif($filedGroup[$f] == "Reviewed By"){
                  $field = 'result_reviewed_by';
+            }elseif($filedGroup[$f] == "Reviewed Date"){
+                 $field = 'result_reviewed_date';
             }elseif($filedGroup[$f] == "Approved By"){
                  $field = 'result_approved_by';
             }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
@@ -96,12 +131,16 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             $fValueResult = $db->rawQuery($fValueQuery);
             $fieldValue = '';
             if(count($fValueResult) >0){
-               if($field == 'lab_tested_date'){
+               if($field == 'date_sample_received_at_testing_lab' || $field == 'date_results_dispatched' || $field == 'lab_tested_date' || $field == 'result_reviewed_date'){
                     if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
                         $xplodDate = explode(" ",$fValueResult[0][$field]);
-                        $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];  
+                        $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
                     }
-               }elseif($field ==  'vl_test_platform' || $field ==  'gender' || $field == 'rejection'){
+               }elseif($field ==  'date_of_completion_of_viral_load'){
+                  if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
+                     $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
+                  }
+               }elseif($field ==  'vl_test_platform' || $field == 'rejection'){
                  $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                }elseif($field ==  'result_reviewed_by'){
                  $fieldValue = $fValueResult[0]['reviewedBy'];

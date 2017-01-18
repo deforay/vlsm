@@ -203,7 +203,6 @@ try {
                   'is_patient_pregnant'=>$_POST['patientPregnant'],
                   'trimestre'=>$_POST['trimestre'],
                   'art_no'=>$_POST['patientArtNo'],
-                  'lab_no'=>$_POST['labNo'],
                   'is_patient_new'=>$_POST['isPatientNew'],
                   'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
                   'current_regimen'=>$_POST['artRegimen'],

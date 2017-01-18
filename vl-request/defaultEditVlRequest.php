@@ -71,13 +71,6 @@ if(isset($result[0]['missing_last_vl_date']) && trim($result[0]['missing_last_vl
  $result[0]['missing_last_vl_date']='';
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['lab_tested_date']);
- $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $result[0]['lab_tested_date']='';
-}
-
 if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
  $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];

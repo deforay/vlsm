@@ -67,13 +67,6 @@ if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['
  $result[0]['date_sample_received_at_testing_lab']='';
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['lab_tested_date']);
- $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $result[0]['lab_tested_date']='';
-}
-
 if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$result[0]['date_results_dispatched']);
  $result[0]['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -85,7 +78,7 @@ if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed
  $expStr=explode(" ",$result[0]['result_reviewed_date']);
  $result[0]['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['result_reviewed_date']= $general->humanDateFormat(date('Y-m-d'));
+ $result[0]['result_reviewed_date']= '';
 }
 //get test status values
 $tsQuery="SELECT * FROM testing_status";
