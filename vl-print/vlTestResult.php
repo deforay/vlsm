@@ -286,7 +286,7 @@ $batResult = $db->rawQuery($batQuery);
     <?php
     if($configFormResult[0]['value'] == 3){
       $path = '../includes/vlRequestDrcResultPdf.php';
-    }else if($configFormResult[0]['value'] == 2){
+    }else if($configFormResult[0]['value'] == 1 || $configFormResult[0]['value'] == 2){
      $path = '../includes/vlRequestResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
@@ -307,7 +307,7 @@ $batResult = $db->rawQuery($batQuery);
     <?php
     if($configFormResult[0]['value'] == 3){
       $path = '../includes/vlRequestDrcSearchResultPdf.php';
-    }else if($configFormResult[0]['value'] == 2){
+    }else if($configFormResult[0]['value'] == 1 || $configFormResult[0]['value'] == 2){
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  

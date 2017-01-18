@@ -110,7 +110,7 @@ try {
                                }
                              $data['lab_tested_date'] = $data_value;
                            }else if($data_heading == 'Viral Load Result(copiesl/ml)'){
-                             $data['absolute_value'] = $data_value;
+                             $data['result'] = $data_value;
                            }else if($data_heading == 'Log Value'){
                              $data['log_value'] = $data_value;
                            }else if($data_heading == 'If no result'){
@@ -238,13 +238,13 @@ try {
                               }
                            }
                            
-                           $data['result'] = NULL;
-                            if(isset($data['absolute_value']) && trim($data['absolute_value'])!= ''){
-                                $data['result'] = $data['absolute_value'];
-                            }elseif(isset($data['log_value']) && trim($data['log_value'])!= ''){
-                                $data['result'] = $data['log_value'];
-                            }
-                    
+                           if(!isset($data['result']) || $data['result'] == ''){
+                                if(isset($data['absolute_value']) && trim($data['absolute_value'])!= ''){
+                                    $data['result'] = $data['absolute_value'];
+                                }elseif(isset($data['log_value']) && trim($data['log_value'])!= ''){
+                                    $data['result'] = $data['log_value'];
+                                }
+                           }
                            $data['form_id'] = $arr['vl_form'];
                            $data['created_by'] = $_SESSION['userId'];
                            $data['created_on'] = $general->getDateTime();
