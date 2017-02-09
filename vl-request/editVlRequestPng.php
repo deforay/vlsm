@@ -434,7 +434,8 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 			 </label>
 			</td>
                       </tr>
-                      </tr>
+		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">CPHL Use Only </td></tr>
+                      <tr>
 			<td colspan="2" class="sampleQuality"><label for="breastfeeding">Sample Quality</label>&nbsp;
 			 <label class="radio-inline">
 			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['rejection']=='accept')?"checked='checked'":""?>>Accept
