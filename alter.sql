@@ -730,6 +730,7 @@ UPDATE `privileges` SET `privilege_name` = 'addImportTestResult.php' WHERE `priv
 
 UPDATE `privileges` SET `display_name` = 'Import Test Result' WHERE `privileges`.`privilege_id` = 53;
 
+
 --saravanan 24-jan-2017
 INSERT INTO `form_details` (`form_id`, `form_name`) VALUES (NULL, 'Papua New Guinea');
 
