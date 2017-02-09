@@ -43,7 +43,7 @@ try {
         $sampletestDate = explode(" ",$_POST['testDate']);
         $_POST['testDate']=$general->dateFormat($sampletestDate[0])." ".$sampletestDate[1];
     }else{
-        $_POST['receivedDate'] = NULL;
+        $_POST['testDate'] = NULL;
     }
     if(isset($_POST['cdDate']) && trim($_POST['cdDate'])!=""){
         $_POST['cdDate']=$general->dateFormat($_POST['cdDate']);
