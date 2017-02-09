@@ -1,84 +1,217 @@
 <?php
 
-$skipTillRow = 2;
-$orderNumberColumn = "C";//mandatory column. Used to check when to stop looping
-
-//function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$rKey,$cellName,$cell){
-function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$key,$rKey,$cellName,$cell,$sheetData){
-           
-     $sampleIdCol='E';
-     $sampleIdRow='2';
-     $logValCol='';
-     $logValRow='';
-     $absValCol='I';
-     $absValRow='2';
-     $txtValCol='';
-     $txtValRow='';
-     $testingDateCol='AC';
-     $testingDateRow='2';
-     $logAndAbsoluteValInSameCol='no';
-     $sampleTypeVal = 'F';
-     $batchCodeVal = 'G';
-     $flagCol = 'K';
-     //$flagRow = '2';
-                
+try {
     
-     if($sampleIdCol==$cellName){
-        if($rKey>=$sampleIdRow){
-            $sampleVal=$cell->getCalculatedValue();
+    $db->delete('temp_sample_report');
+    //set session for controller track id in hold_sample_record table
+    $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_report";
+    $cResult = $db->query($cQuery);
+    if ($cResult[0]['MAX(import_batch_tracking)'] != '') {
+        $maxId = $cResult[0]['MAX(import_batch_tracking)'] + 1;
+    } else {
+        $maxId = 1;
+    }
+    $_SESSION['controllertrack'] = $maxId;
+    
+    $allowedExtensions = array(
+        'xls',
+        'xlsx',
+        'csv'
+    );
+    $fileName          = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['resultFile']['name']);
+    $fileName          = str_replace(" ", "-", $fileName);
+    $ranNumber         = str_pad(rand(0, pow(10, 6) - 1), 6, '0', STR_PAD_LEFT);
+    $extension         = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+    $fileName          = $ranNumber . "." . $extension;
+    
+    
+    if (!file_exists('../temporary' . DIRECTORY_SEPARATOR . "import-result") && !is_dir('../temporary' . DIRECTORY_SEPARATOR . "import-result")) {
+        mkdir('../temporary' . DIRECTORY_SEPARATOR . "import-result");
+    }
+    if (move_uploaded_file($_FILES['resultFile']['tmp_name'], '../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)) {
+        //$file_info = new finfo(FILEINFO_MIME); // object oriented approach!
+        //$mime_type = $file_info->buffer(file_get_contents('../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)); // e.g. gives "image/jpeg"
+
+        $objPHPExcel = \PHPExcel_IOFactory::load('../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName);
+        $sheetData   = $objPHPExcel->getActiveSheet();
+        
+        $bquery    = "select MAX(batch_code_key) from batch_details";
+        $bvlResult = $db->rawQuery($bquery);
+        if ($bvlResult[0]['MAX(batch_code_key)'] != '' && $bvlResult[0]['MAX(batch_code_key)'] != NULL) {
+            $maxBatchCodeKey = $bvlResult[0]['MAX(batch_code_key)'] + 1;
+            $maxBatchCodeKey = "00" . $maxBatchCodeKey;
+        } else {
+            $maxBatchCodeKey = '001';
         }
-     }
-     
-     if($sampleTypeVal==$cellName){
-        if($rKey>=$sampleIdRow){
-            $sampleType=$cell->getCalculatedValue();
-        }
-     }
-     if($batchCodeVal==$cellName){
-        if($rKey>=$sampleIdRow){
-            $batchCode=$cell->getCalculatedValue();
-        }
-     }
-     
-     if($flagCol==$cellName){
-        if($rKey>=$sampleIdRow){
-            $resultFlag=$cell->getCalculatedValue();
-        }
-     }
-     
-     
-     if($testingDateCol==$cellName){
-        if($rKey>=$testingDateRow){
-          $cellDt = $sheetData->getCell($cellName.$rKey);
-          //$testingDate= $cellDt->getValue();
-          $resVal=explode(" ",$cellDt->getValue());
-          //print_r($resVal);die;
-          $testingDate=str_replace("/","-",$resVal[0],$checked);
-          if($checked>0){
-               if(PHPExcel_Shared_Date::isDateTime($cellDt)) {
-                    $testingDate = date("Y-m-d H:i", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
-               }
-          }else{
-               $testingDate = date("Y-m-d H:i", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
+        
+        $newBatchCode = date('Ymd') . $maxBatchCodeKey;
+        
+          $sheetData   = $sheetData->toArray(null, true, true, true);
+          $m           = 0;
+          $skipTillRow = 2;
+        
+          $sampleIdCol='E';
+          $sampleIdRow='2';
+          $logValCol='';
+          $logValRow='';
+          $absValCol='I';
+          $absValRow='2';
+          $txtValCol='';
+          $txtValRow='';
+          $testingDateCol='AC';
+          $testingDateRow='2';
+          $logAndAbsoluteValInSameCol='no';
+          $sampleTypeCol = 'F';
+          $batchCodeCol = 'G';
+          $flagCol = 'K';
+          //$flagRow = '2';
+        
+        foreach ($sheetData as $rowIndex => $row) {
+            
+          if ($rowIndex < $skipTillRow)
+              continue;
+          
+          $sampleCode    = "";
+          $batchCode     = "";
+          $sampleType    = "";
+          $absDecimalVal = "";
+          $absVal        = "";
+          $logVal        = "";
+          $txtVal        = "";
+          $resultFlag    = "";
+          $testingDate   = "";
+           
+         
+          $sampleCode = $row[$sampleIdCol];
+          $sampleType = $row[$sampleTypeCol];
+          
+          $batchCode = $row[$batchCodeCol];
+          $resultFlag = $row[$flagCol];
+          
+          //$d=explode(" ",$row[$testingDateCol]);
+          //$testingDate=str_replace("/","-",$d[0],$checked);
+          //
+          ////$testingDate = date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
+          //
+          
+          // Date time in the provided Roche Sample file is in this format : 9/9/16 12:22
+          $testingDate = DateTime::createFromFormat('m/d/y H:i', $row[$testingDateCol])->format('Y-m-d H:i');          
+          
+          if(trim($row[$absValCol])!=""){
+              $resVal=(int)$row[$absValCol];
+              if($resVal > 0){
+                  $absDecimalVal = $absVal=trim($row[$absValCol]);
+                  
+                  $logVal=round(log10($absVal),4);
+                  $txtVal="";
+              }else{
+                  $absDecimalVal = $absVal="";
+                  $logVal="";                       
+                  $txtVal=trim($row[$absValCol]);
+              }
           }
+            
+            
+          if ($sampleCode == "")
+              continue;
+            
+
+          $infoFromFile[$sampleCode] = array(
+              "sampleCode" => $sampleCode,
+              "logVal" => trim($logVal),
+              "absVal" => $absVal,
+              "absDecimalVal" => $absDecimalVal,
+              "txtVal" => $txtVal,
+              "resultFlag" => $resultFlag,
+              "testingDate" => $testingDate,
+              "sampleType" => $sampleType,
+              "batchCode" => $batchCode
+          );
+            
+            
+            $m++;
         }
-     }
-     
-    if($absValCol==$cellName){
-        if($rKey>=$absValRow){
-            if(trim($cell->getCalculatedValue())!=""){
-                $resVal=(int)$cell->getCalculatedValue();
-                if($resVal > 0){
-                    $absVal=trim($cell->getCalculatedValue());
-                    $logVal=floor(log10($absVal));
-                    $txtVal="";
-                }else{
-                    $absVa="";
-                    $logVal="";                       
-                    $txtVal=trim($cell->getCalculatedValue());
-                }
+        
+        foreach ($infoFromFile as $sampleCode => $d) {
+            
+            $data = array(
+                'lab_id' => base64_decode($_POST['labId']),
+                'vl_test_platform' => $_POST['vltestPlatform'],
+                'result_reviewed_by' => $_SESSION['userId'],
+                'sample_code' => $d['sampleCode'],
+                'log_value' => $d['logVal'],
+                'sample_type' => $d['sampleType'],
+                'absolute_value' => $d['absVal'],
+                'text_value' => $d['txtVal'],
+                'absolute_decimal_value' => $d['absDecimalVal'],
+                'lab_tested_date' => $testingDate,
+                'status' => '6',
+                'file_name' => $fileName,
+                'comments' => $d['resultFlag']
+            );
+            
+            
+            if ($d['absVal'] != "") {
+                $data['result'] = $d['absVal'];
+            } else if ($d['logVal'] != "") {
+                $data['result'] = $d['logVal'];
+            } else if ($d['txtVal'] != "") {
+                $data['result'] = $d['txtVal'];
+            } else {
+                $data['result'] = "";
             }
             
+            if ($batchCode == '') {
+                $data['batch_code']     = $newBatchCode;
+                $data['batch_code_key'] = $maxBatchCodeKey;
+            } else {
+                $data['batch_code'] = $batchCode;
+            }
+            
+            $query    = "select facility_id,vl_sample_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='" . $sampleCode . "'";
+            $vlResult = $db->rawQuery($query);
+            if ($vlResult && $sampleCode != '') {
+                if ($vlResult[0]['log_value'] != '' || $vlResult[0]['absolute_value'] != '' || $vlResult[0]['text_value'] != '' || $vlResult[0]['absolute_decimal_value'] != '') {
+                    $data['sample_details'] = 'Result exists already';
+                } else {
+                    $data['status'] = '7';
+                }
+                $data['facility_id'] = $vlResult[0]['facility_id'];
+            } else {
+                $data['sample_details'] = 'New Sample';
+            }
+            //echo "<pre>";var_dump($data);echo "</pre>";continue;
+            if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
+                $id = $db->insert("temp_sample_report", $data);
+            }
         }
     }
+
+    $_SESSION['alertMsg'] = "Imported results successfully";
+    //Add event log
+    $eventType            = 'import';
+    $action               = ucwords($_SESSION['userName']) . ' imported a new test result with the sample code ' . $sampleCode;
+    $resource             = 'import-result';
+    $data                 = array(
+        'event_type' => $eventType,
+        'action' => $action,
+        'resource' => $resource,
+        'date_time' => $general->getDateTime()
+    );
+    $db->insert("activity_log", $data);
+    
+    //new log for update in result
+    $data = array(
+        'user_id' => $_SESSION['userId'],
+        'vl_sample_id' => $id,
+        'updated_on' => $general->getDateTime()
+    );
+    $db->insert("log_result_updates", $data);
+    
+    header("location:../vl-print/vlResultUnApproval.php");
+    
+}
+catch (Exception $exc) {
+    error_log($exc->getMessage());
+    error_log($exc->getTraceAsString());
 }
