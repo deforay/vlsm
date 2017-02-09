@@ -46,111 +46,95 @@ try {
         
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
         
-          $sheetData   = $sheetData->toArray(null, true, true, true);
-          $m           = 0;
-          $skipTillRow = 2;
+        $sheetData   = $sheetData->toArray(null, true, true, true);
+        $m           = 0;
+        $skipTillRow = 2;
         
-          $sampleIdCol='E';
-          $sampleIdRow='2';
-          $logValCol='';
-          $logValRow='';
-          $absValCol='I';
-          $absValRow='2';
-          $txtValCol='';
-          $txtValRow='';
-          $testingDateCol='AC';
-          $testingDateRow='2';
-          $logAndAbsoluteValInSameCol='no';
-          $sampleTypeCol = 'F';
-          $batchCodeCol = 'G';
-          $flagCol = 'K';
-          //$flagRow = '2';
+        $sampleIdCol   = "B";
+        $resultCol     = "F";
+        $txtValCol     = "G";
+        $sampleTypeCol = "C";
+        $batchCodeVal  = "";
+        $flagCol       = "K";
+        $testDateCol   = "L";
         
         foreach ($sheetData as $rowIndex => $row) {
             
-          if ($rowIndex < $skipTillRow)
-              continue;
-          
-          //echo "<pre>"; print_r($row); die;
-          
-          $sampleCode    = "";
-          $batchCode     = "";
-          $sampleType    = "";
-          $absDecimalVal = "";
-          $absVal        = "";
-          $logVal        = "";
-          $txtVal        = "";
-          $resultFlag    = "";
-          $testingDate   = "";
-           
-         
-          $sampleCode = $row[$sampleIdCol];
-          $sampleType = $row[$sampleTypeCol];
-          
-          $batchCode = $row[$batchCodeCol];
-          $resultFlag = $row[$flagCol];
-          
-          //$d=explode(" ",$row[$testingDateCol]);
-          ////print_r($resVal);die;
-          //$testingDate=str_replace("/","-",$d[0],$checked);
-          //die($testingDate);
-          //
-          ////$testingDate = date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
-          
-          // Date time in the provided Roche Sample file is in this format : 9/9/16 12:22
-          $testingDate = DateTime::createFromFormat('m/d/y H:i', $row[$testingDateCol])->format('Y-m-d H:i');          
-        
-          
-          if(trim($row[$absValCol])!=""){
-                $resVal=(int)$row[$absValCol];
-                if($resVal > 0){
-                    $absVal=trim(str_replace("cp/ml","",$row[$absValCol]));
-                    $logVal=floor(log10($absVal));
-                    $txtVal="";
-                }else{
-                    $absVal="";
-                    $logVal="";
-                    //check signs and cp/ml
-                    $eTxtVal=trim($row[$absValCol]);
-                    $stReplace = str_replace("cp/ml","",$eTxtVal);
-                    $resVal=(int)$stReplace;
-                    if($resVal > 0){
-                    $absVal=trim($stReplace);
-                    $logVal=floor(log10($absVal));
-                    $txtVal="";
-                    }else{
-                         $absVal="";
-                         $logVal="";
-                         $txtVal=trim($stReplace);
-                    }
+            if ($rowIndex < $skipTillRow)
+                continue;
+            
+            $sampleCode    = "";
+            $batchCode     = "";
+            $sampleType    = "";
+            $absDecimalVal = "";
+            $absVal        = "";
+            $logVal        = "";
+            $txtVal        = "";
+            $resultFlag    = "";
+            $testingDate   = "";
+            
+            
+            $sampleCode = $row[$sampleIdCol];
+            
+            if (strpos($row[$resultCol], 'Log (Copies / mL)') !== false) {
+                $logVal = str_replace("Log (Copies / mL)", "", $row[$resultCol]);
+                $logVal = str_replace(",", ".", $logVal);
+            } else if (strpos($row[$resultCol], 'Copies / mL') !== false) {
+                $absVal = str_replace("Copies / mL", "", $row[$resultCol]);
+                preg_match_all('!\d+!', $absVal, $absDecimalVal);
+                $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
+            } else {
+                if ($row[$resultCol] == "" || $row[$resultCol] == null) {
+                    $txtVal     = "Failed";
+                    $resultFlag = $row[$flagCol];
+                } else {
+                    $txtVal     = $row[$flagCol];
+                    $resultFlag = $row[$flagCol];
+                    $absVal     = "";
+                    $logVal     = "";
                 }
-            }          
+            }
             
+            $sampleType = $row[$sampleTypeCol];
+            if ($sampleType == 'Patient') {
+                $sampleType = 'S';
+            }
             
-          if ($sampleCode == "")
-              continue;
+            $batchCode = "";
             
-
-          $infoFromFile[$sampleCode] = array(
-              "sampleCode" => $sampleCode,
-              "logVal" => trim($logVal),
-              "absVal" => $absVal,
-              "absDecimalVal" => $absDecimalVal,
-              "txtVal" => $txtVal,
-              "resultFlag" => $resultFlag,
-              "testingDate" => $testingDate,
-              "sampleType" => $sampleType,
-              "batchCode" => $batchCode
-          );
+            // Date time in the provided Abbott Sample file is in this format : 11/23/2016 2:22:35 PM
+            $testingDate = DateTime::createFromFormat('m/d/Y g:i:s A', $row[$testDateCol])->format('Y-m-d H:i');
             
+            if ($sampleCode == "")
+                continue;
+            
+            if (!isset($infoFromFile[$sampleCode])) {
+                $infoFromFile[$sampleCode] = array(
+                    "sampleCode" => $sampleCode,
+                    "logVal" => trim($logVal),
+                    "txtVal" => $txtVal,
+                    "resultFlag" => $resultFlag,
+                    "testingDate" => $testingDate,
+                    "sampleType" => $sampleType,
+                    "batchCode" => $batchCode
+                );
+            } else {
+                $infoFromFile[$sampleCode]['absVal']        = $absVal;
+                $infoFromFile[$sampleCode]['absDecimalVal'] = $absDecimalVal;
+            }
             
             $m++;
         }
         
-        //echo "<pre>"; print_r($infoFromFile); die;
+        /*
+         * OK, so the reason why we are putting the information into an array ($infoFromFile)
+         * is because the Abbott data has same sample ID repeated in two rows, with one row
+         * giving log and another giving abs value. So we create the $infoFromFile array to
+         * ensure we get both log and abs value for the given sample
+         */
+        
         
         foreach ($infoFromFile as $sampleCode => $d) {
-            
             $data = array(
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
@@ -203,7 +187,7 @@ try {
             }
         }
     }
-    //die;
+    
     $_SESSION['alertMsg'] = "Imported results successfully";
     //Add event log
     $eventType            = 'import';
