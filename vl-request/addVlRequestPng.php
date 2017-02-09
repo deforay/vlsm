@@ -327,7 +327,8 @@ foreach($fResult as $fDetails){
 			 </label>
 			</td>
                       </tr>
-                      </tr>
+		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">CPHL Use Only </td></tr>
+                      <tr>
 			<td colspan="2" class="sampleQuality"><label for="breastfeeding">Sample Quality</label>&nbsp;
 			 <label class="radio-inline">
 			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality">Accept
