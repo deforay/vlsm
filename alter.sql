@@ -729,3 +729,14 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 UPDATE `privileges` SET `privilege_name` = 'addImportTestResult.php' WHERE `privileges`.`privilege_id` = 53;
 
 UPDATE `privileges` SET `display_name` = 'Import Test Result' WHERE `privileges`.`privilege_id` = 53;
+
+--Pal 21-Jan-2017
+INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'monthly_report', 'Monthly Report');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '18', 'monthlyReport.php', 'Access');
+
+UPDATE `resources` SET `resource_name` = 'vl_statistics' WHERE `resources`.`resource_id` = 18;
+
+UPDATE `resources` SET `display_name` = 'Viral Load Statistics' WHERE `resources`.`resource_id` = 18;
+
+UPDATE `privileges` SET `privilege_name` = 'vlStatistics.php' WHERE `privileges`.`privilege_id` = 54;

@@ -135,6 +135,10 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importTestRequestMenu").addClass('active');
+  }else if (splitsUrl=='vlStatistics.php') {
+    $(".program").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlStatistics").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');
