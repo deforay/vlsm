@@ -12,8 +12,8 @@ $country = $configResult[0]['value'];
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('state','district','facility_name','facility_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'comments');
-        $orderColumns = array('state','district','facility_name','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','comments');
+        $aColumns = array('state','district','facility_name','facility_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'vl.comments');
+        $orderColumns = array('state','district','facility_name','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','vl.comments');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
