@@ -98,6 +98,7 @@ $batResult = $db->rawQuery($batQuery);
 		  <td colspan="5"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
+		    &nbsp;<a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllPendingVlRequestInXml();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Xml</a>
 		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		    </td>
 		  <td>
@@ -428,7 +429,7 @@ $batResult = $db->rawQuery($batQuery);
     }
    }
    
-   function exportAllPendingVlRequest(){
+  function exportAllPendingVlRequest(){
      $.blockUI();
      var requestSampleType = $('#requestSampleType').val();
      $.post("generatePendingVlRequestExcel.php", { reqSampleType:requestSampleType},
@@ -441,6 +442,22 @@ $batResult = $db->rawQuery($batQuery);
        }
       });
   }
+  
+  function exportAllPendingVlRequestInXml(){
+     $.blockUI();
+     var requestSampleType = $('#requestSampleType').val();
+     $.post("generatePendingVlRequestXml.php", { reqSampleType:requestSampleType},
+      function(data){
+	  $.unblockUI();
+       if(data === "" || data === null || data === undefined){
+		alert('Unable to generate excel..');
+       }else{
+		window.open('../temporary/'+data,'_blank');
+		//location.href = '../temporary/'+data;
+       }
+      });
+  }
+  
 //  
 //  function printBarcode(tId) {
 //    $.post("printBarcode.php",{id:tId},

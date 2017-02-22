@@ -290,9 +290,11 @@ $batResult = $db->rawQuery($batQuery);
      $path = '../includes/vlRequestResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }else if($configFormResult[0]['value'] == 5){
+     $path = '';  
     }
     ?>
-      $.post("<?php echo$path; ?>", { source:'print', id : id},
+      $.post("<?php echo $path; ?>", { source:'print', id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
@@ -311,6 +313,8 @@ $batResult = $db->rawQuery($batQuery);
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }else if($configFormResult[0]['value'] == 4){
+     $path = '';  
     }
     ?>
     $.post("<?php echo $path;?>", { source:'print',id:id},
