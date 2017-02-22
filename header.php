@@ -288,6 +288,8 @@ $formConfigResult=$db->query($formConfigQuery);
                     <li class="allMenu vlHighMenu"><a href="../program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
                     <?php }  if(isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])){ ?>
                     <!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
+                    <?php } if(isset($_SESSION['privileges']) && in_array("vlStatistics.php", $_SESSION['privileges'])){ ?>
+                    <li class="allMenu vlStatistics"><a href="../program-management/vlStatistics.php"><i class="fa fa-circle-o"></i> Viral Load Statistics</a></li>
                     <?php } ?>
                 </ul>
             </li>
