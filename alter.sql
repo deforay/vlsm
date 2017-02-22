@@ -747,7 +747,7 @@ ALTER TABLE `vl_request_form` ADD `sample_to_transport` VARCHAR(255) NULL DEFAUL
 --ilahir 20-Feb-2017
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '8', 'addImportXmlTestRequest.php', 'Import Xml Test Request');
 
---Pal 21-Jan-2017
+--Pal 21-Feb-2017
 INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'monthly_report', 'Monthly Report');
 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '18', 'monthlyReport.php', 'Access');
