@@ -263,6 +263,11 @@ $formConfigResult=$db->query($formConfigQuery);
                 <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])){ ?>
                <li class="allMenu importTestRequestMenu"><a href="../import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>
                 <?php }?>
+                <?php
+                if(isset($_SESSION['privileges']) && in_array("addImportXmlTestRequest.php", $_SESSION['privileges'])){
+                ?>
+                <li class="allMenu importXmlTestRequestMenu"><a href="../import-result/addImportXmlTestRequest.php"><i class="fa fa-circle-o"></i> Import XML Test Request</a></li>
+                <?php } ?>
             </ul>
         </li>
         <?php }

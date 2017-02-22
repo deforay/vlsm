@@ -87,8 +87,8 @@ $configResult=$db->query($globalConfigQuery);
             <option value=""> -- Select Country -- </option>
             <option value="3">DRC</option>
             <option value="4">Zambia</option>
-        </select>
-        <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h4>Clik here to download</h4></a>
+        </select><br>
+        <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h5>Clik here to download</h5></a>
     </div>
     <script src="assets/js/deforayValidation.js"></script>
     <script src="assets/js/jquery.blockUI.js"></script>

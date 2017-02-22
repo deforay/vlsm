@@ -730,6 +730,23 @@ UPDATE `privileges` SET `privilege_name` = 'addImportTestResult.php' WHERE `priv
 
 UPDATE `privileges` SET `display_name` = 'Import Test Result' WHERE `privileges`.`privilege_id` = 53;
 
+
+--saravanan 24-jan-2017
+INSERT INTO `form_details` (`form_id`, `form_name`) VALUES (NULL, 'Papua New Guinea');
+
+--saravanan 02-feb-2017
+ALTER TABLE `vl_request_form` ADD `ward` VARCHAR(255) NULL DEFAULT NULL AFTER `result_coming_from`, ADD `art_cd_cells` VARCHAR(255) NULL DEFAULT NULL AFTER `ward`, ADD `art_cd_date` DATE NULL DEFAULT NULL AFTER `art_cd_cells`, ADD `who_clinical_stage` VARCHAR(255) NULL DEFAULT NULL AFTER `art_cd_date`, ADD `reason_testing_png` TEXT NULL DEFAULT NULL AFTER `who_clinical_stage`, ADD `tech_name_png` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_testing_png`, ADD `qc_tech_name` VARCHAR(255) NULL DEFAULT NULL AFTER `tech_name_png`, ADD `qc_tech_sign` VARCHAR(255) NULL DEFAULT NULL AFTER `qc_tech_name`, ADD `qc_date` VARCHAR(255) NULL DEFAULT NULL AFTER `qc_tech_sign`;
+--saravanan 08-feb-2017
+ALTER TABLE `vl_request_form`  ADD `whole_blood_ml` VARCHAR(50) NULL DEFAULT NULL  AFTER `qc_date`,  ADD `whole_blodd_vial` VARCHAR(50) NULL DEFAULT NULL  AFTER `whole_blood_ml`,  ADD `plasma_ml` VARCHAR(50) NULL DEFAULT NULL  AFTER `whole_blodd_vial`,  ADD `plasma_vial` VARCHAR(50) NULL DEFAULT NULL  AFTER `plasma_ml`,  ADD `plasma_process_time` VARCHAR(255) NULL DEFAULT NULL  AFTER `plasma_vial`,  ADD `plasma_process_tech` VARCHAR(255) NULL DEFAULT NULL  AFTER `plasma_process_time`,  ADD `batch_quality` VARCHAR(255) NULL DEFAULT NULL  AFTER `plasma_process_tech`,  ADD `sample_test_quality` VARCHAR(255) NULL DEFAULT NULL  AFTER `batch_quality`,  ADD `failed_test_date` DATETIME NULL DEFAULT NULL  AFTER `sample_test_quality`,  ADD `failed_test_tech` VARCHAR(255) NULL DEFAULT NULL  AFTER `failed_test_date`,  ADD `failed_vl_result` VARCHAR(255) NULL DEFAULT NULL  AFTER `failed_test_tech`,  ADD `failed_batch_quality` VARCHAR(255) NULL DEFAULT NULL  AFTER `failed_vl_result`,  ADD `failed_sample_test_quality` VARCHAR(255) NULL DEFAULT NULL  AFTER `failed_batch_quality`,  ADD `failed_batch_id` VARCHAR(255) NULL DEFAULT NULL  AFTER `failed_sample_test_quality`;
+
+ALTER TABLE `vl_request_form` CHANGE `whole_blodd_vial` `whole_blood_vial` VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` ADD `clinic_date` DATE NULL DEFAULT NULL AFTER `failed_batch_id`, ADD `report_date` DATE NULL DEFAULT NULL AFTER `clinic_date`;
+ALTER TABLE `vl_request_form` ADD `sample_to_transport` VARCHAR(255) NULL DEFAULT NULL AFTER `report_date`;
+
+--ilahir 20-Feb-2017
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '8', 'addImportXmlTestRequest.php', 'Import Xml Test Request');
+
 --Pal 21-Jan-2017
 INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'monthly_report', 'Monthly Report');
 
