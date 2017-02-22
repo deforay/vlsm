@@ -743,3 +743,6 @@ ALTER TABLE `vl_request_form` CHANGE `whole_blodd_vial` `whole_blood_vial` VARCH
 
 ALTER TABLE `vl_request_form` ADD `clinic_date` DATE NULL DEFAULT NULL AFTER `failed_batch_id`, ADD `report_date` DATE NULL DEFAULT NULL AFTER `clinic_date`;
 ALTER TABLE `vl_request_form` ADD `sample_to_transport` VARCHAR(255) NULL DEFAULT NULL AFTER `report_date`;
+
+--ilahir 20-Feb-2017
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '8', 'addImportXmlTestRequest.php', 'Import Xml Test Request');

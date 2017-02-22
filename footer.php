@@ -135,6 +135,10 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importTestRequestMenu").addClass('active');
+  }else if (splitsUrl=='addImportXmlTestRequest.php') {
+    $(".test").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".importXmlTestRequestMenu").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');
