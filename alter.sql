@@ -764,3 +764,6 @@ UPDATE `facility_type` SET `facility_type_name` = 'Viral Load Lab' WHERE `facili
 INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`) VALUES (NULL, 'lab');
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Minimum Length', 'min_length', '5'), ('Maximum Lenght', 'max_length', '10');
+
+--Pal 23-Feb-2017
+UPDATE `global_config` SET `display_name` = 'Maximum Length' WHERE `global_config`.`name` = 'max_length';

@@ -153,8 +153,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
+                  <div class="col-md-7" style="height:24px;">
+                    <div class="form-group" style="height:24px;">
                       <label for="auto_approval" class="col-lg-4 control-label">Sample Code </label>
                       <div class="col-lg-8">
                         <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>&nbsp;&nbsp;Auto&nbsp;&nbsp;
@@ -164,7 +164,12 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     </div>
                    </div>
                 </div>
-                <div class="row">
+                <div id="auto-sample-eg" class="row" style="display:<?php echo($arr['sample_code'] == 'auto')?'block':'none'; ?>;">
+                  <div class="col-md-7" style="text-align:right;">
+                      <code>eg. Province Code+Year+Month+Date+Increment Counter</code>
+                  </div>
+                </div>
+                <div class="row" style="margin-top:10px;">
                   <div class="col-md-7">
                     <div class="form-group">
                       <label for="auto_approval" class="col-lg-4 control-label">Same user can Review and Approve </label>
@@ -175,13 +180,12 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     </div>
                    </div>
                 </div>
-                
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="min_length" class="col-lg-4 control-label">Minimum Length<span class="mandatory">*</span></label>
+                      <label for="min_length" class="col-lg-4 control-label">Minimum Length<span class="mandatory minlth" style="display:<?php echo($arr['sample_code'] == 'auto')?'none':'block'; ?>">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric isRequired" id="min_length" name="min_length" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['min_length']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="min_length" name="min_length" <?php echo($arr['sample_code'] == 'auto')?'readonly':''; ?> placeholder="Sample Code Min. Length" title="Please enter sample code min length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['min_length']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -189,14 +193,13 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="min_length" class="col-lg-4 control-label">Maximum Length<span class="mandatory">*</span></label>
+                      <label for="min_length" class="col-lg-4 control-label">Maximum Length<span class="mandatory maxlth" style="display:<?php echo($arr['sample_code'] == 'auto')?'none':'block'; ?>">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric isRequired" id="max_length" name="max_length" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['max_length']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="max_length" name="max_length" <?php echo($arr['sample_code'] == 'auto')?'readonly':''; ?> placeholder="Sample Code Max. Length" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['max_length']; ?>"/>
                       </div>
                     </div>
                    </div>
                 </div>
-                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -238,6 +241,28 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
     $("#clearImage").addClass("hide");
     $("#removedLogoImage").val(img);
   }
+  
+  $("input:radio[name=sample_code]").click(function() {
+    if(this.value == 'auto'){
+       $('#auto-sample-eg').show(); 
+       $('#min_length').val(''); 
+       $('.minlth').hide();
+       $('#min_length').removeClass('isRequired'); 
+       $('#min_length').prop('readonly',true); 
+       $('#max_length').val('');
+       $('.maxlth').hide();
+       $('#max_length').removeClass('isRequired'); 
+       $('#max_length').prop('readonly',true);
+    }else{
+       $('#auto-sample-eg').hide();
+       $('.minlth').show();
+       $('#min_length').addClass('isRequired');
+       $('#min_length').prop('readonly',false);
+       $('.maxlth').show();
+       $('#max_length').addClass('isRequired');
+       $('#max_length').prop('readonly',false);
+    }
+  });
 </script>
   
  <?php
