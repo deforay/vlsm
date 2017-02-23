@@ -192,7 +192,7 @@ $sFormat = '';
                           <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" >
                         </td>
                         <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
-                        <td style="width:20%"><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile No." title="Please enter patient Phone No" style="width:100%;" /></td>
+                        <td style="width:20%;"><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile No." title="Please enter patient Phone No" style="width:100%;" /></td>
                       </tr>
                       <tr>
                         <td colspan="2">
@@ -261,7 +261,7 @@ $sFormat = '';
                          ?>
                          <option value="other">Other</option>
                         </select>
-                        <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art eegimen" style="width:100%;display:none;margin-top:2px;" >
+                        <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art regimen" style="width:100%;display:none;margin-top:2px;" >
                         </td>
                       </tr>
                       <tr>

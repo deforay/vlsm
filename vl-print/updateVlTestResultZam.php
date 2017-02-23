@@ -236,6 +236,8 @@ $disable = "disabled = 'disabled'";
                         <td style="width:20%">
                           <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['surname'];?>" <?php echo $disable;?> >
                         </td>
+                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
+                        <td style="width:20%;"><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" <?php echo $disable;?> /></td>
                       </tr>
                       <tr>
                         <td colspan="2">
@@ -294,7 +296,7 @@ $disable = "disabled = 'disabled'";
                         </td>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
-                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" <?php echo $disable;?>>
+                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" <?php echo $disable;?> style="width:100%;">
                          <option value=""> -- Select -- </option>
                          <?php
                          foreach($aResult as $parentRow){
@@ -308,13 +310,9 @@ $disable = "disabled = 'disabled'";
                         </td>
                       </tr>
                       <tr>
-                        <td class="newArtRegimen" style="display: none;"><label for="newArtRegimen">New ART Regimen</label><span class="mandatory">*</span></td>
-                        <td class="newArtRegimen" style="display: none;">
-                          <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
-                        </td>
                         <td><label for="vlTestReason">Reason VL Requested</label></td>
                         <td>
-                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;" <?php echo $disable;?>>
+                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" <?php echo $disable;?>>
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($testReason as $reason){
@@ -325,10 +323,6 @@ $disable = "disabled = 'disabled'";
                             ?>
                            </select>
                         </td>
-                         <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
-                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" <?php echo $disable;?> /></td>
-                      </tr>
-                      <tr>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
                         <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_date'];?>"  <?php echo $disable;?> /></td>
                         <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>

@@ -247,6 +247,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         <td style="width:20%">
                           <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['surname'];?>" >
                         </td>
+                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
+                        <td style="width:20%;"><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" /></td>
                       </tr>
                       <tr>
                         <td colspan="2">
@@ -304,27 +306,24 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                         </td>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
-                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="ARTValue();">
-                         <option value=""> -- Select -- </option>
-                         <?php
-                         foreach($aResult as $parentRow){
-                         ?>
-                          <option value="<?php echo $parentRow['art_code']; ?>"<?php echo ($vlQueryInfo[0]['current_regimen']==$parentRow['art_code'])?"selected='selected'":""?>><?php echo $parentRow['art_code']; ?></option>
-                         <?php
-                         }
-                         ?>
-                         <option value="other">Other</option>
-                        </select>
+                          <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" style="width:100%;" onchange="ARTValue();">
+                            <option value=""> -- Select -- </option>
+                            <?php
+                            foreach($aResult as $parentRow){
+                            ?>
+                             <option value="<?php echo $parentRow['art_code']; ?>"<?php echo ($vlQueryInfo[0]['current_regimen']==$parentRow['art_code'])?"selected='selected'":""?>><?php echo $parentRow['art_code']; ?></option>
+                            <?php
+                            }
+                            ?>
+                            <option value="other">Other</option>
+                         </select>
+                         <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art eegimen" style="width:100%;display:none;margin-top:2px;" >
                         </td>
                       </tr>
                       <tr>
-                        <td class="newArtRegimen" style="display: none;"><label for="newArtRegimen">New ART Regimen</label><span class="mandatory">*</span></td>
-                        <td class="newArtRegimen" style="display: none;">
-                          <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
-                        </td>
                         <td><label for="vlTestReason">Reason VL Requested</label></td>
                         <td>
-                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;" onchange="ReasonVLTest()">
+                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" onchange="ReasonVLTest()">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($testReason as $reason){
@@ -335,17 +334,9 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                             ?>
                             <option value="other">Other</option>
                            </select>
-                          
+                           <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;display:none;margin-top:2px;">
                         </td>
-                        <td class="newVlTestReason" style="display: none;"><label for="newVlTestReason">Reason VL Requested</label><span class="mandatory">*</span></td>
-                        <td class="newVlTestReason" style="display: none;">
-                          <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;" >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
-                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" /></td>
-                        <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
+                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
                         <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_date'];?>" onchange="checkLastVLTestDate();" /></td>
                         <td><label for="lastViralLoadResult">Result Of Last Viral Load<br/>(copies/ml)</label></td>
                         <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>"/></td>
@@ -621,29 +612,28 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
     $.unblockUI();
   }
   
-  function ARTValue()
-  {
+  function ARTValue(){
     var artRegimen = $("#artRegimen").val();
     if(artRegimen=='other'){
-      $(".newArtRegimen").show();
+      $("#newArtRegimen").show();
       $("#newArtRegimen").addClass("isRequired");
     }else{
-      $(".newArtRegimen").hide();
+      $("#newArtRegimen").hide();
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
   
-  function ReasonVLTest()
-  {
+  function ReasonVLTest(){
     var reason = $("#vlTestReason").val();
     if(reason=='other'){
-      $(".newVlTestReason").show();
+      $("#newVlTestReason").show();
       $("#newVlTestReason").addClass("isRequired");
     }else{
-      $(".newVlTestReason").hide();
+      $("#newVlTestReason").hide();
       $("#newVlTestReason").removeClass("isRequired");
     }
   }
+  
   $("#vlResult").bind("keyup change", function(e) {
       if($("#vlResult").val() == ""){
         $(".noResult").show();
