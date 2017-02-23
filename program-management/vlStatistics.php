@@ -64,7 +64,7 @@
                   <th rowspan="2">IPSL#</th>
                   <th rowspan="2">No. of Rejections</th>
                   <th colspan="2" style="text-align:center;">Viral Load Results -Peds</th>
-                  <th colspan="4" style="text-align:center;">Viral Load results -Adults</th>
+                  <th colspan="4" style="text-align:center;">Viral Load Results -Adults</th>
                   <th colspan="2" style="text-align:center;">Viral Load Results- Pregnant/Breastfeeding Women</th>
                   <th colspan="2" style="text-align:center;">Age/Sex Unknown</th>
                   <th colspan="2" style="text-align:center;">Totals</th>
