@@ -228,9 +228,7 @@ $sFormat = '';
                            <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" > No
                           </label>
                         </td>
-                        
                          <td colspan="2" class="femaleElements"><label for="breastfeeding">Is Patient Breastfeeding?</label>
-                        
                           <label class="radio-inline">
                              <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding">Yes
                           </label>
@@ -239,7 +237,6 @@ $sFormat = '';
                           </label>
                         </td>
                       </tr>
-                      
                       <tr>
                         <td><label for="patientArtNo">Patient OI/ART Number</label></td>
                         <td>
@@ -269,15 +266,6 @@ $sFormat = '';
                         <td class="newArtRegimen" style="display: none;">
                           <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
                         </td>
-                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
-                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
-                        <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
-                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" onchange="checkLastVLTestDate();" style="width:100%;" /></td>
-                      </tr>
-                      
-                      <tr>
-                        <td><label for="lastViralLoadResult">Result Of Last Viral Load<br/>(copies/ml)</label></td>
-                        <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" /></td>
                         <td><label for="vlTestReason">Reason VL Requested</label></td>
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;" onchange="ReasonVLTest()">
@@ -296,6 +284,14 @@ $sFormat = '';
                         <td class="newVlTestReason" style="display: none;">
                           <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;" >
                         </td>
+                      </tr>
+                      <tr>
+                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
+                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
+                        <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
+                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" onchange="checkLastVLTestDate();" style="width:100%;" /></td>
+                        <td><label for="lastViralLoadResult">Result Of Last Viral Load<br/>(copies/ml)</label></td>
+                        <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" /></td>
                       </tr>
                       <tr>
                         <td><label for="enhanceSession">Enhanced Sessions</label></td>
@@ -637,17 +633,20 @@ $sFormat = '';
       $("#newVlTestReason").removeClass("isRequired");
     }
   }
+  
   $("input:radio[name=gender]").click(function() {
-      if($(this).val() == 'male'){
-         $(".femaleElements").hide();
-      }else if($(this).val() == 'female'){
-        $(".femaleElements").show();
-      }else if($(this).val() == 'not_recorded'){
-        $(".femaleElements").show();
-      }
+    if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
+      $('input[name="patientPregnant"]').prop('checked', false);
+      $('input[name="patientPregnant"]').prop('disabled', true);
+      $('input[name="breastfeeding"]').prop('checked', false);
+      $('input[name="breastfeeding"]').prop('disabled', true);
+    }else if($(this).val() == 'female'){
+      $('input[name="patientPregnant"]').prop('disabled', false);
+      $('input[name="breastfeeding"]').prop('disabled', false);
+    }
   });
-    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
-    {
+  
+  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
         var removeDots=obj.value.replace(/\./g,"");
         var removeDots=removeDots.replace(/\,/g,"");
         //str=obj.value;
@@ -661,8 +660,9 @@ $sFormat = '';
                 $(".removeValue").val('');
             }
         });
-    }
-    function getDateOfBirth(){
+  }
+    
+  function getDateOfBirth(){
       var today = new Date();
       var dob = $("#dob").val();
       if($.trim(dob) == ""){
@@ -700,7 +700,8 @@ $sFormat = '';
       $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
       //console.log(diff.getUTCDate() - 1); // Gives day count of difference
   }
-    function checkSampleReceviedDate(){
+  
+  function checkSampleReceviedDate(){
       var sampleCollectionDate = $("#sampleCollectionDate").val();
       var sampleReceivedDate = $("#sampleReceivedDate").val();
       if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= '') {
@@ -732,7 +733,7 @@ $sFormat = '';
       }
     }
     
-    function checkSampleTestingDate(){
+  function checkSampleTestingDate(){
       var sampleCollectionDate = $("#sampleCollectionDate").val();
       var sampleTestingDate = $("#sampleTestingDateAtLab").val();
       if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= '') {
@@ -764,7 +765,7 @@ $sFormat = '';
       }
     }
     
-    function checkARTInitiationDate(){
+  function checkARTInitiationDate(){
       var dob = $("#dob").val();
       var artInitiationDate = $("#dateOfArtInitiation").val();
       if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
@@ -794,7 +795,7 @@ $sFormat = '';
       }
     }
     
-    function checkLastVLTestDate(){
+  function checkLastVLTestDate(){
       var artInitiationDate = $("#dateOfArtInitiation").val();
       var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
       if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
@@ -826,7 +827,7 @@ $sFormat = '';
       }
     }
     //check machine name and limit
-    function getMachineName(){
+  function getMachineName(){
       machineName = true;
       var mName = $("#testingPlatform").val();
       var absValue = $("#vlResult").val();
