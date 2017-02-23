@@ -51,7 +51,7 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="rs_email" class="col-lg-3 control-label">Email Id (gmail only)*</label>
+                      <label for="rs_email" class="col-lg-3 control-label">Email Id <code>(Gmail only)</code>*</label>
                       <div class="col-lg-9">
                         <input type="text" class="form-control isEmail isRequired" id="rs_email" name="rs_email" placeholder="eg.hello.vl@gmail.com" title="Please enter email" value="<?php echo $arr['rs_email']; ?>">
                       </div>
@@ -63,7 +63,7 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                     <div class="form-group">
                       <label for="rs_password" class="col-lg-3 control-label">Password *</label>
                       <div class="col-lg-9">
-                        <input type="text" class="form-control isRequired" id="rs_password" name="rs_password" placeholder="Password" title="Please enter password" value="<?php echo $arr['rs_password']; ?>">
+                        <input type="password" class="form-control isRequired" id="rs_password" name="rs_password" placeholder="Password" title="Please enter password" value="<?php echo $arr['rs_password']; ?>">
                       </div>
                     </div>
                    </div>
