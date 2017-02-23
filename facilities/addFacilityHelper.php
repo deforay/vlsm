@@ -24,9 +24,9 @@ try {
 	if(isset($_SESSION['instanceId'])){
 	     $instanceId = $_SESSION['instanceId'];
 	}
+	$email = '';
 	if(trim($_POST['reportEmail'])!=''){
 	    $expEmail = explode(",",$_POST['reportEmail']);
-	    $email = '';
 	    for($i=0;$i<count($expEmail);$i++){
 		$reportEmail = filter_var($expEmail[$i], FILTER_VALIDATE_EMAIL);
 		if($reportEmail!=''){
