@@ -12,7 +12,7 @@ $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.f
 $result = $db->rawQuery($query);
 $sTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
-$facilityQuery="SELECT * FROM facility_details where status='active'";
+$facilityQuery="SELECT * FROM facility_details where status='active' and facility_type='2'";
 $facilityResult = $db->rawQuery($facilityQuery);
 //Get batches
 $batchQuery="SELECT * FROM batch_details";

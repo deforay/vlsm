@@ -11,6 +11,19 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
+
+//check filters
+$collectionDate = '';$batchCode = '';$sampleType = '';$facilityName = '';$gender = '';$status ='';
+$lastUrl = strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");
+$lastUrl1 = strpos($_SERVER['HTTP_REFERER'],"vlTestResult.php");
+if($lastUrl!='' || $lastUrl1!=''){
+$collectionDate=(isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate']!='' ? $_COOKIE['collectionDate'] :  '');
+$batchCode=(isset($_COOKIE['batchCode']) && $_COOKIE['batchCode']!='' ? $_COOKIE['batchCode'] :  '');
+$sampleType=(isset($_COOKIE['sampleType']) && $_COOKIE['sampleType']!='' ? $_COOKIE['sampleType'] :  '');
+$facilityName=(isset($_COOKIE['facilityName']) && $_COOKIE['facilityName']!='' ? $_COOKIE['facilityName'] :  '');
+$gender=(isset($_COOKIE['gender']) && $_COOKIE['gender']!='' ? $_COOKIE['gender'] :  '');
+$status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'] :  '');
+}
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -18,7 +31,7 @@ $batResult = $db->rawQuery($batQuery);
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Enter VL Result</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home <?php echo strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");?></a></li>
         <li class="active">Enter VL Result</li>
       </ol>
     </section>
@@ -32,7 +45,7 @@ $batResult = $db->rawQuery($batQuery);
 		<tr>
 		    <td><b>Sample Collection Date&nbsp;:</b></td>
 		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;" value="<?php echo $collectionDate;?>"/>
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
@@ -41,7 +54,7 @@ $batResult = $db->rawQuery($batQuery);
 			 <?php
 			 foreach($batResult as $code){
 			  ?>
-			  <option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
+			  <option value="<?php echo $code['batch_code'];?>"<?php echo ($batchCode==$code['batch_code'])?"selected='selected'":""?> ><?php echo $code['batch_code'];?></option>
 			  <?php
 			 }
 			 ?>
@@ -55,7 +68,7 @@ $batResult = $db->rawQuery($batQuery);
 			<?php
 			foreach($sResult as $type){
 			 ?>
-			 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
+			 <option value="<?php echo $type['sample_id'];?>"<?php echo ($sampleType==$type['sample_id'])?"selected='selected'":""?>><?php echo ucwords($type['sample_name']);?></option>
 			 <?php
 			}
 			?>
@@ -70,7 +83,7 @@ $batResult = $db->rawQuery($batQuery);
 			<?php
 			foreach($fResult as $name){
 			 ?>
-			 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+			 <option value="<?php echo $name['facility_id'];?>"<?php echo ($facilityName==$name['facility_id'])?"selected='selected'":""?>><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
 			 <?php
 			}
 			?>
@@ -82,23 +95,23 @@ $batResult = $db->rawQuery($batQuery);
 		  <td>
 		    <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
 		      <option value=""> -- Select -- </option>
-		      <option value="male">Male</option>
-		      <option value="female">Female</option>
-		      <option value="not_recorded">Not Recorded</option>
+		      <option value="male"<?php echo ($gender=='male')?"selected='selected'":""?>>Male</option>
+		      <option value="female"<?php echo ($gender=='female')?"selected='selected'":""?>>Female</option>
+		      <option value="not_recorded"<?php echo ($gender=='not_recorded')?"selected='selected'":""?>>Not Recorded</option>
 		    </select>
 		  </td>
 		  <td><b>Status&nbsp;:</b></td>
 		  <td>
 		      <select style="width: 220px;" name="status" id="status" class="form-control" title="Please choose status">
 			<option value="">-- Select --</option>
-			<option value="7">Accepted</option>
-			<option value="4">Rejected</option>
+			<option value="7"<?php echo ($status=='7')?"selected='selected'":""?>>Accepted</option>
+			<option value="4"<?php echo ($status=='4')?"selected='selected'":""?>>Rejected</option>
 		      </select>
 		    </td>
 		</tr>
 		<tr>
 		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
-		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+		    &nbsp;<button class="btn btn-danger btn-sm" onclick="reset();"><span>Reset</span></button>
 			&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf('');"><span>Result PDF</span></button>
 			&nbsp;<a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllVlTestResult();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
 			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
@@ -198,7 +211,15 @@ $batResult = $db->rawQuery($batQuery);
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
-     $('#sampleCollectionDate').val("");
+     <?php
+     if(!isset($_COOKIE['collectionDate']) || $_COOKIE['collectionDate']==''){
+      ?>
+      $('#sampleCollectionDate').val("");
+      <?php
+     } else if(($lastUrl!='' || $lastUrl1!='') && isset($_COOKIE['collectionDate'])){ ?>
+      $('#sampleCollectionDate').val("<?php echo $_COOKIE['collectionDate'];?>");
+     <?php } ?>
+     
      loadVlRequestData();
      $(".showhideCheckBox").change(function(){
             
@@ -279,6 +300,12 @@ $batResult = $db->rawQuery($batQuery);
   function searchVlRequestData(){
     $.blockUI();
     oTable.fnDraw();
+    document.cookie = "collectionDate="+$("#sampleCollectionDate").val();
+    document.cookie = "batchCode="+$("#batchCode").val();
+    document.cookie = "sampleType="+$("#sampleType").val();
+    document.cookie = "facilityName="+$("#facilityName").val();
+    document.cookie = "gender="+$("#gender").val();
+    document.cookie = "status="+$("#status").val();
     $.unblockUI();
   }
   
@@ -324,7 +351,6 @@ $batResult = $db->rawQuery($batQuery);
 	  }else{
 	      window.open('../uploads/'+data,'_blank');
 	  }
-	  
       });
     $.unblockUI();
   }
@@ -340,6 +366,16 @@ $batResult = $db->rawQuery($batQuery);
 	 location.href = '../temporary/'+data;
        }
       });
+  }
+  function reset()
+  {
+    document.cookie = "collectionDate=";
+    document.cookie = "batchCode=";
+    document.cookie = "sampleType=";
+    document.cookie = "facilityName=";
+    document.cookie = "gender=";
+    document.cookie = "status=";
+    window.location.reload();
   }
 </script>
  <?php
