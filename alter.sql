@@ -757,3 +757,10 @@ UPDATE `resources` SET `resource_name` = 'vl_statistics' WHERE `resources`.`reso
 UPDATE `resources` SET `display_name` = 'Viral Load Statistics' WHERE `resources`.`resource_id` = 18;
 
 UPDATE `privileges` SET `privilege_name` = 'vlStatistics.php' WHERE `privileges`.`privilege_id` = 54;
+
+--saravanan 23-feb-2017
+UPDATE `facility_type` SET `facility_type_name` = 'Viral Load Lab' WHERE `facility_type`.`facility_type_id` = 2;
+
+INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`) VALUES (NULL, 'lab');
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Minimum Length', 'min_length', '5'), ('Maximum Lenght', 'max_length', '10');
