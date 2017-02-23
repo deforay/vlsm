@@ -63,7 +63,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
           $mail->AddAttachment($file_to_attach);
           $message='';
           if(isset($_POST['message']) && trim($_POST['message'])!=""){
-             $message =ucfirst($_POST['message']);
+            $message =ucfirst(nl2br($_POST['message']));
           }
           $mail->msgHTML($message);
           if ($mail->send()){
