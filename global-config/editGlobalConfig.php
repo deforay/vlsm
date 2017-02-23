@@ -176,6 +176,27 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                    </div>
                 </div>
                 
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="min_length" class="col-lg-4 control-label">Minimum Length<span class="mandatory">*</span></label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control checkNum isNumeric isRequired" id="min_length" name="min_length" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['min_length']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="min_length" class="col-lg-4 control-label">Maximum Length<span class="mandatory">*</span></label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control checkNum isNumeric isRequired" id="max_length" name="max_length" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['max_length']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
