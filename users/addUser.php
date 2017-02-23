@@ -48,23 +48,15 @@ $result = $db->rawQuery($query);
                   </div>
                 </div>
                 <div class="row">
-                   <!--<div class="col-md-6">
-                    <div class="form-group">
-                        <label for="mobileNo" class="col-lg-4 control-label">Mobile Number <span class="mandatory">*</span></label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="mobileNo" name="mobileNo" placeholder="Mobile Number" title="Please enter mobile number"/>
-                        </div>
-                    </div>
-                  </div>-->
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="loginId" class="col-lg-4 control-label">Login Id <span class="mandatory">*</span></label>
+                        <label for="phoneNo" class="col-lg-4 control-label">Phone Number </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" onblur="checkNameValidation('user_details','login_id',this,null,'This login id already exists.Try another login id',null)"/>
+                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" title="Please enter phone number"/>
                         </div>
                     </div>
                   </div>
-                   <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="role" class="col-lg-4 control-label">Role <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
@@ -84,7 +76,15 @@ $result = $db->rawQuery($query);
                 </div>
                 
                 <div class="row">
-                   <div class="col-md-6">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="loginId" class="col-lg-4 control-label">Login Id <span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" onblur="checkNameValidation('user_details','login_id',this,null,'This login id already exists.Try another login id',null)"/>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="password" class="col-lg-4 control-label">Password <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
@@ -92,6 +92,8 @@ $result = $db->rawQuery($query);
                         </div>
                     </div>
                   </div>
+                </div>
+                <div class="row">
                    <div class="col-md-6">
                     <div class="form-group">
                         <label for="confirmPassword" class="col-lg-4 control-label">Confirm Password <span class="mandatory">*</span></label>
