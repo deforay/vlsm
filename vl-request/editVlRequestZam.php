@@ -528,16 +528,17 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
     }
   });
     function validateNow(){
-    flag = deforayValidator.init({
-        formId: 'vlRequestForm'
-    });
-    var format = '<?php echo $arr['sample_code'];?>';
+      var format = '<?php echo $arr['sample_code'];?>';
       var sCodeLentgh = $("#sampleCode").val();
       var minLength = '<?php echo $arr['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
         alert("Sample code length atleast "+minLength+" characters");
         return false;
       }
+      flag = deforayValidator.init({
+          formId: 'vlRequestForm'
+      });
+    
     $('.isRequired').each(function () {
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
