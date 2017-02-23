@@ -55,7 +55,7 @@ $batchResult = $db->rawQuery($batchQuery);
                     <div class="form-group">
                         <label for="subject" class="col-lg-3 control-label">Subject <span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                           <input type="text" id="subject" name="subject" class="form-control isRequired" placeholder="Subject" title="Please enter subject"/>
+                           <input type="text" id="subject" name="subject" class="form-control isRequired" placeholder="Subject" title="Please enter subject" value="New Test Requests"/>
                         </div>
                     </div>
                   </div>
@@ -85,7 +85,7 @@ $batchResult = $db->rawQuery($batchQuery);
                     <div class="form-group">
                         <label for="message" class="col-lg-3 control-label">Message <span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                           <textarea id="message" name="message" class="form-control isRequired" placeholder="Message" title="Please enter message"></textarea>
+                           <textarea id="message" name="message" class="form-control isRequired" row="6" placeholder="Message" title="Please enter message"></textarea>
                         </div>
                     </div>
                   </div>
@@ -236,6 +236,7 @@ $batchResult = $db->rawQuery($batchQuery);
   <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
   $(document).ready(function() {
+      document.getElementById('message').value = "Hi, \nPFA the new test requests. \n\nThanks";
       $('#facilityName').select2({placeholder: "Select Facilities"});
       $('#batch').select2({placeholder: "Select Batches"});
       $('#sampleCollectionDate').daterangepicker({
