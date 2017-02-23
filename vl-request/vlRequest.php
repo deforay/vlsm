@@ -294,7 +294,6 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-            "aaSorting": [[ 1, "desc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;
