@@ -14,6 +14,7 @@ try {
     'user_name'=>$_POST['userName'],
     'email'=>$_POST['email'],
     'login_id'=>$_POST['loginId'],
+    'phone_number'=>$_POST['phoneNo'],
     'password'=>$password,
     'role_id'=>$_POST['role'],
     'status'=>'active'
