@@ -204,7 +204,7 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' where '.$whereResult.'vl.form_id="'.$arr['vl_form'].'"';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
-	$sQuery = $sQuery." ORDER BY vl.modified_on DESC";
+	$sQuery = $sQuery." ORDER BY vl.created_on DESC";
 	$_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
