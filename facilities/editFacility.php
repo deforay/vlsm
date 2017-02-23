@@ -92,7 +92,7 @@ $pResult = $db->rawQuery($pQuery);
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email" class="col-lg-4 control-label">Report Email </label>
+                        <label for="reportEmail" class="col-lg-4 control-label">Report Email(s) </label>
                         <div class="col-lg-7">
                         <textarea class="form-control" id="reportEmail" name="reportEmail" placeholder="E.g-jeeva@gmail.com,example@gmail.com" rows="3"><?php echo $facilityInfo[0]['report_email']; ?></textarea>
                         </div>
