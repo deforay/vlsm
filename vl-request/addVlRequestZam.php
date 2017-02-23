@@ -191,6 +191,8 @@ $sFormat = '';
                         <td style="width:20%">
                           <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" >
                         </td>
+                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
+                        <td style="width:20%"><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile No." title="Please enter patient Phone No" style="width:100%;" /></td>
                       </tr>
                       <tr>
                         <td colspan="2">
@@ -248,7 +250,7 @@ $sFormat = '';
                         </td>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
-                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="ARTValue();">
+                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" style="width:100%;" onchange="ARTValue();">
                          <option value=""> -- Select -- </option>
                          <?php
                          foreach($aResult as $parentRow){
@@ -259,16 +261,13 @@ $sFormat = '';
                          ?>
                          <option value="other">Other</option>
                         </select>
+                        <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art eegimen" style="width:100%;display:none;margin-top:2px;" >
                         </td>
                       </tr>
                       <tr>
-                        <td class="newArtRegimen" style="display: none;"><label for="newArtRegimen">New ART Regimen</label><span class="mandatory">*</span></td>
-                        <td class="newArtRegimen" style="display: none;">
-                          <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
-                        </td>
                         <td><label for="vlTestReason">Reason VL Requested</label></td>
                         <td>
-                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;" onchange="ReasonVLTest()">
+                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" onchange="ReasonVLTest()">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($testReason as $reason){
@@ -279,15 +278,8 @@ $sFormat = '';
                             ?>
                             <option value="other">Other</option>
                            </select>
+                            <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;display:none;margin-top:2px;">
                         </td>
-                        <td class="newVlTestReason" style="display: none;"><label for="newVlTestReason">Reason VL Requested</label><span class="mandatory">*</span></td>
-                        <td class="newVlTestReason" style="display: none;">
-                          <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;" >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
-                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
                         <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" onchange="checkLastVLTestDate();" style="width:100%;" /></td>
                         <td><label for="lastViralLoadResult">Result Of Last Viral Load<br/>(copies/ml)</label></td>
@@ -607,29 +599,29 @@ $sFormat = '';
         $(".noResult").hide();
       }
   });
-   function checkRejectedReason()
-{
-  $("#rejectionReason").addClass("isRequired");
-}
-  function ARTValue()
-  {
+  
+  function checkRejectedReason(){
+    $("#rejectionReason").addClass("isRequired");
+  }
+
+  function ARTValue(){
     var artRegimen = $("#artRegimen").val();
     if(artRegimen=='other'){
-      $(".newArtRegimen").show();
+      $("#newArtRegimen").show();
       $("#newArtRegimen").addClass("isRequired");
     }else{
-      $(".newArtRegimen").hide();
+      $("#newArtRegimen").hide();
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
-  function ReasonVLTest()
-  {
+  
+  function ReasonVLTest(){
     var reason = $("#vlTestReason").val();
     if(reason=='other'){
-      $(".newVlTestReason").show();
+      $("#newVlTestReason").show();
       $("#newVlTestReason").addClass("isRequired");
     }else{
-      $(".newVlTestReason").hide();
+      $("#newVlTestReason").hide();
       $("#newVlTestReason").removeClass("isRequired");
     }
   }
