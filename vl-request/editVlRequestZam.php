@@ -10,6 +10,21 @@ $arr = array();
 for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
+if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
+  $numeric = '';
+  $maxLength = '';
+  if($arr['max_length']!='' && $arr['sample_code']=='alphanumeric'){
+  $maxLength = $arr['max_length'];
+  $maxLength = "maxlength=".$maxLength;
+  }
+}else{
+  $numeric = 'checkNum';
+  $maxLength = '';
+  if($arr['max_length']!=''){
+  $maxLength = $arr['max_length'];
+  $maxLength = "maxlength=".$maxLength;
+  }
+}
 //sample rejection reason
 $rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
 $rejectionResult = $db->rawQuery($rejectionQuery);
@@ -153,7 +168,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','This sample code already exists.Try another number',null)" />
+                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','This sample code already exists.Try another number',null)" />
                         </div>
                       </div>
                     </div>
@@ -393,8 +408,8 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
                             </select>
                           <?php } ?>
                         </td>
-                        <td><label for="testMethods">Test Methods</label></td>
-                        <td>
+                        <td><label for="testMethods">Test Methods</label>
+                        
                           <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
                           <option value=""> -- Select -- </option>
                           <option value="individual"<?php echo ($vlQueryInfo[0]['test_methods']=='individual')?"selected='selected'":""?>>Individual</option>
@@ -516,6 +531,13 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
     });
+    var format = '<?php echo $arr['sample_code'];?>';
+      var sCodeLentgh = $("#sampleCode").val();
+      var minLength = '<?php echo $arr['min_length'];?>';
+      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+        alert("Sample code length atleast "+minLength+" characters");
+        return false;
+      }
     $('.isRequired').each(function () {
             ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
