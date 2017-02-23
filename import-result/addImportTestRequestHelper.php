@@ -252,7 +252,14 @@ try {
                            $data['modified_on'] = $general->getDateTime();
                        }
                     }
-                    $db->insert('vl_request_form',$data);
+                    $sampleQuery = 'select vl_sample_id from vl_request_form where sample_code = "'.$data['sample_code'].'"';
+                    $sampleResult = $db->rawQuery($sampleQuery);
+                    if(isset($sampleResult[0]['vl_sample_id'])){
+                      $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+                      $db->update('vl_request_form',$data);
+                    }else{
+                      $db->insert('vl_request_form',$data);  
+                    }
                 }
                 $_SESSION['alertMsg']="Test Request Imported successfully";
                 header("location:../vl-print/vlTestResult.php");

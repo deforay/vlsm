@@ -264,8 +264,8 @@ $disable = "disabled = 'disabled'";
                         <td>
                           <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" value="<?php echo $vlQueryInfo[0]['age_in_mnts'];?>" <?php echo $disable;?>>
                         </td>
-                        <td class="femaleElements"><label for="patientPregnant">Is Patient Pregnant ?</label></td>
-                        <td class="femaleElements">
+                        <td><label for="patientPregnant">Is Patient Pregnant ?</label></td>
+                        <td>
                           <label class="radio-inline">
                            <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='yes')?"checked='checked'":""?> <?php echo $disable;?>> Yes
                           </label>
@@ -273,9 +273,7 @@ $disable = "disabled = 'disabled'";
                            <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='no')?"checked='checked'":""?>  <?php echo $disable;?>> No
                           </label>
                         </td>
-                        
-                         <td colspan="2" class="femaleElements"><label for="breastfeeding">Is Patient Breastfeeding?</label>
-                        
+                         <td colspan="2"><label for="breastfeeding">Is Patient Breastfeeding?</label>
                           <label class="radio-inline">
                              <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?> <?php echo $disable;?> >Yes
                           </label>
@@ -314,15 +312,6 @@ $disable = "disabled = 'disabled'";
                         <td class="newArtRegimen" style="display: none;">
                           <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
                         </td>
-                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
-                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" <?php echo $disable;?> /></td>
-                        <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
-                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_date'];?>"  <?php echo $disable;?> /></td>
-                      </tr>
-                      
-                      <tr>
-                        <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>
-                        <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>" <?php echo $disable;?>/></td>
                         <td><label for="vlTestReason">Reason VL Requested</label></td>
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;" <?php echo $disable;?>>
@@ -336,6 +325,14 @@ $disable = "disabled = 'disabled'";
                             ?>
                            </select>
                         </td>
+                         <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
+                        <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" <?php echo $disable;?> /></td>
+                      </tr>
+                      <tr>
+                        <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
+                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_date'];?>"  <?php echo $disable;?> /></td>
+                        <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>
+                        <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>" <?php echo $disable;?>/></td>
                       </tr>
                       <tr>
                         <td><label for="enhanceSession">Enhanced Sessions</label></td>
