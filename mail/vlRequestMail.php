@@ -351,7 +351,7 @@ $batchResult = $db->rawQuery($batchQuery);
         var toName = $(this).find(':selected').data('name');
         var toEmailId = $(this).find(':selected').data('email');
 	var reportEmailId = $(this).find(':selected').data('report-email');
-	if($.trim(toEmailId) == '' || $.trim(reportEmailId) == ''){
+	if($.trim(toEmailId) == ''){
 	  $('.emailSection').html('No valid Email id available. Please add valid email for this facility..');
 	}else{
 	  $('.emailSection').html('<mark>This email will be sent to the facility with an email id <strong>'+toEmailId+'</strong></mark>');
