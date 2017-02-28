@@ -141,8 +141,7 @@ $country = $configResult[0]['value'];
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-	
-	//die($sQuery);
+	//echo $sQuery;die;
         $sResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
@@ -166,6 +165,16 @@ $country = $configResult[0]['value'];
         foreach ($sResult as $aRow) {
 	    //No. of tests per facility & calculate age
 	    $totalQuery = 'SELECT vl_sample_id,patient_dob,gender,is_patient_pregnant,is_patient_breastfeeding,result FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.form_id = '.$country;
+	    if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
+	       $totalQuery = $totalQuery." AND vl.lab_id IN (".$_POST['lab'].")";
+	    }
+	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		if (trim($start_date) == trim($end_date)) {
+		  $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		}else{
+		  $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		}
+	    }
 	    $totalResult = $db->rawQuery($totalQuery);
 	    $lte14n1000 = array();
 	    $lte14ngt1000 = array();
@@ -220,6 +229,16 @@ $country = $configResult[0]['value'];
 	    }
 	    //No. of rejections
 	    $rejectionQuery = 'SELECT vl_sample_id FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.form_id = '.$country.' AND ((vl.rejection IS NOT NULL AND vl.rejection!= "") OR (vl.sample_rejection_reason IS NOT NULL AND vl.sample_rejection_reason!= ""))';
+	    if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
+	       $rejectionQuery = $rejectionQuery." AND vl.lab_id IN (".$_POST['lab'].")";
+	    }
+	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		if (trim($start_date) == trim($end_date)) {
+		  $rejectionQuery = $rejectionQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		}else{
+		  $rejectionQuery = $rejectionQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		}
+	    }
 	    $rejectionResult = $db->rawQuery($rejectionQuery);
 	    $row = array();
             $row[] = ucwords($aRow['state']);

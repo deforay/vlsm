@@ -1,6 +1,6 @@
   <?php
    include('../header.php');
-   $facilityQuery="SELECT * FROM facility_details where status='active'";
+   $facilityQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
    $facilityResult = $db->rawQuery($facilityQuery);
    ?>
    <link href="../assets/css/multi-select.css" rel="stylesheet" />
