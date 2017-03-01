@@ -163,8 +163,8 @@ $country = $configResult[0]['value'];
 	
         
         foreach ($sResult as $aRow) {
-	    //No. of tests per facility & calculate age
-	    $totalQuery = 'SELECT vl_sample_id,patient_dob,gender,is_patient_pregnant,is_patient_breastfeeding,result FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.form_id = '.$country;
+	    //No. of tests per facility & calculate others
+	    $totalQuery = 'SELECT vl_sample_id,patient_dob,gender,is_patient_pregnant,is_patient_breastfeeding,result,rejection,sample_rejection_reason FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.form_id = '.$country;
 	    if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
 	       $totalQuery = $totalQuery." AND vl.lab_id IN (".$_POST['lab'].")";
 	    }
@@ -188,6 +188,7 @@ $country = $configResult[0]['value'];
 	    $unknownxngt1000 = array();
 	    $lte1000total = array();
 	    $gt1000total = array();
+	    $rejection = array();
 	    foreach($totalResult as $tRow){
 		if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
 		    $lte1000total[] = $tRow['vl_sample_id'];
@@ -226,26 +227,17 @@ $country = $configResult[0]['value'];
 			$unknownxngt1000[] = $tRow['vl_sample_id'];
 		    }
 		}
-	    }
-	    //No. of rejections
-	    $rejectionQuery = 'SELECT vl_sample_id FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.form_id = '.$country.' AND ((vl.rejection IS NOT NULL AND vl.rejection!= "") OR (vl.sample_rejection_reason IS NOT NULL AND vl.sample_rejection_reason!= ""))';
-	    if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
-	       $rejectionQuery = $rejectionQuery." AND vl.lab_id IN (".$_POST['lab'].")";
-	    }
-	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-		if (trim($start_date) == trim($end_date)) {
-		  $rejectionQuery = $rejectionQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		}else{
-		  $rejectionQuery = $rejectionQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		if(($tRow['rejection']!= NULL && $tRow['rejection']!= '') || ($tRow['sample_rejection_reason']!= NULL && $tRow['sample_rejection_reason']!= '' && $tRow['sample_rejection_reason'] >0)){
+		    $rejection[] = $tRow['vl_sample_id'];
 		}
 	    }
-	    $rejectionResult = $db->rawQuery($rejectionQuery);
+	    
 	    $row = array();
             $row[] = ucwords($aRow['state']);
             $row[] = ucwords($aRow['district']);
             $row[] = ucwords($aRow['facility_name']);
             $row[] = '';
-            $row[] = count($rejectionResult);
+            $row[] = count($rejection);
             $row[] = count($lte14n1000);
             $row[] = count($lte14ngt1000);
             $row[] = count($gt14mnlte1000);
