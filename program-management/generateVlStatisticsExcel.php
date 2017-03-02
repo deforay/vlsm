@@ -90,8 +90,10 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
           $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
         }
     }
-    $sQuery = $sQuery.'GROUP BY vl.facility_id';
-    //echo $sQuery;die;
+    if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
+        $sQuery = $sQuery.' AND (f.state LIKE "%'.$_POST['searchData'].'%" OR f.district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
+    }
+    $sQuery = $sQuery.' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
     if(count($sResult)>0){
         $vlLabName = explode(' ',$vlLab['facility_name']);
@@ -129,7 +131,9 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
         $sheet->setCellValue('T2', html_entity_decode('Comments ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
         
         $sheet->getStyle('B1')->applyFromArray($headingStyle);
+        $sheet->getStyle('C1')->applyFromArray($headingStyle);
         $sheet->getStyle('F1')->applyFromArray($headingStyle);
+        $sheet->getStyle('G1')->applyFromArray($headingStyle);
         $sheet->getStyle('B2:B3')->applyFromArray($styleArray);
         $sheet->getStyle('C2:C3')->applyFromArray($styleArray);
         $sheet->getStyle('D2:D3')->applyFromArray($styleArray);
@@ -159,13 +163,16 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
         $r=1;
         foreach ($sResult as $aRow) {
           //No. of tests per facility & calculate others
-           $totalQuery = 'SELECT vl_sample_id,patient_dob,gender,is_patient_pregnant,is_patient_breastfeeding,result,rejection,sample_rejection_reason FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.form_id = '.$country;
+           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.rejection,vl.sample_rejection_reason,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.form_id = '.$country;
            if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
                 if (trim($start_date) == trim($end_date)) {
                   $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
                 }else{
                   $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
                 }
+           }
+           if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
+                $totalQuery = $totalQuery.' AND (f.state LIKE "%'.$_POST['searchData'].'%" OR f.district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
            }
            $totalResult = $db->rawQuery($totalQuery);
            $lte14n1000 = array();

@@ -50,6 +50,7 @@
                     <td style="width:30%;">&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<input type="button" onclick="searchData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-info" type="button" onclick="exportVLStatistics()">Export to excel</button>
+		    &nbsp;<button class="" type="button" onclick="exportVLWeeklyReport()">Weekly Report</button>
 		    </td>
                 </tr>
             </table>
@@ -191,7 +192,21 @@
     
     function exportVLStatistics(){
        $.blockUI();
-       $.post("generateVlStatisticsExcel.php",{reportedDate:$("#sampleCollectionDate").val(),lab:$("#lab").val()},
+       $.post("generateVlStatisticsExcel.php",{reportedDate:$("#sampleCollectionDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
+       function(data){
+	     $.unblockUI();
+	     if(data == "" || data == null || data == undefined){
+		 alert('Unable to generate excel..');
+	     }else{
+	        $.unblockUI();
+		location.href = '../temporary/'+data;
+	     }
+       });
+    }
+    
+    function exportVLWeeklyReport(){
+       $.blockUI();
+       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleCollectionDate").val(),lab:$("#lab").val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){
