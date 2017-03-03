@@ -72,7 +72,7 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
  }
  if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab']))> 0){
     $lab = implode(',',$_POST['lab']);
-    $vlLabQuery="SELECT * FROM facility_details where facility_id IN ('$lab') AND status='active'";
+    $vlLabQuery="SELECT * FROM facility_details where facility_id IN ($lab) AND status='active'";
     $vlLabResult = $db->rawQuery($vlLabQuery);
  }else{
     $vlLabQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
