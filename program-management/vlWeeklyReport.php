@@ -16,7 +16,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-signal"></i> VL Statistics
+      <h1><i class="fa fa-signal"></i> VL Weekly Report
       <!--<ol class="breadcrumb">-->
       <!--  <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
@@ -48,15 +48,14 @@
                       </select>
 		    </td>
                     <td style="width:30%;">&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		    &nbsp;<input type="button" onclick="searchData();" value="Search" class="btn btn-success btn-sm">
-		    &nbsp;<button class="btn btn-info" type="button" onclick="exportVLStatistics()">Export to excel</button>
-		    &nbsp;<button class="" type="button" onclick="exportVLWeeklyReport()">Weekly Report</button>
+		       &nbsp;<input type="button" onclick="searchData();" value="Search" class="btn btn-success btn-sm">
+		       &nbsp;<button class="btn btn-info" type="button" onclick="exportVLWeeklyReport()">Export to excel</button>
 		    </td>
                 </tr>
             </table>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="vlStatisticsDataTable" class="table table-bordered table-striped">
+              <table id="vlWeeklyReportDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
 		  <th rowspan="2">Province</th>
@@ -135,7 +134,7 @@
     } );
   
    function loadDataTable(){
-       oTable = $('#vlStatisticsDataTable').dataTable({
+       oTable = $('#vlWeeklyReportDataTable').dataTable({
         "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
             },
@@ -169,7 +168,7 @@
             "aaSorting": [[ 2, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
-            "sAjaxSource": "getVlStatistics.php",
+            "sAjaxSource": "getVlWeeklyReport.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
                 aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
                 aoData.push({"name": "lab", "value": $("#lab").val()});
@@ -190,23 +189,9 @@
        $.unblockUI(); 
     }
     
-    function exportVLStatistics(){
-       $.blockUI();
-       $.post("generateVlStatisticsExcel.php",{reportedDate:$("#sampleCollectionDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
-       function(data){
-	     $.unblockUI();
-	     if(data == "" || data == null || data == undefined){
-		 alert('Unable to generate excel..');
-	     }else{
-	        $.unblockUI();
-		location.href = '../temporary/'+data;
-	     }
-       });
-    }
-    
     function exportVLWeeklyReport(){
        $.blockUI();
-       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleCollectionDate").val(),lab:$("#lab").val()},
+       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleCollectionDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){
