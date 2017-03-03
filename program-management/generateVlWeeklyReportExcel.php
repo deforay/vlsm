@@ -97,6 +97,7 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
  $sheet->mergeCells('S2:S3');
  $sheet->mergeCells('T2:T3');
  
+ $c = 0;
  foreach($vlLabResult as $vlLab){
     $sQuery="SELECT vl.facility_id,f.state,f.district,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.form_id = '".$country."'";
     if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
@@ -114,7 +115,7 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
     if(count($sResult)>0){
         $vlLabName = explode(' ',$vlLab['facility_name']);
         $sheet = new PHPExcel_Worksheet($excel, '');
-        $excel->addSheet($sheet, 0);
+        $excel->addSheet($sheet, $c);
         $sheet->setTitle('Viral Load Statistics '.ucwords($vlLabName[0]));
         
         $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -282,12 +283,15 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
            $colNo++;
          }
         }
+      $c++;
     }
- }
+  }
  //Statistics sheet end
- //Superlab Performance sheet start
+ 
+ //Super lab Performance sheet start
+ if($c > 0){
    $sheet = new PHPExcel_Worksheet($excel, '');
-   $excel->addSheet($sheet, 0);
+   $excel->addSheet($sheet, $c);
    $sheet->setTitle('Super Lab Performance Report');
    
    $sheet->mergeCells('C1:D1');
@@ -417,11 +421,14 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
           $colNo++;
         }
     }
- //Superlab Performance sheet end
- $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-weekly-report-' . date('d-M-Y-H-i-s') . '.xls';
- $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
- echo $filename;
+   //Super lab Performance sheet end
+   $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+   $filename = 'vl-weekly-report-' . date('d-M-Y-H-i-s') . '.xls';
+   $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
+   echo $filename;
+ }else{
+   echo '';
+ }
 }else{
    echo '';
 }
