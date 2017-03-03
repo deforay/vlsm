@@ -139,10 +139,10 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importXmlTestRequestMenu").addClass('active');
-  }else if (splitsUrl=='vlStatistics.php') {
+  }else if (splitsUrl=='vlWeeklyReport.php') {
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
-    $(".vlStatistics").addClass('active');
+    $(".vlWeeklyReport").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');

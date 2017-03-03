@@ -767,3 +767,10 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Minimum L
 
 --Pal 23-Feb-2017
 UPDATE `global_config` SET `display_name` = 'Maximum Length' WHERE `global_config`.`name` = 'max_length';
+
+--Pal 23-Feb-2017
+UPDATE `resources` SET `resource_name` = 'vl_weekly_report' WHERE `resources`.`resource_id` = 18;
+
+UPDATE `resources` SET `display_name` = 'Viral Load Weekly Report' WHERE `resources`.`resource_id` = 18;
+
+UPDATE `privileges` SET `privilege_name` = 'vlWeeklyReport.php' WHERE `privileges`.`privilege_id` = 54;
