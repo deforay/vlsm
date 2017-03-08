@@ -38,6 +38,17 @@ try {
            $data=array('value'=>$fieldValue);
            $db=$db->where('name',$fieldName);
            $db->update($tableName,$data);
+	   //Generate syn sub folder
+	   if($fieldName == 'sync_path' && trim($fieldValue)!= ''){
+	      if(file_exists($fieldValue)){
+		mkdir($fieldValue . DIRECTORY_SEPARATOR . "request");
+		mkdir($fieldValue . DIRECTORY_SEPARATOR . "result");
+	      }else{
+		mkdir($fieldValue);
+		mkdir($fieldValue . DIRECTORY_SEPARATOR . "request");
+		mkdir($fieldValue . DIRECTORY_SEPARATOR . "result");
+	      }
+	   }
         }
     }
     $_SESSION['alertMsg']="Global Config values updated successfully";

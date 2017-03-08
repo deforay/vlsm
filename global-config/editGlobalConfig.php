@@ -200,6 +200,16 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="sync_path" class="col-lg-4 control-label">Sync Path<span class="mandatory">*</span></label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control isRequired" id="sync_path" name="sync_path" placeholder="Sync Path" title="Please enter sync path" value="<?php echo $arr['sync_path']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -243,25 +253,25 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   }
   
   $("input:radio[name=sample_code]").click(function() {
-    if(this.value == 'auto'){
-       $('#auto-sample-eg').show(); 
-       $('#min_length').val(''); 
-       $('.minlth').hide();
-       $('#min_length').removeClass('isRequired'); 
-       $('#min_length').prop('readonly',true); 
-       $('#max_length').val('');
-       $('.maxlth').hide();
-       $('#max_length').removeClass('isRequired'); 
-       $('#max_length').prop('readonly',true);
-    }else{
-       $('#auto-sample-eg').hide();
-       $('.minlth').show();
-       $('#min_length').addClass('isRequired');
-       $('#min_length').prop('readonly',false);
-       $('.maxlth').show();
-       $('#max_length').addClass('isRequired');
-       $('#max_length').prop('readonly',false);
-    }
+        if(this.value == 'auto'){
+           $('#auto-sample-eg').show(); 
+           $('#min_length').val(''); 
+           $('.minlth').hide();
+           $('#min_length').removeClass('isRequired'); 
+           $('#min_length').prop('readonly',true); 
+           $('#max_length').val('');
+           $('.maxlth').hide();
+           $('#max_length').removeClass('isRequired'); 
+           $('#max_length').prop('readonly',true);
+        }else{
+           $('#auto-sample-eg').hide();
+           $('.minlth').show();
+           $('#min_length').addClass('isRequired');
+           $('#min_length').prop('readonly',false);
+           $('.maxlth').show();
+           $('#max_length').addClass('isRequired');
+           $('#max_length').prop('readonly',false);
+        }
   });
 </script>
   

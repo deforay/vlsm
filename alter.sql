@@ -774,3 +774,10 @@ UPDATE `resources` SET `resource_name` = 'vl_weekly_report' WHERE `resources`.`r
 UPDATE `resources` SET `display_name` = 'Viral Load Weekly Report' WHERE `resources`.`resource_id` = 18;
 
 UPDATE `privileges` SET `privilege_name` = 'vlWeeklyReport.php' WHERE `privileges`.`privilege_id` = 54;
+
+--Pal 06-Mar-2017
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Download Path', 'download_path', NULL);
+
+UPDATE `global_config` SET `display_name` = 'Sync Path' WHERE `global_config`.`name` = 'download_path';
+
+UPDATE `global_config` SET `name` = 'sync_path' WHERE `global_config`.`name` = 'download_path';
