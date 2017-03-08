@@ -16,11 +16,8 @@ $xmlData = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
 $xmlData.="<vl_request>\n";
 $filedGroup = array();
 if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
-     
-    
    $filedGroup = explode(",",$mailconf['rq_field']);
    $headings = $filedGroup;
-   
    //Set query and values
    //$xmlData .="";
    //echo $_SESSION['vlRequestSearchResultQuery'];
@@ -28,7 +25,6 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
    $sampleResult = $db->rawQuery($_SESSION['vlRequestSearchResultQuery']);
       $output = array();
       foreach($sampleResult as $sample){
-         
          $xmlData.="<vl_request_form>\n";
          $row = array();
          $xmlData.="<sample_code>".$sample['sample_code']."</sample_code>\n";
@@ -112,7 +108,6 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
          $xmlData.="<treatment_initiated_date>".$sample['treatment_initiated_date']."</treatment_initiated_date>\n";
          $xmlData.="<arc_no>".$sample['arc_no']."</arc_no>\n";
          $xmlData.="<treatment_details>".$sample['treatment_details']."</treatment_details>\n";
-         
          if(isset($sample['lab_id']) && trim($sample['lab_id'])!=""){
             $fQuery="SELECT * FROM facility_details WHERE facility_type ='2' AND facility_id='".$sample['lab_id']."'";
             $fResult = $db->query($fQuery);
