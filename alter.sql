@@ -781,3 +781,10 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Download 
 UPDATE `global_config` SET `display_name` = 'Sync Path' WHERE `global_config`.`name` = 'download_path';
 
 UPDATE `global_config` SET `name` = 'sync_path' WHERE `global_config`.`name` = 'download_path';
+
+--Pal 08-Mar-2017
+ALTER TABLE `vl_request_form` ADD `test_request_export` INT(11) NOT NULL DEFAULT '0' AFTER `result_mail_sent`;
+
+ALTER TABLE `vl_request_form` ADD `test_request_import` INT(11) NOT NULL DEFAULT '0' AFTER `test_request_export`;
+
+ALTER TABLE `vl_request_form` ADD `test_result_export` INT(11) NOT NULL DEFAULT '0' AFTER `test_request_import`, ADD `test_result_import` INT(11) NOT NULL DEFAULT '0' AFTER `test_result_export`;
