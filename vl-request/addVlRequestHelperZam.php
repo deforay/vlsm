@@ -76,16 +76,17 @@ try {
           $_POST['breastfeeding']='';
      }
      $_POST['result'] = '';
-     if($_POST['vlResult']!=''){
+     if(isset($_POST['vlResult']!='') && trim($_POST['vlResult'])! =''){
           $_POST['result'] = $_POST['vlResult'];
      }
      $instanceId = '';
     if(isset($_SESSION['instanceId'])){
           $instanceId = $_SESSION['instanceId'];
     }
-    if($_POST['testingPlatform']!=''){
+    $testingPlatform = '';
+    if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
         $platForm = explode("##",$_POST['testingPlatform']);
-        $_POST['testingPlatform'] = $platForm[0];
+        $testingPlatform = $platForm[0];
     }
     
      $vldata=array(
@@ -119,7 +120,7 @@ try {
           'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
           'comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='' ? trim($_POST['labComments']) :  NULL),
           'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
-          'vl_test_platform'=>$_POST['testingPlatform'],
+          'vl_test_platform'=>$testingPlatform,
           'rejection'=>(isset($_POST['noResult']) && $_POST['noResult']!='' ? $_POST['noResult'] :  NULL),
           'sample_rejection_reason'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
           'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='' ? $_POST['testMethods'] :  NULL),
