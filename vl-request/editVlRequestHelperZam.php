@@ -69,7 +69,7 @@ try {
           $_POST['breastfeeding']='';
      }
      $_POST['result'] = '';
-     if(isset($_POST['vlResult']) && trim($_POST['vlResult'])! =''){
+     if(isset($_POST['vlResult']) && trim($_POST['vlResult'])!= ''){
           $_POST['result'] = $_POST['vlResult'];
      }
      $instanceId = '';
