@@ -40,13 +40,29 @@ try {
            $db->update($tableName,$data);
 	   //Generate syn sub folder
 	   if($fieldName == 'sync_path' && trim($fieldValue)!= ''){
-	      if(file_exists($fieldValue)){
+	    //root folder creation
+	      if(!file_exists($fieldValue)){
+		  mkdir($fieldValue);
+	      }
+	      //request folder creation
+	      if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "request")){
 		mkdir($fieldValue . DIRECTORY_SEPARATOR . "request");
+	      }if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "request". DIRECTORY_SEPARATOR . "new")){
+		mkdir($fieldValue  . DIRECTORY_SEPARATOR . "request". DIRECTORY_SEPARATOR . "new");
+	      }if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "request". DIRECTORY_SEPARATOR . "synced")){
+		mkdir($fieldValue  . DIRECTORY_SEPARATOR . "request". DIRECTORY_SEPARATOR . "synced");
+	      }if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "request". DIRECTORY_SEPARATOR . "error")){
+		mkdir($fieldValue  . DIRECTORY_SEPARATOR . "request". DIRECTORY_SEPARATOR . "error");
+	      }
+	       //result folder creation
+	      if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "result")){
 		mkdir($fieldValue . DIRECTORY_SEPARATOR . "result");
-	      }else{
-		mkdir($fieldValue);
-		mkdir($fieldValue . DIRECTORY_SEPARATOR . "request");
-		mkdir($fieldValue . DIRECTORY_SEPARATOR . "result");
+	      }if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "result". DIRECTORY_SEPARATOR . "new")){
+		mkdir($fieldValue  . DIRECTORY_SEPARATOR . "result". DIRECTORY_SEPARATOR . "new");
+	      }if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "result". DIRECTORY_SEPARATOR . "synced")){
+		mkdir($fieldValue  . DIRECTORY_SEPARATOR . "result". DIRECTORY_SEPARATOR . "synced");
+	      }if(!file_exists($fieldValue  . DIRECTORY_SEPARATOR . "result". DIRECTORY_SEPARATOR . "error")){
+		mkdir($fieldValue  . DIRECTORY_SEPARATOR . "result". DIRECTORY_SEPARATOR . "error");
 	      }
 	   }
         }
