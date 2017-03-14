@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:element name="vlsm">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="facility">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="facility_name">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="facility_code" type="xs:string"></xs:element>
+                            <xs:element name="facility_contact_person"></xs:element>
+                            <xs:element name="facility_phone_number"></xs:element>
+                            <xs:element name="facility_address"></xs:element>
+                            <xs:element name="facility_country" type="xs:string"></xs:element>
+                            <xs:element name="facility_state" type="xs:string"></xs:element>
+                            <xs:element name="facility_district" type="xs:string"></xs:element>
+                            <xs:element name="facility_hub_name"></xs:element>
+                            <xs:element name="facility_other_id" type="xs:int"></xs:element>
+                            <xs:element name="facility_latitude"></xs:element>
+                            <xs:element name="facility_longitude"></xs:element>
+                            <xs:element name="facility_email"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="patient">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="art_code"></xs:element>
+                            <xs:element name="patient_name">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="surname">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="art_no">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="patient_dob"></xs:element>
+                            <xs:element name="gender"></xs:element>
+                            <xs:element name="patient_phone_number"></xs:element>
+                            <xs:element name="location"></xs:element>
+                            <xs:element name="patient_art_date"></xs:element>
+                            <xs:element name="vl_test_reason"></xs:element>
+                            <xs:element name="is_patient_new"></xs:element>
+                            <xs:element name="treatment_initiation"></xs:element>
+                            <xs:element name="current_regimen"></xs:element>
+                            <xs:element name="date_of_initiation_of_current_regimen"></xs:element>
+                            <xs:element name="is_patient_pregnant"></xs:element>
+                            <xs:element name="is_patient_breastfeeding"></xs:element>
+                            <xs:element name="trimestre"></xs:element>
+                            <xs:element name="arv_adherence"></xs:element>
+                            <xs:element name="poor_adherence"></xs:element>
+                            <xs:element name="patient_receive_sms"></xs:element>
+                            <xs:element name="viral_load_indication"></xs:element>
+                            <xs:element name="enhance_session"></xs:element>
+                            <xs:element name="routine_monitoring_last_vl_date"></xs:element>
+                            <xs:element name="routine_monitoring_value"></xs:element>
+                            <xs:element name="routine_monitoring_sample_type"></xs:element>
+                            <xs:element name="vl_treatment_failure_adherence_counseling_last_vl_date"></xs:element>
+                            <xs:element name="vl_treatment_failure_adherence_counseling_value"></xs:element>
+                            <xs:element name="vl_treatment_failure_adherence_counseling_sample_type"></xs:element>
+                            <xs:element name="suspected_treatment_failure_last_vl_date"></xs:element>
+                            <xs:element name="suspected_treatment_failure_value"></xs:element>
+                            <xs:element name="suspected_treatment_failure_sample_type"></xs:element>
+                            <xs:element name="switch_to_tdf_last_vl_date"></xs:element>
+                            <xs:element name="switch_to_tdf_value"></xs:element>
+                            <xs:element name="switch_to_tdf_sample_type"></xs:element>
+                            <xs:element name="missing_last_vl_date"></xs:element>
+                            <xs:element name="missing_value"></xs:element>
+                            <xs:element name="missing_sample_type"></xs:element>
+                            <xs:element name="request_clinician"></xs:element>
+                            <xs:element name="clinician_ph_no"></xs:element>
+                            <xs:element name="vl_focal_person"></xs:element>
+                            <xs:element name="focal_person_phone_number"></xs:element>
+                            <xs:element name="email_for_HF"></xs:element>
+                            <xs:element name="date_sample_received_at_testing_lab"></xs:element>
+                            <xs:element name="date_results_dispatched"></xs:element>
+                            <xs:element name="rejection"></xs:element>
+                            <xs:element name="sample_rejection_facility"></xs:element>
+                            <xs:element name="sample_rejection_reason"></xs:element>
+                            <xs:element name="age_in_yrs"></xs:element>
+                            <xs:element name="age_in_mnts"></xs:element>
+                            <xs:element name="treatment_initiated_date"></xs:element>
+                            <xs:element name="arc_no"></xs:element>
+                            <xs:element name="treatment_details"></xs:element>
+                            <xs:element name="drug_substitution"></xs:element>
+                            <xs:element name="collected_by"></xs:element>
+                            <xs:element name="support_partner"></xs:element>
+                            <xs:element name="has_patient_changed_regimen"></xs:element>
+                            <xs:element name="reason_for_regimen_change"></xs:element>
+                            <xs:element name="date_of_regimen_changed"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="sample">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="sample_collection_date">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="date_of_demand"></xs:element>
+                            <xs:element name="sample_type"></xs:element>
+                            <xs:element name="plasma_conservation_temperature"></xs:element>
+                            <xs:element name="duration_of_conservation"></xs:element>
+                            <xs:element name="viral_load_no"></xs:element>
+                            <xs:element name="vl_test_platform"></xs:element>
+                            <xs:element name="testing_status" type="xs:string"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="lab">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="lab_name"></xs:element>
+                            <xs:element name="lab_no"></xs:element>
+                            <xs:element name="lab_contact_person"></xs:element>
+                            <xs:element name="lab_phone_no"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="result">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="log_value"></xs:element>
+                            <xs:element name="absolute_value"></xs:element>
+                            <xs:element name="absolute_decimal_value"></xs:element>
+                            <xs:element name="text_value"></xs:element>
+                            <xs:element name="result"></xs:element>
+                            <xs:element name="comments"></xs:element>
+                            <xs:element name="justification"></xs:element>
+                            <xs:element name="result_approved_by" type="xs:string"></xs:element>
+                            <xs:element name="result_approved_by_role" type="xs:string"></xs:element>
+                            <xs:element name="result_approved_on"></xs:element>
+                            <xs:element name="result_reviewed_by"></xs:element>
+                            <xs:element name="result_reviewed_by_role"></xs:element>
+                            <xs:element name="result_reviewed_date"></xs:element>
+                            <xs:element name="test_methods"></xs:element>
+                            <xs:element name="contact_complete_status"></xs:element>
+                            <xs:element name="last_viral_load_date"></xs:element>
+                            <xs:element name="last_viral_load_result"></xs:element>
+                            <xs:element name="viral_load_log"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="action" type="xs:string"></xs:element>
+                <xs:element name="instance">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:minLength value = "2"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="general">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="form_id">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "1"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="serial_no" type="xs:string"></xs:element>
+                            <xs:element name="urgency"></xs:element>
+                            <xs:element name="sample_code">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "6"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="sample_code_key" type="xs:int"></xs:element>
+                            <xs:element name="sample_code_format" type="xs:string"></xs:element>
+                            <xs:element name="machine_id"></xs:element>
+                            <xs:element name="batch_code"></xs:element>
+                            <xs:element name="batch_code_key"></xs:element>
+                            <xs:element name="batch_status"></xs:element>
+                            <xs:element name="date_dispatched_from_clinic_to_lab"></xs:element>
+                            <xs:element name="date_of_completion_of_viral_load"></xs:element>
+                            <xs:element name="lab_tested_date"></xs:element>
+                            <xs:element name="date_result_printed"></xs:element>
+                            <xs:element name="request_mail_sent" type="xs:string"></xs:element>
+                            <xs:element name="result_mail_sent" type="xs:string"></xs:element>
+                            <xs:element name="test_request_export" type="xs:int"></xs:element>
+                            <xs:element name="test_request_import" type="xs:int"></xs:element>
+                            <xs:element name="test_result_export" type="xs:int"></xs:element>
+                            <xs:element name="test_result_import" type="xs:int"></xs:element>
+                            <xs:element name="result_coming_from" type="xs:string"></xs:element>
+                            <xs:element name="created_by">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="created_by_role">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "2"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="date_generated">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:minLength value = "10"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="modified_by" type="xs:string"></xs:element>
+                            <xs:element name="modified_by_role" type="xs:string"></xs:element>
+                            <xs:element name="date_modified" type="xs:string"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
