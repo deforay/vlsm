@@ -233,18 +233,23 @@ try {
               $xmlData.="<date_modified>".$vl['modified_on']."</date_modified>";
             $xmlData.="</general>";
           $xmlData .="</vlsm>";
+          //xml data encryption
+          $key = "14365914278904829744952407287067";
+          $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+          $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+          $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $xmlData, MCRYPT_MODE_ECB, $iv);
           //xml file creation end
           $fileName = $vl['sample_code'].'.xml';
           if(isset($param) && $param == 'request'){
             $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $fileName, 'w+');
-            fwrite($fp, $xmlData);
+            fwrite($fp, $crypttext);
             fclose($fp);
             //update test request export flag
             $db=$db->where('sample_code',$vl['sample_code']);
             $db->update($tableName,array('test_request_export'=>1));
           }else if(isset($param) && $param == 'result'){
             $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $fileName, 'w+');
-            fwrite($fp, $xmlData);
+            fwrite($fp, $crypttext);
             fclose($fp);
             //update test request export flag
             $db=$db->where('sample_code',$vl['sample_code']);
