@@ -28,29 +28,74 @@ try {
         $files = scandir($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new");
       }
     }
+    $key = "14365914278904829744952407287067";
     if(count($files) >2){
       foreach($files as $file) {
         if (in_array($file, array(".",".."))) continue;
         if(isset($param) && $param == 'request'){
+          //xml request data decryption
+          $crypttext = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+          $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+          $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+          $decrypttext = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext, MCRYPT_MODE_ECB, $iv));
+          $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file, 'w+');
+          fwrite($fp, $decrypttext);
+          fclose($fp);
           $xml = new DOMDocument();
-          $xml->load($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+          $xml->load($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file);
           if(!$xml->schemaValidate('validate.xsd')) {
+            $decrypttext = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+            $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $decrypttext, MCRYPT_MODE_ECB, $iv);
+            $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file, 'w+');
+            fwrite($fp, $crypttext);
+            fclose($fp);
             copy($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file,$configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "error" . DIRECTORY_SEPARATOR . $file);
             unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
             break;
+          }else{
+            $decrypttext = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+            $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $decrypttext, MCRYPT_MODE_ECB, $iv);
+            $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file, 'w+');
+            fwrite($fp, $crypttext);
+            fclose($fp);
           }
-          $xmlFile = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
         }else if(isset($param) && $param == 'result'){
+          //xml result data decryption
+          $crypttext = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+          $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+          $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+          $decrypttext = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key, $crypttext, MCRYPT_MODE_ECB, $iv));
+          $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file, 'w+');
+          fwrite($fp, $decrypttext);
+          fclose($fp);
           $xml = new DOMDocument();
-          $xml->load($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+          $xml->load($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file);
           if(!$xml->schemaValidate('validate.xsd')) {
+            $decrypttext = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+            $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $decrypttext, MCRYPT_MODE_ECB, $iv);
+            $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file, 'w+');
+            fwrite($fp, $crypttext);
+            fclose($fp);
             copy($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file,$configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "error" . DIRECTORY_SEPARATOR . $file);
             unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
             break;
+          }else{
+            $decrypttext = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);
+            $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
+            $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+            $crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $key, $decrypttext, MCRYPT_MODE_ECB, $iv);
+            $fp = fopen($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new". DIRECTORY_SEPARATOR. $file, 'w+');
+            fwrite($fp, $crypttext);
+            fclose($fp);
           }
-          $xmlFile = file_get_contents($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . $file);  
         }
-        $xml = new SimpleXMLElement($xmlFile);
+        $xml = new SimpleXMLElement($decrypttext);
         //facility section
         if(count($xml->facility) >0){
           if(isset($xml->facility->facility_name)){
