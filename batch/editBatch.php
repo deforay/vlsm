@@ -18,15 +18,18 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 <link href="../assets/css/multi-select.css" rel="stylesheet"/>
 <style>
   .select2-selection__choice{
-	color:#000000 !important;
+    color:#000000 !important;
   }
   #ms-sampleCode{width: 110%;}
   .showPregnant{display: none;}
-	#sortableRow { list-style-type: none; margin: 10px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
-	#sortableRow li{
-			color:#333 !important;
-			font-size:16px;
-	}
+    #sortableRow { list-style-type: none; margin: 10px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
+    #sortableRow li{
+      color:#333 !important;
+      font-size:16px;
+    }
+    #alertText{
+      text-shadow: 1px 1px #eee;
+    }
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -152,15 +155,11 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 																<?php
 																foreach($result as $key=>$sample){
 																	$selected = '';
-																	$dsiabled = '';
 																	if(isset($sample['batch_id']) && trim($sample['batch_id']) == $id){
-																		$selected = "selected=selected";
-																		if(isset($sample['result']) && trim($sample['result'])!= ''){
-																		  $dsiabled = 'disabled';
-																	  }
+																	  $selected = "selected=selected";
 																	}
 																	?>
-																	  <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo $selected;?> <?php echo $dsiabled; ?>><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
+																	  <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo $selected;?>><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
 																	<?php
 																}
 																?>
@@ -170,12 +169,13 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 											</div>
 										</div>
 								</div>
+								<div class="row" id="alertText" style="font-size:18px;"></div>
 							</div>
 						<!-- /.box-body -->
 						<div class="box-footer">
 								 <input type="hidden" name="batchId" id="batchId" value="<?php echo $batchInfo[0]['batch_id'];?>"/>
 								 <input type="hidden" name="resultSample" id="resultSample"/>
-								 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
+								 <a id="batchSubmit" class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
 								 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
 						</div>
               <!-- /.box-footer -->
@@ -195,7 +195,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
   <script type="text/javascript">
   var startDate = "";
   var endDate = "";
-	var resultSampleArray = [];
+  var resultSampleArray = [];
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'editBatchForm'
@@ -208,18 +208,18 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
   }
    //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
    $(document).ready(function() {
-		noOfSamples = 0;
-		<?php
-			if(isset($batchInfo[0]['max_no_of_samples_in_a_batch']) && trim($batchInfo[0]['max_no_of_samples_in_a_batch'])>0){
-				?>
-				noOfSamples = <?php echo intval($batchInfo[0]['max_no_of_samples_in_a_batch']); ?>;
-		<?php }
-		?>
-		//console.log(noOfSamples);
-		$("#facilityName").select2({placeholder:"Select Facilities"});
+	noOfSamples = 0;
+	<?php
+	  if(isset($batchInfo[0]['max_no_of_samples_in_a_batch']) && trim($batchInfo[0]['max_no_of_samples_in_a_batch'])>0){
+	?>
+	  noOfSamples = <?php echo intval($batchInfo[0]['max_no_of_samples_in_a_batch']); ?>;
+	<?php }
+	?>
+	//console.log(noOfSamples);
+	$("#facilityName").select2({placeholder:"Select Facilities"});
         $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	          separator: ' to ',
+	    separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
@@ -236,50 +236,70 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 	      startDate = start.format('YYYY-MM-DD');
 	      endDate = end.format('YYYY-MM-DD');
 	});
-				
 	$('#sampleCollectionDate').val("");
 	
 	$('.search').multiSelect({
-	 selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
-	 selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
-	 afterInit: function(ms){
-	   var that = this,
-	       $selectableSearch = that.$selectableUl.prev(),
-	       $selectionSearch = that.$selectionUl.prev(),
-	       selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
-	       selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
-       
-	   that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-	   .on('keydown', function(e){
-	     if (e.which === 40){
-	       that.$selectableUl.focus();
-	       return false;
+	    selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
+	    selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
+	    afterInit: function(ms){
+	      var that = this,
+		  $selectableSearch = that.$selectableUl.prev(),
+		  $selectionSearch = that.$selectionUl.prev(),
+		  selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+		  selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+	  
+	      that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	      .on('keydown', function(e){
+		if (e.which === 40){
+		  that.$selectableUl.focus();
+		  return false;
+		}
+	      });
+	  
+	      that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	      .on('keydown', function(e){
+		if (e.which == 40){
+		  that.$selectionUl.focus();
+		  return false;
+		}
+	      });
+	    },
+	    afterSelect: function(){
+	       //initial button disabled/enabled
+	       if(this.qs2.cache().matchedResultsCount == 1){
+		  $("#batchSubmit").attr("disabled",false);
+	       }
+	       //button disabled/enabled
+		if(this.qs2.cache().matchedResultsCount == noOfSamples){
+		   alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+		   $("#batchSubmit").attr("disabled",false);
+		}else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
+		  $("#batchSubmit").attr("disabled",false);
+		}else if(this.qs2.cache().matchedResultsCount > noOfSamples){
+		  alert("You have already selected Maximum no. of sample "+noOfSamples);
+		  $("#batchSubmit").attr("disabled",true);
+		}
+		 this.qs1.cache();
+		 this.qs2.cache();
+	  },
+	  afterDeselect: function(){
+	    //after deselect button disabled/enabled
+	    if(this.qs2.cache().matchedResultsCount == 1){
+	       $("#batchSubmit").attr("disabled",false);
+	    }
+	    //button disabled/enabled
+	     if(this.qs2.cache().matchedResultsCount == noOfSamples){
+		alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+		$("#batchSubmit").attr("disabled",false);
+	     }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
+	       $("#batchSubmit").attr("disabled",false);
+	     }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
+	       alert("You have already selected Maximum no. of sample "+noOfSamples);
+	       $("#batchSubmit").attr("disabled",true);
 	     }
-	   });
-       
-	   that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-	   .on('keydown', function(e){
-	     if (e.which == 40){
-	       that.$selectionUl.focus();
-	       return false;
-	     }
-	   });
-	 },
-	 afterSelect: function(){
-	  if(this.qs2.cache().matchedResultsCount >= noOfSamples){
-	    alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
-	    $(".ms-selectable").css("pointer-events","none");
+	     this.qs1.cache();
+	     this.qs2.cache();
 	  }
-	   this.qs1.cache();
-	   this.qs2.cache();
-	 },
-	 afterDeselect: function(){
-	  if(this.qs2.cache().matchedResultsCount < noOfSamples){
-	    $(".ms-selectable").css("pointer-events","auto");
-	  }
-	   this.qs1.cache();
-	   this.qs2.cache();
-	 }
        });
 	$('#select-all-samplecode').click(function(){
 	 $('#sampleCode').multiSelect('select_all');
@@ -290,33 +310,28 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 	 return false;
        });
        
-      
 	if(noOfSamples == 0){
-	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
-	 } else if('<?php echo count($result); ?>' >= noOfSamples) {
-	   $("#select-all-samplecode").css("pointer-events","none");
-	 }
-       
-    var selectedSampleCount = $("#sampleCode :selected").length;
-	
-	if(parseInt(selectedSampleCount) >= parseInt(noOfSamples)){
-	  $(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
+	  $("#batchSubmit").attr("disabled",true);
+	}else if($("#sampleCode :selected").length > noOfSamples) {
+	  $("#batchSubmit").attr("disabled",true);
 	}
+       
 	<?php
 	$r=1;
 	foreach($result as $sample){
-		if(isset($sample['batch_id']) && trim($sample['batch_id']) == $id){
-			if(isset($sample['result']) && trim($sample['result'])!= ''){
-				if($r == 1){
-				?>
-				$("#deselect-all-samplecode").remove();
-				<?php } ?>
-				resultSampleArray.push('<?php echo $sample['vl_sample_id']; ?>');
-			<?php $r++; }
-		}
+	  if(isset($sample['batch_id']) && trim($sample['batch_id']) == $id){
+	    if(isset($sample['result']) && trim($sample['result'])!= ''){
+		    if($r == 1){
+		    ?>
+		    $("#deselect-all-samplecode").remove();
+		    <?php } ?>
+		    resultSampleArray.push('<?php echo $sample['vl_sample_id']; ?>');
+	    <?php $r++; }
+	  }
 	}
 	?>
-	  $("#resultSample").val(resultSampleArray);
+	$("#resultSample").val(resultSampleArray);
+	$('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of '+noOfSamples+' samples to make it a batch');
    });
    
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
@@ -341,13 +356,18 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
     var sName = $("#sampleType").val();
     var sCode= $("#sampleCode").val();
     var gender= $("#gender").val();
-      var prg =   $("input:radio[name=pregnant]");
-      if(prg[0].checked==false && prg[1].checked==false){
-	pregnant = '';
-      }else{
-	pregnant = $('input[name=pregnant]:checked').val();
-      }
-      var urgent = $('input[name=urgency]:checked').val();
+    var prg =   $("input:radio[name=pregnant]");
+    var urgent =   $("input:radio[name=urgency]");
+    if(prg[0].checked==false && prg[1].checked==false){
+      pregnant = '';
+    }else{
+      pregnant = $('input[name=pregnant]:checked').val();
+    }
+    if(urgent[0].checked==false && urgent[1].checked==false){
+      urgent = '';
+    }else{
+      urgent = $('input[name=urgency]:checked').val();
+    }
     $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
     function(data){
 	if(data != ""){
@@ -356,46 +376,30 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
     });
     $.unblockUI();
   }
+  
   function enablePregnant(obj){
       if(obj.value=="female"){
-				$(".showPregnant").show();
-				$(".pregnant").prop("disabled",false);
-			}else{
-				$(".showPregnant").hide();
-				$(".pregnant").prop("checked",false);
-				$(".pregnant").attr("disabled","");
-			}
-    }
-		
-		$("#machine").change(function(){
-			var self = this.value;
-			if(self!= ''){
-        var selected = $(this).find('option:selected');
+	$(".showPregnant").show();
+	$(".pregnant").prop("disabled",false);
+      }else{
+	$(".showPregnant").hide();
+	$(".pregnant").prop("checked",false);
+	$(".pregnant").attr("disabled","");
+      }
+  }
+  
+  $("#machine").change(function(){
+      var self = this.value;
+      if(self!= ''){
+	getSampleCodeDetails();
+	var selected = $(this).find('option:selected');
         noOfSamples = selected.data('no-of-samples');
-						if(noOfSamples == 0){
-							$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
-							$(".ms-selectable").css("pointer-events","none");
-							$('#sampleCode').multiSelect('deselect_all');
-						}else if(<?php echo count($result); ?> >= noOfSamples) {
-							if($("#sampleCode :selected").length < noOfSamples){
-									$("#select-all-samplecode").css("pointer-events","none");
-									$(".ms-selectable").css("pointer-events","auto");
-							}else{
-									$("#select-all-samplecode").css("pointer-events","none");
-									$(".ms-selectable").css("pointer-events","none");
-							}
-						}else{
-							$(".ms-selectable,#select-all-samplecode").css("pointer-events","auto");
-							$("#select-all-samplecode").css("pointer-events","auto");
-							$(".ms-selectable").css("pointer-events","auto");
-						}
-			}else{
-				noOfSamples = 0;
-				$(".ms-selectable,#select-all-samplecode").css("pointer-events","none");
-				$(".ms-selectable").css("pointer-events","none");
-				$('#sampleCode').multiSelect('deselect_all');
-			}
-    });
+	$('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of '+noOfSamples+' samples to make it a batch');
+      }else{
+	$('.ms-list').html('');
+	$('#alertText').html('');
+      }
+  });
   </script>
   
  <?php
