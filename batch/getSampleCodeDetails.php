@@ -73,7 +73,10 @@ $merge = array_merge($sResult, $result);
           </div><br/><br/>
         <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
         <?php
+        $sampleIn = array();
         foreach($merge as $sample){
+         if(!in_array($sample['vl_sample_id'],$sampleIn)){
+            $sampleIn[] = $sample['vl_sample_id'];
             $selected = '';
             if (in_array($sample['vl_sample_id'], $_POST['sCode'])){
               $selected = "selected=selected";
@@ -81,6 +84,7 @@ $merge = array_merge($sResult, $result);
           ?>
           <option value="<?php echo $sample['vl_sample_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
           <?php
+         }
         }
         ?>
       </select>
@@ -146,7 +150,6 @@ $merge = array_merge($sResult, $result);
 	  }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	    $("#batchSubmit").attr("disabled",false);
 	  }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
-            alert("You have already selected Maximum no. of sample "+noOfSamples);
 	    $("#batchSubmit").attr("disabled",true);
 	  }
 	  this.qs1.cache();
