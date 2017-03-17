@@ -117,13 +117,41 @@ $merge = array_merge($sResult, $result);
           });
         },
         afterSelect: function(){
-          this.qs1.cache();
-          this.qs2.cache();
-        },
-        afterDeselect: function(){
-          this.qs1.cache();
-          this.qs2.cache();
-        }
+            //initial button disabled/enabled
+            if(this.qs2.cache().matchedResultsCount == 1){
+               $("#batchSubmit").attr("disabled",false);
+            }
+            //button disabled/enabled
+	     if(this.qs2.cache().matchedResultsCount == noOfSamples){
+		alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+		$("#batchSubmit").attr("disabled",false);
+	     }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
+	       $("#batchSubmit").attr("disabled",false);
+	     }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
+               alert("You have already selected Maximum no. of sample "+noOfSamples);
+	       $("#batchSubmit").attr("disabled",true);
+	     }
+	      this.qs1.cache();
+	      this.qs2.cache();
+       },
+       afterDeselect: function(){
+         //after deselect button disabled/enabled
+         if(this.qs2.cache().matchedResultsCount == 1){
+            $("#batchSubmit").attr("disabled",false);
+         }
+         //button disabled/enabled
+	  if(this.qs2.cache().matchedResultsCount == noOfSamples){
+	     alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+	     $("#batchSubmit").attr("disabled",false);
+	  }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
+	    $("#batchSubmit").attr("disabled",false);
+	  }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
+            alert("You have already selected Maximum no. of sample "+noOfSamples);
+	    $("#batchSubmit").attr("disabled",true);
+	  }
+	  this.qs1.cache();
+	  this.qs2.cache();
+       }
       });
       $('#select-all-samplecode').click(function(){
         $('#sampleCode').multiSelect('select_all');
