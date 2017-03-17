@@ -311,7 +311,6 @@ foreach($importConfigResult as $machine) {
 	  }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	    $("#batchSubmit").attr("disabled",false);
 	  }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
-	    alert("You have already selected Maximum no. of sample "+noOfSamples);
 	    $("#batchSubmit").attr("disabled",true);
 	  }
 	  this.qs1.cache();
