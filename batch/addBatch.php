@@ -388,7 +388,7 @@ foreach($importConfigResult as $machine) {
 	getSampleCodeDetails();
 	var selected = $(this).find('option:selected');
         noOfSamples = selected.data('no-of-samples');
-	$('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of '+noOfSamples+' samples to make it a batch');
+	$('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of maximum '+noOfSamples+' samples to make it a batch');
       }else{
 	$('.ms-list').html('');
 	$('#alertText').html('');
