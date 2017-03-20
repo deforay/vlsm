@@ -61,7 +61,7 @@
 		  <th rowspan="2">Province</th>
 		  <th rowspan="2">District</th>
 		  <th rowspan="2">Site Name</th>
-                  <th rowspan="2">IPSL#</th>
+                  <th rowspan="2">IPSL</th>
                   <th rowspan="2">No. of Rejections</th>
                   <th colspan="2" style="text-align:center;">Viral Load Results -Peds</th>
                   <th colspan="4" style="text-align:center;">Viral Load Results -Adults</th>
