@@ -153,8 +153,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-7" style="height:24px;">
-                    <div class="form-group" style="height:24px;">
+                  <div class="col-md-7" style="height:28px;">
+                    <div class="form-group" style="height:28px;">
                       <label for="auto_approval" class="col-lg-4 control-label">Sample Code </label>
                       <div class="col-lg-8">
                         <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>&nbsp;&nbsp;Auto&nbsp;&nbsp;
@@ -165,7 +165,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                    </div>
                 </div>
                 <div id="auto-sample-eg" class="row" style="display:<?php echo($arr['sample_code'] == 'auto')?'block':'none'; ?>;">
-                  <div class="col-md-7" style="text-align:right;">
+                  <div class="col-md-7" style="text-align:center;">
                       <code>eg. Province Code+Year+Month+Date+Increment Counter</code>
                   </div>
                 </div>
@@ -209,6 +209,21 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                       </div>
                     </div>
                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7" style="height:38px;">
+                    <div class="form-group" style="height:38px;">
+                      <label for="manager_email" class="col-lg-4 control-label">Manager Email<span class="mandatory">*</span></label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control isRequired" id="manager_email" name="manager_email" placeholder="Manager Email" title="Please enter manager email" value="<?php echo $arr['manager_email']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7" style="text-align:center;">
+                      <code>You can enter multiple email by separating them with comma</code>
+                  </div>
                 </div>
               </div>
               <!-- /.box-body -->
