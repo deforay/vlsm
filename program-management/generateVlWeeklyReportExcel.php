@@ -178,7 +178,7 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
         $r=1;
         foreach ($sResult as $aRow) {
           //No. of tests per facility & calculate others
-           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.rejection,vl.sample_rejection_reason,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.form_id = '.$country;
+           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.rejection,vl.sample_rejection_reason,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.form_id = '.$country;
            if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
                 if (trim($start_date) == trim($end_date)) {
                   $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
@@ -250,7 +250,7 @@ if(isset($_SESSION['vlStatisticsQuery']) && trim($_SESSION['vlStatisticsQuery'])
            $row[] = ucwords($aRow['state']);
            $row[] = ucwords($aRow['district']);
            $row[] = ucwords($aRow['facility_name']);
-           $row[] = '';
+           $row[] = $aRow['facility_code'];
            $row[] = count($rejection);
            $row[] = count($lte14n1000);
            $row[] = count($lte14ngt1000);
