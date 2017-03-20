@@ -2,20 +2,18 @@
 session_start();
 ob_start();
 include('../includes/MysqliDb.php');
+require '../includes/mail/PHPMailerAutoload.php';
 include('../General.php');
 include ('../includes/PHPExcel.php');
 $general=new Deforay_Commons_General();
 $configQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($configQuery);
 $country = $configResult[0]['value'];
-if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
-   $s_t_date = explode("to", $_POST['reportedDate']);
-   if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
-     $start_date = $general->dateFormat(trim($s_t_date[0]));
-   }
-   if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
-     $end_date = $general->dateFormat(trim($s_t_date[1]));
-   }
+$postdata = $_POST;
+$end_date = date('Y-m-d');
+$start_date = date('Y-m-d', strtotime('-7 days'));
+if(!isset($postdata['reportedDate'])){
+   $_POST['reportedDate'] = $general->humanDateFormat($start_date).' to '.$general->humanDateFormat($end_date);
 }
  //excel code start
  $excel = new PHPExcel();
@@ -69,14 +67,9 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
      )
  );
  
- if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab']))> 0){
-    $lab = implode(',',$_POST['lab']);
-    $vlLabQuery="SELECT * FROM facility_details where facility_id IN ($lab) AND status='active'";
-    $vlLabResult = $db->rawQuery($vlLabQuery);
- }else{
-    $vlLabQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
-    $vlLabResult = $db->rawQuery($vlLabQuery);
- }
+ 
+  $vlLabQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
+  $vlLabResult = $db->rawQuery($vlLabQuery);
  //echo $vlLabQuery;die;
  
  //Statistics sheet start
@@ -105,9 +98,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         }else{
           $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
         }
-    }
-    if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-        $sQuery = $sQuery.' AND (f.state LIKE "%'.$_POST['searchData'].'%" OR f.district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
     }
     $sQuery = $sQuery.' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
@@ -184,9 +174,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
                 }else{
                   $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
                 }
-           }
-           if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-                $totalQuery = $totalQuery.' AND (f.state LIKE "%'.$_POST['searchData'].'%" OR f.district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
            }
            $totalResult = $db->rawQuery($totalQuery);
            $lte14n1000 = array();
@@ -331,9 +318,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
             $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
           }
        }
-       if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-          $sQuery = $sQuery.' AND (f.state LIKE "%'.$_POST['searchData'].'%" OR f.district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
-       }
        $sResult = $db->rawQuery($sQuery);
        $noOfSampleReceivedAtLab = array();
        $noOfSampleTested = array();
@@ -416,8 +400,56 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
    $filename = 'vl-weekly-report-' . date('d-M-Y-H-i-s') . '.xls';
    $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
-   echo $filename;
- }else{
-   echo ''; 
- }
+    //mail part start
+    //Create a new PHPMailer instance
+    $mail = new PHPMailer();
+    //Tell PHPMailer to use SMTP
+    $mail->isSMTP();
+    //Enable SMTP debugging
+    // 0 = off (for production use)
+    // 1 = client messages
+    // 2 = client and server messages
+    $mail->SMTPDebug = 2;
+    //Ask for HTML-friendly debug output
+    $mail->Debugoutput = 'html';
+    //Set the hostname of the mail server
+    $mail->Host = 'smtp.gmail.com';
+    //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+    $mail->Port = 25;
+    //Set the encryption system to use - ssl (deprecated) or tls
+    $mail->SMTPSecure = 'tls';
+    //Whether to use SMTP authentication
+    $mail->SMTPAuth = true;
+    $mail->SMTPKeepAlive = true; 
+    //Username to use for SMTP authentication - use full email address for gmail
+    $mail->Username = 'zfmailexample@gmail.com';
+    //Password to use for SMTP authentication
+    $mail->Password = 'mko)(*&^12345';
+    //Set who the message is to be sent from
+    $mail->setFrom('zfmailexample@gmail.com');
+    $subject="VLSM - Weekly Report - ".$_POST['reportedDate'];
+    $mail->Subject = $subject;
+    //Set to emailid(s)
+    $configQuery ="SELECT * from global_config where name='manager_email'";
+    $configResult=$db->query($configQuery);
+    if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
+       $xplodAddress = explode(",",$configResult[0]['value']);
+       for($to=0;$to<count($xplodAddress);$to++){
+          $mail->addAddress($xplodAddress[$to]);
+       }
+       $pathFront=realpath('../temporary');
+       $file_to_attach = $pathFront. DIRECTORY_SEPARATOR. $filename;
+       $mail->AddAttachment($file_to_attach);
+       $message ='Hi Manager,<br>Please find the attached viral load weekly report '.$_POST['reportedDate'];
+       $message = nl2br($message);
+       $mail->msgHTML($message);
+       if($mail->send()){
+          error_log('weekly reports mail sent--'.$_POST['reportedDate']);
+       }else{
+          error_log('weekly reports mail send error--');
+       }
+    }else{
+         error_log('weekly reports mail send error--to email id is missing--');
+    }
+   }
 ?>
