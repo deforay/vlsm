@@ -788,3 +788,6 @@ ALTER TABLE `vl_request_form` ADD `test_request_export` INT(11) NOT NULL DEFAULT
 ALTER TABLE `vl_request_form` ADD `test_request_import` INT(11) NOT NULL DEFAULT '0' AFTER `test_request_export`;
 
 ALTER TABLE `vl_request_form` ADD `test_result_export` INT(11) NOT NULL DEFAULT '0' AFTER `test_request_import`, ADD `test_result_import` INT(11) NOT NULL DEFAULT '0' AFTER `test_result_export`;
+
+--Pal 20-Mar-2017
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Manager Email', 'manager_email', NULL);
