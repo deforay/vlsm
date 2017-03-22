@@ -203,9 +203,9 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="sync_path" class="col-lg-4 control-label">Sync Path<span class="mandatory">*</span></label>
+                      <label for="sync_path" class="col-lg-4 control-label">Sync Path</label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control isRequired" id="sync_path" name="sync_path" placeholder="Sync Path" title="Please enter sync path" value="<?php echo $arr['sync_path']; ?>"/>
+                        <input type="text" class="form-control" id="sync_path" name="sync_path" placeholder="Sync Path" title="Please enter sync path" value="<?php echo $arr['sync_path']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -213,9 +213,9 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">
-                      <label for="manager_email" class="col-lg-4 control-label">Manager Email<span class="mandatory">*</span></label>
+                      <label for="manager_email" class="col-lg-4 control-label">Manager Email</label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control isRequired" id="manager_email" name="manager_email" placeholder="Manager Email" title="Please enter manager email" value="<?php echo $arr['manager_email']; ?>"/>
+                        <input type="text" class="form-control" id="manager_email" name="manager_email" placeholder="Manager Email" title="Please enter manager email" value="<?php echo $arr['manager_email']; ?>"/>
                       </div>
                     </div>
                    </div>

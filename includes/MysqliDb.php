@@ -2287,7 +2287,6 @@ class MysqliDb
 
 // END class
 
-
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
