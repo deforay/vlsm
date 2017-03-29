@@ -2,7 +2,7 @@
 include('../header.php');
 //include('../includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
-$tsQuery = "SELECT status_name FROM testing_status WHERE status_id = '".$id."'";
+$tsQuery = "SELECT status_name FROM r_testing_status WHERE status_id = '".$id."'";
 $tsResult = $db->rawQuery($tsQuery);
 if(!isset($tsResult) || count($tsResult) == 0){
   header("location:/dashboard/index.php");exit;

@@ -106,7 +106,7 @@ if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQuer
 }
 $disable = "disabled = 'disabled'";
 //get test status values
-$tsQuery="SELECT * FROM testing_status";
+$tsQuery="SELECT * FROM r_testing_status";
 $tsResult = $db->rawQuery($tsQuery);
 ?>
 <style>
