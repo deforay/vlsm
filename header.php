@@ -1,12 +1,26 @@
 <?php
 session_start();
 include('../includes/MysqliDb.php');
-$configQuery="SELECT value FROM global_config WHERE name = 'default_time_zone'";
-$configResult=$db->query($configQuery);
-if(isset($configResult) && count($configResult)> 0){
-    date_default_timezone_set($configResult[0]['value']);
+$gQuery = "SELECT * FROM global_config";
+$gResult=$db->query($gQuery);
+$global = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($gResult); $i++) {
+  $global[$gResult[$i]['name']] = $gResult[$i]['value'];
+}
+if(isset($global['default_time_zone']) && count($global['default_time_zone'])> 0){
+    date_default_timezone_set($global['default_time_zone']);
 }else{
     date_default_timezone_set("Europe/London");
+}
+$hideResult = '';$hideRequest='';
+if(isset($global['instance_type']) && $global['instance_type']!='')
+{
+    if($global['instance_type']=='Clinic/Lab'){
+        $hideResult = "display:none;";
+    }else if($global['instance_type']=='Viral Load Lab'){
+        $hideRequest = "display:none;";
+    }
 }
 if(!isset($_SESSION['userId'])){
     header("location:../login.php");
@@ -53,9 +67,6 @@ if(isset($_SESSION['privileges']) && in_array(('index.php'),$_SESSION['privilege
 }else{
   $dashBoardMenuAccess = false;  
 }
-
-$globalConfigQuery ="SELECT * from global_config where name='logo'";
-$configResult=$db->query($globalConfigQuery);
 
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
 $formConfigResult=$db->query($formConfigQuery);
@@ -165,11 +176,11 @@ $formConfigResult=$db->query($formConfigQuery);
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <!-- Sidebar user panel -->
       <?php
-        if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
+        if(isset($global['logo']) && trim($global['logo'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $global['logo'])){
         ?>
       <div class="user-panel">
         <div align="center">
-          <img src="../uploads/logo/<?php echo $configResult[0]['value']; ?>"  alt="Logo Image" style="max-width:120px;" >
+          <img src="../uploads/logo/<?php echo $global['logo']; ?>"  alt="Logo Image" style="max-width:120px;" >
         </div>
         
       </div>
@@ -215,7 +226,7 @@ $formConfigResult=$db->query($formConfigQuery);
 	<?php }
         if($requestMenuAccess == true){
         ?>
-        <li class="treeview request">
+        <li class="treeview request" style="<?php echo $hideRequest;?>">
             <a href="#">
                 <i class="fa fa-edit"></i>
                 <span>Request Management</span>
@@ -241,7 +252,7 @@ $formConfigResult=$db->query($formConfigQuery);
         <?php }
         if($testResultMenuAccess == true){
         ?>
-        <li class="treeview test">
+        <li class="treeview test" style="<?php echo $hideResult;?>">
             <a href="#">
                 <i class="fa fa-edit"></i>
                 <span>Test Result Management</span>
