@@ -225,7 +225,22 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                       <code>You can enter multiple email by separating them with comma</code>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="instance_type" class="col-lg-4 control-label">Instance Type <span class="mandatory">*</span> </label>
+                      <div class="col-lg-8">
+                        <select class="form-control isRequired" name="instance_type" id="instance_type" title="Please select the instance type">
+                            <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
+                            <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
+                            <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
+                        </select>
+                      </div>
+                    </div>
+                   </div>
+                </div>
               </div>
+              
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" name="removedLogoImage" id="removedLogoImage"/>

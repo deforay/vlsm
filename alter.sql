@@ -54,17 +54,17 @@ ALTER TABLE `vl_request_form` ADD `log_value` VARCHAR(255) NULL DEFAULT NULL AFT
 
 
 ALTER TABLE  `vl_request_form` CHANGE  `status`  `status` INT NOT NULL ;
-CREATE TABLE IF NOT EXISTS `testing_status` (
+CREATE TABLE IF NOT EXISTS `r_testing_status` (
   `status_id` int(11) NOT NULL AUTO_INCREMENT,
   `status_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`status_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `testing_status`
+-- Dumping data for table `r_testing_status`
 --
 
-INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES
+INSERT INTO `r_testing_status` (`status_id`, `status_name`) VALUES
 (1, 'waiting'),
 (2, 'lost'),
 (3, 'sample reordered'),
@@ -73,7 +73,7 @@ INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES
 
 ALTER TABLE vl_request_form
 ADD FOREIGN KEY (status)
-REFERENCES testing_status(status_id)
+REFERENCES r_testing_status(status_id)
 
 
 --ilahir 09-Aug-2016
@@ -279,7 +279,7 @@ INSERT INTO `roles_privileges_map` (`map_id`, `role_id`, `privilege_id`) VALUES
 
 ALTER TABLE `import_config` CHANGE `log_absolute_val_same_col` `file_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE `other_config` ADD PRIMARY KEY(`name`);
-INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES (NULL, 'Awaiting Clinic Approval'), (NULL, 'Received and Approved');
+INSERT INTO `r_testing_status` (`status_id`, `status_name`) VALUES (NULL, 'Awaiting Clinic Approval'), (NULL, 'Received and Approved');
 INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'approve_results', 'Approve Imported Results');
 INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '15', 'access', 'access');
 
@@ -791,3 +791,6 @@ ALTER TABLE `vl_request_form` ADD `test_result_export` INT(11) NOT NULL DEFAULT 
 
 --Pal 20-Mar-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Manager Email', 'manager_email', NULL);
+
+--saravanan 29-mar-2017
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Instance Type ', 'instance_type ', 'Both');
