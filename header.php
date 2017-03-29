@@ -139,9 +139,9 @@ $formConfigResult=$db->query($formConfigQuery);
     <!-- Logo -->
     <a href="<?php echo($dashBoardMenuAccess == true)?'../dashboard/index.php':'#'; ?>" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>VL</b></span>
+      <span class="logo-mini"><b>VLSM</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>VL</b> LAB Request</span>
+      <span class="logo-lg">VLSM</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
