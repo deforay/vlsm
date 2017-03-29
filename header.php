@@ -226,7 +226,7 @@ $formConfigResult=$db->query($formConfigQuery);
             <ul class="treeview-menu">
 		<?php
 		 if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu vlRequestMenu"><a href="../vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Request</a></li>
+                  <li class="allMenu vlRequestMenu"><a href="../vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu addVlRequestMenu"><a href="../vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
 		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
