@@ -5,7 +5,7 @@ include('../General.php');
 $general=new Deforay_Commons_General();
 $tableName="temp_sample_report";
 $primaryKey="temp_sample_id";
-$tsQuery="SELECT * FROM r_testing_status";
+$tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -89,7 +89,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN r_testing_status as ts ON ts.status_id=tsr.status";
+	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.sample_rejection_reason INNER JOIN r_sample_status as ts ON ts.status_id=tsr.status";
 	$sOrder = 'temp_sample_id ASC';
         //echo $sQuery;die;
 	
@@ -158,9 +158,9 @@ $tsResult = $db->rawQuery($tsQuery);
 		//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
 		$status = '<select class="form-control" style="" name="status[]" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="toggleTest(this)">
  				<option value="">-- Select --</option>
-				<option value="7" '.($aRow['status']=="7" ? "selected=selected" : "").'>Accepted</option>
- 				<option value="1" '.($aRow['status']=="1" ? "selected=selected" : "").'>Hold</option>
- 				<option value="4" '.($aRow['status']=="4"  ? "selected=selected" : "").'>Rejected</option>
+				<option value="7" '.($aRow['result_status']=="7" ? "selected=selected" : "").'>Accepted</option>
+ 				<option value="1" '.($aRow['result_status']=="1" ? "selected=selected" : "").'>Hold</option>
+ 				<option value="4" '.($aRow['result_status']=="4"  ? "selected=selected" : "").'>Rejected</option>
  			</select><br><br>';
 	    }else{
 		$aRow['sample_code'] = 'Control';

@@ -45,7 +45,7 @@ foreach($vlResult as $vlData){
       $sWhere.= ' where DATE(vl.sample_collection_date) >= "'.$date.' 00:00:00" AND DATE(vl.sample_collection_date) <= "'.$date.' 23:59:59"';
    }
    //get waiting data
-    $waitingWhere.= ' and vl.status=6';
+    $waitingWhere.= ' and vl.result_status=6';
     $waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
     $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
     if($waitingResult[$i][0]['total']!=0){
@@ -56,7 +56,7 @@ foreach($vlResult as $vlData){
     unset($waitingResult[$i]);
     }
    //get accepted data
-    $acceptedWhere.= ' and vl.status=7';
+    $acceptedWhere.= ' and vl.result_status=7';
     $acceptedQuery = $tQuery.' '.$sWhere.$acceptedWhere;
     $acceptedResult[$i] = $db->rawQuery($acceptedQuery);//accepted result
     if($acceptedResult[$i][0]['total']!=0){
@@ -67,7 +67,7 @@ foreach($vlResult as $vlData){
     unset($acceptedResult[$i]);
     }
    //get rejected data
-    $rejectedWhere.= ' and vl.status=4';
+    $rejectedWhere.= ' and vl.result_status=4';
     $rejectedQuery = $tQuery.' '.$sWhere.$rejectedWhere;
     $rejectedResult[$i] = $db->rawQuery($rejectedQuery);//rejected result
     if($rejectedResult[$i][0]['total']!=0){

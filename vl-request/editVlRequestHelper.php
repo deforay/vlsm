@@ -14,17 +14,20 @@ try {
      //var_dump($_POST);die;
      if(isset($_POST['artNo']) && trim($_POST['artNo'])!="" && $treamentId>0){
           if(!isset($_POST['facilityId']) || trim($_POST['facilityId'])==""){
-               $data=array(
-                 'facility_name'=>$_POST['facilityName'],
-                 //'facility_code'=>$_POST['facilityCode'],
-                 //'country'=>$_POST['country'],
-                 'state'=>$_POST['state'],
-                 'hub_name'=>$_POST['hubName'],
-                 'district'=>$_POST['district'],
-                 'status'=>'active'
-               );
-          
-               $_POST['facilityId']=$db->insert('facility_details',$data);
+               if(trim($_POST['facilityName'])!= ''){
+                    $data=array(
+                      'facility_name'=>$_POST['facilityName'],
+                      //'facility_code'=>$_POST['facilityCode'],
+                      //'country'=>$_POST['country'],
+                      'facility_emails'=>$_POST['emailHf'],
+                      'facility_state'=>$_POST['state'],
+                      'facility_hub_name'=>$_POST['hubName'],
+                      'facility_district'=>$_POST['district'],
+                      'facility_type'=>1,
+                      'status'=>'active'
+                    );
+                    $_POST['facilityId']=$db->insert('facility_details',$data);
+               }
           }
           
           if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
@@ -114,55 +117,48 @@ try {
                $_POST['patientPregnant']='';
                $_POST['breastfeeding']='';
           }
-     $vldata=array(
+         $vldata=array(
           'facility_id'=>$_POST['facilityId'],
           'sample_code'=>$_POST['sampleCode'],
-          'urgency'=>$_POST['urgency'],
-          'art_no'=>$_POST['artNo'],
-          'patient_name'=>$_POST['patientName'],
+          'test_urgency'=>$_POST['urgency'],
+          'patient_art_no'=>$_POST['artNo'],
+          'patient_first_name'=>$_POST['patientName'],
           'patient_dob'=>$_POST['dob'],
-          'other_id'=>$_POST['otrId'],
-          'age_in_yrs'=>$_POST['ageInYrs'],
-          'age_in_mnts'=>$_POST['ageInMtns'],
-          'gender'=>$_POST['gender'],
-          'patient_phone_number'=>$_POST['patientPhoneNumber'],
+          'patient_other_id'=>$_POST['otrId'],
+          'patient_age_in_years'=>$_POST['ageInYrs'],
+          'patient_age_in_months'=>$_POST['ageInMtns'],
+          'patient_gender'=>$_POST['gender'],
+          'patient_mobile_number'=>$_POST['patientPhoneNumber'],
           'patient_art_date'=>$_POST['artnoDate'],
-          'location'=>$_POST['patientLocation'],
+          'patient_location'=>$_POST['patientLocation'],
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
-          'sample_id'=>$_POST['sampleType'],
+          'sample_type'=>$_POST['sampleType'],
           'treatment_initiation'=>$_POST['treatPeriod'],
           'treatment_initiated_date'=>$_POST['treatmentInitiatiatedOn'],
           'current_regimen'=>$_POST['currentRegimen'],
           'date_of_initiation_of_current_regimen'=>$_POST['regimenInitiatedOn'],
           'treatment_details'=>$_POST['treatmentDetails'],
           'is_patient_pregnant'=>$_POST['patientPregnant'],
-          'arc_no'=>$_POST['arcNo'],
+          'patient_anc_no'=>$_POST['arcNo'],
           'is_patient_breastfeeding'=>$_POST['breastfeeding'],
-          'arv_adherence'=>$_POST['arvAdherence'],
-          'patient_receive_sms'=>$_POST['receiveSms'],
-          'viral_load_indication'=>$_POST['stViralTesting'],
-          'enhance_session'=>$_POST['enhanceSession'],
-          'routine_monitoring_last_vl_date'=>$_POST['rmTestingLastVLDate'],
-          'routine_monitoring_value'=>$_POST['rmTestingVlValue'],
-          'routine_monitoring_sample_type'=>$_POST['rmTestingSampleType'],
-          'vl_treatment_failure_adherence_counseling_last_vl_date'=>$_POST['repeatTestingLastVLDate'],
-          'vl_treatment_failure_adherence_counseling_value'=>$_POST['repeatTestingVlValue'],
-          'vl_treatment_failure_adherence_counseling_sample_type'=>$_POST['repeatTestingSampleType'],
-          'suspected_treatment_failure_last_vl_date'=>$_POST['suspendTreatmentLastVLDate'],
-          'suspected_treatment_failure_value'=>$_POST['suspendTreatmentVlValue'],
-          'suspected_treatment_failure_sample_type'=>$_POST['suspendTreatmentSampleType'],
-          //'switch_to_tdf_last_vl_date'=>$_POST['switchToTDFLastVLDate'],
-          //'switch_to_tdf_value'=>$_POST['switchToTDFVlValue'],
-          //'switch_to_tdf_sample_type'=>$_POST['switchToTDFSampleType'],
-          //'missing_last_vl_date'=>$_POST['missingLastVLDate'],
-          //'missing_value'=>$_POST['missingVlValue'],
-          //'missing_sample_type'=>$_POST['missingSampleType'],
-          'request_clinician'=>$_POST['requestClinician'],
-          'clinician_ph_no'=>$_POST['clinicianPhone'],
+          'arv_adherance_percentage'=>$_POST['arvAdherence'],
+          'consent_to_receive_sms'=>$_POST['receiveSms'],
+          'reason_for_vl_testing'=>(isset($_POST['stViralTesting']))?$_POST['stViralTesting']:null,
+          'number_of_enhanced_sessions'=>$_POST['enhanceSession'],
+          'last_vl_date_routine'=>$_POST['rmTestingLastVLDate'],
+          'last_vl_result_routine'=>$_POST['rmTestingVlValue'],
+          'last_vl_sample_type_routine'=>$_POST['rmTestingSampleType'],
+          'last_vl_date_failure_ac'=>$_POST['repeatTestingLastVLDate'],
+          'last_vl_result_failure_ac'=>$_POST['repeatTestingVlValue'],
+          'last_vl_sample_type_failure_ac'=>$_POST['repeatTestingSampleType'],
+          'last_vl_date_failure'=>$_POST['suspendTreatmentLastVLDate'],
+          'last_vl_result_failure'=>$_POST['suspendTreatmentVlValue'],
+          'last_vl_sample_type_failure'=>$_POST['suspendTreatmentSampleType'],
+          'request_clinician_name'=>$_POST['requestClinician'],
+          'request_clinician_phone_number'=>$_POST['clinicianPhone'],
           //'sample_tested_datetime'=>$_POST['requestDate'],
           'vl_focal_person'=>$_POST['vlFocalPerson'],
-          'focal_person_phone_number'=>$_POST['vlPhoneNumber'],
-          'email_for_HF'=>$_POST['emailHf'],
+          'vl_focal_person_phone_number'=>$_POST['vlPhoneNumber'],
           'lab_name'=>$_POST['labName'],
           'lab_contact_person'=>$_POST['labContactPerson'],
           'lab_phone_number'=>$_POST['labPhoneNo'],
@@ -172,16 +168,15 @@ try {
           'result_reviewed_by'=>$_POST['reviewedBy'],
           'result_reviewed_datetime'=>$_POST['reviewedOn'],
           'test_methods'=>$_POST['testMethods'],
-          'justification'=>$_POST['justification'],
           'result_value_log'=>$_POST['logValue'],
           'result_value_absolute'=>$_POST['absoluteValue'],
           'result_value_text'=>$_POST['textValue'],
           'result'=>$_POST['result'],
           'approver_comments'=>$_POST['comments'],
-          'status'=>$_POST['status'],
-          'rejection'=>$_POST['rejection'],
+          'result_status'=>$_POST['status'],
+          'is_sample_rejected'=>$_POST['rejection'],
           'sample_rejection_facility'=>$_POST['rejectionFacility'],
-          'sample_rejection_reason'=>$_POST['rejectionReason'],
+          'reason_for_sample_rejection'=>$_POST['rejectionReason'],
           'last_modified_datetime'=>$general->getDateTime()
         );
           

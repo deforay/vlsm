@@ -55,7 +55,7 @@ $pResult = $db->rawQuery($pQuery);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email" class="col-lg-4 control-label">Other Id </label>
+                        <label for="otherId" class="col-lg-4 control-label">Other Id </label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="otherId" name="otherId" placeholder="Other Id" value="<?php echo $facilityInfo[0]['other_id']; ?>"/>
                         </div>
@@ -86,7 +86,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Email </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isEmail" id="email" name="email" placeholder="Email" value="<?php echo $facilityInfo[0]['email']; ?>"/>
+                        <input type="text" class="form-control isEmail" id="email" name="email" placeholder="Email" value="<?php echo $facilityInfo[0]['facility_emails']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -114,7 +114,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" value="<?php echo $facilityInfo[0]['phone_number']; ?>" />
+                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" value="<?php echo $facilityInfo[0]['facility_mobile_numbers']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -131,7 +131,7 @@ $pResult = $db->rawQuery($pQuery);
                           <?php
                           foreach($pResult as $province){
                             ?>
-                            <option value="<?php echo $province['province_name'];?>"<?php echo ($facilityInfo[0]['state']==$province['province_name'])?"selected='selected'":""?>><?php echo $province['province_name'];?></option>
+                            <option value="<?php echo $province['province_name'];?>"<?php echo ($facilityInfo[0]['facility_state']==$province['province_name'])?"selected='selected'":""?>><?php echo $province['province_name'];?></option>
                             <?php
                           }
                           ?>
@@ -141,9 +141,9 @@ $pResult = $db->rawQuery($pQuery);
                   </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
+                        <label for="district" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District" value="<?php echo $facilityInfo[0]['district']; ?>"  title="Please enter district"/>
+                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District" value="<?php echo $facilityInfo[0]['facility_district']; ?>"  title="Please enter district"/>
                         </div>
                     </div>
                   </div>
@@ -154,7 +154,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $facilityInfo[0]['hub_name']; ?>"/>
+                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $facilityInfo[0]['facility_hub_name']; ?>"/>
                         </div>
                     </div>
                   </div>

@@ -30,7 +30,7 @@ $printDateTime = $expStr[1];
 //set query
 if(isset($_POST['id']) && trim($_POST['id'])!=''){
   if(isset($_POST['resultMail'])){
-    $searchQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_id where vl.vl_sample_id IN(".$_POST['id'].")";
+    $searchQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type where vl.vl_sample_id IN(".$_POST['id'].")";
   }else{
     $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
   }
@@ -145,11 +145,11 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['facility_code']) || trim($result['facility_code']) == ''){
            $result['facility_code'] = '';
         }
-        if(!isset($result['state']) || trim($result['state']) == ''){
-           $result['state'] = '';
+        if(!isset($result['facility_state']) || trim($result['facility_state']) == ''){
+           $result['facility_state'] = '';
         }
-        if(!isset($result['district']) || trim($result['district']) == ''){
-           $result['district'] = '';
+        if(!isset($result['facility_district']) || trim($result['facility_district']) == ''){
+           $result['facility_district'] = '';
         }
         if(!isset($result['facility_name']) || trim($result['facility_name']) == ''){
            $result['facility_name'] = '';
@@ -165,13 +165,13 @@ if(sizeof($requestResult)> 0){
           $difference = $todayDate - $dob;
           $seconds_per_year = 60*60*24*365;
           $age = round($difference / $seconds_per_year);
-        }elseif(isset($result['age_in_yrs']) && trim($result['age_in_yrs'])!='' && trim($result['age_in_yrs']) >0){
-          $age = $result['age_in_yrs'];
-        }elseif(isset($result['age_in_mnts']) && trim($result['age_in_mnts'])!='' && trim($result['age_in_mnts']) >0){
-          if($result['age_in_mnts'] > 1){
-            $age = $result['age_in_mnts'].' months';
+        }elseif(isset($result['patient_age_in_years']) && trim($result['patient_age_in_years'])!='' && trim($result['patient_age_in_years']) >0){
+          $age = $result['patient_age_in_years'];
+        }elseif(isset($result['patient_age_in_months']) && trim($result['patient_age_in_months'])!='' && trim($result['patient_age_in_months']) >0){
+          if($result['patient_age_in_months'] > 1){
+            $age = $result['patient_age_in_months'].' months';
           }else{
-            $age = $result['age_in_mnts'].' month';
+            $age = $result['patient_age_in_months'].' month';
           }
         }
         
@@ -203,8 +203,8 @@ if(sizeof($requestResult)> 0){
         }else{
           $result['last_viral_load_date']='';
         }
-        if(!isset($result['gender']) || trim($result['gender'])== ''){
-          $result['gender'] = 'not reported';
+        if(!isset($result['patient_gender']) || trim($result['patient_gender'])== ''){
+          $result['patient_gender'] = 'not reported';
         }
         if(isset($result['approvedBy']) && trim($result['approvedBy'])!= ''){
           $resultApprovedBy = ucwords($result['approvedBy']);
@@ -283,9 +283,9 @@ if(sizeof($requestResult)> 0){
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
           $smileyContent = '';
         }
-        if($result['status']=='4'){
-        $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
-      }
+        if($result['result_status']=='4'){
+         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
+        }
       
         $html = '';
         $html .= '<div style="">';
@@ -302,7 +302,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic code</td>';
                $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['facility_code'].'</td>';
                $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Province</td>';
-               $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['state']).'</td>';
+               $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['facility_state']).'</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td colspan="4">';
@@ -310,7 +310,7 @@ if(sizeof($requestResult)> 0){
                  $html .='<tr>';
                   $html .='<td style="width:50%;"></td>';
                    $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">District</td>';
-                  $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['district']).'</td>';
+                  $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['facility_district']).'</td>';
                 $html .='</tr>';
                 $html .='<tr>';
                   $html .='<td style="width:50%;"></td>';
@@ -346,15 +346,15 @@ if(sizeof($requestResult)> 0){
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient OI / ART Number</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;text-align:left;">'.$result['art_no'].'</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;text-align:left;">'.$result['patient_art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">First Name</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Surname</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Last Name</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_name']).'</td>';
-                    $html .='<td colspan="3" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['surname']).'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_first_name']).'</td>';
+                    $html .='<td colspan="3" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['patient_last_name']).'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Mobile number</td>';
@@ -362,9 +362,9 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sex</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['patient_phone_number'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$age.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords(str_replace("_"," ",$result['gender'])).'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
                    $html .='</tr>';
                  $html .='</table>';
                 $html .='</td>';
@@ -484,7 +484,7 @@ if(sizeof($requestResult)> 0){
       if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
         //Add event log
         $eventType = 'print-result';
-        $action = ucwords($_SESSION['userName']).' print the test result with patient code '.$result['art_no'];
+        $action = ucwords($_SESSION['userName']).' print the test result with patient code '.$result['patient_art_no'];
         $resource = 'print-test-result';
         $data=array(
         'event_type'=>$eventType,

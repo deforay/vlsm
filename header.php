@@ -199,28 +199,42 @@ $formConfigResult=$db->query($formConfigQuery);
 	if($allAdminMenuAccess == true){ ?>
 	    <li class="treeview manage">
 	      <a href="#">
-		<i class="fa fa-gears"></i>
-		<span>Admin</span>
-		<span class="pull-right-container">
-		  <i class="fa fa-angle-left pull-right"></i>
-		</span>
+          <i class="fa fa-gears"></i>
+          <span>Admin</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
 	      </a>
 	      <ul class="treeview-menu">
-		<?php if(isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])){ ?>
-		<li class="allMenu roleMenu"><a href="../roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu userMenu"><a href="../users/users.php"><i class="fa fa-circle-o"></i> Users</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])){ ?>
-		<li class="allMenu facilityMenu"><a href="../facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])){ ?>
-		<li class="allMenu globalConfigMenu"><a href="../global-config/globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])){ ?>
-		<li class="allMenu importConfigMenu"><a href="../import-configs/importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu requestEmailConfigMenu"><a href="../request-mail/testRequestEmailConfig.php"><i class="fa fa-circle-o"></i>Test Request Email/SMS <br>Configuration</a></li>
-                <?php } if(isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu resultEmailConfigMenu"><a href="../result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a></li>
-                <?php } ?>
+          <?php if(isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])){ ?>
+            <li class="allMenu roleMenu">
+              <a href="../roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a>
+            </li>
+          <?php } if(isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])){ ?>
+            <li class="allMenu userMenu">
+              <a href="../users/users.php"><i class="fa fa-circle-o"></i> Users</a>
+            </li>
+          <?php } if(isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])){ ?>
+            <li class="allMenu facilityMenu">
+              <a href="../facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a>
+            </li>
+          <?php } if(isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])){ ?>
+            <li class="allMenu globalConfigMenu">
+              <a href="../global-config/globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
+            </li>
+          <?php } if(isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])){ ?>
+            <li class="allMenu importConfigMenu">
+              <a href="../import-configs/importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a>
+            </li>
+          <?php } if(isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])){ ?>
+            <li class="allMenu requestEmailConfigMenu">
+              <a href="../request-mail/testRequestEmailConfig.php"><i class="fa fa-circle-o"></i>Test Request Email/SMS <br>Configuration</a>
+            </li>
+          <?php } if(isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])){ ?>
+            <li class="allMenu resultEmailConfigMenu">
+              <a href="../result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
+            </li>
+          <?php } ?>
 	      </ul>
 	    </li>
 	<?php }
@@ -235,18 +249,28 @@ $formConfigResult=$db->query($formConfigQuery);
                 </span>
             </a>
             <ul class="treeview-menu">
-		<?php
-		 if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu vlRequestMenu"><a href="../vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu addVlRequestMenu"><a href="../vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu batchCodeMenu"><a href="../batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu vlRequestMailMenu"><a href="../mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("addImportTestResult.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu importTestResultMenu"><a href="../vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a></li>
-		<?php }?>
+              <?php
+               if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu vlRequestMenu">
+                    <a href="../vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+                  </li>
+              <?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu addVlRequestMenu">
+                    <a href="../vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+                  </li>
+              <?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu batchCodeMenu">
+                    <a href="../batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+                  </li>
+              <?php } if(isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu vlRequestMailMenu">
+                    <a href="../mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
+                  </li>
+              <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestResult.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu importTestResultMenu">
+                    <a href="../vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
+                  </li>
+              <?php }?>
             </ul>
         </li>
         <?php }
@@ -261,17 +285,17 @@ $formConfigResult=$db->query($formConfigQuery);
                 </span>
             </a>
             <ul class="treeview-menu">
-		<?php if(isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])){ ?>
+              <?php if(isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu importResultMenu"><a href="../import-result/addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])){ ?>
+              <?php }  if(isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlTestResultMenu"><a href="../vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
-		<?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
+              <?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultApprovalMenu"><a href="../vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
-		<?php }  if(isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])){ ?>
-               <li class="allMenu vlResultMailMenu"><a href="../mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
-                <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])){ ?>
-               <li class="allMenu importTestRequestMenu"><a href="../import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>
-                <?php }?>
+              <?php }  if(isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])){ ?>
+                <li class="allMenu vlResultMailMenu"><a href="../mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+              <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])){ ?>
+                <li class="allMenu importTestRequestMenu"><a href="../import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>
+              <?php }?>
             </ul>
         </li>
         <?php }
