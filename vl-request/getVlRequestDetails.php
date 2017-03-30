@@ -246,30 +246,32 @@ $primaryKey="vl_sample_id";
         foreach ($rResult as $aRow) {
 	    $vlResult='';
 	    $edit='';
+			$barcode='';
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
 	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
 	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
 	    }else{
 	       $aRow['sample_collection_date'] = '';
 	    }
-            $row = array();
-	    //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
-	    $row[] = $aRow['serial_no'];
-	    $row[] = $aRow['sample_collection_date'];
-	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['art_no'];
-            $row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
-	    $row[] = ucwords($aRow['facility_name']);
-	    $row[] = ucwords($aRow['state']);
-	    $row[] = ucwords($aRow['district']);
-            $row[] = ucwords($aRow['sample_name']);
-            $row[] = $aRow['result'];
-            $row[] = ucwords($aRow['status_name']);
+				$row = array();
+				//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
+				$row[] = $aRow['serial_no'];
+				$row[] = $aRow['sample_collection_date'];
+				$row[] = $aRow['batch_code'];
+				$row[] = $aRow['art_no'];
+				$row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
+				$row[] = ucwords($aRow['facility_name']);
+				$row[] = ucwords($aRow['state']);
+				$row[] = ucwords($aRow['district']);
+				$row[] = ucwords($aRow['sample_name']);
+				$row[] = $aRow['result'];
+				$row[] = ucwords($aRow['status_name']);
 	    //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
 		if($aRow['form_id']==2){
 			if($vlRequest){
 				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+				
 			}
 			$pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertZmbPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
 			if($vlView){
@@ -283,16 +285,19 @@ $primaryKey="vl_sample_id";
 			if($vlView){
 			    $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
 			}
+			
+			$barcode='<br><a href="javascript:void(0)" onclick="printBarcode(\''.$aRow['serial_no'].'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode</a>';
+			
 		}
 		
-		
-	    if($vlView){
-			$row[] = $edit;//.$pdf.$view;
-	    }else if($vlRequest || $editVlRequestZm){
-		$row[] = $edit;//.$pdf;
-	    }else if($vlView){
-		$row[] = "";//$pdf.$view;
-	    }
+					
+						if($vlView){
+							$row[] = $edit.$barcode;//.$pdf.$view;
+						}else if($vlRequest || $editVlRequestZm){
+							$row[] = $edit;//.$pdf;
+						}else if($vlView){
+							$row[] = "";//$pdf.$view;
+						}
             $output['aaData'][] = $row;
         }
         
