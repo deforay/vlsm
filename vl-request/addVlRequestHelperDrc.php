@@ -187,6 +187,10 @@ try {
     if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
         $_POST['sampleCode'] = NULL;
     }
+    if($_POST['testingPlatform']!=''){
+          $platForm = explode("##",$_POST['testingPlatform']);
+          $_POST['testingPlatform'] = $platForm[0];
+          }
     //print_r($_POST);die;
     $vldata=array(
                   'vlsm_instance_id'=>$instanceId,

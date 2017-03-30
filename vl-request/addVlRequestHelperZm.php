@@ -109,6 +109,9 @@ try {
     if(!isset($_POST['specimenType']) || trim($_POST['specimenType'])==""){
        $_POST['specimenType'] = NULL;
     }
+    if(trim($_POST['rejectionReason'])==""){
+       $_POST['rejectionReason'] = NULL;
+    }
      $vldata=array(
           'test_urgency'=>$_POST['urgency'],
           'vlsm_instance_id'=>$instanceId,
@@ -163,6 +166,7 @@ try {
         );
          //print_r($vldata);die;
           $id=$db->insert($tableName,$vldata);
+          //echo $id;die;
           if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log

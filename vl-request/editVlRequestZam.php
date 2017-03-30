@@ -355,7 +355,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                           <label class="radio-inline">
                              <input type="radio" class="" id="poorAdherence" name="poorAdherence" value="yes" title="After Enhanced Adherence Poor Adherence was identified" <?php echo ($vlQueryInfo[0]['is_adherance_poor']=='yes')?"checked='checked'":""?>  > Yes
                           </label>
-                          <label class="radio-inline noResult" style="margin-left: 0px;">
+                          <label class="radio-inline " style="margin-left: 0px;">
                                   <input type="radio" class="" id="poorAdherence1" name="poorAdherence" value="no" title="After Enhanced Adherence Poor Adherence was identified" <?php echo ($vlQueryInfo[0]['is_adherance_poor']=='no')?"checked='checked'":""?>> No
                           </label>
                         </td>

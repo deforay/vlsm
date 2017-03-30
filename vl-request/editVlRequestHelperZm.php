@@ -86,7 +86,9 @@ try {
           $platForm = explode("##",$_POST['testingPlatform']);
           $_POST['testingPlatform'] = $platForm[0];
           }
-     
+     if(trim($_POST['rejectionReason'])==""){
+       $_POST['rejectionReason'] = NULL;
+    }
      $vldata=array(
           'test_urgency'=>$_POST['urgency'],
           'serial_no'=>$_POST['serialNo'],
