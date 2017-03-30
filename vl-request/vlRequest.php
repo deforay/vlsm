@@ -192,7 +192,23 @@ $batResult = $db->rawQuery($batQuery);
                 </tr>
                 </tbody>
               </table>
+							<div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br/>
+								<div class="progress" style="width:100%">
+									<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+									</div>
+								</div>
+							</div> <!-- /printer_data_loading -->
+							<div id="printer_details" style="display:none">
+								<span id="selected_printer">No printer selected!</span> 
+								<button type="button" class="btn btn-success" onclick="changePrinter()">Change/Retry</button>
+							</div><br /> <!-- /printer_details -->
+							<div id="printer_select" style="display:none">
+								Zebra Printer Options<br />
+								Printer: <select id="printers"></select>
+							</div> <!-- /printer_select -->
+							
             </div>
+						
             <!-- /.box-body -->
 	<!--    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">-->
 	<!--    <tr style="margin-top:30px;">-->
@@ -225,6 +241,10 @@ $batResult = $db->rawQuery($batQuery);
   </div>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
+  <script src="../assets/js/zebra-print.js"></script>	
+	
+	
   <script type="text/javascript">
    var startDate = "";
    var endDate = "";
@@ -232,6 +252,8 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
    $(document).ready(function() {
+		
+		 setup_web_print();
      loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -305,9 +327,9 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-		<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
-                {"sClass":"center","bSortable":false},
-		<?php } ?>
+								<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
+								{"sClass":"center","bSortable":false},
+								<?php } ?>
             ],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
