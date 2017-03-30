@@ -563,7 +563,7 @@ if($urgency==''){
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="2"/>
-                <?php if($cSampleResult[0]['value']=='auto'){ ?>
+                <?php if($arr['sample_code']=='auto'){ ?>
                 <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                 <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                 <?php } ?>
@@ -666,7 +666,7 @@ if($urgency==''){
       });
       }
       <?php
-      if($cSampleResult[0]['value']=='auto'){
+      if($arr['sample_code']=='auto'){
         ?>
         pNameVal = pName.split("##");
         sCode = '<?php echo date('Ymd');?>';

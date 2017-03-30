@@ -302,7 +302,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                         
                         <td><label for="ageInMonths">Age in months</label></td>
                         <td>
-                          <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>" >
+                          <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>" />
                         </td>
                         <td class="femaleElements" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>><label for="patientPregnant">Is Patient Pregnant ?</label></td>
                         <td class="femaleElements" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>>
@@ -815,6 +815,7 @@ $("#vlLog").bind("keyup change", function(e) {
       var date1 = new Date(yyyy,mm,dd);
       var date2 = new Date(dobYear,dobMonth,dobDate);
       var diff = new Date(date1.getTime() - date2.getTime());
+      console.log(diff.getUTCFullYear() - 1970);
       if((diff.getUTCFullYear() - 1970) == 0){
         $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
       }else{
