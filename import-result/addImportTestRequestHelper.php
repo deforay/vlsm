@@ -232,7 +232,7 @@ try {
                                    $tStatusData = array(
                                                      'status_name'=>$data_value
                                                  );
-                                   $id = $db->insert('testing_status',$tStatusData);
+                                   $id = $db->insert('r_sample_status',$tStatusData);
                                    $data['result_status'] = $id;
                                 }
                               }
