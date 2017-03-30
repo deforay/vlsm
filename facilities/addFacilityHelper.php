@@ -41,7 +41,7 @@ try {
         $data=array(
         'facility_name'=>$_POST['facilityName'],
         'facility_code'=>$_POST['facilityCode'],
-        'vl_instance_id'=>$instanceId,
+        'vlsm_instance_id'=>$instanceId,
         'other_id'=>$_POST['otherId'],
         'phone_number'=>$_POST['phoneNo'],
         'address'=>$_POST['address'],

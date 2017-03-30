@@ -185,17 +185,17 @@ if(sizeof($requestResult)> 0){
         }
         $sampleReceivedDate='';
         $sampleReceivedTime='';
-        if(isset($result['date_sample_received_at_testing_lab']) && trim($result['date_sample_received_at_testing_lab'])!='' && $result['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-          $expStr=explode(" ",$result['date_sample_received_at_testing_lab']);
+        if(isset($result['sample_received_at_vl_lab_datetime']) && trim($result['sample_received_at_vl_lab_datetime'])!='' && $result['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+          $expStr=explode(" ",$result['sample_received_at_vl_lab_datetime']);
           $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
           $sampleReceivedTime =$expStr[1];
         }
         
-        if(isset($result['lab_tested_date']) && trim($result['lab_tested_date'])!='' && $result['lab_tested_date']!='0000-00-00 00:00:00'){
-          $expStr=explode(" ",$result['lab_tested_date']);
-          $result['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+        if(isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime'])!='' && $result['sample_tested_datetime']!='0000-00-00 00:00:00'){
+          $expStr=explode(" ",$result['sample_tested_datetime']);
+          $result['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
         }else{
-          $result['lab_tested_date']='';
+          $result['sample_tested_datetime']='';
         }
         
         if(isset($result['last_viral_load_date']) && trim($result['last_viral_load_date'])!='' && $result['last_viral_load_date']!='0000-00-00'){
@@ -348,7 +348,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_no'].'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_code'].'</td>';
                     $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result['serial_no'].'</td>';
                     $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
@@ -398,7 +398,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['lab_tested_date'].'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
@@ -446,7 +446,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['comments']).'</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['approver_comments']).'</td>';
                   $html .='</tr>';
                 $html .='</table>';
                $html .='</td>';
@@ -511,7 +511,7 @@ if(sizeof($requestResult)> 0){
         $db->insert($tableName1,$data);
         //Update print datetime in VL tbl.
         $db=$db->where('vl_sample_id',$result['vl_sample_id']);
-        $db->update($tableName2,array('date_result_printed'=>$general->getDateTime()));
+        $db->update($tableName2,array('result_printed_datetime'=>$general->getDateTime()));
       }
     }
     

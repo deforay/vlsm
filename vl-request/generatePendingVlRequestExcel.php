@@ -78,7 +78,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             }elseif($filedGroup[$f] == "Sample Collection Date"){
                  $field = 'sample_collection_date';
             }elseif($filedGroup[$f] == "Sample Received Date"){
-                 $field = 'date_sample_received_at_testing_lab';
+                 $field = 'sample_received_at_vl_lab_datetime';
             }elseif($filedGroup[$f] == "Collected by (Initials)"){
                  $field = 'collected_by';
             }elseif($filedGroup[$f] == "Gender"){
@@ -114,17 +114,17 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             }elseif($filedGroup[$f] == "Lab Name"){
                  $field = 'lab_id';
             }elseif($filedGroup[$f] == "LAB No"){
-                 $field = 'lab_no';
+                 $field = 'lab_code';
             }elseif($filedGroup[$f] == "VL Testing Platform"){
                  $field = 'vl_test_platform';
             }elseif($filedGroup[$f] == "Specimen type"){
                  $field = 'sample_name';
             }elseif($filedGroup[$f] == "Sample Testing Date"){
-                 $field = 'lab_tested_date';
+                 $field = 'sample_tested_datetime';
             }elseif($filedGroup[$f] == "Viral Load Result(copiesl/ml)"){
-                 $field = 'absolute_value';
+                 $field = 'result_value_absolute';
             }elseif($filedGroup[$f] == "Log Value"){
-                 $field = 'log_value';
+                 $field = 'result_value_log';
             }elseif($filedGroup[$f] == "If no result"){
                  $field = 'rejection';
             }elseif($filedGroup[$f] == "Rejection Reason"){
@@ -134,7 +134,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             }elseif($filedGroup[$f] == "Approved By"){
                  $field = 'result_approved_by';
             }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
-                 $field = 'comments';
+                 $field = 'approver_comments';
             }elseif($filedGroup[$f] == "Status"){
                  $field = 'status_name';
             }
@@ -151,7 +151,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             $fValueResult = $db->rawQuery($fValueQuery);
             $fieldValue = '';
             if(count($fValueResult) >0){
-                if($field == 'sample_collection_date' || $field == 'date_sample_received_at_testing_lab' || $field == 'lab_tested_date'){
+                if($field == 'sample_collection_date' || $field == 'sample_received_at_vl_lab_datetime' || $field == 'sample_tested_datetime'){
                     if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
                         $xplodDate = explode(" ",$fValueResult[0][$field]);
                         $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];  

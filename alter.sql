@@ -793,4 +793,62 @@ ALTER TABLE `vl_request_form` ADD `test_result_export` INT(11) NOT NULL DEFAULT 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Manager Email', 'manager_email', NULL);
 
 --saravanan 29-mar-2017
-INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Instance Type ', 'instance_type ', 'Both');
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Instance Type', 'instance_type', 'Both');
+
+ALTER TABLE `vl_request_form` CHANGE `file_name` `import_machine_file_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `modified_on` `last_modified_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `modified_by` `last_modified_by` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `created_on` `request_created_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `batch_details` CHANGE `created_on` `request_created_datetime` DATETIME NOT NULL;
+ALTER TABLE `vl_request_form` CHANGE `created_by` `request_created_by` INT(11) NOT NULL;
+ALTER TABLE `vl_request_form` CHANGE `result_coming_from` ` manual_result_entry` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE ` manual_result_entry` `manual_result_entry` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `file_name` `import_machine_file_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `import_config` CHANGE `file_name` `import_machine_file_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `file_name` `import_machine_file_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `result_mail_sent` `is_result_mail_sent` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'no';
+ALTER TABLE `vl_request_form` CHANGE `request_mail_sent` `is_request_mail_sent` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'no';
+ALTER TABLE `vl_request_form` CHANGE `batch_id` `sample_batch_id` VARCHAR(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `form_id` `vlsm_country_id` INT(11) NOT NULL DEFAULT '1';
+ALTER TABLE `form_details` CHANGE `form_id` `vlsm_country_id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `vl_instance` CHANGE `vl_instance_id` `vlsm_instance_id` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+ALTER TABLE `vl_request_form` CHANGE `vl_instance_id` `vlsm_instance_id` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+ALTER TABLE `hold_sample_report` ADD `manual_result_entry` VARCHAR(255) NULL DEFAULT NULL AFTER `import_machine_file_name`;
+ALTER TABLE `vl_request_form` CHANGE `date_result_printed` `result_printed_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `result_approved_on` `result_approved_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `result_reviewed_date` `result_reviewed_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `result_reviewed_date` `result_reviewed_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `result_reviewed_date` `result_reviewed_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `text_value` `result_value_text` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `text_value` `result_value_text` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `text_value` `result_value_text` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `absolute_value` `result_value_absolute` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `absolute_value` `result_value_absolute` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `absolute_value` `result_value_absolute` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `log_value` `result_value_log` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `log_value` `result_value_log` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `log_value` `result_value_log` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+--saravanan 30-mar-2017
+ALTER TABLE `vl_request_form` CHANGE `comments` `approver_comments` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `comments` `approver_comments` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `comments` `approver_comments` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `date_results_dispatched` `result_dispatched_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `date_results_dispatched` `result_dispatched_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `date_results_dispatched` `result_dispatched_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` DROP `date_of_completion_of_viral_load`;
+ALTER TABLE `vl_request_form` CHANGE `absolute_decimal_value` `result_value_absolute_decimal` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `absolute_decimal_value` `result_value_absolute_decimal` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `absolute_decimal_value` `result_value_absolute_decimal` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` ADD `is_result_sms_sent` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `is_result_mail_sent`;
+ALTER TABLE `vl_request_form` ADD `result_sms_sent_datetime` DATETIME NULL DEFAULT NULL AFTER `result_printed_datetime`;
+ALTER TABLE `vl_request_form` CHANGE `lab_tested_date` `sample_tested_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `lab_tested_date` `sample_tested_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `lab_tested_date` `sample_tested_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `date_sample_received_at_testing_lab` `sample_received_at_vl_lab_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `date_sample_received_at_testing_lab` `sample_received_at_vl_lab_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `date_sample_received_at_testing_lab` `sample_received_at_vl_lab_datetime` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `lab_phone_no` `lab_phone_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `hold_sample_report` CHANGE `lab_phone_no` `lab_phone_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `temp_sample_report` CHANGE `lab_phone_no` `lab_phone_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `vl_request_form` CHANGE `lab_no` `lab_code` INT(11) NULL DEFAULT NULL;

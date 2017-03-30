@@ -143,7 +143,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                             <?php
                             foreach($formResult as $val){
                             ?>
-                            <option value="<?php echo $val['form_id']; ?>" <?php echo ($val['form_id']==$arr['vl_form'])?"selected='selected'":""?>><?php echo $val['form_name']; ?></option>
+                            <option value="<?php echo $val['vlsm_country_id']; ?>" <?php echo ($val['vlsm_country_id']==$arr['vl_form'])?"selected='selected'":""?>><?php echo $val['form_name']; ?></option>
                             <?php
                             }
                             ?>

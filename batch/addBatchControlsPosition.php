@@ -31,7 +31,7 @@ if(isset($batchInfo[0]['number_of_in_house_controls']) && trim($batchInfo[0]['nu
 }
 //Get machine's prev. label order
 $machine = intval($batchInfo[0]['machine']);
-$prevLabelQuery="SELECT label_order from batch_details as b_d WHERE b_d.machine = $machine AND b_d.batch_id!= $id ORDER BY b_d.created_on DESC LIMIT 0,1";
+$prevLabelQuery="SELECT label_order from batch_details as b_d WHERE b_d.machine = $machine AND b_d.batch_id!= $id ORDER BY b_d.request_created_datetime DESC LIMIT 0,1";
 $prevlabelInfo=$db->query($prevLabelQuery);
 if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_order'])!= ''){
 	$jsonToArray = json_decode($prevlabelInfo[0]['label_order'],true);
@@ -44,7 +44,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 	}
 	//Get display sample only
 	$displaySampleOrderArray = array();
-	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where batch_id=$id";
+	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id";
     $samplesInfo=$db->query($samplesQuery);
 	foreach($samplesInfo as $sample){
 		$displaySampleOrderArray[] = $sample['vl_sample_id'];
@@ -114,7 +114,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 		   $content.='<li class="ui-state-default" id="no_of_calibrators_'.($c+1).'">Calibrators '.($c+1).'</li>';
 		}
 	}
-	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where batch_id=$id";
+	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id";
     $samplesInfo=$db->query($samplesQuery);
 	foreach($samplesInfo as $sample){
 		$displayOrder[] = "s_".$sample['vl_sample_id'];

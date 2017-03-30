@@ -5,7 +5,7 @@ include('../header.php');
 //Get active machines
 $importConfigQuery="SELECT * FROM import_config WHERE status ='active'";
 $importConfigResult = $db->rawQuery($importConfigQuery);
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id='' ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL OR sample_batch_id='' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -15,7 +15,7 @@ $sResult = $db->rawQuery($sQuery);
 
 $start_date = date('Y-m-d');
 $end_date = date('Y-m-d');
-$batchQuery='select MAX(batch_code_key) FROM batch_details as bd where DATE(bd.created_on) >= "'.$start_date.'" AND DATE(bd.created_on) <= "'.$end_date.'"';
+$batchQuery='select MAX(batch_code_key) FROM batch_details as bd where DATE(bd.request_created_datetime) >= "'.$start_date.'" AND DATE(bd.request_created_datetime) <= "'.$end_date.'"';
 $batchResult=$db->query($batchQuery);
 
 if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code_key)']!=NULL){
@@ -34,7 +34,7 @@ if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code
 //Set last machine label order
 $machinesLabelOrder = array();
 foreach($importConfigResult as $machine) {
-   $lastOrderQuery = "SELECT label_order from batch_details WHERE machine ='". $machine['config_id']."' ORDER BY created_on DESC";
+   $lastOrderQuery = "SELECT label_order from batch_details WHERE machine ='". $machine['config_id']."' ORDER BY request_created_datetime DESC";
    $lastOrderInfo=$db->query($lastOrderQuery);
    if(isset($lastOrderInfo[0]['label_order']) && trim($lastOrderInfo[0]['label_order'])!=''){
      $machinesLabelOrder[$machine['config_id']] = implode(",",json_decode($lastOrderInfo[0]['label_order'],true));

@@ -76,17 +76,17 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             }elseif($filedGroup[$f] == "Lab Name"){
                  $field = 'lab_id';
             }elseif($filedGroup[$f] == "LAB No"){
-                 $field = 'lab_no';
+                 $field = 'lab_code';
             }elseif($filedGroup[$f] == "Lab Contact Person"){
                  $field = 'lab_contact_person';
             }elseif($filedGroup[$f] == "Lab Phone No"){
-                 $field = 'lab_phone_no';
+                 $field = 'lab_phone_number';
             }elseif($filedGroup[$f] == "Sample Received Date"){
-                 $field = 'date_sample_received_at_testing_lab';
+                 $field = 'sample_received_at_vl_lab_datetime';
             }elseif($filedGroup[$f] == "Result Dispatched Date"){
-                 $field = 'date_results_dispatched';
+                 $field = 'result_dispatched_datetime';
             }elseif($filedGroup[$f] == "Date of Viral Load Completion"){
-                 $field = 'date_of_completion_of_viral_load';
+                 $field = 'result_approved_datetime';
             }elseif($filedGroup[$f] == "VL Testing Platform"){
                  $field = 'vl_test_platform';
             }elseif($filedGroup[$f] == "Test Method"){
@@ -94,13 +94,13 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             }elseif($filedGroup[$f] == "Specimen Type"){
                  $field = 'sample_name';
             }elseif($filedGroup[$f] == "Sample Testing Date"){
-                 $field = 'lab_tested_date';
+                 $field = 'sample_tested_datetime';
             }elseif($filedGroup[$f] == "Log Value"){
-                 $field = 'log_value';
+                 $field = 'result_value_log';
             }elseif($filedGroup[$f] == "Absolute Value"){
-                 $field = 'absolute_value';
+                 $field = 'result_value_absolute';
             }elseif($filedGroup[$f] == "Text Value"){
-                 $field = 'text_value';
+                 $field = 'result_value_text';
             }elseif($filedGroup[$f] == "Viral Load Result(copiesl/ml)"){
                  $field = 'result';
             }elseif($filedGroup[$f] == "If no result"){
@@ -110,11 +110,11 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             }elseif($filedGroup[$f] == "Reviewed By"){
                  $field = 'result_reviewed_by';
             }elseif($filedGroup[$f] == "Reviewed Date"){
-                 $field = 'result_reviewed_date';
+                 $field = 'result_reviewed_datetime';
             }elseif($filedGroup[$f] == "Approved By"){
                  $field = 'result_approved_by';
             }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
-                 $field = 'comments';
+                 $field = 'approver_comments';
             }elseif($filedGroup[$f] == "Status"){
                  $field = 'status_name';
             }
@@ -131,12 +131,12 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             $fValueResult = $db->rawQuery($fValueQuery);
             $fieldValue = '';
             if(count($fValueResult) >0){
-               if($field == 'date_sample_received_at_testing_lab' || $field == 'date_results_dispatched' || $field == 'lab_tested_date' || $field == 'result_reviewed_date'){
+               if($field == 'sample_received_at_vl_lab_datetime' || $field == 'result_dispatched_datetime' || $field == 'sample_tested_datetime' || $field == 'result_reviewed_datetime'){
                     if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
                         $xplodDate = explode(" ",$fValueResult[0][$field]);
                         $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
                     }
-               }elseif($field ==  'date_of_completion_of_viral_load'){
+               }elseif($field ==  'result_approved_datetime'){
                   if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
                      $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
                   }

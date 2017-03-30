@@ -55,16 +55,16 @@ include ('../includes/PHPExcel.php');
  
  foreach ($rResult as $aRow) {
   $row = array();
-  if($aRow['lab_tested_date']=='0000-00-00 00:00:00')
+  if($aRow['sample_tested_datetime']=='0000-00-00 00:00:00')
   {
-   $aRow['lab_tested_date'] = '';
+   $aRow['sample_tested_datetime'] = '';
   }
   if($aRow['sample_collection_date']=='0000-00-00 00:00:00')
   {
    $aRow['sample_collection_date'] = '';
   }
   $row[] = $aRow['serial_no'];
-  $row[] = $aRow['vl_instance_id'];
+  $row[] = $aRow['vlsm_instance_id'];
   $row[] = ucwords(str_replace("_"," ",$aRow['gender']));
   $row[] = $aRow['age_in_yrs'];
   $row[] = ucwords($aRow['facility_name']);
@@ -98,18 +98,18 @@ include ('../includes/PHPExcel.php');
   $row[] = ucwords($aRow['labLatitude']);
   $row[] = ucwords($aRow['labFacilityStatus']);
   $row[] = ucwords($aRow['labFacilityTypeName']);
-  $row[] = $aRow['lab_tested_date'];
-  $row[] = $aRow['log_value'];
-  $row[] = $aRow['absolute_value'];
-  $row[] = $aRow['text_value'];
-  $row[] = $aRow['absolute_decimal_value'];
+  $row[] = $aRow['sample_tested_datetime'];
+  $row[] = $aRow['result_value_log'];
+  $row[] = $aRow['result_value_absolute'];
+  $row[] = $aRow['result_value_text'];
+  $row[] = $aRow['result_value_absolute_decimal'];
   $vlResult = '';
-  if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
-       $vlResult = $aRow['absolute_value'];
-   }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
-       $vlResult = $aRow['log_value'];
-   }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
-       $vlResult = $aRow['text_value'];
+  if(isset($aRow['result_value_absolute']) && trim($aRow['result_value_absolute'])!= ''){
+       $vlResult = $aRow['result_value_absolute'];
+   }elseif(isset($aRow['result_value_log']) && trim($aRow['result_value_log'])!= ''){
+       $vlResult = $aRow['result_value_log'];
+   }elseif(isset($aRow['result_value_text']) && trim($aRow['result_value_text'])!= ''){
+       $vlResult = $aRow['result_value_text'];
    }
   $row[] = $vlResult;
   $row[] = ucwords($aRow['test_reason_name']);

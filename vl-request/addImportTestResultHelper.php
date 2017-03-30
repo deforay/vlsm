@@ -51,18 +51,18 @@ try {
                                   $sampleReceivingDate = explode(" ",$data_value);
                                   $data_value = $general->dateFormat($sampleReceivingDate[0])." ".$sampleReceivingDate[1];
                                }
-                              $data['date_sample_received_at_testing_lab'] = $data_value;
+                              $data['sample_received_at_vl_lab_datetime'] = $data_value;
                            }else if($data_heading == 'Result Dispatched Date'){
                              if(trim($data_value)!= '' && $data_value!= '00-00-0000 00:00:00'){
                                   $resultDispatchedDate = explode(" ",$data_value);
                                   $data_value = $general->dateFormat($resultDispatchedDate[0])." ".$resultDispatchedDate[1];
                                }
-                              $data['date_results_dispatched'] = $data_value;
+                              $data['result_dispatched_datetime'] = $data_value;
                            }else if($data_heading == 'Date of Viral Load Completion'){
                               if(trim($data_value)!= '' && $data_value!= '00-00-0000'){
                                 $data_value = $general->dateFormat($data_value);
                               }
-                             $data['date_of_completion_of_viral_load'] = $data_value;
+                             $data['result_approved_datetime'] = $data_value;
                            }else if($data_heading == 'Reason For VL Test'){
                               $data['vl_test_reason'] = $data_value;
                            }else if($data_heading == 'VL Testing Platform'){
@@ -74,13 +74,13 @@ try {
                                   $sampleTestedDate = explode(" ",$data_value);
                                   $data_value = $general->dateFormat($sampleTestedDate[0])." ".$sampleTestedDate[1];
                                }
-                             $data['lab_tested_date'] = $data_value;
+                             $data['sample_tested_datetime'] = $data_value;
                            }else if($data_heading == 'Log Value'){
-                             $data['log_value'] = $data_value;
+                             $data['result_value_log'] = $data_value;
                            }else if($data_heading == 'Absolute Value'){
-                             $data['absolute_value'] = $data_value;
+                             $data['result_value_absolute'] = $data_value;
                            }else if($data_heading == 'Text Value'){
-                             $data['text_value'] = $data_value;
+                             $data['result_value_text'] = $data_value;
                            }else if($data_heading == 'Viral Load Result(copiesl/ml)'){
                              $data['result'] = $data_value;
                            }else if($data_heading == 'If no result'){
@@ -123,7 +123,7 @@ try {
                                   $reviewedDate = explode(" ",$data_value);
                                   $data_value = $general->dateFormat($reviewedDate[0])." ".$reviewedDate[1];
                                }
-                              $data['result_reviewed_date'] = $data_value;
+                              $data['result_reviewed_datetime'] = $data_value;
                            }else if($data_heading == 'Approved By'){
                              $data['result_approved_by'] = NULL;
                              if(trim($data_value)!= ''){
@@ -142,7 +142,7 @@ try {
                                 }
                              }
                            }else if($data_heading == 'Laboratory Scientist Comments'){
-                             $data['comments'] = $data_value;
+                             $data['approver_comments'] = $data_value;
                            }else if($data_heading == 'Specimen type'){
                               $data['sample_id'] = NULL;
                               if(trim($data_value)!= ''){
@@ -179,11 +179,11 @@ try {
                                 }
                               }
                            }else if($data_heading == 'LAB No'){
-                               $data['lab_no'] = $data_value;
+                               $data['lab_code'] = $data_value;
                            }else if($data_heading == 'Lab Contact Person'){
                                $data['lab_contact_person'] = $data_value;
                            }else if($data_heading == 'Lab Phone No'){
-                               $data['lab_phone_no'] = $data_value;
+                               $data['lab_phone_number'] = $data_value;
                            }else if($data_heading == 'Status'){
                               $data['status'] = NULL;
                               if(trim($data_value)!= ''){
@@ -202,15 +202,15 @@ try {
                            }
                            
                            if(!isset($data['result']) || $data['result'] == ''){
-                                if(isset($data['absolute_value']) && trim($data['absolute_value'])!= ''){
-                                    $data['result'] = $data['absolute_value'];
-                                }elseif(isset($data['log_value']) && trim($data['log_value'])!= ''){
-                                    $data['result'] = $data['log_value'];
+                                if(isset($data['result_value_absolute']) && trim($data['result_value_absolute'])!= ''){
+                                    $data['result'] = $data['result_value_absolute'];
+                                }elseif(isset($data['result_value_log']) && trim($data['result_value_log'])!= ''){
+                                    $data['result'] = $data['result_value_log'];
                                 }
                            }
-                           $data['form_id'] = $arr['vl_form'];
-                           $data['modified_by'] = $_SESSION['userId'];
-                           $data['modified_on'] = $general->getDateTime();
+                           $data['vlsm_country_id'] = $arr['vl_form'];
+                           $data['last_modified_by'] = $_SESSION['userId'];
+                           $data['last_modified_datetime'] = $general->getDateTime();
                        }
                     }
                     $sampleQuery = 'select vl_sample_id from vl_request_form where sample_code = "'.$data['sample_code'].'"';
@@ -219,8 +219,8 @@ try {
                         $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
                         $db->update('vl_request_form',$data);
                     }else{
-                        $data['created_by'] = $_SESSION['userId'];
-                        $data['created_on'] = $general->getDateTime();
+                        $data['request_created_by'] = $_SESSION['userId'];
+                        $data['request_created_datetime'] = $general->getDateTime();
                         $db->insert('vl_request_form',$data);
                     }
                 }

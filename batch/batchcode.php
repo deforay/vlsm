@@ -26,7 +26,7 @@ include('../header.php');
 				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="''" class="showhideCheckBox" /> <label for="iCol1">No. Of Samples</label>
 			  </div>
 			  <div class="col-md-4">
-				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="created_on" class="showhideCheckBox"  /> <label for="iCol2">Created On</label>
+				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="request_created_datetime" class="showhideCheckBox"  /> <label for="iCol2">Created On</label>
 			  </div>
 			  <div class="col-md-4">
 				  <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="batch_status" class="showhideCheckBox"  /> <label for="iCol3">Status</label> <br>

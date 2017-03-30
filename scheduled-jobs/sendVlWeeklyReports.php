@@ -91,7 +91,7 @@ if(!isset($postdata['reportedDate'])){
  
  $c = 0;
  foreach($vlLabResult as $vlLab){
-    $sQuery="SELECT vl.facility_id,f.state,f.district,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.form_id = '".$country."'";
+    $sQuery="SELECT vl.facility_id,f.state,f.district,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.vlsm_country_id = '".$country."'";
     if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         if (trim($start_date) == trim($end_date)) {
           $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
@@ -167,7 +167,7 @@ if(!isset($postdata['reportedDate'])){
         $r=1;
         foreach ($sResult as $aRow) {
           //No. of tests per facility & calculate others
-           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.rejection,vl.sample_rejection_reason,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.form_id = '.$country;
+           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.rejection,vl.sample_rejection_reason,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.vlsm_country_id = '.$country;
            if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
                 if (trim($start_date) == trim($end_date)) {
                   $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
@@ -310,7 +310,7 @@ if(!isset($postdata['reportedDate'])){
    $output = array();
     $r=1;
     foreach ($vlLabResult as $vlLab) {
-       $sQuery="SELECT vl.vl_sample_id,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_tested_date,vl.date_result_printed,vl.result,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.form_id = '".$country."'";
+       $sQuery="SELECT vl.vl_sample_id,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.sample_tested_datetime,vl.result_printed_datetime,vl.result,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.vlsm_country_id = '".$country."'";
        if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
           if (trim($start_date) == trim($end_date)) {
             $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
@@ -333,21 +333,21 @@ if(!isset($postdata['reportedDate'])){
          if(trim($result['sample_collection_date'])!= '' && $result['sample_collection_date'] != NULL && $result['sample_collection_date'] != '0000-00-00 00:00:00'){
             $sampleCollectionDate = $result['sample_collection_date'];
          }
-         if(trim($result['date_sample_received_at_testing_lab'])!= '' && $result['date_sample_received_at_testing_lab'] != NULL && $result['date_sample_received_at_testing_lab'] != '0000-00-00 00:00:00'){
-            $dateOfSampleReceivedAtTestingLab = $result['date_sample_received_at_testing_lab'];
+         if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
+            $dateOfSampleReceivedAtTestingLab = $result['sample_received_at_vl_lab_datetime'];
             $noOfSampleReceivedAtLab[] = $result['vl_sample_id'];
          }
-         if(trim($result['lab_tested_date'])!= '' && $result['lab_tested_date'] != NULL && $result['lab_tested_date'] != '0000-00-00 00:00:00'){
-            $labTestedDate = $result['lab_tested_date'];
+         if(trim($result['sample_tested_datetime'])!= '' && $result['sample_tested_datetime'] != NULL && $result['sample_tested_datetime'] != '0000-00-00 00:00:00'){
+            $labTestedDate = $result['sample_tested_datetime'];
             $noOfSampleTested[] = $result['vl_sample_id'];
          }else{
             //For sample not tested..
-            if(trim($result['date_sample_received_at_testing_lab'])!= '' && $result['date_sample_received_at_testing_lab'] != NULL && $result['date_sample_received_at_testing_lab'] != '0000-00-00 00:00:00'){
+            if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
                $noOfSampleNotTested[] = $result['vl_sample_id'];
             }
          }
-         if(trim($result['date_result_printed'])!= '' && $result['date_result_printed'] != NULL && $result['date_result_printed'] != '0000-00-00 00:00:00'){
-            $dateResultPrinted = $result['date_result_printed'];
+         if(trim($result['result_printed_datetime'])!= '' && $result['result_printed_datetime'] != NULL && $result['result_printed_datetime'] != '0000-00-00 00:00:00'){
+            $dateResultPrinted = $result['result_printed_datetime'];
          }
          if(trim($dateOfSampleReceivedAtTestingLab)!= '' && trim($dateResultPrinted)!= ''){
             $date_result_printed = strtotime($dateResultPrinted);

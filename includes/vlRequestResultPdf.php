@@ -96,7 +96,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 $id=$_POST['id'];
-$fQuery="SELECT vl.vl_sample_id,vl.sample_code,vl.serial_no,vl.patient_name,vl.patient_name,vl.surname,vl.patient_dob,vl.age_in_yrs,vl.age_in_mnts,vl.art_no,vl.gender,vl.patient_receive_sms,vl.patient_phone_number,vl.sample_collection_date,vl.clinician_ph_no,vl.sample_testing_date,vl.date_sample_received_at_testing_lab,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.lab_no,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.last_viral_load_result,vl.last_viral_load_date,vl.result_reviewed_date,vl.result_approved_by,vl.vl_test_platform,vl.status,rs.rejection_reason_name,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,s.sample_name,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by WHERE vl_sample_id=$id";
+$fQuery="SELECT vl.vl_sample_id,vl.sample_code,vl.serial_no,vl.patient_name,vl.patient_name,vl.surname,vl.patient_dob,vl.age_in_yrs,vl.age_in_mnts,vl.art_no,vl.gender,vl.patient_receive_sms,vl.patient_phone_number,vl.sample_collection_date,vl.clinician_ph_no,vl.sample_testing_date,vl.sample_received_at_vl_lab_datetime,vl.lab_name,vl.lab_contact_person,vl.lab_phone_number,vl.sample_tested_datetime,vl.lab_code,vl.result_value_log,vl.result_value_absolute,vl.result_value_text,vl.result,vl.approver_comments,vl.result_reviewed_by,vl.last_viral_load_result,vl.last_viral_load_date,vl.result_reviewed_datetime,vl.result_approved_by,vl.vl_test_platform,vl.status,rs.rejection_reason_name,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,s.sample_name,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by WHERE vl_sample_id=$id";
 
 
 $result=$db->query($fQuery);
@@ -143,17 +143,17 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
 }
 $sampleReceivedDate='';
 $sampleReceivedTime='';
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && $result[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
+if(isset($result[0]['sample_received_at_vl_lab_datetime']) && trim($result[0]['sample_received_at_vl_lab_datetime'])!='' && $result[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$result[0]['sample_received_at_vl_lab_datetime']);
   $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
   $sampleReceivedTime =$expStr[1];
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && $result[0]['lab_tested_date']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$result[0]['lab_tested_date']);
-  $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_tested_datetime']) && trim($result[0]['sample_tested_datetime'])!='' && $result[0]['sample_tested_datetime']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$result[0]['sample_tested_datetime']);
+  $result[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
-  $result[0]['lab_tested_date']='';
+  $result[0]['sample_tested_datetime']='';
 }
 
 if(isset($result[0]['last_viral_load_date']) && trim($result[0]['last_viral_load_date'])!='' && $result[0]['last_viral_load_date']!='0000-00-00'){
@@ -311,7 +311,7 @@ $html .= '<div style="">';
           $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Collection Date</td>';
          $html .='</tr>';
          $html .='<tr>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['lab_no'].'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['lab_code'].'</td>';
           $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">'.$result[0]['serial_no'].'</td>';
           $html .='<td style="line-height:22px;font-size:13px;text-align:left;">'.$result[0]['sample_collection_date']." ".$sampleCollectionTime.'</td>';
          $html .='</tr>';
@@ -361,7 +361,7 @@ $html .= '<div style="">';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
           $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['lab_tested_date'].'</td>';
+          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result[0]['sample_tested_datetime'].'</td>';
         $html .='</tr>';
         $html .='<tr>';
           $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
@@ -410,7 +410,7 @@ $html .= '<div style="">';
           $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
         $html .='</tr>';
         $html .='<tr>';
-          $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result[0]['comments']).'</td>';
+          $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result[0]['approver_comments']).'</td>';
         $html .='</tr>';
       $html .='</table>';
       
@@ -476,7 +476,7 @@ if(isset($_POST['source']) && trim($_POST['source']) == 'print'){
   $db->insert($tableName1,$data);
   //Update print datetime in VL tbl.
   $db=$db->where('vl_sample_id',$result[0]['vl_sample_id']);
-  $db->update($tableName2,array('date_result_printed'=>$general->getDateTime()));
+  $db->update($tableName2,array('result_printed_datetime'=>$general->getDateTime()));
 }
 echo $filename;
 ?>

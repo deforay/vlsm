@@ -185,20 +185,20 @@ try {
                   'vl_test_reason'=>$_POST['vlTestReason'],
                   'last_viral_load_result'=>$_POST['lastViralLoadResult'],
                   'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
-                  'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
+                  'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
                   'sample_code'=>$_POST['sampleCode'],
                   'serial_no'=>$_POST['sampleCode'],
-                  'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
+                  'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
-                  'log_value'=>$_POST['vlLog'],
+                  'result_value_log'=>$_POST['vlLog'],
                   'result'=>$_POST['vlResult'],
                   'date_of_demand'=>$_POST['dateOfDemand'],
                   'viral_load_no'=>$_POST['viralLoadNo'],
                   'sample_collection_date'=>$_POST['sampleCollectionDate'],
                   'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],
-                  'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
-                  'modified_by'=>$_SESSION['userId'],
-                  'modified_on'=>$general->getDateTime()
+                  'result_approved_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
+                  'last_modified_by'=>$_SESSION['userId'],
+                  'last_modified_datetime'=>$general->getDateTime()
                 );
     if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
         $vldata['sample_id'] = $_POST['specimenType'];

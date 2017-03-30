@@ -191,7 +191,7 @@ if($id >0){
             }
         }
         $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
-        $sQuery="SELECT sample_code from vl_request_form where batch_id=$id";
+        $sQuery="SELECT sample_code from vl_request_form where sample_batch_id=$id";
         $result=$db->query($sQuery);
         foreach($result as $sample){
             if($pdf->getY()>=250){

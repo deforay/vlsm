@@ -40,7 +40,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where form_id =$formId";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vlsm_country_id =$formId";
 if(isset($facility) && count(array_filter($facility))>0){
     $query = $query." AND vl.facility_id IN (".implode(',',$facility).")";
 }if(trim($sampleType)!=''){
@@ -56,14 +56,14 @@ if(isset($facility) && count(array_filter($facility))>0){
 }if(trim($district)!=''){
     $query = $query." AND f.district LIKE '%" .$district . "%' ";
 }if(isset($batch) && count(array_filter($batch))>0){
-    $query = $query." AND vl.batch_id IN (".implode(',',$batch).")";
+    $query = $query." AND vl.sample_batch_id IN (".implode(',',$batch).")";
 }if(isset($_POST['status']) && trim($_POST['status'])!=''){
     $query = $query." AND vl.status='".$_POST['status']."'";
 }if(trim($mailSentStatus)!=''){
    if(trim($type)== 'request'){
-     $query = $query." AND vl.request_mail_sent='".$mailSentStatus."'";
+     $query = $query." AND vl.is_request_mail_sent='".$mailSentStatus."'";
    }elseif(trim($type)== 'result'){
-      $query = $query." AND vl.result_mail_sent='".$mailSentStatus."'";
+      $query = $query." AND vl.is_result_mail_sent='".$mailSentStatus."'";
    }
 }if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
     if (trim($start_date) == trim($end_date)) {

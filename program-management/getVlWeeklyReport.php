@@ -12,8 +12,8 @@ $country = $configResult[0]['value'];
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('state','district','facility_name','facility_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'vl.comments');
-        $orderColumns = array('state','district','facility_name','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','vl.comments');
+        $aColumns = array('state','district','facility_name','facility_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'vl.approver_comments');
+        $orderColumns = array('state','district','facility_name','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','vl.approver_comments');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -109,12 +109,12 @@ $country = $configResult[0]['value'];
 	$tWhere = 'where ';
 	if(isset($sWhere) && trim($sWhere)!= ''){
 	  $sWhere=' where '.$sWhere;
-	  $sWhere = $sWhere.' AND vl.form_id = '.$country;
-	  $tWhere = $tWhere.'vl.form_id = '.$country;
+	  $sWhere = $sWhere.' AND vl.vlsm_country_id = '.$country;
+	  $tWhere = $tWhere.'vl.vlsm_country_id = '.$country;
 	}else{
 	  $sWhere=' where '.$sWhere;
-	  $sWhere = $sWhere.'vl.form_id = '.$country;
-	  $tWhere = $tWhere.'vl.form_id = '.$country;
+	  $sWhere = $sWhere.'vl.vlsm_country_id = '.$country;
+	  $tWhere = $tWhere.'vl.vlsm_country_id = '.$country;
 	}
 	
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -164,7 +164,7 @@ $country = $configResult[0]['value'];
         
         foreach ($sResult as $aRow) {
 	    //No. of tests per facility & calculate others
-	    $totalQuery = 'SELECT vl_sample_id,patient_dob,gender,is_patient_pregnant,is_patient_breastfeeding,result,rejection,sample_rejection_reason FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.form_id = '.$country;
+	    $totalQuery = 'SELECT vl_sample_id,patient_dob,gender,is_patient_pregnant,is_patient_breastfeeding,result,rejection,sample_rejection_reason FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.vlsm_country_id = '.$country;
 	    if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
 	       $totalQuery = $totalQuery." AND vl.lab_id IN (".$_POST['lab'].")";
 	    }

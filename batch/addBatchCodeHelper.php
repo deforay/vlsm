@@ -13,14 +13,14 @@ try {
                             'machine'=>$_POST['machine'],
                             'batch_code'=>$_POST['batchCode'],
                             'batch_code_key'=>$_POST['batchCodeKey'],
-                            'created_on'=>$general->getDateTime()
+                            'request_created_datetime'=>$general->getDateTime()
                             );
                 $db->insert($tableName1,$data);
                 $lastId = $db->getInsertId();
                 if($lastId!=0 && $lastId!=''){
                     for($j=0;$j<=count($_POST['sampleCode']);$j++){
                         $treamentId = $_POST['sampleCode'][$j];
-                        $value = array('batch_id'=>$lastId);
+                        $value = array('sample_batch_id'=>$lastId);
                         $db=$db->where('vl_sample_id',$treamentId);
                         $db->update($tableName2,$value); 
                     }

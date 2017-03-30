@@ -88,11 +88,11 @@ if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_
 }else{
  $vlQueryInfo[0]['last_viral_load_date']='';
 }
-if(isset($vlQueryInfo[0]['lab_tested_date']) && trim($vlQueryInfo[0]['lab_tested_date'])!='' && trim($vlQueryInfo[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$vlQueryInfo[0]['lab_tested_date']);
- $vlQueryInfo[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && trim($vlQueryInfo[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
+ $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $vlQueryInfo[0]['lab_tested_date']='';
+ $vlQueryInfo[0]['sample_tested_datetime']='';
 }
 if(isset($vlQueryInfo[0]['failed_test_date']) && trim($vlQueryInfo[0]['failed_test_date'])!='' && trim($vlQueryInfo[0]['failed_test_date'])!='0000-00-00 00:00:00'){
   $failedDate=explode(" ",$vlQueryInfo[0]['failed_test_date']);
@@ -100,11 +100,11 @@ if(isset($vlQueryInfo[0]['failed_test_date']) && trim($vlQueryInfo[0]['failed_te
 }else{
  $vlQueryInfo[0]['failed_test_date']='';
 }
-if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQueryInfo[0]['date_sample_received_at_testing_lab'])!='' && $vlQueryInfo[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['date_sample_received_at_testing_lab']);
- $vlQueryInfo[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
+ $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $vlQueryInfo[0]['date_sample_received_at_testing_lab']='';
+ $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
 }
 if(isset($vlQueryInfo[0]['art_cd_date']) && trim($vlQueryInfo[0]['art_cd_date'])!='' && $vlQueryInfo[0]['art_cd_date']!='0000-00-00'){
  $vlQueryInfo[0]['art_cd_date']=$general->humanDateFormat($vlQueryInfo[0]['art_cd_date']);
@@ -238,7 +238,7 @@ $disable = "disabled = 'disabled'";
                         <label for="telephone">Telephone  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control isRequired" name="telephone" id="telephone" <?php echo $disable; ?> placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_no'];?>" >
+                          <input type="text" class="form-control isRequired" name="telephone" id="telephone" <?php echo $disable; ?> placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
                         </td>
                         <td style="width:10%">
                         <label for="clinicDate">Date  <span class="mandatory">*</span></label>
@@ -496,7 +496,7 @@ $disable = "disabled = 'disabled'";
 			<td class="receivedDate"><label for="receivedDate">Date Received</label></td>
 			<td>
 			 <label class="radio-inline">
-			    <input type="text" class="form-control " name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab'];?>" >
+			    <input type="text" class="form-control " name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>" >
 			 </label>
 			</td>
 			<td class="techName"><label for="techName">Tech Name</label></td>
@@ -510,7 +510,7 @@ $disable = "disabled = 'disabled'";
 			<td class=""><label for="testDate">Test date</label></td>
 			<td>
 			  <label class="radio-inline">
-			    <input type="text" class="form-control " name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_tested_date'];?>" >
+			    <input type="text" class="form-control " name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" >
 			 </label>
 			</td>
 			<td class=""><label for="testingTech">Testing tech</label></td>
@@ -558,7 +558,7 @@ $disable = "disabled = 'disabled'";
 			    <select name="batchNo" id="batchNo" class="form-control" title="Please choose batch number">
 			      <option value="">-- Select --</option>
 			      <?php foreach($bResult as $bName) { ?>
-				<option value="<?php echo $bName['batch_id'];?>"<?php echo ($vlQueryInfo[0]['batch_id']==$bName['batch_id'])?"selected='selected'":""?> ><?php echo $bName['batch_code'];?></option>
+				<option value="<?php echo $bName['batch_id'];?>"<?php echo ($vlQueryInfo[0]['sample_batch_id']==$bName['batch_id'])?"selected='selected'":""?> ><?php echo $bName['batch_code'];?></option>
 				<?php
 			      }
 			      ?>
