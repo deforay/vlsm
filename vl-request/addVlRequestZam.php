@@ -213,7 +213,7 @@ $sFormat = '';
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
-                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter DOB" style="width:100%;" >
+                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" style="width:100%;" >
                         </td>
                       </tr>
                       <tr>

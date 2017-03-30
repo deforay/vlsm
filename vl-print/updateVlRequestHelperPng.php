@@ -72,8 +72,8 @@ try {
     }
     
     $vldata=array(
-        'rejection'=>(isset($_POST['sampleQuality']) && $_POST['sampleQuality']!='' ? $_POST['sampleQuality'] :  NULL),
-        'sample_rejection_reason'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
+        'is_sample_rejected'=>(isset($_POST['sampleQuality']) && $_POST['sampleQuality']!='' ? $_POST['sampleQuality'] :  NULL),
+        'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
         'batch_quality'=>(isset($_POST['batchQuality']) && $_POST['batchQuality']!='' ? $_POST['batchQuality'] :  NULL),
         'sample_test_quality'=>(isset($_POST['testQuality']) && $_POST['testQuality']!='' ? $_POST['testQuality'] :  NULL),
         'batch_id'=>(isset($_POST['batchNo']) && $_POST['batchNo']!='' ? $_POST['batchNo'] :  NULL),
@@ -84,7 +84,7 @@ try {
         'failed_sample_test_quality'=>(isset($_POST['failedtestQuality']) && $_POST['failedtestQuality']!='' ? $_POST['failedtestQuality'] :  NULL),
         'failed_batch_id'=>(isset($_POST['failedbatchNo']) && $_POST['failedbatchNo']!='' ? $_POST['failedbatchNo'] :  NULL),
         'lab_id'=>(isset($_POST['laboratoryId']) && $_POST['laboratoryId']!='' ? $_POST['laboratoryId'] :  NULL),
-        'sample_id'=>(isset($_POST['sampleType']) && $_POST['sampleType']!='' ? $_POST['sampleType'] :  NULL),
+        'sample_type'=>(isset($_POST['sampleType']) && $_POST['sampleType']!='' ? $_POST['sampleType'] :  NULL),
         'date_sample_received_at_testing_lab'=>$_POST['receivedDate'],
         'tech_name_png'=>(isset($_POST['techName']) && $_POST['techName']!='' ? $_POST['techName'] :  NULL),
         'lab_tested_date'=>(isset($_POST['testDate']) && $_POST['testDate']!='' ? $_POST['testDate'] :  NULL),
@@ -99,7 +99,7 @@ try {
         );
     
           if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-               $vldata['status']=$_POST['status'];
+               $vldata['result_status']=$_POST['status'];
           }
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $id=$db->update($tableName,$vldata);

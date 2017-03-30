@@ -44,18 +44,18 @@ $tsResult = $db->rawQuery($tsQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $facility = '';
-            $facility.="<option value=''> -- Select -- </option>";
-            foreach($fResult as $fDetails){
-              $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
-            }
-            
+$facility.="<option value=''> -- Select -- </option>";
+foreach($fResult as $fDetails){
+  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+}
+
 $rQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status='active'";
 $rResult = $db->rawQuery($rQuery);
 $rejectReason = '';
-            $rejectReason.="<option value=''> -- Select -- </option>";
-            foreach($rResult as $rDetails){
-              $rejectReason .= "<option value='".$rDetails['rejection_reason_id']."'>".ucwords($rDetails['rejection_reason_name'])."</option>";
-            }
+$rejectReason.="<option value=''> -- Select -- </option>";
+foreach($rResult as $rDetails){
+  $rejectReason .= "<option value='".$rDetails['rejection_reason_id']."'>".ucwords($rDetails['rejection_reason_name'])."</option>";
+}
 
 ?>
 <link rel="stylesheet" href="assets/css/easy-autocomplete.min.css">
@@ -354,21 +354,12 @@ $rejectReason = '';
                     <div class="form-group">
                         <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" />                       
+                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf"/>                     
                         </div>
                     </div>
                   </div>                       
                 </div>
-                
                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="justification" class="col-lg-4 control-label">Justification</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification"/>
-                        </div>
-                    </div>
-                  </div>
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
@@ -382,9 +373,7 @@ $rejectReason = '';
                         </div>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                 <div class="col-md-6">
+                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="sampleType" class="col-lg-4 control-label">Rejection Facility <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
@@ -394,6 +383,8 @@ $rejectReason = '';
                         </div>
                     </div>
                   </div>
+                </div>
+                <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="sampleType" class="col-lg-4 control-label">Rejection Reason <span class="mandatory">*</span></label>
@@ -527,7 +518,7 @@ $rejectReason = '';
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="ArcNo" class="col-lg-4 control-label">If Pregnant, ARC No.</label>
+                        <label for="arcNo" class="col-lg-4 control-label">If Pregnant, ARC No.</label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="arcNo" name="arcNo" placeholder="Enter ARC no." title="Please enter arc no" />
                         </div>
@@ -705,34 +696,6 @@ $rejectReason = '';
                         </div>
                     </div>
                 </div>
-               <div class="row hideTestData" style="display: none;">
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="switchToTDFLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="switchToTDFLastVLDate" name="switchToTDFLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="switchToTDFVlValue" class="col-lg-4 control-label">VL Value</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control viralTestData" id="switchToTDFVlValue" name="switchToTDFVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="switchToTDFSampleType" class="col-lg-4 control-label">Sample Type</label>
-                        <div class="col-lg-7">
-                        <select class="form-control viralTestData" id="switchToTDFSampleType" name="switchToTDFSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                          <?php echo $sampleType; ?>
-                        </select>
-                        </div>
-                    </div>
-                  </div>                   
-                </div>
                <div class="row">                
                     <div class="col-md-6">
                         <div class="form-group">
@@ -744,34 +707,6 @@ $rejectReason = '';
                             </div>
                         </div>
                     </div>
-                </div>
-               <div class="row  hideTestData" style="display: none;">
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="missingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="missingLastVLDate" name="missingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date"/>
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="missingVlValue" class="col-lg-4 control-label">VL Value</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control viralTestData" id="missingVlValue" name="missingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="missingSampleType" class="col-lg-4 control-label">Sample Type</label>
-                        <div class="col-lg-7">
-                        <select class="form-control viralTestData" id="missingSampleType" name="missingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                          <?php echo $sampleType; ?>
-                        </select>
-                        </div>
-                    </div>
-                  </div>                   
                 </div>
                <div class="row">
               <div class="col-md-6">
@@ -1223,7 +1158,8 @@ $rejectReason = '';
       $("#state").val(facilityArray[2]);
       $("#hubName").val(facilityArray[3]);
       $("#district").val(facilityArray[6]);
-      $("#facilityName,#state,#hubName,#district").prop('readonly',true);
+      $("#emailHf").val(facilityArray[7]);
+      $("#facilityName,#state,#hubName,#district,#emailHf").prop('readonly',true);
       $("#clearFInfo").show();
     }
     
@@ -1233,7 +1169,8 @@ $rejectReason = '';
       $("#state").val("");
       $("#hubName").val("");
       $("#district").val("");
-      $("#facilityName,#state,#hubName,#district").prop('readonly',false);
+      $("#emailHf").val("");
+      $("#facilityName,#state,#hubName,#district,#emailHf").prop('readonly',false);
       $("#clearFInfo").hide();
     }
     

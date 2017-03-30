@@ -276,19 +276,19 @@
                                         <input type="radio" class="" id="pregNo" name="patientPregnant" value="no">
                                     </label>
                                 </td>
-                                <td><label for="trimestre">Si Femme  enceinte </label></td>
+                                <td><label for="trimester">Si Femme  enceinte </label></td>
                                 <td colspan="2">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="trimestre1" name="trimestre" value="1" title="Please check trimestre">
+                                        <input type="radio" id="trimester1" name="trimester" value="1" title="Please check trimestre">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 2</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="trimestre2" name="trimestre" value="2">
+                                        <input type="radio" id="trimester2" name="trimester" value="2">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 3</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="trimestre3" name="trimestre" value="3">
+                                        <input type="radio" id="trimester3" name="trimester" value="3">
                                     </label>
                                 </td>
                             </tr>

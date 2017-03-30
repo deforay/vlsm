@@ -94,7 +94,7 @@ $pdf->AddPage();
           $html.='<tr><td style="line-height:25px;">--------/---------/----------------</td></tr>';
           $html.='<tr><td style="line-height:25px;">Time of sample collection</td></tr>';
           $html.='<tr><td style="line-height:25px;">-----------------/-----------------</td></tr>';
-          $html.='<tr><td style="line-height:25px;">Patient name and surname</td></tr>';
+          $html.='<tr><td style="line-height:25px;">Patient name</td></tr>';
           $html.='<tr><td style="line-height:25px;">-----------------------------------</td></tr>';
           $html.='<tr><td style="line-height:25px;">Patient of number</td></tr>';
           $html.='<tr><td style="line-height:25px;">-----------------------------------</td></tr>';
