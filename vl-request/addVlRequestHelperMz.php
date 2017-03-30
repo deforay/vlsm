@@ -75,8 +75,8 @@ try {
      }
     
      $vldata=array(
-          'vl_instance_id'=>$instanceId,
-          'form_id'=>'5',
+          'vlsm_instance_id'=>$instanceId,
+          'vlsm_country_id'=>'5',
           'serial_no'=>(isset($_POST['orderNo']) && $_POST['orderNo']!='' ? $_POST['orderNo'] :  NULL) ,
           'sample_code'=>(isset($_POST['labNumber']) && $_POST['labNumber']!='' ? $_POST['labNumber'] :  NULL),
           'facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='' ? $_POST['clinicName'] :  NULL),
@@ -101,21 +101,21 @@ try {
           'viral_load_log'=>(isset($_POST['viralLoadLog']) && $_POST['viralLoadLog']!='' ? $_POST['viralLoadLog'] :  NULL),
           'vl_test_reason'=>(isset($_POST['vlTestReason']) && $_POST['vlTestReason']!='' ? $_POST['vlTestReason'] :  NULL),
           'sample_id'=>(isset($_POST['sampleType']) && $_POST['sampleType']!='' ? $_POST['sampleType'] :  NULL),
-          'lab_tested_date'=>$_POST['dateOfProcessing'],
+          'sample_tested_datetime'=>$_POST['dateOfProcessing'],
           'sample_rejection_reason'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
-          'absolute_value'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
           'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
-          'log_value'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='' ? $_POST['vlLog'] :  NULL),
-          'comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='' ? $_POST['labComments'] :  NULL),
-          'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
+          'result_value_log'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='' ? $_POST['vlLog'] :  NULL),
+          'approver_comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='' ? $_POST['labComments'] :  NULL),
+          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           //'result_reviewed_by'=>$_POST['reviewedBy'],
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='' ? $_POST['approvedBy'] :  NULL),
           'status'=>$status,
-          'created_by'=>$_SESSION['userId'],
-          'created_on'=>$general->getDateTime(),
-          'modified_by'=>$_SESSION['userId'],
-          'modified_on'=>$general->getDateTime(),
-          'result_coming_from'=>'manual'
+          'request_created_by'=>$_SESSION['userId'],
+          'request_created_datetime'=>$general->getDateTime(),
+          'last_modified_by'=>$_SESSION['userId'],
+          'last_modified_datetime'=>$general->getDateTime(),
+          'manual_result_entry'=>'manual'
         );
      //print_r($vldata);die;
           $id=$db->insert($tableName,$vldata);

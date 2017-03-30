@@ -95,7 +95,7 @@ $primaryKey="vl_sample_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.vl_test_reason";
+	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.vl_test_reason";
 	//$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
        //echo $sQuery;die;
@@ -150,16 +150,16 @@ $primaryKey="vl_sample_id";
            }
 	   if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 		if (trim($sTestDate) == trim($eTestDate)) {
-		    $sWhere = $sWhere.' AND DATE(vl.lab_tested_date) = "'.$sTestDate.'"';
+		    $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$sTestDate.'"';
 		}else{
-		   $sWhere = $sWhere.' AND DATE(vl.lab_tested_date) >= "'.$sTestDate.'" AND DATE(vl.lab_tested_date) <= "'.$eTestDate.'"';
+		   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
 		}
            }
 	   if(isset($_POST['printDate']) && trim($_POST['printDate'])!= ''){
 		if (trim($sPrintDate) == trim($eTestDate)) {
-		    $sWhere = $sWhere.' AND DATE(vl.date_result_printed) = "'.$sPrintDate.'"';
+		    $sWhere = $sWhere.' AND DATE(vl.result_printed_datetime) = "'.$sPrintDate.'"';
 		}else{
-		   $sWhere = $sWhere.' AND DATE(vl.date_result_printed) >= "'.$sPrintDate.'" AND DATE(vl.date_result_printed) <= "'.$ePrintDate.'"';
+		   $sWhere = $sWhere.' AND DATE(vl.result_printed_datetime) >= "'.$sPrintDate.'" AND DATE(vl.result_printed_datetime) <= "'.$ePrintDate.'"';
 		}
            }
 	   if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
@@ -224,20 +224,20 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND DATE(vl.lab_tested_date) >= "'.$sTestDate.'" AND DATE(vl.lab_tested_date) <= "'.$eTestDate.'"';
+		    $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
 		}else{
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' DATE(vl.lab_tested_date) >= "'.$sTestDate.'" AND DATE(vl.lab_tested_date) <= "'.$eTestDate.'"';
+	        $sWhere = $sWhere.' DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
 		}
 	    }
 	    if(isset($_POST['printDate']) && trim($_POST['printDate'])!= ''){
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND DATE(vl.date_result_printed) >= "'.$sPrintDate.'" AND DATE(vl.date_result_printed) <= "'.$ePrintDate.'"';
+		    $sWhere = $sWhere.' AND DATE(vl.result_printed_datetime) >= "'.$sPrintDate.'" AND DATE(vl.result_printed_datetime) <= "'.$ePrintDate.'"';
 		}else{
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' DATE(vl.date_result_printed) >= "'.$sPrintDate.'" AND DATE(vl.date_result_printed) <= "'.$ePrintDate.'"';
+	        $sWhere = $sWhere.' DATE(vl.result_printed_datetime) >= "'.$sPrintDate.'" AND DATE(vl.result_printed_datetime) <= "'.$ePrintDate.'"';
 		}
 	    }
 	    if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
@@ -283,9 +283,9 @@ $primaryKey="vl_sample_id";
 	    }
 	}
 	if($sWhere!=''){
-	    $sWhere = $sWhere.' AND vl.form_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}else{
-	    $sWhere = $sWhere.' where vl.form_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
@@ -303,11 +303,11 @@ $primaryKey="vl_sample_id";
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where form_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."'");
        // $aResultTotal = $countResult->fetch_row();
         $iTotal = $aResultTotal[0]['total'];
 

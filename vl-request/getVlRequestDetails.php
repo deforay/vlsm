@@ -96,7 +96,7 @@ $primaryKey="vl_sample_id";
         */
 	$aWhere = '';
         //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 	
         //echo $sQuery;die;
 	$start_date = '';
@@ -199,12 +199,12 @@ $primaryKey="vl_sample_id";
 	  $whereResult = '(vl.result IS NULL OR vl.result = "") AND ';
 	}
 	if($sWhere!=''){
-	    $sWhere = $sWhere.' AND '.$whereResult.'vl.form_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND '.$whereResult.'vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}else{
-	    $sWhere = $sWhere.' where '.$whereResult.'vl.form_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' where '.$whereResult.'vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
-	$sQuery = $sQuery." ORDER BY vl.created_on DESC";
+	$sQuery = $sQuery." ORDER BY vl.request_created_datetime DESC";
 	$_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
@@ -216,11 +216,11 @@ $primaryKey="vl_sample_id";
         }
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere ORDER BY vl.modified_on DESC, $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.sample_batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere ORDER BY vl.last_modified_datetime DESC, $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where form_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."'");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -267,7 +267,7 @@ $primaryKey="vl_sample_id";
             $row[] = ucwords($aRow['status_name']);
 	    //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
-		if($aRow['form_id']==2){
+		if($aRow['vlsm_country_id']==2){
 			if($vlRequest){
 				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
 			}

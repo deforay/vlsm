@@ -77,10 +77,10 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
 }else{
  $result[0]['sample_collection_date']='';
 }
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($result[0]['date_sample_received_at_testing_lab']);
+if(isset($result[0]['sample_received_at_vl_lab_datetime']) && trim($result[0]['sample_received_at_vl_lab_datetime'])!='' && trim($result[0]['sample_received_at_vl_lab_datetime'])!='0000-00-00'){
+ $result[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($result[0]['sample_received_at_vl_lab_datetime']);
 }else{
- $result[0]['date_sample_received_at_testing_lab']='';
+ $result[0]['sample_received_at_vl_lab_datetime']='';
 }
 
 $configQuery="SELECT * from global_config";
@@ -121,10 +121,10 @@ $configQuery="SELECT * from global_config";
     $html.='<td>Viral Load Result:'.$result[0]['result'].'</td>';
     $html.='</tr>';
     $html.='<tr>';
-    $html.='<td>Viral Load Log Result:'.$result[0]['log_value'].'</td>';
+    $html.='<td>Viral Load Log Result:'.$result[0]['result_value_log'].'</td>';
     $html.='</tr>';
     $html.='<tr>';
-    $html.='<td>Date VL receive:'.$result[0]['date_sample_received_at_testing_lab'].'</td>';
+    $html.='<td>Date VL receive:'.$result[0]['sample_received_at_vl_lab_datetime'].'</td>';
     $html.='</tr>';
    $html.='</table>';
    $pdf->writeHTML($html);

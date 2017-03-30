@@ -9,7 +9,7 @@ try {
     if(trim($_POST['configurationName'])!=""){
     $importConfigData=array(
     'machine_name'=>$_POST['configurationName'],
-    'file_name'=>$_POST['configurationFile'],
+    'import_machine_file_name'=>$_POST['configurationFile'],
     'lower_limit'=>$_POST['lowerLimit'],
     'higher_limit'=>$_POST['higherLimit'],
     'max_no_of_samples_in_a_batch'=>$_POST['maxNOfSamplesInBatch'],

@@ -24,7 +24,7 @@ try {
           $_POST['result'] = $_POST['textValue'];
      }
      //check vl result textbox changes
-     $viralLoadData = array('absolute_value'=>$_POST['vlResult'],'log_value'=>$_POST['vlLog']);
+     $viralLoadData = array('result_value_absolute'=>$_POST['vlResult'],'result_value_log'=>$_POST['vlLog']);
      $db = $db->where('vl_sample_id',$_POST['treamentId']);
      $vloadResultUpdate = $db->update($tableName,$viralLoadData);
      
@@ -35,18 +35,18 @@ try {
        $vldata=array(
           'serial_no'=>$_POST['serialNo'],
           'sample_code'=>$_POST['serialNo'],
-          'lab_no'=>$_POST['labNo'],
+          'lab_code'=>$_POST['labNo'],
           'lab_id'=>$_POST['labId'],
           'vl_test_platform'=>$_POST['testingPlatform'],
-          'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
-          'absolute_value'=>$_POST['vlResult'],
+          'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
+          'result_value_absolute'=>$_POST['vlResult'],
           'result'=>$_POST['result'],
-          'log_value'=>$_POST['vlLog'],
-          'comments'=>$_POST['labComments'],
+          'result_value_log'=>$_POST['vlLog'],
+          'approver_comments'=>$_POST['labComments'],
           'result_approved_by'=>$_POST['approvedBy'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
           'rejection'=>$_POST['noResult'],
-          'modified_on'=>$general->getDateTime()
+          'last_modified_datetime'=>$general->getDateTime()
         );
           if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
                $vldata['sample_id']=$_POST['specimenType'];
@@ -56,8 +56,8 @@ try {
           }
           //print_r($vldata);die;
           if($vloadResultUpdate){
-            $vldata['result_coming_from']='manual';
-            $vldata['file_name']='';
+            $vldata['manual_result_entry']='manual';
+            $vldata['import_machine_file_name']='';
           }
           $db=$db->where('vl_sample_id',$_POST['treamentId']);
           $db->update($tableName,$vldata);

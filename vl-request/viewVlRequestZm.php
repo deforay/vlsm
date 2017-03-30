@@ -47,10 +47,10 @@ if(isset($vlQueryInfo[0]['request_date']) && trim($vlQueryInfo[0]['request_date'
 }else{
  $vlQueryInfo[0]['request_date']='';
 }
-if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQueryInfo[0]['date_sample_received_at_testing_lab'])!='' && trim($vlQueryInfo[0]['date_sample_received_at_testing_lab'])!='0000-00-00'){
- $vlQueryInfo[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($vlQueryInfo[0]['date_sample_received_at_testing_lab']);
+if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='0000-00-00'){
+ $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
 }else{
- $vlQueryInfo[0]['date_sample_received_at_testing_lab']='';
+ $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
 }
 //Add event log
 $eventType = 'view-vl-request-zm';
@@ -144,7 +144,7 @@ $db->insert($tableName1,$data);
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="">Sample Received Date</label>
-                    <input type="text" class="form-control1" style="width:100%;" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab'];?>">
+                    <input type="text" class="form-control1" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>">
                     </div>
                   </div>
                 </div>
@@ -263,7 +263,7 @@ $db->insert($tableName1,$data);
                     <table class="table">
                       <tr>
                         <td><label for="labNo">LAB No</label></td>
-                        <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_no'];?>" /></td>
+                        <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_code'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
                           <input type="text" class="form-control" style="width:100%;" value="<?php echo ucwords($vlQueryInfo[0]['vl_test_platform']);?>"/>
@@ -279,7 +279,7 @@ $db->insert($tableName1,$data);
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" /></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
-                        <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['log_value'];?>" /></td>
+                        <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" /></td>
                       </tr>
                       <tr>
                         <td><label>If no result</label></td>
@@ -289,7 +289,7 @@ $db->insert($tableName1,$data);
                       </tr>
                       <tr>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="5"><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['comments'];?>"/> </td>
+                        <td colspan="5"><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['approver_comments'];?>"/> </td>
                       </tr>
                       <tr>
                         <td><label for="serialNo">Serial No.</label></td>

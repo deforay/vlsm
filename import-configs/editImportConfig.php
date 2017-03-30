@@ -44,7 +44,7 @@ $sInfo=$db->query($sQuery);
                     <div class="form-group">
                         <label for="configurationName" class="col-lg-4 control-label">Configuration File Name<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter file name" value="<?php echo $sInfo[0]['file_name']; ?>" onblur="checkNameValidation('import_config','file_name',this,'<?php echo "config_id##".$sInfo[0]['config_id'];?>','This file name already exists.Try another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter file name" value="<?php echo $sInfo[0]['import_machine_file_name']; ?>" onblur="checkNameValidation('import_config','import_machine_file_name',this,'<?php echo "config_id##".$sInfo[0]['config_id'];?>','This file name already exists.Try another name',null)"/>
                         </div>
                     </div>
                   </div>

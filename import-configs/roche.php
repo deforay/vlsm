@@ -139,15 +139,15 @@ try {
                 'vl_test_platform' => $_POST['vltestPlatform'],
                 'result_reviewed_by' => $_SESSION['userId'],
                 'sample_code' => $d['sampleCode'],
-                'log_value' => $d['logVal'],
+                'result_value_log' => $d['logVal'],
                 'sample_type' => $d['sampleType'],
-                'absolute_value' => $d['absVal'],
-                'text_value' => $d['txtVal'],
-                'absolute_decimal_value' => $d['absDecimalVal'],
-                'lab_tested_date' => $testingDate,
+                'result_value_absolute' => $d['absVal'],
+                'result_value_text' => $d['txtVal'],
+                'result_value_absolute_decimal' => $d['absDecimalVal'],
+                'sample_tested_datetime' => $testingDate,
                 'status' => '6',
-                'file_name' => $fileName,
-                'comments' => $d['resultFlag']
+                'import_machine_file_name' => $fileName,
+                'approver_comments' => $d['resultFlag']
             );
             
             
@@ -168,10 +168,10 @@ try {
                 $data['batch_code'] = $batchCode;
             }
             
-            $query    = "select facility_id,vl_sample_id,result,log_value,absolute_value,text_value,absolute_decimal_value from vl_request_form where sample_code='" . $sampleCode . "'";
+            $query    = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
             if ($vlResult && $sampleCode != '') {
-                if ($vlResult[0]['log_value'] != '' || $vlResult[0]['absolute_value'] != '' || $vlResult[0]['text_value'] != '' || $vlResult[0]['absolute_decimal_value'] != '') {
+                if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
                     $data['sample_details'] = 'Result exists already';
                 } else {
                     $data['status'] = '7';

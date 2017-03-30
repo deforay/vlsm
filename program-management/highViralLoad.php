@@ -117,7 +117,7 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol6">Patient Phone</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="absolute_value"  class="showhideCheckBox" /> <label for="iCol7">Viral Load (absolute > 1000 cp/ml3)</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="result_value_absolute"  class="showhideCheckBox" /> <label for="iCol7">Viral Load (absolute > 1000 cp/ml3)</label>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="contact_notes"  class="showhideCheckBox" /> <label for="iCol8">Contact Notes</label>

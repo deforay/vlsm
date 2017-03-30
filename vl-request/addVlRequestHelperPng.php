@@ -91,12 +91,12 @@ try {
     $vldata=array(
         'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
         'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
-        'vl_instance_id'=>$instanceId,
-        'form_id'=>'5',
+        'vlsm_instance_id'=>$instanceId,
+        'vlsm_country_id'=>'5',
         'ward'=>(isset($_POST['wardData']) && $_POST['wardData']!='' ? $_POST['wardData'] :  NULL),
         'facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='' ? $_POST['clinicName'] :  NULL),
         'lab_contact_person'=>(isset($_POST['officerName']) && $_POST['officerName']!='' ? $_POST['officerName'] :  NULL),
-        'lab_phone_no'=>(isset($_POST['telephone']) && $_POST['telephone']!='' ? $_POST['telephone'] :  NULL),
+        'lab_phone_number'=>(isset($_POST['telephone']) && $_POST['telephone']!='' ? $_POST['telephone'] :  NULL),
         'patient_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
         'surname'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
         'gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
@@ -118,7 +118,7 @@ try {
         'sample_rejection_reason'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
         'batch_quality'=>(isset($_POST['batchQuality']) && $_POST['batchQuality']!='' ? $_POST['batchQuality'] :  NULL),
         'sample_test_quality'=>(isset($_POST['testQuality']) && $_POST['testQuality']!='' ? $_POST['testQuality'] :  NULL),
-        'batch_id'=>(isset($_POST['batchNo']) && $_POST['batchNo']!='' ? $_POST['batchNo'] :  NULL),
+        'sample_batch_id'=>(isset($_POST['batchNo']) && $_POST['batchNo']!='' ? $_POST['batchNo'] :  NULL),
         'failed_test_date'=>$_POST['failedTestDate'],
         'failed_test_tech'=>(isset($_POST['failedTestingTech']) && $_POST['failedTestingTech']!='' ? $_POST['failedTestingTech'] :  NULL),
         'failed_vl_result'=>(isset($_POST['failedvlResult']) && $_POST['failedvlResult']!='' ? $_POST['failedvlResult'] :  NULL),
@@ -129,9 +129,9 @@ try {
         'collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='' ? $_POST['collectedBy'] :  NULL),
         'lab_id'=>(isset($_POST['laboratoryId']) && $_POST['laboratoryId']!='' ? $_POST['laboratoryId'] :  NULL),
         'sample_id'=>(isset($_POST['sampleType']) && $_POST['sampleType']!='' ? $_POST['sampleType'] :  NULL),
-        'date_sample_received_at_testing_lab'=>$_POST['receivedDate'],
+        'sample_received_at_vl_lab_datetime'=>$_POST['receivedDate'],
         'tech_name_png'=>(isset($_POST['techName']) && $_POST['techName']!='' ? $_POST['techName'] :  NULL),
-        'lab_tested_date'=>(isset($_POST['testDate']) && $_POST['testDate']!='' ? $_POST['testDate'] :  NULL),
+        'sample_tested_datetime'=>(isset($_POST['testDate']) && $_POST['testDate']!='' ? $_POST['testDate'] :  NULL),
         'last_viral_load_result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
         'vl_test_platform'=>(isset($_POST['testingTech']) && $_POST['testingTech']!='' ? $_POST['testingTech'] :  NULL),
         'result'=>(isset($_POST['finalViralResult']) && $_POST['finalViralResult']!='' ? $_POST['finalViralResult'] :  NULL),
@@ -141,11 +141,11 @@ try {
         'clinic_date'=>$_POST['clinicDate'],
         'report_date'=>$_POST['reportDate'],
         'status'=>6,
-        'created_by'=>$_SESSION['userId'],
-        'created_on'=>$general->getDateTime(),
-        'modified_by'=>$_SESSION['userId'],
-        'modified_on'=>$general->getDateTime(),
-        'result_coming_from'=>'manual'
+        'request_created_by'=>$_SESSION['userId'],
+        'request_created_datetime'=>$general->getDateTime(),
+        'last_modified_by'=>$_SESSION['userId'],
+        'last_modified_datetime'=>$general->getDateTime(),
+        'manual_result_entry'=>'manual'
         );
     
     $id=$db->insert($tableName,$vldata);

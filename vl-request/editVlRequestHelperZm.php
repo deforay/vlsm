@@ -70,7 +70,7 @@ try {
           $_POST['result'] = $_POST['textValue'];
      }
      //check vl result textbox changes
-     $viralLoadData = array('absolute_value'=>$_POST['vlResult'],'log_value'=>$_POST['vlLog']);
+     $viralLoadData = array('result_value_absolute'=>$_POST['vlResult'],'result_value_log'=>$_POST['vlLog']);
      $db = $db->where('vl_sample_id',$_POST['treamentId']);
      $vloadResultUpdate = $db->update($tableName,$viralLoadData);
      
@@ -114,26 +114,26 @@ try {
           'viral_load_log'=>$_POST['viralLoadLog'],
           'vl_test_reason'=>$_POST['vlTestReason'],
           //'drug_substitution'=>$_POST['drugSubstitution'],
-          'lab_no'=>$_POST['labNo'],
+          'lab_code'=>$_POST['labNo'],
           'lab_id'=>$_POST['labId'],
           'vl_test_platform'=>$_POST['testingPlatform'],
-          'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
-          'absolute_value'=>$_POST['vlResult'],
-          'log_value'=>$_POST['vlLog'],
+          'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
+          'result_value_absolute'=>$_POST['vlResult'],
+          'result_value_log'=>$_POST['vlLog'],
           'result'=>$_POST['result'],
-          'comments'=>$_POST['labComments'],
+          'approver_comments'=>$_POST['labComments'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
-          'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
+          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'rejection'=>$_POST['noResult'],
           'sample_rejection_reason'=>$_POST['rejectionReason'],
-          'modified_on'=>$general->getDateTime()
+          'last_modified_datetime'=>$general->getDateTime()
         );
           if(isset($_POST['approvedBy'])){
             $vldata['result_approved_by'] = $_POST['approvedBy'];
           }
           if($vloadResultUpdate){
-            $vldata['result_coming_from']='manual';
-            $vldata['file_name']='';
+            $vldata['manual_result_entry']='manual';
+            $vldata['import_machine_file_name']='';
           }
           if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
             $vldata['sample_id'] = $_POST['specimenType'];

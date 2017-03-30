@@ -76,7 +76,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                 $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                 $sampleResult = $db->rawQuery($sampleQuery);
                 $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
-                $db->update($tableName,array('result_mail_sent'=>'yes')); 
+                $db->update($tableName,array('is_result_mail_sent'=>'yes')); 
             }
            $_SESSION['alertMsg']='Email sent successfully';
            header('location:vlResultMail.php');

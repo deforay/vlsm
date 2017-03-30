@@ -17,8 +17,8 @@ $primaryKey="vl_sample_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.modified_on,'%d-%b-%Y')",'ts.status_name');
-        $orderColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','vl.modified_on','ts.status_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
+        $orderColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -98,7 +98,7 @@ $primaryKey="vl_sample_id";
          * SQL queries
          * Get data to display
         */
-	 $sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.sample_rejection_reason";
+	 $sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.sample_rejection_reason";
 	
 	//$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
@@ -236,15 +236,15 @@ $primaryKey="vl_sample_id";
 		       $sWhere = "WHERE (vl.status =7 OR vl.status=4 OR vl.status=2)";
 		    }
 		  }
-		    $sWhere = $sWhere." AND vl.form_id='".$arr['vl_form']."'";
-		    $dWhere = "WHERE (vl.status =7 OR vl.status=4 OR vl.status=2) AND vl.form_id='".$arr['vl_form']."'";
+		    $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
+		    $dWhere = "WHERE (vl.status =7 OR vl.status=4 OR vl.status=2) AND vl.vlsm_country_id='".$arr['vl_form']."'";
 		}else{
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND vl.form_id='".$arr['vl_form']."'";
+		        $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
 		    }else{
-		        $sWhere = "WHERE vl.form_id='".$arr['vl_form']."'";
+		        $sWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
 		    }
-		    $dWhere = "WHERE vl.form_id='".$arr['vl_form']."'";
+		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
 		}
 		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
@@ -263,7 +263,7 @@ $primaryKey="vl_sample_id";
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
         /* Total data set length */
         $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl $dWhere");
@@ -290,13 +290,13 @@ $primaryKey="vl_sample_id";
 			$row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
-			if(isset($aRow['modified_on']) && trim($aRow['modified_on'])!= '' && $aRow['modified_on']!= '0000-00-00 00:00:00'){
-			   $xplodDate = explode(" ",$aRow['modified_on']);
-			   $aRow['modified_on'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+			if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
+			   $xplodDate = explode(" ",$aRow['last_modified_datetime']);
+			   $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
 			}else{
-			   $aRow['modified_on'] = '';
+			   $aRow['last_modified_datetime'] = '';
 			}			
-			$row[] = $aRow['modified_on'];
+			$row[] = $aRow['last_modified_datetime'];
             $row[] = ucwords($aRow['status_name']);
 	    
 	    if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){

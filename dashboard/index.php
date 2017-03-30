@@ -16,7 +16,7 @@ include('../header.php');
 //      $db=$db->where('vl_sample_id',$rlt['vl_sample_id']);
 //      //print_r($data);die;
 //      $data = array(
-//		    'lab_tested_date'=>$rlt['sample_testing_date'],
+//		    'sample_tested_datetime'=>$rlt['sample_testing_date'],
 //		  );
 //      $db->update("vl_request_form",$data);
 //    }

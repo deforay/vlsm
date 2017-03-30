@@ -4,7 +4,7 @@ include('../header.php');
 //include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
-$query="SELECT config_id,machine_name,file_name FROM import_config where status='active'";
+$query="SELECT config_id,machine_name,import_machine_file_name FROM import_config where status='active'";
 $iResult = $db->rawQuery($query);
 
 $fQuery="SELECT * FROM facility_details where facility_type=2";
@@ -54,7 +54,7 @@ $lastResult = $db->rawQuery($lastQuery);
                                   <?php
                                   foreach($iResult as $val){
                                   ?>
-                                  <option value="<?php echo base64_encode($val['file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
+                                  <option value="<?php echo base64_encode($val['import_machine_file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
                                   <?php } ?>
                                 </select>
                                 </div>

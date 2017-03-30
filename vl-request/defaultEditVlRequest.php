@@ -71,32 +71,32 @@ if(isset($result[0]['missing_last_vl_date']) && trim($result[0]['missing_last_vl
  $result[0]['missing_last_vl_date']='';
 }
 
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_received_at_vl_lab_datetime']) && trim($result[0]['sample_received_at_vl_lab_datetime'])!='' && trim($result[0]['sample_received_at_vl_lab_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_received_at_vl_lab_datetime']);
+ $result[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['date_sample_received_at_testing_lab']='';
+ $result[0]['sample_received_at_vl_lab_datetime']='';
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['lab_tested_date']);
- $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_tested_datetime']) && trim($result[0]['sample_tested_datetime'])!='' && trim($result[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_tested_datetime']);
+ $result[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['lab_tested_date']='';
+ $result[0]['sample_tested_datetime']='';
 }
 
-if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['date_results_dispatched']);
- $result[0]['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['result_dispatched_datetime']) && trim($result[0]['result_dispatched_datetime'])!='' && trim($result[0]['result_dispatched_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['result_dispatched_datetime']);
+ $result[0]['result_dispatched_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['date_results_dispatched']='';
+ $result[0]['result_dispatched_datetime']='';
 }
 
-if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['result_reviewed_date']);
- $result[0]['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['result_reviewed_datetime']) && trim($result[0]['result_reviewed_datetime'])!='' && trim($result[0]['result_reviewed_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['result_reviewed_datetime']);
+ $result[0]['result_reviewed_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['result_reviewed_date']= $general->humanDateFormat(date('Y-m-d'));
+ $result[0]['result_reviewed_datetime']= $general->humanDateFormat(date('Y-m-d'));
 }
 
 $query="SELECT * from r_art_code_details where parent_art=0";
@@ -413,14 +413,14 @@ $rResult = $db->rawQuery($rQuery);
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">
+                    <!--<div class="col-md-6">
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Sample Testing Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="<?php echo $result[0]['lab_tested_date']; ?>"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" placeholder="Request Date" title="Please enter request date" value="< ?php echo $result[0]['sample_tested_datetime']; ?>"/>
                         </div>
                     </div>
-                  </div>
+                  </div>-->
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="vlFocalPerson" class="col-lg-4 control-label">VL Focal Person</label>
@@ -1051,7 +1051,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="labPhoneNo" class="col-lg-4 control-label">Phone Number </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="labPhoneNo" name="labPhoneNo" placeholder="Enter Lab Phone No." title="Please enter lab phone no." value="<?php echo $result[0]['lab_phone_no']; ?>"/>
+                        <input type="text" class="form-control" id="labPhoneNo" name="labPhoneNo" placeholder="Enter Lab Phone No." title="Please enter lab phone no." value="<?php echo $result[0]['lab_phone_number']; ?>"/>
                         </div>
                     </div>
                    </div>
@@ -1059,7 +1059,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Sample Received at Testing Lab</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Select Sample Received Date" title="Select sample received date" value="<?php echo $result[0]['date_sample_received_at_testing_lab']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Select Sample Received Date" title="Select sample received date" value="<?php echo $result[0]['sample_received_at_vl_lab_datetime']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1070,7 +1070,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Lab Sample Testing Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date" value="<?php echo $result[0]['lab_tested_date']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="sampleTestedOn" name="sampleTestedOn" placeholder="Select Sample Testing Date" title="Select sample testing date" value="<?php echo $result[0]['sample_tested_datetime']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1078,7 +1078,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Results Dispatched</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control readonly" readonly='readonly' id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Select Result Dispatched Date" title="Select result dispatched date" value="<?php echo $result[0]['date_results_dispatched']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Select Result Dispatched Date" title="Select result dispatched date" value="<?php echo $result[0]['result_dispatched_datetime']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1098,7 +1098,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control readonly" readonly='readonly' id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date" value="<?php echo $result[0]['result_reviewed_date']; ?>"/>
+                        <input type="text" class="form-control readonly" readonly='readonly' id="reviewedOn" name="reviewedOn" placeholder="Select Reviewed Date" title="Select reviewed date" value="<?php echo $result[0]['result_reviewed_datetime']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1127,7 +1127,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="logValue" class="col-lg-4 control-label">Log Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="logValue" name="logValue" placeholder="Enter Log Value" title="Please enter log value" value="<?php echo $result[0]['log_value']; ?>"/>
+                        <input type="text" class="form-control" id="logValue" name="logValue" placeholder="Enter Log Value" title="Please enter log value" value="<?php echo $result[0]['result_value_log']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1135,7 +1135,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="absoluteValue" class="col-lg-4 control-label">Absolute Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="absoluteValue" name="absoluteValue" placeholder="Enter Absolute Value" title="Please enter absolute value" value="<?php echo $result[0]['absolute_value']; ?>"/>
+                        <input type="text" class="form-control" id="absoluteValue" name="absoluteValue" placeholder="Enter Absolute Value" title="Please enter absolute value" value="<?php echo $result[0]['result_value_absolute']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1145,7 +1145,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="textValue" class="col-lg-4 control-label">Text Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="textValue" name="textValue" placeholder="Enter Text Value" title="Please enter text value" value="<?php echo $result[0]['text_value']; ?>"/>
+                        <input type="text" class="form-control" id="textValue" name="textValue" placeholder="Enter Text Value" title="Please enter text value" value="<?php echo $result[0]['result_value_text']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -1164,7 +1164,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="comments" class="col-lg-4 control-label">Comments</label>
                         <div class="col-lg-7">
-                         <textarea class="form-control" id="comments" name="comments" row="4" placeholder="Enter Comments" title="Please enter comments"><?php echo $result[0]['comments']; ?></textarea>
+                         <textarea class="form-control" id="comments" name="comments" row="4" placeholder="Enter Comments" title="Please enter comments"><?php echo $result[0]['approver_comments']; ?></textarea>
                         </div>
                     </div>
                   </div>

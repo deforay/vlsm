@@ -9,8 +9,8 @@ $general=new Deforay_Commons_General();
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('b.batch_code',"DATE_FORMAT(b.created_on,'%d-%b-%Y %H:%i:%s')");
-        $orderColumns = array('b.batch_code','','','','','','b.created_on');
+        $aColumns = array('b.batch_code',"DATE_FORMAT(b.request_created_datetime,'%d-%b-%Y %H:%i:%s')");
+        $orderColumns = array('b.batch_code','','','','','','b.request_created_datetime');
 		
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -89,7 +89,7 @@ $general=new Deforay_Commons_General();
          * Get data to display
         */
         
-	$sQuery="select b.created_on ,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id";
+	$sQuery="select b.request_created_datetime ,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.sample_batch_id = b.batch_id";
         
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
@@ -110,11 +110,11 @@ $general=new Deforay_Commons_General();
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("select b.created_on, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("select b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.sample_batch_id = b.batch_id  $sWhere group by b.batch_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select b.created_on, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.batch_id = b.batch_id group by b.batch_id");
+        $aResultTotal =  $db->rawQuery("select b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.sample_batch_id = b.batch_id group by b.batch_id");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
@@ -134,22 +134,22 @@ $general=new Deforay_Commons_General();
 	
         foreach ($rResult as $aRow) {
 	    $humanDate="";
-	    if(trim($aRow['created_on'])!="" && $aRow['created_on']!='0000-00-00 00:00:00'){
-			$date = $aRow['created_on'];
+	    if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
+			$date = $aRow['request_created_datetime'];
 			$humanDate =  date("d-M-Y H:i:s",strtotime($date));
 	    }
 	    //get no. of sample tested.
-	    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' and vl.status=7";
+	    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."' and vl.status=7";
 	    $noOfSampleResultCount = $db->rawQuery($noOfSampleTested);
 	    //error_log($noOfSampleTested);
 	    //get no. of sample tested low level.
-	    $noOfSampleLowTested = "select count(vl.sample_code) as no_of_sample_low_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result < 1000";
+	    $noOfSampleLowTested = "select count(vl.sample_code) as no_of_sample_low_tested from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."' AND vl.result < 1000";
 	    $noOfSampleLowResultCount = $db->rawQuery($noOfSampleLowTested);
 	    //get no. of sample tested high level.
-	    $noOfSampleHighTested = "select count(vl.sample_code) as no_of_sample_high_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result > 1000";
+	    $noOfSampleHighTested = "select count(vl.sample_code) as no_of_sample_high_tested from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."' AND vl.result > 1000";
 	    $noOfSampleHighResultCount = $db->rawQuery($noOfSampleHighTested);
 	    //get no. of sample tested high level.
-	    $noOfSampleLastDateTested = "select max(vl.sample_testing_date) as last_tested_date from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."'";
+	    $noOfSampleLastDateTested = "select max(vl.sample_testing_date) as last_tested_date from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."'";
 	    $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
 	    
         $row = array();

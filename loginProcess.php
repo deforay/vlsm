@@ -21,10 +21,10 @@ try {
             $instanceQuery="SELECT * FROM vl_instance";
             $instanceResult=$db->query($instanceQuery);
             if($instanceResult){
-                $_SESSION['instanceId']=$instanceResult[0]['vl_instance_id'];
+                $_SESSION['instanceId']=$instanceResult[0]['vlsm_instance_id'];
             }else{
                 $id = $general->generateRandomString(30);
-                $db->insert($tableName2,array('vl_instance_id'=>$id));
+                $db->insert($tableName2,array('vlsm_instance_id'=>$id));
                 $_SESSION['instanceId']=$id;
             }
             //Add event log

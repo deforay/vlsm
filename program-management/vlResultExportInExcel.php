@@ -74,11 +74,11 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['date_of_initiation_of_current_regimen']='';
   }
   
-  if(isset($aRow['lab_tested_date']) && trim($aRow['lab_tested_date'])!='' && $aRow['lab_tested_date']!='0000-00-00'){
-   $expStr=explode(" ",$aRow['lab_tested_date']);
-   $aRow['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  if(isset($aRow['sample_tested_datetime']) && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00'){
+   $expStr=explode(" ",$aRow['sample_tested_datetime']);
+   $aRow['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
-   $aRow['lab_tested_date']='';
+   $aRow['sample_tested_datetime']='';
   }
   if(isset($aRow['last_viral_load_date']) && trim($aRow['last_viral_load_date'])!='' && $aRow['last_viral_load_date']!='0000-00-00'){
  $aRow['last_viral_load_date']=$general->humanDateFormat($aRow['last_viral_load_date']);
@@ -86,24 +86,24 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['last_viral_load_date']='';
   }
   
-  if(isset($aRow['date_sample_received_at_testing_lab']) && trim($aRow['date_sample_received_at_testing_lab'])!='' && $aRow['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['date_sample_received_at_testing_lab']);
-   $aRow['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  if(isset($aRow['sample_received_at_vl_lab_datetime']) && trim($aRow['sample_received_at_vl_lab_datetime'])!='' && $aRow['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['sample_received_at_vl_lab_datetime']);
+   $aRow['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
-   $aRow['date_sample_received_at_testing_lab']='';
+   $aRow['sample_received_at_vl_lab_datetime']='';
   }
-  if(isset($aRow['result_approved_on']) && trim($aRow['result_approved_on'])!='' && $aRow['result_approved_on']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['result_approved_on']);
-   $aRow['result_approved_on']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  if(isset($aRow['result_approved_datetime']) && trim($aRow['result_approved_datetime'])!='' && $aRow['result_approved_datetime']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['result_approved_datetime']);
+   $aRow['result_approved_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
-   $aRow['result_approved_on']='';
+   $aRow['result_approved_datetime']='';
   }
   
-  if(isset($aRow['date_result_printed']) && trim($aRow['date_result_printed'])!='' && $aRow['date_result_printed']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['date_result_printed']);
-   $aRow['date_result_printed']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  if(isset($aRow['result_printed_datetime']) && trim($aRow['result_printed_datetime'])!='' && $aRow['result_printed_datetime']!='0000-00-00 00:00:00'){
+   $expStr=explode(" ",$aRow['result_printed_datetime']);
+   $aRow['result_printed_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
   }else{
-   $aRow['date_result_printed']='';
+   $aRow['result_printed_datetime']='';
   }
   
   $row[] = $aRow['serial_no'];
@@ -114,7 +114,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = ucwords($aRow['facility_name']);
   $row[] = ucwords($aRow['lab_contact_person']);
   $row[] = $aRow['sample_collection_date'];
-  $row[] = $aRow['date_sample_received_at_testing_lab'];
+  $row[] = $aRow['sample_received_at_vl_lab_datetime'];
   $row[] = $aRow['collected_by'];
   $row[] = ucwords($aRow['patient_name'].$aRow['surname']);
   $row[] = ucwords(str_replace("_"," ",$aRow['gender']));
@@ -133,18 +133,18 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['viral_load_log'];
   $row[] = ucwords($aRow['test_reason_name']);
   $row[] = ucwords($aRow['labName']);
-  $row[] = $aRow['lab_no'];
+  $row[] = $aRow['lab_code'];
   $row[] = ucwords($aRow['vl_test_platform']);
   $row[] = $aRow['sample_name'];
-  $row[] = $aRow['lab_tested_date'];
-  $row[] = $aRow['date_result_printed'];
+  $row[] = $aRow['sample_tested_datetime'];
+  $row[] = $aRow['result_printed_datetime'];
   $vlResult = '';
-  if(isset($aRow['absolute_value']) && trim($aRow['absolute_value'])!= ''){
-       $vlResult = $aRow['absolute_value'];
-   }elseif(isset($aRow['log_value']) && trim($aRow['log_value'])!= ''){
-       $vlResult = $aRow['log_value'];
-   }elseif(isset($aRow['text_value']) && trim($aRow['text_value'])!= ''){
-       $vlResult = $aRow['text_value'];
+  if(isset($aRow['result_value_absolute']) && trim($aRow['result_value_absolute'])!= ''){
+       $vlResult = $aRow['result_value_absolute'];
+   }elseif(isset($aRow['result_value_log']) && trim($aRow['result_value_log'])!= ''){
+       $vlResult = $aRow['result_value_log'];
+   }elseif(isset($aRow['result_value_text']) && trim($aRow['result_value_text'])!= ''){
+       $vlResult = $aRow['result_value_text'];
    }
   $row[] = $vlResult;
   
@@ -152,8 +152,8 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = ucwords($aRow['rejection_reason_name']);
   $row[] = ucwords($aRow['reviewedBy']);
   $row[] = ucwords($aRow['approvedBy']);
-  $row[] = $aRow['result_approved_on'];
-  $row[] = $aRow['comments'];
+  $row[] = $aRow['result_approved_datetime'];
+  $row[] = $aRow['approver_comments'];
   $row[] = ucwords($aRow['status_name']);
   
   $output[] = $row;

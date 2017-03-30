@@ -47,15 +47,15 @@ try {
         $_POST['sampleCode'] = NULL;
     }
         $vldata=array(
-          'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
+          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'sample_code'=>$_POST['sampleCode'],
           'serial_no'=>$_POST['sampleCode'],
-          'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
+          'result_approved_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
           'vl_test_platform'=>$_POST['testingPlatform'],
-          'log_value'=>$_POST['vlLog'],
+          'result_value_log'=>$_POST['vlLog'],
           'result'=>$_POST['vlResult'],
-          'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
-          'modified_on'=>$general->getDateTime()
+          'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
+          'last_modified_datetime'=>$general->getDateTime()
         );
         if(isset($_POST['status']) && trim($_POST['status'])!= ''){
             $vldata['status'] = $_POST['status'];

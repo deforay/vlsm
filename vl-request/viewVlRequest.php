@@ -7,7 +7,7 @@ include('../General.php');
 $general=new Deforay_Commons_General();
 $tableName1="activity_log";
 $id=base64_decode($_GET['id']);
-$fQuery="SELECT vl.sample_code,vl.patient_name,vl.art_no,vl.urgency,vl.patient_dob,vl.gender,vl.patient_phone_number,vl.location,vl.sample_collection_date,vl.treatment_initiation,vl.date_of_initiation_of_current_regimen,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.arv_adherence,vl.enhance_session,vl.viral_load_indication,vl.routine_monitoring_last_vl_date,vl.routine_monitoring_value,vl.routine_monitoring_sample_type,vl.vl_treatment_failure_adherence_counseling_last_vl_date,vl.vl_treatment_failure_adherence_counseling_value,vl.vl_treatment_failure_adherence_counseling_sample_type,vl.suspected_treatment_failure_last_vl_date,vl.suspected_treatment_failure_value,vl.suspected_treatment_failure_sample_type,vl.switch_to_tdf_last_vl_date,vl.switch_to_tdf_value,vl.switch_to_tdf_sample_type,vl.missing_last_vl_date,vl.missing_value,vl.missing_sample_type,vl.request_clinician,vl.clinician_ph_no,vl.sample_testing_date,vl.vl_focal_person,vl.focal_person_phone_number,vl.email_for_HF,vl.date_sample_received_at_testing_lab,vl.date_results_dispatched,vl.rejection,vl.sample_rejection_facility,vl.sample_rejection_reason,vl.other_id,vl.age_in_yrs,vl.age_in_mnts,vl.treatment_initiated_date,vl.arc_no,vl.patient_receive_sms,vl.treatment_details,vl.lab_name,vl.lab_contact_person,vl.lab_phone_no,vl.lab_tested_date,vl.justification,vl.test_methods,vl.log_value,vl.absolute_value,vl.text_value,vl.result,vl.comments,vl.result_reviewed_by,vl.result_reviewed_date,vl.status,ts.status_name,r_a_c_d.art_code,f.facility_name,f.facility_code,f.state,f.hub_name,r_s_t.sample_name,r_s_t_rm.sample_name as snrm,r_s_t_tfac.sample_name as sntfac,r_s_t_stf.sample_name as snstf,r_s_t_stdf.sample_name as stdf,r_s_t_mis.sample_name as mis from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as r_s_t ON r_s_t.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_sample_type as r_s_t_rm ON r_s_t_rm.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as r_s_t_tfac ON r_s_t_tfac.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as r_s_t_stf ON r_s_t_stf.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN r_sample_type as r_s_t_stdf ON r_s_t_stdf.sample_id=vl.switch_to_tdf_sample_type LEFT JOIN r_sample_type as r_s_t_mis ON r_s_t_mis.sample_id=vl.missing_sample_type LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where vl_sample_id=$id";
+$fQuery="SELECT vl.sample_code,vl.patient_name,vl.art_no,vl.urgency,vl.patient_dob,vl.gender,vl.patient_phone_number,vl.location,vl.sample_collection_date,vl.treatment_initiation,vl.date_of_initiation_of_current_regimen,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.arv_adherence,vl.enhance_session,vl.viral_load_indication,vl.routine_monitoring_last_vl_date,vl.routine_monitoring_value,vl.routine_monitoring_sample_type,vl.vl_treatment_failure_adherence_counseling_last_vl_date,vl.vl_treatment_failure_adherence_counseling_value,vl.vl_treatment_failure_adherence_counseling_sample_type,vl.suspected_treatment_failure_last_vl_date,vl.suspected_treatment_failure_value,vl.suspected_treatment_failure_sample_type,vl.switch_to_tdf_last_vl_date,vl.switch_to_tdf_value,vl.switch_to_tdf_sample_type,vl.missing_last_vl_date,vl.missing_value,vl.missing_sample_type,vl.request_clinician,vl.clinician_ph_no,vl.sample_testing_date,vl.vl_focal_person,vl.focal_person_phone_number,vl.email_for_HF,vl.sample_received_at_vl_lab_datetime,vl.result_dispatched_datetime,vl.rejection,vl.sample_rejection_facility,vl.sample_rejection_reason,vl.other_id,vl.age_in_yrs,vl.age_in_mnts,vl.treatment_initiated_date,vl.arc_no,vl.patient_receive_sms,vl.treatment_details,vl.lab_name,vl.lab_contact_person,vl.lab_phone_number,vl.sample_tested_datetime,vl.justification,vl.test_methods,vl.result_value_log,vl.result_value_absolute,vl.result_value_text,vl.result,vl.approver_comments,vl.result_reviewed_by,vl.result_reviewed_datetime,vl.status,ts.status_name,r_a_c_d.art_code,f.facility_name,f.facility_code,f.state,f.hub_name,r_s_t.sample_name,r_s_t_rm.sample_name as snrm,r_s_t_tfac.sample_name as sntfac,r_s_t_stf.sample_name as snstf,r_s_t_stdf.sample_name as stdf,r_s_t_mis.sample_name as mis from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as r_s_t ON r_s_t.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_sample_type as r_s_t_rm ON r_s_t_rm.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as r_s_t_tfac ON r_s_t_tfac.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type LEFT JOIN r_sample_type as r_s_t_stf ON r_s_t_stf.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN r_sample_type as r_s_t_stdf ON r_s_t_stdf.sample_id=vl.switch_to_tdf_sample_type LEFT JOIN r_sample_type as r_s_t_mis ON r_s_t_mis.sample_id=vl.missing_sample_type LEFT JOIN r_art_code_details as r_a_c_d ON r_a_c_d.art_id=vl.current_regimen where vl_sample_id=$id";
 //echo $fQuery;die;
 $result=$db->query($fQuery);
 
@@ -72,39 +72,39 @@ if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result
 // $result[0]['missing_last_vl_date']='';
 //}
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['lab_tested_date']);
- $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_tested_datetime']) && trim($result[0]['sample_tested_datetime'])!='' && trim($result[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_tested_datetime']);
+ $result[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['lab_tested_date']='';
+ $result[0]['sample_tested_datetime']='';
 }
 
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && trim($result[0]['date_sample_received_at_testing_lab'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_received_at_vl_lab_datetime']) && trim($result[0]['sample_received_at_vl_lab_datetime'])!='' && trim($result[0]['sample_received_at_vl_lab_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_received_at_vl_lab_datetime']);
+ $result[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['date_sample_received_at_testing_lab']='';
+ $result[0]['sample_received_at_vl_lab_datetime']='';
 }
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['lab_tested_date']);
- $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_tested_datetime']) && trim($result[0]['sample_tested_datetime'])!='' && trim($result[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_tested_datetime']);
+ $result[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['lab_tested_date']='';
+ $result[0]['sample_tested_datetime']='';
 }
 
-if(isset($result[0]['date_results_dispatched']) && trim($result[0]['date_results_dispatched'])!='' && trim($result[0]['date_results_dispatched'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['date_results_dispatched']);
- $result[0]['date_results_dispatched']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['result_dispatched_datetime']) && trim($result[0]['result_dispatched_datetime'])!='' && trim($result[0]['result_dispatched_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['result_dispatched_datetime']);
+ $result[0]['result_dispatched_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['date_results_dispatched']='';
+ $result[0]['result_dispatched_datetime']='';
 }
 
-if(isset($result[0]['result_reviewed_date']) && trim($result[0]['result_reviewed_date'])!='' && trim($result[0]['result_reviewed_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['result_reviewed_date']);
- $result[0]['result_reviewed_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['result_reviewed_datetime']) && trim($result[0]['result_reviewed_datetime'])!='' && trim($result[0]['result_reviewed_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['result_reviewed_datetime']);
+ $result[0]['result_reviewed_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['result_reviewed_date']='';
+ $result[0]['result_reviewed_datetime']='';
 }
 //Add event log
 $eventType = 'view-vl-request';
@@ -343,7 +343,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="requestDate" class="col-lg-4 control-label">Request Date</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo $result[0]['lab_tested_date']; ?>
+                          <?php echo $result[0]['sample_tested_datetime']; ?>
                         </div>
                     </div>
                   </div>
@@ -703,7 +703,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="labPhoneNo" class="col-lg-4 control-label">Phone Number </label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo $result[0]['lab_phone_no']; ?>
+                          <?php echo $result[0]['lab_phone_number']; ?>
                         </div>
                     </div>
                    </div>
@@ -711,7 +711,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Sample Received at Testing Lab</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                           <?php echo $result[0]['date_sample_received_at_testing_lab']; ?>
+                           <?php echo $result[0]['sample_received_at_vl_lab_datetime']; ?>
                         </div>
                     </div>
                   </div>
@@ -722,7 +722,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Sample Testing Date</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                           <?php echo $result[0]['lab_tested_date']; ?>
+                           <?php echo $result[0]['sample_tested_datetime']; ?>
                         </div>
                     </div>
                   </div>
@@ -730,7 +730,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Date Results Dispatched</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo $result[0]['date_results_dispatched']; ?>
+                          <?php echo $result[0]['result_dispatched_datetime']; ?>
                         </div>
                     </div>
                   </div>
@@ -749,7 +749,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="" class="col-lg-4 control-label">Reviewed Date</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                           <?php echo $result[0]['result_reviewed_date']; ?>
+                           <?php echo $result[0]['result_reviewed_datetime']; ?>
                         </div>
                     </div>
                   </div>
@@ -774,7 +774,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="logValue" class="col-lg-4 control-label">Log Value</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo $result[0]['log_value']; ?>
+                          <?php echo $result[0]['result_value_log']; ?>
                         </div>
                     </div>
                   </div>
@@ -782,7 +782,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="absoluteValue" class="col-lg-4 control-label">Absolute Value</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo $result[0]['absolute_value']; ?>
+                          <?php echo $result[0]['result_value_absolute']; ?>
                         </div>
                     </div>
                   </div>
@@ -792,7 +792,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="textValue" class="col-lg-4 control-label">Text Value</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo $result[0]['text_value']; ?>
+                          <?php echo $result[0]['result_value_text']; ?>
                         </div>
                     </div>
                   </div>
@@ -811,7 +811,7 @@ $db->insert($tableName1,$data);
                     <div class="form-group">
                         <label for="comments" class="col-lg-4 control-label">Comments</label>
                         <div class="col-lg-7" style="font-style:italic;">
-                          <?php echo ucfirst($result[0]['comments']); ?>
+                          <?php echo ucfirst($result[0]['approver_comments']); ?>
                         </div>
                     </div>
                   </div>

@@ -14,10 +14,10 @@ try {
      //Set Lab no
      $start_date = date('Y-m-01');
      $end_date = date('Y-m-31');
-     $labVlQuery='select MAX(lab_no) FROM vl_request_form as vl where vl.form_id="3" AND DATE(vl.created_on) >= "'.$start_date.'" AND DATE(vl.created_on) <= "'.$end_date.'"';
+     $labVlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
      $labVlResult = $db->rawQuery($labVlQuery);
-     if(isset($labVlResult) && trim($labVlResult[0]['MAX(lab_no)'])!='' && $labVlResult[0]['MAX(lab_no)']!=NULL){
-        $_POST['labNo'] = $labVlResult[0]['MAX(lab_no)']+1;
+     if(isset($labVlResult) && trim($labVlResult[0]['MAX(lab_code)'])!='' && $labVlResult[0]['MAX(lab_code)']!=NULL){
+        $_POST['labNo'] = $labVlResult[0]['MAX(lab_code)']+1;
      }else{
         $_POST['labNo'] = 1;
      }
@@ -189,8 +189,8 @@ try {
     }
     //print_r($_POST);die;
     $vldata=array(
-                  'vl_instance_id'=>$instanceId,
-                  'form_id'=>3,
+                  'vlsm_instance_id'=>$instanceId,
+                  'vlsm_country_id'=>3,
                   'facility_id'=>$_POST['clinicName'],
                   'request_clinician'=>$_POST['clinicianName'],
                   'clinician_ph_no'=>$_POST['clinicanTelephone'],
@@ -215,25 +215,25 @@ try {
                   'sample_id'=>$_POST['specimenType'],
                   'plasma_conservation_temperature'=>$_POST['conservationTemperature'],
                   'duration_of_conservation'=>$_POST['durationOfConservation'],
-                  'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
+                  'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
                   'status'=>$_POST['status'],
                   'sample_rejection_reason'=>$_POST['rejectionReason'],
                   'sample_code'=>$_POST['sampleCode'],
-                  'lab_no'=>$_POST['labNo'],
+                  'lab_code'=>$_POST['labNo'],
                   'serial_no'=>$_POST['sampleCode'],
-                  'lab_tested_date'=>$_POST['sampleTestingDateAtLab'],
+                  'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
-                  'log_value'=>$_POST['vlLog'],
+                  'result_value_log'=>$_POST['vlLog'],
                   'result'=>$_POST['vlResult'],
                   'date_of_demand'=>$_POST['dateOfDemand'],
                   'viral_load_no'=>$_POST['viralLoadNo'],
                   'sample_collection_date'=>$_POST['sampleCollectionDate'],
                   'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],
-                  'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],
-                  'created_by'=>$_SESSION['userId'],
-                  'created_on'=>$general->getDateTime(),
-                  'modified_by'=>$_SESSION['userId'],
-                  'modified_on'=>$general->getDateTime()
+                  'result_approved_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
+                  'request_created_by'=>$_SESSION['userId'],
+                  'request_created_datetime'=>$general->getDateTime(),
+                  'last_modified_by'=>$_SESSION['userId'],
+                  'last_modified_datetime'=>$general->getDateTime()
                 );
     //print_r($vldata);die;
     $id=$db->insert($tableName,$vldata);

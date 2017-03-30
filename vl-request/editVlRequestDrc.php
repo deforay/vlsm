@@ -93,18 +93,18 @@
       $vlQueryInfo[0]['plasma_storage_temperature'] = '';
     }
     //Set sample received date
-    if(isset($vlQueryInfo[0]['date_sample_received_at_testing_lab']) && trim($vlQueryInfo[0]['date_sample_received_at_testing_lab'])!='' && $vlQueryInfo[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['date_sample_received_at_testing_lab']);
-      $vlQueryInfo[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+    if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+      $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
+      $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
     }else{
-      $vlQueryInfo[0]['date_sample_received_at_testing_lab']='';
+      $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
     }
     //Set sample test date
-    if(isset($vlQueryInfo[0]['lab_tested_date']) && trim($vlQueryInfo[0]['lab_tested_date'])!='' && $vlQueryInfo[0]['lab_tested_date']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['lab_tested_date']);
-      $vlQueryInfo[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+    if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && $vlQueryInfo[0]['sample_tested_datetime']!='0000-00-00 00:00:00'){
+      $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
+      $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
     }else{
-      $vlQueryInfo[0]['lab_tested_date']='';
+      $vlQueryInfo[0]['sample_tested_datetime']='';
     }
     //Set Dispatched From Clinic To Lab Date
      if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00 00:00:00'){
@@ -114,10 +114,10 @@
       $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
     }
     //Set Date of Completion of Viral Load
-    if(isset($vlQueryInfo[0]['date_of_completion_of_viral_load']) && trim($vlQueryInfo[0]['date_of_completion_of_viral_load'])!="" && $vlQueryInfo[0]['date_of_completion_of_viral_load']!='0000-00-00'){
-        $vlQueryInfo[0]['date_of_completion_of_viral_load']=$general->humanDateFormat($vlQueryInfo[0]['date_of_completion_of_viral_load']);  
+    if(isset($vlQueryInfo[0]['result_approved_datetime']) && trim($vlQueryInfo[0]['result_approved_datetime'])!="" && $vlQueryInfo[0]['result_approved_datetime']!='0000-00-00'){
+        $vlQueryInfo[0]['result_approved_datetime']=$general->humanDateFormat($vlQueryInfo[0]['result_approved_datetime']);  
     }else{
-        $vlQueryInfo[0]['date_of_completion_of_viral_load'] = '';
+        $vlQueryInfo[0]['result_approved_datetime'] = '';
     }
     //get reason for rejection list
     $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
@@ -493,7 +493,7 @@
                             <tr>
                                 <td style="width:20%;"><label for="">Date de réception de léchantillon </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo[0]['date_sample_received_at_testing_lab']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php
@@ -536,7 +536,7 @@
                             <tr>
                                 <td><label for="">Date de réalisation de la charge virale </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['date_of_completion_of_viral_load']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['result_approved_datetime']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -559,7 +559,7 @@
                                 </td>
                                 <td><label for="vlLog">Log </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" value="<?php echo $vlQueryInfo[0]['log_value']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                    <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" value="<?php echo $vlQueryInfo[0]['result_value_log']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
                             </tr>
                             <tr>
@@ -569,7 +569,7 @@
                             <tr>
                                 <td><label for="">Date de remise du résultat </label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="<?php echo $vlQueryInfo[0]['lab_tested_date']; ?>" onchange="checkSampleTestingDate();" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>" onchange="checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
                         </table>

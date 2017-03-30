@@ -66,7 +66,7 @@ foreach($fResult as $fDetails){
 //sample code
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.form_id="2" AND DATE(vl.created_on) >= "'.$start_date.'" AND DATE(vl.created_on) <= "'.$end_date.'"';
+$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlResult=$db->query($svlQuery);
   if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
  $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
@@ -75,10 +75,10 @@ $svlResult=$db->query($svlQuery);
  $maxId = '001';
 }
 //lab no increament
-$labvlQuery='select MAX(lab_no) FROM vl_request_form as vl where vl.form_id="2" AND DATE(vl.created_on) >= "'.$start_date.'" AND DATE(vl.created_on) <= "'.$end_date.'"';
+$labvlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $labvlResult=$db->query($labvlQuery);
-  if($labvlResult[0]['MAX(lab_no)']!='' && $labvlResult[0]['MAX(lab_no)']!=NULL){
- $maxLabId = $labvlResult[0]['MAX(lab_no)']+1;
+  if($labvlResult[0]['MAX(lab_code)']!='' && $labvlResult[0]['MAX(lab_code)']!=NULL){
+ $maxLabId = $labvlResult[0]['MAX(lab_code)']+1;
 }else{
  $maxLabId = '1';
 }
@@ -108,7 +108,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $districtQuery="SELECT DISTINCT district from facility_details where state='".$stateName."'";
  $districtResult=$db->query($districtQuery);
  
- $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentId'].'"';
+ $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentId'].'"';
  $vlResult=$db->query($vlQuery);
  $urgency = $vlResult[0]['urgency'];
  $cBy = $vlResult[0]['collected_by'];
@@ -127,13 +127,13 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  }
  $sDate = $vlResult[0]['sample_collection_date'];
  
- if(isset($vlResult[0]['date_sample_received_at_testing_lab']) && trim($vlResult[0]['date_sample_received_at_testing_lab'])!='' && $vlResult[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$vlResult[0]['date_sample_received_at_testing_lab']);
-  $vlResult[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+ if(isset($vlResult[0]['sample_received_at_vl_lab_datetime']) && trim($vlResult[0]['sample_received_at_vl_lab_datetime'])!='' && $vlResult[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlResult[0]['sample_received_at_vl_lab_datetime']);
+  $vlResult[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
  }else{
-  $vlResult[0]['date_sample_received_at_testing_lab']='';
+  $vlResult[0]['sample_received_at_vl_lab_datetime']='';
  }
- $sampleReceivedDate = $vlResult[0]['date_sample_received_at_testing_lab'];
+ $sampleReceivedDate = $vlResult[0]['sample_received_at_vl_lab_datetime'];
 }
 if($urgency==''){
   $urgency= 'normal';

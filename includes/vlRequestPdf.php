@@ -104,11 +104,11 @@ if(isset($result[0]['sample_collection_date']) && trim($result[0]['sample_collec
  $result[0]['sample_collection_date']='';
 }
 
-if(isset($result[0]['date_sample_received_at_testing_lab']) && trim($result[0]['date_sample_received_at_testing_lab'])!='' && $result[0]['date_sample_received_at_testing_lab']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['date_sample_received_at_testing_lab']);
- $result[0]['date_sample_received_at_testing_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_received_at_vl_lab_datetime']) && trim($result[0]['sample_received_at_vl_lab_datetime'])!='' && $result[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_received_at_vl_lab_datetime']);
+ $result[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['date_sample_received_at_testing_lab']='';
+ $result[0]['sample_received_at_vl_lab_datetime']='';
 }
 
 if(isset($result[0]['treatment_initiated_date']) && trim($result[0]['treatment_initiated_date'])!='' && trim($result[0]['treatment_initiated_date'])!='0000-00-00'){
@@ -152,11 +152,11 @@ if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result
 // $result[0]['missing_last_vl_date']='';
 //}
 
-if(isset($result[0]['lab_tested_date']) && trim($result[0]['lab_tested_date'])!='' && trim($result[0]['lab_tested_date'])!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$result[0]['lab_tested_date']);
- $result[0]['lab_tested_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+if(isset($result[0]['sample_tested_datetime']) && trim($result[0]['sample_tested_datetime'])!='' && trim($result[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
+ $expStr=explode(" ",$result[0]['sample_tested_datetime']);
+ $result[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $result[0]['lab_tested_date']='';
+ $result[0]['sample_tested_datetime']='';
 }
 
 if(trim($result[0]['current_regimen'])!=''){
@@ -298,7 +298,7 @@ $rejectionrResult = $db->rawQuery($rejectionrQuery);
           $html.='<td>Date Of Sample Collection:'.$result[0]['sample_collection_date'].'</td>';
          $html.='</tr>';
          $html.='<tr style="width:98%;">';
-          $html.='<td>Sample Received Date:'.$result[0]['date_sample_received_at_testing_lab'].'</td>';
+          $html.='<td>Sample Received Date:'.$result[0]['sample_received_at_vl_lab_datetime'].'</td>';
          $html.='</tr>';
          $html.='<tr>';
           $html.='<td>Sample Type:'.$div.'</td>';
@@ -314,7 +314,7 @@ $rejectionrResult = $db->rawQuery($rejectionrQuery);
         $html.='<tr><td>Patient consent to receive SMS?</td><td>&nbsp;'.$sms.'</td><td>Ph Number</td><td>:&nbsp;'.$result[0]['patient_phone_number'].'</td></tr>';
         $html.='<tr><td>Location</td><td colspan="3">:&nbsp;'.$result[0]['location'].'</td></tr>';
         $html.='<tr><td>Request Clinician</td><td>:&nbsp;'.$result[0]['request_clinician'].'</td><td>Phone No.</td><td>:&nbsp;'.$result[0]['clinician_ph_no'].'</td></tr>';
-        $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['lab_tested_date'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
+        $html.='<tr><td>Request Date</td><td>:&nbsp;'.$result[0]['sample_tested_datetime'].'</td><td>VL Focal Person</td><td>:&nbsp;'.$result[0]['vl_focal_person'].'</td></tr>';
         $html.='<tr><td>Phone Number</td><td>:&nbsp;'.$result[0]['focal_person_phone_number'].'</td><td>Email for HF</td><td>:&nbsp;'.$result[0]['email_for_HF'].'</td></tr>';
         $html.='<tr><td>Justification</td><td>:&nbsp;'.$result[0]['justification'].'</td><td>Rejection</td><td>&nbsp;'.$reject.'</td></tr>';
         $html.='<tr><td>Rejection Facility</td><td>:&nbsp;'.ucwords($rejectionfResult[0]['facility_name']).'</td><td>Rejection Reason</td><td>:&nbsp;'.ucwords($rejectionrResult[0]['rejection_reason_name']).'</td></tr>';
