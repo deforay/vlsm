@@ -122,10 +122,10 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol1">Batch Code</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="art_no" class="showhideCheckBox"  /> <label for="iCol2">Art No</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol2">Art No</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_name" class="showhideCheckBox"  /> <label for="iCol3">Patient's Name</label> <br>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol3">Patient's Name</label> <br>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol4">Faility Name</label>
@@ -302,6 +302,8 @@ $batResult = $db->rawQuery($batQuery);
        $path = '../includes/vlRequestResultPdf.php'; 
       }else if($configFormResult[0]['value'] == 4){
        $path = '../includes/vlRequestZamSearchResultPdf.php';  
+      }else{
+	$path = '';
       }
       ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id},
@@ -325,6 +327,8 @@ $batResult = $db->rawQuery($batQuery);
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }else{
+      $path = '';
     }
     ?>
     $.post("<?php echo $path; ?>", { source:'print',id : id},

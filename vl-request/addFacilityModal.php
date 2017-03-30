@@ -10,15 +10,15 @@ if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!="" && trim($_P
         'facility_code'=>$_POST['facilityCode'],
         'vl_instance_id'=>$_SESSION['instanceId'],
         'other_id'=>$_POST['otherId'],
-        'phone_number'=>$_POST['phoneNo'],
+        'facility_mobile_numbers'=>$_POST['phoneNo'],
         'address'=>$_POST['address'],
         'country'=>$_POST['country'],
-        'state'=>$_POST['state'],
-        'district'=>$_POST['district'],
-        'hub_name'=>$_POST['hubName'],
-        'email'=>$_POST['email'],
+        'facility_state'=>$_POST['state'],
+        'facility_district'=>$_POST['district'],
+        'facility_hub_name'=>$_POST['hubName'],
+        'facility_emails'=>$_POST['email'],
         'contact_person'=>$_POST['contactPerson'],
-		'facility_type'=>$_POST['facilityType'],
+	'facility_type'=>$_POST['facilityType'],
         'status'=>'active'
         );
         //print_r($data);die;
@@ -89,7 +89,7 @@ $pResult = $db->rawQuery($pQuery);
                 <div class="row">
 		    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email" class="col-lg-4 control-label">Other Id </label>
+                        <label for="otherId" class="col-lg-4 control-label">Other Id </label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="otherId" name="otherId" placeholder="Other Id" />
                         </div>

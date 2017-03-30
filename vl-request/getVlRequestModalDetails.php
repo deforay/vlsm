@@ -9,8 +9,8 @@ $primaryKey="vl_sample_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.vl_sample_id','vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name');
-        $orderColumns = array('vl.vl_sample_id','vl.sample_code','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.facility_code','s.sample_name');
+        $aColumns = array('vl.vl_sample_id','vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name');
+        $orderColumns = array('vl.vl_sample_id','vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -89,7 +89,7 @@ $primaryKey="vl_sample_id";
         */
 	$aWhere = '';
         //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
-	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN testing_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
         //echo $sQuery;die;
 	$start_date = '';
@@ -182,7 +182,7 @@ $primaryKey="vl_sample_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_first_name,vl.result,f.facility_name,f.facility_code,vl.patient_art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN testing_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -208,7 +208,7 @@ $primaryKey="vl_sample_id";
 	    }else{
 		$aRow['patient_dob'] = '';
 	    }
-            $patientDetails = $aRow['art_no']."##".$aRow['sample_code']."##".$aRow['other_id']."##".$aRow['patient_name']."##".$aRow['patient_dob']."##".$aRow['gender']."##".$aRow['age_in_yrs']."##".$aRow['patient_phone_number']."##".$aRow['location'];
+            $patientDetails = $aRow['patient_art_no']."##".$aRow['sample_code']."##".$aRow['patient_other_id']."##".$aRow['patient_first_name']."##".$aRow['patient_dob']."##".$aRow['patient_gender']."##".$aRow['patient_age_in_years']."##".$aRow['patient_mobile_number']."##".$aRow['patient_location'];
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
 		$xplodDate = explode(" ",$aRow['sample_collection_date']);
 		$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
@@ -220,8 +220,8 @@ $primaryKey="vl_sample_id";
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $aRow['sample_collection_date'];
 	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['art_no'];
-            $row[] = ucwords($aRow['patient_name']);
+	    $row[] = $aRow['patient_art_no'];
+            $row[] = ucwords($aRow['patient_first_name']);
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $output['aaData'][] = $row;

@@ -52,7 +52,7 @@ $pResult = $db->rawQuery($pQuery);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email" class="col-lg-4 control-label">Other Id </label>
+                        <label for="otherId" class="col-lg-4 control-label">Other Id </label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control" id="otherId" name="otherId" placeholder="Other Id" />
                         </div>
@@ -133,7 +133,7 @@ $pResult = $db->rawQuery($pQuery);
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
+                        <label for="district" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District" title="Please enter district"/>
                         </div>

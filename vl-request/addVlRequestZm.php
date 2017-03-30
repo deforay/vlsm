@@ -100,18 +100,18 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityId']."'";
  $facilityResult=$db->query($facilityQuery);
  
- $stateName = $facilityResult[0]['state'];
+ $stateName = $facilityResult[0]['facility_state'];
  $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
  $stateResult=$db->query($stateQuery);
  
  //district details
- $districtQuery="SELECT DISTINCT district from facility_details where state='".$stateName."'";
+ $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
  $districtResult=$db->query($districtQuery);
  
- $vlQuery = 'select vl.urgency,vl.collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentId'].'"';
+ $vlQuery = 'select vl.test_urgency,vl.sample_collected_by,vl.sample_collection_date,vl.date_sample_received_at_testing_lab,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentId'].'"';
  $vlResult=$db->query($vlQuery);
- $urgency = $vlResult[0]['urgency'];
- $cBy = $vlResult[0]['collected_by'];
+ $urgency = $vlResult[0]['test_urgency'];
+ $cBy = $vlResult[0]['sample_collected_by'];
  $clinicianName = $vlResult[0]['lab_contact_person'];
  $labNameId = $vlResult[0]['lab_id'];
  $sKey = $vlResult[0]['sample_code_key']+1;
@@ -215,7 +215,7 @@ if($urgency==''){
                           <?php if($facilityResult!='') { ?>
                             <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
-                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
+                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } } else { echo $province;  } ?>
                           </select>
                         </div>
@@ -229,7 +229,7 @@ if($urgency==''){
                             if($districtResult!=''){
                             foreach($districtResult as $districtName){
                               ?>
-                              <option value="<?php echo $districtName['district'];?>" <?php echo ($facilityResult[0]['district']==$districtName['district'])?"selected='selected'":""?>><?php echo ucwords($districtName['district']);?></option>
+                              <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
                               <?php
                             }
                             }
@@ -320,7 +320,7 @@ if($urgency==''){
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
-                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter DOB" style="width:100%;" >
+                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" style="width:100%;" >
                         </td>
                       </tr>
                       <tr>

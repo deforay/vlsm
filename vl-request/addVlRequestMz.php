@@ -93,7 +93,7 @@ $province.="<option value=''> -- Select -- </option>";
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
                         <div class="form-group">
-                        <label for="urgency">Lab Number&nbsp;&nbsp;&nbsp;&nbsp;<span class="mandatory">*</span></label>
+                        <label for="labNumber">Lab Number&nbsp;&nbsp;&nbsp;&nbsp;<span class="mandatory">*</span></label>
                         <input type="text" class="form-control isRequired" id="" name="labNumber" placeholder="Enter Form Lab No." title="Please enter lab number" style="width:100%;"/>
                         </div>
                       </div>
@@ -168,7 +168,7 @@ $province.="<option value=''> -- Select -- </option>";
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
-                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter DOB" style="width:100%;" >
+                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" style="width:100%;" >
                         </td>
                       </tr>
                       <tr>

@@ -66,11 +66,11 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             if($filedGroup[$f] == "Form Serial No"){
                $field = 'serial_no';
             }elseif($filedGroup[$f] == "Urgency"){
-                 $field = 'urgency';
+                 $field = 'test_urgency';
             }elseif($filedGroup[$f] == "Province"){
-                 $field = 'state';
+                 $field = 'facility_state';
             }elseif($filedGroup[$f] == "District Name"){
-                 $field = 'district';
+                 $field = 'facility_district';
             }elseif($filedGroup[$f] == "Clinic Name"){
                  $field = 'facility_name';
             }elseif($filedGroup[$f] == "Clinician Name"){
@@ -80,37 +80,37 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             }elseif($filedGroup[$f] == "Sample Received Date"){
                  $field = 'date_sample_received_at_testing_lab';
             }elseif($filedGroup[$f] == "Collected by (Initials)"){
-                 $field = 'collected_by';
+                 $field = 'sample_collected_by';
             }elseif($filedGroup[$f] == "Gender"){
-                 $field = 'gender';
+                 $field = 'patient_gender';
             }elseif($filedGroup[$f] == "Date Of Birth"){
                  $field = 'patient_dob';
             }elseif($filedGroup[$f] == "Age in years"){
-                 $field = 'age_in_yrs';
+                 $field = 'patient_age_in_years';
             }elseif($filedGroup[$f] == "Age in months"){
-                 $field = 'age_in_mnts';
+                 $field = 'patient_age_in_months';
             }elseif($filedGroup[$f] == "Is Patient Pregnant?"){
                  $field = 'is_patient_pregnant';
             }elseif($filedGroup[$f] == "Is Patient Breastfeeding?"){
                  $field = 'is_patient_breastfeeding';
             }elseif($filedGroup[$f] == "Patient OI/ART Number"){
-                 $field = 'art_no';
+                 $field = 'patient_art_no';
             }elseif($filedGroup[$f] == "Date Of ART Initiation"){
                  $field = 'date_of_initiation_of_current_regimen';
             }elseif($filedGroup[$f] == "ART Regimen"){
                  $field = 'current_regimen';
             }elseif($filedGroup[$f] == "Patient consent to SMS Notification?"){
-                 $field = 'patient_receive_sms';
+                 $field = 'consent_to_receive_sms';
             }elseif($filedGroup[$f] == "Patient Mobile Number"){
-                 $field = 'patient_phone_number';
+                 $field = 'patient_mobile_number';
             }elseif($filedGroup[$f] == "Date Of Last Viral Load Test"){
                  $field = 'last_viral_load_date';
             }elseif($filedGroup[$f] == "Result Of Last Viral Load"){
                  $field = 'last_viral_load_result';
             }elseif($filedGroup[$f] == "Viral Load Log"){
-                 $field = 'viral_load_log';
+                 $field = 'last_vl_result_in_log';
             }elseif($filedGroup[$f] == "Reason For VL Test"){
-                 $field = 'vl_test_reason';
+                 $field = 'reason_for_vl_testing';
             }elseif($filedGroup[$f] == "Lab Name"){
                  $field = 'lab_id';
             }elseif($filedGroup[$f] == "LAB No"){
@@ -126,7 +126,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             }elseif($filedGroup[$f] == "Log Value"){
                  $field = 'log_value';
             }elseif($filedGroup[$f] == "If no result"){
-                 $field = 'rejection';
+                 $field = 'is_sample_rejected';
             }elseif($filedGroup[$f] == "Rejection Reason"){
                  $field = 'rejection_reason_name';
             }elseif($filedGroup[$f] == "Reviewed By"){
@@ -140,13 +140,13 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
             }
             
             if($field ==  'result_reviewed_by'){
-               $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
+               $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_type LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }elseif($field ==  'result_approved_by'){
-               $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
+               $fValueQuery="SELECT u.user_name as approvedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_type LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN user_details as u ON u.user_id = vl.result_approved_by where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }elseif($field ==  'lab_id'){
                $fValueQuery="SELECT f.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.lab_id=f.facility_id where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }else{
-              $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_id LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN testing_status as t_s ON t_s.status_id=vl.status where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
+              $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_type LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN testing_status as t_s ON t_s.status_id=vl.result_status where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }
             $fValueResult = $db->rawQuery($fValueQuery);
             $fieldValue = '';
@@ -160,7 +160,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
                     if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
                         $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
                     }
-               }elseif($field ==  'vl_test_platform' || $field ==  'gender' || $field == 'rejection'){
+               }elseif($field ==  'vl_test_platform' || $field ==  'patient_gender' || $field == 'is_sample_rejected'){
                  $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                }elseif($field ==  'result_reviewed_by'){
                  $fieldValue = $fValueResult[0]['reviewedBy'];

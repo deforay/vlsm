@@ -139,17 +139,17 @@ $general=new Deforay_Commons_General();
 			$humanDate =  date("d-M-Y H:i:s",strtotime($date));
 	    }
 	    //get no. of sample tested.
-	    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' and vl.status=7";
+	    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as vl where vl.batch_id='".$aRow['batch_id']."' and vl.result_status=7";
 	    $noOfSampleResultCount = $db->rawQuery($noOfSampleTested);
 	    //error_log($noOfSampleTested);
 	    //get no. of sample tested low level.
-	    $noOfSampleLowTested = "select count(vl.sample_code) as no_of_sample_low_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result < 1000";
+	    $noOfSampleLowTested = "select count(vl.sample_code) as no_of_sample_low_tested from vl_request_form as vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result < 1000";
 	    $noOfSampleLowResultCount = $db->rawQuery($noOfSampleLowTested);
 	    //get no. of sample tested high level.
-	    $noOfSampleHighTested = "select count(vl.sample_code) as no_of_sample_high_tested from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result > 1000";
+	    $noOfSampleHighTested = "select count(vl.sample_code) as no_of_sample_high_tested from vl_request_form as vl where vl.batch_id='".$aRow['batch_id']."' AND vl.result > 1000";
 	    $noOfSampleHighResultCount = $db->rawQuery($noOfSampleHighTested);
 	    //get no. of sample tested high level.
-	    $noOfSampleLastDateTested = "select max(vl.sample_testing_date) as last_tested_date from vl_request_form as  vl where vl.batch_id='".$aRow['batch_id']."'";
+	    $noOfSampleLastDateTested = "select max(vl.sample_testing_date) as last_tested_date from vl_request_form as vl where vl.batch_id='".$aRow['batch_id']."'";
 	    $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
 	    
         $row = array();

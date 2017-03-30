@@ -18,8 +18,8 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.result','cn.contact_notes','vl.contact_complete_status');
-        $orderColumns = array('vl.sample_code','vl.sample_collection_date','f.facility_name','f.phone_number','vl.art_no','vl.patient_name','vl.patient_phone_number','vl.result','cn.contact_notes','vl.contact_complete_status');
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'f.facility_name','f.facility_mobile_numbers','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.result','cn.contact_notes','vl.contact_complete_status');
+        $orderColumns = array('vl.sample_code','vl.sample_collection_date','f.facility_name','f.facility_mobile_numbers','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.result','cn.contact_notes','vl.contact_complete_status');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -98,8 +98,8 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > ".$thresholdLimit;
-	//$sWhere = ' where vl.status=7 AND vl.result > 1000';
+	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.result_status=7 AND vl.result > ".$thresholdLimit;
+	//$sWhere = ' where vl.result_status=7 AND vl.result > 1000';
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -146,11 +146,11 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.status=7 AND vl.result > $thresholdLimit $sWhere group by vl.vl_sample_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id LEFT JOIN contact_notes_details as cn ON cn.treament_contact_id=vl.vl_sample_id where vl.result_status=7 AND vl.result > $thresholdLimit $sWhere group by vl.vl_sample_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where status=7 AND result > 1000");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where result_status=7 AND result > 1000");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -187,10 +187,10 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $aRow['sample_collection_date'];
 	    $row[] = ucwords($aRow['facility_name']);
-	    $row[] = $aRow['phone_number'];
-            $row[] = $aRow['art_no'];
-            $row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
-            $row[] = ucwords($aRow['patient_phone_number']);
+	    $row[] = $aRow['facility_mobile_numbers'];
+            $row[] = $aRow['patient_art_no'];
+            $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
+            $row[] = ucwords($aRow['patient_mobile_number']);
             $row[] = $aRow['result'];
             $row[] = ucwords($aRow['contact_notes']);
             $row[] = '<select class="form-control" name="status" id=' . $aRow['vl_sample_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
