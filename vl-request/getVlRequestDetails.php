@@ -95,7 +95,7 @@ $primaryKey="vl_sample_id";
          * Get data to display
         */
 	$aWhere = '';
-        //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id";
+        //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type";
 	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 	
         //echo $sQuery;die;
@@ -246,6 +246,7 @@ $primaryKey="vl_sample_id";
         foreach ($rResult as $aRow) {
 	    $vlResult='';
 	    $edit='';
+			$barcode='';
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
 	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
 	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
@@ -270,6 +271,7 @@ $primaryKey="vl_sample_id";
 		if($aRow['vlsm_country_id']==2){
 			if($vlRequest){
 				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+				
 			}
 			$pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertZmbPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
 			if($vlView){
@@ -283,16 +285,19 @@ $primaryKey="vl_sample_id";
 			if($vlView){
 			    $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
 			}
+			
+			$barcode='<br><a href="javascript:void(0)" onclick="printBarcode(\''.$aRow['serial_no'].'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode</a>';
+			
 		}
 		
-		
-	    if($vlView){
-			$row[] = $edit;//.$pdf.$view;
-	    }else if($vlRequest || $editVlRequestZm){
-		$row[] = $edit;//.$pdf;
-	    }else if($vlView){
-		$row[] = "";//$pdf.$view;
-	    }
+					
+						if($vlView){
+							$row[] = $edit.$barcode;//.$pdf.$view;
+						}else if($vlRequest || $editVlRequestZm){
+							$row[] = $edit;//.$pdf;
+						}else if($vlView){
+							$row[] = "";//$pdf.$view;
+						}
             $output['aaData'][] = $row;
         }
         

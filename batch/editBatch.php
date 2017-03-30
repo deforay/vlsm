@@ -6,7 +6,7 @@ $id=base64_decode($_GET['id']);
 $batchQuery="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
 $rejected = '4';
-$query="SELECT vl.sample_code,vl.sample_batch_id,vl.vl_sample_id,vl.facility_id,vl.result,vl.status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where  vl.status NOT IN (".$rejected.") AND sample_batch_id is NULL OR sample_batch_id='' OR sample_batch_id=$id ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.batch_id,vl.vl_sample_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND sample_batch_id is NULL OR sample_batch_id='' OR sample_batch_id=$id ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
