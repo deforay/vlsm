@@ -113,7 +113,7 @@ $sampleTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value=""> -- Select -- </option>';
 //get test status values
-$tsQuery="SELECT * FROM testing_status";
+$tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 
 

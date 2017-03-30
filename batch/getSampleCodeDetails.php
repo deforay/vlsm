@@ -20,15 +20,15 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
      $end_date = $general->dateFormat(trim($s_c_date[1]));
    }
 }
-
+$rejected = '4';
 if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']=='' && $gender=='' && $pregnant=='' && $urgent==''){
-    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL OR batch_id=''";
+    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where  vl.status NOT IN (".$rejected.") AND batch_id is NULL OR batch_id=''";
 }else{
 if(isset($_POST['sCode']) && $_POST['sCode']!=''){
     $ids = implode(",",$_POST['sCode']);
-    $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id NOT IN (".$ids.") AND batch_id is NULL";
+    $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.status NOT IN (".$rejected.") AND vl_sample_id NOT IN (".$ids.") AND batch_id is NULL";
 }else{
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where batch_id is NULL and vl.status NOT IN (".$rejected.")";
 }
 if($fName!=''){
     $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";

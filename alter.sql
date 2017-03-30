@@ -54,17 +54,17 @@ ALTER TABLE `vl_request_form` ADD `log_value` VARCHAR(255) NULL DEFAULT NULL AFT
 
 
 ALTER TABLE  `vl_request_form` CHANGE  `status`  `status` INT NOT NULL ;
-CREATE TABLE IF NOT EXISTS `testing_status` (
+CREATE TABLE IF NOT EXISTS `r_testing_status` (
   `status_id` int(11) NOT NULL AUTO_INCREMENT,
   `status_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`status_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `testing_status`
+-- Dumping data for table `r_testing_status`
 --
 
-INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES
+INSERT INTO `r_testing_status` (`status_id`, `status_name`) VALUES
 (1, 'waiting'),
 (2, 'lost'),
 (3, 'sample reordered'),
@@ -73,7 +73,7 @@ INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES
 
 ALTER TABLE vl_request_form
 ADD FOREIGN KEY (status)
-REFERENCES testing_status(status_id)
+REFERENCES r_testing_status(status_id)
 
 
 --ilahir 09-Aug-2016
@@ -279,7 +279,7 @@ INSERT INTO `roles_privileges_map` (`map_id`, `role_id`, `privilege_id`) VALUES
 
 ALTER TABLE `import_config` CHANGE `log_absolute_val_same_col` `file_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE `other_config` ADD PRIMARY KEY(`name`);
-INSERT INTO `testing_status` (`status_id`, `status_name`) VALUES (NULL, 'Awaiting Clinic Approval'), (NULL, 'Received and Approved');
+INSERT INTO `r_testing_status` (`status_id`, `status_name`) VALUES (NULL, 'Awaiting Clinic Approval'), (NULL, 'Received and Approved');
 INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'approve_results', 'Approve Imported Results');
 INSERT INTO  `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '15', 'access', 'access');
 
@@ -792,23 +792,6 @@ ALTER TABLE `vl_request_form` ADD `test_result_export` INT(11) NOT NULL DEFAULT 
 --Pal 20-Mar-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Manager Email', 'manager_email', NULL);
 
---Pal 28-Mar-2017
-ALTER TABLE `facility_details` CHANGE `state` `facility_state` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `district` `facility_district` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `hub_name` `facility_hub_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
-ALTER TABLE `vl_request_form` CHANGE `urgency` `test_urgency` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
-ALTER TABLE `vl_request_form` CHANGE `sample_id` `facility_sample_id` INT(11) NULL DEFAULT NULL;
-
-ALTER TABLE `vl_request_form` CHANGE `request_clinician` `request_clinician_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
-ALTER TABLE `vl_request_form` CHANGE `clinician_ph_no` `request_clinician_phone_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
-ALTER TABLE `vl_request_form` CHANGE `support_partner` `facility_support_partner` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
-ALTER TABLE `vl_request_form` CHANGE `date_of_demand` `date_test_ordered_by_physician` DATE NULL DEFAULT NULL;
-
-ALTER TABLE `vl_request_form` CHANGE `collected_by` `sample_collected_by` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
-
 --Pal 29-Mar-2017
 ALTER TABLE `facility_details` CHANGE `email` `facility_emails` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
@@ -885,20 +868,8 @@ ALTER TABLE `vl_request_form` CHANGE `duration_of_conservation` `plasma_conserva
 
 ALTER TABLE `vl_request_form` CHANGE `status` `result_status` INT(11) NOT NULL;
 
-ALTER TABLE `vl_request_form` CHANGE `facility_sample_id` `sample_type` INT(11) NULL DEFAULT NULL;
+--saravanan 29-mar-2017
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Instance Type ', 'instance_type ', 'Both');
 
-ALTER TABLE `vl_request_form` ADD `facility_sample_id` VARCHAR(255) NULL DEFAULT NULL AFTER `facility_id`;
 
-ALTER TABLE `vl_request_form` DROP `justification`;
-
-ALTER TABLE `vl_request_form`
-  DROP `switch_to_tdf_last_vl_date`,
-  DROP `switch_to_tdf_value`,
-  DROP `switch_to_tdf_sample_type`,
-  DROP `missing_last_vl_date`,
-  DROP `missing_value`,
-  DROP `missing_sample_type`;
-  
-ALTER TABLE `vl_request_form` DROP `viral_load_indication`;
-
-ALTER TABLE `vl_request_form` CHANGE `vl_test_reason` `reason_for_vl_testing` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+RENAME `testing_status` TO `r_sample_status`;

@@ -126,7 +126,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             }elseif($field ==  'lab_id'){
                $fValueQuery="SELECT f.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.lab_id=f.facility_id where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }else{
-              $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_type LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN testing_status as t_s ON t_s.status_id=vl.result_status where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
+              $fValueQuery="SELECT $field FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_type LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_sample_status as t_s ON t_s.status_id=vl.result_status where vl.vl_sample_id = '".$sample['vl_sample_id']."'";
             }
             $fValueResult = $db->rawQuery($fValueQuery);
             $fieldValue = '';

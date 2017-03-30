@@ -1,7 +1,7 @@
 <?php
 include('../header.php');
 //include('../includes/MysqliDb.php');
-$tsQuery="SELECT * FROM testing_status";
+$tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
@@ -28,7 +28,7 @@ $batResult = $db->rawQuery($batQuery);
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+	    <table id="advanceFilter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;display: none;">
 		<tr>
 		    <td><b>Sample Collection Date :</b></td>
 		    <td>
@@ -95,17 +95,33 @@ $batResult = $db->rawQuery($batQuery);
 		  </td>
 		</tr>
 		<tr>
-		  <td colspan="5"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
+		  <td colspan="2"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		    &nbsp;<a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
-		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
-		    </td>
-		  <td>
-		      <?php
+		    &nbsp;<button class="btn btn-danger btn-sm" onclick="hideAdvanceSearch('advanceFilter','filter');"><span>Hide Advanced Search</span></button>
+		  </td>
+		  <td colspan="4">
+		    <?php
 		      if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
-			  <a href="addVlRequest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add VL Request Form</a>
+			  <a href="addVlRequest.php" class="btn btn-primary btn-sm pull-right" > <i class="fa fa-plus"></i> Add VL Request Form</a>
 		      <?php }
 		      ?>
+		      &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+		    &nbsp;<a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
+		  </td>
+		</tr>
+	    </table>
+	    <table id="filter" class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+	      <tr id="" style="">
+		  <td>
+		    
+		    <?php
+		      if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
+			  <a href="addVlRequest.php" class="btn btn-primary btn-sm pull-right" > <i class="fa fa-plus"></i> Add VL Request Form</a>
+		      <?php }
+		      ?>
+		      &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+		    &nbsp;<a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
+		    &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
 		  </td>
 		</tr>
 	    </table>
@@ -452,6 +468,11 @@ $batResult = $db->rawQuery($batQuery);
 //	  }
 //    });
 //  }
+function hideAdvanceSearch(hideId,showId)
+{
+  $("#"+hideId).hide();
+  $("#"+showId).show();
+}
 </script>
  <?php
  include('../footer.php');
