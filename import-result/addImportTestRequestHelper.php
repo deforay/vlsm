@@ -224,7 +224,7 @@ try {
                            }else if($data_heading == 'Status'){
                               $data['status'] = NULL;
                               if(trim($data_value)!= ''){
-                                $statusQuery = 'select status_id from r_testing_status where status_name = "'.$data_value.'" OR status_name = "'.strtolower($data_value).'"';
+                                $statusQuery = 'select status_id from r_sample_status where status_name = "'.$data_value.'" OR status_name = "'.strtolower($data_value).'"';
                                 $statusResult = $db->rawQuery($statusQuery);
                                 if(isset($statusResult[0]['status_id'])){
                                    $data['status'] = $statusResult[0]['status_id'];
@@ -232,7 +232,7 @@ try {
                                    $tStatusData = array(
                                                      'status_name'=>$data_value
                                                  );
-                                   $id = $db->insert('r_testing_status',$tStatusData);
+                                   $id = $db->insert('r_sample_status',$tStatusData);
                                    $data['status'] = $id;
                                 }
                               }

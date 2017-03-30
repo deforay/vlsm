@@ -76,7 +76,7 @@ try {
           $_POST['breastfeeding']='';
      }
      $_POST['result'] = '';
-     if(isset($_POST['vlResult']) && trim($_POST['vlResult'])!= ''){
+     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
           $_POST['result'] = $_POST['vlResult'];
      }
      $instanceId = '';
@@ -134,7 +134,7 @@ try {
           'modified_on'=>$general->getDateTime(),
           'result_coming_from'=>'manual'
         );
-     //print_r($vldata);die;
+     //echo "<pre>";var_dump($vldata);die;
           $id=$db->insert($tableName,$vldata);
           if($id>0){
                $_SESSION['alertMsg']="VL request added successfully";

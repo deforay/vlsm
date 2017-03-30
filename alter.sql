@@ -794,3 +794,6 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Manager E
 
 --saravanan 29-mar-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Instance Type ', 'instance_type ', 'Both');
+
+
+RENAME `testing_status` TO `r_sample_status`;

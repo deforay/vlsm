@@ -38,7 +38,7 @@ if($sResult[0]['MAX(vl_sample_id)']!=''){
  $maxId = 1;
 }
 //get test status values
-$tsQuery="SELECT * FROM r_testing_status";
+$tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 
 $fQuery="SELECT * FROM facility_details where status='active'";
