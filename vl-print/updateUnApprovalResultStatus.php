@@ -64,7 +64,7 @@ try {
                $data['batch_code']=$rResult[0]['batch_code'];
                 $data['modified_by']=$rResult[0]['result_reviewed_by'];
                 $data['modified_on']=$general->getDateTime();               
-               $data['status']=$status[$i];
+               $data['result_status']=$status[$i];
                $data['import_batch_tracking']=$_SESSION['controllertrack'];
                $result = $db->insert($tableName2,$data);
             }else{
@@ -93,7 +93,7 @@ try {
                 }
                 $query="select vl_sample_id,result from vl_request_form where sample_code='".$sampleVal."'";
                 $vlResult=$db->rawQuery($query);
-                $data['status']=$_POST['status'];
+                $data['result_status']=$_POST['status'];
                 $data['serial_no']=$rResult[0]['sample_code'];
                 if(count($vlResult)>0){
                     $data['form_id']=$arr['vl_form'];
@@ -114,7 +114,7 @@ try {
         }
     }
     //get all accepted data result
-    $accQuery="SELECT * FROM temp_sample_report where status='7'";
+    $accQuery="SELECT * FROM temp_sample_report where result_status='7'";
     $accResult = $db->rawQuery($accQuery);
     if($accResult){
     for($i = 0;$i<count($accResult);$i++){
@@ -142,7 +142,7 @@ try {
                         'result_approved_on'=>$general->getDateTime(),
                         'file_name'=>$accResult[$i]['file_name'],
                         'result_coming_from'=>'report',
-                        'status'=>'7',
+                        'result_status'=>'7',
                         'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
                     );
                 if($accResult[$i]['absolute_value']!=''){

@@ -64,7 +64,7 @@ try {
                               }
                              $data['date_of_completion_of_viral_load'] = $data_value;
                            }else if($data_heading == 'Reason For VL Test'){
-                              $data['vl_test_reason'] = $data_value;
+                              $data['reason_for_vl_testing'] = $data_value;
                            }else if($data_heading == 'VL Testing Platform'){
                               $data['vl_test_platform'] = $data_value;
                            }else if($data_heading == 'Test Method'){
@@ -84,21 +84,21 @@ try {
                            }else if($data_heading == 'Viral Load Result(copiesl/ml)'){
                              $data['result'] = $data_value;
                            }else if($data_heading == 'If no result'){
-                             $data['rejection'] = strtolower(str_replace(' ','_',$data_value));
+                             $data['is_sample_rejected'] = strtolower(str_replace(' ','_',$data_value));
                            }else if($data_heading == 'Rejection Reason'){
-                                $data['sample_rejection_reason'] = NULL;
+                                $data['reason_for_sample_rejection'] = NULL;
                                 if(trim($data_value)!= ''){
                                     $rrQuery = 'select rejection_reason_id from r_sample_rejection_reasons where rejection_reason_name = "'.$data_value.'" or rejection_reason_name = "'.strtolower($data_value).'"';
                                     $rrResult = $db->rawQuery($rrQuery);
                                     if(isset($rrResult[0]['rejection_reason_id'])){
-                                       $data['sample_rejection_reason'] = $rrResult[0]['rejection_reason_id'];
+                                       $data['reason_for_sample_rejection'] = $rrResult[0]['rejection_reason_id'];
                                     }else{
                                         $rrData = array(
                                                         'rejection_reason_name'=>$data_value,
                                                         'rejection_reason_status'=>'active'
                                                 );
                                         $id = $db->insert('r_sample_rejection_reasons',$rrData);
-                                        $data['sample_rejection_reason'] = $id;
+                                        $data['reason_for_sample_rejection'] = $id;
                                     }
                                 }
                            }else if($data_heading == 'Reviewed By'){
@@ -144,19 +144,19 @@ try {
                            }else if($data_heading == 'Laboratory Scientist Comments'){
                              $data['comments'] = $data_value;
                            }else if($data_heading == 'Specimen type'){
-                              $data['sample_id'] = NULL;
+                              $data['sample_type'] = NULL;
                               if(trim($data_value)!= ''){
                                 $specimenTypeQuery = 'select sample_id from r_sample_type where sample_name = "'.$data_value.'"';
                                 $specimenResult = $db->rawQuery($specimenTypeQuery);
                                 if(isset($specimenResult[0]['sample_id'])){
-                                   $data['sample_id'] = $specimenResult[0]['sample_id'];
+                                   $data['sample_type'] = $specimenResult[0]['sample_id'];
                                 }else{
                                    $sampleTypeData = array(
                                                      'sample_name'=>$data_value,
                                                      'status'=>'active'
                                                  );
                                    $id = $db->insert('r_sample_type',$sampleTypeData);
-                                   $data['sample_id'] = $id;
+                                   $data['sample_type'] = $id;
                                 }
                               }
                            }else if($data_heading == 'Lab'){
@@ -185,18 +185,18 @@ try {
                            }else if($data_heading == 'Lab Phone No'){
                                $data['lab_phone_no'] = $data_value;
                            }else if($data_heading == 'Status'){
-                              $data['status'] = NULL;
+                              $data['result_status'] = NULL;
                               if(trim($data_value)!= ''){
                                 $statusQuery = 'select status_id from r_sample_status where status_name = "'.$data_value.'" OR status_name = "'.strtolower($data_value).'"';
                                 $statusResult = $db->rawQuery($statusQuery);
                                 if(isset($statusResult[0]['status_id'])){
-                                   $data['status'] = $statusResult[0]['status_id'];
+                                   $data['result_status'] = $statusResult[0]['status_id'];
                                 }else{
                                    $tStatusData = array(
                                                      'status_name'=>$data_value
                                                  );
                                    $id = $db->insert('r_sample_status',$tStatusData);
-                                   $data['status'] = $id;
+                                   $data['result_status'] = $id;
                                 }
                               }
                            }

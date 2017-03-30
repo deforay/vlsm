@@ -44,21 +44,21 @@ $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.f
 if(isset($facility) && count(array_filter($facility))>0){
     $query = $query." AND vl.facility_id IN (".implode(',',$facility).")";
 }if(trim($sampleType)!=''){
-    $query = $query." AND vl.sample_id='".$sampleType."'";
+    $query = $query." AND vl.sample_type='".$sampleType."'";
 }if(trim($gender)!=''){
-    $query = $query." AND vl.gender='".$gender."'";
+    $query = $query." AND vl.patient_gender='".$gender."'";
 }if(trim($pregnant)!=''){
     $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
 }if(trim($urgent)!=''){
-    $query = $query." AND vl.urgency='".$urgent."'";
+    $query = $query." AND vl.test_urgency='".$urgent."'";
 }if(trim($state)!=''){
-    $query = $query." AND f.state LIKE '%" .$state . "%' ";
+    $query = $query." AND f.facility_state LIKE '%" .$state . "%' ";
 }if(trim($district)!=''){
-    $query = $query." AND f.district LIKE '%" .$district . "%' ";
+    $query = $query." AND f.facility_district LIKE '%" .$district . "%' ";
 }if(isset($batch) && count(array_filter($batch))>0){
     $query = $query." AND vl.batch_id IN (".implode(',',$batch).")";
 }if(isset($_POST['status']) && trim($_POST['status'])!=''){
-    $query = $query." AND vl.status='".$_POST['status']."'";
+    $query = $query." AND vl.result_status='".$_POST['status']."'";
 }if(trim($mailSentStatus)!=''){
    if(trim($type)== 'request'){
      $query = $query." AND vl.request_mail_sent='".$mailSentStatus."'";

@@ -43,7 +43,7 @@ try {
                            }else if($data_heading == 'Form Serial No'){
                               $data['serial_no'] = $data_value;
                            }else if($data_heading == 'Urgency'){
-                              $data['urgency'] = strtolower($data_value);
+                              $data['test_urgency'] = strtolower($data_value);
                            }else if($data_heading == 'Province'){
                                $state = $data_value;
                            }else if($data_heading == 'District Name'){
@@ -63,24 +63,24 @@ try {
                                }
                              $data['date_sample_received_at_testing_lab'] = $data_value;
                            }else if($data_heading == 'Collected by (Initials)'){
-                             $data['collected_by'] = $data_value;
+                             $data['sample_collected_by'] = $data_value;
                            }else if($data_heading == 'Gender'){
-                             $data['gender'] = strtolower($data_value);
+                             $data['patient_gender'] = strtolower($data_value);
                            }else if($data_heading == 'Date Of Birth'){
                               if(trim($data_value)!= '' && $data_value!= '00-00-0000'){
                                 $data_value = $general->dateFormat($data_value);
                               }
                              $data['patient_dob'] = $data_value;
                            }else if($data_heading == 'Age in years'){
-                             $data['age_in_yrs'] = $data_value;
+                             $data['patient_age_in_years'] = $data_value;
                            }else if($data_heading == 'Age in months'){
-                             $data['age_in_mnts'] = $data_value;
+                             $data['patient_age_in_months'] = $data_value;
                            }else if($data_heading == 'Is Patient Pregnant?'){
                              $data['is_patient_pregnant'] = strtolower($data_value);
                            }else if($data_heading == 'Is Patient Breastfeeding?'){
                              $data['is_patient_breastfeeding'] = strtolower($data_value);
                            }else if($data_heading == 'Patient OI/ART Number'){
-                             $data['art_no'] = $data_value;
+                             $data['patient_art_no'] = $data_value;
                            }else if($data_heading == 'Date Of ART Initiation'){
                              if(trim($data_value)!= '' && $data_value!= '00-00-0000'){
                                 $data_value = $general->dateFormat($data_value);
@@ -89,7 +89,7 @@ try {
                            }else if($data_heading == 'ART Regimen'){
                               $data['current_regimen'] = $data_value;
                            }else if($data_heading == 'Patient consent to SMS Notification?'){
-                              $data['patient_receive_sms'] = strtolower($data_value);
+                              $data['consent_to_receive_sms'] = strtolower($data_value);
                            }else if($data_heading == 'Date Of Last Viral Load Test'){
                                if(trim($data_value)!= '' && $data_value!= '00-00-0000'){
                                  $data_value = $general->dateFormat($data_value);
@@ -98,9 +98,9 @@ try {
                            }else if($data_heading == 'Result Of Last Viral Load'){
                               $data['last_viral_load_result'] = $data_value;
                            }else if($data_heading == 'Viral Load Log'){
-                              $data['viral_load_log'] = $data_value;
+                              $data['last_vl_result_in_log'] = $data_value;
                            }else if($data_heading == 'Reason For VL Test'){
-                              $data['vl_test_reason'] = $data_value;
+                              $data['reason_for_vl_testing'] = $data_value;
                            }else if($data_heading == 'VL Testing Platform'){
                               $data['vl_test_platform'] = $data_value;
                            }else if($data_heading == 'Sample Testing Date'){
@@ -114,21 +114,21 @@ try {
                            }else if($data_heading == 'Log Value'){
                              $data['log_value'] = $data_value;
                            }else if($data_heading == 'If no result'){
-                             $data['rejection'] = strtolower(str_replace(' ','_',$data_value));
+                             $data['is_sample_rejected'] = strtolower(str_replace(' ','_',$data_value));
                            }else if($data_heading == 'Rejection Reason'){
-                                $data['sample_rejection_reason'] = NULL;
+                                $data['reason_for_sample_rejection'] = NULL;
                                 if(trim($data_value)!= ''){
                                     $rrQuery = 'select rejection_reason_id from r_sample_rejection_reasons where rejection_reason_name = "'.$data_value.'" or rejection_reason_name = "'.strtolower($data_value).'"';
                                     $rrResult = $db->rawQuery($rrQuery);
                                     if(isset($rrResult[0]['rejection_reason_id'])){
-                                       $data['sample_rejection_reason'] = $rrResult[0]['rejection_reason_id'];
+                                       $data['reason_for_sample_rejection'] = $rrResult[0]['rejection_reason_id'];
                                     }else{
                                         $rrData = array(
                                                         'rejection_reason_name'=>$data_value,
                                                         'rejection_reason_status'=>'active'
                                                 );
                                         $id = $db->insert('r_sample_rejection_reasons',$rrData);
-                                        $data['sample_rejection_reason'] = $id;
+                                        $data['reason_for_sample_rejection'] = $id;
                                     }
                                 }
                            }else if($data_heading == 'Reviewed By'){
@@ -168,19 +168,19 @@ try {
                            }else if($data_heading == 'Laboratory Scientist Comments'){
                              $data['comments'] = $data_value;
                            }else if($data_heading == 'Specimen type'){
-                              $data['sample_id'] = NULL;
+                              $data['sample_type'] = NULL;
                               if(trim($data_value)!= ''){
                                 $specimenTypeQuery = 'select sample_id from r_sample_type where sample_name = "'.$data_value.'"';
                                 $specimenResult = $db->rawQuery($specimenTypeQuery);
                                 if(isset($specimenResult[0]['sample_id'])){
-                                   $data['sample_id'] = $specimenResult[0]['sample_id'];
+                                   $data['sample_type'] = $specimenResult[0]['sample_id'];
                                 }else{
                                    $sampleTypeData = array(
                                                      'sample_name'=>$data_value,
                                                      'status'=>'active'
                                                  );
                                    $id = $db->insert('r_sample_type',$sampleTypeData);
-                                   $data['sample_id'] = $id;
+                                   $data['sample_type'] = $id;
                                 }
                               }
                            }else if($data_heading == 'Clinic Name'){
@@ -193,8 +193,8 @@ try {
                                 }else{
                                    $clinicData = array(
                                                      'facility_name'=>$data_value,
-                                                     'state'=>$state,
-                                                     'district'=>$district,
+                                                     'facility_state'=>$state,
+                                                     'facility_district'=>$district,
                                                      'facility_type'=>1,
                                                      'status'=>'active'
                                                  );
@@ -222,18 +222,18 @@ try {
                            }else if($data_heading == 'LAB No'){
                               $data['lab_no'] = $data_value;
                            }else if($data_heading == 'Status'){
-                              $data['status'] = NULL;
+                              $data['result_status'] = NULL;
                               if(trim($data_value)!= ''){
                                 $statusQuery = 'select status_id from r_sample_status where status_name = "'.$data_value.'" OR status_name = "'.strtolower($data_value).'"';
                                 $statusResult = $db->rawQuery($statusQuery);
                                 if(isset($statusResult[0]['status_id'])){
-                                   $data['status'] = $statusResult[0]['status_id'];
+                                   $data['result_status'] = $statusResult[0]['status_id'];
                                 }else{
                                    $tStatusData = array(
                                                      'status_name'=>$data_value
                                                  );
                                    $id = $db->insert('r_sample_status',$tStatusData);
-                                   $data['status'] = $id;
+                                   $data['result_status'] = $id;
                                 }
                               }
                            }

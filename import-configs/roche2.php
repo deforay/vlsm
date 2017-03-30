@@ -162,7 +162,7 @@ try {
                 'text_value' => $d['txtVal'],
                 'absolute_decimal_value' => $d['absDecimalVal'],
                 'lab_tested_date' => $testingDate,
-                'status' => '6',
+                'result_status' => '6',
                 'file_name' => $fileName,
                 'comments' => $d['resultFlag']
             );
@@ -191,7 +191,7 @@ try {
                 if ($vlResult[0]['log_value'] != '' || $vlResult[0]['absolute_value'] != '' || $vlResult[0]['text_value'] != '' || $vlResult[0]['absolute_decimal_value'] != '') {
                     $data['sample_details'] = 'Result exists already';
                 } else {
-                    $data['status'] = '7';
+                    $data['result_status'] = '7';
                 }
                 $data['facility_id'] = $vlResult[0]['facility_id'];
             } else {
