@@ -12,7 +12,7 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
-$sQuery="SELECT * from r_sample_type where sample_id='".$vlQueryInfo[0]['sample_id']."'";
+$sQuery="SELECT * from r_sample_type where sample_id='".$vlQueryInfo[0]['sample_type']."'";
 $sResult=$db->query($sQuery);
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
@@ -105,19 +105,19 @@ $db->insert($tableName1,$data);
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="province">Province</label>
-                          <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($facilityResult[0]['state']);?>"/>
+                          <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($facilityResult[0]['facility_state']);?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="District">District  </label>
-                        <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($facilityResult[0]['district']);?>"/>
+                        <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($facilityResult[0]['facility_district']);?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="urgency">Urgency  </label>
-                        <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($vlQueryInfo[0]['urgency']);?>"/>
+                        <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($vlQueryInfo[0]['test_urgency']);?>"/>
                         </div>
                       </div>
                     </div>
@@ -152,7 +152,7 @@ $db->insert($tableName1,$data);
                   <div class="col-xs-3 col-md-3 col-lg-3">
                     <div class="form-group">
                     <label for="collectedBy">Collected by (Initials)</label>
-                    <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($vlQueryInfo[0]['collected_by']);?>">
+                    <input type="text" class="form-control1" style="width:100%;" value="<?php echo ucwords($vlQueryInfo[0]['sample_collected_by']);?>">
                     </div>
                   </div>
                 </div>
@@ -169,13 +169,13 @@ $db->insert($tableName1,$data);
                         <label for="patientFname">Patient First Name  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control" style="width:100%;" value="<?php echo ucwords($vlQueryInfo[0]['patient_name']);?>" >
+                          <input type="text" class="form-control" style="width:100%;" value="<?php echo ucwords($vlQueryInfo[0]['patient_first_name']);?>" >
                         </td>
                         <td style="width:10%">
-                        <label for="surName">Surname </label>
+                        <label for="surName">Last Name </label>
                         </td>
                         <td style="width:18%">
-                          <input type="text" class="form-control" style="width:100%;"  value="<?php echo ucwords($vlQueryInfo[0]['surname']);?>" >
+                          <input type="text" class="form-control" style="width:100%;"  value="<?php echo ucwords($vlQueryInfo[0]['patient_last_name']);?>" >
                         </td>
                       </tr>
                       <tr>
@@ -183,7 +183,7 @@ $db->insert($tableName1,$data);
                           <label for="gender">Gender</label>
                         </td>
                         <td>
-                          <input type="text" class="form-control" style="width:100%;"  value="<?php echo ucwords($vlQueryInfo[0]['gender']);?>" >
+                          <input type="text" class="form-control" style="width:100%;"  value="<?php echo ucwords($vlQueryInfo[0]['patient_gender']);?>" >
                         </td>
                         <td><label>Date Of Birth</label></td>
                         <td>
@@ -191,21 +191,21 @@ $db->insert($tableName1,$data);
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
-                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter DOB" style="width:100%;" value="<?php echo $vlQueryInfo[0]['age_in_yrs'];?>">
+                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_age_in_years'];?>">
                           
                         </td>
                       </tr>
                       <tr>
                         <td><label for="ageInMonths">Age in months</label></td>
                         <td>
-                          <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" value="<?php echo $vlQueryInfo[0]['age_in_mnts'];?>" >
+                          <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>" >
                         </td>
-                        <td class="femaleElements" <?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>><label for="patientPregnant">Is Patient Pregnant ?</label></td>
-                        <td class="femaleElements" <?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
+                        <td class="femaleElements" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>><label for="patientPregnant">Is Patient Pregnant ?</label></td>
+                        <td class="femaleElements" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>>
                         <input type="text" class="form-control" style="width:100%;"  value="<?php echo ucwords($vlQueryInfo[0]['is_patient_pregnant']);?>" >
                         </td>
                         
-                        <td colspan="2"  class="femaleElements" <?php echo($vlQueryInfo[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
+                        <td colspan="2"  class="femaleElements" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>>
                         <label for="breastfeeding">Is Patient Breastfeeding?</label>
                         <input type="text" class="form-control" style="width:100%;"  value="<?php echo ucwords($vlQueryInfo[0]['is_patient_breastfeeding']);?>" >
                         </td>
@@ -214,7 +214,7 @@ $db->insert($tableName1,$data);
                       <tr>
                         <td><label for="patientArtNo">Patient OI/ART Number</label></td>
                         <td>
-                          <input type="text" class="form-control" style="width: 100%;" value="<?php echo $vlQueryInfo[0]['art_no'];?>" >
+                          <input type="text" class="form-control" style="width: 100%;" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>" >
                         </td>
                         <td><label for="dateOfArt">Date Of ART Initiation</label></td>
                         <td>
@@ -228,10 +228,10 @@ $db->insert($tableName1,$data);
                       <tr>
                         <td><label>Patient consent to SMS Notification</label></td>
                         <td>
-                          <input type="text" class="form-control" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['patient_receive_sms'];?>" >
+                          <input type="text" class="form-control" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['consent_to_receive_sms'];?>" >
                         </td>
                         <td><label for="patientPhoneNumber">Mobile Number</label></td>
-                        <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_phone_number'];?>" /></td>
+                        <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_mobile_number'];?>" /></td>
                       </tr>
                       <tr>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
@@ -239,12 +239,12 @@ $db->insert($tableName1,$data);
                         <td><label for="lastViralLoadResult">Result Of Last Viral Load</label></td>
                         <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>" /></td>
                         <td><label for="viralLoadLog">Viral Load Log</label></td>
-                        <td><input type="text" class="form-control" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['viral_load_log'];?>"/></td>
+                        <td><input type="text" class="form-control" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['last_vl_result_in_log'];?>"/></td>
                       </tr>
                       <tr>
                         <td><label for="vlTestReason">Reason For VL test</label></td>
                         <td>
-                          <input type="text" class="form-control" style="width:100%;" value="<?php echo str_replace('_', ' ',  ucwords($vlQueryInfo[0]['vl_test_reason']));?>"/>
+                          <input type="text" class="form-control" style="width:100%;" value="<?php echo str_replace('_', ' ',  ucwords($vlQueryInfo[0]['reason_for_vl_testing']));?>"/>
                           
                         </td>
                         <td><label for="drugSubstitution">Single Drug Substitution</label></td>
@@ -284,7 +284,7 @@ $db->insert($tableName1,$data);
                       <tr>
                         <td><label>If no result</label></td>
                         <td colspan="3">
-                          <input type="text" class="form-control" style="width:100%;" value="<?php echo str_replace('_', ' ',  ucwords($vlQueryInfo[0]['rejection']));?>" />
+                          <input type="text" class="form-control" style="width:100%;" value="<?php echo str_replace('_', ' ',  ucwords($vlQueryInfo[0]['is_sample_rejected']));?>" />
                         </td>
                       </tr>
                       <tr>

@@ -40,19 +40,17 @@ $vlQueryInfo=$db->query($vlQuery);
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
-if(isset($facilityResult[0]['state']) && $facilityResult[0]['state']!=''){
-}else{
-  $facilityResult[0]['state'] = 0;
+if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
+  $facilityResult[0]['facility_state'] = 0;
 }
-$stateName = $facilityResult[0]['state'];
+$stateName = $facilityResult[0]['facility_state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
-if(isset($stateResult[0]['province_code']) && $stateResult[0]['province_code']!=''){
-}else{
+if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code']==''){
   $stateResult[0]['province_code'] = 0;
 }
 //district details
-$districtQuery="SELECT DISTINCT district from facility_details where state='".$stateName."'";
+$districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
 
 $province = '';
@@ -196,7 +194,7 @@ $disable = "disabled = 'disabled'";
                           <select class="form-control isRequired" name="province" id="province" <?php echo $disable; ?> title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
 			    <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
-                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
+                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } ?>
                           </select>
                         </td>
@@ -209,7 +207,7 @@ $disable = "disabled = 'disabled'";
                             <?php
                             foreach($districtResult as $districtName){
                               ?>
-                              <option value="<?php echo $districtName['district'];?>" <?php echo ($facilityResult[0]['district']==$districtName['district'])?"selected='selected'":""?>><?php echo ucwords($districtName['district']);?></option>
+                              <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
                               <?php
                             }
                             ?>
@@ -253,24 +251,24 @@ $disable = "disabled = 'disabled'";
                         <label for="patientFname">First Name  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control " name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_name'];?>" >
+                          <input type="text" class="form-control " name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" >
                         </td>
                         <td style="width:10%">
-                        <label for="surName">Surname </label>
+                        <label for="surName">Last Name </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Surname" <?php echo $disable; ?> title="Enter Surname"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['surname'];?>" >
+                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Last Name" <?php echo $disable; ?> title="Enter Last Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_last_name'];?>" >
                         </td>
                         <td colspan="2">
                         <label for="gender">Gender &nbsp;&nbsp;</label>
 			  <label class="radio-inline">
-			   <input type="radio" class="" id="genderMale" name="gender" value="male" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['gender']=='male')?"checked='checked'":""?>> Male
+			   <input type="radio" class="" id="genderMale" name="gender" value="male" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
 			   </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderFemale" name="gender" value="female" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['gender']=='female')?"checked='checked'":""?>> Female
+			   <input type="radio" class=" " id="genderFemale" name="gender" value="female" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
 			 </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['gender']=='not_recorded')?"checked='checked'":""?>> Not Recorded
+			   <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>> Not Recorded
 			 </label>
                         </td>
                       </tr>
@@ -424,7 +422,7 @@ $disable = "disabled = 'disabled'";
 			</td>
 			<td>
 			  <label class="radio-inline">
-			  <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By" <?php echo $disable; ?>  style="width:100%;" value="<?php echo $vlQueryInfo[0]['collected_by'];?>" >
+			  <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By" <?php echo $disable; ?>  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_collected_by'];?>" >
 			  </label>
 			</td>
 			<td colspan="4" class="processTime"><label for="processTime">For onsite plasma processing only</label>
@@ -441,10 +439,10 @@ $disable = "disabled = 'disabled'";
                       <tr>
 			<td colspan="2" class="sampleQuality"><label for="breastfeeding">Sample Quality</label>&nbsp;
 			 <label class="radio-inline">
-			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['rejection']=='accept')?"checked='checked'":""?>>Accept
+			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='accept')?"checked='checked'":""?>>Accept
 			 </label>
 			 <label class="radio-inline">
-			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="reject" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['rejection']=='reject')?"checked='checked'":""?>>Reject
+			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="reject" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"checked='checked'":""?>>Reject
 			 </label>
 			</td>
 			<td colspan="2" class="reason"><label for="rejectionReason">Reason</label>
@@ -454,7 +452,7 @@ $disable = "disabled = 'disabled'";
 				<?php
 				foreach($rejectionResult as $reject){
 				  ?>
-				  <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo ($vlQueryInfo[0]['sample_rejection_reason']==$reject['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
+				  <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo ($vlQueryInfo[0]['reason_for_sample_rejection']==$reject['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
 				  <?php
 				}
 				?>
@@ -486,7 +484,7 @@ $disable = "disabled = 'disabled'";
                                 <?php
                                 foreach($sResult as $name){
                                  ?>
-                                 <option value="<?php echo $name['sample_id'];?>"<?php echo ($vlQueryInfo[0]['sample_id']==$name['sample_id'])?"selected='selected'":""?> ><?php echo ucwords($name['sample_name']);?></option>
+                                 <option value="<?php echo $name['sample_id'];?>"<?php echo ($vlQueryInfo[0]['sample_type']==$name['sample_id'])?"selected='selected'":""?> ><?php echo ucwords($name['sample_name']);?></option>
                                  <?php
                                 }
                                 ?>
@@ -668,8 +666,8 @@ $disable = "disabled = 'disabled'";
                         <td>
                         <select class="form-control" id="status" name="status" title="Please select test status">
                          <option value="">-- Select --</option>
-                         <option value="7"<?php echo (7==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>>Accepted</option>
-                          <option value="4"<?php echo (4==$vlQueryInfo[0]['status']) ? 'selected="selected"':'';?>>Rejected</option>
+                         <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
+                          <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
                         </select>
                         </td>
                        </tr>

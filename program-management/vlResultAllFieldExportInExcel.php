@@ -6,7 +6,7 @@ include('../General.php');
 include ('../includes/PHPExcel.php');
  $general=new Deforay_Commons_General();
 
- $sQuery="SELECT vl.*,s.sample_name,s.status as sample_type_status,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,f.phone_number,f.address,f.hub_name,f.contact_person,f.report_email,f.country,f.longitude,f.latitude,f.facility_type,f.status as facility_status,ft.facility_type_name,lft.facility_type_name as labFacilityTypeName,l_f.facility_name as labName,l_f.facility_code as labCode,l_f.state as labState,l_f.district as labDistrict,l_f.phone_number as labPhone,l_f.address as labAddress,l_f.hub_name as LabHub,l_f.contact_person as labContactPerson,l_f.report_email as labReportMail,l_f.country as labCountry,l_f.longitude as labLongitude,l_f.latitude as labLatitude,l_f.facility_type as labFacilityType,l_f.status as labFacilityStatus,tr.test_reason_name,tr.test_reason_status FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_sample_status as ts ON ts.status_id=vl.status LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.vl_test_reason LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type";
+ $sQuery="SELECT vl.*,s.sample_name,s.status as sample_type_status,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,f.facility_mobile_numbers,f.address,f.facility_hub_name,f.contact_person,f.report_email,f.country,f.longitude,f.latitude,f.facility_type,f.status as facility_status,ft.facility_type_name,lft.facility_type_name as labFacilityTypeName,l_f.facility_name as labName,l_f.facility_code as labCode,l_f.facility_state as labState,l_f.district as labDistrict,l_f.facility_mobile_numbers as labPhone,l_f.address as labAddress,l_f.hub_name as LabHub,l_f.contact_person as labContactPerson,l_f.report_email as labReportMail,l_f.country as labCountry,l_f.longitude as labLongitude,l_f.latitude as labLatitude,l_f.facility_type as labFacilityType,l_f.status as labFacilityStatus,tr.test_reason_name,tr.test_reason_status FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type";
 
  $rResult = $db->rawQuery($sQuery);
  
@@ -65,15 +65,15 @@ include ('../includes/PHPExcel.php');
   }
   $row[] = $aRow['serial_no'];
   $row[] = $aRow['vl_instance_id'];
-  $row[] = ucwords(str_replace("_"," ",$aRow['gender']));
-  $row[] = $aRow['age_in_yrs'];
+  $row[] = ucwords(str_replace("_"," ",$aRow['patient_gender']));
+  $row[] = $aRow['patient_age_in_years'];
   $row[] = ucwords($aRow['facility_name']);
   $row[] = ucwords($aRow['facility_code']);
-  $row[] = ucwords($aRow['state']);
-  $row[] = ucwords($aRow['district']);
-  $row[] = ucwords($aRow['phone_number']);
+  $row[] = ucwords($aRow['facility_state']);
+  $row[] = ucwords($aRow['facility_district']);
+  $row[] = ucwords($aRow['facility_mobile_numbers']);
   $row[] = ucwords($aRow['address']);
-  $row[] = ucwords($aRow['hub_name']);
+  $row[] = ucwords($aRow['facility_hub_name']);
   $row[] = ucwords($aRow['contact_person']);
   $row[] = ucwords($aRow['report_email']);
   $row[] = ucwords($aRow['country']);

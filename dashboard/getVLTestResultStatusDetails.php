@@ -9,8 +9,8 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        $aColumns = array('vl.serial_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result');
-        $orderColumns = array('vl.serial_no','vl.sample_collection_date','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','f.state','f.district','s.sample_name','vl.result');
+        $aColumns = array('vl.serial_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result');
+        $orderColumns = array('vl.serial_no','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -87,7 +87,7 @@ $primaryKey="vl_sample_id";
          * SQL queries
          * Get data to display
         */
-	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	$sQuery="SELECT * FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -161,9 +161,9 @@ $primaryKey="vl_sample_id";
 	}
 	
         if (isset($sWhere) && $sWhere != "") {
-	    $sWhere = $sWhere.' AND vl.status = "'.$_POST['status'].'"';
+	    $sWhere = $sWhere.' AND vl.result_status = "'.$_POST['status'].'"';
 	}else{
-	    $sWhere =' WHERE vl.status = "'.$_POST['status'].'"';
+	    $sWhere =' WHERE vl.result_status = "'.$_POST['status'].'"';
 	}
 	
 	$sQuery = $sQuery.' '.$sWhere;
@@ -179,11 +179,11 @@ $primaryKey="vl_sample_id";
         
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere  ORDER BY vl.modified_on DESC, $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_first_name,vl.result,f.facility_name,f.facility_code,vl.patient_art_no,s.sample_name,b.batch_code,vl.batch_id,ts.status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id $sWhere  ORDER BY vl.modified_on DESC, $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where status = ".$_POST['status']);
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where result_status = ".$_POST['status']);
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -209,11 +209,11 @@ $primaryKey="vl_sample_id";
 	    $row[] = $aRow['serial_no'];
 	    $row[] = $aRow['sample_collection_date'];
 	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['art_no'];
-            $row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
+	    $row[] = $aRow['patient_art_no'];
+            $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
 	    $row[] = ucwords($aRow['facility_name']);
-	    $row[] = ucwords($aRow['state']);
-	    $row[] = ucwords($aRow['district']);
+	    $row[] = ucwords($aRow['facility_state']);
+	    $row[] = ucwords($aRow['facility_district']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
             $output['aaData'][] = $row;

@@ -130,7 +130,7 @@ $primaryKey="user_id";
         
         foreach ($rResult as $aRow) {
             $row = array();
-			$row[] = ucwords($aRow['user_name']);
+	    $row[] = ucwords($aRow['user_name']);
             $row[] = $aRow['email'];
             //$row[] = $aRow['phone_number'];
             $row[] = ucwords($aRow['role_name']);

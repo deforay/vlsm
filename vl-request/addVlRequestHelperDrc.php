@@ -52,19 +52,19 @@ try {
         $_POST['gender'] = NULL;
         $_POST['breastfeeding'] = NULL;
         $_POST['patientPregnant'] = NULL;
-        $_POST['trimestre'] = NULL;
+        $_POST['trimester'] = NULL;
     }else if($_POST['gender'] == "female"){
         if(!isset($_POST['breastfeeding']) || trim($_POST['breastfeeding'])==""){
             $_POST['breastfeeding'] = NULL;
         } if(!isset($_POST['patientPregnant']) || trim($_POST['patientPregnant'])==""){
             $_POST['patientPregnant'] = NULL;
-        } if(!isset($_POST['trimestre']) || trim($_POST['trimestre'])==""){
-            $_POST['trimestre'] = NULL;
+        } if(!isset($_POST['trimester']) || trim($_POST['trimester'])==""){
+            $_POST['trimester'] = NULL;
         }
     }else if($_POST['gender'] == "male"){
         $_POST['breastfeeding'] = NULL;
         $_POST['patientPregnant'] = NULL;
-        $_POST['trimestre'] = NULL;
+        $_POST['trimester'] = NULL;
     }
     
     //Set ARV current regimen
@@ -192,32 +192,32 @@ try {
                   'vl_instance_id'=>$instanceId,
                   'form_id'=>3,
                   'facility_id'=>$_POST['clinicName'],
-                  'request_clinician'=>$_POST['clinicianName'],
-                  'clinician_ph_no'=>$_POST['clinicanTelephone'],
-                  'support_partner'=>$_POST['supportPartner'],
+                  'request_clinician_name'=>$_POST['clinicianName'],
+                  'request_clinician_phone_number'=>$_POST['clinicanTelephone'],
+                  'facility_support_partner'=>$_POST['supportPartner'],
                   'patient_dob'=>$_POST['dob'],
-                  'age_in_yrs'=>$_POST['ageInYears'],
-                  'age_in_mnts'=>$_POST['ageInMonths'],
-                  'gender'=>$_POST['gender'],
+                  'patient_age_in_years'=>$_POST['ageInYears'],
+                  'patient_age_in_months'=>$_POST['ageInMonths'],
+                  'patient_gender'=>$_POST['gender'],
                   'is_patient_breastfeeding'=>$_POST['breastfeeding'],
                   'is_patient_pregnant'=>$_POST['patientPregnant'],
-                  'trimestre'=>$_POST['trimestre'],
-                  'art_no'=>$_POST['patientArtNo'],
+                  'pregnancy_trimester'=>$_POST['trimester'],
+                  'patient_art_no'=>$_POST['patientArtNo'],
                   'is_patient_new'=>$_POST['isPatientNew'],
                   'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
                   'current_regimen'=>$_POST['artRegimen'],
                   'has_patient_changed_regimen'=>$_POST['hasChangedRegimen'],
                   'reason_for_regimen_change'=>$_POST['reasonForArvRegimenChange'],
-                  'date_of_regimen_changed'=>$_POST['dateOfArvRegimenChange'],
-                  'vl_test_reason'=>$_POST['vlTestReason'],
+                  'regimen_change_date'=>$_POST['dateOfArvRegimenChange'],
+                  'reason_for_vl_testing'=>$_POST['vlTestReason'],
                   'last_viral_load_result'=>$_POST['lastViralLoadResult'],
                   'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
-                  'sample_id'=>$_POST['specimenType'],
+                  'sample_type'=>$_POST['specimenType'],
                   'plasma_conservation_temperature'=>$_POST['conservationTemperature'],
-                  'duration_of_conservation'=>$_POST['durationOfConservation'],
+                  'plasma_conservation_duration'=>$_POST['durationOfConservation'],
                   'date_sample_received_at_testing_lab'=>$_POST['sampleReceivedDate'],
-                  'status'=>$_POST['status'],
-                  'sample_rejection_reason'=>$_POST['rejectionReason'],
+                  'result_status'=>$_POST['status'],
+                  'reason_for_sample_rejection'=>$_POST['rejectionReason'],
                   'sample_code'=>$_POST['sampleCode'],
                   'lab_no'=>$_POST['labNo'],
                   'serial_no'=>$_POST['sampleCode'],
@@ -225,8 +225,8 @@ try {
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'log_value'=>$_POST['vlLog'],
                   'result'=>$_POST['vlResult'],
-                  'date_of_demand'=>$_POST['dateOfDemand'],
-                  'viral_load_no'=>$_POST['viralLoadNo'],
+                  'date_test_ordered_by_physician'=>$_POST['dateOfDemand'],
+                  'vl_test_number'=>$_POST['viralLoadNo'],
                   'sample_collection_date'=>$_POST['sampleCollectionDate'],
                   'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],
                   'date_of_completion_of_viral_load'=>$_POST['dateOfCompletionOfViralLoad'],

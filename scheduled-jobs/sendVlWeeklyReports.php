@@ -91,7 +91,7 @@ if(!isset($postdata['reportedDate'])){
  
  $c = 0;
  foreach($vlLabResult as $vlLab){
-    $sQuery="SELECT vl.facility_id,f.state,f.district,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.form_id = '".$country."'";
+    $sQuery="SELECT vl.facility_id,f.facility_state,f.facility_district,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.form_id = '".$country."'";
     if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         if (trim($start_date) == trim($end_date)) {
           $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
@@ -167,7 +167,7 @@ if(!isset($postdata['reportedDate'])){
         $r=1;
         foreach ($sResult as $aRow) {
           //No. of tests per facility & calculate others
-           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.rejection,vl.sample_rejection_reason,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.form_id = '.$country;
+           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.patient_gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.is_sample_rejected,vl.reason_for_sample_rejection,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.form_id = '.$country;
            if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
                 if (trim($start_date) == trim($end_date)) {
                   $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
@@ -198,16 +198,16 @@ if(!isset($postdata['reportedDate'])){
                if($tRow['patient_dob']!= NULL && $tRow['patient_dob']!= '' && $tRow['patient_dob']!= '0000-00-00'){
                    $age = floor((time() - strtotime($tRow['patient_dob'])) / 31556926);
                    if($age > 14){
-                       if($tRow['gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+                       if($tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
                            $gt14mnlte1000[] = $tRow['vl_sample_id'];
-                       }else if($tRow['gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+                       }else if($tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
                            $gt14mn1000[] = $tRow['vl_sample_id'];
-                       }else if($tRow['gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+                       }else if($tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
                            if(($tRow['is_patient_pregnant']!= NULL && $tRow['is_patient_pregnant']!= '' && $tRow['is_patient_pregnant'] == 'yes') || ($tRow['is_patient_breastfeeding']!= NULL && $tRow['is_patient_breastfeeding']!= '' && $tRow['is_patient_breastfeeding'] == 'yes')){
                                $isPatientPergnantrbfeedingnlte1000[] = $tRow['vl_sample_id'];
                            }
                           $gt14fnlte1000[] = $tRow['vl_sample_id'];
-                       }else if($tRow['gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+                       }else if($tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
                            if(($tRow['is_patient_pregnant']!= NULL && $tRow['is_patient_pregnant']!= '' && $tRow['is_patient_pregnant'] == 'yes') || ($tRow['is_patient_breastfeeding']!= NULL && $tRow['is_patient_breastfeeding']!= '' && $tRow['is_patient_breastfeeding'] == 'yes')){
                                $isPatientPergnantrbfeedingngt1000[] = $tRow['vl_sample_id'];
                            }
@@ -227,14 +227,14 @@ if(!isset($postdata['reportedDate'])){
                        $unknownxngt1000[] = $tRow['vl_sample_id'];
                    }
                }
-               if(($tRow['rejection']!= NULL && $tRow['rejection']!= '') || ($tRow['sample_rejection_reason']!= NULL && $tRow['sample_rejection_reason']!= '' && $tRow['sample_rejection_reason'] >0)){
+               if(($tRow['is_sample_rejected']!= NULL && $tRow['is_sample_rejected']!= '') || ($tRow['reason_for_sample_rejection']!= NULL && $tRow['reason_for_sample_rejection']!= '' && $tRow['reason_for_sample_rejection'] >0)){
                    $rejection[] = $tRow['vl_sample_id'];
                }
            }
            $row = array();
            $row[] = $r;
-           $row[] = ucwords($aRow['state']);
-           $row[] = ucwords($aRow['district']);
+           $row[] = ucwords($aRow['facility_state']);
+           $row[] = ucwords($aRow['facility_district']);
            $row[] = ucwords($aRow['facility_name']);
            $row[] = $aRow['facility_code'];
            $row[] = count($rejection);
@@ -369,8 +369,8 @@ if(!isset($postdata['reportedDate'])){
        }
        $row = array();
        $row[] = $r;
-       $row[] = ucwords($vlLab['state']);
-       $row[] = ucwords($vlLab['district']);
+       $row[] = ucwords($vlLab['facility_state']);
+       $row[] = ucwords($vlLab['facility_district']);
        $row[] = ucwords($vlLab['facility_name']);
        $row[] = $vlLab['facility_code'];
        $row[] = count($noOfSampleReceivedAtLab);
