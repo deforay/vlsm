@@ -1,7 +1,7 @@
 <?php
 include('../header.php');
 //include('../includes/MysqliDb.php');
-$tsQuery="SELECT * FROM testing_status";
+$tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
