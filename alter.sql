@@ -868,6 +868,8 @@ ALTER TABLE `vl_request_form` CHANGE `duration_of_conservation` `plasma_conserva
 
 ALTER TABLE `vl_request_form` CHANGE `status` `result_status` INT(11) NOT NULL;
 
+ALTER TABLE `temp_sample_report` CHANGE `status` `result_status` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
 --saravanan 29-mar-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Instance Type ', 'instance_type ', 'Both');
 

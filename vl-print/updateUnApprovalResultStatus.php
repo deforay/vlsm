@@ -114,7 +114,7 @@ try {
         }
     }
     //get all accepted data result
-    $accQuery="SELECT * FROM temp_sample_report where status='7'";
+    $accQuery="SELECT * FROM temp_sample_report where result_status='7'";
     $accResult = $db->rawQuery($accQuery);
     if($accResult){
     for($i = 0;$i<count($accResult);$i++){
