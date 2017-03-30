@@ -44,7 +44,7 @@ try {
           'result_value_text'=>$_POST['textValue'],
           'result'=>$_POST['result'],
           'approver_comments'=>$_POST['comments'],
-          'status'=>$_POST['status'],
+          'result_status'=>$_POST['status'],
         );
           //print_r($vldata);die;
           $db=$db->where('vl_sample_id',$treamentId);

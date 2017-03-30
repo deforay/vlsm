@@ -16,8 +16,8 @@ $primaryKey="vl_sample_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.sample_code','b.batch_code','vl.art_no','vl.patient_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -95,8 +95,8 @@ $primaryKey="vl_sample_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.state,f.district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.routine_monitoring_sample_type LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.vl_treatment_failure_adherence_counseling_sample_type  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.suspected_treatment_failure_sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.sample_rejection_reason LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.vl_test_reason";
-	//$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
+	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing";
+	//$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.result_status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_id LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
 	
        //echo $sQuery;die;
 	$start_date = '';
@@ -166,20 +166,20 @@ $primaryKey="vl_sample_id";
 		  $vLoad ='';
 		  //just comment if condition
 		  if($_POST['vLoad']=='<=1000'){
-		    $vLoad = " AND vl.status != '4' AND vl.result!='>10000000'";
+		    $vLoad = " AND vl.result_status != '4' AND vl.result!='>10000000'";
 		  }else{
 		    $vLoad = " OR (vl.result = '>10000000')";
 		  }
 	        $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-	        $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
+	        $sWhere = $sWhere.' AND vl.result_status ='.$_POST['status'];
 	    }
 	    if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
 		if(trim($_POST['gender']) == "not_recorded"){
-		    $sWhere = $sWhere.' AND (vl.gender = "not_recorded" OR vl.gender ="" OR vl.gender IS NULL)';
+		    $sWhere = $sWhere.' AND (vl.patient_gender = "not_recorded" OR vl.patient_gender ="" OR vl.patient_gender IS NULL)';
 		}else{
-		    $sWhere = $sWhere.' AND vl.gender ="'.$_POST['gender'].'"';
+		    $sWhere = $sWhere.' AND vl.patient_gender ="'.$_POST['gender'].'"';
 		}
 	    }
 	}else{
@@ -244,7 +244,7 @@ $primaryKey="vl_sample_id";
 		  $vLoad ='';
 		  //just comment if condition
 		  if($_POST['vLoad']=='<=1000'){
-		    $vLoad = " AND vl.status != '4'";
+		    $vLoad = " AND vl.result_status != '4'";
 		  }else{
 		    //$vLoad = " OR (vl.result = '>10000000')";
 		  }
@@ -258,26 +258,26 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND vl.status ='.$_POST['status'];
+		    $sWhere = $sWhere.' AND vl.result_status ='.$_POST['status'];
 		}else{
 		  $setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' vl.status ='.$_POST['status'];
+	        $sWhere = $sWhere.' vl.result_status ='.$_POST['status'];
 		}
 	    }
 	    if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
 		if(isset($setWhr)){
 		    if(trim($_POST['gender']) == "not_recorded"){
-		      $sWhere = $sWhere.' AND (vl.gender = "not_recorded" OR vl.gender ="" OR vl.gender IS NULL)';
+		      $sWhere = $sWhere.' AND (vl.patient_gender = "not_recorded" OR vl.patient_gender ="" OR vl.patient_gender IS NULL)';
 		    }else{
-		      $sWhere = $sWhere.' AND vl.gender ="'.$_POST['gender'].'"';
+		      $sWhere = $sWhere.' AND vl.patient_gender ="'.$_POST['gender'].'"';
 		    }
 		}else{
 		   $sWhere=' where '.$sWhere;
 		    if(trim($_POST['gender']) == "not_recorded"){
-	                $sWhere = $sWhere.' (vl.gender = "not_recorded" OR vl.gender ="" OR vl.gender IS NULL)';
+	                $sWhere = $sWhere.' (vl.patient_gender = "not_recorded" OR vl.patient_gender ="" OR vl.patient_gender IS NULL)';
 		    }else{
-			$sWhere = $sWhere.' vl.gender ="'.$_POST['gender'].'"';
+			$sWhere = $sWhere.' vl.patient_gender ="'.$_POST['gender'].'"';
 		    }
 		}
 	    }
@@ -303,7 +303,7 @@ $primaryKey="vl_sample_id";
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_id INNER JOIN r_testing_status as ts ON ts.status_id=vl.status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -325,8 +325,8 @@ $primaryKey="vl_sample_id";
             $row = array();
 	    $row[] = $aRow['sample_code'];
 	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['art_no'];
-            $row[] = ucwords($aRow['patient_name']).' '.ucwords($aRow['surname']);
+	    $row[] = $aRow['patient_art_no'];
+            $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];

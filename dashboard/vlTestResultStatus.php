@@ -2,7 +2,7 @@
 include('../header.php');
 //include('../includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
-$tsQuery = "SELECT status_name FROM r_testing_status WHERE status_id = '".$id."'";
+$tsQuery = "SELECT status_name FROM r_sample_status WHERE status_id = '".$id."'";
 $tsResult = $db->rawQuery($tsQuery);
 if(!isset($tsResult) || count($tsResult) == 0){
   header("location:/dashboard/index.php");exit;
@@ -101,10 +101,10 @@ $batResult = $db->rawQuery($batQuery);
 				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="batch_code" class="showhideCheckBox"  /> <label for="iCol2">Batch Code</label> <br>
 			    </div>
 			    <div class="col-md-3">
-				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="art_no" class="showhideCheckBox"  /> <label for="iCol3">Art No</label>
+				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol3">Art No</label>
 			    </div>
 			    <div class="col-md-3">
-				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="patient_name" class="showhideCheckBox" /> <label for="iCol4">Patient's Name</label> <br>
+				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="patient_first_name" class="showhideCheckBox" /> <label for="iCol4">Patient's Name</label> <br>
 			    </div>
 			    <div class="col-md-3">
 				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol5">Faility Name</label>

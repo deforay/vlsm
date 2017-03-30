@@ -12,8 +12,8 @@ $country = $configResult[0]['value'];
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('state','district','facility_name','facility_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'vl.approver_comments');
-        $orderColumns = array('state','district','facility_name','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','vl.approver_comments');
+        $aColumns = array('facility_state','facility_district','facility_name','facility_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'vl.approver_comments');
+        $orderColumns = array('facility_state','facility_district','facility_name','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','sample_collection_date','vl.approver_comments');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -93,7 +93,7 @@ $country = $configResult[0]['value'];
          * SQL queries
          * Get data to display
         */
-	$sQuery="SELECT vl.vl_sample_id,vl.facility_id,f.state,f.district,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id";
+	$sQuery="SELECT vl.vl_sample_id,vl.facility_id,f.facility_state,f.facility_district,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -164,7 +164,7 @@ $country = $configResult[0]['value'];
         
         foreach ($sResult as $aRow) {
 	    //No. of tests per facility & calculate others
-	    $totalQuery = 'SELECT vl_sample_id,patient_dob,gender,is_patient_pregnant,is_patient_breastfeeding,result,rejection,sample_rejection_reason FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.vlsm_country_id = '.$country;
+	    $totalQuery = 'SELECT vl_sample_id,patient_dob,patient_gender,is_patient_pregnant,is_patient_breastfeeding,result,is_sample_rejected,reason_for_sample_rejection FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.vlsm_country_id = '.$country;
 	    if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
 	       $totalQuery = $totalQuery." AND vl.lab_id IN (".$_POST['lab'].")";
 	    }
@@ -198,16 +198,16 @@ $country = $configResult[0]['value'];
 		if($tRow['patient_dob']!= NULL && $tRow['patient_dob']!= '' && $tRow['patient_dob']!= '0000-00-00'){
 		    $age = floor((time() - strtotime($tRow['patient_dob'])) / 31556926);
 		    if($age > 14){
-			if($tRow['gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+			if($tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
 			    $gt14mnlte1000[] = $tRow['vl_sample_id'];
-			}else if($tRow['gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+			}else if($tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
 			    $gt14mn1000[] = $tRow['vl_sample_id'];
-			}else if($tRow['gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+			}else if($tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
 			    if(($tRow['is_patient_pregnant']!= NULL && $tRow['is_patient_pregnant']!= '' && $tRow['is_patient_pregnant'] == 'yes') || ($tRow['is_patient_breastfeeding']!= NULL && $tRow['is_patient_breastfeeding']!= '' && $tRow['is_patient_breastfeeding'] == 'yes')){
 				$isPatientPergnantrbfeedingnlte1000[] = $tRow['vl_sample_id'];
 			    }
 			   $gt14fnlte1000[] = $tRow['vl_sample_id'];
-			}else if($tRow['gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+			}else if($tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
 			    if(($tRow['is_patient_pregnant']!= NULL && $tRow['is_patient_pregnant']!= '' && $tRow['is_patient_pregnant'] == 'yes') || ($tRow['is_patient_breastfeeding']!= NULL && $tRow['is_patient_breastfeeding']!= '' && $tRow['is_patient_breastfeeding'] == 'yes')){
 				$isPatientPergnantrbfeedingngt1000[] = $tRow['vl_sample_id'];
 			    }
@@ -227,14 +227,14 @@ $country = $configResult[0]['value'];
 			$unknownxngt1000[] = $tRow['vl_sample_id'];
 		    }
 		}
-		if(($tRow['rejection']!= NULL && $tRow['rejection']!= '') || ($tRow['sample_rejection_reason']!= NULL && $tRow['sample_rejection_reason']!= '' && $tRow['sample_rejection_reason'] >0)){
+		if(($tRow['is_sample_rejected']!= NULL && $tRow['is_sample_rejected']!= '') || ($tRow['reason_for_sample_rejection']!= NULL && $tRow['reason_for_sample_rejection']!= '' && $tRow['reason_for_sample_rejection'] >0)){
 		    $rejection[] = $tRow['vl_sample_id'];
 		}
 	    }
 	    
 	    $row = array();
-            $row[] = ucwords($aRow['state']);
-            $row[] = ucwords($aRow['district']);
+            $row[] = ucwords($aRow['facility_state']);
+            $row[] = ucwords($aRow['facility_district']);
             $row[] = ucwords($aRow['facility_name']);
             $row[] = '';
             $row[] = count($rejection);

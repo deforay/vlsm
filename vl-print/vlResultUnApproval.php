@@ -1,6 +1,6 @@
 <?php
 include('../header.php');
-$tsQuery="SELECT * FROM r_testing_status";
+$tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);

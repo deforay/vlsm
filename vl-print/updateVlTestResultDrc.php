@@ -24,13 +24,13 @@
     //Get selected state
     $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
     $stateResult=$db->query($stateQuery);
-    if(!isset($stateResult[0]['state']) || $stateResult[0]['state']==''){
-      $stateResult[0]['state'] = 0;
+    if(!isset($stateResult[0]['facility_state']) || $stateResult[0]['facility_state']==''){
+      $stateResult[0]['facility_state'] = 0;
     }
     //district details
-    $districtQuery="SELECT DISTINCT district from facility_details where state='".$stateResult[0]['state']."'";
+    $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateResult[0]['facility_state']."'";
     $districtResult=$db->query($districtQuery);
-    $provinceQuery="SELECT * from province_details where province_name='".$stateResult[0]['state']."'";
+    $provinceQuery="SELECT * from province_details where province_name='".$stateResult[0]['facility_state']."'";
     $provinceResult=$db->query($provinceQuery);
     if(!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_code']==''){
       $provinceResult[0]['province_code'] = 0;
@@ -47,10 +47,10 @@
       $vlQueryInfo[0]['patient_dob']='';
     }
      //Set Date of demand
-    if(isset($vlQueryInfo[0]['date_of_demand']) && trim($vlQueryInfo[0]['date_of_demand'])!='' && $vlQueryInfo[0]['date_of_demand']!='0000-00-00'){
-      $vlQueryInfo[0]['date_of_demand']=$general->humanDateFormat($vlQueryInfo[0]['date_of_demand']);
+    if(isset($vlQueryInfo[0]['date_test_ordered_by_physician']) && trim($vlQueryInfo[0]['date_test_ordered_by_physician'])!='' && $vlQueryInfo[0]['date_test_ordered_by_physician']!='0000-00-00'){
+      $vlQueryInfo[0]['date_test_ordered_by_physician']=$general->humanDateFormat($vlQueryInfo[0]['date_test_ordered_by_physician']);
     }else{
-      $vlQueryInfo[0]['date_of_demand']='';
+      $vlQueryInfo[0]['date_test_ordered_by_physician']='';
     }
     //Set ARV initiation date
     if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo[0]['date_of_initiation_of_current_regimen'])!='' && $vlQueryInfo[0]['date_of_initiation_of_current_regimen']!='0000-00-00'){
@@ -60,14 +60,14 @@
     }
     //Has patient changed regimen section
     if(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes"){
-      if(isset($vlQueryInfo[0]['date_of_regimen_changed']) && trim($vlQueryInfo[0]['date_of_regimen_changed'])!='' && $vlQueryInfo[0]['date_of_regimen_changed']!='0000-00-00'){
-        $vlQueryInfo[0]['date_of_regimen_changed']=$general->humanDateFormat($vlQueryInfo[0]['date_of_regimen_changed']);
+      if(isset($vlQueryInfo[0]['regimen_change_date']) && trim($vlQueryInfo[0]['regimen_change_date'])!='' && $vlQueryInfo[0]['regimen_change_date']!='0000-00-00'){
+        $vlQueryInfo[0]['regimen_change_date']=$general->humanDateFormat($vlQueryInfo[0]['regimen_change_date']);
       }else{
-        $vlQueryInfo[0]['date_of_regimen_changed']='';
+        $vlQueryInfo[0]['regimen_change_date']='';
       }
     }else{
       $vlQueryInfo[0]['reason_for_regimen_change'] = '';
-      $vlQueryInfo[0]['date_of_regimen_changed'] = '';
+      $vlQueryInfo[0]['regimen_change_date'] = '';
     }
     //Set last VL result
     if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_viral_load_date'])!='' && $vlQueryInfo[0]['last_viral_load_date']!='0000-00-00'){
@@ -83,7 +83,7 @@
       $vlQueryInfo[0]['sample_collection_date']='';
     }
     //Set plasma storage temp.
-    if(isset($vlQueryInfo[0]['sample_id']) && $vlQueryInfo[0]['sample_id']!= 2){
+    if(isset($vlQueryInfo[0]['sample_type']) && $vlQueryInfo[0]['sample_type']!= 2){
       $vlQueryInfo[0]['plasma_storage_temperature'] = '';
     }
     //Set sample received date
@@ -163,7 +163,7 @@
       }
       #femaleElements{
         <?php
-        if(trim($vlQueryInfo[0]['gender']) == "" || trim($vlQueryInfo[0]['gender']) == "male"){ ?>
+        if(trim($vlQueryInfo[0]['patient_gender']) == "" || trim($vlQueryInfo[0]['patient_gender']) == "male"){ ?>
           display:none;
         <?php } ?>
       }
@@ -207,7 +207,7 @@
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
                                       foreach($pdResult as $provinceName){ ?>
-                                        <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
+                                        <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['facility_state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
                                       <?php } ?>
                                     </select>
                                 </td>
@@ -218,7 +218,7 @@
                                       <?php
                                       foreach($districtResult as $districtName){
                                         ?>
-                                        <option value="<?php echo $districtName['district'];?>" <?php echo ($stateResult[0]['district']==$districtName['district'])?"selected='selected'":""?>><?php echo ucwords($districtName['district']);?></option>
+                                        <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($stateResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
                                         <?php
                                       }
                                       ?>
@@ -238,21 +238,21 @@
                             <tr>
                                 <td><label for="clinicianName">Demandeur </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="clinicianName" name="clinicianName" placeholder="Demandeur" title="Please enter demandeur" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['request_clinician']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="clinicianName" name="clinicianName" placeholder="Demandeur" title="Please enter demandeur" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['request_clinician_name']; ?>" style="width:100%;"/>
                                 </td>
                                 <td><label for="clinicanTelephone">Téléphone </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['clinician_ph_no']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['request_clinician_phone_number']; ?>" style="width:100%;"/>
                                 </td>
                                 <td><label for="supportPartner">Partenaire dappui </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['support_partner']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['facility_support_partner']; ?>" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="">Date de la demande </label></td>
                                 <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['date_of_demand']; ?>" style="width:21%;"/>
+                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['date_test_ordered_by_physician']; ?>" style="width:21%;"/>
                                 </td>
                             </tr>
                         </table>
@@ -267,28 +267,28 @@
                                 </td>
                                 <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['age_in_yrs']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['patient_age_in_years']; ?>" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="ageInMonths">Âge en mois </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['age_in_mnts']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['patient_age_in_months']; ?>" style="width:100%;"/>
                                 </td>
                                 <td><label for="sex">Sexe </label></td>
                                 <td style="width:16%;">
                                     <label class="radio-inline" style="padding-left:12px !important;margin-left:0;">M</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="genderMale" name="gender" <?php echo $disable; ?> value="male" title="Please check sexe" <?php echo (trim($vlQueryInfo[0]['gender']) == "male")?'checked="checked"':''; ?>>
+                                        <input type="radio" class="" id="genderMale" name="gender" <?php echo $disable; ?> value="male" title="Please check sexe" <?php echo (trim($vlQueryInfo[0]['patient_gender']) == "male")?'checked="checked"':''; ?>>
                                     </label>
                                     <label class="radio-inline" style="padding-left:12px !important;margin-left:0;">F</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="genderFemale" name="gender" <?php echo $disable; ?> value="female" title="Please check sexe" <?php echo (trim($vlQueryInfo[0]['gender']) == "female")?'checked="checked"':''; ?>>
+                                        <input type="radio" class="" id="genderFemale" name="gender" <?php echo $disable; ?> value="female" title="Please check sexe" <?php echo (trim($vlQueryInfo[0]['patient_gender']) == "female")?'checked="checked"':''; ?>>
                                     </label>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="patientArtNo">Code du patient </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['art_no']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;"/>
                                 </td>
                                 <td><label for="isPatientNew">Si S/ ARV </label></td>
                                 <td>
@@ -348,7 +348,7 @@
                             <tr class="arvChangedElement" style="display:<?php echo(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes")?'':'none'; ?>;">
                                 <td><label for="">Date du changement de régime ARV </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['date_of_regimen_changed']; ?>" style="width:30%;"/> (Jour/Mois/Année)
+                                    <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['regimen_change_date']; ?>" style="width:30%;"/> (Jour/Mois/Année)
                                 </td>
                             </tr>
                             <tr>
@@ -359,14 +359,14 @@
                                       <?php
                                       foreach($vlTestReasonResult as $tReason){
                                       ?>
-                                       <option value="<?php echo $tReason['test_reason_id']; ?>" <?php echo($vlQueryInfo[0]['vl_test_reason'] == $tReason['test_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($tReason['test_reason_name']); ?></option>
+                                       <option value="<?php echo $tReason['test_reason_id']; ?>" <?php echo($vlQueryInfo[0]['reason_for_vl_testing'] == $tReason['test_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($tReason['test_reason_name']); ?></option>
                                       <?php } ?>
                                       <option value="other">Autre</option>
                                     </select>
                                 </td>
                                 <td><label for="viralLoadNo">Charge virale N </label></td>
                                 <td colspan="4">
-                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['viral_load_no']; ?>" style="width:60%;"/>
+                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['vl_test_number']; ?>" style="width:60%;"/>
                                 </td>
                             </tr>
                             <tr id="femaleElements">
@@ -392,19 +392,19 @@
                                         <input type="radio" class="" id="pregNo" name="patientPregnant" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "no")?'checked="checked"':''; ?> value="no" <?php echo $disable; ?>>
                                     </label>
                                 </td>
-                                <td><label for="trimestre">Si Femme  enceinte </label></td>
+                                <td><label for="trimester">Si Femme  enceinte </label></td>
                                 <td colspan="3">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="trimestre1" name="trimestre" <?php echo(trim($vlQueryInfo[0]['trimestre']) == "1")?'checked="checked"':''; ?> value="1" <?php echo $disable; ?> title="Please check trimestre">
+                                        <input type="radio" id="trimester1" name="trimester" <?php echo(trim($vlQueryInfo[0]['pregnancy_trimester']) == "1")?'checked="checked"':''; ?> value="1" <?php echo $disable; ?> title="Please check trimestre">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 2</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="trimestre2" name="trimestre" <?php echo(trim($vlQueryInfo[0]['trimestre']) == "2")?'checked="checked"':''; ?> value="2" <?php echo $disable; ?>>
+                                        <input type="radio" id="trimester2" name="trimester" <?php echo(trim($vlQueryInfo[0]['pregnancy_trimester']) == "2")?'checked="checked"':''; ?> value="2" <?php echo $disable; ?>>
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 3</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="trimestre3" name="trimestre" <?php echo(trim($vlQueryInfo[0]['trimestre']) == "3")?'checked="checked"':''; ?> value="3" <?php echo $disable; ?>>
+                                        <input type="radio" id="trimester3" name="trimester" <?php echo(trim($vlQueryInfo[0]['pregnancy_trimester']) == "3")?'checked="checked"':''; ?> value="3" <?php echo $disable; ?>>
                                     </label>
                                 </td>
                             </tr>
@@ -451,7 +451,7 @@
                                     <?php
                                     foreach($sResult as $type){
                                      ?>
-                                     <option value="<?php echo $type['sample_id'];?>" <?php echo($vlQueryInfo[0]['sample_id'] == $type['sample_id'])?'selected="selected"':''; ?>><?php echo ucwords($type['sample_name']);?></option>
+                                     <option value="<?php echo $type['sample_id'];?>" <?php echo($vlQueryInfo[0]['sample_type'] == $type['sample_id'])?'selected="selected"':''; ?>><?php echo ucwords($type['sample_name']);?></option>
                                      <?php
                                     }
                                     ?>
@@ -459,14 +459,14 @@
                                 </td>
                               </tr>
                             <?php } ?>
-                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_id'] == 2)?'':'none'; ?>;">
+                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_type'] == 2)?'':'none'; ?>;">
                                 <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
                                     <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['plasma_conservation_temperature']; ?>" style="width:80%;"/>°C
                                 </td>
                                 <td><label for="durationOfConservation">Durée de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['duration_of_conservation']; ?>" style="width:60%;"/>Jour/Heures
+                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['plasma_conservation_duration']; ?>" style="width:60%;"/>Jour/Heures
                                 </td>
                             </tr>
                             <tr>
@@ -500,14 +500,14 @@
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
-                                      <option value="6" <?php echo($vlQueryInfo[0]['status'] == 6)?'selected="selected"':''; ?>> En attente d'approbation Clinique </option>
-                                      <option value="7" <?php echo($vlQueryInfo[0]['status'] == 7)?'selected="selected"':''; ?>>Echantillon accepté</option>
-                                      <option value="4" <?php echo($vlQueryInfo[0]['status'] == 4)?'selected="selected"':''; ?>>Echantillon rejeté</option>
+                                      <option value="6" <?php echo($vlQueryInfo[0]['result_status'] == 6)?'selected="selected"':''; ?>> En attente d'approbation Clinique </option>
+                                      <option value="7" <?php echo($vlQueryInfo[0]['result_status'] == 7)?'selected="selected"':''; ?>>Echantillon accepté</option>
+                                      <option value="4" <?php echo($vlQueryInfo[0]['result_status'] == 4)?'selected="selected"':''; ?>>Echantillon rejeté</option>
                                     </select>
                                 </td>
                               </tr>
                             <?php } ?>
-                            <tr class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['status'] == 4)?'':'none'; ?>;">
+                            <tr class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['result_status'] == 4)?'':'none'; ?>;">
                                 <td><label for="rejectionReason">Motifs de rejet </label></td>
                                 <td>
                                     <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
@@ -515,7 +515,7 @@
                                       <?php
                                       foreach($rjctReasonResult as $rjctReason){
                                       ?>
-                                       <option value="<?php echo $rjctReason['rejection_reason_id']; ?>" <?php echo($vlQueryInfo[0]['sample_rejection_reason'] == $rjctReason['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
+                                       <option value="<?php echo $rjctReason['rejection_reason_id']; ?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $rjctReason['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
                                       <?php } ?>
                                        <option value="other">Autre</option>
                                     </select>
@@ -576,7 +576,7 @@
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" id="rSrc" name="rSrc" value="er"/>
-                <input type="hidden" id="dubPatientArtNo" name="dubPatientArtNo" value="<?php echo $vlQueryInfo[0]['art_no']; ?>"/>
+                <input type="hidden" id="dubPatientArtNo" name="dubPatientArtNo" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>"/>
                 <input type="hidden" id="vlSampleId" name="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id']; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="vlTestResult.php" class="btn btn-default"> Cancel</a>

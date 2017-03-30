@@ -34,13 +34,13 @@ if($fName!=''){
     $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
 }
 if($sample!=''){
-    $query = $query." AND vl.sample_id='".$sample."'";
+    $query = $query." AND vl.sample_type='".$sample."'";
 }if($gender!=''){
-    $query = $query." AND vl.gender='".$gender."'";
+    $query = $query." AND vl.patient_gender='".$gender."'";
 }if($pregnant!=''){
     $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
 }if($urgent!=''){
-    $query = $query." AND vl.urgency='".$urgent."'";
+    $query = $query." AND vl.test_urgency='".$urgent."'";
 }
 
 $query." ORDER BY f.facility_name ASC";

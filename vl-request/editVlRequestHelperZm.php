@@ -88,31 +88,31 @@ try {
           }
      
      $vldata=array(
-          'urgency'=>$_POST['urgency'],
+          'test_urgency'=>$_POST['urgency'],
           'serial_no'=>$_POST['serialNo'],
           'sample_code'=>$_POST['serialNo'],
           'facility_id'=>$_POST['clinicName'],
           //'sample_code'=>$_POST['sampleCode'],
           'lab_contact_person'=>$_POST['clinicianName'],
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
-          'collected_by'=>$_POST['collectedBy'],
-          'patient_name'=>$_POST['patientFname'],
-          'surname'=>$_POST['surName'],
-          'gender'=>$_POST['gender'],
+          'sample_collected_by'=>$_POST['collectedBy'],
+          'patient_first_name'=>$_POST['patientFname'],
+          'patient_last_name'=>$_POST['surName'],
+          'patient_gender'=>$_POST['gender'],
           'patient_dob'=>$_POST['dob'],
-          'age_in_yrs'=>$_POST['ageInYears'],
-          'age_in_mnts'=>$_POST['ageInMonths'],
+          'patient_age_in_years'=>$_POST['ageInYears'],
+          'patient_age_in_months'=>$_POST['ageInMonths'],
           'is_patient_pregnant'=>$_POST['patientPregnant'],
           'is_patient_breastfeeding'=>$_POST['breastfeeding'],
-          'art_no'=>$_POST['patientArtNo'],
+          'patient_art_no'=>$_POST['patientArtNo'],
           'current_regimen'=>$_POST['artRegimen'],
           'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
-          'patient_receive_sms'=>$_POST['receiveSms'],
-          'patient_phone_number'=>$_POST['patientPhoneNumber'],
+          'consent_to_receive_sms'=>$_POST['receiveSms'],
+          'patient_mobile_number'=>$_POST['patientPhoneNumber'],
           'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
           'last_viral_load_result'=>$_POST['lastViralLoadResult'],
-          'viral_load_log'=>$_POST['viralLoadLog'],
-          'vl_test_reason'=>$_POST['vlTestReason'],
+          'last_vl_result_in_log'=>$_POST['viralLoadLog'],
+          'reason_for_vl_testing'=>$_POST['vlTestReason'],
           //'drug_substitution'=>$_POST['drugSubstitution'],
           'lab_code'=>$_POST['labNo'],
           'lab_id'=>$_POST['labId'],
@@ -124,8 +124,8 @@ try {
           'approver_comments'=>$_POST['labComments'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
-          'rejection'=>$_POST['noResult'],
-          'sample_rejection_reason'=>$_POST['rejectionReason'],
+          'is_sample_rejected'=>$_POST['noResult'],
+          'reason_for_sample_rejection'=>$_POST['rejectionReason'],
           'last_modified_datetime'=>$general->getDateTime()
         );
           if(isset($_POST['approvedBy'])){
@@ -136,7 +136,7 @@ try {
             $vldata['import_machine_file_name']='';
           }
           if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
-            $vldata['sample_id'] = $_POST['specimenType'];
+            $vldata['sample_type'] = $_POST['specimenType'];
           }
           //print_r($vldata);die;
           $db=$db->where('vl_sample_id',$_POST['treamentId']);

@@ -93,7 +93,7 @@ try {
                 }
                 $query="select vl_sample_id,result from vl_request_form where sample_code='".$sampleVal."'";
                 $vlResult=$db->rawQuery($query);
-                $data['status']=$status[$i];
+                $data['result_status']=$status[$i];
                 $data['serial_no']=$rResult[0]['sample_code'];
                 if(count($vlResult)>0){
                     $data['vlsm_country_id']=$arr['vl_form'];
@@ -142,7 +142,7 @@ try {
                         'result_approved_datetime'=>$general->getDateTime(),
                         'import_machine_file_name'=>$accResult[$i]['import_machine_file_name'],
                         'manual_result_entry'=>'report',
-                        'status'=>'7',
+                        'result_status'=>'7',
                         'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
                     );
                 if($accResult[$i]['result_value_absolute']!=''){

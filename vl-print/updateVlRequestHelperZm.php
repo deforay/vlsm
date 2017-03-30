@@ -45,14 +45,14 @@ try {
           'approver_comments'=>$_POST['labComments'],
           'result_approved_by'=>$_POST['approvedBy'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
-          'rejection'=>$_POST['noResult'],
+          'is_sample_rejected'=>$_POST['noResult'],
           'last_modified_datetime'=>$general->getDateTime()
         );
           if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
-               $vldata['sample_id']=$_POST['specimenType'];
+               $vldata['sample_type']=$_POST['specimenType'];
           }
           if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-               $vldata['status']=$_POST['status'];
+               $vldata['result_status']=$_POST['status'];
           }
           //print_r($vldata);die;
           if($vloadResultUpdate){

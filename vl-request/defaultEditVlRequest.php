@@ -5,7 +5,7 @@ ob_start();
 include('../General.php');
 $general=new Deforay_Commons_General();
 
-$fQuery="SELECT vl.*,f.facility_name,f.facility_code,f.hub_name,f.state,f.district from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id=$id";
+$fQuery="SELECT vl.*,f.facility_name,f.facility_code,f.facility_emails,f.facility_hub_name,f.facility_state,f.facility_district from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id=$id";
 $result=$db->query($fQuery);
 
 $uQuery = "Select * from user_details where user_id=".$result[0]['result_reviewed_by'];
@@ -43,32 +43,22 @@ if(isset($result[0]['date_of_initiation_of_current_regimen']) && trim($result[0]
  $result[0]['date_of_initiation_of_current_regimen']='';
 }
 
-if(isset($result[0]['routine_monitoring_last_vl_date']) && trim($result[0]['routine_monitoring_last_vl_date'])!='' && trim($result[0]['routine_monitoring_last_vl_date'])!='0000-00-00'){
- $result[0]['routine_monitoring_last_vl_date']=$general->humanDateFormat($result[0]['routine_monitoring_last_vl_date']);
+if(isset($result[0]['last_vl_date_routine']) && trim($result[0]['last_vl_date_routine'])!='' && trim($result[0]['last_vl_date_routine'])!='0000-00-00'){
+ $result[0]['last_vl_date_routine']=$general->humanDateFormat($result[0]['last_vl_date_routine']);
 }else{
- $result[0]['routine_monitoring_last_vl_date']='';
+ $result[0]['last_vl_date_routine']='';
 }
 
-if(isset($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']) && trim($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'])!='' && trim($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date'])!='0000-00-00'){
- $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']=$general->humanDateFormat($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']);
+if(isset($result[0]['last_vl_date_failure_ac']) && trim($result[0]['last_vl_date_failure_ac'])!='' && trim($result[0]['last_vl_date_failure_ac'])!='0000-00-00'){
+ $result[0]['last_vl_date_failure_ac']=$general->humanDateFormat($result[0]['last_vl_date_failure_ac']);
 }else{
- $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']='';
+ $result[0]['last_vl_date_failure_ac']='';
 }
 
-if(isset($result[0]['suspected_treatment_failure_last_vl_date']) && trim($result[0]['suspected_treatment_failure_last_vl_date'])!='' && trim($result[0]['suspected_treatment_failure_last_vl_date'])!='0000-00-00'){
- $result[0]['suspected_treatment_failure_last_vl_date']=$general->humanDateFormat($result[0]['suspected_treatment_failure_last_vl_date']);
+if(isset($result[0]['last_vl_date_failure']) && trim($result[0]['last_vl_date_failure'])!='' && trim($result[0]['last_vl_date_failure'])!='0000-00-00'){
+ $result[0]['last_vl_date_failure']=$general->humanDateFormat($result[0]['last_vl_date_failure']);
 }else{
- $result[0]['suspected_treatment_failure_last_vl_date']='';
-}
-if(isset($result[0]['switch_to_tdf_last_vl_date']) && trim($result[0]['switch_to_tdf_last_vl_date'])!='' && trim($result[0]['switch_to_tdf_last_vl_date'])!='0000-00-00'){
- $result[0]['switch_to_tdf_last_vl_date']=$general->humanDateFormat($result[0]['switch_to_tdf_last_vl_date']);
-}else{
- $result[0]['switch_to_tdf_last_vl_date']='';
-}
-if(isset($result[0]['missing_last_vl_date']) && trim($result[0]['missing_last_vl_date'])!='' && trim($result[0]['missing_last_vl_date'])!='0000-00-00'){
- $result[0]['missing_last_vl_date']=$general->humanDateFormat($result[0]['missing_last_vl_date']);
-}else{
- $result[0]['missing_last_vl_date']='';
+ $result[0]['last_vl_date_failure']='';
 }
 
 if(isset($result[0]['sample_received_at_vl_lab_datetime']) && trim($result[0]['sample_received_at_vl_lab_datetime'])!='' && trim($result[0]['sample_received_at_vl_lab_datetime'])!='0000-00-00 00:00:00'){
@@ -123,7 +113,7 @@ $sampleTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 $sampleType='<option value=""> -- Select -- </option>';
 //get test status values
-$tsQuery="SELECT * FROM r_testing_status";
+$tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 
 
@@ -231,7 +221,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="state" class="col-lg-4 control-label">State/Province</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="state" name="state" placeholder="State" value="<?php echo $result[0]['state']; ?>" readonly/>
+                        <input type="text" class="form-control" id="state" name="state" placeholder="State" value="<?php echo $result[0]['facility_state']; ?>" readonly/>
                         </div>
                     </div>
                   </div>
@@ -241,7 +231,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="hubName" class="col-lg-4 control-label">Linked Hub Name (If Applicable)</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $result[0]['hub_name']; ?>" readonly/>
+                        <input type="text" class="form-control" id="hubName" name="hubName" placeholder="Hub Name" title="Please enter hub name" value="<?php echo $result[0]['facility_hub_name']; ?>" readonly/>
                         </div>
                     </div>
                   </div>
@@ -249,7 +239,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="district" class="col-lg-4 control-label">District</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="district" name="district" placeholder="District" title="Please enter district" value="<?php echo $result[0]['district']; ?>" readonly />
+                        <input type="text" class="form-control" id="district" name="district" placeholder="District" title="Please enter district" value="<?php echo $result[0]['facility_district']; ?>" readonly />
                         </div>
                     </div>
                   </div>
@@ -257,13 +247,13 @@ $rResult = $db->rawQuery($rQuery);
                 <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="gender" class="col-lg-4 control-label">Urgency <span class="mandatory">*</span></label>
+                        <label for="urgency" class="col-lg-4 control-label">Urgency <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-                         <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" <?php echo ($result[0]['urgency']=='normal')?"checked='checked'":""?>> Normal
+                         <input type="radio" class="" id="urgencyNormal" name="urgency" value="normal" title="Please check urgency" <?php echo ($result[0]['test_urgency']=='normal')?"checked='checked'":""?>> Normal
                         </label>
                         <label class="radio-inline">
-                         <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency" <?php echo ($result[0]['urgency']=='urgent')?"checked='checked'":""?> > Urgent
+                         <input type="radio" class=" " id="urgencyUrgent" name="urgency" value="urgent" title="Please check urgency" <?php echo ($result[0]['test_urgency']=='urgent')?"checked='checked'":""?> > Urgent
                         </label>
                         </div>
                     </div>
@@ -285,7 +275,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="artNo" class="col-lg-4 control-label">Unique ART No. <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                         <input type="text" class="form-control isRequired" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" value="<?php echo $result[0]['art_no']; ?>" />
+                         <input type="text" class="form-control isRequired" id="artNo" name="artNo" placeholder="ART Number" title="Please enter art number" value="<?php echo $result[0]['patient_art_no']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -303,7 +293,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="otrId" class="col-lg-4 control-label">Other Id</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" value="<?php echo $result[0]['other_id']; ?>"/>
+                        <input type="text" class="form-control" id="otrId" name="otrId" placeholder="Enter Other Id" title="Please enter Other Id" value="<?php echo $result[0]['patient_other_id']; ?>"/>
                         </div>
                     </div>
                    </div>
@@ -311,7 +301,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="patientName" class="col-lg-4 control-label">Patient's Name </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="patientName" name="patientName" placeholder="Patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_name']; ?>"/>
+                        <input type="text" class="form-control" id="patientName" name="patientName" placeholder="Patient Name" title="Please enter patient name" value="<?php echo $result[0]['patient_first_name']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -331,10 +321,10 @@ $rResult = $db->rawQuery($rQuery);
                         <label for="gender" class="col-lg-4 control-label">Gender <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-                         <input type="radio"  id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($result[0]['gender']=='male')?"checked='checked'":""?>> Male
+                         <input type="radio"  id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($result[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
                         </label>
                         <label class="radio-inline">
-                         <input type="radio" class="isRequired" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($result[0]['gender']=='female')?"checked='checked'":""?>> Female
+                         <input type="radio" class="isRequired" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($result[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
                         </label>
                         </div>
                     </div>
@@ -345,7 +335,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="ageInYrs" class="col-lg-4 control-label">Age in years</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ageInYrs" name="ageInYrs" placeholder="Enter age in years" title="Please enter age in years" value="<?php echo $result[0]['age_in_yrs']; ?>"/>
+                        <input type="text" class="form-control" id="ageInYrs" name="ageInYrs" placeholder="Enter age in years" title="Please enter age in years" value="<?php echo $result[0]['patient_age_in_years']; ?>"/>
                         <p class="help-block"><small>If DOB Unkown</small></p>
                         </div>
                     </div>
@@ -354,7 +344,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="ageInMtns" class="col-lg-4 control-label">Age in months</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="ageInMtns" data-calendar="false" name="ageInMtns" placeholder="Enter Age in months" title="Please enter age in" value="<?php echo $result[0]['age_in_mnts']; ?>"/>
+                        <input type="text" class="form-control" id="ageInMtns" data-calendar="false" name="ageInMtns" placeholder="Enter Age in months" title="Please enter age in" value="<?php echo $result[0]['patient_age_in_months']; ?>"/>
                         <p class="help-block"><small>If age < 1 year </small></p>
                         </div>
                     </div>
@@ -366,10 +356,10 @@ $rResult = $db->rawQuery($rQuery);
                         <label for="receiveSms" class="col-lg-4 control-label">Patient consent to receive SMS?</label>
                         <div class="col-lg-7">
                         <label class="radio-inline">
-                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);" <?php echo ($result[0]['patient_receive_sms']=='yes')?"checked='checked'":""?>> Yes
+                             <input type="radio" class="" id="receivesmsYes" name="receiveSms" value="yes" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);" <?php echo ($result[0]['consent_to_receive_sms']=='yes')?"checked='checked'":""?>> Yes
                        </label>
                        <label class="radio-inline">
-                               <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);" <?php echo ($result[0]['patient_receive_sms']=='no')?"checked='checked'":""?>> No
+                               <input type="radio" class="" id="receivesmsNo" name="receiveSms" value="no" title="Patient consent to receive SMS" onclick="checkPatientReceivesms(this.value);" <?php echo ($result[0]['consent_to_receive_sms']=='no')?"checked='checked'":""?>> No
                        </label>
                         </div>
                     </div>
@@ -378,7 +368,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="patientPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" value="<?php echo $result[0]['patient_phone_number']; ?>"/>
+                        <input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Patient Phone No." title="Please enter patient Phone No" value="<?php echo $result[0]['patient_mobile_number']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -388,7 +378,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="location" class="col-lg-4 control-label">Location/District Code</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control patientDatas" id="patientLocation" name="patientLocation" placeholder="Enter Patient location/district code" title="Please enter patient location/district code" value="<?php echo $result[0]['location']; ?>" />
+                        <input type="text" class="form-control patientDatas" id="patientLocation" name="patientLocation" placeholder="Enter Patient location/district code" title="Please enter patient location/district code" value="<?php echo $result[0]['patient_location']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -398,7 +388,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="requestClinician" class="col-lg-4 control-label">Request Clinician</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name" value="<?php echo $result[0]['request_clinician']; ?>"/>
+                        <input type="text" class="form-control" id="requestClinician" name="requestClinician" placeholder="Enter Clinician" title="Please enter clinician name" value="<?php echo $result[0]['request_clinician_name']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -406,7 +396,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="clinicianPhone" class="col-lg-4 control-label">Phone No.</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." value="<?php echo $result[0]['clinician_ph_no']; ?>"/>
+                        <input type="text" class="form-control" id="clinicianPhone" name="clinicianPhone" placeholder="Clinician Phone No." title="Please enter phone no." value="<?php echo $result[0]['request_clinician_phone_number']; ?>"/>
                         </div>
                     </div>
                   </div>                       
@@ -433,9 +423,9 @@ $rResult = $db->rawQuery($rQuery);
                 <div class="row">
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="vlPhoneNumber" class="col-lg-4 control-label">Phone Number</label>
+                        <label for="vlPhoneNumber" class="col-lg-4 control-label">VL Focal Person Phone Number</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title=" Please enter vl focal person phone number" value="<?php echo $result[0]['focal_person_phone_number']; ?>"/>
+                        <input type="text" class="form-control" id="vlPhoneNumber" name="vlPhoneNumber" placeholder="VL Focal Person Phone Number" title="Please enter vl focal person phone number" value="<?php echo $result[0]['vl_focal_person_phone_number']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -443,7 +433,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="emailHf" class="col-lg-4 control-label">Email for HF</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $result[0]['email_for_HF']; ?>"/>
+                        <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $result[0]['facility_emails']; ?>" readonly/>
                         </div>
                     </div>
                   </div>                       
@@ -451,29 +441,18 @@ $rResult = $db->rawQuery($rQuery);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="justification" class="col-lg-4 control-label">Justification</label>
+                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="justification" name="justification" placeholder="Enter Justification" title="Please enter justification" value="<?php echo $result[0]['justification']; ?>"/>
+                        <label class="radio-inline">
+                         <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['is_sample_rejected']=='yes')?"checked='checked'":""?>> Yes
+                         </label>
+                         <label class="radio-inline">
+                          <input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['is_sample_rejected']=='no')?"checked='checked'":""?>> No
+                         </label>
                         </div>
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="rejection" class="col-lg-4 control-label">Rejected by Clinic <span class="mandatory">*</span></label>
-                        <div class="col-lg-7">
-                        <label class="radio-inline">
-                         <input type="radio" class="isRequired" id="rejectionYes" name="rejection" value="yes" title="Please check rejection" <?php echo ($result[0]['rejection']=='yes')?"checked='checked'":""?>> Yes
-                         </label>
-                         <label class="radio-inline">
-                          <input type="radio" id="rejectionNo" name="rejection" value="no" title="Please check rejection" <?php echo ($result[0]['rejection']=='no')?"checked='checked'":""?>> No
-                         </label>
-                        </div>
-                    </div>
-                  </div>                                    
-               </div>
-                <div class="row">
-                 <div class="row">
-                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="sampleType" class="col-lg-4 control-label">Rejection Facility <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
@@ -490,6 +469,8 @@ $rResult = $db->rawQuery($rQuery);
                         </div>
                     </div>
                   </div>
+               </div>
+               <div class="row">
                  <div class="col-md-6">
                     <div class="form-group">
                         <label for="sampleType" class="col-lg-4 control-label">Rejection Reason <span class="mandatory">*</span></label>
@@ -499,7 +480,7 @@ $rResult = $db->rawQuery($rQuery);
                            <?php
                            foreach($rResult as $rDetails){
                             ?>
-                            <option value="<?php echo $rDetails['rejection_reason_id'];?>" <?php echo ($result[0]['sample_rejection_reason']==$rDetails['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($rDetails['rejection_reason_name']);?></option>
+                            <option value="<?php echo $rDetails['rejection_reason_id'];?>" <?php echo ($result[0]['reason_for_sample_rejection']==$rDetails['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($rDetails['rejection_reason_name']);?></option>
                             <?php
                            }
                            ?>
@@ -507,7 +488,6 @@ $rResult = $db->rawQuery($rQuery);
                         </div>
                     </div>
                   </div> 
-                </div>
                 </div>
             </div>
             <!-- /.box-footer-->
@@ -537,7 +517,7 @@ $rResult = $db->rawQuery($rQuery);
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
-                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['sample_id']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
                            <?php
                            }
                            ?>
@@ -621,7 +601,7 @@ $rResult = $db->rawQuery($rQuery);
                     </div>
                   </div>    
                 </div>
-                <div class="row femaleElements" <?php echo($result[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
+                <div class="row femaleElements" <?php echo($result[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>>
                     <div class="col-md-6">
                     <div class="form-group">
                         <label for="pregYes" class="col-lg-4 control-label">Is Patient Pregnant ?</label>
@@ -637,16 +617,16 @@ $rResult = $db->rawQuery($rQuery);
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="ArcNo" class="col-lg-4 control-label">If Pregnant, ARC No.</label>
+                        <label for="arcNo" class="col-lg-4 control-label">If Pregnant, ARC No.</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="arcNo" name="arcNo" placeholder="Enter ARC no." title="Please enter arc no" value="<?php echo $result[0]['arc_no']; ?>"/>
+                        <input type="text" class="form-control" id="arcNo" name="arcNo" placeholder="Enter ARC no." title="Please enter arc no" value="<?php echo $result[0]['patient_anc_no']; ?>"/>
                         </div>
                     </div>
                   </div>                       
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6 femaleElements" <?php echo($result[0]['gender'] == 'male')?'style="display:none;"':''; ?>>
+                    <div class="col-md-6 femaleElements" <?php echo($result[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>>
                     <div class="form-group">
                         <label for="breastfeeding" class="col-lg-4 control-label">Is Patient Breastfeeding?</label>
                         <div class="col-lg-7">
@@ -689,8 +669,8 @@ $rResult = $db->rawQuery($rQuery);
                              <?php
                              $checked = '';
                              $display = '';
-                             //if($result[0]['routine_monitoring_last_vl_date']!='' || $result[0]['routine_monitoring_value']!='' || $result[0]['routine_monitoring_sample_type']!=''){
-                             if($result[0]['viral_load_indication']=='routine'){
+                             //if($result[0]['last_vl_date_routine']!='' || $result[0]['last_vl_result_routine']!='' || $result[0]['last_vl_sample_type_routine']!=''){
+                             if($result[0]['reason_for_vl_testing']=='routine'){
                               $checked = 'checked="checked"';
                               $display = 'block';
                              }else{
@@ -710,7 +690,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['routine_monitoring_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['last_vl_date_routine']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -718,7 +698,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="rmTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['routine_monitoring_value']; ?>" />
+                        <input type="text" class="form-control viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['last_vl_result_routine']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -732,7 +712,7 @@ $rResult = $db->rawQuery($rQuery);
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
-                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['routine_monitoring_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['last_vl_sample_type_routine']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
                            <?php
                            }
                            ?>
@@ -750,8 +730,8 @@ $rResult = $db->rawQuery($rQuery);
                              <?php
                              $checked = '';
                              $display = '';
-                             //if($result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']!='' || $result[0]['vl_treatment_failure_adherence_counseling_value']!='' || $result[0]['vl_treatment_failure_adherence_counseling_sample_type']!=''){
-                             if($result[0]['viral_load_indication']=='failure'){
+                             //if($result[0]['last_vl_date_failure_ac']!='' || $result[0]['last_vl_result_failure_ac']!='' || $result[0]['last_vl_sample_type_failure_ac']!=''){
+                             if($result[0]['reason_for_vl_testing']=='failure'){
                               $checked = 'checked="checked"';
                               $display = 'block';
                              }else{
@@ -771,7 +751,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['last_vl_date_failure_ac']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -779,7 +759,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="repeatTestingVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['vl_treatment_failure_adherence_counseling_value']; ?>" />
+                        <input type="text" class="form-control viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['last_vl_result_failure_ac']; ?>" />
                         </div>
                     </div>
                   </div>
@@ -792,7 +772,7 @@ $rResult = $db->rawQuery($rQuery);
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
-                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['vl_treatment_failure_adherence_counseling_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['last_vl_sample_type_failure_ac']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
                            <?php
                            }
                            ?>
@@ -810,8 +790,8 @@ $rResult = $db->rawQuery($rQuery);
                              <?php
                              $checked = '';
                              $display = '';
-                             //if($result[0]['suspected_treatment_failure_last_vl_date']!='' || $result[0]['suspected_treatment_failure_value']!='' || $result[0]['suspected_treatment_failure_sample_type']!=''){
-                             if($result[0]['viral_load_indication']=='suspect'){
+                             //if($result[0]['last_vl_date_failure']!='' || $result[0]['last_vl_result_failure']!='' || $result[0]['last_vl_sample_type_failure']!=''){
+                             if($result[0]['reason_for_vl_testing']=='suspect'){
                               $checked = 'checked="checked"';
                               $display = 'block';
                              }else{
@@ -831,7 +811,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="suspendTreatmentLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['suspected_treatment_failure_last_vl_date']; ?>"/>
+                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['last_vl_date_failure']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -839,7 +819,7 @@ $rResult = $db->rawQuery($rQuery);
                     <div class="form-group">
                         <label for="suspendTreatmentVlValue" class="col-lg-4 control-label">VL Value</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['suspected_treatment_failure_value']; ?>"/>
+                        <input type="text" class="form-control viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['last_vl_result_failure']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -852,7 +832,7 @@ $rResult = $db->rawQuery($rQuery);
                            <?php
                            foreach ($sampleTypeResult as $row) {
                            ?>
-                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['suspected_treatment_failure_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
+                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['last_vl_sample_type_failure']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
                            <?php
                            }
                            ?>
@@ -869,8 +849,7 @@ $rResult = $db->rawQuery($rQuery);
                                 <?php
                                 $checked = '';
                                 $display = '';
-                                //if($result[0]['switch_to_tdf_last_vl_date']!='' || $result[0]['switch_to_tdf_value']!='' || $result[0]['switch_to_tdf_sample_type']!=''){
-                                if($result[0]['viral_load_indication']=='switch'){
+                                if($result[0]['reason_for_vl_testing']=='switch'){
                                  $checked = 'checked="checked"';
                                  $display = 'block';
                                 }else{
@@ -885,42 +864,7 @@ $rResult = $db->rawQuery($rQuery);
                         </div>
                     </div>
                 </div>
-               <div class="row  hideTestData"  style="display: none;">
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="switchToTDFLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="switchToTDFLastVLDate" name="switchToTDFLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['switch_to_tdf_last_vl_date']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="switchToTDFVlValue" class="col-lg-4 control-label">VL Value</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control viralTestData" id="switchToTDFVlValue" name="switchToTDFVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['switch_to_tdf_value']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="switchToTDFSampleType" class="col-lg-4 control-label">Sample Type</label>
-                        <div class="col-lg-7">
-                        <select class="form-control viralTestData" id="switchToTDFSampleType" name="switchToTDFSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                         <option value=""> -- Select -- </option>
-                          <?php
-                           foreach ($sampleTypeResult as $row) {
-                           ?>
-                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['switch_to_tdf_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
-                           <?php
-                           }
-                           ?>
-                        </select>
-                        </div>
-                    </div>
-                  </div>                   
-                </div>
-               <div class="row">                
+               <div class="row">        
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="col-lg-12">
@@ -928,8 +872,7 @@ $rResult = $db->rawQuery($rQuery);
                                 <?php
                                 $checked = '';
                                 $display = '';
-                                //if($result[0]['missing_last_vl_date']!='' || $result[0]['missing_value']!='' || $result[0]['missing_sample_type']!=''){
-                                if($result[0]['viral_load_indication']=='missing'){
+                                if($result[0]['reason_for_vl_testing']=='missing'){
                                  $checked = 'checked="checked"';
                                  $display = 'block';
                                 }else{
@@ -944,41 +887,6 @@ $rResult = $db->rawQuery($rQuery);
                         </div>
                     </div>
                 </div>
-               <div class="row hideTestData" style="display: none;">
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="missingLastVLDate" class="col-lg-4 control-label">Last VL Date</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control date viralTestData readonly" readonly='readonly' id="missingLastVLDate" name="missingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $result[0]['missing_last_vl_date']; ?>"/>
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="missingVlValue" class="col-lg-4 control-label">VL Value</label>
-                        <div class="col-lg-7">
-                        <input type="text" class="form-control viralTestData" id="missingVlValue" name="missingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $result[0]['missing_value']; ?>" />
-                        </div>
-                    </div>
-                  </div>
-                   <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="missingSampleType" class="col-lg-4 control-label">Sample Type</label>
-                        <div class="col-lg-7">
-                        <select class="form-control viralTestData" id="missingSampleType" name="missingSampleType" placeholder="Enter Sample Type" title="Please enter sample type" >
-                         <option value=""> -- Select -- </option>
-                          <?php
-                           foreach ($sampleTypeResult as $row) {
-                           ?>
-                           <option value="<?php echo $row['sample_id']; ?>" <?php echo ($result[0]['missing_sample_type']==$row['sample_id'])?"selected='selected'":""?>><?php echo ucwords($row['sample_name']); ?></option>
-                           <?php
-                           }
-                           ?>
-                        </select>
-                        </div>
-                    </div>
-                  </div>                   
-                </div>
                <div class="row">
               <div class="col-md-6">
                  <div class="form-group">
@@ -987,9 +895,9 @@ $rResult = $db->rawQuery($rQuery);
                      <!--<input type="text" class="form-control" id="arvAdherence" name="arvAdherence" placeholder="Enter ARV Adherence" title="Please enter ARV adherence" />-->
                      <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
                       <option value=""> -- Select -- </option>
-                      <option value="good" <?php echo ($result[0]['arv_adherence']=='good')?"selected='selected'":""?>>Good >= 95%</option>
-                      <option value="fair" <?php echo ($result[0]['arv_adherence']=='fair')?"selected='selected'":""?>>Fair (85-94%)</option>
-                      <option value="poor" <?php echo ($result[0]['arv_adherence']=='poor')?"selected='selected'":""?>>Poor < 85%</option>
+                      <option value="good" <?php echo ($result[0]['arv_adherance_percentage']=='good')?"selected='selected'":""?>>Good >= 95%</option>
+                      <option value="fair" <?php echo ($result[0]['arv_adherance_percentage']=='fair')?"selected='selected'":""?>>Fair (85-94%)</option>
+                      <option value="poor" <?php echo ($result[0]['arv_adherance_percentage']=='poor')?"selected='selected'":""?>>Poor < 85%</option>
                      </select>
                      </div>
                  </div>
@@ -1000,11 +908,11 @@ $rResult = $db->rawQuery($rQuery);
                      <div class="col-lg-7">
                      <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
                       <option value=""> -- Select -- </option>
-                      <option value="1" <?php echo ($result[0]['enhance_session']=='1')?"selected='selected'":""?>>1</option>
-                      <option value="2" <?php echo ($result[0]['enhance_session']=='2')?"selected='selected'":""?>>2</option>
-                      <option value="3" <?php echo ($result[0]['enhance_session']=='3')?"selected='selected'":""?>>3</option>
-                      <option value=">3" <?php echo ($result[0]['enhance_session']=='>3')?"selected='selected'":""?>> > 3</option>
-                      <option value="missing" <?php echo ($result[0]['enhance_session']=='missing')?"selected='selected'":""?>> Missing</option>
+                      <option value="1" <?php echo ($result[0]['number_of_enhanced_sessions']=='1')?"selected='selected'":""?>>1</option>
+                      <option value="2" <?php echo ($result[0]['number_of_enhanced_sessions']=='2')?"selected='selected'":""?>>2</option>
+                      <option value="3" <?php echo ($result[0]['number_of_enhanced_sessions']=='3')?"selected='selected'":""?>>3</option>
+                      <option value=">3" <?php echo ($result[0]['number_of_enhanced_sessions']=='>3')?"selected='selected'":""?>> > 3</option>
+                      <option value="missing" <?php echo ($result[0]['number_of_enhanced_sessions']=='missing')?"selected='selected'":""?>> Missing</option>
                      </select>
                      </div>
                  </div>
@@ -1013,8 +921,6 @@ $rResult = $db->rawQuery($rQuery);
             </div>
             <!-- /.box-footer-->
           </div>
-                
-                
               </div>
              <div class="row">
                 <div class="col-md-12"><h4><a id="lra" href="javascript:void(0);" onclick="resultToggler('+');">Lab/Result Details <i class="fa fa-plus"></i></a></h4></div>
@@ -1176,7 +1082,7 @@ $rResult = $db->rawQuery($rQuery);
 			    <?php
                             foreach($tsResult as $status){
                              ?>
-                             <option value="<?php echo $status['status_id']; ?>" <?php echo ($status['status_id']==$result[0]['status']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']);?></option>
+                             <option value="<?php echo $status['status_id']; ?>" <?php echo ($status['status_id']==$result[0]['result_status']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']);?></option>
                              <?php
                             }
                             ?>
@@ -1366,7 +1272,7 @@ $rResult = $db->rawQuery($rQuery);
     	$('.ui-datepicker-calendar').show();
     });
      $('.ui-datepicker-calendar').show();
-     checkPatientReceivesms('<?php echo $result[0]['patient_receive_sms'];?>');
+     checkPatientReceivesms('<?php echo $result[0]['consent_to_receive_sms'];?>');
      <?php
      if(isset($result[0]['patient_dob']) && trim($result[0]['patient_dob'])!= ''){ ?>
        getDateOfBirth("ld");
@@ -1431,7 +1337,8 @@ $rResult = $db->rawQuery($rQuery);
       $("#state").val(facilityArray[2]);
       $("#hubName").val(facilityArray[3]);
       $("#district").val(facilityArray[6]);
-      $("#facilityName,#state,#hubName,#district").prop('readonly',true);
+      $("#emailHf").val(facilityArray[7]);
+      $("#facilityName,#state,#hubName,#district,#emailHf").prop('readonly',true);
       $("#clearFInfo").show();
     }
     
@@ -1441,7 +1348,8 @@ $rResult = $db->rawQuery($rQuery);
       $("#state").val("");
       $("#hubName").val("");
       $("#district").val("");
-      $("#facilityName,#state,#hubName,#district").prop('readonly',false);
+      $("#emailHf").val("");
+      $("#facilityName,#state,#hubName,#district,#emailHf").prop('readonly',false);
       $("#clearFInfo").hide();
     }
     

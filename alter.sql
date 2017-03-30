@@ -125,7 +125,7 @@ INSERT INTO `facility_type` (`facility_type_id`, `facility_type_name`) VALUES
 ALTER TABLE  `facility_details` ADD  `facility_type` INT NULL DEFAULT NULL AFTER  `hub_name` ;
 
 
-ALTER TABLE  `vl_request_form` ADD  `location` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `patient_phone_number` ;
+ALTER TABLE  `vl_request_form` ADD  `location` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `patient_mobile_number` ;
 --saravaanna10-aug-2016
 ALTER TABLE  `batch_details` ADD  `created_on` DATETIME NOT NULL ;
 ALTER TABLE  `batch_details` ADD  `batch_status` VARCHAR( 255 ) NOT NULL DEFAULT  'pending' AFTER  `batch_code` ;
@@ -321,8 +321,8 @@ ALTER TABLE `vl_request_form` CHANGE `result_reviewed_by` `result_reviewed_by` I
 --saravanan 26-aug-2016
 ALTER TABLE  `facility_details` ADD  `district` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `state` ;
 ALTER TABLE  `facility_details` ADD  `other_id` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `facility_code` ;
-ALTER TABLE  `vl_request_form` ADD  `patient_receive_sms` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `arv_adherence` ;
-ALTER TABLE  `vl_request_form` ADD  `switch_to_tdf_last_vl_date` DATE NULL DEFAULT NULL AFTER  `suspected_treatment_failure_sample_type` ,
+ALTER TABLE  `vl_request_form` ADD  `patient_receive_sms` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `arv_adherance_percentage` ;
+ALTER TABLE  `vl_request_form` ADD  `switch_to_tdf_last_vl_date` DATE NULL DEFAULT NULL AFTER  `last_vl_sample_type_failure` ,
 ADD  `switch_to_tdf_value` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `switch_to_tdf_last_vl_date` ,
 ADD  `switch_to_tdf_sample_type` INT NULL DEFAULT NULL AFTER  `switch_to_tdf_value` ,
 ADD  `missing_last_vl_date` DATE NULL DEFAULT NULL AFTER  `switch_to_tdf_sample_type` ,
@@ -331,7 +331,7 @@ ADD  `missing_sample_type` INT NULL DEFAULT NULL AFTER  `missing_value` ;
 
 --saravanan 31-aug-2016
 ALTER TABLE  `vl_request_form` ADD  `viral_load_indication` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `patient_receive_sms` ;
-ALTER TABLE  `vl_request_form` ADD  `enhance_session` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `viral_load_indication` ;
+ALTER TABLE  `vl_request_form` ADD  `number_of_enhanced_sessions` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `viral_load_indication` ;
 ALTER TABLE  `vl_request_form` ADD  `test_methods` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `result_reviewed_date` ;
 --ilahir 31-Aug-2016
 
@@ -542,9 +542,9 @@ ALTER TABLE `vl_request_form` ADD `support_partner` VARCHAR(255) NULL DEFAULT NU
 
 ALTER TABLE `vl_request_form` ADD `has_patient_changed_regimen` VARCHAR(45) NULL DEFAULT NULL AFTER `support_partner`;
 
-ALTER TABLE `vl_request_form` ADD `reason_for_regimen_change` VARCHAR(255) NULL DEFAULT NULL AFTER `has_patient_changed_regimen`, ADD `date_of_regimen_changed` DATE NULL DEFAULT NULL AFTER `reason_for_regimen_change`;
+ALTER TABLE `vl_request_form` ADD `reason_for_regimen_change` VARCHAR(255) NULL DEFAULT NULL AFTER `has_patient_changed_regimen`, ADD `regimen_change_date` DATE NULL DEFAULT NULL AFTER `reason_for_regimen_change`;
 
-ALTER TABLE `vl_request_form` ADD `plasma_storage_temperature` FLOAT NULL DEFAULT NULL AFTER `date_of_regimen_changed`;
+ALTER TABLE `vl_request_form` ADD `plasma_storage_temperature` FLOAT NULL DEFAULT NULL AFTER `regimen_change_date`;
 
 
 -- Pal 01 Oct 2016
@@ -713,7 +713,7 @@ ALTER TABLE `vl_request_form` ADD `trimestre` INT(11) NULL DEFAULT NULL AFTER `i
 
 --saravanan 21-dec-2016
 INSERT INTO `form_details` (`form_id`, `form_name`) VALUES (NULL, 'Zambia Form');
-ALTER TABLE `vl_request_form` ADD `poor_adherence` VARCHAR(255) NULL DEFAULT NULL AFTER `arv_adherence`;
+ALTER TABLE `vl_request_form` ADD `is_adherance_poor` VARCHAR(255) NULL DEFAULT NULL AFTER `arv_adherance_percentage`;
 
 --Pal 11-Jan-2017
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'vlRequestMailConfirm.php', 'Email Test Request Confirm');
@@ -792,6 +792,82 @@ ALTER TABLE `vl_request_form` ADD `test_result_export` INT(11) NOT NULL DEFAULT 
 --Pal 20-Mar-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Manager Email', 'manager_email', NULL);
 
+--Pal 29-Mar-2017
+ALTER TABLE `facility_details` CHANGE `email` `facility_emails` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `facility_details` CHANGE `phone_number` `facility_mobile_numbers` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `art_no` `patient_art_no` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `arc_no` `patient_anc_no` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` ADD `patient_nationality` INT(11) NULL DEFAULT NULL AFTER `surname`;
+
+ALTER TABLE `vl_request_form` CHANGE `other_id` `patient_other_id` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `patient_name` `patient_first_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `surname` `patient_last_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `gender` `patient_gender` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `age_in_yrs` `patient_age_in_years` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `age_in_mnts` `patient_age_in_months` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` ADD `physician_name` VARCHAR(255) NULL DEFAULT NULL AFTER `duration_of_conservation`;
+
+ALTER TABLE `vl_request_form` CHANGE `patient_receive_sms` `consent_to_receive_sms` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `consent_to_receive_sms` `consent_to_receive_sms` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `patient_phone_number` `patient_mobile_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `location` `patient_location` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `focal_person_phone_number` `vl_focal_person_phone_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` DROP `email_for_HF`;
+
+ALTER TABLE `vl_request_form` ADD `patient_address` TEXT NULL DEFAULT NULL AFTER `patient_location`;
+
+ALTER TABLE `vl_request_form` CHANGE `trimestre` `pregnancy_trimester` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `routine_monitoring_last_vl_date` `last_vl_date_routine` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `routine_monitoring_value` `last_vl_result_routine` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `routine_monitoring_sample_type` `last_vl_sample_type_routine` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `vl_treatment_failure_adherence_counseling_last_vl_date` `last_vl_date_failure_ac` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `vl_treatment_failure_adherence_counseling_value` `last_vl_result_failure_ac` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `last_vl_sample_type_failure_ac` `last_vl_sample_type_failure_ac` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `suspected_treatment_failure_last_vl_date` `last_vl_date_failure` DATE NULL DEFAULT NULL, CHANGE `suspected_treatment_failure_value` `last_vl_result_failure` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `suspected_treatment_failure_sample_type` `last_vl_sample_type_failure` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `date_of_regimen_changed` `regimen_change_date` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `arv_adherence` `arv_adherance_percentage` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `poor_adherence` `is_adherance_poor` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `viral_load_log` `last_vl_result_in_log` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `viral_load_no` `vl_test_number` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `enhance_session` `number_of_enhanced_sessions` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `rejection` `is_sample_rejected` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+--Pal 30-Mar-2017
+ALTER TABLE `vl_request_form` CHANGE `sample_rejection_reason` `reason_for_sample_rejection` INT(11) NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `duration_of_conservation` `plasma_conservation_duration` VARCHAR(45) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` CHANGE `status` `result_status` INT(11) NOT NULL;
+
 --saravanan 29-mar-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Instance Type', 'instance_type', 'Both');
 
@@ -852,3 +928,7 @@ ALTER TABLE `vl_request_form` CHANGE `lab_phone_no` `lab_phone_number` VARCHAR(2
 ALTER TABLE `hold_sample_report` CHANGE `lab_phone_no` `lab_phone_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE `temp_sample_report` CHANGE `lab_phone_no` `lab_phone_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE `vl_request_form` CHANGE `lab_no` `lab_code` INT(11) NULL DEFAULT NULL;
+
+
+
+RENAME `testing_status` TO `r_sample_status`;

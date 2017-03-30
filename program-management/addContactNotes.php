@@ -18,7 +18,7 @@ $general=new Deforay_Commons_General();
 $contactInfo="SELECT * from contact_notes_details where treament_contact_id=$id";
 $contact=$db->query($contactInfo);
 //get patient info
-$vlInfo="SELECT sample_code,patient_name,surname,art_no,sample_collection_date from vl_request_form where vl_sample_id=$id";
+$vlInfo="SELECT sample_code,patient_first_name,patient_last_name,patient_art_no,sample_collection_date from vl_request_form where vl_sample_id=$id";
 $vlResult=$db->query($vlInfo);
 
 if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!= '' && $vlResult[0]['sample_collection_date']!= '0000-00-00 00:00:00'){
@@ -51,8 +51,8 @@ $general=new Deforay_Commons_General();
                     <tr>
                       <td><b>Sample Code:<small><?php echo $vlResult[0]['sample_code'];?></small></b></td>
                       <td><b>Collection Date:<small><?php echo $vlResult[0]['sample_collection_date'] ;?></small></b></td>
-                      <td><b>Patient Name:<small><?php echo $vlResult[0]['patient_name']." ".$vlResult[0]['surname'];?></small></b></td>
-                      <td><b>Patient Code:<small><?php echo $vlResult[0]['art_no'];?></small></b></td>
+                      <td><b>Patient Name:<small><?php echo $vlResult[0]['patient_first_name']." ".$vlResult[0]['patient_last_name'];?></small></b></td>
+                      <td><b>Patient Code:<small><?php echo $vlResult[0]['patient_art_no'];?></small></b></td>
                     </tr>
                   </table>
                 <div class="row">

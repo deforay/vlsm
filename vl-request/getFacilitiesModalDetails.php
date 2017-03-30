@@ -91,11 +91,11 @@ $primaryKey="facility_id";
             $sWhere=' where '.$sWhere;
             $sWhere= $sWhere.' AND status = "active"';
 	    if(isset($_POST['hub']) && trim($_POST['hub'])!= ''){
-		$sWhere = $sWhere." AND f_d.hub_name LIKE '%" . $_POST['hub'] . "%' ";
+		$sWhere = $sWhere." AND f_d.facility_hub_name LIKE '%" . $_POST['hub'] . "%' ";
 	    }if(isset($_POST['district']) && trim($_POST['district'])!= ''){
-		$sWhere = $sWhere." AND f_d.district LIKE '%" . $_POST['district'] . "%' ";
+		$sWhere = $sWhere." AND f_d.facility_district LIKE '%" . $_POST['district'] . "%' ";
 	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
-		$sWhere = $sWhere." AND f_d.state LIKE '%" . $_POST['state'] . "%' ";
+		$sWhere = $sWhere." AND f_d.facility_state LIKE '%" . $_POST['state'] . "%' ";
 	    }if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
 		$sWhere = $sWhere." AND f_t.facility_type_id='".$_POST['facilityName']."'";
 	    }
@@ -103,11 +103,11 @@ $primaryKey="facility_id";
         }else{
             $sWhere=' where status = "active"';
 	    if(isset($_POST['hub']) && trim($_POST['hub'])!= ''){
-		$sWhere = $sWhere." AND f_d.hub_name LIKE '%" . $_POST['hub'] . "%' ";
+		$sWhere = $sWhere." AND f_d.facility_hub_name LIKE '%" . $_POST['hub'] . "%' ";
 	    }if(isset($_POST['district']) && trim($_POST['district'])!= ''){
-		$sWhere = $sWhere." AND f_d.district LIKE '%" . $_POST['district'] . "%' ";
+		$sWhere = $sWhere." AND f_d.facility_district LIKE '%" . $_POST['district'] . "%' ";
 	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
-		$sWhere = $sWhere." AND f_d.state LIKE '%" . $_POST['state'] . "%' ";
+		$sWhere = $sWhere." AND f_d.facility_state LIKE '%" . $_POST['state'] . "%' ";
 	    }if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
 		$sWhere = $sWhere." AND f_t.facility_type_id='".$_POST['facilityName']."'";
 	    }
@@ -152,10 +152,10 @@ $primaryKey="facility_id";
         );
         
         foreach ($rResult as $aRow) {
-	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['state']."##".$aRow['hub_name']."##".$aRow['contact_person']."##".$aRow['phone_number']."##".$aRow['district'];
+	    $facilityDetails = $aRow['facility_id']."##".$aRow['facility_name']."##".$aRow['facility_state']."##".$aRow['facility_hub_name']."##".$aRow['contact_person']."##".$aRow['facility_mobile_numbers']."##".$aRow['facility_district']."##".$aRow['facility_emails'];
             $row = array();
 	    if($_POST['type']=='all'){
-	    $row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacility(this.value);">';
+	       $row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacility(this.value);">';
 	    }else{
 		$row[] = '<input type="radio" id="facility'.$aRow['facility_id'].'" name="facility" value="'.$facilityDetails.'" onclick="getFacilityLab(this.value);">';
 	    }

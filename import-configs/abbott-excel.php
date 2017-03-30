@@ -146,7 +146,7 @@ try {
                 'result_value_text' => $d['txtVal'],
                 'result_value_absolute_decimal' => $d['absDecimalVal'],
                 'sample_tested_datetime' => $testingDate,
-                'status' => '6',
+                'result_status' => '6',
                 'import_machine_file_name' => $fileName,
                 'approver_comments' => $d['resultFlag']
             );
@@ -175,7 +175,7 @@ try {
                 if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
                     $data['sample_details'] = 'Result exists already';
                 } else {
-                    $data['status'] = '7';
+                    $data['result_status'] = '7';
                 }
                 $data['facility_id'] = $vlResult[0]['facility_id'];
             } else {
