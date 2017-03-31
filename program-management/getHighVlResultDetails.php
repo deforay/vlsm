@@ -129,6 +129,11 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
 	  $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
         }
+	if($sWhere!=''){
+	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	}else{
+	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	}
        
 	$sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by vl.vl_sample_id';
@@ -150,7 +155,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where result_status=7 AND result > 1000");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where result_status=7 AND result > 1000 AND vlsm_country_id='".$arr['vl_form']."'");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
