@@ -58,7 +58,7 @@ try {
           'last_modified_datetime'=>$general->getDateTime()
         );
         if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-            $vldata['status'] = $_POST['status'];
+            $vldata['result_status'] = $_POST['status'];
             if(isset($_POST['rejectionReason'])){
                 $vldata['sample_rejection_reason'] = $_POST['rejectionReason'];
             }

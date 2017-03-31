@@ -20,8 +20,6 @@ try {
           $_POST['result'] = $_POST['vlResult'];
      }else if($_POST['vlLog']!=''){
           $_POST['result'] = $_POST['vlLog'];
-     }else if($_POST['textValue']!=''){
-          $_POST['result'] = $_POST['textValue'];
      }
      //check vl result textbox changes
      $viralLoadData = array('result_value_absolute'=>$_POST['vlResult'],'result_value_log'=>$_POST['vlLog']);
@@ -50,6 +48,8 @@ try {
         );
           if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
                $vldata['sample_type']=$_POST['specimenType'];
+          }else{
+               $vldata['sample_type'] = null;
           }
           if(isset($_POST['status']) && trim($_POST['status'])!= ''){
                $vldata['result_status']=$_POST['status'];

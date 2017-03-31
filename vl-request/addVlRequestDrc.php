@@ -101,21 +101,21 @@
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td><label for="province">Province </label></td>
+                                <td><label for="province">Province </label><span class="mandatory">*</span></td>
                                 <td>
-                                    <select class="form-control" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
+                                    <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
                                         <?php echo $province; ?>
                                     </select>
                                 </td>
-                                <td><label for="district">Zone de santé </label></td>
+                                <td><label for="district">Zone de santé </label><span class="mandatory">*</span></td>
                                 <td>
                                     <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                       <option value=""> -- Sélectionner -- </option>
                                     </select>
                                 </td>
-                                <td><label for="clinicName">Structure/Service </label></td>
+                                <td><label for="clinicName">Structure/Service </label><span class="mandatory">*</span></td>
                                 <td>
-                                    <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                                    <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
                                       <?php echo $facility;  ?>
                                     </select>
                                 </td>

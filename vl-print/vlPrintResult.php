@@ -269,7 +269,7 @@ $batResult = $db->rawQuery($batQuery);
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
 			      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-			      aoData.push({"name": "facility", "value": $("#facility").val()});
+			      aoData.push({"name": "facilityName", "value": $("#facility").val()});
 			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});
 			      aoData.push({"name": "status", "value": $("#status").val()});
