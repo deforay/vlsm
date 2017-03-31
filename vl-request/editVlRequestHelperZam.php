@@ -117,7 +117,7 @@ try {
           'is_adherance_poor'=>(isset($_POST['poorAdherence']) && $_POST['poorAdherence']!='' ? $_POST['poorAdherence'] :  NULL),
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='' ? $_POST['approvedBy'] :  NULL),
           'last_modified_datetime'=>$general->getDateTime(),
-          'manual_result_entry'=>'manual'
+          'manual_result_entry'=>'yes'
         );
      //print_r($vldata);die;
      $db=$db->where('vl_sample_id',$_POST['vlSampleId']);

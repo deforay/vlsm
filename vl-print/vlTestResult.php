@@ -14,8 +14,11 @@ $batResult = $db->rawQuery($batQuery);
 
 //check filters
 $collectionDate = '';$batchCode = '';$sampleType = '';$facilityName = '';$gender = '';$status ='';
+$lastUrl = '';$lastUrl1 = '';
+if(isset($_SERVER['HTTP_REFERER'])){
 $lastUrl = strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");
 $lastUrl1 = strpos($_SERVER['HTTP_REFERER'],"vlTestResult.php");
+}
 if($lastUrl!='' || $lastUrl1!=''){
 $collectionDate=(isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate']!='' ? $_COOKIE['collectionDate'] :  '');
 $batchCode=(isset($_COOKIE['batchCode']) && $_COOKIE['batchCode']!='' ? $_COOKIE['batchCode'] :  '');
@@ -31,7 +34,7 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Enter VL Result</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home <?php echo strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");?></a></li>
+        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home <?php echo $lastUrl;?></a></li>
         <li class="active">Enter VL Result</li>
       </ol>
     </section>
