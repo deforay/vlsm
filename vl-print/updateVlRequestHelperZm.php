@@ -56,7 +56,7 @@ try {
           }
           //print_r($vldata);die;
           if($vloadResultUpdate){
-            $vldata['manual_result_entry']='manual';
+            $vldata['manual_result_entry']='yes';
             $vldata['import_machine_file_name']='';
           }
           $db=$db->where('vl_sample_id',$_POST['treamentId']);

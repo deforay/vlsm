@@ -55,7 +55,7 @@ try {
                         'sample_tested_datetime'=>$rResult[0]['sample_tested_datetime'],
                         'lab_id'=>$rResult[0]['lab_id'],
                         'import_machine_file_name'=>$rResult[0]['import_machine_file_name'],
-                        'manual_result_entry'=>'report'
+                        'manual_result_entry'=>'no'
                     );
             if($status[$i]=='1'){
                 $data['result_reviewed_by']=$_POST['reviewedBy'];
@@ -141,7 +141,7 @@ try {
                         'result_approved_by'=>$_POST['appBy'],
                         'result_approved_datetime'=>$general->getDateTime(),
                         'import_machine_file_name'=>$accResult[$i]['import_machine_file_name'],
-                        'manual_result_entry'=>'report',
+                        'manual_result_entry'=>'no',
                         'result_status'=>'7',
                         'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
                     );
