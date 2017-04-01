@@ -130,7 +130,7 @@ foreach($rResult as $rDetails){
                         <label for="facilityName" class="col-lg-4 control-label">Facility <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="hidden" id="facilityId" name="facilityId"/>
-                        <input type="text" class="form-control" id="facilityName" name="facilityName" placeholder="Facility" title="Please enter facility">
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility" title="Please enter facility">
                         </div>
                     </div>
                   </div>

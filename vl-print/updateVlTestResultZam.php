@@ -26,6 +26,9 @@ $fResult = $db->rawQuery($fQuery);
 //get vltest reason details
 $testRQuery="SELECT * FROM r_vl_test_reasons";
 $testReason = $db->rawQuery($testRQuery);
+//get lab facility details
+$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lResult = $db->rawQuery($lQuery);
 
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zam'";
 $aResult=$db->query($aQuery);
@@ -384,8 +387,7 @@ $disable = "disabled = 'disabled'";
                             </select>
                           <?php } ?>
                         </td>
-                        <td><label for="testMethods">Test Methods</label></td>
-                        <td>
+                        <td><label for="testMethods">Test Methods</label>
                           <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
                           <option value=""> -- Select -- </option>
                           <option value="individual"<?php echo ($vlQueryInfo[0]['test_methods']=='individual')?"selected='selected'":""?>>Individual</option>
@@ -397,9 +399,21 @@ $disable = "disabled = 'disabled'";
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" onchange="checkSampleTestingDate();" /></td>
-                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
+                        <td><label for="vlResult">Viral Load Result<br/> (copies/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" /></td>
-                        
+                        <td>
+                          <label for="labId">Lab Name</label>
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                            <option value=""> -- Select -- </option>
+                            <?php
+                            foreach($lResult as $labName){
+                              ?>
+                              <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
                       </tr>
                       <tr class="noResult">
                         <td><label class="noResult">If no result</label></td>
@@ -411,9 +425,9 @@ $disable = "disabled = 'disabled'";
                               <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='technical_error')?"checked='checked'":""?> onclick='checkRejectionReason()'> Lab testing Technical Error
                           </label>
                         </td>
-                        
-                        <td><label class="noResult">Rejection Reason</label></td>
-                        <td><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <td colspan="2">
+                          <label class="noResult">Rejection Reason</label>
+                          <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
                         <option value="">-- Select --</option>
                           <?php
                           foreach($rejectionResult as $reject){

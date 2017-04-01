@@ -7,6 +7,9 @@
     //get lab facility list
     $fQuery="SELECT * FROM facility_details where status='active'";
     $fResult = $db->rawQuery($fQuery);
+    //get lab facility details
+    $lQuery="SELECT * FROM facility_details where facility_type='2'";
+    $lResult = $db->rawQuery($lQuery);
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
@@ -411,6 +414,21 @@
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
                                     <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:30%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="labId">Nom du laboratoire </label> </td>
+                                <td colspan="3">
+                                    <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:30%;">
+                                    <option value=""> -- Select -- </option>
+                                    <?php
+                                    foreach($lResult as $labName){
+                                      ?>
+                                      <option value="<?php echo $labName['facility_id'];?>" ><?php echo ucwords($labName['facility_name']);?></option>
+                                      <?php
+                                    }
+                                    ?>
+                                  </select>
                                 </td>
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>

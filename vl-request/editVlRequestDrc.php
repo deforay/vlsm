@@ -5,6 +5,9 @@
     //Get VL info
     $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
     $vlQueryInfo=$db->query($vlQuery);
+    //get lab facility details
+    $lQuery="SELECT * FROM facility_details where facility_type='2'";
+    $lResult = $db->rawQuery($lQuery);
     //get province list
     $pdQuery="SELECT * from province_details";
     $pdResult=$db->query($pdQuery);
@@ -530,6 +533,21 @@
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
                                     <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="labId">Nom du laboratoire </label> </td>
+                                <td colspan="3">
+                                    <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:30%;">
+                                    <option value=""> -- Select -- </option>
+                                    <?php
+                                    foreach($lResult as $labName){
+                                      ?>
+                                      <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
+                                      <?php
+                                    }
+                                    ?>
+                                  </select>
                                 </td>
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
