@@ -41,6 +41,9 @@ $fResult = $db->rawQuery($fQuery);
 //get vltest reason details
 $testRQuery="SELECT * FROM r_vl_test_reasons";
 $testReason = $db->rawQuery($testRQuery);
+//get lab facility details
+$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lResult = $db->rawQuery($lQuery);
 
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zam'";
 $aResult=$db->query($aQuery);
@@ -357,6 +360,19 @@ $sFormat = '';
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" onchange="checkSampleTestingDate();"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
+                        <td>
+                          <label for="labId">Lab Name</label>
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                            <option value=""> -- Select -- </option>
+                            <?php
+                            foreach($lResult as $labName){
+                              ?>
+                              <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
                       </tr>
                       <tr class="noResult">
                         <td><label>If no result</label></td>
@@ -368,8 +384,9 @@ $sFormat = '';
                                   <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" onclick="checkRejectedReason();"> Lab testing Technical Error
                           </label>
                         </td>
-                        <td><label class="noResult">Rejection Reason</label></td>
-                        <td><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <td colspan="2">
+                          <label class="noResult">Rejection Reason</label>
+                          <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
                         <option value="">-- Select --</option>
                           <?php
                           foreach($rejectionResult as $reject){

@@ -15,6 +15,9 @@ if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE"){
 //get import config
 $importQuery="SELECT * FROM import_config WHERE status = 'active'";
 $importResult=$db->query($importQuery);
+//get lab facility details
+$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lResult = $db->rawQuery($lQuery);
 
 //global config
 $cSampleQuery="SELECT * FROM global_config";

@@ -192,6 +192,7 @@ try {
                   'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
                   'sample_code'=>$_POST['sampleCode'],
                   'serial_no'=>$_POST['sampleCode'],
+                  'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
                   'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
                   'vl_test_platform'=>$_POST['testingPlatform'],
                   'result_value_log'=>$_POST['vlLog'],
