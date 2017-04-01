@@ -28,7 +28,8 @@ try {
             'result_status'=>(isset($_POST['status']) && $_POST['status']!='' ? $_POST['status'] :  NULL) ,
             'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='' ? $_POST['noResult'] :  NULL) ,
             'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
-            'last_modified_datetime'=>$general->getDateTime()
+            'last_modified_datetime'=>$general->getDateTime(),
+            'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
         );
           $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
           $db->update($tableName,$vldata);
