@@ -954,3 +954,6 @@ ALTER TABLE `facility_details` CHANGE `vl_instance_id` `vlsm_instance_id` VARCHA
 ALTER TABLE `facility_details` CHANGE `state` `facility_state` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `district` `facility_district` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `hub_name` `facility_hub_name` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 RENAME `testing_status` TO `r_sample_status`;
+
+--palz 01-apr-2017
+ALTER TABLE `vl_request_form` ADD `source` VARCHAR(500) NULL DEFAULT 'manual' AFTER `manual_result_entry`;

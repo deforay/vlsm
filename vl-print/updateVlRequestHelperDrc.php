@@ -55,7 +55,8 @@ try {
           'result_value_log'=>$_POST['vlLog'],
           'result'=>$_POST['vlResult'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
-          'last_modified_datetime'=>$general->getDateTime()
+          'last_modified_datetime'=>$general->getDateTime(),
+          'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
         );
         if(isset($_POST['status']) && trim($_POST['status'])!= ''){
             $vldata['result_status'] = $_POST['status'];
