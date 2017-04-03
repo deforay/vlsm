@@ -346,7 +346,8 @@ $sFormat = '';
                             </select>
                           <?php } ?>
                         </td>
-                        <td colspan="2"><label for="testMethods">Test Methods</label>
+                        <td><label for="testMethods">Test Methods</label></td>
+                        <td>
                           <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
                           <option value=""> -- Select -- </option>
                           <option value="individual">Individual</option>
@@ -360,8 +361,8 @@ $sFormat = '';
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" onchange="checkSampleTestingDate();"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
+                        <td><label for="labId">Lab Name</label></td>
                         <td>
-                          <label for="labId">Lab Name</label>
                           <select name="labId" id="labId" class="form-control" title="Please choose lab name">
                             <option value=""> -- Select -- </option>
                             <?php
@@ -384,10 +385,10 @@ $sFormat = '';
                                   <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" onclick="checkRejectedReason();"> Lab testing Technical Error
                           </label>
                         </td>
+                        <td><label class="noResult">Rejection Reason</label></td>
                         <td colspan="2">
-                          <label class="noResult">Rejection Reason</label>
-                          <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
-                        <option value="">-- Select --</option>
+                         <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                           <option value="">-- Select --</option>
                           <?php
                           foreach($rejectionResult as $reject){
                             ?>
@@ -395,11 +396,12 @@ $sFormat = '';
                             <?php
                           }
                           ?>
-                        </select></td>
+                         </select>
+                        </td>
                       </tr>
                       <tr>
                         <td><label>Approved By</label></td>
-                         <td>
+                        <td>
                           <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
                             <option value="">-- Select --</option>
                             <?php
@@ -412,7 +414,7 @@ $sFormat = '';
                           </select>
                          </td>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="4"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
+                        <td colspan="3"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
                       </tr>
                     </table>
                   </div>

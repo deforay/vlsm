@@ -400,7 +400,8 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                             </select>
                           <?php } ?>
                         </td>
-                        <td><label for="testMethods">Test Methods</label>
+                        <td><label for="testMethods">Test Methods</label></td>
+                        <td>
                           <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
                           <option value=""> -- Select -- </option>
                           <option value="individual"<?php echo ($vlQueryInfo[0]['test_methods']=='individual')?"selected='selected'":""?>>Individual</option>
@@ -414,8 +415,8 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                         <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" onchange="checkSampleTestingDate();" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copies/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" /></td>
+                        <td><label for="labId">Lab Name</label></td>
                         <td>
-                          <label for="labId">Lab Name</label>
                           <select name="labId" id="labId" class="form-control" title="Please choose lab name">
                             <option value=""> -- Select -- </option>
                             <?php
@@ -438,8 +439,8 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                               <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='technical_error')?"checked='checked'":""?> onclick='checkRejectionReason()'> Lab testing Technical Error
                           </label>
                         </td>
+                        <td><label class="noResult">Rejection Reason</label></td>
                         <td colspan="2">
-                          <label class="noResult">Rejection Reason</label>
                           <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
                         <option value="">-- Select --</option>
                           <?php
@@ -449,11 +450,12 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                             <?php
                           }
                           ?>
-                        </select></td>
+                        </select>
+                        </td>
                       </tr>
                       <tr>
                         <td><label>Approved By</label></td>
-                         <td>
+                        <td>
                           <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
                             <option value="">-- Select --</option>
                             <?php
@@ -466,7 +468,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                           </select>
                          </td>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="4"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo trim($vlQueryInfo[0]['approver_comments']);?></textarea></td>
+                        <td colspan="3"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"> <?php echo trim($vlQueryInfo[0]['approver_comments']);?></textarea></td>
                       </tr>
                     </table>
                   </div>
