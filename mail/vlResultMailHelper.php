@@ -70,7 +70,14 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
         $message =ucfirst(nl2br($_POST['message']));
       }
       $mail->msgHTML($message);
-      if ($mail->send()){
+      $mail->SMTPOptions = array(
+         'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+         )
+      );
+      if($mail->send()){
            //Update result mail sent flag
            for($s=0;$s<count($_POST['sample']);$s++){
                 $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
