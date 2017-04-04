@@ -415,7 +415,7 @@ if(!isset($postdata['reportedDate'])){
     //Set the hostname of the mail server
     $mail->Host = 'smtp.gmail.com';
     //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-    $mail->Port = 25;
+    $mail->Port = 587;
     //Set the encryption system to use - ssl (deprecated) or tls
     $mail->SMTPSecure = 'tls';
     //Whether to use SMTP authentication
@@ -443,6 +443,13 @@ if(!isset($postdata['reportedDate'])){
        $message ='Hi Manager,<br>Please find the attached viral load weekly report '.$_POST['reportedDate'];
        $message = nl2br($message);
        $mail->msgHTML($message);
+       $mail->SMTPOptions = array(
+         'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+         )
+       );
        if($mail->send()){
           error_log('weekly reports mail sent--'.$_POST['reportedDate']);
        }else{
