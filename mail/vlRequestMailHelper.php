@@ -27,7 +27,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
           //Set the hostname of the mail server
           $mail->Host = 'smtp.gmail.com';
           //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-          $mail->Port = 25;
+          $mail->Port = 587;
           //Set the encryption system to use - ssl (deprecated) or tls
           $mail->SMTPSecure = 'tls';
           //Whether to use SMTP authentication
@@ -66,7 +66,14 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
             $message =ucfirst(nl2br($_POST['message']));
           }
           $mail->msgHTML($message);
-          if ($mail->send()){
+          $mail->SMTPOptions = array(
+               'ssl' => array(
+                  'verify_peer' => false,
+                  'verify_peer_name' => false,
+                  'allow_self_signed' => true
+               )
+          );
+          if($mail->send()){
                 //Update request mail sent flag
                 $sampleArray = explode(',',$_POST['sample']);
                 for($s=0;$s<count($sampleArray);$s++){

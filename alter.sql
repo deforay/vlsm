@@ -957,3 +957,6 @@ RENAME `testing_status` TO `r_sample_status`;
 
 --palz 01-apr-2017
 ALTER TABLE `vl_request_form` ADD `source` VARCHAR(500) NULL DEFAULT 'manual' AFTER `manual_result_entry`;
+
+--palz 03-apr-2017
+INSERT INTO `r_sample_status` (`status_id`, `status_name`) VALUES (NULL, 'Sent to Lab');
