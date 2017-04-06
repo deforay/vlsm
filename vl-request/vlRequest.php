@@ -241,8 +241,8 @@ $batResult = $db->rawQuery($batQuery);
   </div>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
-<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
-  <script src="../assets/js/zebra-print.js"></script>	
+	<!--<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>-->
+  <!--<script src="../assets/js/zebra-print.js"></script>-->
 	
 	
   <script type="text/javascript">
@@ -253,11 +253,11 @@ $batResult = $db->rawQuery($batQuery);
    var oTable = null;
    $(document).ready(function() {
 		
-		 setup_web_print();
+		 //setup_web_print();
      loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+						separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
