@@ -273,7 +273,7 @@ $batResult = $db->rawQuery($batQuery);
             "bScrollCollapse": true,
             //"bStateSave" : true,
             "iDisplayLength": 100,
-            "bRetrieve": true,                        
+            "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
                 {"sClass":"center"},
