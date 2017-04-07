@@ -292,7 +292,7 @@ if(sizeof($requestResult)> 0){
             $html.='<table style="padding:2px;">';
               if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
                 $html .='<tr>';
-                  $html .='<td colspan="4" style="text-align:center;"><img src="../uploads/logo/'.$arr['logo'].'" style="" alt="logo"></td>';
+                  $html .='<td colspan="4" style="text-align:center;"><img src="../uploads/logo/'.$arr['logo'].'" style="height:80px;" alt="logo"></td>';
                 $html .='</tr>';
               }
               $html .='<tr>';

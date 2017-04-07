@@ -26,7 +26,10 @@ try {
        if (move_uploaded_file($_FILES["logo"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $imageName)) {
            $resizeObj = new Deforay_Image_Resize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR .$imageName);
 	   if($_POST['vl_form']==4){
-	   $resizeObj->resizeImage(240, 80, 'auto'); 
+	   list($width, $height) = getimagesize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR .$imageName);
+	   if($width>240){
+	    $resizeObj->resizeImage(240, 80, 'auto');
+	   }
 	   }else{
            $resizeObj->resizeImage(80, 80, 'auto');
 	   }
