@@ -2,13 +2,15 @@
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$formConfigQuery ="SELECT * from global_config where name='vl_form'";
+$formConfigQuery ="SELECT * FROM global_config";
 $configResult=$db->query($formConfigQuery);
-$arr = array();
+$gconfig = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($configResult); $i++) {
-  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+  $gconfig[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+
+
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
@@ -199,9 +201,9 @@ $primaryKey="vl_sample_id";
 	  $whereResult = '(vl.result IS NULL OR vl.result = "") AND ';
 	}
 	if($sWhere!=''){
-	    $sWhere = $sWhere.' AND '.$whereResult.'vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND '.$whereResult.'vl.vlsm_country_id="'.$gconfig['vl_form'].'"';
 	}else{
-	    $sWhere = $sWhere.' where '.$whereResult.'vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' where '.$whereResult.'vl.vlsm_country_id="'.$gconfig['vl_form'].'"';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	$sQuery = $sQuery." ORDER BY vl.request_created_datetime DESC";
@@ -220,7 +222,7 @@ $primaryKey="vl_sample_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$gconfig['vl_form']."'");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
@@ -285,8 +287,11 @@ $primaryKey="vl_sample_id";
 			if($vlView){
 			    $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
 			}
-			
-			$barcode='<br><a href="javascript:void(0)" onclick="printBarcode(\''.$aRow['serial_no'].'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode</a>';
+		  
+			if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){	
+				$fac = ucwords($aRow['facility_name'])." | ".$aRow['sample_collection_date'];
+				$barcode='<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\''.$aRow['serial_no'].'\',\''.$fac.'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
+			}
 			
 		}
 		

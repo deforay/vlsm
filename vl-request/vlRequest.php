@@ -11,6 +11,7 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
+
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -170,14 +171,14 @@ $batResult = $db->rawQuery($batQuery);
                 <thead>
                 <tr>
 		  <!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
-		  <th>Sample Code</th>
+									<th>Sample Code</th>
                   <th>Sample Collection Date</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
-		  <th>Province</th>
-		  <th>District</th>
+									<th>Facility Name</th>
+									<th>Province</th>
+									<th>District</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -192,6 +193,10 @@ $batResult = $db->rawQuery($batQuery);
                 </tr>
                 </tbody>
               </table>
+					<?php
+					if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
+					?>
+							
 							<div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br/>
 								<div class="progress" style="width:100%">
 									<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -206,29 +211,14 @@ $batResult = $db->rawQuery($batQuery);
 								Zebra Printer Options<br />
 								Printer: <select id="printers"></select>
 							</div> <!-- /printer_select -->
+						
+						<?php
+						}
+						?>
+						
 							
             </div>
 						
-            <!-- /.box-body -->
-	<!--    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 45%;">-->
-	<!--    <tr style="margin-top:30px;">-->
-	<!--	  <td><b>Choose Status&nbsp;:</b></td>-->
-	<!--	  <td>-->
-	<!--	    <input type="hidden" name="checkedTests" id="checkedTests"/>-->
-	<!--	    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled=disabled"">-->
-	<!--	      <option value="">-- Select --</option>-->
-	<!--		< ?php-->
-	<!--		foreach($tsResult as $status){-->
-	<!--		 ?>-->
-	<!--		 <option value="< ?php echo $status['status_id'];?>">< ?php echo ucwords($status['status_name']);?></option>-->
-	<!--		 < ?php-->
-	<!--		}-->
-	<!--		?>-->
-	<!--	    </select>-->
-	<!--	  </td>-->
-	<!--	  <td>&nbsp;<input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></td>-->
-	<!--	</tr>-->
-	<!--  </table>-->
           </div>
           <!-- /.box -->
 	  
@@ -241,8 +231,23 @@ $batResult = $db->rawQuery($batQuery);
   </div>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
-	<!--<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>-->
-  <!--<script src="../assets/js/zebra-print.js"></script>-->
+	
+	<?php
+		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
+			if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
+				?>
+					<script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
+					<script src="../assets/js/dymo-print.js"></script>    
+				<?php
+			}else if($global['bar_code_printing'] == 'zebra-printer'){
+				?>
+					<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
+					<script src="../assets/js/zebra-print.js"></script>				
+				<?php				
+			}
+		}
+	?>
+
 	
 	
   <script type="text/javascript">
@@ -253,7 +258,11 @@ $batResult = $db->rawQuery($batQuery);
    var oTable = null;
    $(document).ready(function() {
 		
-		 //setup_web_print();
+	<?php
+		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
+	?>
+		 setup_web_print();
+	<?php } ?>
      loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
