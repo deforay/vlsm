@@ -242,12 +242,12 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="instance_type" class="col-lg-4 control-label">Barcode Printing <span class="mandatory">*</span> </label>
+                      <label for="instance_type" class="col-lg-4 control-label">Barcode Printing  (Experimental) <span class="mandatory">*</span> </label>
                       <div class="col-lg-8">
                         <select class="form-control isRequired" name="bar_code_printing" id="bar_code_printing" title="Please select the barcode printing">
                             <option value="off" <?php echo ('off'==$arr['bar_code_printing'])?"selected='selected'":""?>>Off</option>
-                            <option value="zebra printer" <?php echo ('zebra printer'==$arr['bar_code_printing'])?"selected='selected'":""?>>Zebra Printer</option>
-                            <option value="dymo labelwriter 450" <?php echo ('dymo labelwriter 450'==$arr['bar_code_printing'])?"selected='selected'":""?>>Dymo LabelWriter 450</option>
+                            <option value="zebra-printer" <?php echo ('zebra-printer'==$arr['bar_code_printing'])?"selected='selected'":""?>>Zebra Printer</option>
+                            <option value="dymo-labelwriter-450" <?php echo ('dymo-labelwriter-450'==$arr['bar_code_printing'])?"selected='selected'":""?>>Dymo LabelWriter 450</option>
                         </select>
                       </div>
                     </div>
