@@ -960,3 +960,6 @@ ALTER TABLE `vl_request_form` ADD `source` VARCHAR(500) NULL DEFAULT 'manual' AF
 
 --palz 03-apr-2017
 INSERT INTO `r_sample_status` (`status_id`, `status_name`) VALUES (NULL, 'Sent to Lab');
+
+--saravanan 11-apr-2017
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Barcode Printing', 'bar_code_printing', 'off');
