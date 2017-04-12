@@ -217,7 +217,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="clinicianName">Clinician Name </label>
-                    <input type="text" class="form-control  " name="clinicianName" id="clinicianName" placeholder="Enter Clinician Name" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_contact_person'];?>" >
+                    <input type="text" class="form-control  " name="clinicianName" id="clinicianName" placeholder="Enter Clinician Name" style="width:100%;" value="<?php echo $vlQueryInfo[0]['request_clinician_name'];?>" >
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
