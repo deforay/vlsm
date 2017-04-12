@@ -97,7 +97,7 @@ try {
           'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='' ? $_POST['sampleCodeFormat'] :  NULL),
           'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
           'facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='' ? $_POST['clinicName'] :  NULL),
-          'request_clinician_name'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
+          'lab_contact_person'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
           'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
@@ -135,7 +135,7 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
-     //echo "<pre>";var_dump($vldata);die;
+          //echo "<pre>";var_dump($vldata);die;
           $id=$db->insert($tableName,$vldata);
           if($id>0){
                $_SESSION['alertMsg']="VL request added successfully";
@@ -150,10 +150,22 @@ try {
                'date_time'=>$general->getDateTime()
                );
                $db->insert($tableName1,$data);
+               
+               
+              $barcode = "";
+              if(isset($_POST['printBarCode']) && $_POST['printBarCode'] =='on'){
+                    $s = $_POST['sampleCode'];
+                    $facQuery="SELECT * FROM facility_details where facility_id=".$_POST['clinicName'];
+                    $facResult = $db->rawQuery($facQuery);
+                    $f = ucwords($facResult[0]['facility_name'])." | ".$_POST['sampleCollectionDate'];
+                    $barcode = "?barcode=true&s=$s&f=$f";
+               }
+               
+               
                if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
-                    header("location:addVlRequest.php");
+                    header("location:addVlRequest.php".$barcode);
                }else{
-                    header("location:vlRequest.php");
+                    header("location:vlRequest.php".$barcode);
                }
           }else{
                $_SESSION['alertMsg']="Please try again later";

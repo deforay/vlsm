@@ -1,27 +1,28 @@
 <?php
 ob_start();
 include('../General.php');
+
 $general=new Deforay_Commons_General();
 //global config
 $cSampleQuery="SELECT * FROM global_config";
 $cSampleResult=$db->query($cSampleQuery);
-$arr = array();
+$gconfig = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+  $gconfig[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
-if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
+if($gconfig['sample_code']=='auto' || $gconfig['sample_code']=='alphanumeric'){
   $numeric = '';
   $maxLength = '';
-  if($arr['max_length']!='' && $arr['sample_code']=='alphanumeric'){
-  $maxLength = $arr['max_length'];
+  if($gconfig['max_length']!='' && $gconfig['sample_code']=='alphanumeric'){
+  $maxLength = $gconfig['max_length'];
   $maxLength = "maxlength=".$maxLength;
   }
 }else{
   $numeric = 'checkNum';
   $maxLength = '';
-  if($arr['max_length']!=''){
-  $maxLength = $arr['max_length'];
+  if($gconfig['max_length']!=''){
+  $maxLength = $gconfig['max_length'];
   $maxLength = "maxlength=".$maxLength;
   }
 }
@@ -131,6 +132,23 @@ $sFormat = '';
                           <input type="text" class="form-control sampleCode isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)" />
                         </div>
                       </div>
+                      
+                      
+                      <!-- BARCODESTUFF START -->
+                      <?php
+                        if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
+                      ?>
+                      <div class="col-xs-3 col-md-3 pull-right">
+                        <div class="form-group">
+                          <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
+                          <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
+                        </div>
+                      </div>
+                      <?php
+                        }
+                      ?>
+                      <!-- BARCODESTUFF END -->
+                      
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
@@ -331,9 +349,9 @@ $sFormat = '';
                             ?>
                           </select>
                         </td>
-                        <td><?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
+                        <td><?php if(isset($gconfig['sample_type']) && trim($gconfig['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
                         <td>
-                          <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
+                          <?php if(isset($gconfig['sample_type']) && trim($gconfig['sample_type']) == "enabled"){ ?>
                             <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
                                 <option value=""> -- Select -- </option>
                                 <?php
@@ -417,15 +435,45 @@ $sFormat = '';
                         <td colspan="3"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
                       </tr>
                     </table>
+                    
+        
+                    
                   </div>
                 </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+                
+             
+        <!-- BARCODESTUFF START -->                    
+        <?php
+					if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
+					?>
+							
+							<div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br/>
+								<div class="progress" style="width:100%">
+									<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+									</div>
+								</div>
+							</div> <!-- /printer_data_loading -->
+							<div id="printer_details" style="display:none">
+								<span id="selected_printer">No printer selected!</span> 
+								<button type="button" class="btn btn-success" onclick="changePrinter()">Change/Retry</button>
+							</div><br /> <!-- /printer_details -->
+							<div id="printer_select" style="display:none">
+								Zebra Printer Options<br />
+								Printer: <select id="printers"></select>
+							</div> <!-- /printer_select -->
+						
+						<?php
+						}
+						?>                    
+             <!-- BARCODESTUFF END -->                      
+                
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="4"/>
-                <?php if($arr['sample_code']=='auto'){ ?>
+                <?php if($gconfig['sample_code']=='auto'){ ?>
                 <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                 <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                 <?php } ?>
@@ -444,12 +492,43 @@ $sFormat = '';
     <!-- /.content -->
   </div>
   
+  
+  <!-- BARCODESTUFF START -->
+  
+	<?php
+		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
+			if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
+				?>
+					<script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
+					<script src="../assets/js/dymo-print.js"></script>    
+				<?php
+			}else if($global['bar_code_printing'] == 'zebra-printer'){
+				?>
+					<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
+					<script src="../assets/js/zebra-print.js"></script>				
+				<?php				
+			}
+		}
+	?>
+
+  <!-- BARCODESTUFF END -->
+  
   <script type="text/javascript">
   
   provinceName = true;
   facilityName = true;
   machineName = true;
-  $(document).ready(function() {
+ $(document).ready(function() {
+	
+  // BARCODESTUFF START
+			
+	<?php
+		if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
+			echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
+		}
+	?>
+  // BARCODESTUFF END
+  
   $('.date').datepicker({
      changeMonth: true,
      changeYear: true,
@@ -479,9 +558,9 @@ $sFormat = '';
      });
   });
     function validateNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
+      var format = '<?php echo $gconfig['sample_code'];?>';
       var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
+      var minLength = '<?php echo $gconfig['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
         alert("Sample code length atleast "+minLength+" characters");
         return false;
@@ -504,9 +583,9 @@ $sFormat = '';
     }
     }
     function validateSaveNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
+      var format = '<?php echo $gconfig['sample_code'];?>';
       var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
+      var minLength = '<?php echo $gconfig['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
         alert("Sample code length atleast "+minLength+" characters");
         return false;
@@ -548,7 +627,7 @@ $sFormat = '';
       });
       }
       <?php
-      if($arr['sample_code']=='auto'){
+      if($gconfig['sample_code']=='auto'){
         ?>
         pNameVal = pName.split("##");
         sCode = '<?php echo date('Ymd');?>';

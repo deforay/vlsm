@@ -259,10 +259,10 @@ $batResult = $db->rawQuery($batQuery);
    $(document).ready(function() {
 		
 	<?php
-		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
+		if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
+			echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
+		}
 	?>
-		 setup_web_print();
-	<?php } ?>
      loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
