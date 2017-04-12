@@ -314,14 +314,13 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
   
   function convertResultToPdf(id){
     <?php
+    $path = '';
     if($configFormResult[0]['value'] == 3){
       $path = '../includes/vlRequestDrcResultPdf.php';
     }else if($configFormResult[0]['value'] == 1 || $configFormResult[0]['value'] == 2){
      $path = '../includes/vlRequestResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
-    }else if($configFormResult[0]['value'] == 5){
-     $path = '';  
     }
     ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id},
@@ -343,8 +342,6 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
-    }else if($configFormResult[0]['value'] == 4){
-     $path = '';  
     }
     ?>
     $.post("<?php echo $path;?>", { source:'print',id:id},
