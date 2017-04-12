@@ -288,7 +288,7 @@ $primaryKey="vl_sample_id";
 			    $view = '<a href="viewVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
 			}
 		  
-			if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){	
+			if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){
 				$fac = ucwords($aRow['facility_name'])." | ".$aRow['sample_collection_date'];
 				$barcode='<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\''.$aRow['serial_no'].'\',\''.$fac.'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
 			}

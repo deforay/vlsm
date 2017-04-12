@@ -6,6 +6,8 @@ var format_start = "^XA^FO100,100^BY3^B3N,N,100,Y,N^FD123ABC^FS^XZ";
 var format_end = "^FS^XZ";
 var default_mode = true;
 
+function urldecode(str) { if (typeof str != "string") { return str; } return decodeURIComponent(str.replace(/\+/g, ' ')); }
+
 function setup_web_print()
 {
 	$('#printer_select').on('change', onPrinterSelected);
@@ -78,9 +80,10 @@ function showBrowserPrintNotFound()
 	showErrorMessage("An error occured while attempting to connect to your Zebra Printer. You may not have Zebra Browser Print installed, or it may not be running. Install Zebra Browser Print, or start the Zebra Browser Print Service, and try again.");
 
 };
-function printBarcode(bcode)
+function printBarcodeLabel(bcode,facility)
 {
 	showLoading("Printing...");
+	facility = urldecode(urldecode);
 	checkPrinterStatus( function (text){
 		if (text == "Ready to Print")
 		{
@@ -206,3 +209,6 @@ function trySetupAgain()
 }
 
 
+$(document).ready(function() {
+	setup_web_print();
+});

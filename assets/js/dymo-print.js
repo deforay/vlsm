@@ -1,10 +1,11 @@
-
+function urldecode(str) { if (typeof str != "string") { return str; } return decodeURIComponent(str.replace(/\+/g, ' ')); }
 
 function printBarcodeLabel(barcode,facility){
         
            
             $.blockUI();
             dymo.label.framework.trace = 1; //true
+            facility = urldecode(urldecode);
 
   
             try{

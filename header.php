@@ -18,9 +18,10 @@ if(isset($global['instance_type']) && $global['instance_type']!='')
 {
     if($global['instance_type']=='Clinic/Lab'){
         $hideResult = "display:none;";
-    }else if($global['instance_type']=='Viral Load Lab'){
-        $hideRequest = "display:none;";
     }
+    //else if($global['instance_type']=='Viral Load Lab'){
+       // $hideRequest = "display:none;";
+    //}
 }
 if(!isset($_SESSION['userId'])){
     header("location:../login.php");

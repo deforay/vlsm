@@ -92,7 +92,7 @@ try {
           'last_vl_result_failure_ac'=>(isset($_POST['repeatTestingVlValue']) && $_POST['repeatTestingVlValue']!='' ? $_POST['repeatTestingVlValue'] :  NULL),
           'last_vl_date_failure'=>(isset($_POST['suspendTreatmentLastVLDate']) && $_POST['suspendTreatmentLastVLDate']!='' ? $general->dateFormat($_POST['suspendTreatmentLastVLDate']) :  NULL),
           'last_vl_result_failure'=>(isset($_POST['suspendTreatmentVlValue']) && $_POST['suspendTreatmentVlValue']!='' ? $_POST['suspendTreatmentVlValue'] :  NULL),
-          'patient_receiving_theraphy'=>(isset($_POST['theraphy']) && $_POST['theraphy']!='' ? $_POST['theraphy'] :  NULL),
+          'patient_receiving_therapy'=>(isset($_POST['theraphy']) && $_POST['theraphy']!='' ? $_POST['theraphy'] :  NULL),
           'patient_drugs_transmission'=>(isset($_POST['drugTransmission']) && $_POST['drugTransmission']!='' ? $_POST['drugTransmission'] :  NULL),
           'patient_tb'=>(isset($_POST['patientTB']) && $_POST['patientTB']!='' ? $_POST['patientTB'] :  NULL),
           'patient_tb_yes'=>(isset($_POST['patientTBActive']) && $_POST['patientTBActive']!='' ? $_POST['patientTBActive'] :  NULL),

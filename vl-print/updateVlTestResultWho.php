@@ -261,10 +261,10 @@ $disable = "disabled = 'disabled'";
                             <tr>
                                 <td colspan="3"><label for="therapy">Is the Patient receiving second-line theraphy? </label>
                                     <label class="radio-inline">
-                                        <input type="radio" class="" id="theraphyYes" name="theraphy" value="yes" <?php echo($vlQueryInfo[0]['patient_receiving_theraphy'] == 'yes' )?"checked='checked'":""; ?> title="Is the Patient receiving second-line theraphy? " <?php echo $disable;?>> Yes
+                                        <input type="radio" class="" id="theraphyYes" name="theraphy" value="yes" <?php echo($vlQueryInfo[0]['patient_receiving_therapy'] == 'yes' )?"checked='checked'":""; ?> title="Is the Patient receiving second-line theraphy? " <?php echo $disable;?>> Yes
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" class=" " id="theraphyNo" name="theraphy" value="no"<?php echo($vlQueryInfo[0]['patient_receiving_theraphy'] == 'no' )?"checked='checked'":""; ?> title="Is the Patient receiving second-line theraphy?" <?php echo $disable;?>> No
+                                        <input type="radio" class=" " id="theraphyNo" name="theraphy" value="no"<?php echo($vlQueryInfo[0]['patient_receiving_therapy'] == 'no' )?"checked='checked'":""; ?> title="Is the Patient receiving second-line theraphy?" <?php echo $disable;?>> No
                                     </label>
                                 </td>
                                 <td colspan="3" class=""><label for="breastfeeding">Is the Patient Pregnant or Breastfeeding?</label>
