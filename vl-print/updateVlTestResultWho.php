@@ -121,7 +121,14 @@ $disable = "disabled = 'disabled'";
                         <h3 class="box-title">Specimen identification information: to be completed by laboratory staff</h3>
                     </div>
                   <div class="box-body">
-                    
+                    <div class="row">
+                      <div class="col-xs-3 col-md-3">
+                        <div class="form-group">
+                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control " id="sampleCode" name="sampleCode"  placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"  <?php echo $disable;?> />
+                        </div>
+                      </div>
+                    </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
@@ -204,7 +211,7 @@ $disable = "disabled = 'disabled'";
                             <tr>
                               <td><label for="uniqueId">Unique identifier</label></td>
                               <td>
-                                <input type="text" name="uniqueId" id="uniqueId" class="uniqueId form-control" placeholder="Enter Unique Id" title="Enter unique identifier" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" <?php echo $disable;?>/>
+                                <input type="text" name="uniqueId" id="uniqueId" class="uniqueId form-control" placeholder="Enter Unique Id" title="Enter unique identifier" value="<?php echo $vlQueryInfo[0]['patient_other_id'];?>" <?php echo $disable;?>/>
                               </td>
                               <td><label for="dob">Date Of Birth</label></td>
                               <td>
@@ -532,7 +539,6 @@ $disable = "disabled = 'disabled'";
      }).click(function(){
    	$('.ui-datepicker-calendar').show();
      });
-    getDateOfBirth();
   });
   
     function validateNow(){

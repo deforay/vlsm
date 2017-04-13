@@ -576,6 +576,7 @@ $sFormat = '';
         $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
+        $("#fCode").val(pNameVal[2]);
         <?php
       }
       ?>
@@ -607,7 +608,9 @@ $sFormat = '';
     $.blockUI();
      //check facility name
       var cName = $("#fName").val();
-      var pName = $("#province").val();
+      //var pName = $("#province").val();
+      var pName = '';
+      facilityName = true;
       if(cName!='' && provinceName && facilityName){
         provinceName = false;
       }
@@ -628,6 +631,7 @@ $sFormat = '';
               $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
               $("#sampleCodeFormat").val(pNameVal[1]+sCode);
               $("#sampleCodeKey").val(sCodeKey);
+              $("#fCode").val(pNameVal[2]);
               <?php
             }
             ?>
@@ -639,6 +643,7 @@ $sFormat = '';
       $("#province").html("<?php echo $province;?>");
       $("#fName").html("<?php echo $facility;?>");
     }
+    
     $.unblockUI();
   }
   function ARTValue(){

@@ -325,6 +325,8 @@ $batResult = $db->rawQuery($batQuery);
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($arr['vl_form'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }else if($arr['vl_form'] == 6){
+     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
     }
     ?>
       $.post("<?php echo $path; ?>", {source:'print',id : id},

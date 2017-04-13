@@ -7,6 +7,7 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
+$fDetails="facility_details";
 try {
      $configQuery ="SELECT value FROM global_config where name='auto_approval'";
      $configResult = $db->rawQuery($configQuery);
@@ -43,6 +44,12 @@ try {
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
      }
+     //update facility code
+     //if($_POST['fCode']!=''){
+          $fData = array('facility_code'=>$_POST['fCode']);
+          $db=$db->where('facility_id',$_POST['fName']);
+          $id=$db->update($fDetails,$fData);
+     //}
      
      if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
           $_POST['breastfeeding']='';
