@@ -56,7 +56,9 @@ $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_
 $svlResult=$db->query($svlQuery);
   if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
  $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
- $maxId = "00".$maxId;
+ $strparam = strlen($maxId);
+ $zeros = substr("000", $strparam);
+ $maxId = $zeros.$maxId;
 }else{
  $maxId = '001';
 }
