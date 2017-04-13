@@ -170,7 +170,7 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fCode">Facility Code <span class="mandatory">*</span></label>
-                            <input type="text" class="form-control " style="width:100%;" name="fCode" id="fCode" placeholder="Facility Code" title="Please enter facility code" <?php echo $disable;?>>
+                            <input type="text" class="form-control " style="width:100%;" name="fCode" id="fCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $facilityResult[0]['facility_code'];?>" <?php echo $disable;?>>
                           </div>
                       </div>
                     </div>
