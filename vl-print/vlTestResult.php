@@ -342,6 +342,8 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }else if($configFormResult[0]['value'] == 6){
+     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
     }
     ?>
     $.post("<?php echo $path;?>", { source:'print',id:id},

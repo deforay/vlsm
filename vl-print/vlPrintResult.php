@@ -302,8 +302,8 @@ $batResult = $db->rawQuery($batQuery);
        $path = '../includes/vlRequestResultPdf.php'; 
       }else if($configFormResult[0]['value'] == 4){
        $path = '../includes/vlRequestZamSearchResultPdf.php';  
-      }else{
-	$path = '';
+      }else if($configFormResult[0]['value'] == 6){
+	$path = '../includes/vlRequestWhoSearchResultPdf.php';  
       }
       ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id},
@@ -327,8 +327,8 @@ $batResult = $db->rawQuery($batQuery);
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
-    }else{
-      $path = '';
+    }else if($configFormResult[0]['value'] == 6){
+     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
     }
     ?>
     $.post("<?php echo $path; ?>", { source:'print',id : id},

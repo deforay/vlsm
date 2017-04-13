@@ -12,7 +12,7 @@ if($facilityInfo){
     $state = '';
     if($facilityInfo[0]['facility_state']!=''){
         $state.="<option value=''> -- Select -- </option>";
-            $state .= "<option value='".$facilityInfo[0]['facility_state']."##".$pdResult[0]['province_code']."' selected='selected'>".ucwords($facilityInfo[0]['facility_state'])."</option>";
+            $state .= "<option value='".$facilityInfo[0]['facility_state']."##".$pdResult[0]['province_code']."##".$facilityInfo[0]['facility_code']."' selected='selected'>".ucwords($facilityInfo[0]['facility_state'])."</option>";
     }else{
         $state.="<option value=''> -- Select -- </option>";
     }

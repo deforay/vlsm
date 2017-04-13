@@ -10,6 +10,22 @@ $arr = array();
 for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
+if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
+  $numeric = '';
+  $maxLength = '';
+  if($arr['max_length']!='' && $arr['sample_code']=='alphanumeric'){
+  $maxLength = $arr['max_length'];
+  $maxLength = "maxlength=".$maxLength;
+  }
+}else{
+  $numeric = 'checkNum';
+  $maxLength = '';
+  if($arr['max_length']!=''){
+  $maxLength = $arr['max_length'];
+  $maxLength = "maxlength=".$maxLength;
+  }
+}
+
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 
@@ -119,7 +135,14 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                         <h3 class="box-title">Specimen identification information: to be completed by laboratory staff</h3>
                     </div>
                   <div class="box-body">
-                    
+                    <div class="row">
+                      <div class="col-xs-3 col-md-3">
+                        <div class="form-group">
+                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$vlQueryInfo[0]['vl_sample_id'];?>','This sample code already exists.Try another number',null)" />
+                        </div>
+                      </div>
+                    </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
@@ -161,7 +184,7 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fCode">Facility Code </label>
-                            <input type="text" class="form-control " style="width:100%;" name="fCode" id="fCode" placeholder="Facility Code" title="Please enter facility code">
+                            <input type="text" class="form-control " style="width:100%;" name="fCode" id="fCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $facilityResult[0]['facility_code'];?>">
                           </div>
                       </div>
                     </div>
@@ -202,7 +225,7 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                             <tr>
                               <td><label for="uniqueId">Unique identifier</label></td>
                               <td>
-                                <input type="text" name="uniqueId" id="uniqueId" class="uniqueId form-control" placeholder="Enter Unique Id" title="Enter unique identifier" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                                <input type="text" name="uniqueId" id="uniqueId" class="uniqueId form-control" placeholder="Enter Unique Id" title="Enter unique identifier" value="<?php echo $vlQueryInfo[0]['patient_other_id'];?>"/>
                               </td>
                               <td><label for="dob">Date Of Birth</label></td>
                               <td>
@@ -618,7 +641,9 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
     $.blockUI();
      //check facility name
       var cName = $("#fName").val();
-      var pName = $("#province").val();
+      //var pName = $("#province").val();
+      var pName = '';
+      facilityName = true;
       if(cName!='' && provinceName && facilityName){
         provinceName = false;
       }
