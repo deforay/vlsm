@@ -119,8 +119,11 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $cBy = $vlResult[0]['sample_collected_by'];
  $clinicianName = $vlResult[0]['lab_contact_person'];
  $labNameId = $vlResult[0]['lab_id'];
+ 
  $sKey = $vlResult[0]['sample_code_key']+1;
- $sKey = "00".$sKey;
+ $strparam = strlen($sKey);
+ $zeros = substr("000", $strparam);
+ $sKey = $zeros.$maxId;
  $sFormat = $vlResult[0]['sample_code_format'];
  $sCodeValue = $vlResult[0]['sample_code_format'].$sKey;
  

@@ -79,6 +79,66 @@ $svlResult=$db->query($svlQuery);
 }
 $sKey = '';
 $sFormat = '';
+
+$facilityResult='';
+$stateResult='';
+$districtResult = '';
+$sDate ='';
+$cBy ='';
+$urgency ='';
+$clinicianName = '';
+$sKey = '';
+$sFormat = '';
+$sCodeValue = '';
+$sampleReceivedDate = '';
+$labNameId = '';
+$sCode = '';
+if(isset($_SESSION['treamentIdZam']) && $_SESSION['treamentIdZam']!=''){
+  //facility details
+ $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityIdZam']."'";
+ $facilityResult=$db->query($facilityQuery);
+ 
+ $stateName = $facilityResult[0]['facility_state'];
+ $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
+ $stateResult=$db->query($stateQuery);
+ 
+ //district details
+ $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
+ $districtResult=$db->query($districtQuery);
+ 
+ $vlQuery = 'select vl.test_urgency,vl.sample_collected_by,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentIdZam'].'"';
+ $vlResult=$db->query($vlQuery);
+ $urgency = $vlResult[0]['test_urgency'];
+ $cBy = $vlResult[0]['sample_collected_by'];
+ $clinicianName = $vlResult[0]['lab_contact_person'];
+ $labNameId = $vlResult[0]['lab_id'];
+ $sKey = $vlResult[0]['sample_code_key']+1;
+ $strparam = strlen($sKey);
+ $zeros = substr("000", $strparam);
+ $sKey = $zeros.$sKey;
+ $sFormat = $vlResult[0]['sample_code_format'];
+ $sCodeValue = $vlResult[0]['sample_code_format'].$sKey;
+ if($arr['sample_code']=='auto'){
+  $sCode = $sFormat.$sKey;
+ }
+ 
+ if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
+  $vlResult[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+ }else{
+  $vlResult[0]['sample_collection_date']='';
+ }
+ $sDate = $vlResult[0]['sample_collection_date'];
+ 
+ if(isset($vlResult[0]['sample_received_at_vl_lab_datetime']) && trim($vlResult[0]['sample_received_at_vl_lab_datetime'])!='' && $vlResult[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlResult[0]['sample_received_at_vl_lab_datetime']);
+  $vlResult[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+ }else{
+  $vlResult[0]['sample_received_at_vl_lab_datetime']='';
+ }
+ $sampleReceivedDate = $vlResult[0]['sample_received_at_vl_lab_datetime'];
+}
+
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -131,7 +191,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)" />
+                          <input type="text" class="form-control sampleCode isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $sCode;?>" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)" />
                         </div>
                       </div>
                       
@@ -157,7 +217,11 @@ $sFormat = '';
                         <div class="form-group">
                         <label for="province">Province <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
-                            <?php echo $province;?>
+                            <?php if($facilityResult!='') { ?>
+                            <option value=""> -- Select -- </option>
+                            <?php foreach($pdResult as $provinceName){ ?>
+                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
+                            <?php } } else { echo $province;  } ?>
                           </select>
                         </div>
                       </div>
@@ -166,6 +230,15 @@ $sFormat = '';
                         <label for="District">District  <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                             <option value=""> -- Select -- </option>
+                            <?php
+                            if($districtResult!=''){
+                            foreach($districtResult as $districtName){
+                              ?>
+                              <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
+                              <?php
+                            }
+                            }
+                            ?>
                           </select>
                         </div>
                       </div>
@@ -176,26 +249,30 @@ $sFormat = '';
                     <div class="form-group">
                     <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
                       <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-			<?php echo $facility;  ?>
+			<?php if($facilityResult!=''){ ?>
+		      <option value=""> -- Select -- </option>
+			<?php foreach($fResult as $fDetails){ ?>
+                        <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_SESSION['facilityIdZam']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                        <?php } } else { echo $facility; } ?>
 		      </select>
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="clinicianName">Clinician Name </label>
-                    <input type="text" class="form-control  " name="clinicianName" id="clinicianName" placeholder="Enter Clinician Name" style="width:100%;" >
+                    <input type="text" class="form-control  " name="clinicianName" id="clinicianName" placeholder="Enter Clinician Name" style="width:100%;"  value="<?php echo $clinicianName;?>">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="sampleCollectionDate">Sample Collection Date <span class="mandatory">*</span></label>
-                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
+                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="">Sample Received Date</label>
-                    <input type="text" class="form-control" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" onchange="checkSampleReceviedDate();">
+                    <input type="text" class="form-control" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" value="<?php echo $sampleReceivedDate; ?>"  onchange="checkSampleReceviedDate();">
                     </div>
                   </div>
                 </div>
@@ -388,7 +465,7 @@ $sFormat = '';
                             <?php
                             foreach($lResult as $labName){
                               ?>
-                              <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
+                              <option value="<?php echo $labName['facility_id'];?>" <?php echo ($labNameId==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
                               <?php
                             }
                             ?>

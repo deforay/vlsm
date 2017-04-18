@@ -430,7 +430,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['approver_comments']).'</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.str_replace("VL result above 1000 copies/mL is indicative of Treatmenet failure or poor adherance","",ucfirst($result['approver_comments'])).'</td>';
                   $html .='</tr>';
                 $html .='</table>';
                $html .='</td>';
