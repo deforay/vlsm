@@ -51,6 +51,7 @@ $tsResult = $db->rawQuery($tsQuery);
         */
         
         $sWhere = "";
+	$sWhereSub = "";
         if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
             $searchArray = explode(" ", $_POST['sSearch']);
             foreach ($searchArray as $search) {
@@ -128,6 +129,9 @@ $tsResult = $db->rawQuery($tsQuery);
         );
         foreach ($rResult as $aRow) {
 	    $rsDetails = '';
+	    $aRow['sample_code'] = 'Control';
+	    $color = '';
+	    $status ='';
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
 	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
 	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
@@ -142,19 +146,18 @@ $tsResult = $db->rawQuery($tsQuery);
 	    }
             $row = array();
 	    if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
-		
 		if($aRow['sample_details']=='Already Result Exist'){
-		$rsDetails = 'Existing Result';
-                $color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
-            }
-	    if($aRow['sample_details']=='New Sample'){
-		$rsDetails = 'Unknown Sample';
-		$color = '<span style="color:#e8000b;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
-            }
-	    if($aRow['sample_details']==''){
-		$rsDetails = 'Result for Sample';
-		$color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
-            }
+		   $rsDetails = 'Existing Result';
+                   $color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
+                }
+		if($aRow['sample_details']=='New Sample'){
+		    $rsDetails = 'Unknown Sample';
+		    $color = '<span style="color:#e8000b;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
+		}
+		if($aRow['sample_details']==''){
+		    $rsDetails = 'Result for Sample';
+		    $color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
+		}
 		//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
 		$status = '<select class="form-control" style="" name="status[]" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="toggleTest(this)">
  				<option value="">-- Select --</option>
@@ -162,11 +165,6 @@ $tsResult = $db->rawQuery($tsQuery);
  				<option value="1" '.($aRow['result_status']=="1" ? "selected=selected" : "").'>Hold</option>
  				<option value="4" '.($aRow['result_status']=="4"  ? "selected=selected" : "").'>Rejected</option>
  			</select><br><br>';
-	    }else{
-		$aRow['sample_code'] = 'Control';
-		$color = '';
-		//$row[] = '';
-		$status ='';
 	    }
 	    $row[] = '<span title="'.$rsDetails.'">'.$aRow['sample_code'].$color.'</span>';
 	    $row[] = $aRow['sample_collection_date'];
