@@ -161,10 +161,15 @@ try {
                     $barcode = "?barcode=true&s=$s&f=$f";
                }
                
-               
                if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
+                    $_SESSION['treamentIdZam'] = $id;
+                    $_SESSION['facilityIdZam'] = $_POST['clinicName'];
                     header("location:addVlRequest.php".$barcode);
                }else{
+                    $_SESSION['treamentIdZam'] = '';
+                    $_SESSION['facilityIdZam'] = '';
+                    unset($_SESSION['treamentIdZam']);
+                    unset($_SESSION['facilityIdZam']);
                     header("location:vlRequest.php".$barcode);
                }
           }else{
