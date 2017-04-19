@@ -88,15 +88,17 @@ try {
           $batchCode = $row[$batchCodeCol];
           $resultFlag = $row[$flagCol];
           
-          //$d=explode(" ",$row[$testingDateCol]);
+          $d=explode(" ",$row[$testingDateCol]);
           //$testingDate=str_replace("/","-",$d[0],$checked);
-          //
-          ////$testingDate = date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
-          //
-          
-          // Date time in the provided Roche Sample file is in this format : 9/9/16 12:22
-          $testingDate = DateTime::createFromFormat('m/d/y H:i', $row[$testingDateCol])->format('Y-m-d H:i');          
-          
+          //$testingDate = date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
+          $dt=explode("/",$d[0]);
+          if(count($dt) > 1){
+            // Date time in the provided Roche Sample file is in this format : 2016/09/20 12:22:03
+            $testingDate = DateTime::createFromFormat('Y/m/d H:i:s', $row[$testingDateCol])->format('Y-m-d H:i');
+          }else{
+            // Date time in the provided Roche Sample file is in this format : 20-09-16 12:22
+            $testingDate = DateTime::createFromFormat('d-m-y H:i', $row[$testingDateCol])->format('Y-m-d H:i');
+          }
           if(trim($row[$absValCol])!=""){
               $resVal=(int)$row[$absValCol];
               if($resVal > 0){
