@@ -1,7 +1,5 @@
 <?php
 
-
-
 try {
     
     $db->delete('temp_sample_report');
@@ -89,33 +87,13 @@ try {
           
           $batchCode = $row[$batchCodeCol];
           $resultFlag = $row[$flagCol];
-        
-
-          // Date time in the provided Roche Sample file is in this format : 9/9/16 12:22
-          //$testingDate = DateTime::createFromFormat('m/d/y h:i:s A', $row[$testingDateCol])->format('Y-m-d H:i');
           
           $testingDate = date('Y-m-d H:i', strtotime($row[$testingDateCol]));
           
-          
-          
-          if(trim($row[$absValCol])!=""){
-              $resVal=(int)$row[$absValCol];
-              if($resVal > 0){
-                  $absDecimalVal = $absVal=trim($row[$absValCol]);
-                  
-                  $logVal=round(log10($absVal),4);
-                  $txtVal="";
-              }else{
-                  $absDecimalVal = $absVal="";
-                  $logVal="";                       
-                  $txtVal=trim($row[$absValCol]);
-              }
-          }
-          
-          if(trim($row[$absValCol])!=""){
+            if(trim($row[$absValCol])!=""){
                 $resVal=explode("(",$row[$absValCol]);
                 if(count($resVal)==2){
-                    $absVal=trim($resVal[0]);
+                    $absVal=(float) trim($resVal[0]);
                     
                     $expAbsVal=explode("E",$absVal);
                     if(count($expAbsVal)==2){
@@ -129,7 +107,7 @@ try {
                         $resultFlag=trim($txtVal);
                     }
                 }
-            }          
+            } 
             
             
           if ($sampleCode == "")
@@ -152,7 +130,6 @@ try {
             $m++;
         }
         
-        
         foreach ($infoFromFile as $sampleCode => $d) {
             
             $data = array(
@@ -171,7 +148,7 @@ try {
                 'approver_comments' => $d['resultFlag']
             );
             
-            
+            //echo "<pre>";var_dump($data);continue;
             if ($d['absVal'] != "") {
                 $data['result'] = $d['absVal'];
             } else if ($d['logVal'] != "") {
@@ -222,13 +199,14 @@ try {
     $db->insert("activity_log", $data);
     
     //new log for update in result
-    $data = array(
+    if(isset($id) && $id > 0){
+        $data = array(
         'user_id' => $_SESSION['userId'],
         'vl_sample_id' => $id,
         'updated_on' => $general->getDateTime()
-    );
-    $db->insert("log_result_updates", $data);
-    
+        );
+        $db->insert("log_result_updates", $data);
+    }
     header("location:../vl-print/vlResultUnApproval.php");
     
 }
