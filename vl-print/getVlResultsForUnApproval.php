@@ -92,7 +92,7 @@ $tsResult = $db->rawQuery($tsQuery);
 	$aWhere = '';
 	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.result_status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_status as ts ON ts.status_id=tsr.result_status";
 	$sOrder = 'temp_sample_id ASC';
-        //echo $sQuery;die;
+    //echo $sQuery;die;
 	
 	if (isset($sWhere) && $sWhere != "") {
         $sWhere=' where '.$sWhere;
@@ -128,54 +128,56 @@ $tsResult = $db->rawQuery($tsQuery);
             "aaData" => array()
         );
         foreach ($rResult as $aRow) {
-	    $rsDetails = '';
-	    $aRow['sample_code'] = 'Control';
-	    $color = '';
-	    $status ='';
-	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
-	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
-	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
-	    }else{
-	       $aRow['sample_collection_date'] = '';
-	    }
-	    if(isset($aRow['sample_tested_datetime']) && trim($aRow['sample_tested_datetime'])!= '' && $aRow['sample_tested_datetime']!= '0000-00-00 00:00:00'){
-	       $xplodDate = explode(" ",$aRow['sample_tested_datetime']);
-	       $aRow['sample_tested_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
-	    }else{
-	       $aRow['sample_tested_datetime'] = '';
-	    }
+			$rsDetails = '';
+			//$aRow['sample_code'] = 'Control';
+			$color = '';
+			$status ='';
+			if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
+			   $xplodDate = explode(" ",$aRow['sample_collection_date']);
+			   $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+			}else{
+			   $aRow['sample_collection_date'] = '';
+			}
+			if(isset($aRow['sample_tested_datetime']) && trim($aRow['sample_tested_datetime'])!= '' && $aRow['sample_tested_datetime']!= '0000-00-00 00:00:00'){
+			   $xplodDate = explode(" ",$aRow['sample_tested_datetime']);
+			   $aRow['sample_tested_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+			}else{
+			   $aRow['sample_tested_datetime'] = '';
+			}
             $row = array();
-	    if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
-		if($aRow['sample_details']=='Already Result Exist'){
-		   $rsDetails = 'Existing Result';
-                   $color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
-                }
-		if($aRow['sample_details']=='New Sample'){
-		    $rsDetails = 'Unknown Sample';
-		    $color = '<span style="color:#e8000b;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
-		}
-		if($aRow['sample_details']==''){
-		    $rsDetails = 'Result for Sample';
-		    $color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
-		}
-		//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
-		$status = '<select class="form-control" style="" name="status[]" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="toggleTest(this)">
- 				<option value="">-- Select --</option>
-				<option value="7" '.($aRow['result_status']=="7" ? "selected=selected" : "").'>Accepted</option>
- 				<option value="1" '.($aRow['result_status']=="1" ? "selected=selected" : "").'>Hold</option>
- 				<option value="4" '.($aRow['result_status']=="4"  ? "selected=selected" : "").'>Rejected</option>
- 			</select><br><br>';
-	    }
-	    $row[] = '<span title="'.$rsDetails.'">'.$aRow['sample_code'].$color.'</span>';
-	    $row[] = $aRow['sample_collection_date'];
-	    $row[] = $aRow['sample_tested_datetime'];
-	    $row[] = $aRow['facility_name'];
-	    $row[] = $aRow['rejection_reason_name'];
-	    $row[] = ucwords($aRow['sample_type']);
-	    $row[] = $aRow['result'];
-	    $row[] = $status;
+			if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
+				if($aRow['sample_details']== 'Result exists already'){
+					$rsDetails = 'Existing Result';
+					$color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
+				}
+				if($aRow['sample_details']=='New Sample'){
+					$rsDetails = 'Unknown Sample';
+					$color = '<span style="color:#e8000b;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
+				}
+				//if($aRow['sample_details']==''){
+				else{
+					$rsDetails = 'Result for Sample';
+					$color = '<span style="color:#337ab7;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
+				}
+				//}
+				//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
+				$status = '<select class="form-control" style="" name="status[]" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="toggleTest(this)">
+					<option value="">-- Select --</option>
+					<option value="7" '.($aRow['result_status']=="7" ? "selected=selected" : "").'>Accepted</option>
+					<option value="1" '.($aRow['result_status']=="1" ? "selected=selected" : "").'>Hold</option>
+					<option value="4" '.($aRow['result_status']=="4"  ? "selected=selected" : "").'>Rejected</option>
+					</select><br><br>';
+			}
+			$row[] = '<span title="'.$rsDetails.'">'.$aRow['sample_code'].$color.'</span>';
+			$row[] = $aRow['sample_collection_date'];
+			$row[] = $aRow['sample_tested_datetime'];
+			$row[] = $aRow['facility_name'];
+			$row[] = $aRow['rejection_reason_name'];
+			$row[] = ucwords($aRow['sample_type']);
+			$row[] = $aRow['result'];
+			$row[] = $status;
 	    
-	    $output['aaData'][] = $row;
+			$output['aaData'][] = $row;
         }
         
         echo json_encode($output);

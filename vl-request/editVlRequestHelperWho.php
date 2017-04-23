@@ -39,11 +39,11 @@ try {
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
      }
      //update facility code
-     //if($_POST['fCode']!=''){
+     if($_POST['fCode']!=''){
           $fData = array('facility_code'=>$_POST['fCode']);
           $db=$db->where('facility_id',$_POST['fName']);
           $id=$db->update($fDetails,$fData);
-     //}
+     }
      if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
           $_POST['breastfeeding']='';
      }
@@ -52,7 +52,7 @@ try {
           $instanceId = $_SESSION['instanceId'];
     }
     
-    $_POST['result'] = '';
+    //$_POST['result'] = '';
     if($_POST['rmTestingVlValue']!=''){
      $_POST['result'] = $_POST['rmTestingVlValue']; 
     }
@@ -84,7 +84,7 @@ try {
           //'last_viral_load_result'=>(isset($_POST['lastViralLoadResult']) && $_POST['lastViralLoadResult']!='' ? $_POST['lastViralLoadResult'] :  NULL),
           'sample_type'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='' ? $_POST['specimenType'] :  NULL),
           'arv_adherance_percentage'=>(isset($_POST['arvAdherence']) && $_POST['arvAdherence']!='' ? $_POST['arvAdherence'] :  NULL),
-          'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
+          //'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
           'last_vl_date_routine'=>(isset($_POST['rmTestingLastVLDate']) && $_POST['rmTestingLastVLDate']!='' ? $general->dateFormat($_POST['rmTestingLastVLDate']) :  NULL),
           'last_vl_result_routine'=>(isset($_POST['rmTestingVlValue']) && $_POST['rmTestingVlValue']!='' ? $_POST['rmTestingVlValue'] :  NULL),
           'last_vl_date_failure_ac'=>(isset($_POST['repeatTestingLastVLDate']) && $_POST['repeatTestingLastVLDate']!='' ? $general->dateFormat($_POST['repeatTestingLastVLDate']) :  NULL),
