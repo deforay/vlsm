@@ -29,6 +29,16 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 
+//get import config
+$importQuery="SELECT * FROM import_config WHERE status = 'active'";
+$importResult=$db->query($importQuery);
+
+$userQuery="SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
+
+//get lab facility details
+$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lResult = $db->rawQuery($lQuery);
 //sample rejection reason
 $rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
 $rejectionResult = $db->rawQuery($rejectionQuery);
@@ -190,6 +200,20 @@ $sFormat = '';
                     <div class="box-body">
                         <table class="table">
                             <tr>
+                              <td><label for="patientFirstName">Patient First Name</label></td>
+                              <td>
+                                <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter First Name" title="Enter patient first name"/>
+                              </td>
+                              <td><label for="patientMiddleName">Patient Middle Name</label></td>
+                              <td>
+                                <input type="text" name="patientMiddleName" id="patientMiddleName" class="form-control" placeholder="Enter Middle Name" title="Enter patient middle name"/>
+                              </td>
+                              <td><label for="patientLastName">Patient Last Name</label></td>
+                              <td>
+                                <input type="text" name="patientLastName" id="patientLastName" class="form-control" placeholder="Enter Last Name" title="Enter patient last name"/>
+                              </td>
+                            </tr>
+                            <tr>
                               <td><label for="uniqueId">Unique identifier</label></td>
                               <td>
                                 <input type="text" name="uniqueId" id="uniqueId" class="uniqueId form-control" placeholder="Enter Unique Id" title="Enter unique identifier"/>
@@ -301,7 +325,7 @@ $sFormat = '';
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3"><label for="patientTB">If Yes,is he or she on</label>
+                                <td colspan="3"><label for="patientTB">If Yes, is he or she on</label>
                                     <label class="radio-inline">
                                         <input type="radio" class="" id="patientTBInitiation" name="patientTBActive" value="yes" title="Does the patient have active TB? Yes"> Initiation
                                     </label>
@@ -430,6 +454,74 @@ $sFormat = '';
                 </div>
                   
               </div>
+              <div class="box box-primary">
+                  <div class="box-body">
+                    <div class="box-header with-border">
+                    <h3 class="box-title">Laboratory Information</h3>
+                    
+                    </div>
+                    <table class="table">
+                      <tr>
+                        <td><label for="testingPlatform">VL Testing Platform</label></td>
+                        <td>
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                            <option value="">-- Select --</option>
+                            <?php foreach($importResult as $mName) { ?>
+                              <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
+                        <td><label for="testMethods">Test Methods</label></td>
+                        <td colspan="3">
+                          <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
+                          <option value=""> -- Select -- </option>
+                          <option value="individual">Individual</option>
+                          <option value="minipool">Minipool</option>
+                          <option value="other pooling algorithm">Other Pooling Algorithm</option>
+                         </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
+                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;"/></td>
+                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
+                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
+                        <td><label for="labId">Lab Name</label></td>
+                        <td>
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                            <option value=""> -- Select -- </option>
+                            <?php
+                            foreach($lResult as $labName){
+                              ?>
+                              <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><label>Approved By</label></td>
+                        <td>
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                            <option value="">-- Select --</option>
+                            <?php
+                            foreach($userResult as $uName){
+                              ?>
+                              <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                         </td>
+                        <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
+                        <td colspan="3"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
+                      </tr>
+                    </table>
+                  </div>
+              </div>
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
@@ -442,10 +534,6 @@ $sFormat = '';
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
             </form>
-                
-               
-        
-        
       </div>
     </section>
   </div>
@@ -465,9 +553,9 @@ $sFormat = '';
    });
    
    $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate').mask('99-aaa-9999 99:99');
+   $('#sampleCollectionDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
    
-   $('#sampleCollectionDate').datetimepicker({
+   $('#sampleCollectionDate,#sampleTestingDateAtLab').datetimepicker({
      changeMonth: true,
      changeYear: true,
      dateFormat: 'dd-M-yy',
@@ -661,6 +749,11 @@ $sFormat = '';
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
+  
+  function checkRejectedReason(){
+    $("#rejectionReason").addClass("isRequired");
+  }
+  
   function getDateOfBirth(){
       var today = new Date();
       var dob = $("#dob").val();
