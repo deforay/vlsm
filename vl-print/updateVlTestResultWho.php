@@ -25,9 +25,9 @@ $province.="<option value=''> -- Select -- </option>";
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
             }
 $facility = '';
-$facility.="<option value=''> -- Select -- </option>";
+$facility.="<option data-code='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
@@ -118,7 +118,7 @@ $disable = "disabled = 'disabled'";
               <div class="box-body">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Specimen identification information: to be completed by laboratory staff</h3>
+                        <h3 class="box-title">Specimen identification information: To be completed by laboratory staff</h3>
                     </div>
                   <div class="box-body">
                     <div class="row">
@@ -160,9 +160,9 @@ $disable = "disabled = 'disabled'";
                         <div class="form-group">
                           <label for="fName">Facility Name <span class="mandatory">*</span></label>
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name name" style="width:100%;" <?php echo $disable;?>>
-                              <option value=''> -- Select -- </option>
+                              <option data-code="" value=''> -- Select -- </option>
                                 <?php foreach($fResult as $fDetails){ ?>
-                                <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option data-code="<?php echo $fDetails['facility_code'];?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                                 <?php } ?>
                             </select>
                           </div>
@@ -203,7 +203,7 @@ $disable = "disabled = 'disabled'";
                 <div class="box box-primary">
                     <div class="box-body">
                       <div class="box-header with-border">
-                        <h3 class="box-title">Paitent information: to be completed by clinician</h3>
+                        <h3 class="box-title">Paitent information: To be completed by clinician</h3>
                       </div>
                     </div>
                     <div class="box-body">
@@ -497,7 +497,7 @@ $disable = "disabled = 'disabled'";
               </div><div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
-                <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
+                <a href="vlTestResult.php" class="btn btn-default"> Cancel</a>
               </div>
             </form>
                 
