@@ -49,20 +49,25 @@ try {
      }
      $instanceId = '';
     if(isset($_SESSION['instanceId'])){
-          $instanceId = $_SESSION['instanceId'];
+        $instanceId = $_SESSION['instanceId'];
     }
     
-    //$_POST['result'] = '';
-    if($_POST['rmTestingVlValue']!=''){
-     $_POST['result'] = $_POST['rmTestingVlValue']; 
+    $testingPlatform = '';
+    if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
+        $platForm = explode("##",$_POST['testingPlatform']);
+        $testingPlatform = $platForm[0];
     }
-    if($_POST['repeatTestingVlValue']!=''){
-     $_POST['result'] = $_POST['repeatTestingVlValue']; 
+    if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
+          $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
+    }else{
+        $_POST['sampleTestingDateAtLab'] = NULL;
     }
-    if($_POST['suspendTreatmentVlValue']!=''){
-     $_POST['result'] = $_POST['suspendTreatmentVlValue']; 
-    }
-    
+    if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
+          $_POST['result'] = $_POST['vlResult'];
+     }else{
+        $_POST['result'] = NULL;  
+     }
      $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>'6',
@@ -71,6 +76,9 @@ try {
           'patient_other_id'=>(isset($_POST['uniqueId']) && $_POST['uniqueId']!='' ? $_POST['uniqueId'] :  NULL),
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='' ? $_POST['fName'] :  NULL),
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
+          'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='' ? $_POST['patientFirstName'] :  NULL),
+          'patient_middle_name'=>(isset($_POST['patientMiddleName']) && $_POST['patientMiddleName']!='' ? $_POST['patientMiddleName'] :  NULL),
+          'patient_last_name'=>(isset($_POST['patientLastName']) && $_POST['patientLastName']!='' ? $_POST['patientLastName'] :  NULL),
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
           'patient_dob'=>$_POST['dob'],
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='' ? $_POST['ageInYears'] :  NULL),
@@ -98,6 +106,14 @@ try {
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='' ? $_POST['reqClinician'] :  NULL),
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
           'test_requested_on'=>(isset($_POST['requestDate']) && $_POST['requestDate']!='' ? $general->dateFormat($_POST['requestDate']) :  NULL),
+          'vl_test_platform'=>$testingPlatform,
+          'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
+          'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
+          'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
+          'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
+          'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
+          'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'

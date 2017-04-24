@@ -26,8 +26,19 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   }
 }
 
+//get import config
+$importQuery="SELECT * FROM import_config WHERE status = 'active'";
+$importResult=$db->query($importQuery);
+
+$userQuery="SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
+
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
+
+//get lab facility details
+$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lResult = $db->rawQuery($lQuery);
 
 //sample rejection reason
 $rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
@@ -84,6 +95,12 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
  $vlQueryInfo[0]['date_of_initiation_of_current_regimen']=$general->humanDateFormat($vlQueryInfo[0]['date_of_initiation_of_current_regimen']);
 }else{
  $vlQueryInfo[0]['date_of_initiation_of_current_regimen']='';
+}
+if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && trim($vlQueryInfo[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
+  $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+}else{
+  $vlQueryInfo[0]['sample_tested_datetime']='';
 }
 ?>
 <style>
@@ -223,6 +240,20 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                     <div class="box-body">
                         <table class="table">
                             <tr>
+                              <td><label for="patientFirstName">Patient First Name</label></td>
+                              <td>
+                                <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter First Name" title="Enter patient first name" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>"/>
+                              </td>
+                              <td><label for="patientMiddleName">Patient Middle Name</label></td>
+                              <td>
+                                <input type="text" name="patientMiddleName" id="patientMiddleName" class="form-control" placeholder="Enter Middle Name" title="Enter patient middle name" value="<?php echo $vlQueryInfo[0]['patient_middle_name'];?>"/>
+                              </td>
+                              <td><label for="patientLastName">Patient Last Name</label></td>
+                              <td>
+                                <input type="text" name="patientLastName" id="patientLastName" class="form-control" placeholder="Enter Last Name" title="Enter patient last name" value="<?php echo $vlQueryInfo[0]['patient_last_name'];?>"/>
+                              </td>
+                            </tr>
+                            <tr>
                               <td><label for="uniqueId">Unique identifier</label></td>
                               <td>
                                 <input type="text" name="uniqueId" id="uniqueId" class="uniqueId form-control" placeholder="Enter Unique Id" title="Enter unique identifier" value="<?php echo $vlQueryInfo[0]['patient_other_id'];?>"/>
@@ -334,7 +365,7 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3"><label for="patientTB">If Yes,is he or she on</label>
+                                <td colspan="3"><label for="patientTB">If Yes, is he or she on</label>
                                     <label class="radio-inline">
                                         <input type="radio" class="" id="patientTBInitiation" name="patientTBActive" value="yes" title="Does the patient have active TB? Yes" <?php echo($vlQueryInfo[0]['patient_tb'] == 'no')?'disabled':''; ?> <?php echo($vlQueryInfo[0]['patient_tb_yes'] == 'yes' )?"checked='checked'":""; ?>> Initiation
                                     </label>
@@ -498,16 +529,81 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                 </div><br/>
                 </div>
                   
-              </div><div class="box-footer">
+              </div>
+              <div class="box box-primary">
+                  <div class="box-body">
+                    <div class="box-header with-border">
+                    <h3 class="box-title">Laboratory Information</h3>
+                    
+                    </div>
+                    <table class="table">
+                      <tr>
+                        <td><label for="testingPlatform">VL Testing Platform</label></td>
+                        <td>
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                            <option value="">-- Select --</option>
+                            <?php foreach($importResult as $mName) { ?>
+                              <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
+                        <td><label for="testMethods">Test Methods</label></td>
+                        <td colspan="3">
+                          <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
+                          <option value=""> -- Select -- </option>
+                          <option value="individual" <?php echo($vlQueryInfo[0]['test_methods'] == 'individual')? 'selected="selected"':''; ?>>Individual</option>
+                          <option value="minipool" <?php echo($vlQueryInfo[0]['test_methods'] == 'minipool')? 'selected="selected"':''; ?>>Minipool</option>
+                          <option value="other pooling algorithm" <?php echo($vlQueryInfo[0]['test_methods'] == 'other pooling algorithm')? 'selected="selected"':''; ?>>Other Pooling Algorithm</option>
+                         </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
+                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" style="width:100%;"/></td>
+                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
+                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" style="width:100%;" /></td>
+                        <td><label for="labId">Lab Name</label></td>
+                        <td>
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                            <option value=""> -- Select -- </option>
+                            <?php
+                            foreach($lResult as $labName){
+                              ?>
+                              <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><label>Approved By</label></td>
+                        <td>
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                            <option value="">-- Select --</option>
+                            <?php
+                            foreach($userResult as $uName){
+                              ?>
+                              <option value="<?php echo $uName['user_id'];?>" <?php echo ($vlQueryInfo[0]['result_approved_by'] == $uName['user_id'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                         </td>
+                        <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
+                        <td colspan="3"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
             </form>
-                
-               
-        
-        
       </div>
     </section>
   </div>
@@ -527,9 +623,9 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
    });
    
    $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate').mask('99-aaa-9999 99:99');
+   $('#sampleCollectionDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
    
-   $('#sampleCollectionDate').datetimepicker({
+   $('#sampleCollectionDate,#sampleTestingDateAtLab').datetimepicker({
      changeMonth: true,
      changeYear: true,
      dateFormat: 'dd-M-yy',

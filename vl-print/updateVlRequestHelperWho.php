@@ -7,17 +7,22 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName2="log_result_updates";
 try {
-    $_POST['result'] = '';
-    if($_POST['rmTestingVlValue']!=''){
-     $_POST['result'] = $_POST['rmTestingVlValue']; 
+    $testingPlatform = '';
+    if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
+        $platForm = explode("##",$_POST['testingPlatform']);
+        $testingPlatform = $platForm[0];
     }
-    if($_POST['repeatTestingVlValue']!=''){
-     $_POST['result'] = $_POST['repeatTestingVlValue']; 
+    if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
+        $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
+    }else{
+        $_POST['sampleTestingDateAtLab'] = NULL;
     }
-    if($_POST['suspendTreatmentVlValue']!=''){
-     $_POST['result'] = $_POST['suspendTreatmentVlValue']; 
+    if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
+        $_POST['result'] = $_POST['vlResult'];
+     }else{
+        $_POST['result'] = NULL;  
     }
-    
      $vldata=array(
           'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
           'last_vl_date_routine'=>(isset($_POST['rmTestingLastVLDate']) && $_POST['rmTestingLastVLDate']!='' ? $general->dateFormat($_POST['rmTestingLastVLDate']) :  NULL),
@@ -28,6 +33,14 @@ try {
           'last_vl_result_failure'=>(isset($_POST['suspendTreatmentVlValue']) && $_POST['suspendTreatmentVlValue']!='' ? $_POST['suspendTreatmentVlValue'] :  NULL),
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='' ? $_POST['reqClinician'] :  NULL),
           'test_requested_on'=>(isset($_POST['requestDate']) && $_POST['requestDate']!='' ? $general->dateFormat($_POST['requestDate']) :  NULL),
+          'vl_test_platform'=>$testingPlatform,
+          'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
+          'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
+          'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
+          'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
+          'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
+          'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'last_modified_by'=>$_SESSION['userId'],
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='' ? $_POST['status'] :  NULL) ,
           'last_modified_datetime'=>$general->getDateTime(),
