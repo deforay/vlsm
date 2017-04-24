@@ -41,9 +41,9 @@ $province.="<option value=''> -- Select -- </option>";
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
             }
 $facility = '';
-$facility.="<option value=''> -- Select -- </option>";
+$facility.="<option data-code='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
@@ -111,7 +111,7 @@ $sFormat = '';
               <div class="box-body">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Specimen identification information: to be completed by laboratory staff</h3>
+                        <h3 class="box-title">Specimen identification information: To be completed by laboratory staff</h3>
                     </div>
                   <div class="box-body">
                     
@@ -143,7 +143,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name name" style="width:100%;" onchange="getfacilityProvinceDetails(this);autoFillFacilityCode();">
                               <?php echo $facility;  ?>
                             </select>
                           </div>
@@ -184,7 +184,7 @@ $sFormat = '';
                 <div class="box box-primary">
                     <div class="box-body">
                       <div class="box-header with-border">
-                        <h3 class="box-title">Paitent information: to be completed by clinician</h3>
+                        <h3 class="box-title">Paitent information: To be completed by clinician</h3>
                       </div>
                     </div>
                     <div class="box-body">
@@ -204,11 +204,11 @@ $sFormat = '';
                               </td>
                             </tr>
                             <tr>
-                              <td><label for="ageInYears">If unknown,age in years</label></td>
+                              <td><label for="ageInYears">If unknown, age in years</label></td>
                               <td>
                                 <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" style="width:100%;" >
                               </td>
-                              <td><label for="ageInMonths">If < 1 age in months</label></td>
+                              <td><label for="ageInMonths">If age < 1, age in months</label></td>
                               <td>
                                 <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" >
                               </td>
@@ -218,10 +218,10 @@ $sFormat = '';
                                   <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
                                   </label>
                                 <label class="radio-inline">
-                                  <input type="radio" class=" " id="genderFemale" name="gender" value="female" title="Please check gender"> Female
+                                  <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender"> Female
                                 </label>
                                 <label class="radio-inline">
-                                  <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"> Not Recorded
+                                  <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"> Not Recorded
                                 </label>
                               </td>
                             </tr>
@@ -277,7 +277,7 @@ $sFormat = '';
                                        ?>
                                     </select>
                                 </td>
-                                <td colspan="3" class=""><label for="drugTransmission">Is the Patient receiving ARV drugs for preventing mother-to-child transmission?</label>
+                                <td colspan="3" class=""><label for="drugTransmission">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
                                   <label class="radio-inline">
                                      <input type="radio" id="transmissionYes" name="drugTransmission" value="yes" title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">Yes
                                   </label>
@@ -578,7 +578,6 @@ $sFormat = '';
         $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
-        $("#fCode").val(pNameVal[2]);
         <?php
       }
       ?>
@@ -633,7 +632,6 @@ $sFormat = '';
               $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
               $("#sampleCodeFormat").val(pNameVal[1]+sCode);
               $("#sampleCodeKey").val(sCodeKey);
-              $("#fCode").val(pNameVal[2]);
               <?php
             }
             ?>
@@ -648,6 +646,11 @@ $sFormat = '';
     
     $.unblockUI();
   }
+  
+  function autoFillFacilityCode(){
+    $("#fCode").val($('#fName').find(':selected').data('code'));
+  }
+  
   function ARTValue(){
     var artRegimen = $("#artRegimen").val();
     if(artRegimen=='other'){

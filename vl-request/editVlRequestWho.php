@@ -41,9 +41,9 @@ $province.="<option value=''> -- Select -- </option>";
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
             }
 $facility = '';
-$facility.="<option value=''> -- Select -- </option>";
+$facility.="<option data-code='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
@@ -132,7 +132,7 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
               <div class="box-body">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Specimen identification information: to be completed by laboratory staff</h3>
+                        <h3 class="box-title">Specimen identification information: To be completed by laboratory staff</h3>
                     </div>
                   <div class="box-body">
                     <div class="row">
@@ -173,10 +173,10 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-                              <option value=''> -- Select -- </option>
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name name" style="width:100%;" onchange="getfacilityProvinceDetails(this);autoFillFacilityCode();">
+                              <option data-code="" value=''> -- Select -- </option>
                                 <?php foreach($fResult as $fDetails){ ?>
-                                <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option data-code="<?php echo $fDetails['facility_code']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                                 <?php } ?>
                             </select>
                           </div>
@@ -217,7 +217,7 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                 <div class="box box-primary">
                     <div class="box-body">
                       <div class="box-header with-border">
-                        <h3 class="box-title">Paitent information: to be completed by clinician</h3>
+                        <h3 class="box-title">Paitent information: To be completed by clinician</h3>
                       </div>
                     </div>
                     <div class="box-body">
@@ -237,11 +237,11 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                               </td>
                             </tr>
                             <tr>
-                              <td><label for="ageInYears">If unknown,age in years</label></td>
+                              <td><label for="ageInYears">If unknown, age in years</label></td>
                               <td>
                                 <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_age_in_years'];?>" >
                               </td>
-                              <td><label for="dob">If < 1 age in months</label></td>
+                              <td><label for="dob">If age < 1, age in months</label></td>
                               <td>
                                 <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>" >
                               </td>
@@ -310,7 +310,7 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
                                        ?>
                                     </select>
                                 </td>
-                                <td colspan="3" class=""><label for="drugTransmission">Is the Patient receiving ARV drugs for preventing mother-to-child transmission?</label>
+                                <td colspan="3" class=""><label for="drugTransmission">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
                                   <label class="radio-inline">
                                      <input type="radio" id="transmissionYes" name="drugTransmission" value="yes" <?php echo($vlQueryInfo[0]['patient_drugs_transmission'] == 'yes' )?"checked='checked'":""; ?> title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">Yes
                                   </label>
@@ -664,6 +664,11 @@ if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQu
     }
     $.unblockUI();
   }
+  
+  function autoFillFacilityCode(){
+    $("#fCode").val($('#fName').find(':selected').data('code'));
+  }
+  
   function ARTValue(){
     var artRegimen = $("#artRegimen").val();
     if(artRegimen=='other'){
