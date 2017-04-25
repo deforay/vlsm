@@ -98,11 +98,7 @@ $primaryKey="vl_sample_id";
          * SQL queries
          * Get data to display
         */
-	 $sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
-	
-	//$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.sample_code,vl.patient_name,vl.result,f.facility_name,f.facility_code,vl.art_no,s.sample_name,b.batch_code,vl.batch_id,vl.result_status FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.batch_id";
-	
-//        echo $sQuery;die;
+	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -116,7 +112,6 @@ $primaryKey="vl_sample_id";
 	   }
 	}
 	  
-	
 		if (isset($sWhere) && $sWhere != "") {
 			$sWhere=' where '.$sWhere;
 			if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
@@ -229,15 +224,15 @@ $primaryKey="vl_sample_id";
 		$dWhere = '';
 		// Only approved results can be printed
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
-		  if(trim($_POST['status'])== ''){
+		  if(!isset($_POST['status']) || trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND (vl.result_status =7 OR vl.result_status=4 OR vl.result_status=2)";
+		        $sWhere = $sWhere." AND (vl.result_status =7)";
 		    }else{
-		       $sWhere = "WHERE (vl.result_status =7 OR vl.result_status=4 OR vl.result_status=2)";
+		       $sWhere = "WHERE (vl.result_status =7)";
 		    }
 		  }
-		    $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
-		    $dWhere = "WHERE (vl.result_status =7 OR vl.result_status=4 OR vl.result_status=2) AND vl.vlsm_country_id='".$arr['vl_form']."'";
+		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
+		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."'";
 		}else{
 		    if(trim($sWhere)!= ''){
 		        $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
@@ -280,7 +275,6 @@ $primaryKey="vl_sample_id";
             "aaData" => array()
         );
 	
-        
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = $aRow['sample_code'];
@@ -290,22 +284,21 @@ $primaryKey="vl_sample_id";
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
-			if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
-			   $xplodDate = explode(" ",$aRow['last_modified_datetime']);
-			   $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
-			}else{
-			   $aRow['last_modified_datetime'] = '';
-			}			
-			$row[] = $aRow['last_modified_datetime'];
+	    if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
+	       $xplodDate = explode(" ",$aRow['last_modified_datetime']);
+	       $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+	    }else{
+	       $aRow['last_modified_datetime'] = '';
+	    }			
+	    $row[] = $aRow['last_modified_datetime'];
             $row[] = ucwords($aRow['status_name']);
 	    
 	    if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
-		$row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-print"> Print</i></a>';
+	      $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-print"> Print</i></a>';
 	    }else{
-            //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
-            //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
-	    $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
-                      ';
+             //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
+             //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
+	     $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
 	    }
            
             $output['aaData'][] = $row;

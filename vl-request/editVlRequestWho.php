@@ -319,11 +319,11 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                         <input type="radio" class=" " id="theraphyNo" name="theraphy" value="no"<?php echo($vlQueryInfo[0]['patient_receiving_therapy'] == 'no' )?"checked='checked'":""; ?> title="Is the Patient receiving second-line theraphy?"> No
                                     </label>
                                 </td>
-                                <td colspan="3" class=""><label for="breastfeeding" class="femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '' || $vlQueryInfo[0]['patient_gender'] == null)?'visible':'hidden'; ?>">Is the Patient Pregnant or Breastfeeding?</label>
-                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '' || $vlQueryInfo[0]['patient_gender'] == null)?'visible':'hidden'; ?>">
+                                <td colspan="3" class=""><label for="breastfeeding" class="femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'hidden':'visible'; ?>">Is the Patient Pregnant or Breastfeeding?</label>
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'hidden':'visible'; ?>">
                                      <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Pregnant or Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>>Yes
                                   </label>
-                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '' || $vlQueryInfo[0]['patient_gender'] == null)?'visible':'hidden'; ?>">
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'hidden':'visible'; ?>">
                                     <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Pregnant or Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>>No
                                   </label>
                                 </td>
@@ -341,11 +341,11 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                        ?>
                                     </select>
                                 </td>
-                                <td colspan="3" class=""><label for="drugTransmission" class="femaleSection">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
-                                  <label class="radio-inline femaleSection">
+                                <td colspan="3" class=""><label for="drugTransmission" class="femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'hidden':'visible'; ?>">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'hidden':'visible'; ?>">
                                      <input type="radio" id="transmissionYes" name="drugTransmission" value="yes" <?php echo($vlQueryInfo[0]['patient_drugs_transmission'] == 'yes' )?"checked='checked'":""; ?> title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">Yes
                                   </label>
-                                  <label class="radio-inline femaleSection">
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'hidden':'visible'; ?>">
                                     <input type="radio" id="transmissionNo" name="drugTransmission" value="no" <?php echo($vlQueryInfo[0]['patient_drugs_transmission'] == 'no' )?"checked='checked'":""; ?> title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">No
                                   </label>
                                 </td>
@@ -514,21 +514,30 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="reqClinician" class="col-lg-4 control-label">Request Clinician</label>
                         <div class="col-lg-7">
                            <input type="text" class="form-control" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" value="<?php echo $vlQueryInfo[0]['request_clinician_name'];?>"/>
                         </div>
-                   </div>
-                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-4">
                         <label class="col-lg-4 control-label" for="requestDate">Requested Date </label>
                         <div class="col-lg-7">
                             <input type="text" class="form-control date readonly" readonly='readonly' id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date" value="<?php echo $general->humanDateFormat($vlQueryInfo[0]['test_requested_on']); ?>"/>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <label class="col-lg-4 control-label" for="status"> Status<span class="mandatory">*</span></label>
+                        <div class="col-lg-7">
+                         <select class="form-control isRequired" id="status" name="status" title="Please select test status">
+                            <option value="">-- Select --</option>
+                            <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
+ 			    <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
+			  </select>
+                        </div>
+                    </div>
                 </div><br/>
                 </div>
-                  
               </div>
               <div class="box box-primary">
                   <div class="box-body">
