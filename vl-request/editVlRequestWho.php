@@ -319,11 +319,11 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                         <input type="radio" class=" " id="theraphyNo" name="theraphy" value="no"<?php echo($vlQueryInfo[0]['patient_receiving_therapy'] == 'no' )?"checked='checked'":""; ?> title="Is the Patient receiving second-line theraphy?"> No
                                     </label>
                                 </td>
-                                <td colspan="3" class=""><label for="breastfeeding" class="femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '')?'visible':'hidden'; ?>">Is the Patient Pregnant or Breastfeeding?</label>
-                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female')?'visible':'hidden'; ?>">
+                                <td colspan="3" class=""><label for="breastfeeding" class="femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '' || $vlQueryInfo[0]['patient_gender'] == null)?'visible':'hidden'; ?>">Is the Patient Pregnant or Breastfeeding?</label>
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '' || $vlQueryInfo[0]['patient_gender'] == null)?'visible':'hidden'; ?>">
                                      <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Pregnant or Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>>Yes
                                   </label>
-                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female')?'visible':'hidden'; ?>">
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '' || $vlQueryInfo[0]['patient_gender'] == null)?'visible':'hidden'; ?>">
                                     <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Pregnant or Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>>No
                                   </label>
                                 </td>
