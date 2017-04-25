@@ -175,7 +175,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         
         $output = array();
         $r=1;
-        foreach ($sResult as $aRow) {
+        foreach($sResult as $aRow) {
           //No. of tests per facility & calculate others
            $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.patient_gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.is_sample_rejected,vl.reason_for_sample_rejection,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.vlsm_country_id = '.$country;
            if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
@@ -189,82 +189,86 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
                 $totalQuery = $totalQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
            }
            $totalResult = $db->rawQuery($totalQuery);
-           $lte14n1000 = array();
-           $lte14ngt1000 = array();
-           $gt14mnlte1000 = array();
-           $gt14mn1000 = array();
-           $gt14fnlte1000 = array();
-           $gt14fn1000 = array();
-           $isPatientPergnantrbfeedingnlte1000 = array();
-           $isPatientPergnantrbfeedingngt1000 = array();
-           $unknownxnlte1000 = array();
-           $unknownxngt1000 = array();
-           $lte1000total = array();
-           $gt1000total = array();
-           $rejection = array();
+            $lte14n1000 = array();
+	    $lte14ngt1000 = array();
+	    $gt14mnlte1000 = array();
+	    $gt14mngt1000 = array();
+	    $gt14fnlte1000 = array();
+	    $gt14fngt1000 = array();
+	    $isPatientPergnantrbfeedingnlte1000 = array();
+	    $isPatientPergnantrbfeedingngt1000 = array();
+	    $unknownxnlte1000 = array();
+	    $unknownxngt1000 = array();
+	    $lte1000 = array();
+	    $gt1000 = array();
+	    $rejection = array();
            foreach($totalResult as $tRow){
-               if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
-                   $lte1000total[] = $tRow['vl_sample_id'];
-               }else if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
-                  $gt1000total[] = $tRow['vl_sample_id'];
-               }
-               if($tRow['patient_dob']!= NULL && $tRow['patient_dob']!= '' && $tRow['patient_dob']!= '0000-00-00'){
-                   $age = floor((time() - strtotime($tRow['patient_dob'])) / 31556926);
-                   if($age > 14){
-                       if($tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
-                           $gt14mnlte1000[] = $tRow['vl_sample_id'];
-                       }else if($tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
-                           $gt14mn1000[] = $tRow['vl_sample_id'];
-                       }else if($tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
-                           if(($tRow['is_patient_pregnant']!= NULL && $tRow['is_patient_pregnant']!= '' && $tRow['is_patient_pregnant'] == 'yes') || ($tRow['is_patient_breastfeeding']!= NULL && $tRow['is_patient_breastfeeding']!= '' && $tRow['is_patient_breastfeeding'] == 'yes')){
-                               $isPatientPergnantrbfeedingnlte1000[] = $tRow['vl_sample_id'];
-                           }
-                          $gt14fnlte1000[] = $tRow['vl_sample_id'];
-                       }else if($tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
-                           if(($tRow['is_patient_pregnant']!= NULL && $tRow['is_patient_pregnant']!= '' && $tRow['is_patient_pregnant'] == 'yes') || ($tRow['is_patient_breastfeeding']!= NULL && $tRow['is_patient_breastfeeding']!= '' && $tRow['is_patient_breastfeeding'] == 'yes')){
-                               $isPatientPergnantrbfeedingngt1000[] = $tRow['vl_sample_id'];
-                           }
-                          $gt14fn1000[] = $tRow['vl_sample_id'];
-                       }
-                   }else{
-                       if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
-                          $lte14n1000[] = $tRow['vl_sample_id'];
-                       }else if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
-                         $lte14ngt1000[] = $tRow['vl_sample_id'];
-                       }
-                   }
-               }else{
-                   if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
-                       $unknownxnlte1000[] = $tRow['vl_sample_id'];
-                   }else if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
-                       $unknownxngt1000[] = $tRow['vl_sample_id'];
-                   }
-               }
-               if(($tRow['is_sample_rejected']!= NULL && $tRow['is_sample_rejected']!= '') || ($tRow['reason_for_sample_rejection']!= NULL && $tRow['reason_for_sample_rejection']!= '' && $tRow['reason_for_sample_rejection'] >0)){
-                   $rejection[] = $tRow['vl_sample_id'];
-               }
+                $age = '';
+		if($tRow['patient_dob']!= NULL && $tRow['patient_dob']!= '' && $tRow['patient_dob']!= '0000-00-00'){
+		    $age = floor((time() - strtotime($tRow['patient_dob'])) / 31556926);
+		}
+		
+		if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+		    $lte1000[] = $tRow['vl_sample_id'];
+		}else if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+		   $gt1000[] = $tRow['vl_sample_id'];
+		}
+		
+		if(trim($age)!= '' && $age <= 14 && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+		    $lte14n1000[] = $tRow['vl_sample_id'];
+		}else if(trim($age)!= '' && $age <= 14 && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+		    $lte14ngt1000[] = $tRow['vl_sample_id'];
+		}
+		
+		if(trim($age)!= '' && $age > 14 && $tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+		    $gt14mnlte1000[] = $tRow['vl_sample_id'];
+		}else if(trim($age)!= '' && $age > 14 && $tRow['patient_gender'] == 'male' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+		    $gt14mngt1000[] = $tRow['vl_sample_id'];
+		}else if(trim($age)!= '' && $age > 14 && $tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+		    $gt14fnlte1000[] = $tRow['vl_sample_id'];
+		}else if(trim($age)!= '' && $age > 14 && $tRow['patient_gender'] == 'female' && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+		    $gt14fngt1000[] = $tRow['vl_sample_id'];
+		}
+		
+		if($tRow['patient_gender'] == 'female' && ($tRow['is_patient_pregnant'] == 'yes' || $tRow['is_patient_breastfeeding'] == 'yes') && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+		    $isPatientPergnantrbfeedingnlte1000[] = $tRow['vl_sample_id'];
+		}else if($tRow['patient_gender'] == 'female' && ($tRow['is_patient_pregnant'] == 'yes' || $tRow['is_patient_breastfeeding'] == 'yes') && trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+		    $isPatientPergnantrbfeedingngt1000[] = $tRow['vl_sample_id'];
+		}
+		
+		if($tRow['patient_gender']!= 'male' && $tRow['patient_gender']!= 'female'){
+		    if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] <= 1000){
+			$unknownxnlte1000[] = $tRow['vl_sample_id'];
+		    }else if(trim($tRow['result'])!= '' && $tRow['result']!= NULL && $tRow['result']!= 'Target Not Detected' && $tRow['result'] > 1000){
+			$unknownxngt1000[] = $tRow['vl_sample_id'];
+		    }
+		}
+		
+		if(($tRow['is_sample_rejected']!= NULL && $tRow['is_sample_rejected']!= '') || ($tRow['reason_for_sample_rejection']!= NULL && $tRow['reason_for_sample_rejection']!= '' && $tRow['reason_for_sample_rejection'] >0)){
+		    $rejection[] = $tRow['vl_sample_id'];
+		}
            }
            $row = array();
-           $row[] = $r;
-           $row[] = ucwords($aRow['facility_state']);
-           $row[] = ucwords($aRow['facility_district']);
-           $row[] = ucwords($aRow['facility_name']);
-           $row[] = $aRow['facility_code'];
-           $row[] = count($rejection);
-           $row[] = count($lte14n1000);
-           $row[] = count($lte14ngt1000);
-           $row[] = count($gt14mnlte1000);
-           $row[] = count($gt14mn1000);
-           $row[] = count($gt14fnlte1000);
-           $row[] = count($gt14fn1000);
-           $row[] = count($isPatientPergnantrbfeedingnlte1000);
-           $row[] = count($isPatientPergnantrbfeedingngt1000);
-           $row[] = count($unknownxnlte1000);
-           $row[] = count($unknownxngt1000);
-           $row[] = count($lte1000total);
-           $row[] = count($gt1000total);
-           $row[] = count($totalResult);
-           $row[] = '';
+            $row[] = $r;
+            $row[] = ucwords($aRow['facility_state']);
+            $row[] = ucwords($aRow['facility_district']);
+            $row[] = ucwords($aRow['facility_name']);
+            $row[] = $aRow['facility_code'];
+            $row[] = count($rejection);
+            $row[] = count($lte14n1000);
+            $row[] = count($lte14ngt1000);
+            $row[] = count($gt14mnlte1000);
+            $row[] = count($gt14mngt1000);
+            $row[] = count($gt14fnlte1000);
+            $row[] = count($gt14fngt1000);
+            $row[] = count($isPatientPergnantrbfeedingnlte1000);
+            $row[] = count($isPatientPergnantrbfeedingngt1000);
+            $row[] = count($unknownxnlte1000);
+            $row[] = count($unknownxngt1000);
+            $row[] = count($lte1000);
+            $row[] = count($gt1000);
+            $row[] = count($totalResult);
+            $row[] = '';
            $output[] = $row;
          $r++;
         }
