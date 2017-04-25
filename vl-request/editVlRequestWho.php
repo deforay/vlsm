@@ -319,12 +319,12 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                         <input type="radio" class=" " id="theraphyNo" name="theraphy" value="no"<?php echo($vlQueryInfo[0]['patient_receiving_therapy'] == 'no' )?"checked='checked'":""; ?> title="Is the Patient receiving second-line theraphy?"> No
                                     </label>
                                 </td>
-                                <td colspan="3" class=""><label for="breastfeeding">Is the Patient Pregnant or Breastfeeding?</label>
-                                  <label class="radio-inline">
-                                     <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Pregnant or Breastfeeding" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'disabled':''; ?> <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>>Yes
+                                <td colspan="3" class=""><label for="breastfeeding" class="femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female' || $vlQueryInfo[0]['patient_gender'] == '')?'visible':'hidden'; ?>">Is the Patient Pregnant or Breastfeeding?</label>
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female')?'visible':'hidden'; ?>">
+                                     <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Pregnant or Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>>Yes
                                   </label>
-                                  <label class="radio-inline">
-                                    <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Pregnant or Breastfeeding" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male' || $vlQueryInfo[0]['patient_gender'] == 'not_recorded')?'disabled':''; ?> <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>>No
+                                  <label class="radio-inline femaleSection" style="visibility:<?php echo($vlQueryInfo[0]['patient_gender'] == 'female')?'visible':'hidden'; ?>">
+                                    <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Pregnant or Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>>No
                                   </label>
                                 </td>
                             </tr>
@@ -341,11 +341,11 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                        ?>
                                     </select>
                                 </td>
-                                <td colspan="3" class=""><label for="drugTransmission">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
-                                  <label class="radio-inline">
+                                <td colspan="3" class=""><label for="drugTransmission" class="femaleSection">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
+                                  <label class="radio-inline femaleSection">
                                      <input type="radio" id="transmissionYes" name="drugTransmission" value="yes" <?php echo($vlQueryInfo[0]['patient_drugs_transmission'] == 'yes' )?"checked='checked'":""; ?> title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">Yes
                                   </label>
-                                  <label class="radio-inline">
+                                  <label class="radio-inline femaleSection">
                                     <input type="radio" id="transmissionNo" name="drugTransmission" value="no" <?php echo($vlQueryInfo[0]['patient_drugs_transmission'] == 'no' )?"checked='checked'":""; ?> title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">No
                                   </label>
                                 </td>
@@ -667,10 +667,11 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
     
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
+      $('.femaleSection').css('visibility','hidden');
       $('input[name="breastfeeding"]').prop('checked', false);
-      $('input[name="breastfeeding"]').prop('disabled', true);
+      $('input[name="drugTransmission"]').prop('checked', false);
     }else if($(this).val() == 'female'){
-      $('input[name="breastfeeding"]').prop('disabled', false);
+      $('.femaleSection').css('visibility','visible');
     }
   });
   
