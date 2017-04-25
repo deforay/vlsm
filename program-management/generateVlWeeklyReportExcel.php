@@ -177,7 +177,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         $r=1;
         foreach($sResult as $aRow) {
           //No. of tests per facility & calculate others
-           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.patient_gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.is_sample_rejected,vl.reason_for_sample_rejection,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.vlsm_country_id = '.$country;
+           $totalQuery = 'SELECT vl.vl_sample_id,vl.patient_dob,vl.patient_gender,vl.is_patient_pregnant,vl.is_patient_breastfeeding,vl.result,vl.is_sample_rejected,vl.reason_for_sample_rejection,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.facility_id = '.$aRow['facility_id'].' AND vl.lab_id = '.$vlLab['facility_id'].' AND vl.vlsm_country_id = '.$country;
            if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
                 if (trim($start_date) == trim($end_date)) {
                   $totalQuery = $totalQuery.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
@@ -244,7 +244,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
 		    }
 		}
 		
-		if(($tRow['is_sample_rejected']!= NULL && $tRow['is_sample_rejected']!= '') || ($tRow['reason_for_sample_rejection']!= NULL && $tRow['reason_for_sample_rejection']!= '' && $tRow['reason_for_sample_rejection'] >0)){
+		if($tRow['result_status'] == 4){
 		    $rejection[] = $tRow['vl_sample_id'];
 		}
            }

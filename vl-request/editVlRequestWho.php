@@ -67,6 +67,9 @@ $vlQueryInfo=$db->query($vlQuery);
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
+if(!isset($facilityResult[0]['facility_code'])){
+  $facilityResult[0]['facility_code'] = '';
+}
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
   $facilityResult[0]['facility_state'] = 0;
 }
