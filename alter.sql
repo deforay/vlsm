@@ -968,5 +968,5 @@ INSERT INTO `form_details` (`vlsm_country_id`, `form_name`) VALUES (6, 'WHO FORM
 ALTER TABLE `vl_request_form` ADD `patient_receiving_therapy` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_art_date`, ADD `patient_drugs_transmission` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_receiving_therapy`, ADD `patient_tb` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_drugs_transmission`, ADD `patient_tb_yes` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_tb`;
 ALTER TABLE `vl_request_form` ADD `test_requested_on` DATE NULL DEFAULT NULL AFTER `request_clinician_name`;
 
---saravanan 24-apr-2017
+--Pal 24-apr-2017
 ALTER TABLE `vl_request_form` ADD `patient_middle_name` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_first_name`;

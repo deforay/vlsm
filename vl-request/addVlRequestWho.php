@@ -279,11 +279,11 @@ $sFormat = '';
                                         <input type="radio" class=" " id="theraphyNo" name="theraphy" value="no" title="Is the Patient receiving second-line theraphy?"> No
                                     </label>
                                 </td>
-                                <td colspan="3" class=""><label for="breastfeeding">Is the Patient Pregnant or Breastfeeding?</label>
-                                  <label class="radio-inline">
+                                <td colspan="3" class=""><label for="breastfeeding" class="femaleSection">Is the Patient Pregnant or Breastfeeding?</label>
+                                  <label class="radio-inline femaleSection">
                                      <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Pregnant or Breastfeeding">Yes
                                   </label>
-                                  <label class="radio-inline">
+                                  <label class="radio-inline femaleSection">
                                     <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Pregnant or Breastfeeding">No
                                   </label>
                                 </td>
@@ -301,11 +301,11 @@ $sFormat = '';
                                        ?>
                                     </select>
                                 </td>
-                                <td colspan="3" class=""><label for="drugTransmission">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
-                                  <label class="radio-inline">
+                                <td colspan="3" class=""><label for="drugTransmission" class="femaleSection">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
+                                  <label class="radio-inline femaleSection">
                                      <input type="radio" id="transmissionYes" name="drugTransmission" value="yes" title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">Yes
                                   </label>
-                                  <label class="radio-inline">
+                                  <label class="radio-inline femaleSection">
                                     <input type="radio" id="transmissionNo" name="drugTransmission" value="no" title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">No
                                   </label>
                                 </td>
@@ -574,10 +574,11 @@ $sFormat = '';
     
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
+      $('.femaleSection').css('visibility','hidden');
       $('input[name="breastfeeding"]').prop('checked', false);
-      $('input[name="breastfeeding"]').prop('disabled', true);
+      $('input[name="drugTransmission"]').prop('checked', false);
     }else if($(this).val() == 'female'){
-      $('input[name="breastfeeding"]').prop('disabled', false);
+      $('.femaleSection').css('visibility','visible');
     }
   });
   $("input:radio[name=patientTB]").click(function() {
