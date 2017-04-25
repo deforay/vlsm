@@ -93,7 +93,7 @@ $country = $configResult[0]['value'];
          * SQL queries
          * Get data to display
         */
-	$sQuery="SELECT vl.vl_sample_id,vl.facility_id,f.facility_state,f.facility_district,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id";
+	$sQuery="SELECT vl.vl_sample_id,vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -164,7 +164,7 @@ $country = $configResult[0]['value'];
         
         foreach ($sResult as $aRow) {
 	    //No. of tests per facility & calculate others
-	    $totalQuery = 'SELECT vl_sample_id,patient_dob,patient_gender,is_patient_pregnant,is_patient_breastfeeding,result,is_sample_rejected,reason_for_sample_rejection FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.vlsm_country_id = '.$country;
+	    $totalQuery = 'SELECT vl_sample_id,patient_dob,patient_gender,is_patient_pregnant,is_patient_breastfeeding,result,is_sample_rejected,reason_for_sample_rejection,result_status FROM vl_request_form as vl where vl.facility_id = '.$aRow['facility_id'].' AND vl.vlsm_country_id = '.$country;
 	    if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
 	       $totalQuery = $totalQuery." AND vl.lab_id IN (".$_POST['lab'].")";
 	    }
@@ -231,7 +231,7 @@ $country = $configResult[0]['value'];
 		    }
 		}
 		
-		if(($tRow['is_sample_rejected']!= NULL && $tRow['is_sample_rejected']!= '') || ($tRow['reason_for_sample_rejection']!= NULL && $tRow['reason_for_sample_rejection']!= '' && $tRow['reason_for_sample_rejection'] >0)){
+		if($tRow['result_status'] == 4){
 		    $rejection[] = $tRow['vl_sample_id'];
 		}
 	    }
@@ -239,7 +239,7 @@ $country = $configResult[0]['value'];
             $row[] = ucwords($aRow['facility_state']);
             $row[] = ucwords($aRow['facility_district']);
             $row[] = ucwords($aRow['facility_name']);
-            $row[] = '';
+            $row[] = $aRow['facility_code'];
             $row[] = count($rejection);
             $row[] = count($lte14n1000);
             $row[] = count($lte14ngt1000);
