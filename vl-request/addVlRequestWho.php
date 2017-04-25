@@ -581,6 +581,7 @@ $sFormat = '';
       $('.femaleSection').css('visibility','visible');
     }
   });
+  
   $("input:radio[name=patientTB]").click(function() {
     if($(this).val() == 'no'){
       $('input[name="patientTBActive"]').prop('checked', false);
