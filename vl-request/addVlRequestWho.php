@@ -170,7 +170,7 @@ $sFormat = '';
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                           <label for="sampleCollectionDate">Date Specimen Collected <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
+                          <input type="text" class="form-control isRequired" style="width:74%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
                           </div>
                         </div>
                         <div class="col-xs-3 col-md-3">
@@ -266,12 +266,21 @@ $sFormat = '';
                                 <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art regimen" style="width:100%;display:none;margin-top:2px;" >
                                 </td>
                                 <td><label for="dateOfArtInitiation">Date treatment initiated</td>
-                                <td>
-                                  <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of treatment initiated" title="Date Of treatment initiated" style="width:100%;" onchange="checkARTInitiationDate();">
+                                <td colspan="3">
+                                  <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of treatment initiated" title="Date Of treatment initiated" style="width:36%;" onchange="checkARTInitiationDate();">
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="3"><label for="therapy">Is the Patient receiving second-line theraphy? </label>
+                                <td><label for="lineOfTreatment">Line of Treatment </label></td>
+                                <td>
+                                  <select name="lineOfTreatment" id="lineOfTreatment" class="form-control" title="Please choose line of treatment" style="width:100%;">
+                                    <option value=""> -- Select -- </option>
+                                    <option value="1">First Line</option>
+                                    <option value="2">Second Line</option>
+                                    <option value="3">Third Line</option>
+                                   </select>
+                                </td>
+                                <td colspan="4"><label for="therapy">Is the Patient receiving second-line theraphy? </label>
                                     <label class="radio-inline">
                                         <input type="radio" class="" id="theraphyYes" name="theraphy" value="yes" title="Is the Patient receiving second-line theraphy? "> Yes
                                     </label>
@@ -279,33 +288,21 @@ $sFormat = '';
                                         <input type="radio" class=" " id="theraphyNo" name="theraphy" value="no" title="Is the Patient receiving second-line theraphy?"> No
                                     </label>
                                 </td>
-                                <td colspan="3" class=""><label for="breastfeeding" class="femaleSection">Is the Patient Pregnant or Breastfeeding?</label>
-                                  <label class="radio-inline femaleSection">
+                            </tr>
+                            <tr class="femaleSection">
+                                <td colspan="3" class=""><label for="breastfeeding" class="">Is the Patient Pregnant or Breastfeeding?</label>
+                                  <label class="radio-inline">
                                      <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Pregnant or Breastfeeding">Yes
                                   </label>
-                                  <label class="radio-inline femaleSection">
+                                  <label class="radio-inline">
                                     <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Pregnant or Breastfeeding">No
                                   </label>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3"><label for="rejectionReason">Reason For Failure </label>
-                                    <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
-                                        <option value="">-- Select --</option>
-                                       <?php
-                                       foreach($rejectionResult as $reject){
-                                         ?>
-                                         <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                         <?php
-                                       }
-                                       ?>
-                                    </select>
-                                </td>
-                                <td colspan="3" class=""><label for="drugTransmission" class="femaleSection">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
-                                  <label class="radio-inline femaleSection">
+                                <td colspan="3" class=""><label for="drugTransmission" class="">Is the Patient receiving ARV drugs for <br>preventing mother-to-child transmission?</label>
+                                  <label class="radio-inline">
                                      <input type="radio" id="transmissionYes" name="drugTransmission" value="yes" title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">Yes
                                   </label>
-                                  <label class="radio-inline femaleSection">
+                                  <label class="radio-inline">
                                     <input type="radio" id="transmissionNo" name="drugTransmission" value="no" title="Is the Patient receiving ARV drugs for preventing mother-to-child transmission?">No
                                   </label>
                                 </td>
@@ -330,7 +327,7 @@ $sFormat = '';
                                         <input type="radio" class="" id="patientTBInitiation" name="patientTBActive" value="yes" title="Does the patient have active TB? Yes"> Initiation
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" class=" " id="patientTBPhase" name="patientTBActive" value="no" title="Does the patient have active TB? Yes"> Continuation phase
+                                        <input type="radio" class=" " id="patientTBPhase" name="patientTBActive" value="no" title="Does the patient have active TB? Yes"> Continuation Phase
                                     </label>
                                 </td>
                                 <td colspan=""><label for="arvAdherence">ARV adherence</td>
@@ -474,13 +471,26 @@ $sFormat = '';
                           </select>
                         </td>
                         <td><label for="testMethods">Test Methods</label></td>
-                        <td colspan="3">
+                        <td>
                           <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
                           <option value=""> -- Select -- </option>
                           <option value="individual">Individual</option>
                           <option value="minipool">Minipool</option>
                           <option value="other pooling algorithm">Other Pooling Algorithm</option>
                          </select>
+                        </td>
+                        <td><label for="rejectionReason">Reason For Failure </label></td>
+                        <td>
+                            <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                                <option value="">-- Select --</option>
+                               <?php
+                               foreach($rejectionResult as $reject){
+                                 ?>
+                                 <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
+                                 <?php
+                               }
+                               ?>
+                            </select>
                         </td>
                       </tr>
                       <tr>
@@ -574,11 +584,11 @@ $sFormat = '';
     
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
-      $('.femaleSection').css('visibility','hidden');
+      $('.femaleSection').hide();
       $('input[name="breastfeeding"]').prop('checked', false);
       $('input[name="drugTransmission"]').prop('checked', false);
     }else if($(this).val() == 'female'){
-      $('.femaleSection').css('visibility','visible');
+      $('.femaleSection').show();
     }
   });
   

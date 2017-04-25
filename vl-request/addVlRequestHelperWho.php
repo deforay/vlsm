@@ -94,6 +94,7 @@ try {
           'patient_art_no'=>(isset($_POST['artNo']) && $_POST['artNo']!='' ? $_POST['artNo'] :  NULL),
           'current_regimen'=>(isset($_POST['artRegimen']) && $_POST['artRegimen']!='' ? $_POST['artRegimen'] :  NULL),
           'date_of_initiation_of_current_regimen'=>$_POST['dateOfArtInitiation'],
+          'line_of_treatment'=>(isset($_POST['lineOfTreatment']) && $_POST['lineOfTreatment']!='') ? $_POST['lineOfTreatment'] :  NULL,
           'patient_mobile_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='' ? $_POST['patientPhoneNumber'] :  NULL),
           //'last_viral_load_date'=>$_POST['lastViralLoadTestDate'],
           //'last_viral_load_result'=>(isset($_POST['lastViralLoadResult']) && $_POST['lastViralLoadResult']!='' ? $_POST['lastViralLoadResult'] :  NULL),
