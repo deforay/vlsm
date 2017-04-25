@@ -970,3 +970,6 @@ ALTER TABLE `vl_request_form` ADD `test_requested_on` DATE NULL DEFAULT NULL AFT
 
 --Pal 24-apr-2017
 ALTER TABLE `vl_request_form` ADD `patient_middle_name` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_first_name`;
+
+--Pal 25-apr-2017
+ALTER TABLE `vl_request_form` ADD `line_of_treatment` INT(11) NULL DEFAULT NULL AFTER `treatment_initiation`;
