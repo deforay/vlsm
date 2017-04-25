@@ -165,12 +165,11 @@ $sFormat = '';
                           </div>
                       </div>
                     </div>
-                    
                     <div class="row">
-                        <div class="col-xs-4 col-md-4">
+                        <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="sampleCollectionDate">Date Specimen Collected <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" style="width:74%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
+                          <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
                           </div>
                         </div>
                         <div class="col-xs-3 col-md-3">
@@ -318,7 +317,7 @@ $sFormat = '';
                                 </td>
                                 <td colspan=""><label for="patientPhoneNumber">Patient's telephone number</td>
                                 <td colspan="2">
-                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:100%;" >
+                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:50%;" >
                                 </td>
                             </tr>
                             <tr>

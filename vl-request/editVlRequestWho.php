@@ -213,10 +213,10 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                     </div>
                     
                     <div class="row">
-                        <div class="col-xs-4 col-md-4">
+                        <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="sampleCollectionDate">Date Specimen Collected <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" style="width:74%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date"  value="<?php echo $vlQueryInfo[0]['sample_collection_date'];?>">
+                          <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date"  value="<?php echo $vlQueryInfo[0]['sample_collection_date'];?>">
                           </div>
                         </div>
                         <div class="col-xs-3 col-md-3">
@@ -364,7 +364,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                 </td>
                                 <td colspan=""><label for="patientPhoneNumber">Patient's telephone number</td>
                                 <td colspan="2">
-                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_mobile_number'];?>" >
+                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:50%;" value="<?php echo $vlQueryInfo[0]['patient_mobile_number'];?>" >
                                 </td>
                             </tr>
                             <tr>
