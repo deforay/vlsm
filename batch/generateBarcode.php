@@ -37,7 +37,7 @@ if($id >0){
                 if(trim($this->logo)!=""){
                     if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
                         $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
-                        $this->Image($image_file,10, 10, 25, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                        $this->Image($image_file,10, 10, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
                     }
                 }
     
