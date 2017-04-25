@@ -14,7 +14,10 @@ $batResult = $db->rawQuery($batQuery);
 ?>
 <style>
   .select2-selection__choice{
-	color:#000000 !important;
+    color:#000000 !important;
+  }
+  .center{
+    text-align:center;
   }
 </style>
   <!-- Content Wrapper. Contains page content -->
@@ -90,18 +93,10 @@ $batResult = $db->rawQuery($batQuery);
 		      <option value="not_recorded">Not Recorded</option>
 		    </select>
 		  </td>
-		  <td><b>Status&nbsp;:</b></td>
-		  <td>
-		      <select name="status[]" id="status" class="form-control" title="Please choose status" style="width:220px;" multiple="multiple">
-			<option value="7">Accepted</option>
-			<option value="4">Rejected</option>
-			<option value="2">Lost</option>
-		      </select>
-		    </td>
-		</tr>
-		<tr>
 		  <td><b>ART Number&nbsp;:</b></td>
-		  <td><input type="text" id="artNo" name="artNo" class="form-control" placeholder="ART Number" style="width:220px;" onkeyup="searchVlRequestData()"/></td>
+		  <td>
+		    <input type="text" id="artNo" name="artNo" class="form-control" placeholder="ART Number" style="width:220px;" onkeyup="searchVlRequestData()"/>
+		  </td>
 		</tr>
 		<tr>
 		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -187,7 +182,6 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
-     $("#status").select2({placeholder:"Select Status"});
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	          separator: ' to ',
@@ -272,7 +266,6 @@ $batResult = $db->rawQuery($batQuery);
 			      aoData.push({"name": "facilityName", "value": $("#facility").val()});
 			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});
-			      aoData.push({"name": "status", "value": $("#status").val()});
 			      aoData.push({"name": "gender", "value": $("#gender").val()});
 			      aoData.push({"name": "artNo", "value": $("#artNo").val()});
               $.ajax({
