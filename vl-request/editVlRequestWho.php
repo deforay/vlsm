@@ -73,6 +73,9 @@ if(!isset($facilityResult[0]['facility_code'])){
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
   $facilityResult[0]['facility_state'] = 0;
 }
+if(!isset($facilityResult[0]['facility_district']) || $facilityResult[0]['facility_district']==''){
+  $facilityResult[0]['facility_district'] = 0;
+}
 $stateName = $facilityResult[0]['facility_state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
