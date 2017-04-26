@@ -153,7 +153,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name name" style="width:100%;" onchange="getfacilityProvinceDetails(this);autoFillFacilityCode();">
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" onchange="getfacilityProvinceDetails(this);autoFillFacilityCode();">
                               <?php echo $facility;  ?>
                             </select>
                           </div>

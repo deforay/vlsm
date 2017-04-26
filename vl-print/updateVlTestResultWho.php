@@ -181,10 +181,10 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name name" style="width:100%;" <?php echo $disable;?>>
-                              <option data-code="" value=''> -- Select -- </option>
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" <?php echo $disable;?>>
+                              <option value=''> -- Select -- </option>
                                 <?php foreach($fResult as $fDetails){ ?>
-                                <option data-code="<?php echo $fDetails['facility_code'];?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                                 <?php } ?>
                             </select>
                           </div>
@@ -271,10 +271,10 @@ $disable = "disabled = 'disabled'";
                                   <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"<?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?> <?php echo $disable;?>> Male
                                   </label>
                                 <label class="radio-inline">
-                                  <input type="radio" class=" " id="genderFemale" name="gender" value="female" title="Please check gender"<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?> <?php echo $disable;?>> Female
+                                  <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender"<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?> <?php echo $disable;?>> Female
                                 </label>
                                 <label class="radio-inline">
-                                  <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"<?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?> <?php echo $disable;?>> Not Recorded
+                                  <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"<?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?> <?php echo $disable;?>> Not Recorded
                                 </label>
                               </td>
                             </tr>
