@@ -162,7 +162,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$vlQueryInfo[0]['vl_sample_id'];?>','This sample code already exists.Try another number',null)" />
+                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </div>
                       </div>
                     </div>
