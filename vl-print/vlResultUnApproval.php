@@ -51,10 +51,10 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 				</div>
 			  <div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Update" class="btn btn-success btn-sm"></div>-->
 			  <ul style="list-style: none;float: right;">
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #e8000b"></i> - Unknown Sample</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #86c0c8"></i> - Existing Result</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #337ab7"></i> - Result for Sample</li>
-	    <li><i class="fa fa-square" aria-hidden="true" style="color: #7d8388"></i> - Control</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color:#e8000b;"></i> - Unknown Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color:#86c0c8;"></i> - Existing Result</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color:#337ab7;"></i> - Result for Sample</li>
+	    <li><i class="fa fa-square" aria-hidden="true" style="color:#7d8388;"></i> - Control</li>
 	    </ul>
             </div>
 	      <span><b style="color: #f03033;">Note:-</b>When you leave from this page, these temporary records will be deleted from the system.</span>

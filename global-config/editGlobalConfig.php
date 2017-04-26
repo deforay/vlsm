@@ -71,6 +71,26 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
+                      <label for="h_vl_msg" class="col-lg-4 control-label">Result PDF High Viral Load Message </label>
+                      <div class="col-lg-8">
+                        <textarea class="form-control" id="h_vl_msg" name="h_vl_msg" placeholder="High Viral Load Message" title="Please enter high viral load message" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['h_vl_msg']; ?></textarea>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="l_vl_msg" class="col-lg-4 control-label">Result PDF Low Viral Load Message </label>
+                      <div class="col-lg-8">
+                        <textarea class="form-control" id="l_vl_msg" name="l_vl_msg" placeholder="Low Viral Load Message" title="Please enter low viral load message" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['l_vl_msg']; ?></textarea>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
                       <label for="" class="col-lg-4 control-label">Logo Image </label>
                       <div class="col-lg-8">
                        <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -254,7 +274,6 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                    </div>
                 </div>
               </div>
-              
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" name="removedLogoImage" id="removedLogoImage"/>
