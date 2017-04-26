@@ -26,9 +26,6 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $maxLength = "maxlength=".$maxLength;
   }
 }
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-
 //get import config
 $importQuery="SELECT * FROM import_config WHERE status = 'active'";
 $importResult=$db->query($importQuery);
@@ -50,11 +47,10 @@ $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
             }
+            
 $facility = '';
 $facility.="<option data-code='' value=''> -- Select -- </option>";
-foreach($fResult as $fDetails){
-  $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
-}
+
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 
@@ -153,7 +149,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" onchange="getfacilityProvinceDetails(this);autoFillFacilityCode();">
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" onchange="autoFillFacilityCode();">
                               <?php echo $facility;  ?>
                             </select>
                           </div>
@@ -662,9 +658,8 @@ $sFormat = '';
       function(data){
 	  if(data != ""){
             details = data.split("###");
-            $("#fName").html(details[0]);
             $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
+            $("#fName").html("<option data-code='' value=''> -- Select -- </option>");
 	  }
       });
       }
@@ -688,8 +683,8 @@ $sFormat = '';
     }
     $.unblockUI();
   }
-  function getfacilityDistrictwise(obj)
-  {
+  
+  function getfacilityDistrictwise(obj){
     $.blockUI();
     var dName = $("#district").val();
     var cName = $("#fName").val();
@@ -701,48 +696,6 @@ $sFormat = '';
 	  }
       });
     }
-    $.unblockUI();
-  }
-  function getfacilityProvinceDetails(obj)
-  {
-    $.blockUI();
-     //check facility name
-      var cName = $("#fName").val();
-      //var pName = $("#province").val();
-      var pName = '';
-      facilityName = true;
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            <?php
-            if($arr['sample_code']=='auto'){
-              ?>
-              var pName = $("#province").val();
-              pNameVal = pName.split("##");
-              sCode = '<?php echo date('Ymd');?>';
-              sCodeKey = '<?php echo $maxId;?>';
-              $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-              $("#sampleCodeFormat").val(pNameVal[1]+sCode);
-              $("#sampleCodeKey").val(sCodeKey);
-              <?php
-            }
-            ?>
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#fName").html("<?php echo $facility;?>");
-    }
-    
     $.unblockUI();
   }
   
