@@ -22,7 +22,7 @@ try {
         }
 	$instanceId = '';
 	if(isset($_SESSION['instanceId'])){
-	     $instanceId = $_SESSION['instanceId'];
+	    $instanceId = $_SESSION['instanceId'];
 	}
 	$email = '';
 	if(trim($_POST['reportEmail'])!=''){

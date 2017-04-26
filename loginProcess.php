@@ -7,6 +7,7 @@ $general=new Deforay_Commons_General();
 
 $tableName1="activity_log";
 $tableName2 = 'vl_instance';
+$tableName3 = 'facility_details';
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
         $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
@@ -26,6 +27,9 @@ try {
                 $id = $general->generateRandomString(30);
                 $db->insert($tableName2,array('vlsm_instance_id'=>$id));
                 $_SESSION['instanceId']=$id;
+                //Update instance ID into facility tbl
+                $data=array('vlsm_instance_id'=>$id);
+                $db->update($tableName3,$data);
             }
             //Add event log
             $eventType = 'login';
