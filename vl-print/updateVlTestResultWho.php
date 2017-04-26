@@ -184,7 +184,7 @@ $disable = "disabled = 'disabled'";
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" <?php echo $disable;?>>
                               <option value=''> -- Select -- </option>
                                 <?php foreach($fResult as $fDetails){ ?>
-                                <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                  <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                                 <?php } ?>
                             </select>
                           </div>

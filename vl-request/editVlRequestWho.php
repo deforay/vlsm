@@ -196,7 +196,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" onchange="getfacilityProvinceDetails(this);autoFillFacilityCode();">
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" onchange="autoFillFacilityCode();">
                               <option data-code="" value=''> -- Select -- </option>
                                 <?php foreach($fResult as $fDetails){ ?>
                                 <option data-code="<?php echo $fDetails['facility_code']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
@@ -727,9 +727,8 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
       function(data){
 	  if(data != ""){
             details = data.split("###");
-            $("#fName").html(details[0]);
             $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
+            $("#fName").html("<option data-code='' value=''> -- Select -- </option>");
 	  }
       });
       }
@@ -738,12 +737,12 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
-      $("#fName").html("<?php echo $facility;?>");
+      $("#fName").html("<option data-code='' value=''> -- Select -- </option>");
     }
     $.unblockUI();
   }
-  function getfacilityDistrictwise(obj)
-  {
+  
+  function getfacilityDistrictwise(obj){
     $.blockUI();
     var dName = $("#district").val();
     var cName = $("#fName").val();
@@ -754,34 +753,6 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
             $("#fName").html(data);
 	  }
       });
-    }
-    $.unblockUI();
-  }
-  function getfacilityProvinceDetails(obj)
-  {
-    $.blockUI();
-     //check facility name
-      var cName = $("#fName").val();
-      //var pName = $("#province").val();
-      var pName = '';
-      facilityName = true;
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#fName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
   }
