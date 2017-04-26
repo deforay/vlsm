@@ -125,7 +125,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)" />
+                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;"/>
                         </div>
                       </div>
                     </div>
