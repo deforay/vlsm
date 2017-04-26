@@ -41,10 +41,8 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-//$pdf->SetAuthor('Saravanan');
-$pdf->SetTitle('Vl Request Result Form');
-//$pdf->SetSubject('TCPDF Tutorial');
-//$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf->SetAuthor('VLSM');
+$pdf->SetTitle('Viral Load Result');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -266,7 +264,7 @@ $html .= '<div style="">';
       $html .='</tr>';
     }
     $html .='<tr>';
-     $html .='<td colspan="4" style="text-align:left;"><h4>Viral Load Results</h4></td>';
+     $html .='<td colspan="4" style="text-align:left;"><h4>Viral Load Result</h4></td>';
     $html .='</tr>';
     $html .='<tr>';
      $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic code</td>';
