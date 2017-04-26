@@ -259,8 +259,7 @@ array("tnd","target not detected"))){
             $vlResult = 'TND*';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
 src="../assets/img/smiley_smile.png" alt="smile_face"/>';
-            $showMessage = 'Viral load adequately controlled : continue
-current regimen';
+            $showMessage = ucfirst($arr['l_vl_msg']);
             $tndMessage = 'TND* - Target not Detected';
             $resultTextSize = '18px';
           }else if(in_array(strtolower(trim($result['result'])),
@@ -274,16 +273,14 @@ $result['result']<=10000000){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
 src="../assets/img/smiley_frown.png" alt="frown_face"/>';
-            $showMessage = 'High Viral Load - need assessment for enhanced
-adherence or clinical assessment for possible switch to second line.';
+            $showMessage = ucfirst($arr['h_vl_msg']);
             $messageTextSize = '15px';
           }else if(trim($result['result']) <= 1000 &&
 $result['result']>=20){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
 src="../assets/img/smiley_smile.png" alt="smile_face"/>';
-            $showMessage = 'Viral load adequately controlled : continue
-current regimen';
+            $showMessage = ucfirst($arr['l_vl_msg']);
           }else if(trim($result['result'] > 10000000) && $resultType){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
@@ -298,14 +295,12 @@ src="../assets/img/smiley_smile.png" alt="smile_face"/>';
             $vlResult = '&lt;20';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
 src="../assets/img/smiley_smile.png" alt="smile_face"/>';
-            $showMessage = 'Viral load adequately controlled : continue
-current regimen ';
+            $showMessage = ucfirst($arr['l_vl_msg']);
           }else if(trim($result['result'])=='>10000000'){
             $vlResult = $result['result'];
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
 src="../assets/img/smiley_frown.png" alt="frown_face"/>';
-            $showMessage = 'High Viral Load - need assessment for enhanced
-adherence or clinical assessment for possible switch to second line.';
+            $showMessage = ucfirst($arr['h_vl_msg']);
           }else if($result['vl_test_platform']=='Roche'){
             //
             $chkSign = '';

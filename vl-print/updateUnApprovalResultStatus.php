@@ -21,20 +21,18 @@ try {
     $id= explode(",",$_POST['value']);
     $status= explode(",",$_POST['status']);
     if($_POST['value']!=''){
-    for($i=0;$i<count($id);$i++){
+        for($i=0;$i<count($id);$i++){
             $sQuery="SELECT * FROM temp_sample_report where temp_sample_id='".$id[$i]."'";
             $rResult = $db->rawQuery($sQuery);
             
             if(isset($rResult[0]['approver_comments']) && $rResult[0]['approver_comments'] != ""){
                 $comments = $rResult[0]['approver_comments'] ;//
-                
                 if($_POST['comments'] != ""){
                     $comments .=" - " .$_POST['comments'];
                 }
             }else{
                 $comments = $_POST['comments'];
             }
-            
             
             $data=array(
                         'lab_name'=>$rResult[0]['lab_name'],
@@ -47,6 +45,8 @@ try {
                         'result_reviewed_by'=>$_POST['reviewedBy'],
                         'vl_test_platform'=>$rResult[0]['vl_test_platform'],
                         'approver_comments'=>$comments,
+                        'lot_number'=>$rResult[0]['lot_number'],
+                        'lot_expiration_date'=>$rResult[0]['lot_expiration_date'],
                         'result_value_log'=>$rResult[0]['result_value_log'],
                         'result_value_absolute'=>$rResult[0]['result_value_absolute'],
                         'result_value_text'=>$rResult[0]['result_value_text'],
@@ -108,7 +108,7 @@ try {
             }
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);
-    }
+        }
         if (!file_exists('../uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $rResult[0]['import_machine_file_name'])) {
             copy('../temporary'. DIRECTORY_SEPARATOR ."import-result". DIRECTORY_SEPARATOR.$rResult[0]['import_machine_file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $rResult[0]['import_machine_file_name']);
         }
@@ -117,70 +117,71 @@ try {
     $accQuery="SELECT * FROM temp_sample_report where result_status='7'";
     $accResult = $db->rawQuery($accQuery);
     if($accResult){
-    for($i = 0;$i<count($accResult);$i++){
-        $data=array(
-                        'lab_name'=>$accResult[$i]['lab_name'],
-                        'lab_contact_person'=>$accResult[$i]['lab_contact_person'],
-                        'lab_phone_number'=>$accResult[$i]['lab_phone_number'],
-                        'sample_received_at_vl_lab_datetime'=>$accResult[$i]['sample_received_at_vl_lab_datetime'],
-                        //'sample_tested_datetime'=>$accResult[$i]['sample_tested_datetime'],
-                        'result_dispatched_datetime'=>$accResult[$i]['result_dispatched_datetime'],
-                        'result_reviewed_datetime'=>$accResult[$i]['result_reviewed_datetime'],
-                        'result_reviewed_by'=>$_POST['reviewedBy'],
-                        'approver_comments'=>$_POST['comments'],
-                        'result_value_log'=>$accResult[$i]['result_value_log'],
-                        'result_value_absolute'=>$accResult[$i]['result_value_absolute'],
-                        'result_value_text'=>$accResult[$i]['result_value_text'],
-                        'result_value_absolute_decimal'=>$accResult[$i]['result_value_absolute_decimal'],
-                        'result'=>$accResult[$i]['result'],
-                        'sample_tested_datetime'=>$accResult[$i]['sample_tested_datetime'],
-                        'lab_id'=>$accResult[$i]['lab_id'],
-                        'request_created_by'=>$accResult[$i]['result_reviewed_by'],
-                        'request_created_datetime'=>$general->getDateTime(),
-                        'last_modified_datetime'=>$general->getDateTime(),
-                        'result_approved_by'=>$_POST['appBy'],
-                        'result_approved_datetime'=>$general->getDateTime(),
-                        'import_machine_file_name'=>$accResult[$i]['import_machine_file_name'],
-                        'manual_result_entry'=>'no',
-                        'result_status'=>'7',
-                        'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
-                    );
-                if($accResult[$i]['result_value_absolute']!=''){
-                    $data['result'] = $accResult[$i]['result_value_absolute'];
-                }else if($accResult[$i]['result_value_log']!=''){
-                    $data['result'] = $accResult[$i]['result_value_log'];
-                }else if($accResult[$i]['result_value_text']!=''){
-                    $data['result'] = $accResult[$i]['result_value_text'];
-                }
-            //get bacth code
-                $bquery="select * from batch_details where batch_code='".$accResult[$i]['batch_code']."'";
-                $bvlResult=$db->rawQuery($bquery);
-                if($bvlResult){
-                    $data['sample_batch_id'] = $bvlResult[0]['batch_id'];
-                }else{
-                    $batchResult = $db->insert('batch_details',array('batch_code'=>$accResult[$i]['batch_code'],'batch_code_key'=>$accResult[$i]['batch_code_key'],'sent_mail'=>'no','request_created_datetime'=>$general->getDateTime()));
-                    $data['sample_batch_id'] = $db->getInsertId();
-                }
-                $db=$db->where('sample_code',$accResult[$i]['sample_code']);
-                $result=$db->update($tableName1,$data);
-                if (!file_exists('../uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'])) {
-                    copy('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name']);
-                }
-                $db=$db->where('temp_sample_id',$accResult[$i]['temp_sample_id']);
-                $result=$db->delete($tableName);
-        
-    }
+        for($i = 0;$i<count($accResult);$i++){
+            $data=array(
+                            'lab_name'=>$accResult[$i]['lab_name'],
+                            'lab_contact_person'=>$accResult[$i]['lab_contact_person'],
+                            'lab_phone_number'=>$accResult[$i]['lab_phone_number'],
+                            'sample_received_at_vl_lab_datetime'=>$accResult[$i]['sample_received_at_vl_lab_datetime'],
+                            //'sample_tested_datetime'=>$accResult[$i]['sample_tested_datetime'],
+                            'result_dispatched_datetime'=>$accResult[$i]['result_dispatched_datetime'],
+                            'result_reviewed_datetime'=>$accResult[$i]['result_reviewed_datetime'],
+                            'result_reviewed_by'=>$_POST['reviewedBy'],
+                            'approver_comments'=>$_POST['comments'],
+                            'lot_number'=>$accResult[$i]['lot_number'],
+                            'lot_expiration_date'=>$accResult[$i]['lot_expiration_date'],
+                            'result_value_log'=>$accResult[$i]['result_value_log'],
+                            'result_value_absolute'=>$accResult[$i]['result_value_absolute'],
+                            'result_value_text'=>$accResult[$i]['result_value_text'],
+                            'result_value_absolute_decimal'=>$accResult[$i]['result_value_absolute_decimal'],
+                            'result'=>$accResult[$i]['result'],
+                            'sample_tested_datetime'=>$accResult[$i]['sample_tested_datetime'],
+                            'lab_id'=>$accResult[$i]['lab_id'],
+                            'request_created_by'=>$accResult[$i]['result_reviewed_by'],
+                            'request_created_datetime'=>$general->getDateTime(),
+                            'last_modified_datetime'=>$general->getDateTime(),
+                            'result_approved_by'=>$_POST['appBy'],
+                            'result_approved_datetime'=>$general->getDateTime(),
+                            'import_machine_file_name'=>$accResult[$i]['import_machine_file_name'],
+                            'manual_result_entry'=>'no',
+                            'result_status'=>'7',
+                            'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
+                        );
+                    if($accResult[$i]['result_value_absolute']!=''){
+                        $data['result'] = $accResult[$i]['result_value_absolute'];
+                    }else if($accResult[$i]['result_value_log']!=''){
+                        $data['result'] = $accResult[$i]['result_value_log'];
+                    }else if($accResult[$i]['result_value_text']!=''){
+                        $data['result'] = $accResult[$i]['result_value_text'];
+                    }
+                //get bacth code
+                    $bquery="select * from batch_details where batch_code='".$accResult[$i]['batch_code']."'";
+                    $bvlResult=$db->rawQuery($bquery);
+                    if($bvlResult){
+                        $data['sample_batch_id'] = $bvlResult[0]['batch_id'];
+                    }else{
+                        $batchResult = $db->insert('batch_details',array('batch_code'=>$accResult[$i]['batch_code'],'batch_code_key'=>$accResult[$i]['batch_code_key'],'sent_mail'=>'no','request_created_datetime'=>$general->getDateTime()));
+                        $data['sample_batch_id'] = $db->getInsertId();
+                    }
+                    $db=$db->where('sample_code',$accResult[$i]['sample_code']);
+                    $result=$db->update($tableName1,$data);
+                    if (!file_exists('../uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'])) {
+                        copy('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name']);
+                    }
+                    $db=$db->where('temp_sample_id',$accResult[$i]['temp_sample_id']);
+                    $result=$db->delete($tableName);
+            
+        }
     }
     
     $stQuery="SELECT * FROM temp_sample_report where sample_type='s'";
     $stResult = $db->rawQuery($stQuery);
-    if($stResult){
-    }else{
+    if(!$stResult){
         $result = "vlPrintResult.php";
     }
+   echo $result;
 }
 catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
 }
-echo $result;

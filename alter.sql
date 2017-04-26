@@ -973,3 +973,16 @@ ALTER TABLE `vl_request_form` ADD `patient_middle_name` VARCHAR(255) NULL DEFAUL
 
 --Pal 25-apr-2017
 ALTER TABLE `vl_request_form` ADD `line_of_treatment` INT(11) NULL DEFAULT NULL AFTER `treatment_initiation`;
+
+--Pal 26-apr-2017
+ALTER TABLE `temp_sample_report` ADD `lot_number` VARCHAR(255) NULL DEFAULT NULL AFTER `approver_comments`, ADD `lot_expiration_date` DATE NULL DEFAULT NULL AFTER `lot_number`;
+
+ALTER TABLE `vl_request_form` ADD `lot_number` VARCHAR(255) NULL DEFAULT NULL AFTER `approver_comments`, ADD `lot_expiration_date` DATE NULL DEFAULT NULL AFTER `lot_number`;
+
+ALTER TABLE `hold_sample_report` ADD `lot_number` VARCHAR(255) NULL DEFAULT NULL AFTER `approver_comments`, ADD `lot_expiration_date` DATE NULL DEFAULT NULL AFTER `lot_number`;
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Result PDF High Viral Load Message', 'h_vl_msg', NULL), ('Result PDF Low Viral Load Message', 'l_vl_msg', NULL);
+
+UPDATE `global_config` SET `value` = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.' WHERE `global_config`.`name` = 'h_vl_msg';
+
+UPDATE `global_config` SET `value` = 'Viral load adequately controlled : continue current regimen' WHERE `global_config`.`name` = 'l_vl_msg';

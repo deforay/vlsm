@@ -65,9 +65,10 @@ try {
           $batchCodeCol = 'G';
           $flagCol = 'K';
           //$flagRow = '2';
+          $lotNumberCol = 'O';
+          $lotExpirationDateCol = 'P';
         
         foreach ($sheetData as $rowIndex => $row) {
-            
           if ($rowIndex < $skipTillRow)
               continue;
           
@@ -80,7 +81,8 @@ try {
           $txtVal        = "";
           $resultFlag    = "";
           $testingDate   = "";
-           
+          $lotNumberVal = "";
+          $lotExpirationDateVal = null;
          
           $sampleCode = $row[$sampleIdCol];
           $sampleType = $row[$sampleTypeCol];
@@ -109,11 +111,14 @@ try {
                 }
             } 
             
-            
-          if ($sampleCode == "")
+          $lotNumberVal = $row[$lotNumberCol];
+          if(trim($row[$lotExpirationDateCol]) !=''){
+            $lotExpirationDateVal = date('Y-m-d', strtotime($row[$lotExpirationDateCol]));
+          }
+        
+          if($sampleCode == "")
               continue;
             
-
           $infoFromFile[$sampleCode] = array(
               "sampleCode" => $sampleCode,
               "logVal" => trim($logVal),
@@ -123,15 +128,15 @@ try {
               "resultFlag" => $resultFlag,
               "testingDate" => $testingDate,
               "sampleType" => $sampleType,
-              "batchCode" => $batchCode
+              "batchCode" => $batchCode,
+              "lotNumber" => $lotNumberVal,
+              "lotExpirationDate" => $lotExpirationDateVal
           );
-            
             
             $m++;
         }
         
         foreach ($infoFromFile as $sampleCode => $d) {
-            
             $data = array(
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
@@ -145,7 +150,9 @@ try {
                 'sample_tested_datetime' => $testingDate,
                 'result_status' => '6',
                 'import_machine_file_name' => $fileName,
-                'approver_comments' => $d['resultFlag']
+                'approver_comments' => $d['resultFlag'],
+                'lot_number' => $d['lotNumber'],
+                'lot_expiration_date' => $d['lotExpirationDate']
             );
             
             //echo "<pre>";var_dump($data);continue;
