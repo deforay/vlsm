@@ -268,9 +268,9 @@ $formConfigResult=$db->query($formConfigQuery);
                     <a href="../mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
                   </li>
               <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestResult.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu importTestResultMenu">
+                  <!--<li class="allMenu importTestResultMenu">
                     <a href="../vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
-                  </li>
+                  </li>-->
               <?php }?>
             </ul>
         </li>
@@ -295,7 +295,7 @@ $formConfigResult=$db->query($formConfigQuery);
               <?php }  if(isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlResultMailMenu"><a href="../mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
               <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu importTestRequestMenu"><a href="../import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>
+                <!--<li class="allMenu importTestRequestMenu"><a href="../import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>-->
               <?php }?>
             </ul>
         </li>
