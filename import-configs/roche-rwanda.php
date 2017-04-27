@@ -95,13 +95,14 @@ try {
             if(trim($row[$absValCol])!=""){
                 $resVal=explode("(",$row[$absValCol]);
                 if(count($resVal)==2){
-                    $absVal=(float) trim($resVal[0]);
-                    
-                    $expAbsVal=explode("E",$absVal);
-                    if(count($expAbsVal)==2){
-                         $multipleVal=substr($expAbsVal[1],1);
-                         $absDecimalVal=$expAbsVal[0]*pow(10,$multipleVal);
-                    }
+                    $absVal= trim($resVal[0]);
+                    $absDecimalVal=(float) trim($resVal[0]);
+                    //
+                    //$expAbsVal=explode("E",$absVal);
+                    //if(count($expAbsVal)==2){
+                    //     $multipleVal=substr($expAbsVal[1],1);
+                    //     $absDecimalVal=$expAbsVal[0]*pow(10,$multipleVal);
+                    //}
                     $logVal=substr(trim($resVal[1]),0,-1);
                 }else{
                     $txtVal=trim($row[$absValCol]);
