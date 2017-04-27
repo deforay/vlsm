@@ -986,3 +986,6 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Result PD
 UPDATE `global_config` SET `value` = 'High Viral Load - need assessment for enhanced adherence or clinical assessment for possible switch to second line.' WHERE `global_config`.`name` = 'h_vl_msg';
 
 UPDATE `global_config` SET `value` = 'Viral load adequately controlled : continue current regimen' WHERE `global_config`.`name` = 'l_vl_msg';
+
+--Pal 27-apr-2017
+ALTER TABLE `vl_request_form` ADD `reason_for_vl_result_changes` TEXT NULL DEFAULT NULL AFTER `approver_comments`;

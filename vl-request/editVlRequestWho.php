@@ -151,7 +151,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
         </div>
         <div class="box-body">
           <!-- form start -->
-            <form class="form-inline" method='post' name='vlRequestForm' id='vlRequestForm' autocomplete="off" action="editVlRequestHelperWho.php">
+            <form class="form-inline" method="post" name="vlRequestForm" id="vlRequestForm" autocomplete="off" action="editVlRequestHelperWho.php">
               <div class="box-body">
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -541,7 +541,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       <tr>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control labSection" title="Please choose VL Testing Platform">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
@@ -552,7 +552,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                         </td>
                         <td><label for="testMethods">Test Methods</label></td>
                         <td>
-                          <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
+                          <select name="testMethods" id="testMethods" class="form-control labSection" title="Please choose test methods">
                           <option value=""> -- Select -- </option>
                           <option value="individual" <?php echo($vlQueryInfo[0]['test_methods'] == 'individual')? 'selected="selected"':''; ?>>Individual</option>
                           <option value="minipool" <?php echo($vlQueryInfo[0]['test_methods'] == 'minipool')? 'selected="selected"':''; ?>>Minipool</option>
@@ -561,7 +561,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                         </td>
                         <td><label for="rejectionReason">Reason For Failure </label></td>
                         <td>
-                            <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                            <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason">
                                 <option value="">-- Select --</option>
                                <?php
                                foreach($rejectionResult as $reject){
@@ -575,12 +575,12 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" style="width:100%;"/></td>
+                        <td><input type="text" class="form-control labSection" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" style="width:100%;"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" style="width:100%;" /></td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
-                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                          <select name="labId" id="labId" class="form-control labSection" title="Please choose lab name">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -595,7 +595,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       <tr>
                         <td><label>Approved By</label></td>
                         <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                          <select name="approvedBy" id="approvedBy" class="form-control labSection" title="Please choose approved by">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -607,17 +607,19 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                           </select>
                          </td>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="3"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea></td>
+                        <td colspan="3"><textarea class="form-control labSection" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea></td>
                       </tr>
                       <tr>
                         <td><label for="status">Status <span class="mandatory">*</span></label></td>
-                        <td colspan="5">
-                          <select class="form-control isRequired" id="status" name="status" title="Please select test status">
+                        <td>
+                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
                             <option value="">-- Select --</option>
                             <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
  			    <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
 			  </select>
-                         </td>
+                        </td>
+                        <td><label for="reasonForResultChanges" class="reasonForResultChanges" style="visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;">Reason For Changes in Result</label></td>
+                        <td colspan="3"><textarea class="form-control reasonForResultChanges" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;"><?php echo trim($vlQueryInfo[0]['reason_for_vl_result_changes']);?></textarea></td>
                       </tr>
                     </table>
                   </div>
@@ -664,6 +666,9 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
    	$('.ui-datepicker-calendar').show();
      });
     getDateOfBirth();
+    __clone = $("#vlRequestForm .labSection").clone();
+    reason = $("#reasonForResultChanges").val();
+    result = $("#vlResult").val();
   });
   
     function validateNow(){
@@ -838,4 +843,21 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
         }
       }
     }
+    
+    $("#vlRequestForm .labSection").on("change", function() {
+      if($.trim(result)!= ''){
+        if($("#vlRequestForm .labSection").serialize() == $(__clone).serialize()){
+          if($.trim(reason)== '') {
+            $(".reasonForResultChanges").css("visibility","hidden");
+          }else{
+            $(".reasonForResultChanges").css("visibility","visible");
+            $("#reasonForResultChanges").val(reason);
+          }
+          $("#reasonForResultChanges").removeClass("isRequired");
+        }else{
+          $(".reasonForResultChanges").css("visibility","visible");
+          $("#reasonForResultChanges").addClass("isRequired");
+        }
+      }
+    });
 </script>
