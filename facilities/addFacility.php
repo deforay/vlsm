@@ -11,10 +11,10 @@ $pResult = $db->rawQuery($pQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-gears"></i> Add Facility</h1>
+      <h1><i class="fa fa-gears"></i> Add Clinic/Health Center</h1>
       <ol class="breadcrumb">
         <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Facility</li>
+        <li class="active">Clinic/Health Center</li>
       </ol>
     </section>
 
@@ -28,22 +28,22 @@ $pResult = $db->rawQuery($pQuery);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addFacilityForm' id='addFacilityForm' autocomplete="off" action="addFacilityHelper.php">
+            <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" action="addFacilityHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
+                        <label for="facilityName" class="col-lg-4 control-label">Clinic/Health Center <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" />
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Clinic/Health Center Name" title="Please enter clinic/health center name" />
                         </div>
                     </div>
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityCode" class="col-lg-4 control-label">Facility Code</label>
+                        <label for="facilityCode" class="col-lg-4 control-label">Clinic/Health Center Code</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" onblur="checkNameValidation('facility_details','facility_code',this,null,'This code already exists.Try another code',null)"/>
+                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Clinic/Health Center Code" title="Please enter clinic/health center code" onblur="checkNameValidation('facility_details','facility_code',this,null,'This code already exists.Try another code',null)"/>
                         </div>
                     </div>
                   </div>
@@ -60,9 +60,9 @@ $pResult = $db->rawQuery($pQuery);
                   </div>
                     <div class="col-md-6">
                     <div class="form-group">
-                        <label for="address" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
+                        <label for="facilityType" class="col-lg-4 control-label">Clinic/Health Center Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
+                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select clinic/health center type">
                           <option value=""> -- Select -- </option>
                             <?php
                             foreach($fResult as $type){

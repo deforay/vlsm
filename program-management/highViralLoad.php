@@ -69,9 +69,9 @@ $batResult = $db->rawQuery($batQuery);
 		      </select>
 		    </td>
 		
-		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+		    <td>&nbsp;<b>Clinic/Health Center & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select clinic/health center name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -102,10 +102,10 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol1">Sample Collection Date</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol2">Facility Name</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol2">Clinic/Health Center</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol3">Facility Contact No.</label> <br>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol3">Clinic Contact No.</label> <br>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol4">Patient Code</label>
@@ -137,8 +137,8 @@ $batResult = $db->rawQuery($batQuery);
                 <tr>
 		  <th>Sample Code</th>
                   <th>Sample Collection Date</th>
-		  <th>Facility Name</th>
-		  <th>Facility Contact No.</th>
+		  <th>Clinic/Health Center</th>
+		  <th>Clinic Contact No.</th>
                   <th>Patient Code</th>
                   <th>Patient Name</th>
                   <th>Patient Phone</th>

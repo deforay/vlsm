@@ -195,8 +195,8 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" onchange="autoFillFacilityCode();">
+                          <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="autoFillFacilityCode();">
                               <option data-code="" value=''> -- Select -- </option>
                                 <?php foreach($fResult as $fDetails){ ?>
                                 <option data-code="<?php echo $fDetails['facility_code']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
@@ -206,8 +206,8 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="fCode">Facility Code </label>
-                            <input type="text" class="form-control " style="width:100%;" name="fCode" id="fCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $facilityResult[0]['facility_code'];?>">
+                          <label for="fCode">Clinic/Health Center Code </label>
+                            <input type="text" class="form-control" style="width:100%;" name="fCode" id="fCode" placeholder="Clinic/Health Center Code" title="Please enter clinic/health center code" value="<?php echo $facilityResult[0]['facility_code'];?>">
                           </div>
                       </div>
                     </div>

@@ -202,7 +202,7 @@ $rResult = $db->rawQuery($rQuery);
              <div id="toogleFormDiv">
               <div class="box box-default">
             <div class="box-header with-border">
-               <div class="pull-left"><h3 class="box-title">Facility Information</h3></div>
+               <div class="pull-left"><h3 class="box-title">Clinic Information</h3></div>
                <div class="pull-right"><a id="clearFInfo" href="javascript:void(0);" onclick="clearFacilitiesInfo();" class="btn btn-danger btn-sm" style="padding-right:10px;">Clear</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showModal('facilitiesModal.php?type=all',900,520);" class="btn btn-default btn-sm" style="margin-right: 2px;" title="Search"><i class="fa fa-search"></i> Search</a></div>
             </div>
             <!-- /.box-header -->
@@ -210,10 +210,10 @@ $rResult = $db->rawQuery($rQuery);
               <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityName" class="col-lg-4 control-label">Facility <span class="mandatory">*</span></label>
+                        <label for="facilityName" class="col-lg-4 control-label">Clinic/Health Center <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="hidden" id="facilityId" name="facilityId" value="<?php echo $result[0]['facility_id']; ?>"/>
-                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility" title="Please enter facility" value="<?php echo $result[0]['facility_name']; ?>" readonly/>
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Clinic/Health Center" title="Please enter clinic/health center name" value="<?php echo $result[0]['facility_name']; ?>" readonly/>
                         </div>
                     </div>
                   </div>
@@ -454,9 +454,9 @@ $rResult = $db->rawQuery($rQuery);
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="sampleType" class="col-lg-4 control-label">Rejection Facility <span class="mandatory">*</span></label>
+                        <label for="rejectionFacility" class="col-lg-4 control-label">Rejection Clinic <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                         <select class="form-control isRequired" name='rejectionFacility' id='rejectionFacility' title="Please select Facility">
+                         <select class="form-control isRequired" name='rejectionFacility' id='rejectionFacility' title="Please select rejection clinic">
                            <option value=""> -- Select -- </option>
                            <?php
                            foreach($fResult as $fDetails){

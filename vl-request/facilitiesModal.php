@@ -30,11 +30,11 @@ $type=$_GET['type'];
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="pull-left" style="font-size:22px;">Search Facilities</div>
+      <div class="pull-left" style="font-size:22px;">Search Clinics</div>
       <?php if($type=='all'){ ?>
-      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php?type=all',900,520);" style="margin-bottom:20px;">Add Facility</a></div>
+      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php?type=all',900,520);" style="margin-bottom:20px;">Add Clinic</a></div>
       <?php } else { ?>
-      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php?type=lab',900,520);" style="margin-bottom:20px;">Add Facility</a></div>
+      <div class="pull-right"><a class="btn btn-primary" href="javascript:void(0);" onclick="showModal('addFacilityModal.php?type=lab',900,520);" style="margin-bottom:20px;">Add Clinic</a></div>
       <?php } ?>
     </section>
      <!-- Main content -->
@@ -58,12 +58,12 @@ $type=$_GET['type'];
 		    <td>
 		      <input type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;"/>
 		    </td>
-		    <td>&nbsp;<b>Facility Type&nbsp;:</b></td>
+		    <td>&nbsp;<b>Clinic Type&nbsp;:</b></td>
 		    <td>
                       <?php
                       if($type=='all'){
                       ?>
-		      <select class="form-control" id="facilityTypeName" name="facilityTypeName" title="Please select facility name">
+		      <select class="form-control" id="facilityTypeName" name="facilityTypeName" title="Please select clinic type">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -93,9 +93,9 @@ $type=$_GET['type'];
                 <thead>
                 <tr>
                   <th style="width:10%;">Select</th>
-                  <th>Facility Code</th>
-                  <th>Facility Name</th>
-                  <th>Facility Type</th>
+                  <th>Clinic/Health Center Code</th>
+                  <th>Clinic/Health Center</th>
+                  <th>Clinic/Health Center Type</th>
                 </tr>
                 </thead>
                 <tbody>

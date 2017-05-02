@@ -14,7 +14,7 @@ include ('../includes/PHPExcel.php');
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Serial No.","Instance Id","Gender","Age In Years","Clinic Name","Facility Code","Facility State","Facility District","Facility Phone Number","Facility Address","Facility HUB Name","Facility Contact Person","Facility Report Mail","Facility Country","Facility Longitude","Facility Latitude","Facility Status","Facility Type","Sample Type","Sample Type Status","Sample Collection Date","LAB Name","Lab Code","Lab State","Lab District","Lab Phone Number","Lab Address","Lab HUB Name","Lab Contact Person","Lab Report Mail","Lab Country","Lab Longitude","Lab Latitude","Lab Status","Lab Type","Lab Tested Date","Log Value","Absolute Value","Text Value","Absolute Decimal Value","Result","Testing Reason","Test Reason Status","Testing Status");
+ $headings = array("Serial No.","Instance Id","Gender","Age In Years","Clinic Name","Clinic Code","Clinic State","Clinic District","Clinic Phone Number","Clinic Address","Clinic HUB Name","Clinic Contact Person","Clinic Report Mail","Clinic Country","Clinic Longitude","Clinic Latitude","Clinic Status","Clinic Type","Sample Type","Sample Type Status","Sample Collection Date","LAB Name","Lab Code","Lab State","Lab District","Lab Phone Number","Lab Address","Lab HUB Name","Lab Contact Person","Lab Report Mail","Lab Country","Lab Longitude","Lab Latitude","Lab Status","Lab Type","Lab Tested Date","Log Value","Absolute Value","Text Value","Absolute Decimal Value","Result","Testing Reason","Test Reason Status","Testing Status");
  
  $colNo = 0;
  
