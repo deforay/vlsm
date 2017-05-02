@@ -180,8 +180,8 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="fName">Facility Name <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" <?php echo $disable;?>>
+                          <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" <?php echo $disable;?>>
                               <option value=''> -- Select -- </option>
                                 <?php foreach($fResult as $fDetails){ ?>
                                   <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
@@ -191,8 +191,8 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="fCode">Facility Code <span class="mandatory">*</span></label>
-                            <input type="text" class="form-control " style="width:100%;" name="fCode" id="fCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $facilityResult[0]['facility_code'];?>" <?php echo $disable;?>>
+                          <label for="fCode">Clinic Code <span class="mandatory">*</span></label>
+                            <input type="text" class="form-control " style="width:100%;" name="fCode" id="fCode" placeholder="Clinic Code" title="Please enter clinic code" value="<?php echo $facilityResult[0]['facility_code'];?>" <?php echo $disable;?>>
                           </div>
                       </div>
                     </div>

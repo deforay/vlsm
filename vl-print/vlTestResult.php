@@ -79,9 +79,9 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
 		    </td>
 		</tr>
 		<tr>
-		    <td><b>Facility :</b></td>
+		    <td><b>Clinic/Health Center :</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select clinic/health center name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -164,7 +164,7 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
+		  <th>Clinic/Health Center</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Modified On</th>

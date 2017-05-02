@@ -64,9 +64,9 @@ $batchResult = $db->rawQuery($batchQuery);
                 <div class="row">
                     <div class="col-md-9">
                     <div class="form-group">
-                        <label for="facility" class="col-lg-3 control-label">Facility (To)<span class="mandatory">*</span></label>
+                        <label for="facility" class="col-lg-3 control-label">Clinic/Health Center (To)<span class="mandatory">*</span></label>
                         <div class="col-lg-9">
-                          <select class="form-control isRequired" id="facility" name="facility" title="Please select facility">
+                          <select class="form-control isRequired" id="facility" name="facility" title="Please select clinic/health center">
 			    <option value=""> -- Select -- </option>
 			    <?php
 			    foreach($facilityResult as $facility){ ?>
@@ -114,9 +114,9 @@ $batchResult = $db->rawQuery($batchQuery);
                                     </td>
                             </tr>
                             <tr>
-                                 <td>&nbsp;<b>Facility&nbsp;:</b></td>
+                                 <td>&nbsp;<b>Clinic/Health Center&nbsp;:</b></td>
                                     <td>
-                                        <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name"  multiple="multiple">
+                                        <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select clinic/health center name"  multiple="multiple">
                                         <?php
                                         foreach($facilityResult as $name){
                                          ?>

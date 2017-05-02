@@ -71,9 +71,9 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		    <td><b>Facility :</b></td>
+		    <td><b>Clinic/Health Center :</b></td>
 		    <td>
-		      <select class="form-control" id="facility" name="facility" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facility" name="facility" title="Please select clinic/health center name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -148,7 +148,7 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Batch Code</th>
                   <th>Unique ART No.</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
+		  <th>Clinic/Health Center</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Last Modified On</th>

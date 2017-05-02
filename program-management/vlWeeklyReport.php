@@ -68,7 +68,7 @@
                   <th colspan="2" style="text-align:center;">Viral Load Results- Pregnant/Breastfeeding Women</th>
                   <th colspan="2" style="text-align:center;">Age/Sex Unknown</th>
                   <th colspan="2" style="text-align:center;">Totals</th>
-                  <th rowspan="2">Total Test per Facility</th>
+                  <th rowspan="2">Total Test per Clinic</th>
                   <th rowspan="2">Comments</th>
                 </tr>
 		<tr>

@@ -71,9 +71,9 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 							</td>
 					</tr>
 					<tr>
-						 <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
+						 <td>&nbsp;<b>Clinic/Health Center & Code&nbsp;:</b></td>
 							<td>
-								<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
+								<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select clinic/health center name" multiple="multiple">
 								<?php
 								foreach($fResult as $name){
 								 ?>

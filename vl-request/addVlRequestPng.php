@@ -109,7 +109,7 @@ foreach($fResult as $fDetails){
                           </select>
                         </td>
                         <td style="width:10%">
-                        <label for="facility">Facility/Ward  <span class="mandatory">*</span></label>
+                        <label for="facility">Clinic/Ward  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
                           <select class="form-control isRequired" id="wardData" name="wardData" title="Please select ward data" style="width:100%;">

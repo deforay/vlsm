@@ -37,7 +37,7 @@ function printBarcodeLabel(barcode,facility){
 			<Verticalized>False</Verticalized>\
 			<StyledText>\
 				<Element>\
-					<String xml:space="preserve">Facility - ABC coll Date 12/Jan/2017</String>\
+					<String xml:space="preserve">Clinic - ABC coll Date 12/Jan/2017</String>\
 					<Attributes>\
 						<Font Family="Arial" Size="9" Bold="False" Italic="False" Underline="False" Strikeout="False" />\
 						<ForeColor Alpha="255" Red="0" Green="0" Blue="0" HueScale="100" />\
