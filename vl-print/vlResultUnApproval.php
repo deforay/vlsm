@@ -118,7 +118,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 		    ?>
 		  </select>
 		</td>
-		  <td><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
+		  <td><input type="hidden" name="print" id="print"/><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm">&nbsp;&nbsp;<input type="button" onclick="submitTestStatusAndPrint();" value="Save & Print All" class="btn btn-success btn-sm"></td>
 	    </tr>
 	    
 	  </table>
@@ -231,6 +231,10 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 			$.blockUI();
 			$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments,appBy:appBy, reviewedBy : reviewedBy, format: "html"},
 			function(data){
+			  if($("#print").val()=='print')
+			  {
+				convertSearchResultToPdf('');
+			  }
 				if(data=='vlPrintResult.php'){
 				  window.location.href="vlPrintResult.php";
 				}
@@ -249,6 +253,10 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       alert("Please choose approved by field");
     }
    }
+   function submitTestStatusAndPrint() {
+    $("#print").val('print');
+	submitTestStatus();
+   }
    
   function updateStatus(value,status){
     if(status!=''){
@@ -257,6 +265,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 		$.blockUI();
 		$.post("updateUnApprovalResultStatus.php", { value : value,status:status, format: "html"},
 	       function(data){
+			convertSearchResultToPdf('');
 			oTable.fnDraw();
 			selectedTests = [];
 			selectedTestsId = [];
@@ -271,6 +280,31 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
    else{
       alert("Please select the status.");
     }
+  }
+  function convertSearchResultToPdf(id){
+    $.blockUI();
+    <?php
+    if($arr['vl_form'] == 3){
+      $path = '../includes/vlRequestDrcSearchResultPdf.php';
+    }else if($arr['vl_form'] == 2){
+     $path = '../includes/vlRequestSearchResultPdf.php'; 
+    }else if($arr['vl_form'] == 4){
+     $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }else if($arr['vl_form'] == 6){
+     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
+    }
+    ?>
+    $.post("<?php echo $path; ?>", { source:'print',id : id},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      $.unblockUI();
+	      alert('Unable to generate download');
+	  }else{
+	      $.unblockUI();
+	      window.open('../uploads/'+data,'_blank');
+	  }
+	  
+      });
   }
   function updateSampleCode(obj,oldSampleCode,tempsampleId) {
 	$(obj).fastConfirm({
