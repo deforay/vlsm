@@ -11,6 +11,7 @@ try {
     $cSampleQuery="SELECT * FROM global_config";
     $cSampleResult=$db->query($cSampleQuery);
     $arr = array();
+    $printSampleCode = array();
     // now we create an associative array so that we can easily create view variables
     for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
@@ -105,7 +106,9 @@ try {
                     $data['vlsm_instance_id'] = $instanceResult[0]['vlsm_instance_id'];
                     $db->insert($tableName1,$data);
                 }
+                $printSampleCode[] = "'".$rResult[0]['sample_code']."'";
             }
+            
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->delete($tableName);
         }
@@ -165,15 +168,18 @@ try {
                     }
                     $db=$db->where('sample_code',$accResult[$i]['sample_code']);
                     $result=$db->update($tableName1,$data);
+                    $printSampleCode[] = "'".$accResult[$i]['sample_code']."'";
                     if (!file_exists('../uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'])) {
                         copy('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name']);
                     }
                     $db=$db->where('temp_sample_id',$accResult[$i]['temp_sample_id']);
                     $result=$db->delete($tableName);
-            
         }
     }
-    
+    $sCode = implode( ', ', $printSampleCode);
+    $samplePrintQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";    
+    $samplePrintQuery .= ' where vl.sample_code IN ( ' . $sCode . ')'; // Append to condition
+    $_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
     $stQuery="SELECT * FROM temp_sample_report where sample_type='s'";
     $stResult = $db->rawQuery($stQuery);
     if(!$stResult){
