@@ -21,6 +21,8 @@ $configQuery="SELECT * from global_config";
       include('editVlRequestPng.php');
     }else if($arr['vl_form']==6){
       include('editVlRequestWho.php');
+    }else if($arr['vl_form']==7){
+      include('editVlRequestRwd.php');
     }
 include('../footer.php');
  ?>

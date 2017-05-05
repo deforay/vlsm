@@ -115,7 +115,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         $vlLabName = explode(' ',$vlLab['facility_name']);
         $sheet = new PHPExcel_Worksheet($excel, '');
         $excel->addSheet($sheet, $c);
-        $sheet->setTitle('Viral Load Statistics '.ucwords($vlLabName[0]));
+        $sheet->setTitle('VL Statistics '.ucwords($vlLabName[0]));
         
         $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
         $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -245,7 +245,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
 		}
 		
 		if($tRow['result_status'] == 4){
-		    $rejection[] = $tRow['vl_sample_id'];
+		  $rejection[] = $tRow['vl_sample_id'];
 		}
            }
            $row = array();
@@ -353,22 +353,25 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
          if(trim($result['sample_collection_date'])!= '' && $result['sample_collection_date'] != NULL && $result['sample_collection_date'] != '0000-00-00 00:00:00'){
             $sampleCollectionDate = $result['sample_collection_date'];
          }
+         
          if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
             $dateOfSampleReceivedAtTestingLab = $result['sample_received_at_vl_lab_datetime'];
             $noOfSampleReceivedAtLab[] = $result['vl_sample_id'];
          }
+         
          if(trim($result['sample_tested_datetime'])!= '' && $result['sample_tested_datetime'] != NULL && $result['sample_tested_datetime'] != '0000-00-00 00:00:00'){
             $labTestedDate = $result['sample_tested_datetime'];
             $noOfSampleTested[] = $result['vl_sample_id'];
          }else{
-            //For sample not tested..
             if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
                $noOfSampleNotTested[] = $result['vl_sample_id'];
             }
          }
+         
          if(trim($result['result_printed_datetime'])!= '' && $result['result_printed_datetime'] != NULL && $result['result_printed_datetime'] != '0000-00-00 00:00:00'){
             $dateResultPrinted = $result['result_printed_datetime'];
          }
+         
          if(trim($dateOfSampleReceivedAtTestingLab)!= '' && trim($dateResultPrinted)!= ''){
             $date_result_printed = strtotime($dateResultPrinted);
             $date_of_sample_received_at_testing_lab = strtotime($dateOfSampleReceivedAtTestingLab);

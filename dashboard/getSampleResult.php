@@ -3,6 +3,8 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
+$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormResult = $db->rawQuery($configFormQuery);
 $cDate = date('Y-m-d');
 $lastSevenDay = date('Y-m-d', strtotime('-7 days'));
 
@@ -18,7 +20,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 $sWhere = '';
 $vlQuery = "select DISTINCT YEAR(sample_collection_date), MONTH(sample_collection_date), DAY(sample_collection_date)  from vl_request_form as vl ";
-$sWhere.= ' where DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" ';
+$sWhere.= ' where DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
 $vlQuery = $vlQuery.$sWhere;
 $vlResult = $db->rawQuery($vlQuery);
 
@@ -30,25 +32,24 @@ $waitingDate = '';
 $rejectedDate = '';
 $i = 0;
 foreach($vlResult as $vlData){
-   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl";
+   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
    $date = $vlData['YEAR(sample_collection_date)']."-".$vlData['MONTH(sample_collection_date)']."-".$vlData['DAY(sample_collection_date)'];
    $dFormat = date("d M", strtotime($date));
-
-   //check filter
+   //filter
    $sWhere = '';
    $waitingWhere = '';
    $rejectedWhere = '';
    if(isset($cDate) && trim($cDate)!= ''){
-      $sWhere.= ' where DATE(vl.sample_collection_date) >= "'.$date.' 00:00:00" AND DATE(vl.sample_collection_date) <= "'.$date.' 23:59:59"';
+      $sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$date.' 00:00:00" AND DATE(vl.sample_collection_date) <= "'.$date.' 23:59:59"';
    }
    //get waiting data
     $waitingWhere.= ' and vl.result_status=6';
     $waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
     $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
-    if($waitingResult[$i][0]['total']!=0){
-    $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
-    $waitingResult[$i]['date'] = $dFormat;
-    $waitingDate = $dFormat;
+    if($waitingResult[$i][0]['total']!= 0){
+      $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
+      $waitingResult[$i]['date'] = $dFormat;
+      $waitingDate = $dFormat;
     }else{
       unset($waitingResult[$i]);
     }
@@ -57,17 +58,17 @@ foreach($vlResult as $vlData){
     $rejectedWhere.= ' and vl.result_status=4';
     $rejectedQuery = $tQuery.' '.$sWhere.$rejectedWhere;
     $rejectedResult[$i] = $db->rawQuery($rejectedQuery);//rejected result
-    if($rejectedResult[$i][0]['total']!=0){
-    $rejectedTotal = $rejectedTotal + $rejectedResult[$i][0]['total'];
-    $rejectedResult[$i]['date'] = $dFormat;
-    $rejectedDate = $dFormat;
+    if($rejectedResult[$i][0]['total']!= 0){
+      $rejectedTotal = $rejectedTotal + $rejectedResult[$i][0]['total'];
+      $rejectedResult[$i]['date'] = $dFormat;
+      $rejectedDate = $dFormat;
     }else{
-    unset($rejectedResult[$i]);
+      unset($rejectedResult[$i]);
     }
    
     $tQuery = $tQuery.' '.$sWhere;
     $tResult[$i] = $db->rawQuery($tQuery);//overall result
-    if($tResult[$i][0]['total']!=0){
+    if($tResult[$i][0]['total']!= 0){
       $receivedTotal = $receivedTotal + $tResult[$i][0]['total'];
       $tResult[$i]['date'] = $dFormat;
     }else{
@@ -78,8 +79,8 @@ foreach($vlResult as $vlData){
 
 //for sample tested
 $stWhere = '';
-$stVlQuery = "select DISTINCT YEAR(sample_tested_datetime), MONTH(sample_tested_datetime), DAY(sample_tested_datetime)  from vl_request_form as vl ";
-$stWhere.= ' where DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" ';
+$stVlQuery = "select DISTINCT YEAR(sample_tested_datetime), MONTH(sample_tested_datetime), DAY(sample_tested_datetime) from vl_request_form as vl";
+$stWhere.= ' where DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
 $stVlQuery = $stVlQuery.$stWhere;
 $stVlResult = $db->rawQuery($stVlQuery);
 
@@ -87,27 +88,25 @@ $j=0;
 $acceptedTotal = 0;
 $acceptedDate = '';
 foreach($stVlResult as $vlData){
-   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl";
+   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
    $date = $vlData['YEAR(sample_tested_datetime)']."-".$vlData['MONTH(sample_tested_datetime)']."-".$vlData['DAY(sample_tested_datetime)'];
    $dFormat = date("d M", strtotime($date));
 
-   //check filter
+   //filter
    $sWhere = '';
-   $acceptedWhere = '';
    if(isset($cDate) && trim($cDate)!= ''){
-      $sWhere.= ' where DATE(vl.sample_tested_datetime) >= "'.$date.' 00:00:00" AND DATE(vl.sample_tested_datetime) <= "'.$date.' 23:59:59"';
+      $sWhere.= ' AND DATE(vl.sample_tested_datetime) >= "'.$date.' 00:00:00" AND DATE(vl.sample_tested_datetime) <= "'.$date.' 23:59:59"';
    }
-    $acceptedWhere.= ' and vl.result_status=7';
-    $acceptedQuery = $tQuery.' '.$sWhere.$acceptedWhere;
-    $acceptedResult[$j] = $db->rawQuery($acceptedQuery);//accepted result
-    if($acceptedResult[$j][0]['total']!=0){
-    $acceptedTotal = $acceptedTotal + $acceptedResult[$j][0]['total'];
-    $acceptedResult[$j]['date'] = $dFormat;
-    $acceptedDate = $dFormat;
-    }else{
-      unset($acceptedResult[$j]);
-    }
-   $j++;
+   $acceptedQuery = $tQuery.' '.$sWhere;
+   $acceptedResult[$j] = $db->rawQuery($acceptedQuery);
+   if($acceptedResult[$j][0]['total']!= 0){
+     $acceptedTotal = $acceptedTotal + $acceptedResult[$j][0]['total'];
+     $acceptedResult[$j]['date'] = $dFormat;
+     $acceptedDate = $dFormat;
+   }else{
+     unset($acceptedResult[$j]);
+   }
+  $j++;
 }
 ?>
 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
