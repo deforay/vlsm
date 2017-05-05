@@ -105,6 +105,7 @@ $formConfigResult=$db->query($formConfigQuery);
   <link href="../assets/css/select2.min.css" rel="stylesheet" />
   <link href="../assets/css/style.css" rel="stylesheet" />
   <link href="../assets/css/deforayModal.css" rel="stylesheet" />
+  <link href="../assets/css/jquery.fastconfirm.css" rel="stylesheet" />
  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -120,6 +121,7 @@ $formConfigResult=$db->query($formConfigQuery);
     
 <script type="text/javascript" src="../assets/js/jquery-ui.1.11.0.js"></script>
 <script src="../assets/js/deforayModal.js"></script>
+<script src="../assets/js/jquery.fastconfirm.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 <style>
   .dataTables_wrapper{

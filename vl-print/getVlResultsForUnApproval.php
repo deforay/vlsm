@@ -168,7 +168,8 @@ $tsResult = $db->rawQuery($tsQuery);
 					<option value="4" '.($aRow['result_status']=="4"  ? "selected=selected" : "").'>Rejected</option>
 					</select><br><br>';
 			}
-			$row[] = '<span title="'.$rsDetails.'">'.$aRow['sample_code'].$color.'</span>';
+			$samCode = "'".$aRow['sample_code']."'";
+			$row[] = '<input style="width:90%;" type="text" name="sampleCode" id="sampleCode'.$aRow['temp_sample_id'].'" title="'.$rsDetails.'" value="'.$aRow['sample_code'].'" onchange="updateSampleCode(this,'.$samCode.','.$aRow['temp_sample_id'].');"/>'.$color;
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['sample_tested_datetime'];
 			$row[] = $aRow['facility_name'];
