@@ -211,8 +211,7 @@ $result['sample_collection_date']=$general->humanDateFormat($expStr[0]);
         if(isset($result['sample_received_at_vl_lab_datetime']) &&
 trim($result['sample_received_at_vl_lab_datetime'])!='' &&
 $result['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
-          $expStr=explode("
-",$result['sample_received_at_vl_lab_datetime']);
+          $expStr=explode(" ",$result['sample_received_at_vl_lab_datetime']);
           $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
           $sampleReceivedTime =$expStr[1];
         }
@@ -240,8 +239,7 @@ $result['last_viral_load_date']=$general->humanDateFormat($result['last_viral_lo
 trim($result['patient_gender'])== ''){
           $result['patient_gender'] = 'not reported';
         }
-        if(isset($result['approvedBy']) && trim($result['approvedBy'])!=
-''){
+        if(isset($result['approvedBy']) && trim($result['approvedBy'])!=''){
           $resultApprovedBy = ucwords($result['approvedBy']);
         }else{
           $resultApprovedBy  = '';

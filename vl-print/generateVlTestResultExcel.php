@@ -15,10 +15,12 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 $filedGroup = array();
 if($arr['vl_form'] == 2){
   $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
-}else if($arr['vl_form'] == 4){
-  $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
 }else if($arr['vl_form'] == 3){
   $rs_field = 'Sample Received Date,Date of Viral Load Completion,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+}else if($arr['vl_form'] == 4){
+  $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+}else if($arr['vl_form'] == 7){
+  $rs_field = 'Lab Name,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
 }else{
   $rs_field = 'Lab,LAB No,Lab Contact Person,Lab Phone No,Sample Received Date,Result Dispatched Date,Test Method,Sample Testing Date,Log Value,Absolute Value,Text Value,Viral Load Result(copiesl/ml),Reviewed By,Reviewed Date,Approved By,Laboratory Scientist Comments,Status';
 }

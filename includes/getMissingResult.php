@@ -1,10 +1,12 @@
 <?php
 ob_start();
 include('MysqliDb.php');
-$tsQuery = "select * from r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
 include('General.php');
 $general=new Deforay_Commons_General();
+$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormResult = $db->rawQuery($configFormQuery);
+$tsQuery = "select * from r_sample_status";
+$tsResult = $db->rawQuery($tsQuery);
 //date
 $start_date = '';
 $end_date = '';
@@ -20,8 +22,8 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 $i = 0;
 foreach($tsResult as $tsId){
-   $tQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.result_status='".$tsId['status_id']."'";
-   //check filter
+   $tQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status='".$tsId['status_id']."'";
+   //filter
    $sWhere = '';
    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
       $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';

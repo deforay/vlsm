@@ -324,6 +324,10 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
      $path = '../includes/vlRequestResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
+    }else if($configFormResult[0]['value'] == 6){
+     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
+    }else if($configFormResult[0]['value'] == 7){
+     $path = '../includes/vlRequestRwdSearchResultPdf.php';  
     }
     ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id},
@@ -372,8 +376,8 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
        }
       });
   }
-  function reset()
-  {
+  
+  function reset(){
     document.cookie = "collectionDate=";
     document.cookie = "batchCode=";
     document.cookie = "sampleType=";

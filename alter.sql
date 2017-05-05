@@ -989,3 +989,6 @@ UPDATE `global_config` SET `value` = 'Viral load adequately controlled : continu
 
 --Pal 27-apr-2017
 ALTER TABLE `vl_request_form` ADD `reason_for_vl_result_changes` TEXT NULL DEFAULT NULL AFTER `approver_comments`;
+
+--Pal 04-may-2017
+INSERT INTO `form_details` (`vlsm_country_id`, `form_name`) VALUES (NULL, 'Rwanda FORM');
