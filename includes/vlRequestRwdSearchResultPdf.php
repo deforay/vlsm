@@ -5,6 +5,7 @@ include('MysqliDb.php');
 include('General.php');
 include ('tcpdf/tcpdf.php');
 include ('fpdi/fpdi.php');
+include ('fpdf/fpdf.php');
 define('UPLOAD_PATH','../uploads');
 $tableName1="activity_log";
 $tableName2="vl_request_form";
@@ -42,7 +43,6 @@ $requestResult=$db->query($searchQuery);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
 //print_r($requestResult);die;
-$pdfNew = new TCPDF();
 //header and footer
 class MYPDF extends TCPDF {
 
@@ -66,6 +66,65 @@ class MYPDF extends TCPDF {
         // Page number
         $this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');
     }
+}
+
+class PDF_Rotate extends FPDI {
+
+  var $angle = 0;
+  
+  function Rotate($angle, $x = -1, $y = -1) {
+      if ($x == -1)
+          $x = $this->x;
+      if ($y == -1)
+          $y = $this->y;
+      if ($this->angle != 0)
+          $this->_out('Q');
+      $this->angle = $angle;
+      if ($angle != 0) {
+          $angle*=M_PI / 180;
+          $c = cos($angle);
+          $s = sin($angle);
+          $cx = $x * $this->k;
+          $cy = ($this->h - $y) * $this->k;
+          $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy));
+      }
+  }
+  
+  function _endpage() {
+      if ($this->angle != 0) {
+          $this->angle = 0;
+          $this->_out('Q');
+      }
+      parent::_endpage();
+  }
+}
+
+class Watermark extends PDF_Rotate {
+
+  var $_tplIdx;
+  
+  function Header() {
+      global $fullPathToFile;
+  
+      //Put the watermark
+      $this->SetFont('helvetica', 'B', 50);
+      $this->SetTextColor(148,162,204);
+      $this->RotatedText(65,140,'DRAFT',45);
+  
+      if (is_null($this->_tplIdx)) {
+          // THIS IS WHERE YOU GET THE NUMBER OF PAGES
+          $this->numPages = $this->setSourceFile($fullPathToFile);
+          $this->_tplIdx = $this->importPage(1);
+      }
+      $this->useTemplate($this->_tplIdx, 0, 0, 200);
+  }
+  
+  function RotatedText($x, $y, $txt, $angle) {
+      //Text rotated around its origin
+      $this->Rotate($angle, $x, $y);
+      $this->Text($x, $y, $txt);
+      $this->Rotate(0);
+  }
 }
 
 class Pdf_concat extends FPDI {
@@ -99,6 +158,35 @@ if(sizeof($requestResult)> 0){
     $page = 1;
     foreach($requestResult as $result){
         $_SESSION['aliasPage'] = $page;
+        $mField = 13;
+        //Set watermark text
+        if(!isset($result['facility_code']) || trim($result['facility_code']) == '' || $result['facility_code'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['facility_state']) || trim($result['facility_state']) == '' || $result['facility_state'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['facility_district']) || trim($result['facility_district']) == '' || $result['facility_district'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['facility_name']) || trim($result['facility_name']) == '' || $result['facility_name'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['sample_code']) || trim($result['sample_code']) == '' || $result['sample_code'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['sample_collection_date']) || trim($result['sample_collection_date']) == '' || $result['sample_collection_date'] == null || $result['sample_collection_date'] == '0000-00-00 00:00:00'){
+          $mField = $mField -1;
+        }if(!isset($result['patient_art_no']) || trim($result['patient_art_no']) == '' || $result['patient_art_no'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['sample_received_at_vl_lab_datetime']) || trim($result['sample_received_at_vl_lab_datetime']) == '' || $result['sample_received_at_vl_lab_datetime'] == null || $result['sample_received_at_vl_lab_datetime'] == '0000-00-00 00:00:00'){
+          $mField = $mField -1;
+        }if(!isset($result['sample_tested_datetime']) || trim($result['sample_tested_datetime']) == '' || $result['sample_tested_datetime'] == null || $result['sample_tested_datetime'] == '0000-00-00 00:00:00'){
+          $mField = $mField -1;
+        }if(!isset($result['sample_name']) || trim($result['sample_name']) == '' || $result['sample_name'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['vl_test_platform']) || trim($result['vl_test_platform']) == '' || $result['vl_test_platform'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['result']) || trim($result['result']) == '' || $result['result'] == null){
+          $mField = $mField -1;
+        }if(!isset($result['approvedBy']) || trim($result['approvedBy']) == '' || $result['approvedBy'] == null){
+          $mField = $mField -1;
+        }
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT,true, 'UTF-8', false);
 
@@ -282,7 +370,7 @@ if(sizeof($requestResult)> 0){
           $smileyContent = '';
         }
         if($result['result_status']=='4'){
-         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
+          $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
         }
         $html = '';
         $html .= '<div style="">';
@@ -369,8 +457,8 @@ if(sizeof($requestResult)> 0){
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
-          $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
-          $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
+                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
@@ -402,7 +490,6 @@ if(sizeof($requestResult)> 0){
                       $html .='<td colspan="4" style="line-height:4px;"></td>';
                     $html .='</tr>';
                   }
-
                   if(trim($tndMessage)!= ''){
                     $html .='<tr>';
                       $html .='<td colspan="4" style="line-height:22px;font-size:18px;text-align:left;">'.$tndMessage.'</td>';
@@ -411,7 +498,6 @@ if(sizeof($requestResult)> 0){
                       $html .='<td colspan="4" style="line-height:6px;"></td>';
                     $html .='</tr>';
                   }
-
                   $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
                   $html .='</tr>';
@@ -421,7 +507,6 @@ if(sizeof($requestResult)> 0){
                 $html .='</table>';
                $html .='</td>';
                $html .='<td style="text-align:left;">';
-
               $html.='<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td>'.$smileyContent.'</td></tr></table>';
                $html .='</td>';
               $html .='</tr>';
@@ -459,6 +544,12 @@ if(sizeof($requestResult)> 0){
           $pdf->lastPage();
           $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
           $pdf->Output($filename,"F");
+          if($mField <13){
+            //Watermark section
+            $watermark = new Watermark();
+            $fullPathToFile = $filename;
+            $watermark->Output($filename,"F");
+          }
           $pages[] = $filename;
         $page++;
         }
