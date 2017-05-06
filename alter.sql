@@ -992,3 +992,34 @@ ALTER TABLE `vl_request_form` ADD `reason_for_vl_result_changes` TEXT NULL DEFAU
 
 --Pal 04-may-2017
 INSERT INTO `form_details` (`vlsm_country_id`, `form_name`) VALUES (NULL, 'Rwanda FORM');
+
+--Pal 06-may-2017
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '1a = AZT+3TC+EFV', '7', 'rwd'), (NULL, '1b = AZT+3TC+NVP', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '1c = d4T+3TC+EFV', '7', 'rwd'), (NULL, '1d = d4T+3TC+NVP', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '1f = TDF+3TC+EFV', '7', 'rwd'), (NULL, '1g = TDF+3TC+NVP', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '1h = TDF +FTC+ EFV', '7', 'rwd'), (NULL, '1j = TDF+FTC+NVP', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '1k=ABC+3TC+EFV', '7', 'rwd'), (NULL, '1m=ABC+3TC+NVP', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '2a = ABC+ddI+LPV/r', '7', 'rwd'), (NULL, '2b = ABC+ddI+NFV', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '2c = TDF+ddI+LPV/r', '7', 'rwd'), (NULL, '2d = TDF+ddI+NFV', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '2e = TDF+3TC+LPV/r', '7', 'rwd'), (NULL, '2f = TDF+3TC+ATZ/r', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '2g = AZT+3TC+LPV/r', '7', 'rwd'), (NULL, '2h = AZT+3TC+ATZ', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '4a = AZT+3TC+NVP', '7', 'rwd'), (NULL, '4b = AZT+3TC+NFV', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '4c = d4T+3TC+NVP', '7', 'rwd'), (NULL, '4d = d4T+3TC+EFV', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '4f = ABC+3TC+NVP', '7', 'rwd'), (NULL, '4g = ABC+3TC+EFV', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '4h = TDF+3TC+EFV', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '5a = ABC+ddI+LPV/r', '7', 'rwd'), (NULL, '5b = AZT+3TC+LPV/r', '7', 'rwd');
+
+INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '5c = ABC+3TC+LPV/r', '7', 'rwd'), (NULL, '5d = TDF+3TC+LPV/r', '7', 'rwd');
