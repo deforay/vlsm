@@ -116,7 +116,7 @@ $tsResult = $db->rawQuery($tsQuery);
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Update VL Test Result</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Update VL Test Result</li>
       </ol>
     </section>
@@ -145,7 +145,7 @@ $tsResult = $db->rawQuery($tsQuery);
              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityName" class="col-lg-4 control-label">Clinic/Health Center </label>
+                        <label for="facilityName" class="col-lg-4 control-label">Facility Name </label>
                         <div class="col-lg-7" style="font-style:italic;">
                             <?php echo ucwords($result[0]['facility_name']); ?>
                         </div>
@@ -153,7 +153,7 @@ $tsResult = $db->rawQuery($tsQuery);
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityCode" class="col-lg-4 control-label">Clinic Code </label>
+                        <label for="facilityCode" class="col-lg-4 control-label">Facility Code </label>
                         <div class="col-lg-7" style="font-style:italic;">
                             <?php echo $result[0]['facility_code']; ?>
                         </div>

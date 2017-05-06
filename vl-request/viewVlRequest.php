@@ -119,7 +119,7 @@ $db->insert($tableName1,$data);
     <section class="content-header">
       <h1>View VL Request</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">View VL Request</li>
       </ol>
     </section>
@@ -148,7 +148,7 @@ $db->insert($tableName1,$data);
              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityName" class="col-lg-4 control-label">Clinic/Health Center </label>
+                        <label for="facilityName" class="col-lg-4 control-label">Facility Name </label>
                         <div class="col-lg-7" style="font-style:italic;">
                             <?php echo ucwords($result[0]['facility_name']); ?>
                         </div>
@@ -156,7 +156,7 @@ $db->insert($tableName1,$data);
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityCode" class="col-lg-4 control-label">Clinic Code </label>
+                        <label for="facilityCode" class="col-lg-4 control-label">Facility Code </label>
                         <div class="col-lg-7" style="font-style:italic;">
                             <?php echo $result[0]['facility_code']; ?>
                         </div>

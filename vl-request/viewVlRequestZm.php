@@ -75,7 +75,7 @@ $db->insert($tableName1,$data);
     <section class="content-header">
       <h1>VIRAL LOAD LABORATORY REQUEST FORM</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">View Vl Request</li>
       </ol>
     </section>

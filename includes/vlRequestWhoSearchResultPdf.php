@@ -354,7 +354,7 @@ Load Results</h4></td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td
-style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic/Health Center
+style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Facility
 code</td>';
                $html .='<td
 style="line-height:22px;font-size:12px;text-align:left;">'.$result['facility_code'].'</td>';
@@ -376,7 +376,7 @@ style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strto
                 $html .='<tr>';
                   $html .='<td style="width:50%;"></td>';
                    $html .='<td
-style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Clinic/Health Center
+style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Facility
 Name</td>';
                   $html .='<td
 style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['facility_name']).'</td>';

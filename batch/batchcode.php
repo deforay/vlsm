@@ -7,7 +7,7 @@ include('../header.php');
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Manage Batches</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Manage Batches</li>
       </ol>
     </section>

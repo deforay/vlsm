@@ -66,7 +66,7 @@ foreach($importConfigResult as $machine) {
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Create Batch</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Batch</li>
       </ol>
     </section>
@@ -99,9 +99,9 @@ foreach($importConfigResult as $machine) {
 							</td>
 					</tr>
 					<tr>
-						 <td>&nbsp;<b>Clinic/Health Center & Code&nbsp;:</b></td>
+						 <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 							<td>
-								<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select clinic/health center name"  multiple="multiple">
+								<select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name"  multiple="multiple">
 							<!--<option value="">-- Select --</option>-->
 								<?php
 								foreach($fResult as $name){

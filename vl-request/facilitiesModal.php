@@ -93,9 +93,9 @@ $type=$_GET['type'];
                 <thead>
                 <tr>
                   <th style="width:10%;">Select</th>
-                  <th>Clinic/Health Center Code</th>
-                  <th>Clinic/Health Center</th>
-                  <th>Clinic/Health Center Type</th>
+                  <th>Facility Code</th>
+                  <th>Facility Name</th>
+                  <th>Facility Type</th>
                 </tr>
                 </thead>
                 <tbody>

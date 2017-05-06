@@ -59,7 +59,7 @@ try {
         );
         
         $db->insert($tableName,$data);
-        $_SESSION['alertMsg']="Clinic/Health Center details added successfully";
+        $_SESSION['alertMsg']="Facility details added successfully";
     }
     header("location:facilities.php");
   
