@@ -246,7 +246,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
 <div class="content-wrapper">
     <div class="box box-default">
         <div class="box-header with-border">
-          <div style="text-align:center;"><h4>Clinic/Health Center : <?php echo ucwords($_POST['toName']); ?></h4></div>
+          <div style="text-align:center;"><h4>Facility Name : <?php echo ucwords($_POST['toName']); ?></h4></div>
         </div>
         <div class="box-body">
             <form id="vlResultMailConfirmForm" name="vlResultMailConfirmForm" method="post" action="vlResultMailHelper.php">

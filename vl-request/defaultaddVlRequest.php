@@ -96,7 +96,7 @@ foreach($rResult as $rDetails){
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Add VL Request</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Vl Request</li>
       </ol>
     </section>
@@ -127,10 +127,10 @@ foreach($rResult as $rDetails){
              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityName" class="col-lg-4 control-label">Clinic/Health Center Name<span class="mandatory">*</span></label>
+                        <label for="facilityName" class="col-lg-4 control-label">Facility Name<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
                         <input type="hidden" id="facilityId" name="facilityId"/>
-                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Clinic/Health Center" title="Please enter clinic/health center name">
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name">
                         </div>
                     </div>
                   </div>

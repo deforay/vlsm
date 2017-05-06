@@ -52,7 +52,7 @@ $pResult = $db->rawQuery($pQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h3>Add Clinic/Health Center</h3>
+      <h3>Add Facility</h3>
     </section>
 
     <!-- Main content -->
@@ -70,17 +70,17 @@ $pResult = $db->rawQuery($pQuery);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityName" class="col-lg-4 control-label">Clinic/Health Center <span class="mandatory">*</span></label>
+                        <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Clinic/Health Center Name" title="Please enter clinic/health center name" />
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" />
                         </div>
                     </div>
                   </div>
                    <div class="col-md-6">
                     <div class="form-group">
-                        <label for="facilityCode" class="col-lg-4 control-label">Clinic/Health Center Code</label>
+                        <label for="facilityCode" class="col-lg-4 control-label">Facility Code</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Clinic/Health Center Code" title="Please enter clinic/health center code" onblur="checkNameValidation('facility_details','facility_code',this,null,'This code already exists.Try another code',null)"/>
+                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" onblur="checkNameValidation('facility_details','facility_code',this,null,'This code already exists.Try another code',null)"/>
                         </div>
                     </div>
                   </div>

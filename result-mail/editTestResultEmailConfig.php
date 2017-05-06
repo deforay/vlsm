@@ -30,7 +30,7 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
     <section class="content-header">
       <h1 class="fa fa-gears"> Edit Test Result Email Configuration</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="testResultEmailConfig.php"><i class="fa fa-dashboard"></i> Manage Test Result Email/SMS Config</a></li>
         <li class="active">Edit Test Result Email Configuration</li>
       </ol>

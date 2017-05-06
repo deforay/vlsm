@@ -22,7 +22,7 @@ $batResult = $db->rawQuery($batQuery);
     <section class="content-header">
       <h1>VL Test Result Status [<?php echo ucwords($tsResult[0]['status_name']); ?> ]</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">VL Test Result Status [<?php echo ucwords($tsResult[0]['status_name']); ?> ]</li>
       </ol>
     </section>
@@ -67,9 +67,9 @@ $batResult = $db->rawQuery($batQuery);
 		      </select>
 		    </td>
 		
-		    <td>&nbsp;<b>Clinic/Health Center & Code&nbsp;:</b></td>
+		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select clinic/health center name">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -107,7 +107,7 @@ $batResult = $db->rawQuery($batQuery);
 				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="patient_first_name" class="showhideCheckBox" /> <label for="iCol4">Patient's Name</label> <br>
 			    </div>
 			    <div class="col-md-3">
-				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol5">Clinic/Health Center</label>
+				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol5">Facility Name</label>
 			    </div>
 			    <div class="col-md-3">
 				    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="state"  class="showhideCheckBox" /> <label for="iCol6">Province</label>
@@ -134,7 +134,7 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Clinic/Health Center</th>
+		  <th>Facility Name</th>
 		  <th>Province</th>
 		  <th>District</th>
                   <th>Sample Type</th>

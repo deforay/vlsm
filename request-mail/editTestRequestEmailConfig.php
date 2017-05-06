@@ -30,7 +30,7 @@ if(isset($arr['rq_field']) && trim($arr['rq_field'])!= ''){
     <section class="content-header">
       <h1 class="fa fa-gears"> Edit Test Request Email Configuration</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="testRequestEmailConfig.php"><i class="fa fa-dashboard"></i> Manage Test Request Email/SMS Config</a></li>
         <li class="active">Edit Test Request Email Configuration</li>
       </ol>

@@ -29,7 +29,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
     <section class="content-header">
       <h1>Imported Results</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Test Request</li>
       </ol>
     </section>

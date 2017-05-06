@@ -26,7 +26,7 @@ $batResult = $db->rawQuery($batQuery);
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Print VL Result</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Print VL Result</li>
       </ol>
     </section>
@@ -71,9 +71,9 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		    <td><b>Clinic/Health Center :</b></td>
+		    <td><b>Facility Name :</b></td>
 		    <td>
-		      <select class="form-control" id="facility" name="facility" title="Please select clinic/health center name" style="width:220px;">
+		      <select class="form-control" id="facility" name="facility" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -123,7 +123,7 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol3">Patient's Name</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol4">Clinic/Health Center</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol4">Facility Name</label>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="sample_name" class="showhideCheckBox" /> <label for="iCol5">Sample Type</label> <br>
@@ -148,7 +148,7 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Batch Code</th>
                   <th>Unique ART No.</th>
                   <th>Patient's Name</th>
-		  <th>Clinic/Health Center</th>
+		  <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Last Modified On</th>

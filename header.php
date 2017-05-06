@@ -219,7 +219,7 @@ $formConfigResult=$db->query($formConfigQuery);
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu facilityMenu">
-              <a href="../facilities/facilities.php"><i class="fa fa-circle-o"></i> Clinics/Health Centers</a>
+              <a href="../facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a>
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu globalConfigMenu">

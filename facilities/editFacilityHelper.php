@@ -55,7 +55,7 @@ try {
         //print_r($data);die;
         $db=$db->where('facility_id',$facilityId);
         $db->update($tableName,$data);
-        $_SESSION['alertMsg']="Clinic/Health Center details updated successfully";
+        $_SESSION['alertMsg']="Facility details updated successfully";
     }
     header("location:facilities.php");
   

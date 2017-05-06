@@ -24,7 +24,7 @@ $batResult = $db->rawQuery($batQuery);
     <section class="content-header">
       <h1> <i class="fa fa-book"></i> High VL Result</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">High VL Report</li>
       </ol>
     </section>
@@ -69,9 +69,9 @@ $batResult = $db->rawQuery($batQuery);
 		      </select>
 		    </td>
 		
-		    <td>&nbsp;<b>Clinic/Health Center & Code&nbsp;:</b></td>
+		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select clinic/health center name" style="width:220px;">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -102,13 +102,13 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol1">Sample Collection Date</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol2">Clinic/Health Center</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol2">Facility Name</label>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol3">Clinic Contact No.</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol4">Patient Code</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol4">Patient Code</label>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="sample_name" class="showhideCheckBox" /> <label for="iCol5">Patient Name</label> <br>
@@ -129,7 +129,6 @@ $batResult = $db->rawQuery($batQuery);
 				</div>
 			    </div>
 			</span>
-           
             <!-- /.box-header -->
             <div class="box-body">
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
@@ -137,7 +136,7 @@ $batResult = $db->rawQuery($batQuery);
                 <tr>
 		  <th>Sample Code</th>
                   <th>Sample Collection Date</th>
-		  <th>Clinic/Health Center</th>
+		  <th>Facility Name</th>
 		  <th>Clinic Contact No.</th>
                   <th>Patient Code</th>
                   <th>Patient Name</th>

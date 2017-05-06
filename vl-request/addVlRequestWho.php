@@ -148,16 +148,16 @@ $sFormat = '';
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="autoFillFacilityCode();">
+                          <label for="fName">Facility Name <span class="mandatory">*</span></label>
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select facility name" style="width:100%;" onchange="autoFillFacilityCode();">
                               <?php echo $facility;  ?>
                             </select>
                           </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="fCode">Clinic/Health Center Code </label>
-                            <input type="text" class="form-control" style="width:100%;" name="fCode" id="fCode" placeholder="Clinic/Health Center Code" title="Please enter clinic/health center code">
+                          <label for="fCode">Facility Code </label>
+                            <input type="text" class="form-control" style="width:100%;" name="fCode" id="fCode" placeholder="Facility Code" title="Please enter facility code">
                           </div>
                       </div>
                     </div>

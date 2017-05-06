@@ -20,7 +20,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
     <section class="content-header">
       <h1 class="fa fa-gears"> Edit General Configuration</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Manage General Config</li>
       </ol>
     </section>
