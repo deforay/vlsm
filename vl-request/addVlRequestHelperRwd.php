@@ -167,9 +167,9 @@ try {
              );
              $db->insert($tableName1,$data);
              if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
-                  header("location:addVlRequest.php");
+                header("location:addVlRequest.php");
              }else{
-                  header("location:vlRequest.php");
+                header("location:vlRequest.php");
              }
         }else{
              $_SESSION['alertMsg']="Please try again later";
