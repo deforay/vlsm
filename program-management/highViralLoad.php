@@ -36,9 +36,9 @@ $batResult = $db->rawQuery($batQuery);
           <div class="box">
 	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
 		<tr>
-		    <td><b>Sample Collection Date&nbsp;:</b></td>
+		    <td><b>Sample Test Date&nbsp;:</b></td>
 		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
+		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
 		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 		    <td>
@@ -175,7 +175,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
-     $('#sampleCollectionDate').daterangepicker({
+     $('#sampleTestDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
             startDate: moment().subtract('days', 29),
@@ -194,10 +194,9 @@ $batResult = $db->rawQuery($batQuery);
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
-     $('#sampleCollectionDate').val("");
+     $('#sampleTestDate').val("");
      loadVlRequestData();
      $(".showhideCheckBox").change(function(){
-            
             if($(this).attr('checked')){
                 idpart = $(this).attr('data-showhide');
                 $("#"+idpart+"-sort").show();
@@ -258,7 +257,7 @@ $batResult = $db->rawQuery($batQuery);
             "sAjaxSource": "getHighVlResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-			      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+			      aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
 			      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});

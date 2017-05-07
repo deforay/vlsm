@@ -98,10 +98,21 @@ try {
     if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
          $data=array(
            'rejection_reason_name'=>$_POST['newRejectionReason'],
+           'rejection_type'=>'general',
            'rejection_reason_status'=>'active'
          );
          $id=$db->insert('r_sample_rejection_reasons',$data);
          $_POST['rejectionReason'] = $id;
+    }
+    
+    $isRejection = false;
+    if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
+        $isRejection = true;
+        $_POST['vlResult'] = '';
+    }
+    
+    if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
+        $_POST['vlResult'] = 'Target Not Detected';
     }
     
     $_POST['result'] = '';
@@ -152,8 +163,8 @@ try {
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
           'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='') ? $_POST['noResult'] :  NULL,
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='') ? $_POST['rejectionReason'] :  NULL,
-          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
-          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['vlResult']!='Target Not Detected') ? $_POST['vlResult'] :  NULL,
+          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['vlResult']!='Target Not Detected') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,

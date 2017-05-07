@@ -101,17 +101,29 @@ $primaryKey="vl_sample_id";
 	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
 	$start_date = '';
 	$end_date = '';
-	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-	   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
-	   //print_r($s_c_date);die;
-	   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-	     $start_date = $general->dateFormat(trim($s_c_date[0]));
-	   }
-	   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-	     $end_date = $general->dateFormat(trim($s_c_date[1]));
-	   }
-	}
+	$t_start_date = '';
+	$t_end_date = '';
+		if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
+		   //print_r($s_c_date);die;
+		   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+		     $start_date = $general->dateFormat(trim($s_c_date[0]));
+		   }
+		   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+		     $end_date = $general->dateFormat(trim($s_c_date[1]));
+		   }
+		}
 	  
+	        if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+		   $s_t_date = explode("to", $_POST['sampleTestDate']);
+		   //print_r($s_t_date);die;
+		   if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+		     $t_start_date = $general->dateFormat(trim($s_t_date[0]));
+		   }
+		   if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+		     $t_end_date = $general->dateFormat(trim($s_t_date[1]));
+		   }
+		}
 		if (isset($sWhere) && $sWhere != "") {
 			$sWhere=' where '.$sWhere;
 			if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
@@ -122,6 +134,13 @@ $primaryKey="vl_sample_id";
 					$sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
 				}else{
 				   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+				}
+			}
+			if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+				if (trim($t_start_date) == trim($t_end_date)) {
+					$sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$t_start_date.'"';
+				}else{
+				   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$t_start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$t_end_date.'"';
 				}
 			}
 			if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
@@ -167,6 +186,22 @@ $primaryKey="vl_sample_id";
 				}
 			}
 			
+			if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+				if(isset($setWhr)){
+					if (trim($t_start_date) == trim($t_end_date)) {
+						if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+						   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$t_start_date.'"';
+						}else{
+						   $sWhere=' where '.$sWhere;
+						   $sWhere = $sWhere.' DATE(vl.sample_tested_datetime) = "'.$t_start_date.'"';
+						}
+					}
+				}else{
+					$setWhr = 'where';
+					$sWhere=' where '.$sWhere;
+					$sWhere = $sWhere.' DATE(vl.sample_tested_datetime) >= "'.$t_start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$t_end_date.'"';
+				}
+			}
 			if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
 				if(isset($setWhr)){
 					$sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';

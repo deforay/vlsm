@@ -1028,3 +1028,25 @@ INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_id
 ALTER TABLE `vl_request_form` ADD `sample_reordered` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `sample_batch_id`;
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Result PDF Mandatory Fields', 'r_mandatory_fields', NULL);
+
+ALTER TABLE `r_sample_rejection_reasons` ADD `rejection_type` VARCHAR(255) NOT NULL DEFAULT 'general' AFTER `rejection_reason_name`;
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'Poorly labelled specimen', 'general', 'active'), (NULL, 'Mismatched sample and form labeling', 'general', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'Missing labels on container or tracking form', 'general', 'active'), (NULL, 'Sample without request forms/Tracking forms', 'general', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'Name/Information of requester is missing', 'general', 'active'), (NULL, 'Missing information on request form - Age', 'general', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'Missing information on request form - Sex', 'general', 'active'), (NULL, 'Missing information on request form - Sample Collection Date', 'general', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'Missing information on request form - ART No', 'general', 'active'), (NULL, 'Inappropriate specimen packing', 'general', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'Inappropriate specimen for test request', 'general', 'active'), (NULL, 'Wrong container/anticoagulant used', 'whole blood', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'EDTA tube specimens that arrived hemolyzed', 'whole blood', 'active'), (NULL, 'ETDA tube that arrives more than 24 hours after specimen collection', 'whole blood', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'Plasma that arrives at a temperature above 8 C', 'plasma', 'active'), (NULL, 'Plasma tube contain less than 1.5 mL', 'plasma', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'DBS cards with insufficient blood spots', 'dbs', 'active'), (NULL, 'DBS card with clotting present in spots', 'dbs', 'active');
+
+INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'DBS cards that have serum rings indicating contamination around spots', 'dbs', 'active'), (NULL, 'VL Mechine Flag', 'testing', 'active');
