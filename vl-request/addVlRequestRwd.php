@@ -136,6 +136,13 @@ $sFormat = '';
                           <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;"/>
                         </div>
                       </div>
+                      <div class="col-xs-3 col-md-3">
+                        <div class="form-group">
+                          <label for="sampleReordered">
+                            <input type="checkbox" class="" id="sampleReordered" name="sampleReordered" value="yes" title="Please check sample reordered"> Sample Reordered
+                          </label>
+                        </div>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
@@ -214,7 +221,7 @@ $sFormat = '';
                         <label for="gender">Gender</label><br>
                           <label class="radio-inline">
                             <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
-                            </label>
+                          </label>
                           <label class="radio-inline">
                             <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender"> Female
                           </label>

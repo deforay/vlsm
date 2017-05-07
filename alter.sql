@@ -1023,3 +1023,6 @@ INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_id
 INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '5a = ABC+ddI+LPV/r', '7', 'rwd'), (NULL, '5b = AZT+3TC+LPV/r', '7', 'rwd');
 
 INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_identifier`) VALUES (NULL, '5c = ABC+3TC+LPV/r', '7', 'rwd'), (NULL, '5d = TDF+3TC+LPV/r', '7', 'rwd');
+
+--Pal 07-may-2017
+ALTER TABLE `vl_request_form` ADD `sample_reordered` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `sample_batch_id`;

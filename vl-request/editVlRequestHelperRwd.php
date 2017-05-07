@@ -94,6 +94,7 @@ try {
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
+          'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
           'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
@@ -131,7 +132,10 @@ try {
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
           'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='') ? $_POST['noResult'] :  NULL,
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='') ? $_POST['rejectionReason'] :  NULL,
+          'result_value_log'=>NULL,
           'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
+          'result_value_text'=>NULL,
+          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
