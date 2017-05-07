@@ -287,7 +287,6 @@ if(sizeof($requestResult)> 0){
         $smileyContent = '';
         $showMessage = '';
         $tndMessage = '';
-        $resultTextSize = '12px';
         $messageTextSize = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
           $resultType = is_numeric($result['result']);
@@ -296,7 +295,6 @@ if(sizeof($requestResult)> 0){
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = ucfirst($arr['l_vl_msg']);
             $tndMessage = 'TND* - Target not Detected';
-            $resultTextSize = '18px';
           }else if(in_array(strtolower(trim($result['result'])),array("failed","fail","no_sample"))){
             $vlResult = $result['result'];
             $smileyContent = '';
@@ -454,7 +452,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:'.$resultTextSize.';text-align:left;">'.$result['result'].'</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:18px;font-weight:bold;text-align:left;">'.$result['result'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
@@ -482,12 +480,14 @@ if(sizeof($requestResult)> 0){
                       $html .='<td colspan="4" style="line-height:6px;"></td>';
                     $html .='</tr>';
                   }
-                  $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
-                  $html .='</tr>';
-                  $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['approver_comments']).'</td>';
-                  $html .='</tr>';
+                  if(trim($result['approver_comments'])!= ''){
+                    $html .='<tr>';
+                      $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
+                    $html .='</tr>';
+                    $html .='<tr>';
+                      $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['approver_comments']).'</td>';
+                    $html .='</tr>';
+                  }
                 $html .='</table>';
                $html .='</td>';
                $html .='<td style="text-align:left;">';
