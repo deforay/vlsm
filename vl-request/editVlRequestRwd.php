@@ -372,7 +372,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                       <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="artRegimen">Current Regimen</label>
-                            <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="artValue();">
+                            <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTValue();">
                                  <option value=""> -- Select -- </option>
                                  <?php
                                  foreach($aResult as $regimen){
@@ -383,7 +383,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                                  ?>
                                  <option value="other">Other</option>
                             </select>
-                            <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art regimen" style="width:100%;display:none;margin-top:2px;" >
+                            <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
                           </div>
                        </div>
                       <div class="col-xs-3 col-md-3">
@@ -671,7 +671,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                         <div class="col-md-4 rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
                             <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
                             <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason">
+                              <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
                                <?php
                                foreach($rejectionResult as $reject){
@@ -681,6 +681,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                                }
                                ?>
                               </select>
+                              <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -852,7 +853,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
     }
   });
   
-  function artValue(){
+  function checkARTValue(){
     var artRegimen = $("#artRegimen").val();
     if(artRegimen=='other'){
       $("#newArtRegimen").show();
@@ -860,6 +861,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
     }else{
       $("#newArtRegimen").hide();
       $("#newArtRegimen").removeClass("isRequired");
+      $('#newArtRegimen').val("");
     }
   }
   
@@ -918,6 +920,18 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
         }
       }
   });
+  
+  function checkRejectionReason(){
+    var rejectionReason = $("#rejectionReason").val();
+    if(rejectionReason == 16){
+      $("#newRejectionReason").show();
+      $("#newRejectionReason").addClass("isRequired");
+    }else{
+      $("#newRejectionReason").hide();
+      $("#newRejectionReason").removeClass("isRequired");
+      $('#newRejectionReason').val("");
+    }
+  }
   
   function validateNow(){
       var format = '<?php echo $arr['sample_code'];?>';

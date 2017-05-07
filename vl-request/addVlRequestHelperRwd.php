@@ -50,6 +50,7 @@ try {
          $result=$db->insert('r_art_code_details',$data);
          $_POST['artRegimen'] = $_POST['newArtRegimen'];
     }
+    
     //update facility code
     if(trim($_POST['fCode'])!=''){
        $fData = array('facility_code'=>$_POST['fCode']);
@@ -93,6 +94,16 @@ try {
     }else{
         $_POST['resultDispatchedOn'] = NULL;
     }
+    
+    if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
+         $data=array(
+           'rejection_reason_name'=>$_POST['newRejectionReason'],
+           'rejection_reason_status'=>'active'
+         );
+         $id=$db->insert('r_sample_rejection_reasons',$data);
+         $_POST['rejectionReason'] = $id;
+    }
+    
     $_POST['result'] = '';
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
         $_POST['result'] = $_POST['vlResult'];
