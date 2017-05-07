@@ -95,7 +95,7 @@ try {
             if(trim($row[$absValCol])!=""){
                 $resVal=explode("(",$row[$absValCol]);
                 if(count($resVal)==2){
-                    $absVal= trim($resVal[0]);
+                    $absVal= (float) trim($resVal[0]);
                     $absDecimalVal=(float) trim($resVal[0]);
                     //
                     //$expAbsVal=explode("E",$absVal);
