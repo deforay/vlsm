@@ -193,6 +193,13 @@ $disable = "disabled = 'disabled'";
                           <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" <?php echo $disable;?> style="width:100%;"/>
                         </div>
                       </div>
+                      <div class="col-xs-3 col-md-3">
+                        <div class="form-group">
+                          <label for="sampleReordered">
+                            <input type="checkbox" class="" id="sampleReordered" name="sampleReordered" value="yes" <?php echo(trim($vlQueryInfo[0]['sample_reordered']) == 'yes')?'checked="checked"':'' ?> <?php echo $disable;?> title="Please check sample reordered"> Sample Reordered
+                          </label>
+                        </div>
+                      </div>
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
