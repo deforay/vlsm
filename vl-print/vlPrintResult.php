@@ -99,6 +99,13 @@ $batResult = $db->rawQuery($batQuery);
 		  </td>
 		</tr>
 		<tr>
+		    <td><b>Sample Test Date&nbsp;:</b></td>
+		    <td>
+		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+		    </td>
+		    <td colspan="4"></td>
+		</tr>
+		<tr>
 		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf('');"><span>Result PDF</span></button>
@@ -182,9 +189,9 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
-     $('#sampleCollectionDate').daterangepicker({
+     $('#sampleCollectionDate,#sampleTestDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	          separator: ' to ',
+	    separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
@@ -201,10 +208,9 @@ $batResult = $db->rawQuery($batQuery);
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
-     $('#sampleCollectionDate').val("");
+     $('#sampleCollectionDate,#sampleTestDate').val("");
      loadVlRequestData();
      $(".showhideCheckBox").change(function(){
-            
             if($(this).attr('checked')){
                 idpart = $(this).attr('data-showhide');
                 $("#"+idpart+"-sort").show();
@@ -268,6 +274,7 @@ $batResult = $db->rawQuery($batQuery);
 			      aoData.push({"name": "vlPrint", "value": 'print'});
 			      aoData.push({"name": "gender", "value": $("#gender").val()});
 			      aoData.push({"name": "artNo", "value": $("#artNo").val()});
+			      aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
