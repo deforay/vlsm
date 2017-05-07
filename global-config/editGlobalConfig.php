@@ -12,8 +12,18 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+$mFieldArray = array();
+if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
+    $mFieldArray = explode(',',$arr['r_mandatory_fields']);
+}
 ?>
 <link href="../assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
+<link href="../assets/css/multi-select.css" rel="stylesheet" />
+<style>
+  .select2-selection__choice{
+    color:#000000 !important;
+  }
+</style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -273,6 +283,39 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="r_mandatory_fields" class="col-lg-4 control-label">Result PDF Mandatory Fields </label>
+                      <div class="col-lg-8">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                    <div style="width:60%;margin:0 auto;clear:both;">
+                                    <a href="#" id="select-all-field" style="float:left;" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href="#" id="deselect-all-field" style="float:right;" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+                                    </div><br/><br/>
+                                   <select id="r_mandatory_fields" name="r_mandatory_fields[]" multiple="multiple" class="search">
+                                     <option value="facility_code" <?php echo (in_array('facility_code',$mFieldArray))?'selected="selected"':''; ?>>Facility Code</option>
+                                     <option value="facility_state" <?php echo (in_array('facility_state',$mFieldArray))?'selected="selected"':''; ?>>Facility Province</option>
+                                     <option value="facility_district" <?php echo (in_array('facility_district',$mFieldArray))?'selected="selected"':''; ?>>Facility District</option>
+                                     <option value="facility_name" <?php echo (in_array('facility_name',$mFieldArray))?'selected="selected"':''; ?>>Facility Name</option>
+                                     <option value="sample_code" <?php echo (in_array('sample_code',$mFieldArray))?'selected="selected"':''; ?>>Sample Code</option>
+                                     <option value="sample_collection_date" <?php echo (in_array('sample_collection_date',$mFieldArray))?'selected="selected"':''; ?>>Sample Collection Date</option>
+                                     <option value="patient_art_no" <?php echo (in_array('patient_art_no',$mFieldArray))?'selected="selected"':''; ?>>Patient ART No.</option>
+                                     <option value="sample_received_at_vl_lab_datetime" <?php echo (in_array('sample_received_at_vl_lab_datetime',$mFieldArray))?'selected="selected"':''; ?>>Date Sample Received at Testing Lab</option>
+                                     <option value="sample_tested_datetime" <?php echo (in_array('sample_tested_datetime',$mFieldArray))?'selected="selected"':''; ?>>Sample Tested Date</option>
+                                     <option value="sample_name" <?php echo (in_array('sample_name',$mFieldArray))?'selected="selected"':''; ?>>Sample Type</option>
+                                     <option value="vl_test_platform" <?php echo (in_array('vl_test_platform',$mFieldArray))?'selected="selected"':''; ?>>VL Testing Platform</option>
+                                     <option value="result" <?php echo (in_array('result',$mFieldArray))?'selected="selected"':''; ?>>VL Result</option>
+                                     <option value="approvedBy" <?php echo (in_array('approvedBy',$mFieldArray))?'selected="selected"':''; ?>>Approved By</option>
+                                   </select>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                   </div>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -292,7 +335,56 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
     <!-- /.content -->
   </div>
   <script type="text/javascript" src="../assets/js/jasny-bootstrap.js"></script>
+  <script src="../assets/js/jquery.multi-select.js"></script>
+  <script src="../assets/js/jquery.quicksearch.js"></script>
   <script type="text/javascript">
+  $(document).ready(function() {
+      $('.search').multiSelect({
+       selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Field Name'>",
+       selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Field Name'>",
+       afterInit: function(ms){
+	 var that = this,
+	     $selectableSearch = that.$selectableUl.prev(),
+	     $selectionSearch = that.$selectionUl.prev(),
+	     selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+	     selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+     
+	 that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+	 .on('keydown', function(e){
+	   if (e.which === 40){
+	     that.$selectableUl.focus();
+	     return false;
+	   }
+	 });
+     
+	 that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+	 .on('keydown', function(e){
+	   if (e.which == 40){
+	     that.$selectionUl.focus();
+	     return false;
+	   }
+	 });
+       },
+       afterSelect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+       },
+       afterDeselect: function(){
+	  this.qs1.cache();
+	  this.qs2.cache();
+       }
+     });
+      
+      $('#select-all-field').click(function(){
+       $('#r_mandatory_fields').multiSelect('select_all');
+       return false;
+     });
+     $('#deselect-all-field').click(function(){
+       $('#r_mandatory_fields').multiSelect('deselect_all');
+       return false;
+     });
+   });
+  
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'editGlobalConfigForm'

@@ -23,6 +23,11 @@ if(isset($arr['default_time_zone']) && $arr['default_time_zone']!=''){
 }else{
   date_default_timezone_set("Europe/London");
 }
+//set mField Array
+$mFieldArray = array();
+if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
+  $mFieldArray = explode(',',$arr['r_mandatory_fields']);
+}
 //set print time
 $printedTime = date('Y-m-d H:i:s');
 $expStr=explode(" ",$printedTime);
@@ -158,34 +163,13 @@ if(sizeof($requestResult)> 0){
     $page = 1;
     foreach($requestResult as $result){
         $_SESSION['aliasPage'] = $page;
-        $mField = 13;
+        $draftTextShow = false;
         //Set watermark text
-        if(!isset($result['facility_code']) || trim($result['facility_code']) == '' || $result['facility_code'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['facility_state']) || trim($result['facility_state']) == '' || $result['facility_state'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['facility_district']) || trim($result['facility_district']) == '' || $result['facility_district'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['facility_name']) || trim($result['facility_name']) == '' || $result['facility_name'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['sample_code']) || trim($result['sample_code']) == '' || $result['sample_code'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['sample_collection_date']) || trim($result['sample_collection_date']) == '' || $result['sample_collection_date'] == null || $result['sample_collection_date'] == '0000-00-00 00:00:00'){
-          $mField = $mField -1;
-        }if(!isset($result['patient_art_no']) || trim($result['patient_art_no']) == '' || $result['patient_art_no'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['sample_received_at_vl_lab_datetime']) || trim($result['sample_received_at_vl_lab_datetime']) == '' || $result['sample_received_at_vl_lab_datetime'] == null || $result['sample_received_at_vl_lab_datetime'] == '0000-00-00 00:00:00'){
-          $mField = $mField -1;
-        }if(!isset($result['sample_tested_datetime']) || trim($result['sample_tested_datetime']) == '' || $result['sample_tested_datetime'] == null || $result['sample_tested_datetime'] == '0000-00-00 00:00:00'){
-          $mField = $mField -1;
-        }if(!isset($result['sample_name']) || trim($result['sample_name']) == '' || $result['sample_name'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['vl_test_platform']) || trim($result['vl_test_platform']) == '' || $result['vl_test_platform'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['result']) || trim($result['result']) == '' || $result['result'] == null){
-          $mField = $mField -1;
-        }if(!isset($result['approvedBy']) || trim($result['approvedBy']) == '' || $result['approvedBy'] == null){
-          $mField = $mField -1;
+        for($m=0;$m<count($mFieldArray);$m++){
+          if(!isset($result[$mFieldArray[$m]]) || trim($result[$mFieldArray[$m]]) == '' || $result[$mFieldArray[$m]] == null || $result[$mFieldArray[$m]] == '0000-00-00 00:00:00'){
+            $draftTextShow = true;
+            break;
+          }
         }
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT,true, 'UTF-8', false);
@@ -544,7 +528,7 @@ if(sizeof($requestResult)> 0){
           $pdf->lastPage();
           $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
           $pdf->Output($filename,"F");
-          if($mField <13){
+          if($draftTextShow){
             //Watermark section
             $watermark = new Watermark();
             $fullPathToFile = $filename;
