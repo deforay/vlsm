@@ -11,12 +11,15 @@
         .select2-selection__choice{
           color:#000000 !important;
         }
+								table.valign-mid td{
+									vertical-align:middle !important;
+								}
     </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-signal"></i> VL Weekly Report
+      <h1><i class="fa fa-signal"></i> VL LAB Weekly Report
       <!--<ol class="breadcrumb">-->
       <!--  <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
@@ -28,14 +31,14 @@
       <div class="row">
         <div class="col-xs-12">
           <div class="box">
-            <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
+            <table class="table valign-mid" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
 		<tr>
-		    <td><b>Sample Collection Date&nbsp;:</b></td>
-		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#eee;"/>
+		    <td style=""><b>Sample Test<br>Date Range&nbsp;:</b></td>
+		    <td style="width:20% !important;">
+		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Sample Test Date Range" readonly style="background:#eee;font-size:0.9em"/>
 		    </td>
-                    <td><b>Lab&nbsp;:</b></td>
-		    <td>
+      <td><b>VL Lab(s)&nbsp;:</b></td>
+		    <td style="width:32%;">
 		      <select id="lab" name="lab" class="form-control" title="Please select lab" multiple>
                          <option value=""> -- Select -- </option>
                             <?php
@@ -47,9 +50,11 @@
                             ?>
                       </select>
 		    </td>
-                    <td style="width:30%;">&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+						<td style="width:28%;">
+								 
 		       &nbsp;<input type="button" onclick="searchData();" value="Search" class="btn btn-success btn-sm">
-		       &nbsp;<button class="btn btn-info" type="button" onclick="exportVLWeeklyReport()">Export to excel</button>
+									&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+		       &nbsp;<button class="btn btn-info btn-sm" type="button" onclick="exportVLWeeklyReport()">Excel Export</button>
 		    </td>
                 </tr>
             </table>
@@ -58,33 +63,32 @@
               <table id="vlWeeklyReportDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th rowspan="2">Province</th>
-		  <th rowspan="2">District</th>
-		  <th rowspan="2">Site Name</th>
+																		<th rowspan="2">Province</th>
+																		<th rowspan="2">District</th>
+																		<th rowspan="2">Site Name</th>
                   <th rowspan="2">IPSL</th>
                   <th rowspan="2">No. of Rejections</th>
-                  <th colspan="2" style="text-align:center;">Viral Load Results -Peds</th>
-                  <th colspan="4" style="text-align:center;">Viral Load Results -Adults</th>
-                  <th colspan="2" style="text-align:center;">Viral Load Results- Pregnant/Breastfeeding Women</th>
+                  <th colspan="2" style="text-align:center;">Viral Load Results - Peds</th>
+                  <th colspan="4" style="text-align:center;">Viral Load Results - Adults</th>
+                  <th colspan="2" style="text-align:center;">Viral Load Results - Pregnant/Breastfeeding Women</th>
                   <th colspan="2" style="text-align:center;">Age/Sex Unknown</th>
                   <th colspan="2" style="text-align:center;">Totals</th>
                   <th rowspan="2">Total Test per Clinic</th>
-                  <th rowspan="2">Comments</th>
                 </tr>
-		<tr>
-		 <th><= 14 yrs <=1000 copies/ml</th>
-		 <th><= 14 yrs >1000 copies/ml</th>
-		 <th>> 14yrs Male <= 1000 copies/ml</th>
-		 <th>> 14yrs Male > 1000 copies/ml</th>
-		 <th>> 14yrs Female <= 1000 copies/ml</th>
-		 <th>> 14yrs  Female > 1000 copies/ml</th>
-		 <th><= 1000 copies/ml</th>
-		 <th>> 1000 copies/ml</th>
-		 <th>Unknown Age/Sex <= 1000ml</th>
-		 <th>Unknown Age/Sex > 1000ml</th>
-		 <th><= 1000 copies/ml</th>
-		 <th>> 1000 copies/ml</th>
-		</tr>
+																<tr>
+																		<th><= 14 yrs <=1000 copies/ml</th>
+																		<th><= 14 yrs >1000 copies/ml</th>
+																		<th>> 14yrs Male <= 1000 copies/ml</th>
+																		<th>> 14yrs Male > 1000 copies/ml</th>
+																		<th>> 14yrs Female <= 1000 copies/ml</th>
+																		<th>> 14yrs  Female > 1000 copies/ml</th>
+																		<th><= 1000 copies/ml</th>
+																		<th>> 1000 copies/ml</th>
+																		<th>Unknown Age/Sex <= 1000ml</th>
+																		<th>Unknown Age/Sex > 1000ml</th>
+																		<th><= 1000 copies/ml</th>
+																		<th>> 1000 copies/ml</th>
+																</tr>
                 </thead>
                 <tbody>
                   <tr>
@@ -111,7 +115,7 @@
     var oTable = null;
     $(document).ready(function() {
         $('#lab').select2({placeholder:"All Labs"});
-        $('#sampleCollectionDate').daterangepicker({
+        $('#sampleTestDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
             startDate: moment().subtract('days', 6),
@@ -162,15 +166,14 @@
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
-                {"sClass":"center","bSortable":false},
-                {"sClass":"center"}
+                {"sClass":"center","bSortable":false}
             ],
             "aaSorting": [[ 2, "asc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlWeeklyReport.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-                aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+                aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
                 aoData.push({"name": "lab", "value": $("#lab").val()});
               $.ajax({
                   "dataType": 'json',
@@ -191,7 +194,7 @@
     
     function exportVLWeeklyReport(){
        $.blockUI();
-       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleCollectionDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
+       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleTestDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){
