@@ -1026,3 +1026,5 @@ INSERT INTO `r_art_code_details` (`art_id`, `art_code`, `parent_art`, `nation_id
 
 --Pal 07-may-2017
 ALTER TABLE `vl_request_form` ADD `sample_reordered` VARCHAR(45) NOT NULL DEFAULT 'no' AFTER `sample_batch_id`;
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Result PDF Mandatory Fields', 'r_mandatory_fields', NULL);

@@ -26,12 +26,12 @@ try {
        if (move_uploaded_file($_FILES["logo"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $imageName)) {
            $resizeObj = new Deforay_Image_Resize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR .$imageName);
 	   if($_POST['vl_form']==4){
-	   list($width, $height) = getimagesize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR .$imageName);
-	   if($width>240){
-	    $resizeObj->resizeImage(240, 80, 'auto');
-	   }
+	    list($width, $height) = getimagesize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR .$imageName);
+	    if($width>240){
+	     $resizeObj->resizeImage(240, 80, 'auto');
+	    }
 	   }else{
-           $resizeObj->resizeImage(80, 80, 'auto');
+             $resizeObj->resizeImage(80, 80, 'auto');
 	   }
 	   $resizeObj->saveImage(UPLOAD_PATH . DIRECTORY_SEPARATOR ."logo". DIRECTORY_SEPARATOR. $imageName, 100);
            $data=array('value'=>$imageName);
@@ -39,9 +39,17 @@ try {
            $db->update($tableName,$data);
        }
     }
+    if(!isset($_POST['r_mandatory_fields'])){
+	$data=array('value'=>null);
+        $db=$db->where('name','r_mandatory_fields');
+        $db->update($tableName,$data);
+    }
     
     foreach ($_POST as $fieldName => $fieldValue) {
         if($fieldName!= 'removedLogoImage'){
+	   if($fieldName == 'r_mandatory_fields'){
+	     $fieldValue = implode(',',$fieldValue);
+	   }
            $data=array('value'=>$fieldValue);
            $db=$db->where('name',$fieldName);
            $db->update($tableName,$data);
