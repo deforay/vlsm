@@ -195,8 +195,8 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" <?php echo $disable;?> style="width:100%;"/>
+                          <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" <?php echo $disable;?> style="width:100%;"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -262,7 +262,7 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="artNo">Unique ART No. <span class="mandatory">*</span></label>
+                        <label for="artNo">TRACNET (ART) <span class="mandatory">*</span></label>
                           <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>" <?php echo $disable;?>/>
                         </div>
                       </div>
@@ -295,11 +295,14 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="gender">Gender</label><br>
-                          <label class="radio-inline">
+                          <label class="radio-inline" style="margin-left:0px;">
                             <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
                             </label>
-                          <label class="radio-inline">
+                          <label class="radio-inline" style="margin-left:0px;">
                             <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
+                          </label>
+                          <label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>>Not Recorded
                           </label>
                         </div>
                       </div>
@@ -387,7 +390,7 @@ $disable = "disabled = 'disabled'";
                         </div>
                       </div>
                     </div>
-                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']!='male')?"":"none"?>";>
+                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"":"none"?>";>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="patientPregnant">Is Patient Pregnant? </label><br>
