@@ -37,14 +37,17 @@ $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 
 //get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lQuery="SELECT * FROM facility_details where facility_type='2' AND status='active'";
 $lResult = $db->rawQuery($lQuery);
 //sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
 //rejection type
-$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons";
+$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+//sample status
+$statusQuery="SELECT * FROM r_sample_status where status = 'active'";
+$statusResult = $db->rawQuery($statusQuery);
 
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
@@ -63,7 +66,7 @@ foreach($fResult as $fDetails){
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 
-$aQuery="SELECT * from r_art_code_details where nation_identifier='rwd'";
+$aQuery="SELECT * from r_art_code_details where nation_identifier='rwd' AND art_status ='active'";
 $aResult=$db->query($aQuery);
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
@@ -81,7 +84,7 @@ if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_k
 $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 //facility details
-$facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
+$facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."' AND status='active'";
 $facilityResult=$db->query($facilityQuery);
 if(!isset($facilityResult[0]['facility_code'])){
   $facilityResult[0]['facility_code'] = '';
@@ -99,7 +102,7 @@ if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] 
   $stateResult[0]['province_code'] = 0;
 }
 //district details
-$districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
+$districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
 $districtResult=$db->query($districtQuery);
 
 if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
@@ -689,6 +692,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                                   ?>
                                 </optgroup>
                                 <?php } ?>
+                                <option value="other">Other (Please Specify) </option>
                               </select>
                               <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                             </div>
@@ -730,8 +734,11 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                             <div class="col-lg-7">
                               <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
                                 <option value="">-- Select --</option>
-                                <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
-                                <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
+                                <?php
+                                foreach($statusResult as $status){
+                                ?>
+                                  <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>
+                                <?php } ?>
                               </select>
                             </div>
                         </div>
@@ -951,7 +958,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
   
   function checkRejectionReason(){
     var rejectionReason = $("#rejectionReason").val();
-    if(rejectionReason == 16){
+    if(rejectionReason == "other"){
       $("#newRejectionReason").show();
       $("#newRejectionReason").addClass("isRequired");
     }else{

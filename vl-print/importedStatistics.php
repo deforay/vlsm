@@ -106,6 +106,8 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
      $path = '../includes/vlRequestZamSearchResultPdf.php';  
     }else if($arr['vl_form'] == 6){
      $path = '../includes/vlRequestWhoSearchResultPdf.php';  
+    }else if($arr['vl_form'] == 7){
+     $path = '../includes/vlRequestRwdSearchResultPdf.php.php';  
     }
     ?>
     $.post("<?php echo $path; ?>", { source:'print',id : id},
