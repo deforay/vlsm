@@ -34,9 +34,9 @@ $province.="<option value=''> -- Select -- </option>";
     }
     
 $facility = '';
-$facility.="<option data-code='' value=''> -- Select -- </option>";
+$facility.="<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 
 $sQuery="SELECT * from r_sample_type where status='active'";
@@ -238,9 +238,9 @@ $disable = "disabled = 'disabled'";
                         <div class="form-group">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" <?php echo $disable;?> style="width:100%;" onchange="autoFillFacilityCode();">
-                              <option data-code="" value=''> -- Select -- </option>
+                              <option data-code="" data-emails="" data-mobile-nos="" value=""> -- Select -- </option>
                               <?php foreach($fResult as $fDetails){ ?>
-                                <option data-code="<?php echo $fDetails['facility_code']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -252,7 +252,13 @@ $disable = "disabled = 'disabled'";
                           </div>
                       </div>
                     </div>
+                    <div class="row facilityDetails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '' || trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;">
+                      <div class="col-xs-3 col-md-3 femails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Email(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 femails facilityEmails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_emails']; ?></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers facilityMobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_mobile_numbers']; ?></div>
                     </div>
+                  </div>
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
