@@ -52,7 +52,7 @@ $province.="<option value=''> -- Select -- </option>";
     }
 
 $facility = '';
-$facility.="<option data-code='' value=''> -- Select -- </option>";
+$facility.="<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>";
 
 //get active sample types
 $sQuery="SELECT * from r_sample_type where status='active'";
@@ -136,8 +136,8 @@ $sFormat = '';
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;"/>
+                          <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -152,7 +152,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="province">Province <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
                             <?php echo $province;?>
                           </select>
                         </div>
@@ -160,7 +160,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="district">District  <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
                             <option value=""> -- Select -- </option>
                           </select>
                         </div>
@@ -181,10 +181,10 @@ $sFormat = '';
                       </div>
                     </div>
                     <div class="row facilityDetails" style="display:none;">
-                      <div class="col-xs-3 col-md-3 emails"><strong>Clinic/Health Center Email(s)</strong></div>
-                      <div class="col-xs-3 col-md-3 emails facilityEmails"></div>
-                      <div class="col-xs-3 col-md-3 mobileNumbers"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
-                      <div class="col-xs-3 col-md-3 mobileNumbers facilityMobileNumbers"></div>
+                      <div class="col-xs-3 col-md-3 femails" style="display:none;"><strong>Clinic/Health Center Email(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 femails facilityEmails" style="display:none;"></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers" style="display:none;"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers facilityMobileNumbers" style="display:none;"></div>
                     </div>
                   </div>
                 </div>
@@ -196,7 +196,7 @@ $sFormat = '';
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="artNo">Unique ART No. <span class="mandatory">*</span></label>
+                        <label for="artNo">TRACNET (ART) <span class="mandatory">*</span></label>
                           <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number"/>
                         </div>
                       </div>
@@ -229,11 +229,14 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="gender">Gender</label><br>
-                          <label class="radio-inline">
-                            <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
+                          <label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender">Male
                           </label>
-                          <label class="radio-inline">
-                            <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender"> Female
+                          <label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender">Female
+                          </label>
+                          <label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender">Not Recorded
                           </label>
                         </div>
                       </div>
@@ -660,7 +663,7 @@ $sFormat = '';
       $("."+chosenClass).show();
     }
     
-    function getfacilityDetails(obj){
+    function getProvinceDistricts(obj){
       $.blockUI();
       var cName = $("#fName").val();
       var pName = $("#province").val();
@@ -674,7 +677,10 @@ $sFormat = '';
 	  if(data != ""){
             details = data.split("###");
             $("#district").html(details[1]);
-            $("#fName").html("<option data-code='' value=''> -- Select -- </option>");
+            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>");
+            $(".facilityDetails").hide();
+            $(".facilityEmails").html('');
+            $(".facilityMobileNumbers").html('');
 	  }
       });
       }
@@ -699,7 +705,7 @@ $sFormat = '';
     $.unblockUI();
   }
   
-  function getfacilityDistrictwise(obj){
+  function getFacilities(obj){
     $.blockUI();
     var dName = $("#district").val();
     var cName = $("#fName").val();
@@ -708,6 +714,9 @@ $sFormat = '';
       function(data){
 	  if(data != ""){
             $("#fName").html(data);
+            $(".facilityDetails").hide();
+            $(".facilityEmails").html('');
+            $(".facilityMobileNumbers").html('');
 	  }
       });
     }
@@ -716,9 +725,17 @@ $sFormat = '';
   
   function fillFacilityDetails(){
     $("#fCode").val($('#fName').find(':selected').data('code'));
-    $(".facilityDetails").show();
-    $(".facilityEmails").html($('#fName').find(':selected').data('emails'));
-    $(".facilityMobileNumbers").html($('#fName').find(':selected').data('mobile-nos'));
+    var femails = $('#fName').find(':selected').data('emails');
+    var fmobilenos = $('#fName').find(':selected').data('mobile-nos');
+    if($.trim(femails) !='' || $.trim(fmobilenos) !=''){
+      $(".facilityDetails").show();
+    }else{
+      $(".facilityDetails").hide();
+    }
+    ($.trim(femails) !='')?$(".femails").show():$(".femails").hide();
+    ($.trim(femails) !='')?$(".facilityEmails").html(femails):$(".facilityEmails").html('');
+    ($.trim(fmobilenos) !='')?$(".fmobileNumbers").show():$(".fmobileNumbers").hide();
+    ($.trim(fmobilenos) !='')?$(".facilityMobileNumbers").html(fmobilenos):$(".facilityMobileNumbers").html('');
   }
   
   $("input:radio[name=gender]").click(function() {
@@ -828,7 +845,7 @@ $sFormat = '';
       var sCodeLentgh = $("#sampleCode").val();
       var minLength = '<?php echo $arr['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
+        alert("Sample id length atleast "+minLength+" characters");
         return false;
       }
     
@@ -851,7 +868,7 @@ $sFormat = '';
       var sCodeLentgh = $("#sampleCode").val();
       var minLength = '<?php echo $arr['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
+        alert("Sample id length atleast "+minLength+" characters");
         return false;
       }
       flag = deforayValidator.init({
