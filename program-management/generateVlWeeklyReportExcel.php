@@ -170,7 +170,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
     }
     $sQuery = $sQuery.' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
-    error_log($sQuery);
+    //error_log($sQuery);
     if(count($sResult)>0){
 
         $sheet = new PHPExcel_Worksheet($excel, '');
