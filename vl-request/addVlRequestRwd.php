@@ -168,7 +168,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="autoFillFacilityCode();">
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
                               <?php echo $facility;  ?>
                             </select>
                           </div>
@@ -180,7 +180,13 @@ $sFormat = '';
                           </div>
                       </div>
                     </div>
+                    <div class="row facilityDetails" style="display:none;">
+                      <div class="col-xs-3 col-md-3 emails"><strong>Clinic/Health Center Email(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 emails facilityEmails"></div>
+                      <div class="col-xs-3 col-md-3 mobileNumbers"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 mobileNumbers facilityMobileNumbers"></div>
                     </div>
+                  </div>
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -708,8 +714,11 @@ $sFormat = '';
     $.unblockUI();
   }
   
-  function autoFillFacilityCode(){
+  function fillFacilityDetails(){
     $("#fCode").val($('#fName').find(':selected').data('code'));
+    $(".facilityDetails").show();
+    $(".facilityEmails").html($('#fName').find(':selected').data('emails'));
+    $(".facilityMobileNumbers").html($('#fName').find(':selected').data('mobile-nos'));
   }
   
   $("input:radio[name=gender]").click(function() {
