@@ -1056,3 +1056,5 @@ ALTER TABLE  `temp_sample_report` ADD  `temp_sample_status` INT NOT NULL DEFAULT
 
 --Pal 08-may-2017
 ALTER TABLE `r_sample_status` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `status_name`;
+
+ALTER TABLE `r_art_code_details` ADD `art_status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `nation_identifier`;
