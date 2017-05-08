@@ -1053,6 +1053,7 @@ INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reas
 
 --saravanan 08-may-2017
 ALTER TABLE  `temp_sample_report` ADD  `temp_sample_status` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `temp_sample_report` ADD  `sample_review_by` VARCHAR( 10 ) NULL DEFAULT NULL ;
 
 --Pal 08-may-2017
 DELETE FROM `vl_lab_request`.`r_sample_rejection_reasons` WHERE `r_sample_rejection_reasons`.`rejection_reason_id` = 16
