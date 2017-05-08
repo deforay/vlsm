@@ -34,9 +34,9 @@ $province.="<option value=''> -- Select -- </option>";
     }
     
 $facility = '';
-$facility.="<option data-code='' value=''> -- Select -- </option>";
+$facility.="<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 
 $sQuery="SELECT * from r_sample_type where status='active'";
@@ -195,8 +195,8 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" <?php echo $disable;?> style="width:100%;"/>
+                          <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" <?php echo $disable;?> style="width:100%;"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -238,9 +238,9 @@ $disable = "disabled = 'disabled'";
                         <div class="form-group">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" <?php echo $disable;?> style="width:100%;" onchange="autoFillFacilityCode();">
-                              <option data-code="" value=''> -- Select -- </option>
+                              <option data-code="" data-emails="" data-mobile-nos="" value=""> -- Select -- </option>
                               <?php foreach($fResult as $fDetails){ ?>
-                                <option data-code="<?php echo $fDetails['facility_code']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -252,7 +252,13 @@ $disable = "disabled = 'disabled'";
                           </div>
                       </div>
                     </div>
+                    <div class="row facilityDetails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '' || trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;">
+                      <div class="col-xs-3 col-md-3 femails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Email(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 femails facilityEmails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_emails']; ?></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers facilityMobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_mobile_numbers']; ?></div>
                     </div>
+                  </div>
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -262,7 +268,7 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="artNo">Unique ART No. <span class="mandatory">*</span></label>
+                        <label for="artNo">TRACNET (ART) <span class="mandatory">*</span></label>
                           <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>" <?php echo $disable;?>/>
                         </div>
                       </div>
@@ -295,11 +301,14 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="gender">Gender</label><br>
-                          <label class="radio-inline">
+                          <label class="radio-inline" style="margin-left:0px;">
                             <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
                             </label>
-                          <label class="radio-inline">
+                          <label class="radio-inline" style="margin-left:0px;">
                             <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
+                          </label>
+                          <label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>>Not Recorded
                           </label>
                         </div>
                       </div>
@@ -387,7 +396,7 @@ $disable = "disabled = 'disabled'";
                         </div>
                       </div>
                     </div>
-                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']!='male')?"":"none"?>";>
+                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"":"none"?>";>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="patientPregnant">Is Patient Pregnant? </label><br>

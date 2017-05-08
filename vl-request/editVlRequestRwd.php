@@ -58,9 +58,9 @@ $province.="<option value=''> -- Select -- </option>";
     }
     
 $facility = '';
-$facility.="<option data-code='' value=''> -- Select -- </option>";
+$facility.="<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 
 $sQuery="SELECT * from r_sample_type where status='active'";
@@ -218,8 +218,8 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;"/>
+                          <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -234,7 +234,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="province">Province <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
                             <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
                               <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
@@ -245,7 +245,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="district">District  <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
                              <option value=""> -- Select -- </option>
                               <?php
                               foreach($districtResult as $districtName){
@@ -260,10 +260,10 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="autoFillFacilityCode();">
-                              <option data-code="" value=''> -- Select -- </option>
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
+                              <option data-code="" data-emails="" data-mobile-nos="" value=""> -- Select -- </option>
                               <?php foreach($fResult as $fDetails){ ?>
-                                <option data-code="<?php echo $fDetails['facility_code']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -275,7 +275,13 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                           </div>
                       </div>
                     </div>
+                    <div class="row facilityDetails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '' || trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;">
+                      <div class="col-xs-3 col-md-3 femails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Email(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 femails facilityEmails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_emails']; ?></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 fmobileNumbers facilityMobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_mobile_numbers']; ?></div>
                     </div>
+                  </div>
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -285,7 +291,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="artNo">Unique ART No. <span class="mandatory">*</span></label>
+                        <label for="artNo">TRACNET (ART) <span class="mandatory">*</span></label>
                           <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>"/>
                         </div>
                       </div>
@@ -318,11 +324,14 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="gender">Gender</label><br>
-                          <label class="radio-inline">
+                          <label class="radio-inline" style="margin-left:0px;">
                             <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
                             </label>
-                          <label class="radio-inline">
+                          <label class="radio-inline" style="margin-left:0px;">
                             <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
+                          </label>
+                          <label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>>Not Recorded
                           </label>
                         </div>
                       </div>
@@ -410,7 +419,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                         </div>
                       </div>
                     </div>
-                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']!='male')?"":"none"?>";>
+                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"":"none"?>";>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="patientPregnant">Is Patient Pregnant? </label><br>
@@ -802,7 +811,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
       $("."+chosenClass).show();
     }
     
-    function getfacilityDetails(obj){
+    function getProvinceDistricts(obj){
     $.blockUI();
       var cName = $("#fName").val();
       var pName = $("#province").val();
@@ -816,7 +825,10 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
 	  if(data != ""){
             details = data.split("###");
             $("#district").html(details[1]);
-            $("#fName").html("<option data-code='' value=''> -- Select -- </option>");
+            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>");
+            $(".facilityDetails").hide();
+            $(".facilityEmails").html('');
+            $(".facilityMobileNumbers").html('');
 	  }
       });
       }
@@ -830,7 +842,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
     $.unblockUI();
   }
   
-  function getfacilityDistrictwise(obj){
+  function getFacilities(obj){
     $.blockUI();
     var dName = $("#district").val();
     var cName = $("#fName").val();
@@ -839,14 +851,28 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
       function(data){
 	  if(data != ""){
             $("#fName").html(data);
+            $(".facilityDetails").hide();
+            $(".facilityEmails").html('');
+            $(".facilityMobileNumbers").html('');
 	  }
       });
     }
     $.unblockUI();
   }
   
-  function autoFillFacilityCode(){
+  function fillFacilityDetails(){
     $("#fCode").val($('#fName').find(':selected').data('code'));
+    var femails = $('#fName').find(':selected').data('emails');
+    var fmobilenos = $('#fName').find(':selected').data('mobile-nos');
+    if($.trim(femails) !='' || $.trim(fmobilenos) !=''){
+      $(".facilityDetails").show();
+    }else{
+      $(".facilityDetails").hide();
+    }
+    ($.trim(femails) !='')?$(".femails").show():$(".femails").hide();
+    ($.trim(femails) !='')?$(".facilityEmails").html(femails):$(".facilityEmails").html('');
+    ($.trim(fmobilenos) !='')?$(".fmobileNumbers").show():$(".fmobileNumbers").hide();
+    ($.trim(fmobilenos) !='')?$(".facilityMobileNumbers").html(fmobilenos):$(".facilityMobileNumbers").html('');
   }
   
   $("input:radio[name=gender]").click(function() {
@@ -973,7 +999,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
       var sCodeLentgh = $("#sampleCode").val();
       var minLength = '<?php echo $arr['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
+        alert("Sample id length atleast "+minLength+" characters");
         return false;
       }
     
