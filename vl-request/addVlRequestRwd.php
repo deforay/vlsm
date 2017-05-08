@@ -502,7 +502,7 @@ $sFormat = '';
                               </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <!--<div class="col-md-4">
                             <label for="testMethods" class="col-lg-5 control-label">Test Methods</label>
                             <div class="col-lg-7">
                               <select name="testMethods" id="testMethods" class="form-control" title="Please choose test methods">
@@ -512,7 +512,7 @@ $sFormat = '';
                                 <option value="other pooling algorithm">Other Pooling Algorithm</option>
                                </select>
                             </div>
-                        </div>
+                        </div>-->
                       </div>
                       <div class="row">
                         <div class="col-md-4">
