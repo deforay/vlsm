@@ -18,6 +18,9 @@ $lResult = $db->rawQuery($lQuery);
 //sample rejection reason
 $rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
 $rejectionResult = $db->rawQuery($rejectionQuery);
+//rejection type
+$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
@@ -650,13 +653,19 @@ $disable = "disabled = 'disabled'";
                             <div class="col-lg-7">
                               <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
-                               <?php
-                               foreach($rejectionResult as $reject){
-                                 ?>
-                                 <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $reject['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                 <?php
-                               }
-                               ?>
+                                <?php foreach($rejectionTypeResult as $type) { ?>
+                                <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
+                                  <?php
+                                  foreach($rejectionResult as $reject){
+                                    if($type['rejection_type'] == $reject['rejection_type']){
+                                    ?>
+                                    <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $reject['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
+                                    <?php
+                                    }
+                                  }
+                                  ?>
+                                </optgroup>
+                                <?php } ?>
                               </select>
                               <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                             </div>
