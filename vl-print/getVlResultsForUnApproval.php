@@ -95,7 +95,9 @@ $tsResult = $db->rawQuery($tsQuery);
     //echo $sQuery;die;
 	
 	if (isset($sWhere) && $sWhere != "") {
-        $sWhere=' where '.$sWhere;
+        $sWhere=' where temp_sample_status=0 AND '.$sWhere;
+	}else{
+		$sWhere = ' where temp_sample_status=0';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
         if (isset($sOrder) && $sOrder != "") {
@@ -116,7 +118,7 @@ $tsResult = $db->rawQuery($tsQuery);
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(temp_sample_id) as total FROM temp_sample_report");
+        $aResultTotal =  $db->rawQuery("select COUNT(temp_sample_id) as total FROM temp_sample_report where temp_sample_status=0");
         $iTotal = $aResultTotal[0]['total'];
         /*
          * Output
