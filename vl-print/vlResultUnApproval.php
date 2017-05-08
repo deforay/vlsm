@@ -336,6 +336,30 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
             }
         });
   }
+  function updateBatchCode(obj,oldBatchCode,tempsampleId) {
+	$(obj).fastConfirm({
+            position: "right",
+            questionText: "Are you sure you want to rename this Batch?",
+            onProceed: function(trigger) {
+                var pos = oTable.fnGetPosition(obj);
+				$.blockUI();
+				$.post("updateUnApprovalResultSample.php", { batchCode : obj.value,tempsampleId:tempsampleId},
+				   function(data){
+					if (data) {
+					  alert("Updated successfully!");
+                        oTable.fnDraw();
+                    }else{
+					  alert("Something went wrong!.Please try again");
+					}
+					
+				});
+				$.unblockUI();
+            },
+            onCancel: function(trigger) {
+			  $("#"+obj.id).val(oldBatchCode);
+            }
+        });
+  }
    
   
  

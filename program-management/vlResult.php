@@ -123,7 +123,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		  <td><b>Show only Recordered Samples&nbsp;:</b></td>
+		  <td><b>Show only Reordered Samples&nbsp;:</b></td>
 		    <td>
 		      <select name="showReordSample" id="showReordSample" class="form-control" title="Please choose record sample">
 				<option value=""> -- Select -- </option>

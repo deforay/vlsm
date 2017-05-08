@@ -171,11 +171,12 @@ $tsResult = $db->rawQuery($tsQuery);
 					</select><br><br>';
 			}
 			$samCode = "'".$aRow['sample_code']."'";
+			$batchCode = "'".$aRow['batch_code']."'";
 			$row[] = '<input style="width:90%;" type="text" name="sampleCode" id="sampleCode'.$aRow['temp_sample_id'].'" title="'.$rsDetails.'" value="'.$aRow['sample_code'].'" onchange="updateSampleCode(this,'.$samCode.','.$aRow['temp_sample_id'].');"/>'.$color;
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['sample_tested_datetime'];
 			$row[] = $aRow['facility_name'];
-			$row[] = $aRow['batch_code'];
+			$row[] = '<input style="width:90%;" type="text" name="batchCode" id="batchCode'.$aRow['temp_sample_id'].'" value="'.$aRow['batch_code'].'" onchange="updateBatchCode(this,'.$batchCode.','.$aRow['temp_sample_id'].');"/>';
 			$row[] = $aRow['lot_number'];
 			$row[] = $general->humanDateFormat($aRow['lot_expiration_date']);
 			$row[] = $aRow['rejection_reason_name'];
