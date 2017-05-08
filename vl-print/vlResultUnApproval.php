@@ -118,7 +118,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 		    ?>
 		  </select>
 		</td>
-		  <td><input type="hidden" name="print" id="print"/><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm">&nbsp;&nbsp;<input type="button" onclick="submitTestStatusAndPrint();" value="Save & Print All" class="btn btn-success btn-sm"></td>
+		  <td><input type="hidden" name="print" id="print"/><br/><input type="button" onclick="submitTestStatus();" value="Save" class="btn btn-success btn-sm"></td>
 	    </tr>
 	    
 	  </table>
@@ -177,7 +177,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 			  var oSettings = this.fnSettings();
               var iTotalRecords = oSettings.fnRecordsTotal();
 			  if(iTotalRecords==0){
-				  window.location.href="vlPrintResult.php";
+				  window.location.href="importedStatistics.php";
 			  }
 	    },
             "bProcessing": true,
@@ -235,8 +235,8 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 			  {
 				convertSearchResultToPdf('');
 			  }
-				if(data=='vlPrintResult.php'){
-				  window.location.href="vlPrintResult.php";
+				if(data=='importedStatistics.php'){
+				  window.location.href="importedStatistics.php";
 				}
 				oTable.fnDraw();
 				selectedTests = [];

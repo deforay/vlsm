@@ -1050,3 +1050,6 @@ INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reas
 INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'DBS cards with insufficient blood spots', 'dbs', 'active'), (NULL, 'DBS card with clotting present in spots', 'dbs', 'active');
 
 INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`) VALUES (NULL, 'DBS cards that have serum rings indicating contamination around spots', 'dbs', 'active'), (NULL, 'VL Mechine Flag', 'testing', 'active');
+
+--saravanan 08-may-2017
+ALTER TABLE  `temp_sample_report` ADD  `temp_sample_status` INT NOT NULL DEFAULT  '0';

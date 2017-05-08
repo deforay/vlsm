@@ -110,7 +110,7 @@ try {
             }
             
             $db=$db->where('temp_sample_id',$id[$i]);
-            $result=$db->delete($tableName);
+            $result=$db->update($tableName,array('temp_sample_status'=>1));
         }
         if (!file_exists('../uploads'. DIRECTORY_SEPARATOR . "import-result". DIRECTORY_SEPARATOR . $rResult[0]['import_machine_file_name'])) {
             copy('../temporary'. DIRECTORY_SEPARATOR ."import-result". DIRECTORY_SEPARATOR.$rResult[0]['import_machine_file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $rResult[0]['import_machine_file_name']);
@@ -173,7 +173,7 @@ try {
                         copy('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name'], '../uploads'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $accResult[$i]['import_machine_file_name']);
                     }
                     $db=$db->where('temp_sample_id',$accResult[$i]['temp_sample_id']);
-                    $result=$db->delete($tableName);
+                    $result=$db->update($tableName,array('temp_sample_status'=>1));
         }
     }
     $sCode = implode( ', ', $printSampleCode);
@@ -183,7 +183,7 @@ try {
     $stQuery="SELECT * FROM temp_sample_report where sample_type='s'";
     $stResult = $db->rawQuery($stQuery);
     if(!$stResult){
-        $result = "vlPrintResult.php";
+        $result = "importedStatistics.php";
     }
    echo $result;
 }
