@@ -65,19 +65,22 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
                 <thead>
                 <tr>
 		  <!--<th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
-		  <th style="width: 13%;">Form Serial No.</th>
+		  <th style="width: 23%;">Form Serial No.</th>
 		  <th style="width: 11%;">Sample Collection Date</th>
-                  <th style="width: 18%;">Sample Test Date</th>
-                  <th style="width: 18%;">Clinic Name</th>
-                  <th style="width: 18%;">Reason</th>
-                  <th style="width: 11%;">Sample Type</th>
+                  <th style="width: 10%;">Sample Test Date</th>
+                  <th style="width: 10%;">Clinic Name</th>
+                  <th style="width: 10%;">Batch Code</th>
+                  <th style="width: 10%;">General Lot No.</th>
+                  <th style="width: 10%;">General Expiry Date</th>
+                  <th style="width: 10%;">Reason</th>
+                  <th style="width: 9%;">Sample Type</th>
                   <th style="width: 9%;">Result</th>
                   <th style="width: 9%;">Status</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="5" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="11" class="dataTables_empty">Loading data from server</td>
 		  </tr>
                 </tbody>
               </table>
@@ -155,6 +158,9 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
             "bScrollCollapse": true,
             "bRetrieve": true,                        
             "aoColumns": [
+                {"sClass":"center","bSortable":false},
+                {"sClass":"center","bSortable":false},
+                {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
