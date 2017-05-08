@@ -68,7 +68,7 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
         <option data-code='' value=''> -- Select -- </option>
         <?php
         foreach($facilityInfo as $fDetails){ ?>
-            <option data-code="<?php echo $fDetails['facility_code']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_POST['cliName']==$fDetails['facility_id'])?'selected="selected"':'';?>><?php echo ucwords($fDetails['facility_name']);?></option>
+            <option data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_POST['cliName']==$fDetails['facility_id'])?'selected="selected"':'';?>><?php echo ucwords($fDetails['facility_name']);?></option>
             <?php
         }
     }else{ ?>

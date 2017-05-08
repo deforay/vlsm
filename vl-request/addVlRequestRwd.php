@@ -62,7 +62,7 @@ $aQuery="SELECT * from r_art_code_details where nation_identifier='rwd' AND art_
 $aResult=$db->query($aQuery);
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="6" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlResult=$db->query($svlQuery);
 if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
  $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
@@ -168,7 +168,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="autoFillFacilityCode();">
+                            <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
                               <?php echo $facility;  ?>
                             </select>
                           </div>
@@ -180,7 +180,13 @@ $sFormat = '';
                           </div>
                       </div>
                     </div>
+                    <div class="row facilityDetails" style="display:none;">
+                      <div class="col-xs-3 col-md-3 emails"><strong>Clinic/Health Center Email(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 emails facilityEmails"></div>
+                      <div class="col-xs-3 col-md-3 mobileNumbers"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
+                      <div class="col-xs-3 col-md-3 mobileNumbers facilityMobileNumbers"></div>
                     </div>
+                  </div>
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -708,8 +714,11 @@ $sFormat = '';
     $.unblockUI();
   }
   
-  function autoFillFacilityCode(){
+  function fillFacilityDetails(){
     $("#fCode").val($('#fName').find(':selected').data('code'));
+    $(".facilityDetails").show();
+    $(".facilityEmails").html($('#fName').find(':selected').data('emails'));
+    $(".facilityMobileNumbers").html($('#fName').find(':selected').data('mobile-nos'));
   }
   
   $("input:radio[name=gender]").click(function() {
