@@ -406,7 +406,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="3" style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Patient OI/ ART Number</td>';
+                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">TRACNET (ART)</td>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;text-align:left;">'.$result['patient_art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
