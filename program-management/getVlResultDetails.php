@@ -182,6 +182,9 @@ $primaryKey="vl_sample_id";
 		    $sWhere = $sWhere.' AND vl.patient_gender ="'.$_POST['gender'].'"';
 		}
 	    }
+		if(isset($_POST['showReordSample']) && trim($_POST['showReordSample'])!= ''){
+	        $sWhere = $sWhere.' AND vl.sample_reordered ="'.$_POST['showReordSample'].'"';
+	    }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 		$setWhr = 'where';
@@ -263,6 +266,15 @@ $primaryKey="vl_sample_id";
 		  $setWhr = 'where';
 		$sWhere=' where '.$sWhere;
 	        $sWhere = $sWhere.' vl.result_status ='.$_POST['status'];
+		}
+	    }
+		if(isset($_POST['showReordSample']) && trim($_POST['showReordSample'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND vl.sample_reordered ="'.$_POST['showReordSample'].'"';
+		}else{
+		  $setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' vl.sample_reordered ="'.$_POST['showReordSample'].'"';
 		}
 	    }
 	    if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
