@@ -4,7 +4,12 @@ $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
-
+$tQuery = "select sample_review_by from temp_sample_report limit 0,1";
+$tResult = $db->rawQuery($tQuery);
+$reviewBy = $_SESSION['userId'];
+if($tResult){
+  $reviewBy = $tResult[0]['sample_review_by'];  
+}
 //global config
 $cSampleQuery="SELECT * FROM global_config";
 $cSampleResult=$db->query($cSampleQuery);
@@ -101,7 +106,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 		      <?php
 		      foreach($userResult as $uName){
 			?>
-			<option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+			<option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$reviewBy)?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
 			<?php
 		      }
 		      ?>
@@ -286,31 +291,6 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
    else{
       alert("Please select the status.");
     }
-  }
-  function convertSearchResultToPdf(id){
-    $.blockUI();
-    <?php
-    if($arr['vl_form'] == 3){
-      $path = '../includes/vlRequestDrcSearchResultPdf.php';
-    }else if($arr['vl_form'] == 2){
-     $path = '../includes/vlRequestSearchResultPdf.php'; 
-    }else if($arr['vl_form'] == 4){
-     $path = '../includes/vlRequestZamSearchResultPdf.php';  
-    }else if($arr['vl_form'] == 6){
-     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
-    }
-    ?>
-    $.post("<?php echo $path; ?>", { source:'print',id : id},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      $.unblockUI();
-	      alert('Unable to generate download');
-	  }else{
-	      $.unblockUI();
-	      window.open('../uploads/'+data,'_blank');
-	  }
-	  
-      });
   }
   function updateSampleCode(obj,oldSampleCode,tempsampleId) {
 	$(obj).fastConfirm({
