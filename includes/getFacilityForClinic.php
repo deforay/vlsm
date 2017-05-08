@@ -33,7 +33,7 @@ if(isset($_POST['pName'])){
     if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
      $dName = " AND facility_district ='".$_POST['dName']."'";
     }
-    $facilityQuery="SELECT * from facility_details where facility_state='".$provinceName[0]."'".$dName;
+    $facilityQuery="SELECT * from facility_details where facility_state='".$provinceName[0]."' AND status='active'".$dName;
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
@@ -45,7 +45,7 @@ if(isset($_POST['pName'])){
         $facility.="<option data-code='' value=''> -- Select -- </option>";
     }
     $district = '';
-    $facilityDistQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$provinceName[0]."'";
+    $facilityDistQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$provinceName[0]."' AND status='active'";
     $facilityDistInfo=$db->query($facilityDistQuery);
     if($facilityDistInfo){
         $district.="<option value=''> -- Select -- </option>";
@@ -61,7 +61,7 @@ if(isset($_POST['pName'])){
 }
 if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     $distName=$_POST['dName'];
-    $facilityQuery="SELECT * from facility_details where facility_district='".$distName."'";
+    $facilityQuery="SELECT * from facility_details where facility_district='".$distName."' AND status='active'";
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){ ?>
