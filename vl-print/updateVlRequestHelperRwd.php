@@ -64,7 +64,7 @@ try {
           'vlsm_instance_id'=>$instanceId,
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
-          'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
+          //'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
