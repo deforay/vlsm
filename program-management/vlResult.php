@@ -13,7 +13,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 }
 $sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery="SELECT * FROM facility_details where status='active'";
+$fQuery="SELECT * FROM facility_details where status='active' and facility_type=2";
 $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
@@ -119,6 +119,16 @@ $batResult = $db->rawQuery($batQuery);
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
 			<option value="6">Awaiting Clinic Approval</option>
+		      </select>
+		    </td>
+		</tr>
+		<tr>
+		  <td><b>Show only Recordered Samples&nbsp;:</b></td>
+		    <td>
+		      <select name="showReordSample" id="showReordSample" class="form-control" title="Please choose record sample">
+				<option value=""> -- Select -- </option>
+				<option value="yes">Yes</option>
+				<option value="no" selected="selected">No</option>
 		      </select>
 		    </td>
 		</tr>
@@ -299,6 +309,7 @@ $batResult = $db->rawQuery($batQuery);
 			  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
 			  aoData.push({"name": "status", "value": $("#status").val()});
 			  aoData.push({"name": "gender", "value": $("#gender").val()});
+			  aoData.push({"name": "showReordSample", "value": $("#showReordSample").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
