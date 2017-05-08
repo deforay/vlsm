@@ -90,7 +90,7 @@ $tsResult = $db->rawQuery($tsQuery);
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.result_status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_status as ts ON ts.status_id=tsr.result_status";
+	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,tsr.lot_number,tsr.lot_expiration_date,tsr.batch_code,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.result_status,ts.status_name FROM temp_sample_report as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_status as ts ON ts.status_id=tsr.result_status";
 	$sOrder = 'temp_sample_id ASC';
     //echo $sQuery;die;
 	
@@ -171,10 +171,14 @@ $tsResult = $db->rawQuery($tsQuery);
 					</select><br><br>';
 			}
 			$samCode = "'".$aRow['sample_code']."'";
+			$batchCode = "'".$aRow['batch_code']."'";
 			$row[] = '<input style="width:90%;" type="text" name="sampleCode" id="sampleCode'.$aRow['temp_sample_id'].'" title="'.$rsDetails.'" value="'.$aRow['sample_code'].'" onchange="updateSampleCode(this,'.$samCode.','.$aRow['temp_sample_id'].');"/>'.$color;
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['sample_tested_datetime'];
 			$row[] = $aRow['facility_name'];
+			$row[] = '<input style="width:90%;" type="text" name="batchCode" id="batchCode'.$aRow['temp_sample_id'].'" value="'.$aRow['batch_code'].'" onchange="updateBatchCode(this,'.$batchCode.','.$aRow['temp_sample_id'].');"/>';
+			$row[] = $aRow['lot_number'];
+			$row[] = $general->humanDateFormat($aRow['lot_expiration_date']);
 			$row[] = $aRow['rejection_reason_name'];
 			$row[] = ucwords($aRow['sample_type']);
 			$row[] = $aRow['result'];

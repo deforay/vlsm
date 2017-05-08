@@ -6,8 +6,22 @@ $general=new Deforay_Commons_General();
 $tableName="temp_sample_report";
 try {
     $result = false;
-    if(trim($_POST['sampleCode'])!=''){
-        $sampleResult = $db->rawQuery("select sample_code from vl_request_form where sample_code='".$_POST['sampleCode']."'");
+    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=''){
+        $batchResult = $db->rawQuery("select batch_code from batch_details where batch_code='".trim($_POST['batchCode'])."'");
+        if($batchResult){}
+        else{
+            $data=array(
+                    'machine'=>0,
+                    'batch_code'=>trim($_POST['batchCode']),
+                    'request_created_datetime'=>$general->getDateTime()
+                    );
+            $db->insert("batch_details",$data);
+        }
+        $db=$db->where('temp_sample_id',$_POST['tempsampleId']);
+        $result = $db->update($tableName,array('batch_code'=>$_POST['batchCode']));
+    }
+    else if(isset($_POST['sampleCode']) && trim($_POST['sampleCode'])!=''){
+        $sampleResult = $db->rawQuery("select sample_code from vl_request_form where sample_code='".trim($_POST['sampleCode'])."'");
         if($sampleResult){
             $sampleDetails = 'Result exists already';
         }else{
@@ -15,7 +29,7 @@ try {
         }
         $db=$db->where('temp_sample_id',$_POST['tempsampleId']);
         $result = $db->update($tableName,array('sample_code'=>$_POST['sampleCode'],'sample_details'=>$sampleDetails));
-}
+    }
 }
 catch (Exception $exc) {
     error_log($exc->getMessage());

@@ -1,349 +1,265 @@
 <?php
-include('../header.php');
-//include('../includes/MysqliDb.php');
-$tsQuery="SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
-$sQuery="SELECT * FROM r_sample_type";
-$sResult = $db->rawQuery($sQuery);
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-$batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
-$batResult = $db->rawQuery($batQuery);
-?>
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1><i class="fa fa-edit"></i> Results Approval</h1>
-      <ol class="breadcrumb">
-        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Test Request</li>
-      </ol>
-    </section>
+session_start();
+include('../includes/MysqliDb.php');
+include('../General.php');
+$formConfigQuery ="SELECT * from global_config where name='vl_form'";
+$configResult=$db->query($formConfigQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
+$general=new Deforay_Commons_General();
+$tableName="vl_request_form";
+$primaryKey="vl_sample_id";
 
-     <!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;">
-		<tr>
-		    <td style=""><b>Sample Collection Date&nbsp;:</b></td>
-		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
-		    </td>
-		    <td>&nbsp;<b>Batch Code&nbsp;:</b></td>
-		    <td>
-		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
-		        <option value=""> -- Select -- </option>
-			 <?php
-			 foreach($batResult as $code){
-			  ?>
-			  <option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
-			  <?php
-			 }
-			 ?>
-		      </select>
-		    </td>
-		</tr>
-		<tr>
-		    <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
-		    <td>
-		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-		      <option value=""> -- Select -- </option>
-			<?php
-			foreach($sResult as $type){
-			 ?>
-			 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
-			 <?php
-			}
-			?>
-		      </select>
-		    </td>
-		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
-		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
-		      <option value=""> -- Select -- </option>
-			<?php
-			foreach($fResult as $name){
-			 ?>
-			 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
-			 <?php
-			}
-			?>
-		      </select>
-		    </td>
-		</tr>
-		<tr>
-		  <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
-		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		    
-		    </td>
-		</tr>
-		
-	    </table>
-            <div class="box-header with-border">
-		<div class="col-md-5 col-sm-5">
-		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled="disabled">
-		      <option value="">-- Select at least one sample to apply bulk action --</option>
-		      <option value="7">Accepted</option>
-		      <option value="4">Rejected</option>
-		      <option value="2">Lost</option>
-		    </select>
-		</div>
-		<div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Apply" class="btn btn-success btn-sm"></div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table id="vlRequestDataTable" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-		  <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
-		  <th>Sample Code</th>
-                  <th>Sample Collection Date</th>
-                  <th>Batch Code</th>
-                  <th>Unique ART No</th>
-                  <th>Patient's Name</th>
-		  <th>Facility Name</th>
-                  <th>Sample Type</th>
-                  <th>Result</th>
-                  <th>Last Modified on</th>
-                  <th>Status</th>
-		  <?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
-                  <!--<th>Action</th>-->
-		  <?php } ?>
-                </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colspan="13" class="dataTables_empty">Loading data from server</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-	  
-        </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
-  <script type="text/javascript">
-   var startDate = "";
-   var endDate = "";
-   var selectedTests=[];
-   var selectedTestsId=[];
-  $(document).ready(function() {
-     $('#sampleCollectionDate').daterangepicker({
-            format: 'DD-MMM-YYYY',
-	    separator: ' to ',
-            startDate: moment().subtract('days', 29),
-            endDate: moment(),
-            maxDate: moment(),
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+        /* Array of database columns which should be read and sent back to DataTables. Use a space where
+         * you want to insert a non-database field (for example a counter or static image)
+        */
+        
+        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
+        $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
+        
+        /* Indexed column (used for fast and accurate table cardinality) */
+        $sIndexColumn = $primaryKey;
+        
+        $sTable = $tableName;
+        /*
+         * Paging
+         */
+        $sLimit = "";
+        if (isset($_POST['iDisplayStart']) && $_POST['iDisplayLength'] != '-1') {
+            $sOffset = $_POST['iDisplayStart'];
+            $sLimit = $_POST['iDisplayLength'];
+        }
+        
+        /*
+         * Ordering
+        */
+        
+        $sOrder = "";
+        if (isset($_POST['iSortCol_0'])) {
+            $sOrder = "";
+            for ($i = 0; $i < intval($_POST['iSortingCols']); $i++) {
+                if ($_POST['bSortable_' . intval($_POST['iSortCol_' . $i])] == "true") {
+                    $sOrder .= $orderColumns[intval($_POST['iSortCol_' . $i])] . "
+				 	" . ( $_POST['sSortDir_' . $i] ) . ", ";
+                }
             }
-        },
-        function(start, end) {
-            startDate = start.format('YYYY-MM-DD');
-            endDate = end.format('YYYY-MM-DD');
-      });
-     $('#sampleCollectionDate').val("");
-     loadVlRequestData();
-  } );
-  
-  var oTable = null;
-  function loadVlRequestData(){
-    $.blockUI();
-     oTable = $('#vlRequestDataTable').dataTable({
-            "oLanguage": {
-                "sLengthMenu": "_MENU_ records per page"
-            },
-            "bJQueryUI": false,
-            "bAutoWidth": false,
-            "bInfo": true,
-            "bScrollCollapse": true,
-            //"bStateSave" : true,
-            "iDisplayLength": 100,            
-            "bRetrieve": true,                        
-            "aoColumns": [
-		{"sClass":"center","bSortable":false},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                {"sClass":"center"},
-                //{"sClass":"center","bSortable":false},
-            ],
-            "aaSorting": [[ 9, "desc" ]],
-	    "fnDrawCallback": function() {
-		var checkBoxes=document.getElementsByName("chk[]");
-                len = checkBoxes.length;
-                for(c=0;c<len;c++){
-                    if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1 ){
-			checkBoxes[c].setAttribute("checked",true);
+            $sOrder = substr_replace($sOrder, "", -2);
+        }
+        
+        /*
+         * Filtering
+         * NOTE this does not match the built-in DataTables filtering which does it
+         * word by word on any field. It's possible to do here, but concerned about efficiency
+         * on very large tables, and MySQL's regex functionality is very limited
+        */
+        
+        $sWhere = "";
+        if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
+            $searchArray = explode(" ", $_POST['sSearch']);
+            foreach ($searchArray as $search) {
+                if ($sWhere == "") {
+                    $sWhere .= "(";
+                } else {
+                    $sWhere .= " AND (";
+                }
+                $colSize = count($aColumns);
+                
+                for ($i = 0; $i < $colSize; $i++) {
+                    if ($i < $colSize - 1) {
+                        $sWhere .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
+                    } else {
+                        $sWhere .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' ";
                     }
                 }
-	    },
-            "bProcessing": true,
-            "bServerSide": true,
-            "sAjaxSource": "getVlResultsForApproval.php",
-            "fnServerData": function ( sSource, aoData, fnCallback ) {
-	      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-	      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-	      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
-              $.ajax({
-                  "dataType": 'json',
-                  "type": "POST",
-                  "url": sSource,
-                  "data": aoData,
-                  "success": fnCallback
-              });
+                $sWhere .= ")";
             }
-        });
-     $.unblockUI();
-  }
-  
-  function searchVlRequestData(){
-    $.blockUI();
-    oTable.fnDraw();
-    $.unblockUI();
-  }
-    
-  function convertPdf(id){
-      $.post("../includes/vlRequestPdf.php", { id : id, format: "html"},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
-	  }else{
-	      window.open('../uploads/'+data,'_blank');
-	  }
+            //$sWhere .= $sWhereSub;
+        }else{
+	    //$sWhere = "vl.result_status = 6";
+	}
+        
+        /* Individual column filtering */
+        for ($i = 0; $i < count($aColumns); $i++) {
+            if (isset($_POST['bSearchable_' . $i]) && $_POST['bSearchable_' . $i] == "true" && $_POST['sSearch_' . $i] != '') {
+                if ($sWhere == "") {
+                    $sWhere .= $aColumns[$i] . " LIKE '%" . ($_POST['sSearch_' . $i]) . "%' ";
+                } else {
+                    $sWhere .= " AND " . $aColumns[$i] . " LIKE '%" . ($_POST['sSearch_' . $i]) . "%' ";
+                }
+            }
+        }
+        
+        /*
+         * SQL queries
+         * Get data to display
+        */
+	$aWhere = '';
+        //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type";
+	$sQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+	
+        //echo $sQuery;die;
+	$start_date = '';
+	$end_date = '';
+	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+	   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
+	   //print_r($s_c_date);die;
+	   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+	     $start_date = $general->dateFormat(trim($s_c_date[0]));
+	   }
+	   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+	     $end_date = $general->dateFormat(trim($s_c_date[1]));
+	   }
+	}
 	  
-      });
-  }
-  
-  
-  function toggleTest(obj){
-	 if ($(obj).is(':checked')) {
-	     if($.inArray(obj.value, selectedTests) == -1){
-		 selectedTests.push(obj.value);
-		 selectedTestsId.push(obj.id);
-	     }
-	 } else {
-	     selectedTests.splice( $.inArray(obj.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(obj.id, selectedTestsId), 1 );
-	     $("#checkTestsData").attr("checked",false);
-	 }
-	 $("#checkedTests").val(selectedTests.join());
-	 if(selectedTests.length!=0){
-	  $("#status").prop('disabled', false);
-	 }else{
-	  $("#status").prop('disabled', true);
-	 }
-	 
-    }
-      
-    function toggleAllVisible(){
-        //alert(tabStatus);
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	     $("#status").prop('disabled', true);
-	 });
-	 if ($("#checkTestsData").is(':checked')) {
-	 $(".checkTests").each(function(){
-	     $(this).prop('checked', true);
-		 selectedTests.push(this.value);
-		 selectedTestsId.push(this.id);
-	 });
-	 $("#status").prop('disabled', false);
-     } else{
-	$(".checkTests").each(function(){
-	     $(this).prop('checked', false);
-	     selectedTests.splice( $.inArray(this.value, selectedTests), 1 );
-	     selectedTestsId.splice( $.inArray(this.id, selectedTestsId), 1 );
-	     $("#status").prop('disabled', true);
-	 });
-     }
-     $("#checkedTests").val(selectedTests.join());
-   }
-   
-   function submitTestStatus(){
-    var stValue = $("#status").val();
-    var testIds = $("#checkedTests").val();
-    if(stValue!='' && testIds!=''){
-      conf=confirm("Do you wish to change the test status ?");
-      if (conf) {
-    $.post("updateTestStatus.php", { status : stValue,id:testIds},
-      function(data){
-	  if(data != ""){
-	    $("#checkedTests").val('');
-	    selectedTests = [];
-	    selectedTestsId = [];
-	    $("#checkTestsData").attr("checked",false);
-	    $("#status").val('');
-	    $("#status").prop('disabled', true);
-	    oTable.fnDraw();
-	    alert('Updated successfully.');
-	  }
-      });
-      }
-    }else{
-      alert("Please be checked atleast one checkbox.");
-    }
-   }
-  function updateStatus(obj)
-  {
-   if(obj.value!=''){
-     conf=confirm("Do you wish to change the status ?");
-     if (conf) {
-   $.post("updateTestStatus.php", { status : obj.value,id:obj.id},
-     function(data){
-       if(data != ""){
-	 $("#checkedTests").val('');
-	   selectedTests = [];
-	   selectedTestsId = [];
-	   $("#checkTestsData").attr("checked",false);
-	   $("#status").val('');
-	   $("#status").prop('disabled', true);
-	   oTable.fnDraw();
-	   alert('Updated successfully.');
-       }
-     });
-   }
-  }
-  }
-//  
-//  function printBarcode(tId) {
-//    $.post("printBarcode.php",{id:tId},
-//      function(data){
-//	  if(data == "" || data == null || data == undefined){
-//	    alert('Unable to generate download');
-//	  }else{
-//	    window.open('../uploads/barcode/'+data,'_blank');
-//	  }
-//    });
-//  }
-</script>
- <?php
- include('../footer.php');
- ?>
+	if (isset($sWhere) && $sWhere != "") {
+            $sWhere=' where '.$sWhere;
+	    //$sQuery = $sQuery.' '.$sWhere;
+	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+	        $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
+	    }
+	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+			if (trim($start_date) == trim($end_date)) {
+				$sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+			}else{
+			   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			}
+        }
+		if(isset($_POST['sampleType']) && $_POST['sampleType']!=''){
+			$sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
+		}
+		if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
+			$sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		}
+	}else{
+	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' b.batch_code = "'.$_POST['batchCode'].'"';
+	    }
+	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		if(isset($setWhr)){
+		    if (trim($start_date) == trim($end_date)) {
+		     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+		        $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		     }else{
+			$sWhere=' where '.$sWhere;
+			$sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		     }
+		    }
+		}else{
+		    $setWhr = 'where';
+		    $sWhere=' where '.$sWhere;
+		    $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		}
+	    }
+	    if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
+		}else{
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' s.sample_id = "'.$_POST['sampleType'].'"';
+		}
+	    }
+	    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		}else{
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
+		}
+	    }
+	}
+	if($sWhere!=''){
+	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	}else{
+	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	}
+	$sQuery = $sQuery.' '.$sWhere;
+	//echo $sQuery;die;
+	//echo $sQuery;die;
+        if (isset($sOrder) && $sOrder != "") {
+            $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
+            $sQuery = $sQuery.' order by '.$sOrder;
+        }
+        
+        if (isset($sLimit) && isset($sOffset)) {
+            $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
+        }
+       //die($sQuery);
+      // echo $sQuery;
+        $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
+        $rResult = $db->rawQuery($sQuery);
+       // print_r($rResult);
+        /* Data set length after filtering */
+        
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_first_name,vl.result,f.facility_name,f.facility_code,vl.patient_art_no,s.sample_name,b.batch_code,vl.sample_batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+        $iFilteredTotal = count($aResultFilterTotal);
+
+        /* Total data set length */
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."'");
+       // $aResultTotal = $countResult->fetch_row();
+       //print_r($aResultTotal);
+        $iTotal = $aResultTotal[0]['total'];
+
+        /*
+         * Output
+        */
+        $output = array(
+            "sEcho" => intval($_POST['sEcho']),
+            "iTotalRecords" => $iTotal,
+            "iTotalDisplayRecords" => $iFilteredTotal,
+            "aaData" => array()
+        );
+		$vlRequest = false;
+		$vlView = false;
+		if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges']))){
+		    $vlRequest = true;
+		}
+		if(isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))){
+		    $vlView = true;
+		}
+			
+        foreach ($rResult as $aRow) {
+	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
+		    $xplodDate = explode(" ",$aRow['sample_collection_date']);
+		    $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+	    }else{
+		    $aRow['sample_collection_date'] = '';
+	    }
+	  
+	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['vl_sample_id'].'" title="Please select status" onchange="updateStatus(this)">
+ 				<option value="">-- Select --</option>
+				<option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
+ 				<option value="4" '.($aRow['status_id']=="4"  ? "selected=selected" : "").'>Rejected</option>
+ 				<option value="2" '.($aRow['status_id']=="2"  ? "selected=selected" : "").'>Lost</option>
+ 			</select><br><br>';
+			
+			$row = array();
+			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
+			$row[] = $aRow['sample_code'];
+			$row[] = $aRow['sample_collection_date'];
+			$row[] = $aRow['batch_code'];
+			$row[] = $aRow['patient_art_no'];
+			$row[] = ucwords($aRow['patient_first_name']." ".$aRow['patient_last_name']);
+			$row[] = ucwords($aRow['facility_name']);
+			$row[] = ucwords($aRow['sample_name']);
+			$row[] = $aRow['result'];
+			if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
+			   $xplodDate = explode(" ",$aRow['last_modified_datetime']);
+			   $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+			}else{
+			   $aRow['last_modified_datetime'] = '';
+			}			
+			$row[] = $aRow['last_modified_datetime'];			
+			$row[] = $status;
+			//$row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Result</a>';
+			
+			$output['aaData'][] = $row;
+        }
+        
+        echo json_encode($output);
+?>
