@@ -34,13 +34,13 @@ $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
 
 //get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
+$lQuery="SELECT * FROM facility_details where facility_type='2' AND status='active'";
 $lResult = $db->rawQuery($lQuery);
 //sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
 //rejection type
-$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons";
+$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
 $pdQuery="SELECT * from province_details";
@@ -54,10 +54,11 @@ $province.="<option value=''> -- Select -- </option>";
 $facility = '';
 $facility.="<option data-code='' value=''> -- Select -- </option>";
 
+//get active sample types
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 
-$aQuery="SELECT * from r_art_code_details where nation_identifier='rwd'";
+$aQuery="SELECT * from r_art_code_details where nation_identifier='rwd' AND art_status ='active'";
 $aResult=$db->query($aQuery);
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
@@ -563,6 +564,7 @@ $sFormat = '';
                                   ?>
                                 </optgroup>
                                 <?php } ?>
+                                <option value="other">Other (Please Specify) </option>
                               </select>
                               <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                             </div>
@@ -802,7 +804,7 @@ $sFormat = '';
   
   function checkRejectionReason(){
     var rejectionReason = $("#rejectionReason").val();
-    if(rejectionReason == 16){
+    if(rejectionReason == "other"){
       $("#newRejectionReason").show();
       $("#newRejectionReason").addClass("isRequired");
     }else{

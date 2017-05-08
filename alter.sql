@@ -1053,3 +1053,10 @@ INSERT INTO `r_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reas
 
 --saravanan 08-may-2017
 ALTER TABLE  `temp_sample_report` ADD  `temp_sample_status` INT NOT NULL DEFAULT  '0';
+
+--Pal 08-may-2017
+DELETE FROM `vl_lab_request`.`r_sample_rejection_reasons` WHERE `r_sample_rejection_reasons`.`rejection_reason_id` = 16
+
+ALTER TABLE `r_sample_status` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `status_name`;
+
+ALTER TABLE `r_art_code_details` ADD `art_status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `nation_identifier`;
