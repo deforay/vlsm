@@ -1060,3 +1060,6 @@ DELETE FROM `vl_lab_request`.`r_sample_rejection_reasons` WHERE `r_sample_reject
 ALTER TABLE `r_sample_status` ADD `status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `status_name`;
 
 ALTER TABLE `r_art_code_details` ADD `art_status` VARCHAR(45) NOT NULL DEFAULT 'active' AFTER `nation_identifier`;
+
+--saravanan 09-may-2017
+INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Sample Code Prefix', 'sample_code_prefix', NULL);

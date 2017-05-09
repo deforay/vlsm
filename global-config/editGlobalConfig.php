@@ -23,6 +23,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
   .select2-selection__choice{
     color:#000000 !important;
   }
+  .boxWidth {width:10%;}
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -183,10 +184,27 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-7" style="height:28px;">
+                  <div class="col-md-10" style="height:28px;margin-left:5%;">
                     <div class="form-group" style="height:28px;">
-                      <label for="auto_approval" class="col-lg-4 control-label">Sample Code </label>
+                      <label for="auto_approval" class="col-lg-2 control-label">Sample Code </label>
                       <div class="col-lg-8">
+                        <?php
+                        $sPrefixMMYY = '';
+                        $sPrefixYY = '';
+                        $sPrefixMMYYDisplay = 'disabled="disabled"';
+                        $sPrefixYYDisplay = 'disabled="disabled"';
+                        if($arr['sample_code']=='MMYY'){
+                        $sPrefixMMYY = $arr['sample_code_prefix'];
+                        $sPrefixMMYYDisplay = '';
+                        }else if($arr['sample_code']=='YY'){
+                            $sPrefixYY = $arr['sample_code_prefix'];
+                            $sPrefixYYDisplay = '';
+                        }
+                        ?>
+                        <input type="radio" class="" id="auto_generate_yy" name="sample_code" value="YY" <?php echo($arr['sample_code'] == 'YY')?'checked':''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay;?> type="text" class="boxWidth prefixYY" id="prefixYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY;?>"/>
+                        &nbsp;&nbsp;YY&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_generate_mmyy" name="sample_code" value="MMYY" <?php echo($arr['sample_code'] == 'MMYY')?'checked':''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay;?>  type="text" class="boxWidth prefixMMYY" id="prefixMMYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY;?>"/>
+                        &nbsp;&nbsp;MMYY&nbsp;&nbsp;
                         <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>&nbsp;&nbsp;Auto&nbsp;&nbsp;
                         <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>&nbsp;&nbsp;Numeric
                         <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>&nbsp;&nbsp;Alpha Numeric
@@ -215,7 +233,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group">
                       <label for="min_length" class="col-lg-4 control-label">Minimum Length<span class="mandatory minlth" style="display:<?php echo($arr['sample_code'] == 'auto')?'none':'block'; ?>">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="min_length" name="min_length" <?php echo($arr['sample_code'] == 'auto')?'readonly':''; ?> placeholder="Sample Code Min. Length" title="Please enter sample code min length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['min_length']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="min_length" name="min_length" <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'readonly':''; ?> placeholder="Sample Code Min. Length" title="Please enter sample code min length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['min_length']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -225,7 +243,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group">
                       <label for="min_length" class="col-lg-4 control-label">Maximum Length<span class="mandatory maxlth" style="display:<?php echo($arr['sample_code'] == 'auto')?'none':'block'; ?>">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="max_length" name="max_length" <?php echo($arr['sample_code'] == 'auto')?'readonly':''; ?> placeholder="Sample Code Max. Length" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['max_length']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="max_length" name="max_length" <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'readonly':''; ?> placeholder="Sample Code Max. Length" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['max_length']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -408,7 +426,18 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
   }
   
   $("input:radio[name=sample_code]").click(function() {
-        if(this.value == 'auto'){
+        if (this.value == 'MMYY' || this.value == 'YY') {
+            $('#auto-sample-eg').hide(); 
+            $('#min_length').val(''); 
+            $('.minlth').hide();
+            $('#min_length').removeClass('isRequired'); 
+            $('#min_length').prop('readonly',true); 
+            $('#max_length').val('');
+            $('.maxlth').hide();
+            $('#max_length').removeClass('isRequired'); 
+            $('#max_length').prop('readonly',true);
+        }
+        else if(this.value == 'auto'){
            $('#auto-sample-eg').show(); 
            $('#min_length').val(''); 
            $('.minlth').hide();
@@ -418,6 +447,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
            $('.maxlth').hide();
            $('#max_length').removeClass('isRequired'); 
            $('#max_length').prop('readonly',true);
+           $('.boxWidth').removeClass('isRequired').attr('disabled',true).val('');
         }else{
            $('#auto-sample-eg').hide();
            $('.minlth').show();
@@ -426,8 +456,15 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
            $('.maxlth').show();
            $('#max_length').addClass('isRequired');
            $('#max_length').prop('readonly',false);
+           $('.boxWidth').removeClass('isRequired').attr('disabled',true).val('');
         }
   });
+  function makeReadonly(id1,id2) {
+    $("#"+id1).val('');
+    $("#"+id1).attr("disabled",'disabled').removeClass('isRequired');
+    $("#"+id2).attr("disabled",false).addClass('isRequired');
+    
+  }
 </script>
   
  <?php
