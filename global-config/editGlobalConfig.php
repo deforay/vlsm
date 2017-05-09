@@ -233,7 +233,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group">
                       <label for="min_length" class="col-lg-4 control-label">Minimum Length<span class="mandatory minlth" style="display:<?php echo($arr['sample_code'] == 'auto')?'none':'block'; ?>">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="min_length" name="min_length" <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'readonly':''; ?> placeholder="Sample Code Min. Length" title="Please enter sample code min length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['min_length']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'':'isRequired'; ?>" id="min_length" name="min_length" <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'readonly':''; ?> placeholder="Sample Code Min. Length" title="Please enter sample code min length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['min_length']; ?>"/>
                       </div>
                     </div>
                    </div>
@@ -243,7 +243,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group">
                       <label for="min_length" class="col-lg-4 control-label">Maximum Length<span class="mandatory maxlth" style="display:<?php echo($arr['sample_code'] == 'auto')?'none':'block'; ?>">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto')?'':'isRequired'; ?>" id="max_length" name="max_length" <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'readonly':''; ?> placeholder="Sample Code Max. Length" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['max_length']; ?>"/>
+                        <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'':'isRequired'; ?>" id="max_length" name="max_length" <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'readonly':''; ?> placeholder="Sample Code Max. Length" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['max_length']; ?>"/>
                       </div>
                     </div>
                    </div>
