@@ -95,13 +95,12 @@ $country = $configResult[0]['value'];
         */
 	$sQuery="SELECT
 	
-		vl.lab_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
+		vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
 		
 		SUM(CASE
 			WHEN (result_status = 4) THEN 1
 		             ELSE 0
 		           END) AS rejections,
-
 		SUM(CASE 
 			WHEN (patient_age_in_years <= 14 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
 		             ELSE 0
@@ -151,7 +150,7 @@ $country = $configResult[0]['value'];
              ELSE 0
            END) AS totalGreaterThan1000,
 		COUNT(result) as total
-		FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.lab_id";
+		FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
@@ -167,12 +166,12 @@ $country = $configResult[0]['value'];
 		$tWhere = 'where ';
 		if(isset($sWhere) && trim($sWhere)!= ''){
 		  $sWhere=' where '.$sWhere;
-		  $sWhere = $sWhere.' AND vl.vlsm_country_id = '.$country.' AND facility_type=2 ';
-		  $tWhere = $tWhere.'vl.vlsm_country_id = '.$country.' AND facility_type=2 ';
+		  $sWhere = $sWhere.' AND vl.vlsm_country_id = '.$country;
+		  $tWhere = $tWhere.'vl.vlsm_country_id = '.$country;
 		}else{
 		  $sWhere=' where '.$sWhere;
-		  $sWhere = $sWhere.'vl.vlsm_country_id = '.$country.' AND facility_type=2 ';
-		  $tWhere = $tWhere.'vl.vlsm_country_id = '.$country.' AND facility_type=2 ';
+		  $sWhere = $sWhere.'vl.vlsm_country_id = '.$country;
+		  $tWhere = $tWhere.'vl.vlsm_country_id = '.$country;
 		}
 		
 		if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
@@ -190,7 +189,7 @@ $country = $configResult[0]['value'];
 		}
 		
 		$sQuery = $sQuery.' '.$sWhere;
-		$sQuery = $sQuery.' GROUP BY vl.lab_id';
+		$sQuery = $sQuery.' GROUP BY vl.facility_id';
 		
 		
 		$_SESSION['vlStatisticsQuery']=$sQuery;
@@ -208,10 +207,10 @@ $country = $configResult[0]['value'];
         $sResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.lab_id $sWhere GROUP BY vl.lab_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $sWhere GROUP BY vl.facility_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.lab_id $tWhere GROUP BY vl.lab_id");
+        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $tWhere GROUP BY vl.facility_id");
         $iTotal = count($aResultTotal);
 
         /*
