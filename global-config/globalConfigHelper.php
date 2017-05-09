@@ -8,6 +8,9 @@ define('UPLOAD_PATH','../uploads');
 $general = new Deforay_Commons_General();
 $tableName="global_config";
 try {
+	$configQuery ="SELECT value FROM global_config where name='sample_code'";
+	$configResult = $db->rawQuery($configQuery);
+	
     if(isset($_POST['removedLogoImage']) && trim($_POST['removedLogoImage']) != "" && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage'])){
         unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage']);
         $data=array('value'=>'');
@@ -82,6 +85,42 @@ try {
 	   }
         }
     }
+	//update all sample code in database
+	if(isset($_POST['sample_code_prefix']) && trim($_POST['sample_code_prefix'])!=''){
+		if($configResult[0]['value']!=$_POST['sample_code'])
+		{
+			$prefix = trim($_POST['sample_code_prefix']);
+			$vlDistinctQuery ="SELECT DISTINCT DATE_FORMAT( request_created_datetime,'%Y-%m' ) as month FROM vl_request_form";
+			$distnictResult = $db->rawQuery($vlDistinctQuery);
+			if($distnictResult){
+				foreach($distnictResult as $month){
+					$start_date = date($month['month'].'-01');
+					$end_date = date($month['month'].'-31');
+					$vlQuery = 'select sample_code,vl_sample_id from vl_request_form as vl where vl.vlsm_country_id='.$_POST['vl_form'].' AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" order by vl_sample_id';
+					$svlResult=$db->query($vlQuery);
+					if($_POST['sample_code']=='YY'){
+						$y = explode("-",$month['month']);
+						$dtYr = $y[0];
+					}
+					else if($_POST['sample_code']=='MMYY'){
+						$dtYr = str_replace('-','',$month['month']);
+					}
+					$increment = 1;
+					foreach($svlResult as $sample){
+						$maxId = $increment;
+						$strparam = strlen($maxId);
+						$zeros = substr("000000", $strparam);
+						$maxId = $zeros.$maxId;
+						$sampleCode = $prefix.$dtYr.$maxId;
+						$vlData = array('serial_no'=>$sampleCode,'sample_code'=>$sampleCode,'sample_code_format'=>$prefix.$dtYr,'sample_code_key'=>$maxId);
+						$db=$db->where('vl_sample_id',$sample['vl_sample_id']);
+						$id=$db->update('vl_request_form',$vlData);
+						$increment++;
+					}
+				}
+			}
+		}
+	}
     $_SESSION['alertMsg']="Global Config values updated successfully";
     header("location:globalConfig.php");
 }catch (Exception $exc) {
