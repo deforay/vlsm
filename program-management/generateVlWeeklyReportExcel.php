@@ -100,7 +100,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
  foreach($vlLabResult as $vlLab){
     $sQuery="SELECT
 	
-		 vl.lab_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
+		 vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
 		
 		SUM(CASE
 			 WHEN (result_status = 4) THEN 1
@@ -156,8 +156,8 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
              ELSE 0
            END) AS totalGreaterThan1000,
 		COUNT(result) as total
-		 FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.lab_id
-       WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.vlsm_country_id = '".$country."'";
+		 FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id
+       WHERE vl.lab_id = ".$vlLab['facility_id']." AND vl.vlsm_country_id = ".$country;
     if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         if (trim($start_date) == trim($end_date)) {
           $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
@@ -166,16 +166,16 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         }
     }
     if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-        $sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
+        //$sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
     }
-    $sQuery = $sQuery.' GROUP BY vl.lab_id';
+    $sQuery = $sQuery.' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
-    error_log($sQuery);
+    //error_log($sQuery);
     if(count($sResult)>0){
-        $vlLabName = explode(' ',$vlLab['facility_name']);
+
         $sheet = new PHPExcel_Worksheet($excel, '');
         $excel->addSheet($sheet, $c);
-        $sheet->setTitle('VL Statistics '.ucwords($vlLabName[0]));
+        $sheet->setTitle($vlLab['facility_name']);
         
         $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
         $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -317,7 +317,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
    $output = array();
     $r=1;
     foreach ($vlLabResult as $vlLab) {
-       $sQuery="SELECT vl.vl_sample_id,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.sample_tested_datetime,vl.result_printed_datetime,vl.result,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.lab_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.vlsm_country_id = '".$country."'";
+       $sQuery="SELECT vl.vl_sample_id,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.sample_tested_datetime,vl.result_printed_datetime,vl.result,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.vlsm_country_id = '".$country."'";
        if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
           if (trim($start_date) == trim($end_date)) {
             $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
@@ -417,4 +417,3 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
  }else{
    echo ''; 
  }
-?>
