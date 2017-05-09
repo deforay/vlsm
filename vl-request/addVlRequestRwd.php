@@ -65,11 +65,11 @@ $end_date = date('Y-m-31');
 if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
 $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MAX(length(sample_code_key)) from vl_request_form )';
 }else{
-  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MIN(length(sample_code_key)) from vl_request_form )';
 }
 $svlResult=$db->query($svlQuery);
+$lngth = strlen($svlResult[0]['MAX(sample_code_key)']);
 if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
-  $lngth = strlen($svlResult[0]['MAX(sample_code_key)']);
   if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth > 3){
     $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
     $strparam = strlen($maxId);
@@ -84,9 +84,8 @@ if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
     $mnthYr = date('Y');
   }
   $prefix = $arr['sample_code_prefix'];
-  error_log($prefix);
 }else{
-if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
+if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth < 3){
  $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
  $strparam = strlen($maxId);
  $zeros = substr("000", $strparam);
