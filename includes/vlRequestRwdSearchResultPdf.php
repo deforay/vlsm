@@ -432,39 +432,39 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3">';
-                $html .='<table cellspacing="6" style="border:2px solid #333;">';
+                $html .='<table style="border:2px solid #333;border-collapse:collapse;">';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Sample Received Date</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Date of Viral Load Result</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;">Sample Received Date</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;">Date of Viral Load Result</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
+                    $html .='<td style="line-height:26px;font-size:12px;text-align:left;">'.$sampleReceivedDate.'</td>';
+                    $html .='<td style="line-height:26px;font-size:12px;text-align:left;">'.$sampleReceivedTime.'</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Testing Platform</td>';
-                    $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
+                    $html .='<td style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
+                    $html .='<td style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
+                    $html .='<td style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">Testing Platform</td>';
+                    $html .='<td style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Result of viral load(copies/ml)</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:18px;font-weight:bold;text-align:left;">'.$result['result'].'</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;background-color:#dcdcdc;border-left:2px solid #333;">Result of viral load(copies/ml)</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:18px;font-weight:bold;text-align:left;background-color:#dcdcdc;border-right:2px solid #333;">'.$result['result'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
                   $html .='</tr>';
                   if(isset($result['rejection_reason_name']) && $result['rejection_reason_name'] != null && trim($result['rejection_reason_name']) != ""){
                     $html .='<tr>';
-                      $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Rejected Reason</td>';
-                      $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['rejection_reason_name']).'</td>';
+                      $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;">Rejected Reason</td>';
+                      $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['rejection_reason_name']).'</td>';
                     $html .='</tr>';
                   }
                   if(trim($showMessage)!= ''){
                     $html .='<tr>';
-                      $html .='<td colspan="4" style="line-height:22px;font-size:'.$messageTextSize.';text-align:left;">'.$showMessage.'</td>';
+                      $html .='<td colspan="4" style="line-height:26px;font-size:'.$messageTextSize.';text-align:left;">'.$showMessage.'</td>';
                     $html .='</tr>';
                     $html .='<tr>';
                       $html .='<td colspan="4" style="line-height:4px;"></td>';
@@ -472,7 +472,7 @@ if(sizeof($requestResult)> 0){
                   }
                   if(trim($tndMessage)!= ''){
                     $html .='<tr>';
-                      $html .='<td colspan="4" style="line-height:22px;font-size:18px;text-align:left;">'.$tndMessage.'</td>';
+                      $html .='<td colspan="4" style="line-height:26px;font-size:18px;text-align:left;">'.$tndMessage.'</td>';
                     $html .='</tr>';
                     $html .='<tr>';
                       $html .='<td colspan="4" style="line-height:6px;"></td>';
@@ -480,10 +480,10 @@ if(sizeof($requestResult)> 0){
                   }
                   if(trim($result['approver_comments'])!= ''){
                     $html .='<tr>';
-                      $html .='<td colspan="4" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
+                      $html .='<td colspan="4" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">Lab comments</td>';
                     $html .='</tr>';
                     $html .='<tr>';
-                      $html .='<td colspan="4" style="line-height:22px;font-size:12px;text-align:left;">'.ucfirst($result['approver_comments']).'</td>';
+                      $html .='<td colspan="4" style="line-height:26px;font-size:12px;text-align:left;">'.ucfirst($result['approver_comments']).'</td>';
                     $html .='</tr>';
                   }
                 $html .='</table>';
