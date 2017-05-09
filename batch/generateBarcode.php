@@ -127,7 +127,7 @@ if($id >0){
                     <td align="center" width="6%"><strong>Pos.</strong></td>
                     <td align="center" width="27%"><strong>Sample ID</strong></td>
                     <td align="center" width="39%"><strong>Barcode</strong></td>
-                    <td align="center" width="14%"><strong>LOT NO & DATE</strong></td>
+                    <td align="center" width="14%"><strong>LOT NO <br>DATE</strong></td>
                     <td align="center" width="14%"><strong>VL Result</strong></td>
                 </tr>
             </thead>';
@@ -228,7 +228,7 @@ if($id >0){
             $lotExpirationDate = '';
             if(isset($sample['lot_expiration_date']) && $sample['lot_expiration_date'] != '' && $sample['lot_expiration_date']!= NULL && $sample['lot_expiration_date'] != '0000-00-00'){
                 if(trim($sample['lot_number'])!= ''){
-                    $lotExpirationDate.=' & ';
+                    $lotExpirationDate.='<br>';
                 }
                 $lotExpirationDate.= $general->humanDateFormat($sample['lot_expiration_date']);
             }
