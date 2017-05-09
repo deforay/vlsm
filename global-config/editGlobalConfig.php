@@ -212,9 +212,17 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-                <div id="auto-sample-eg" class="row" style="display:<?php echo($arr['sample_code'] == 'auto')?'block':'none'; ?>;">
+                <div id="auto-sample-eg" class="row" style="display:<?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'block':'none'; ?>;">
                   <div class="col-md-7" style="text-align:center;">
-                      <code>eg. Province Code+Year+Month+Date+Increment Counter</code>
+                    <code id="auto-sample-code" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'auto')?'block':'none'; ?>;">
+                        eg. Province Code+Year+Month+Date+Increment Counter
+                    </code>
+                    <code id="auto-sample-code-MMYY" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'MMYY')?'block':'none'; ?>;">
+                        eg. Prefix+Month+Year+Increment Counter
+                    </code>
+                    <code id="auto-sample-code-YY" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'YY')?'block':'none'; ?>;">
+                        eg. Prefix+Year+Increment Counter
+                    </code>
                   </div>
                 </div>
                 <div class="row" style="margin-top:10px;">
@@ -427,7 +435,13 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
   
   $("input:radio[name=sample_code]").click(function() {
         if (this.value == 'MMYY' || this.value == 'YY') {
-            $('#auto-sample-eg').hide(); 
+            $('#auto-sample-eg').show(); 
+            $('.autoSample').hide();
+            if (this.value == 'MMYY') {
+                $('#auto-sample-code-MMYY').show();
+            }else{
+                $('#auto-sample-code-YY').show();
+            }
             $('#min_length').val(''); 
             $('.minlth').hide();
             $('#min_length').removeClass('isRequired'); 
@@ -438,7 +452,9 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
             $('#max_length').prop('readonly',true);
         }
         else if(this.value == 'auto'){
-           $('#auto-sample-eg').show(); 
+            $('.autoSample').hide(); 
+           $('#auto-sample-eg').show();
+           $('#auto-sample-code').show();
            $('#min_length').val(''); 
            $('.minlth').hide();
            $('#min_length').removeClass('isRequired'); 
