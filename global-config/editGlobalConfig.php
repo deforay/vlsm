@@ -218,24 +218,13 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                         eg. Province Code+Year+Month+Date+Increment Counter
                     </code>
                     <code id="auto-sample-code-MMYY" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'MMYY')?'block':'none'; ?>;">
-                        eg. Prefix+Month+Year+Increment Counter
+                        eg. Prefix+Month+Year+Increment Counter (VL052017999999)
                     </code>
                     <code id="auto-sample-code-YY" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'YY')?'block':'none'; ?>;">
-                        eg. Prefix+Year+Increment Counter
+                        eg. Prefix+Year+Increment Counter (VL2017999999)
                     </code>
                   </div>
-                </div>
-                <div class="row" style="margin-top:10px;">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="auto_approval" class="col-lg-4 control-label">Same user can Review and Approve </label>
-                      <div class="col-lg-8">
-                        <input type="radio" class="" id="user_review_yes" name="user_review_approve" value="yes" <?php echo($arr['user_review_approve'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
-                        <input type="radio" class="" id="user_review_no" name="user_review_approve" value="no" <?php echo($arr['user_review_approve'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
-                      </div>
-                    </div>
-                   </div>
-                </div>
+                </div><br/>
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
@@ -252,6 +241,17 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                       <label for="min_length" class="col-lg-4 control-label">Maximum Length<span class="mandatory maxlth" style="display:<?php echo($arr['sample_code'] == 'auto')?'none':'block'; ?>">*</span></label>
                       <div class="col-lg-8">
                         <input type="text" class="form-control checkNum isNumeric <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'':'isRequired'; ?>" id="max_length" name="max_length" <?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'readonly':''; ?> placeholder="Sample Code Max. Length" title="Please enter sample code max length" value="<?php echo ($arr['sample_code'] == 'auto')?'':$arr['max_length']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="auto_approval" class="col-lg-4 control-label">Same user can Review and Approve </label>
+                      <div class="col-lg-8">
+                        <input type="radio" class="" id="user_review_yes" name="user_review_approve" value="yes" <?php echo($arr['user_review_approve'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="user_review_no" name="user_review_approve" value="no" <?php echo($arr['user_review_approve'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
                       </div>
                     </div>
                    </div>

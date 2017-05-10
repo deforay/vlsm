@@ -98,12 +98,12 @@ try {
 					$end_date = date($month['month'].'-31');
 					$vlQuery = 'select sample_code,vl_sample_id from vl_request_form as vl where vl.vlsm_country_id='.$_POST['vl_form'].' AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" order by vl_sample_id';
 					$svlResult=$db->query($vlQuery);
+					$y = explode("-",$month['month']);
 					if($_POST['sample_code']=='YY'){
-						$y = explode("-",$month['month']);
 						$dtYr = $y[0];
 					}
 					else if($_POST['sample_code']=='MMYY'){
-						$dtYr = str_replace('-','',$month['month']);
+						$dtYr = $y[1].$y[0];
 					}
 					$increment = 1;
 					foreach($svlResult as $sample){
