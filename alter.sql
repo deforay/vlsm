@@ -1066,5 +1066,5 @@ INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) V
 
 --saravanna 10-may-2017
 INSERT INTO `vl_lab_request`.`resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'sample_rejection_report', 'Sample Rejection Report');
-INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '19', 'sample-rejection-report.php', 'Access');
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '19', 'sampleRejectionReport.php', 'Access');
 ALTER TABLE  `r_sample_rejection_reasons` ADD  `rejection_reason_code` VARCHAR( 255 ) NULL DEFAULT NULL ;
