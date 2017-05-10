@@ -158,6 +158,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
 }
 //set reason for changes history
 $rch = '';
+$allChange = array();
 if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= ''){
   $rch.='<h4>Result Changes History</h4>';
   $rch.='<table style="width:100%;">';
@@ -781,9 +782,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                       </div>
+                      <?php
+                      if(count($allChange)>0){
+                      ?>
                       <div class="row">
                         <div class="col-md-12"><?php echo $rch; ?></div>
                       </div>
+                      <?php } ?>
                     </div>
                   </div>
                </div>

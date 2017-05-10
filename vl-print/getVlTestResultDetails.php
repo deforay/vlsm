@@ -276,7 +276,7 @@ $primaryKey="vl_sample_id";
 		    }
 		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
 		}
-		$sQuery = $sQuery.' '.$sWhere;
+		$sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";
 		$_SESSION['vlResultQuery']=$sQuery;
 		//echo $_SESSION['vlResultQuery'];die;
 		
