@@ -156,6 +156,29 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
 }else{
  $vlQueryInfo[0]['result_dispatched_datetime']='';
 }
+//set reason for changes history
+$rch = '';
+if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= ''){
+  $rch.='<h4>Result Changes History</h4>';
+  $rch.='<table style="width:100%;">';
+  $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
+  $rch.='<tbody>';
+  $allChange = json_decode($vlQueryInfo[0]['reason_for_vl_result_changes'],true);
+  $allChange = array_reverse($allChange);
+  foreach($allChange as $change){
+    $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
+    $usrResult = $db->rawQuery($usrQuery);
+    $name = '';
+    if(isset($usrResult[0]['user_name'])){
+      $name = ucwords($usrResult[0]['user_name']);
+    }
+    $expStr = explode(" ",$change['dtime']);
+    $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
+    $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
+  }
+  $rch.='</tbody>';
+  $rch.='</table>';
+}
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -751,18 +774,22 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
                               </select>
                             </div>
                         </div>
-                        <div class="col-md-8 reasonForResultChanges" style="visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;">
+                        <div class="col-md-8 reasonForResultChanges" style="visibility:hidden;">
                             <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result </label>
                             <div class="col-lg-10">
-                              <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"><?php echo trim($vlQueryInfo[0]['reason_for_vl_result_changes']);?></textarea>
+                              <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
                             </div>
                         </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12"><?php echo $rch; ?></div>
                       </div>
                     </div>
                   </div>
                </div>
               <div class="box-footer">
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
+                <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo base64_encode($vlQueryInfo[0]['reason_for_vl_result_changes']);?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -801,8 +828,8 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
         $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#resultDispatchedOn').mask('99-aaa-9999 99:99');
         getDateOfBirth();
         __clone = $("#vlRequestFormRwd .labSection").clone();
-        reason = $("#reasonForResultChanges").val();
-        result = $("#vlResult").val();
+        reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
+        result = ($("#vlResult").length)?$("#vlResult").val():'';
     });
     
     function showTesting(chosenClass){
@@ -812,7 +839,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
     }
     
     function getProvinceDistricts(obj){
-    $.blockUI();
+      $.blockUI();
       var cName = $("#fName").val();
       var pName = $("#province").val();
       if(pName!='' && provinceName && facilityName){
@@ -968,12 +995,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
   $("#vlRequestFormRwd .labSection").on("change", function() {
       if($.trim(result)!= ''){
         if($("#vlRequestFormRwd .labSection").serialize() == $(__clone).serialize()){
-          if($.trim(reason)== '') {
-            $(".reasonForResultChanges").css("visibility","hidden");
-          }else{
-            $(".reasonForResultChanges").css("visibility","visible");
-            $("#reasonForResultChanges").val(reason);
-          }
+          $(".reasonForResultChanges").css("visibility","hidden");
           $("#reasonForResultChanges").removeClass("isRequired");
         }else{
           $(".reasonForResultChanges").css("visibility","visible");

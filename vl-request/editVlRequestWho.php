@@ -667,8 +667,8 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
      });
     getDateOfBirth();
     __clone = $("#vlRequestForm .labSection").clone();
-    reason = $("#reasonForResultChanges").val();
-    result = $("#vlResult").val();
+    reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
+    result = ($("#vlResult").length)?$("#vlResult").val():'';
   });
   
     function validateNow(){
