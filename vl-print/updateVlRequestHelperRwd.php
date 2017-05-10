@@ -109,7 +109,7 @@ try {
               'updated_on'=>$general->getDateTime()
             );
             $db->insert($tableName2,$data);
-            header("location:vlResultApproval.php");
+            header("location:vlTestResult.php");
         }else{
              $_SESSION['alertMsg']="Please try again later";
         }
