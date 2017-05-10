@@ -52,14 +52,27 @@ $_SESSION['aliasPage'] = 1;
 class MYPDF extends TCPDF {
 
     //Page header
+    public function setHeading($logo,$text) {
+      $this->logo = $logo;
+      $this->text = $text;
+    }
+    //Page header
     public function Header() {
         // Logo
         //$image_file = K_PATH_IMAGES.'logo_example.jpg';
-        //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false,300, '', false, false, 0, false, false, false);
+        //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
-        //$this->SetFont('helvetica', 'B', 20);
-        // Title
-        //$this->Cell(0, 15, 'VL Request Form Report', 0, false, 'C', 0,'', 0, false, 'M', 'M');
+        if(trim($this->logo)!=""){
+            if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+                $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+                $this->Image($image_file,16, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            }
+        }
+        $this->SetFont('helvetica', '', 7);
+        $this->writeHTMLCell(0,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
+        $this->SetFont('helvetica', '', 13);
+        //$html='<hr/>';
+        $this->writeHTMLCell(0, 0,10,30, '', 0, 0, 0, true, 'J', true);
     }
 
     // Page footer
@@ -158,7 +171,6 @@ if(sizeof($requestResult)> 0){
       mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
     }
     $pathFront = realpath('../uploads/'.$_SESSION['rVal'].'/');
-
     $pages = array();
     $page = 1;
     foreach($requestResult as $result){
@@ -173,7 +185,7 @@ if(sizeof($requestResult)> 0){
         }
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT,true, 'UTF-8', false);
-
+        $pdf->setHeading($arr['logo'],$arr['header']);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         //$pdf->SetAuthor('Saravanan');
@@ -192,9 +204,9 @@ if(sizeof($requestResult)> 0){
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // set margins
-        //$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_RIGHT);
-        //$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        //$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         // set auto page breaks
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
@@ -203,10 +215,10 @@ if(sizeof($requestResult)> 0){
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         // set some language-dependent strings (optional)
-        //if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-        //    require_once(dirname(__FILE__).'/lang/eng.php');
-        //    $pdf->setLanguageArray($l);
-        //}
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
 
         // ---------------------------------------------------------
 
@@ -355,41 +367,27 @@ if(sizeof($requestResult)> 0){
           $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
         }
         $html = '';
-        $html .= '<div style="">';
             $html.='<table style="padding:2px;">';
-              if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
-                $html .='<tr>';
-                  $html .='<td colspan="4" style="text-align:center;"><img src="../uploads/logo/'.$arr['logo'].'" style="height:80px;" alt="logo"></td>';
-                $html .='</tr>';
-              }
               $html .='<tr>';
-               $html .='<td colspan="4" style="text-align:left;"><h4>Viral Load Results</h4></td>';
-              $html .='</tr>';
+               $html .='<td colspan="4" style="text-align:center;"><h4>Viral Load Result</h4></td>';
+              $html .='</tr><hr/><br/>';
               $html .='<tr>';
-               $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic/Health Center code</td>';
-               $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.$result['facility_code'].'</td>';
+               $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic/Health Center code</td>';
                $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Province</td>';
-               $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['facility_state']).'</td>';
+               $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">District</td>';
               $html .='</tr>';
               $html .='<tr>';
-                $html .='<td colspan="4">';
-                $html .='<table>';
-                 $html .='<tr>';
-                  $html .='<td style="width:50%;"></td>';
-                   $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">District</td>';
-                  $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['facility_district']).'</td>';
-                $html .='</tr>';
-                $html .='<tr>';
-                  $html .='<td style="width:50%;"></td>';
-                   $html .='<td style="width:25%;line-height:14px;font-size:13px;font-weight:bold;text-align:left;">Clinic/Health Center Name</td>';
-                  $html .='<td style="width:25%;line-height:14px;font-size:12px;text-align:left;">&nbsp;'.strtoupper($result['facility_name']).'</td>';
-                $html .='</tr>';
-                $html .='</table>';
-                $html .='</td>';
+                $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.$result['facility_code'].'</td>';
+                $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['facility_state']).'</td>';
+                $html .='<td style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['facility_district']).'</td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
-               $html .='<td colspan="3" style="line-height:22px;font-size:10px;text-align:left;">'.ucwords($result['request_clinician_name']).'</td>';
+               $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic/Health Center Name</td>';
+               $html .='<td colspan="2" style="line-height:22px;font-size:12px;font-weight:bold;text-align:left;">Clinician name</td>';
+              $html .='</tr>';
+              $html .='<tr>';
+                $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.strtoupper($result['facility_name']).'</td>';
+                $html .='<td colspan="2" style="line-height:22px;font-size:12px;text-align:left;">'.ucwords($result['request_clinician_name']).'</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="4" style="line-height:2px;border-bottom:2px solid #333;"></td>';
@@ -406,8 +404,10 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="3" style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">TRACNET (ART)</td>';
-                    $html .='<td colspan="2" style="line-height:22px;font-size:13px;text-align:left;">'.$result['patient_art_no'].'</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">TRACNET (ART)</td>';
+                   $html .='</tr>';
+                   $html .='<tr>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;text-align:left;">'.$result['patient_art_no'].'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">First Name</td>';
@@ -443,18 +443,22 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
-                    $html .='<td style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
-                    $html .='<td style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">Testing Platform</td>';
-                    $html .='<td style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">Specimen type</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">Testing Platform</td>';
+                  $html .='</tr>';
+                  $html .='<tr>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;background-color:#dcdcdc;border-left:2px solid #333;">Result of viral load(copies/ml)</td>';
                     $html .='<td colspan="2" style="line-height:26px;font-size:18px;font-weight:bold;text-align:left;background-color:#dcdcdc;border-right:2px solid #333;">'.$result['result'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
-                    $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
+                    $html .='<td colspan="4" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
+                  $html .='</tr>';
+                  $html .='<tr>';
+                    $html .='<td colspan="4" style="line-height:26px;font-size:12px;text-align:left;">'.$resultApprovedBy.'</td>';
                   $html .='</tr>';
                   if(isset($result['rejection_reason_name']) && $result['rejection_reason_name'] != null && trim($result['rejection_reason_name']) != ""){
                     $html .='<tr>';
@@ -464,7 +468,7 @@ if(sizeof($requestResult)> 0){
                   }
                   if(trim($showMessage)!= ''){
                     $html .='<tr>';
-                      $html .='<td colspan="4" style="line-height:26px;font-size:'.$messageTextSize.';text-align:left;">'.$showMessage.'</td>';
+                      $html .='<td colspan="4" style="line-height:30px;font-size:'.$messageTextSize.';text-align:left;">'.$showMessage.'</td>';
                     $html .='</tr>';
                     $html .='<tr>';
                       $html .='<td colspan="4" style="line-height:4px;"></td>';
@@ -520,7 +524,6 @@ if(sizeof($requestResult)> 0){
                 $html .='</td>';
               $html .='</tr>';
           $html.='</table>';
-        $html .= "</div>";
         if($result['result']!=''){
           $pdf->writeHTML($html);
           $pdf->lastPage();
