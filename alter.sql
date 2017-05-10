@@ -1063,3 +1063,8 @@ ALTER TABLE `r_art_code_details` ADD `art_status` VARCHAR(45) NOT NULL DEFAULT '
 
 --saravanan 09-may-2017
 INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) VALUES ('Sample Code Prefix', 'sample_code_prefix', NULL);
+
+--saravanna 10-may-2017
+INSERT INTO `vl_lab_request`.`resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'sample_rejection_report', 'Sample Rejection Report');
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '19', 'sample-rejection-report.php', 'Access');
+ALTER TABLE  `r_sample_rejection_reasons` ADD  `rejection_reason_code` VARCHAR( 255 ) NULL DEFAULT NULL ;
