@@ -43,6 +43,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 	  }
 	  $tQuery = $tQuery.' '.$sWhere;
 	  $tResult[$rejectedResult['rejection_reason_code']] = $db->rawQuery($tQuery);
+	  $tResult[$rejectedResult['rejection_reason_code']][0]['rejection_reason_name'] = $rejectedResult['rejection_reason_name']; 
 	  $tableResult[$rejectedResult['rejection_reason_code']] = $db->rawQuery($tQuery);
 	  if($tableResult[$rejectedResult['rejection_reason_code']][0]['total']==0){
 		 unset($tableResult[$rejectedResult['rejection_reason_code']]);
@@ -73,9 +74,11 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 	  $rjResult[$type] = $db->rawQuery($rjQuery);
    }
 }
+if(count($tResult[$rejectedResult['rejection_reason_code']])>0){
 ?>
-<div id="container" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;float:left;"></div>
-<div id="rejectedType" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;float:right;"></div>
+<div id="container" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;"></div>
+<!--<div id="rejectedType" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;float:right;"></div>-->
+<?php } ?>
 <table id="vlRequestDataTable" class="table table-bordered table-striped">
    <thead>
       <tr>
@@ -111,7 +114,6 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
     if(isset($tResult) && count($tResult)>0){ ?>
       $('#container').highcharts({
                 chart: {
-				  
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
                     plotShadow: false,
@@ -124,7 +126,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
                   enabled: false
                },
                 tooltip: {
-                    pointFormat: '{point.name}: <b>{point.y}</b>'
+                    pointFormat: '{point.number}: <b>{point.y}</b>'
                 },
                 plotOptions: {
                     pie: {
@@ -154,7 +156,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
             <?php
             foreach($tResult as $key=>$total){
                 ?>
-                {name:'<?php echo ucwords($key);?>',y:<?php echo ucwords($total[0]['total']);?>},
+                {name:'<?php echo ucwords($key);?>',y:<?php echo ucwords($total[0]['total']);?>,number:'<?php echo ucwords($total[0]['rejection_reason_name']);?>'},
                 <?php
             }
             ?>
