@@ -648,8 +648,8 @@ $disable = "disabled = 'disabled'";
    	$('.ui-datepicker-calendar').show();
      });
      __clone = $("#vlRequestForm .labSection").clone();
-     reason = $("#reasonForResultChanges").val();
-     result = $("#vlResult").val();
+     reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
+     result = ($("#vlResult").length)?$("#vlResult").val():'';
   });
   
     function validateNow(){
