@@ -58,9 +58,9 @@ $province.="<option value=''> -- Select -- </option>";
     }
     
 $facility = '';
-$facility.="<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>";
+$facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 
 $sQuery="SELECT * from r_sample_type where status='active'";
@@ -287,7 +287,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
                               <option data-code="" data-emails="" data-mobile-nos="" value=""> -- Select -- </option>
                               <?php foreach($fResult as $fDetails){ ?>
-                                <option data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" data-contact-person="<?php echo ucwords($fDetails['contact_person']); ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                               <?php } ?>
                             </select>
                           </div>
@@ -299,11 +299,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                           </div>
                       </div>
                     </div>
-                    <div class="row facilityDetails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '' || trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;">
-                      <div class="col-xs-3 col-md-3 femails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Email(s)</strong></div>
-                      <div class="col-xs-3 col-md-3 femails facilityEmails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_emails']; ?></div>
-                      <div class="col-xs-3 col-md-3 fmobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
-                      <div class="col-xs-3 col-md-3 fmobileNumbers facilityMobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_mobile_numbers']; ?></div>
+                    <div class="row facilityDetails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '' || trim($facilityResult[0]['facility_mobile_numbers']) != '' || trim($facilityResult[0]['contact_person']) != '')?'':'none'; ?>;">
+                      <div class="col-xs-2 col-md-2 femails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><strong>Clinic Email(s)</strong></div>
+                      <div class="col-xs-2 col-md-2 femails facilityEmails" style="display:<?php echo(trim($facilityResult[0]['facility_emails']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_emails']; ?></div>
+                      <div class="col-xs-2 col-md-2 fmobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><strong>Clinic Mobile No.(s)</strong></div>
+                      <div class="col-xs-2 col-md-2 fmobileNumbers facilityMobileNumbers" style="display:<?php echo(trim($facilityResult[0]['facility_mobile_numbers']) != '')?'':'none'; ?>;"><?php echo $facilityResult[0]['facility_mobile_numbers']; ?></div>
+                      <div class="col-xs-2 col-md-2 fContactPerson" style="display:<?php echo(trim($facilityResult[0]['contact_person']) != '')?'':'none'; ?>;"><strong>Clinic Contact Person -</strong></div>
+                      <div class="col-xs-2 col-md-2 fContactPerson facilityContactPerson" style="display:<?php echo(trim($facilityResult[0]['contact_person']) != '')?'':'none'; ?>;"><?php echo ucwords($facilityResult[0]['contact_person']); ?></div>
                     </div>
                   </div>
                 </div>
@@ -315,7 +317,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="artNo">TRACNET (ART) <span class="mandatory">*</span></label>
+                        <label for="artNo">ART (TRACNET) No. <span class="mandatory">*</span></label>
                           <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>"/>
                         </div>
                       </div>
@@ -857,10 +859,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
 	  if(data != ""){
             details = data.split("###");
             $("#district").html(details[1]);
-            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>");
+            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
             $(".facilityDetails").hide();
             $(".facilityEmails").html('');
             $(".facilityMobileNumbers").html('');
+            $(".facilityContactPerson").html('');
 	  }
       });
       }
@@ -869,7 +872,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
-      $("#fName").html("<option data-code='' value=''> -- Select -- </option>");
+      $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
     }
     $.unblockUI();
   }
@@ -886,6 +889,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
             $(".facilityDetails").hide();
             $(".facilityEmails").html('');
             $(".facilityMobileNumbers").html('');
+            $(".facilityContactPerson").html('');
 	  }
       });
     }
@@ -896,7 +900,8 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     $("#fCode").val($('#fName').find(':selected').data('code'));
     var femails = $('#fName').find(':selected').data('emails');
     var fmobilenos = $('#fName').find(':selected').data('mobile-nos');
-    if($.trim(femails) !='' || $.trim(fmobilenos) !=''){
+    var fContactPerson = $('#fName').find(':selected').data('contact-person');
+    if($.trim(femails) !='' || $.trim(fmobilenos) !='' || fContactPerson != ''){
       $(".facilityDetails").show();
     }else{
       $(".facilityDetails").hide();
@@ -905,6 +910,8 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     ($.trim(femails) !='')?$(".facilityEmails").html(femails):$(".facilityEmails").html('');
     ($.trim(fmobilenos) !='')?$(".fmobileNumbers").show():$(".fmobileNumbers").hide();
     ($.trim(fmobilenos) !='')?$(".facilityMobileNumbers").html(fmobilenos):$(".facilityMobileNumbers").html('');
+    ($.trim(fContactPerson) !='')?$(".fContactPerson").show():$(".fContactPerson").hide();
+    ($.trim(fContactPerson) !='')?$(".facilityContactPerson").html(fContactPerson):$(".facilityContactPerson").html('');
   }
   
   $("input:radio[name=gender]").click(function() {

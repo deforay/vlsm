@@ -65,14 +65,13 @@ class MYPDF extends TCPDF {
         if(trim($this->logo)!=""){
             if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
                 $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
-                $this->Image($image_file,16, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
         $this->SetFont('helvetica', '', 7);
-        $this->writeHTMLCell(0,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
+        $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
         $this->SetFont('helvetica', '', 13);
-        //$html='<hr/>';
-        $this->writeHTMLCell(0, 0,10,30, '', 0, 0, 0, true, 'J', true);
+        $this->writeHTMLCell(0, 0,10,32, '', 0, 0, 0, true, 'J', true);
     }
 
     // Page footer
@@ -370,8 +369,8 @@ if(sizeof($requestResult)> 0){
         $html = '';
             $html.='<table style="padding:2px;">';
               $html .='<tr>';
-               $html .='<td colspan="4" style="text-align:center;"><h4>Viral Load Result</h4></td>';
-              $html .='</tr><hr/><br/>';
+               $html .='<td colspan="4" style="text-align:center;line-height:38px;"><h4>Viral Load Result</h4></td>';
+              $html .='</tr><hr/>';
               $html .='<tr>';
                $html .='<td colspan="2" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Clinic/Health Center code</td>';
                $html .='<td style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">Province</td>';
@@ -405,7 +404,7 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="3" style="line-height:22px;font-size:13px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
                    $html .='</tr>';
                    $html .='<tr>';
-                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">TRACNET (ART)</td>';
+                    $html .='<td colspan="4" style="line-height:22px;font-size:13px;font-weight:bold;text-align:left;">ART (TRACNET) No.</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:22px;font-size:13px;text-align:left;">'.$result['patient_art_no'].'</td>';
