@@ -52,7 +52,7 @@ $province.="<option value=''> -- Select -- </option>";
     }
 
 $facility = '';
-$facility.="<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>";
+$facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 
 //get active sample types
 $sQuery="SELECT * from r_sample_type where status='active'";
@@ -203,10 +203,12 @@ $sFormat = '';
                       </div>
                     </div>
                     <div class="row facilityDetails" style="display:none;">
-                      <div class="col-xs-3 col-md-3 femails" style="display:none;"><strong>Clinic/Health Center Email(s)</strong></div>
-                      <div class="col-xs-3 col-md-3 femails facilityEmails" style="display:none;"></div>
-                      <div class="col-xs-3 col-md-3 fmobileNumbers" style="display:none;"><strong>Clinic/Health Center Mobile No.(s)</strong></div>
-                      <div class="col-xs-3 col-md-3 fmobileNumbers facilityMobileNumbers" style="display:none;"></div>
+                      <div class="col-xs-2 col-md-2 femails" style="display:none;"><strong>Clinic Email(s) -</strong></div>
+                      <div class="col-xs-2 col-md-2 femails facilityEmails" style="display:none;"></div>
+                      <div class="col-xs-2 col-md-2 fmobileNumbers" style="display:none;"><strong>Clinic Mobile No.(s) -</strong></div>
+                      <div class="col-xs-2 col-md-2 fmobileNumbers facilityMobileNumbers" style="display:none;"></div>
+                      <div class="col-xs-2 col-md-2 fContactPerson" style="display:none;"><strong>Clinic Contact Person -</strong></div>
+                      <div class="col-xs-2 col-md-2 fContactPerson facilityContactPerson" style="display:none;"></div>
                     </div>
                   </div>
                 </div>
@@ -218,7 +220,7 @@ $sFormat = '';
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="artNo">TRACNET (ART) <span class="mandatory">*</span></label>
+                        <label for="artNo">ART (TRACNET) No. <span class="mandatory">*</span></label>
                           <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number"/>
                         </div>
                       </div>
@@ -699,10 +701,11 @@ $sFormat = '';
 	  if(data != ""){
             details = data.split("###");
             $("#district").html(details[1]);
-            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' value=''> -- Select -- </option>");
+            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
             $(".facilityDetails").hide();
             $(".facilityEmails").html('');
             $(".facilityMobileNumbers").html('');
+            $(".facilityContactPerson").html('');
 	  }
       });
       }
@@ -744,6 +747,7 @@ $sFormat = '';
             $(".facilityDetails").hide();
             $(".facilityEmails").html('');
             $(".facilityMobileNumbers").html('');
+            $(".facilityContactPerson").html('');
 	  }
       });
     }
@@ -754,7 +758,8 @@ $sFormat = '';
     $("#fCode").val($('#fName').find(':selected').data('code'));
     var femails = $('#fName').find(':selected').data('emails');
     var fmobilenos = $('#fName').find(':selected').data('mobile-nos');
-    if($.trim(femails) !='' || $.trim(fmobilenos) !=''){
+    var fContactPerson = $('#fName').find(':selected').data('contact-person');
+    if($.trim(femails) !='' || $.trim(fmobilenos) !='' || fContactPerson != ''){
       $(".facilityDetails").show();
     }else{
       $(".facilityDetails").hide();
@@ -763,6 +768,8 @@ $sFormat = '';
     ($.trim(femails) !='')?$(".facilityEmails").html(femails):$(".facilityEmails").html('');
     ($.trim(fmobilenos) !='')?$(".fmobileNumbers").show():$(".fmobileNumbers").hide();
     ($.trim(fmobilenos) !='')?$(".facilityMobileNumbers").html(fmobilenos):$(".facilityMobileNumbers").html('');
+    ($.trim(fContactPerson) !='')?$(".fContactPerson").show():$(".fContactPerson").hide();
+    ($.trim(fContactPerson) !='')?$(".facilityContactPerson").html(fContactPerson):$(".facilityContactPerson").html('');
   }
   
   $("input:radio[name=gender]").click(function() {
