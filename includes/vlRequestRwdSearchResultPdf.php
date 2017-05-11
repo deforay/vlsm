@@ -127,7 +127,7 @@ class Watermark extends PDF_Rotate {
       //Put the watermark
       $this->SetFont('helvetica', 'B', 50);
       $this->SetTextColor(148,162,204);
-      $this->RotatedText(65,140,'DRAFT',45);
+      $this->RotatedText(65,124,'DRAFT',45);
   
       if (is_null($this->_tplIdx)) {
           // THIS IS WHERE YOU GET THE NUMBER OF PAGES
@@ -142,6 +142,7 @@ class Watermark extends PDF_Rotate {
       $this->Rotate($angle, $x, $y);
       $this->Text($x, $y, $txt);
       $this->Rotate(0);
+      //$this->SetAlpha(0.7);
   }
 }
 
@@ -451,8 +452,8 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="2" style="line-height:26px;font-size:12px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
-                    $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;background-color:#dcdcdc;border-left:2px solid #333;">Result of viral load(copies/ml)</td>';
-                    $html .='<td colspan="2" style="line-height:26px;font-size:18px;font-weight:bold;text-align:left;background-color:#dcdcdc;border-right:2px solid #333;">'.$result['result'].'</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;background-color:#dbdbdb;border-left:2px solid #333;">Result of viral load(copies/ml)</td>';
+                    $html .='<td colspan="2" style="line-height:26px;font-size:18px;font-weight:bold;text-align:left;background-color:#dbdbdb;border-right:2px solid #333;">'.$result['result'].'</td>';
                   $html .='</tr>';
                   $html .='<tr>';
                     $html .='<td colspan="4" style="line-height:26px;font-size:13px;font-weight:bold;text-align:left;">Approved by</td>';
