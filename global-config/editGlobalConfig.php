@@ -257,8 +257,8 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                    </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
+                  <div class="col-md-7" style="height:38px;">
+                    <div class="form-group" style="height:38px;">
                       <label for="sync_path" class="col-lg-4 control-label">Sync Path</label>
                       <div class="col-lg-8">
                         <input type="text" class="form-control" id="sync_path" name="sync_path" placeholder="Sync Path" title="Please enter sync path" value="<?php echo $arr['sync_path']; ?>"/>
@@ -266,6 +266,11 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7" style="text-align:center;">
+                      <code>Used for Dropbox or shared folder sync using the vlsm-connect module</code>
+                  </div>
+                </div><br/>
                 <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">
@@ -280,7 +285,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                   <div class="col-md-7" style="text-align:center;">
                       <code>You can enter multiple email by separating them with comma</code>
                   </div>
-                </div>
+                </div><br/>
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
