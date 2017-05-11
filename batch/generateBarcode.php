@@ -50,11 +50,11 @@ if($id >0){
                 if(trim($this->logo)!=""){
                     if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
                         $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
-                        $this->Image($image_file,10, 10, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+                        $this->Image($image_file,15, 10, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
                     }
                 }
                 $this->SetFont('helvetica', '', 7);
-                $this->writeHTMLCell(0,0,10,26,$this->text, 0, 0, 0, true, 'A', true);
+                $this->writeHTMLCell(30,0,10,26,$this->text, 0, 0, 0, true, 'A', true);
                 $this->SetFont('helvetica', '', 13);
                 $this->writeHTMLCell(0,0,0,10,'Batch : '.$this->batch, 0, 0, 0, true, 'C', true);
                 $this->writeHTMLCell(0,0,0,20,'Batch Worksheet', 0, 0, 0, true, 'C', true);
@@ -62,7 +62,7 @@ if($id >0){
                 $this->writeHTMLCell(0,0,144,10,'Resulted : '.$this->resulted, 0, 0, 0, true, 'C', true);
                 $this->writeHTMLCell(0,0,144,16,'Reviewed : '.$this->reviewed, 0, 0, 0, true, 'C', true);
                 $html='<hr/>';
-                $this->writeHTMLCell(0, 0,10,30, $html, 0, 0, 0, true, 'J', true);
+                $this->writeHTMLCell(0, 0,10,32, $html, 0, 0, 0, true, 'J', true);
             }
         
             // Page footer
@@ -148,11 +148,11 @@ if($id >0){
                 
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
                 $tbl.='<tr>';
-                $tbl.='<td align="center" width="6%" style="vertical-align:middle;">'.$sampleCounter.'.</td>';
-                $tbl.='<td align="center" width="27%" style="vertical-align:middle;">'.$sampleResult[0]['sample_code'].'</td>';
-                $tbl.='<td align="center" width="39%" style="vertical-align:middle;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;"></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;"></td>';
+                $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
+                $tbl.='<td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
+                $tbl.='<td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
                 $tbl.='</tr>';
                 $tbl.='</table>';
             }else{
@@ -161,11 +161,11 @@ if($id >0){
                 $label = ucwords(str_replace("no of "," ",$label));
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
                 $tbl.='<tr>';
-                $tbl.='<td align="center" width="6%" style="vertical-align:middle;">'.$sampleCounter.'.</td>';
-                $tbl.='<td align="center" width="27%" style="vertical-align:middle;">'.$label.'</td>';
-                $tbl.='<td align="center" width="39%" style="vertical-align:middle;"></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;"></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;"></td>';
+                $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
+                $tbl.='<td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$label.'</td>';
+                $tbl.='<td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
                 $tbl.='</tr>';
                 $tbl.='</table>';
             }
@@ -178,11 +178,11 @@ if($id >0){
             for($i=1;$i<=$bResult[0]['number_of_in_house_controls'];$i++){
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
                      <tr nobr="true">
-                    <td align="center" width="6%" style="vertical-align:middle;">'.$i.'.</td>
-                    <td align="center" width="27%" style="vertical-align:middle;">In-House Controls '. $i.'</td>
-                    <td align="center" width="39%" style="vertical-align:middle;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;"></td>
+                    <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$i.'.</td>
+                    <td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">In-House Controls '. $i.'</td>
+                    <td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
                 </tr></table>';
             }
         }
@@ -193,11 +193,11 @@ if($id >0){
                 $sNo = $noOfInHouseControls+$i;
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
                     <tr nobr="true">
-                    <td align="center" width="6%" style="vertical-align:middle;">'.$sNo.'.</td>
-                    <td align="center" width="27%" style="vertical-align:middle;">Manufacturer Controls '. $i.'</td>
-                    <td align="center" width="39%" style="vertical-align:middle;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;"></td>
+                    <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sNo.'.</td>
+                    <td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">Manufacturer Controls '. $i.'</td>
+                    <td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
                 </tr></table>';
             }
         }
@@ -208,11 +208,11 @@ if($id >0){
                 $sNo = $noOfInHouseControls+$noOfManufacturerControls+$i;
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
                     <tr nobr="true">
-                    <td align="center" width="6%" style="vertical-align:middle;">'.$sNo.'.</td>
-                    <td align="center" width="27%" style="vertical-align:middle;">Calibrators '. $i.'</td>
-                    <td align="center" width="39%" style="vertical-align:middle;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;"></td>
+                    <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sNo.'.</td>
+                    <td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">Calibrators '. $i.'</td>
+                    <td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
                 </tr></table>';
             }
         }
@@ -236,11 +236,11 @@ if($id >0){
             
             $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
             $tbl.='<tr>';
-            $tbl.='<td align="center" width="6%" style="vertical-align:middle;">'.$sampleCounter.'.</td>';
-            $tbl.='<td align="center" width="27%" style="vertical-align:middle;">'.$sample['sample_code'].'</td>';
-            $tbl.='<td align="center" width="39%" style="vertical-align:middle;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-            $tbl.='<td align="center" width="14%" style="vertical-align:middle;">'.$lotDetails.'</td>';
-            $tbl.='<td align="center" width="14%" style="vertical-align:middle;">'.$sample['result'].'</td>';
+            $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
+            $tbl.='<td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['sample_code'].'</td>';
+            $tbl.='<td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+            $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
+            $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['result'].'</td>';
             $tbl.='</tr>';
             $tbl .='</table>';
           $sampleCounter++;
