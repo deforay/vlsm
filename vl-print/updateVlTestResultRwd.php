@@ -762,9 +762,9 @@ $disable = "disabled = 'disabled'";
                       <?php
                       if(count($allChange)>0){
                       ?>
-                      <div class="row">
-                        <div class="col-md-12"><?php echo $rch; ?></div>
-                      </div>
+                        <div class="row">
+                          <div class="col-md-12"><?php echo $rch; ?></div>
+                        </div>
                       <?php } ?>
                     </div>
                   </div>
