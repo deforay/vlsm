@@ -712,6 +712,14 @@ $sFormat = '';
     provinceName = true;
     facilityName = true;
     $(document).ready(function() {
+      // BARCODESTUFF START
+			
+	<?php
+		if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
+			echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
+		}
+	?>
+  // BARCODESTUFF END
         $('.date').datepicker({
            changeMonth: true,
            changeYear: true,
