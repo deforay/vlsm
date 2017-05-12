@@ -1068,3 +1068,10 @@ INSERT INTO `vl_lab_request`.`global_config` (`display_name`, `name`, `value`) V
 INSERT INTO `vl_lab_request`.`resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'sample_rejection_report', 'Sample Rejection Report');
 INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '19', 'sampleRejectionReport.php', 'Access');
 ALTER TABLE  `r_sample_rejection_reasons` ADD  `rejection_reason_code` VARCHAR( 255 ) NULL DEFAULT NULL ;
+
+--saravanan 12-may-2017
+CREATE TABLE IF NOT EXISTS `r_sample_controls` (
+  `r_sample_control_id` int(11) NOT NULL AUTO_INCREMENT,
+  `r_sample_control_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`r_sample_control_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
