@@ -190,6 +190,16 @@ try {
              'date_time'=>$general->getDateTime()
              );
              $db->insert($tableName1,$data);
+             
+             $barcode = "";
+            if(isset($_POST['printBarCode']) && $_POST['printBarCode'] =='on'){
+                  $s = $_POST['sampleCode'];
+                  $facQuery="SELECT * FROM facility_details where facility_id=".$_POST['fName'];
+                  $facResult = $db->rawQuery($facQuery);
+                  $f = ucwords($facResult[0]['facility_name'])." | ".$_POST['sampleCollectionDate'];
+                  $barcode = "?barcode=true&s=$s&f=$f";
+             }
+             
              if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
                 header("location:addVlRequest.php");
              }else{

@@ -169,6 +169,20 @@ $sFormat = '';
                           </label>
                         </div>
                       </div>
+                       <!-- BARCODESTUFF START -->
+                      <?php
+                        if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
+                      ?>
+                      <div class="col-xs-3 col-md-3 pull-right">
+                        <div class="form-group">
+                          <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
+                          <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
+                        </div>
+                      </div>
+                      <?php
+                        }
+                      ?>
+                      <!-- BARCODESTUFF END -->
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
@@ -637,6 +651,31 @@ $sFormat = '';
                   </div>
                </div>
               <div class="box-footer">
+                <!-- BARCODESTUFF START -->                    
+        <?php
+					if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
+					?>
+							
+							<div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br/>
+								<div class="progress" style="width:100%">
+									<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+									</div>
+								</div>
+							</div> <!-- /printer_data_loading -->
+							<div id="printer_details" style="display:none">
+								<span id="selected_printer">No printer selected!</span> 
+								<button type="button" class="btn btn-success" onclick="changePrinter()">Change/Retry</button>
+							</div><br /> <!-- /printer_details -->
+							<div id="printer_select" style="display:none">
+								Zebra Printer Options<br />
+								Printer: <select id="printers"></select>
+							</div> <!-- /printer_select -->
+						
+						<?php
+						}
+						?>                    
+             <!-- BARCODESTUFF END -->
+             
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
@@ -650,6 +689,25 @@ $sFormat = '';
       </div>
     </section>
   </div>
+  <!-- BARCODESTUFF START -->
+  
+	<?php
+		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
+			if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
+				?>
+					<script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
+					<script src="../assets/js/dymo-print.js"></script>    
+				<?php
+			}else if($global['bar_code_printing'] == 'zebra-printer'){
+				?>
+					<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
+					<script src="../assets/js/zebra-print.js"></script>				
+				<?php				
+			}
+		}
+	?>
+
+  <!-- BARCODESTUFF END -->
   <script>
     provinceName = true;
     facilityName = true;
