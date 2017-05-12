@@ -7,6 +7,18 @@ $tableName="temp_sample_report";
 $primaryKey="temp_sample_id";
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
+$scQuery = "select r_sample_control_name from r_sample_controls";
+$scResult = $db->rawQuery($scQuery);
+//in-house control limit
+$inQuery = "select i.number_of_in_house_controls,i.number_of_manufacturer_controls,i.machine_name from temp_sample_report as ts INNER JOIN import_config as i ON i.machine_name=ts.vl_test_platform limit 0,1";
+$inResult = $db->rawQuery($inQuery);
+$tsrQuery = "select count(temp_sample_id) as count from temp_sample_report where sample_type!='s'";
+$tsrResult = $db->rawQuery($tsrQuery);
+$totalControls = 0;
+if($tsrResult[0]['count']!=0){
+	$totalControls = $inResult[0]['number_of_manufacturer_controls'] + $inResult[0]['number_of_in_house_controls'];
+}
+
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
@@ -147,7 +159,8 @@ $tsResult = $db->rawQuery($tsQuery);
 			   $aRow['sample_tested_datetime'] = '';
 			}
             $row = array();
-			if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
+			$samCode = "'".$aRow['sample_code']."'";
+			//if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
 				if($aRow['sample_details']== 'Result exists already'){
 					$rsDetails = 'Existing Result';
 					$color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
@@ -163,14 +176,26 @@ $tsResult = $db->rawQuery($tsQuery);
 				}
 				//}
 				//$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['temp_sample_id'] . '"  value="' . $aRow['temp_sample_id'] . '" onclick="toggleTest(this);"  />';
-				$status = '<select class="form-control" style="" name="status[]" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="toggleTest(this)">
+				$status = '<select class="form-control" style="" name="status[]" id="'.$aRow['temp_sample_id'].'" title="Please select status" onchange="toggleTest(this,'.$samCode.')">
 					<option value="">-- Select --</option>
 					<option value="7" '.($aRow['result_status']=="7" ? "selected=selected" : "").'>Accepted</option>
 					<option value="1" '.($aRow['result_status']=="1" ? "selected=selected" : "").'>Hold</option>
 					<option value="4" '.($aRow['result_status']=="4"  ? "selected=selected" : "").'>Rejected</option>
 					</select><br><br>';
+			//}
+			//sample to control
+			if($scResult && ($aRow['sample_type']=='S' || $aRow['sample_type']=='s') && $inResult[0]['number_of_in_house_controls']!= 0 && $tsrResult[0]['count']!=0 && $tsrResult[0]['count']!=$totalControls){
+			$controlCode = "'".$aRow['sample_type']."'";
+			$controlName = '<select class="form-control" style="" name="controlName[]" id="controlName'.$aRow['temp_sample_id'].'" title="Please select control" onchange="sampleToControl(this,'.$controlCode.','.$aRow['temp_sample_id'].')"><option value="">-- Select --</option>';
+			foreach($scResult as $control)
+			{
+				$controlName .= '<option value="'.$control['r_sample_control_name'].'" '.($aRow['result_status']==$control['r_sample_control_name'] || ucwords($control['r_sample_control_name']) ? "selected=selected" : "").'>'.ucwords($control['r_sample_control_name']).'</option>';
 			}
-			$samCode = "'".$aRow['sample_code']."'";
+			$controlName .= '</select><br><br>';
+			}else{
+				$controlName = ucwords($aRow['sample_type']);
+			}
+			
 			$batchCode = "'".$aRow['batch_code']."'";
 			$row[] = '<input style="width:90%;" type="text" name="sampleCode" id="sampleCode'.$aRow['temp_sample_id'].'" title="'.$rsDetails.'" value="'.$aRow['sample_code'].'" onchange="updateSampleCode(this,'.$samCode.','.$aRow['temp_sample_id'].');"/>'.$color;
 			$row[] = $aRow['sample_collection_date'];
@@ -180,7 +205,7 @@ $tsResult = $db->rawQuery($tsQuery);
 			$row[] = $aRow['lot_number'];
 			$row[] = $general->humanDateFormat($aRow['lot_expiration_date']);
 			$row[] = $aRow['rejection_reason_name'];
-			$row[] = ucwords($aRow['sample_type']);
+			$row[] = $controlName;
 			$row[] = $aRow['result'];
 			$row[] = $status;
 	    
