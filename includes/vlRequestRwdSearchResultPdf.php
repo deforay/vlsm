@@ -71,11 +71,11 @@ class MYPDF extends TCPDF {
         }
         $this->SetFont('helvetica', 'B', 7);
         $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
-        $this->SetFont('helvetica', '', 16);
+        $this->SetFont('helvetica', '', 18);
         $this->writeHTMLCell(0,0,10,18,'VIRAL LOAD TEST RESULT', 0, 0, 0, true, 'C', true);
         if(trim($this->lab)!= ''){
-          $this->SetFont('helvetica', '', 10);
-          $this->writeHTMLCell(0,0,10,24,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+          $this->SetFont('helvetica', '', 9);
+          $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
         }
     }
 
