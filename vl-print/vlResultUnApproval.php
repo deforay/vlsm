@@ -206,7 +206,12 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
         });
      $.unblockUI();
   }
-  function toggleTest(obj){
+  function toggleTest(obj,sampleCode){
+	if (sampleCode=='') {
+        alert("Please enter sample code");
+		$("#"+obj.id).val('');
+		return false;
+    }
     var dValue = obj.value;
     var dId = obj.id;
     if($.inArray(obj.id, selectedTests) == -1){
@@ -337,6 +342,30 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
             },
             onCancel: function(trigger) {
 			  $("#"+obj.id).val(oldBatchCode);
+            }
+        });
+  }
+  function sampleToControl(obj,oldValue,tempsampleId) {
+	$(obj).fastConfirm({
+            position: "left",
+            questionText: "Are you sure you want to change this Sample?",
+            onProceed: function(trigger) {
+                var pos = oTable.fnGetPosition(obj);
+				$.blockUI();
+				$.post("updateUnApprovalResultSample.php", { sampleType : obj.value,tempsampleId:tempsampleId},
+				   function(data){
+					if (data) {
+					  alert("Updated successfully!");
+                        oTable.fnDraw();
+                    }else{
+					  alert("Something went wrong!.Please try again");
+					}
+					
+				});
+				$.unblockUI();
+            },
+            onCancel: function(trigger) {
+			  $("#"+obj.id).val(oldValue);
             }
         });
   }
