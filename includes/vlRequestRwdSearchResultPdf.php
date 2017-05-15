@@ -36,7 +36,7 @@ $printDateTime = $expStr[1];
 //set query
 if(isset($_POST['id']) && trim($_POST['id'])!=''){
   if(isset($_POST['resultMail'])){
-    $searchQuery="SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type where vl.vl_sample_id IN(".$_POST['id'].")";
+    $searchQuery="SELECT vl.*,f.*,rst.*,l.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id where vl.vl_sample_id IN(".$_POST['id'].")";
   }else{
     $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
   }
@@ -52,9 +52,10 @@ $_SESSION['aliasPage'] = 1;
 class MYPDF extends TCPDF {
 
     //Page header
-    public function setHeading($logo,$text) {
+    public function setHeading($logo,$text,$lab) {
       $this->logo = $logo;
       $this->text = $text;
+      $this->lab = $lab;
     }
     //Page header
     public function Header() {
@@ -62,16 +63,20 @@ class MYPDF extends TCPDF {
         //$image_file = K_PATH_IMAGES.'logo_example.jpg';
         //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
-        if(trim($this->logo)!=""){
+        if(trim($this->logo)!=''){
             if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-                $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
-                $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+              $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+              $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
         $this->SetFont('helvetica', 'B', 7);
         $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
         $this->SetFont('helvetica', '', 16);
         $this->writeHTMLCell(0,0,10,18,'VIRAL LOAD TEST RESULT', 0, 0, 0, true, 'C', true);
+        if(trim($this->lab)!= ''){
+          $this->SetFont('helvetica', '', 10);
+          $this->writeHTMLCell(0,0,10,24,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+        }
     }
 
     // Page footer
@@ -175,6 +180,9 @@ if(sizeof($requestResult)> 0){
     $page = 1;
     foreach($requestResult as $result){
         $_SESSION['aliasPage'] = $page;
+        if(!isset($result['labName'])){
+          $result['labName'] = '';
+        }
         $draftTextShow = false;
         //Set watermark text
         for($m=0;$m<count($mFieldArray);$m++){
@@ -185,7 +193,7 @@ if(sizeof($requestResult)> 0){
         }
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT,true, 'UTF-8', false);
-        $pdf->setHeading($arr['logo'],$arr['header']);
+        $pdf->setHeading($arr['logo'],$arr['header'],$result['labName']);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         //$pdf->SetAuthor('Saravanan');
