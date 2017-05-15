@@ -120,8 +120,10 @@ try {
             $lotExpirationDateVal = date('Y-m-d', strtotime($row[$lotExpirationDateCol]));
           }
         
-          if($sampleCode == "")
-              continue;
+          if($sampleCode == ""){
+          $sampleCode = $sampleType.$m;
+          }
+           //   continue;
             
           $infoFromFile[$sampleCode] = array(
               "sampleCode" => $sampleCode,
@@ -140,8 +142,11 @@ try {
             
             $m++;
         }
-        
+        $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
+            if($d['sampleCode']==$d['sampleType'].$inc){
+               $d['sampleCode'] = ''; 
+            }
             $data = array(
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
@@ -196,6 +201,13 @@ try {
             
             $query    = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
+            //insert sample controls
+            $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='".trim($d['sampleType'])."'";
+            $scResult = $db->rawQuery($scQuery);
+            if($scResult==false){
+                $scData = array('r_sample_control_name'=>trim($d['sampleType']));
+                $scId = $db->insert("r_sample_controls", $scData);
+            }
             if ($vlResult && $sampleCode != '') {
                 if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
                     $data['sample_details'] = 'Result exists already';
@@ -210,6 +222,7 @@ try {
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $id = $db->insert("temp_sample_report", $data);
             }
+            $inc++;
         }
     }
 

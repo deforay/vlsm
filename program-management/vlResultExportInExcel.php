@@ -44,14 +44,28 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
          ),
      )
  );
+
+ $sheet->mergeCells('A1:Z1');
+ $nameValue = '';
+ foreach($_POST as $key=>$value)
+ {
+  error_log($value);
+  if(trim($value)!='' && trim($value)!='-- Select --'){
+  $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
+  }
+ }
+ $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
+
+ //if($_POST['sampleCollectionDate']!='' || $_POST['batchCode']!='-- Select --' || $_POST['sampleType']!='-- Select --' || $_POST['facilityName']!='-- Select --' || $_POST['sampleTestDate']!='' || $_POST['vLoad']!='-- Select --' || $_POST['printDate']!='' || $_POST['gender']!='-- Select --' || $_POST['status']!='-- Select --' || $_POST['showReordSample']!='-- Select --')
+ //{
+ // 
+ //}
  
  foreach ($headings as $field => $value) {
-  
-  $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
   $colNo++;
-  
  }
- $sheet->getStyle('A1:AN1')->applyFromArray($styleArray);
+ $sheet->getStyle('A3:AN3')->applyFromArray($styleArray);
  
  foreach ($rResult as $aRow) {
   $row = array();
@@ -159,16 +173,16 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $output[] = $row;
  }
 
- $start = (count($output));
+ $start = (count($output))+2;
  foreach ($output as $rowNo => $rowData) {
   $colNo = 0;
   foreach ($rowData as $field => $value) {
-    $rRowCount = $rowNo + 2;
+    $rRowCount = $rowNo + 4;
     $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
     $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
     $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
     $sheet->getDefaultRowDimension()->setRowHeight(15);
-    $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+    $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
     $colNo++;
   }
  }
