@@ -1,64 +1,5 @@
 <?php
 
-$skipTillRow = 2;
-$orderNumberColumn = "C";//mandatory column. Used to check when to stop looping
-
-//function fetchValuesFromFile(&$sampleVal,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$rKey,$cellName,$cell){
-function fetchValuesFromFile(&$sampleCode,&$logVal,&$absVal,&$txtVal,&$absDecimalVal,&$resultFlag,&$testingDate,&$sampleType,&$batchCode,$sheetData){
-     
-     $sampleIdCol=1;
-     $resultCol=5;
-     $txtValCol=6;
-     $sampleTypeCol = 2;
-     $batchCodeVal = '';
-     $flagCol = 10;
-                
-     $sampleCode = $sheetData[$sampleIdCol];
-     
-     if(strpos($sheetData[$resultCol], 'Log (Copies / mL)') !== false){
-          $logVal = str_replace("Log (Copies / mL)", "", $sheetData[$resultCol]);
-          $logVal = str_replace(",", ".", $logVal);
-     }else if(strpos($sheetData[$resultCol], 'Copies / mL') !== false){
-          $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
-     }else{
-          
-          if($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null){
-               //$txtVal =  $sheetData[$flagCol];
-               $txtVal =  "Failed";
-               $resultFlag = $sheetData[$flagCol];
-          }else{
-               $txtVal = $sheetData[$resultCol+1];
-               $resultFlag = "";
-               $absVal = "";
-               $logVal = "";
-          }
-          
-     }
-     
-     
-     $sampleType = $sheetData[$sampleTypeCol];
-     if($sampleType == 'Patient'){
-          $sampleType = 'S';
-     }
-     preg_match_all('!\d+!', $absVal, $absDecimalVal);
-     $absVal=$absDecimalVal = implode("",$absDecimalVal[0]);
-     $batchCode = "";
-    
-}
-
-
-
-
-
-$configQuery  = "SELECT * from global_config";
-$configResult = $db->query($configQuery);
-$arr          = array();
-for ($i = 0; $i < sizeof($configResult); $i++) {
-    $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
-
-$general = new Deforay_Commons_General();
-
 try {
     
     $db->delete('temp_sample_report');
@@ -73,9 +14,7 @@ try {
     $_SESSION['controllertrack'] = $maxId;
     
     $allowedExtensions = array(
-        'xls',
-        'xlsx',
-        'csv'
+        'txt'
     );
     $fileName          = preg_replace('/[^A-Za-z0-9.]/', '-', $_FILES['resultFile']['name']);
     $fileName          = str_replace(" ", "-", $fileName);
@@ -88,10 +27,12 @@ try {
         mkdir('../temporary' . DIRECTORY_SEPARATOR . "import-result");
     }
     if (move_uploaded_file($_FILES['resultFile']['tmp_name'], '../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)) {
-        //$file_info = new finfo(FILEINFO_MIME); // object oriented approach!
-        //$mime_type = $file_info->buffer(file_get_contents('../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)); // e.g. gives "image/jpeg"
         
-       
+        $file_info = new finfo(FILEINFO_MIME); // object oriented approach!
+        $mime_type = $file_info->buffer(file_get_contents('../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)); // e.g. gives "image/jpeg"
+        
+        
+        
         
         $bquery    = "select MAX(batch_code_key) from batch_details";
         $bvlResult = $db->rawQuery($bquery);
@@ -105,6 +46,7 @@ try {
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
         
         
+        
         $m           = 1;
         $skipTillRow = 23;
         
@@ -116,89 +58,122 @@ try {
         $flagCol       = 10;
         $testDateCol   = 11;
         
-        if (($handle = fopen('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== FALSE) {
-          
-          while (($row = fgetcsv($handle, 1000, "\t")) !== FALSE) {
+        
+        $lotNumberCol = 12;
+        $reviewByCol = '';
+        $lotExpirationDateCol = 13;        
+        
+        
+        
+        if (strpos($mime_type, 'text/plain') !== false) {
+                  $infoFromFile = array();
+                  $testDateRow = "";
+                  $skip = 23;
+                  
+                   $row = 1;
+                   if (($handle = fopen('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== FALSE) {
+                       while (($sheetData = fgetcsv($handle, 1000, "\t")) !== FALSE) {
+                         $num = count($sheetData);
+                         $row++;
+                         if($row < $skip) continue;
+                         
+                        $sampleCode = "";
+                        $batchCode = "";
+                        $sampleType = "";
+                        $absDecimalVal="";
+                        $absVal="";
+                        $logVal="";
+                        $txtVal="";
+                        $resultFlag="";
+                        $testingDate="";
+                          
+                          
+                        $sampleCode = $sheetData[$sampleIdCol];
+                        $sampleType = $sheetData[$sampleTypeCol];
+                        
+                        $batchCode = $sheetData[$batchCodeCol];
+                        $resultFlag = $sheetData[$flagCol];
+                        //$reviewBy = $sheetData[$reviewByCol];
+                        
+                        //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
+                        $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
+                        $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
+                        
+                        if(strpos($sheetData[$resultCol], 'Log (Copies / mL)') !== false){
+                             $logVal = str_replace("Log (Copies / mL)", "", $sheetData[$resultCol]);
+                             $logVal = str_replace(",", ".", $logVal);
+                        }else if(strpos($sheetData[$resultCol], 'Copies / mL') !== false){
+                             $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
+                             $absVal = str_replace(" ", "", $sheetData[$resultCol]);
+                             preg_match_all('!\d+!', $absVal, $absDecimalVal);
+                             $absVal=$absDecimalVal = implode("",$absDecimalVal[0]);
+                        }else{
+                             if($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null){
+                                  //$txtVal =  $sheetData[$flagCol];
+                                  $txtVal =  "Failed";
+                                  $resultFlag = $sheetData[$flagCol];
+                             }else{
+                                  $txtVal = $sheetData[$resultCol+1];
+                                  $resultFlag = "";
+                                  $absVal = "";
+                                  $logVal = "";
+                             } 
+                        }
+                            
+                        $sampleType = $sheetData[$sampleTypeCol];
+                        if($sampleType == 'Patient'){
+                             $sampleType = 'S';
+                        }
+                        
+                        $batchCode = "";
+                        
+                        $lotNumberVal = $sheetData[$lotNumberCol];
+                        if(trim($sheetData[$lotExpirationDateCol]) !=''){
+                            //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
+                            $sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
+                            $lotExpirationDateVal = date('Y-m-d', strtotime($sheetData[$lotExpirationDateCol]));
+                        }
+                      
+                        if($sampleCode == ""){
+                           $sampleCode = $sampleType.$m;
+                        }
+                            
+                            
+
             
-            $m++;
-            if ($m < $skipTillRow)
-                continue;
-            
-            $sampleCode    = "";
-            $batchCode     = "";
-            $sampleType    = "";
-            $absDecimalVal = "";
-            $absVal        = "";
-            $logVal        = "";
-            $txtVal        = "";
-            $resultFlag    = "";
-            $testingDate   = "";
-            
- 
-            
-            $sampleCode = $row[$sampleIdCol];
-            
-            if (strpos($row[$resultCol], 'Log (Copies / mL)') !== false) {
-                $logVal = str_replace("Log (Copies / mL)", "", $row[$resultCol]);
-                $logVal = str_replace(",", ".", $logVal);
-            } else if (strpos($row[$resultCol], 'Copies / mL') !== false) {
-                $absVal = str_replace("Copies / mL", "", $row[$resultCol]);
-                preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
-            } else {
-                if ($row[$resultCol] == "" || $row[$resultCol] == null) {
-                    $txtVal     = "Failed";
-                    $resultFlag = $row[$flagCol];
-                } else {
-                    $txtVal     = $row[$flagCol];
-                    $resultFlag = $row[$flagCol];
-                    $absVal     = "";
-                    $logVal     = "";
-                }
-            }
-            
-            $sampleType = $row[$sampleTypeCol];
-            if ($sampleType == 'Patient') {
-                $sampleType = 'S';
-            }
-            
-            $batchCode = "";
-            
-            // Date time in the provided Abbott Sample file is in this format : 11/23/2016 2:22:35 PM
-            $testingDate = DateTime::createFromFormat('m/d/Y g:i:s A', $row[$testDateCol])->format('Y-m-d H:i');
-            
-            if ($sampleCode == "")
-                continue;
-            
-            if (!isset($infoFromFile[$sampleCode])) {
-                $infoFromFile[$sampleCode] = array(
-                    "sampleCode" => $sampleCode,
-                    "logVal" => trim($logVal),
-                    "txtVal" => $txtVal,
-                    "resultFlag" => $resultFlag,
-                    "testingDate" => $testingDate,
-                    "sampleType" => $sampleType,
-                    "batchCode" => $batchCode
-                );
-            } else {
-                $infoFromFile[$sampleCode]['absVal']        = $absVal;
-                $infoFromFile[$sampleCode]['absDecimalVal'] = $absDecimalVal;
-            }
-            
-            //$m++;
-        }
+                        if (!isset($infoFromFile[$sampleCode])) {
+                            $infoFromFile[$sampleCode] = array(
+                                "sampleCode" => $sampleCode,
+                                "logVal" => trim($logVal),
+                                "absVal" => $absVal,
+                                "absDecimalVal" => $absDecimalVal,
+                                "txtVal" => $txtVal,
+                                "resultFlag" => $resultFlag,
+                                "testingDate" => $testingDate,
+                                "sampleType" => $sampleType,
+                                "batchCode" => $batchCode,
+                                "lotNumber" => $lotNumberVal,
+                                "lotExpirationDate" => $lotExpirationDateVal
+                            );
+                        } else {
+                            if(isset($logVal) && trim($logVal) != ""){
+                                $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
+                            }
+                        }
+                                        
+                                        $m++;
+                         
+                       }
+                   }
         }
         
-        /*
-         * OK, so the reason why we are putting the information into an array ($infoFromFile)
-         * is because the Abbott data has same sample ID repeated in two rows, with one row
-         * giving log and another giving abs value. So we create the $infoFromFile array to
-         * ensure we get both log and abs value for the given sample
-         */
-         
+        
+        
+        $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
-            if ($sampleCode == "")
-                continue;
+            if($d['sampleCode']==$d['sampleType'].$inc){
+               $d['sampleCode'] = ''; 
+            }
             $data = array(
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
@@ -212,10 +187,12 @@ try {
                 'sample_tested_datetime' => $testingDate,
                 'result_status' => '6',
                 'import_machine_file_name' => $fileName,
-                'approver_comments' => $d['resultFlag']
+                'approver_comments' => $d['resultFlag'],
+                'lot_number' => $d['lotNumber'],
+                'lot_expiration_date' => $d['lotExpirationDate']
             );
             
-            
+            //echo "<pre>";var_dump($data);continue;
             if ($d['absVal'] != "") {
                 $data['result'] = $d['absVal'];
             } else if ($d['logVal'] != "") {
@@ -232,9 +209,32 @@ try {
             } else {
                 $data['batch_code'] = $batchCode;
             }
+            //get user name
+            if($d['reviewBy']!=''){
+                $uQuery = "select user_name,user_id from user_details where user_name='".$d['reviewBy']."'";
+                $uResult = $db->rawQuery($uQuery);
+                if($uResult){
+                    $data['sample_review_by'] = $uResult[0]['user_id'];
+                }else{
+                    $userdata=array(
+                    'user_name'=>$d['reviewBy'],
+                    'role_id'=>'3',
+                    'status'=>'active'
+                    );
+                    $db->insert('user_details',$userdata);
+                    $data['sample_review_by'] = $db->getInsertId();
+                }
+            }
             
             $query    = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
+            //insert sample controls
+            $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='".trim($d['sampleType'])."'";
+            $scResult = $db->rawQuery($scQuery);
+            if($scResult==false){
+                $scData = array('r_sample_control_name'=>trim($d['sampleType']));
+                $scId = $db->insert("r_sample_controls", $scData);
+            }
             if ($vlResult && $sampleCode != '') {
                 if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
                     $data['sample_details'] = 'Result exists already';
@@ -249,9 +249,10 @@ try {
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $id = $db->insert("temp_sample_report", $data);
             }
+            $inc++;
         }
     }
-    //die;
+
     $_SESSION['alertMsg'] = "Imported results successfully";
     //Add event log
     $eventType            = 'import';
@@ -266,13 +267,14 @@ try {
     $db->insert("activity_log", $data);
     
     //new log for update in result
-    $data = array(
+    if(isset($id) && $id > 0){
+        $data = array(
         'user_id' => $_SESSION['userId'],
         'vl_sample_id' => $id,
         'updated_on' => $general->getDateTime()
-    );
-    $db->insert("log_result_updates", $data);
-    
+        );
+        $db->insert("log_result_updates", $data);
+    }
     header("location:../vl-print/vlResultUnApproval.php");
     
 }
