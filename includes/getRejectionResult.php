@@ -83,8 +83,8 @@ if(count($tResult[$rejectedResult['rejection_reason_code']])>0){
    <thead>
       <tr>
          <th>Sample Collection Date</th>
-         <th> Reason</th>
-         <th> Reason Type</th>
+         <th>Rejection Reason</th>
+         <th>Reason Type</th>
          <th>No. Of Records</th>
       </tr>
    </thead>
@@ -97,7 +97,7 @@ if(count($tResult[$rejectedResult['rejection_reason_code']])>0){
 				  <td><?php $dateExp = explode(" ",$rejectedData[0]['sample_collection_date']);
 				  echo $general->humanDateFormat($dateExp[0]);?></td>
 				  <td><?php echo ucwords($rejectedData[0]['rejection_reason_name']);?></td>
-				  <td><?php echo ucwords($rejectedData[0]['rejection_type']);?></td>
+				  <td><?php echo strtoupper($rejectedData[0]['rejection_type']);?></td>
 				  <td><?php echo $rejectedData[0]['total'];?></td>
 			   </tr>
 			   <?php
@@ -120,7 +120,7 @@ if(count($tResult[$rejectedResult['rejection_reason_code']])>0){
                     type: 'pie'
                 },
                 title: {
-                    text: 'Sample Rejected Reason'
+                    text: 'Sample Rejection Reason'
                 },
                 credits: {
                   enabled: false
@@ -174,7 +174,7 @@ if(count($tResult[$rejectedResult['rejection_reason_code']])>0){
                     type: 'pie'
                 },
                 title: {
-                    text: 'Sample Rejected Reason Type'
+                    text: 'Sample Rejection Reason Type'
                 },
                 credits: {
                   enabled: false
