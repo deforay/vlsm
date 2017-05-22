@@ -86,7 +86,7 @@ try {
         }
     }
 	//update all sample code in database
-	if(isset($_POST['sample_code_prefix']) && trim($_POST['sample_code_prefix'])!=''){
+	if(isset($_POST['sample_code_prefix']) && trim($_POST['sample_code_prefix'])!='' && ($_POST['vl_form']==7 || $_POST['vl_form']==3 || $_POST['vl_form']==4)){
 		if($configResult[0]['value']!=$_POST['sample_code'])
 		{
 			$prefix = trim($_POST['sample_code_prefix']);
