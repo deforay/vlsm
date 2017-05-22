@@ -44,6 +44,43 @@
     for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
     }
+    
+    $start_date = date('Y-m-01');
+  $end_date = date('Y-m-31');
+  if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MAX(length(sample_code_key)) from vl_request_form )';
+  }else{
+    $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MIN(length(sample_code_key)) from vl_request_form )';
+  }
+  $svlResult=$db->query($svlQuery);
+  $lngth = strlen($svlResult[0]['MAX(sample_code_key)']);
+  if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+    if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth > 3){
+      $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+      $strparam = strlen($maxId);
+      $zeros = substr("000000", $strparam);
+      $maxId = $zeros.$maxId;
+    }else{
+      $maxId = '000001';
+    }
+    if($arr['sample_code']=='MMYY'){
+      $mnthYr = date('mY');
+    }else{
+      $mnthYr = date('Y');
+    }
+    $prefix = $arr['sample_code_prefix'];
+  }else{
+  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth < 3){
+   $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+   $strparam = strlen($maxId);
+   $zeros = substr("000", $strparam);
+   $maxId = $zeros.$maxId;
+  }else{
+   $maxId = '001';
+  }
+  }
+  $sKey = '';
+  $sFormat = '';
     ?>
     <style>
       .ui_tpicker_second_label {
@@ -480,6 +517,10 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+                <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+                  <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
+                  <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
+                <?php } ?>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="formId" id="formId" value="3"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
@@ -542,6 +583,23 @@
                 }
             });
         }
+        <?php
+      if($arr['sample_code']=='auto'){
+        ?>
+        pNameVal = pName.split("##");
+        sCode = '<?php echo date('Ymd');?>';
+        sCodeKey = '<?php echo $maxId;?>';
+        $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
+        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+        $("#sampleCodeKey").val(sCodeKey);
+        <?php
+      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
+        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
+        $("#sampleCodeKey").val('<?php echo $maxId;?>');
+        <?php
+      }
+      ?>
       }else if(pName=='' && cName==''){
         provinceName = true;
         facilityName = true;
