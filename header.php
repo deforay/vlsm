@@ -329,7 +329,7 @@ $formConfigResult=$db->query($formConfigQuery);
                     <?php } if(isset($_SESSION['privileges']) && in_array("vlWeeklyReport.php", $_SESSION['privileges'])){ ?>
                     <li class="allMenu vlWeeklyReport"><a href="../program-management/vlWeeklyReport.php"><i class="fa fa-circle-o"></i> VL Lab Weekly Report</a></li>
                     <?php } if(isset($_SESSION['privileges']) && in_array("sampleRejectionReport.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu sampleRejectionReport"><a href="../program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejected Report</a></li>
+                    <li class="allMenu sampleRejectionReport"><a href="../program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
                     <?php } ?>
                 </ul>
             </li>
