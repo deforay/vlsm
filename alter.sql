@@ -1075,3 +1075,14 @@ CREATE TABLE IF NOT EXISTS `r_sample_controls` (
   `r_sample_control_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`r_sample_control_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+--saravanan 23-may-2017
+CREATE TABLE IF NOT EXISTS `import_config_machines` (
+  `config_machine_id` int(11) NOT NULL AUTO_INCREMENT,
+  `config_id` int(11) NOT NULL,
+  `config_machine_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`config_machine_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+ALTER TABLE  `temp_sample_report` ADD  `import_machine_name` INT NULL DEFAULT NULL AFTER  `vl_test_platform` ;
+ALTER TABLE  `vl_request_form` ADD  `import_machine_name` INT NULL DEFAULT NULL AFTER  `vl_test_platform` ;
+ALTER TABLE  `hold_sample_report` ADD  `import_machine_name` INT NULL DEFAULT NULL AFTER  `vl_test_platform` ;

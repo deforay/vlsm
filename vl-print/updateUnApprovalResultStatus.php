@@ -45,6 +45,7 @@ try {
                         'result_reviewed_datetime'=>$rResult[0]['result_reviewed_datetime'],
                         'result_reviewed_by'=>$_POST['reviewedBy'],
                         'vl_test_platform'=>$rResult[0]['vl_test_platform'],
+                        'import_machine_name'=>$rResult[0]['import_machine_name'],
                         'approver_comments'=>$comments,
                         'lot_number'=>$rResult[0]['lot_number'],
                         'lot_expiration_date'=>$rResult[0]['lot_expiration_date'],
@@ -149,6 +150,7 @@ try {
                             'manual_result_entry'=>'no',
                             'result_status'=>'7',
                             'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
+                            'import_machine_name'=>$accResult[$i]['import_machine_name'],
                         );
                     if($accResult[$i]['result_value_absolute']!=''){
                         $data['result'] = $accResult[$i]['result_value_absolute'];
