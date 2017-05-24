@@ -331,7 +331,7 @@ $batResult = $db->rawQuery($batQuery);
   function convertSearchResultToPdf(id){
     <?php
     if($arr['vl_form'] == 3){
-      $path = '../includes/vlRequestDrcResultPdf.php';
+      $path = '../includes/vlRequestDrcSearchResultPdf.php';
     }else if($arr['vl_form'] == 2){
      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }else if($arr['vl_form'] == 4){

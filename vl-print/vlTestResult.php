@@ -319,7 +319,7 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
     <?php
     $path = '';
     if($configFormResult[0]['value'] == 3){
-      $path = '../includes/vlRequestDrcResultPdf.php';
+      $path = '../includes/vlRequestDrcSearchResultPdf.php';
     }else if($configFormResult[0]['value'] == 1 || $configFormResult[0]['value'] == 2){
      $path = '../includes/vlRequestResultPdf.php'; 
     }else if($configFormResult[0]['value'] == 4){
