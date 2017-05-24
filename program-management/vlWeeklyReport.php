@@ -11,9 +11,9 @@
         .select2-selection__choice{
           color:#000000 !important;
         }
-								table.valign-mid td{
-									vertical-align:middle !important;
-								}
+	table.valign-mid td{
+		vertical-align:middle !important;
+	}
     </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -63,9 +63,9 @@
               <table id="vlWeeklyReportDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-																		<th rowspan="2">Province</th>
-																		<th rowspan="2">District</th>
-																		<th rowspan="2">Site Name</th>
+		  <th rowspan="2">Province</th>
+		  <th rowspan="2">District</th>
+		  <th rowspan="2">Site Name</th>
                   <th rowspan="2">IPSL</th>
                   <th rowspan="2">No. of Rejections</th>
                   <th colspan="2" style="text-align:center;">Viral Load Results - Peds</th>
@@ -75,20 +75,20 @@
                   <th colspan="2" style="text-align:center;">Totals</th>
                   <th rowspan="2">Total Test per Clinic</th>
                 </tr>
-																<tr>
-																		<th><= 14 yrs <=1000 copies/ml</th>
-																		<th><= 14 yrs >1000 copies/ml</th>
-																		<th>> 14yrs Male <= 1000 copies/ml</th>
-																		<th>> 14yrs Male > 1000 copies/ml</th>
-																		<th>> 14yrs Female <= 1000 copies/ml</th>
-																		<th>> 14yrs  Female > 1000 copies/ml</th>
-																		<th><= 1000 copies/ml</th>
-																		<th>> 1000 copies/ml</th>
-																		<th>Unknown Age/Sex <= 1000ml</th>
-																		<th>Unknown Age/Sex > 1000ml</th>
-																		<th><= 1000 copies/ml</th>
-																		<th>> 1000 copies/ml</th>
-																</tr>
+		<tr>
+		  <th><= 14 yrs <=1000 copies/ml</th>
+		  <th><= 14 yrs >1000 copies/ml</th>
+		  <th>> 14yrs Male <= 1000 copies/ml</th>
+		  <th>> 14yrs Male > 1000 copies/ml</th>
+		  <th>> 14yrs Female <= 1000 copies/ml</th>
+		  <th>> 14yrs  Female > 1000 copies/ml</th>
+		  <th><= 1000 copies/ml</th>
+		  <th>> 1000 copies/ml</th>
+		  <th>Unknown Age/Sex <= 1000ml</th>
+		  <th>Unknown Age/Sex > 1000ml</th>
+		  <th><= 1000 copies/ml</th>
+		  <th>> 1000 copies/ml</th>
+		</tr>
                 </thead>
                 <tbody>
                   <tr>
