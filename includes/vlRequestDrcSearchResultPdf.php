@@ -196,7 +196,7 @@ if(sizeof($requestResult)> 0){
         $pdf->setHeading($arr['logo'],$arr['header'],$result['labName']);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        //$pdf->SetAuthor('Saravanan');
+        //$pdf->SetAuthor('Pal');
         $pdf->SetTitle('Viral Load Test Result');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -224,8 +224,8 @@ if(sizeof($requestResult)> 0){
 
         // set some language-dependent strings (optional)
         //if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-            //require_once(dirname(__FILE__).'/lang/eng.php');
-            //$pdf->setLanguageArray($l);
+        //    require_once(dirname(__FILE__).'/lang/eng.php');
+        //    $pdf->setLanguageArray($l);
         //}
 
         // ---------------------------------------------------------
@@ -545,7 +545,7 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
             $html.='</table>';
         if($result['result']!=''){
-          $pdf->writeHTML($html);
+          $pdf->writeHTML(utf8_encode($html));
           $pdf->lastPage();
           $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
           $pdf->Output($filename,"F");
