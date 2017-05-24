@@ -5,6 +5,8 @@ include('../header.php');
 $id=base64_decode($_GET['id']);
 $sQuery="SELECT * from import_config where config_id=$id";
 $sInfo=$db->query($sQuery);
+$configMachineQuery="SELECT * from import_config_machines where config_id=$id";
+$configMachineInfo=$db->query($configMachineQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -122,6 +124,48 @@ $sInfo=$db->query($sQuery);
                     </div>
                   </div>
                 </div>
+				<div class="box-header">
+                  <h3 class="box-title ">Machine Names</h3>
+                </div>
+                <div class="box-body">
+                  <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-condensed" style="width:60%;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;">Machine Name <span class="mandatory">*</span></th>
+                            <th style="text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="machineTable">
+					  <?php
+					  $i = 1;
+					  if(count($configMachineInfo)>0){
+						foreach($configMachineInfo as $machine){
+						?>
+						<tr>
+                            <td>
+								<input type="hidden" name="configMachineId[]" value="<?php echo $machine['config_machine_id'];?>"/>
+                                <input type="text" name="configMachineName[]" id="configMachineName<?php echo $i;?>" class="form-control isRequired" placeholder="Machine Name" title="Please enter machine name" value="<?php echo $machine['config_machine_name'];?>" onblur="checkNameValidation('import_config_machines','config_machine_name',this,'<?php echo "config_machine_id##".$machine['config_machine_id'];?>','This configuration machine name already exists.Try another name',null)";/>
+                            </td>
+                            <td align="center" style="vertical-align:middle;">
+                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>
+                            </td>
+                        </tr>
+						<?php
+						$i++;
+						} }else{
+					  ?>
+                        <tr>
+                            <td>
+                                <input type="text" name="configMachineName[]" id="configMachineName<?php echo $i;?>" class="form-control" placeholder="Machine Name" title="Please enter machine name" onblur="checkNameValidation('import_config_machines','config_machine_name',this,null,'This configuration machine name already exists.Try another name',null)";/>
+                            </td>
+                            <td align="center" style="vertical-align:middle;">
+                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+                            </td>
+                        </tr>
+						<?php } ?>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -142,6 +186,7 @@ $sInfo=$db->query($sQuery);
   </div>
   
   <script type="text/javascript">
+	tableRowId = '<?php echo $i; ?>';
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'editImportConfigForm'
@@ -158,13 +203,37 @@ $sInfo=$db->query($sQuery);
         //str=obj.value;
         removeDots = removeDots.replace(/\s{2,}/g,' ');
 
-        $.post("/includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
         function(data){
             if(data==='1'){
                 alert(alrt);
                 document.getElementById(obj.id).value="";
             }
         });
+  }
+  function insRow() {
+      rl = document.getElementById("machineTable").rows.length;
+      var a = document.getElementById("machineTable").insertRow(rl);
+      a.setAttribute("style", "display:none");
+      var b = a.insertCell(0);
+      var c = a.insertCell(1);
+      c.setAttribute("align", "center");
+      c.setAttribute("style","vertical-align:middle");
+      
+      b.innerHTML = '<input type="text" name="configMachineName[]" id="configMachineName' + tableRowId + '"class="isRequired form-control" placeholder="Machine Name" title="Please enter machine name"  onblur="checkNameValidation(\'import_config_machines\',\'config_machine_name\',this,null,\'This configuration machine name already exists.Try another name\',null)"/ >';
+      c.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
+      $(a).fadeIn(800);
+      tableRowId++;
+  }
+
+  function removeAttributeRow(el) {
+      $(el).fadeOut("slow", function() {
+          el.parentNode.removeChild(el);
+          rl = document.getElementById("machineTable").rows.length;
+          if (rl == 0) {
+              insRow();
+          }
+      });
   }
 </script>
   

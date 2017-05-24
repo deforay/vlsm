@@ -49,13 +49,23 @@ $lastResult = $db->rawQuery($lastQuery);
                             <div class="form-group">
                                 <label for="machineName" class="col-lg-4 control-label">Configuration Name <span class="mandatory">*</span></label>
                                 <div class="col-lg-7">
-                                <select name="machineName" id="machineName" class="form-control isRequired" title="Please select the import machine type">
+                                <select name="machineName" id="machineName" class="form-control isRequired" title="Please select the import machine type" onchange="getConfigMachineName();">
                                   <option value=""> -- Select -- </option>
-                                  <?php
-                                  foreach($iResult as $val){
-                                  ?>
+                                  <?php foreach($iResult as $val){ ?>
                                   <option value="<?php echo base64_encode($val['import_machine_file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
                                   <?php } ?>
+                                </select>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="machineName" class="col-lg-4 control-label">Configuration Machine Name</label>
+                                <div class="col-lg-7">
+                                <select name="configMachineName" id="configMachineName" class="form-control" title="Please select the import config machine name">
+                                  <option value=""> -- Select -- </option>
                                 </select>
                                 </div>
                             </div>
@@ -135,12 +145,10 @@ $lastResult = $db->rawQuery($lastQuery);
     flag = deforayValidator.init({
         formId: 'addImportResultForm'
     });
-    
     if(flag){
       document.getElementById('addImportResultForm').submit();
     }
   }
-  
   
   $("#machineName").change(function(){
 	if ($("#machineName").val() == "") {
@@ -149,9 +157,14 @@ $lastResult = $db->rawQuery($lastQuery);
 	  $("#vltestPlatform").val($("#machineName option:selected").text());
 	}
   });
-  
-
-  
+  function getConfigMachineName() {
+	if ($("#machineName").val()!='') {
+	$.post("getConfigMachineName.php", {configId:$("#machineName").val()},
+	function(data){
+	  $("#configMachineName").html(data);
+	});
+	}
+  }
 </script>
  <?php
  include('../footer.php');
