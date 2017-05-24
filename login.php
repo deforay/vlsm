@@ -46,6 +46,14 @@ $configResult=$db->query($globalConfigQuery);
         <?php
         $filePath = './uploads/login-logos';
         $dir = scandir($filePath);
+        
+        if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
+        ?>
+        <div style="margin-top:15px;float:left;">
+            <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" style="max-width:120px;">
+        </div>
+        <?php }
+        
         if(is_dir($filePath) && count($dir)>2)
         {
             $loginLogoFiles = array();
@@ -58,17 +66,14 @@ $configResult=$db->query($globalConfigQuery);
             ?>
             <div style="margin-top:15px;float:left;">
                 <?php foreach($loginLogoFiles as $fileName) { ?>
-                        <img src="./uploads/login-logos/<?php echo $fileName; ?>" alt="Logo image" style="max-width:120px;">
+                        &nbsp;<img src="./uploads/login-logos/<?php echo $fileName; ?>" alt="Logo image" style="max-width:80px;">
                 <?php }  ?>
             </div>
         <?php
-        }else{
-        if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
+        }
+        
+        
         ?>
-        <div style="margin-top:15px;float:left;">
-            <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" style="max-width:120px;">
-        </div>
-        <?php } } ?>
         <div id="loginbox" style="margin-top:15px;margin-bottom:70px;float:right;margin-right:-15px;" class="mainbox col-md-3 col-sm-8 ">
             <div class="panel panel-default" style="opacity: 0.9;">
                 <div class="panel-heading">
@@ -104,6 +109,7 @@ $configResult=$db->query($globalConfigQuery);
         <a id="download-form" href="#" style="color:#fff;text-decoration:underline;"><h3>Download VL Form</h3></a>
         <select id="country" name="country" class="form-control" style="width:220px;display:none;">
             <option value=""> -- Select Country -- </option>
+            <option value="5">Rwanda</option>
             <option value="3">DRC</option>
             <option value="4">Zambia</option>
         </select>
@@ -143,9 +149,14 @@ $configResult=$db->query($globalConfigQuery);
          $('#download').show(400);
          if($('#country').val() == 3){
             $('#download').attr('onclick','downloadVLForm("drc")');
-         }else if($('#country').val() == 4){
+         }
+         else if($('#country').val() == 4){
             $('#download').attr('onclick','downloadVLForm("zambia")');
-         }else{
+         }
+         else if($('#country').val() == 5){
+            $('#download').attr('onclick','downloadVLForm("rwanda")');
+         }
+         else{
             $('#download').removeAttr('onclick');
          }
       }else{
@@ -160,21 +171,14 @@ $configResult=$db->query($globalConfigQuery);
         if(country == 'drc'){
           $.unblockUI();
           window.open('../uploads/vl-drc-form.pdf','_blank');
-        }else if(country == 'zambia'){
+        }
+        else if(country == 'zambia'){
           $.unblockUI();
           window.open('../uploads/vl-zambia-form.pdf','_blank');
-          //downloadURL = '../includes/downloadZambiaForm.php';
-          //$.post(downloadURL, { },
-          //function(data){
-          //    if(data == "" || data == null || data == undefined){
-          //        $.unblockUI();
-          //        alert('Unable to generate download');
-          //    }else{
-          //        $.unblockUI();
-          //        window.open('../uploads/'+data,'_blank');
-          //    }
-          //    
-          //});
+        }
+        else if(country == 'rwanda'){
+          $.unblockUI();
+          window.open('../uploads/vl-rwanda-form.pdf','_blank');
         }
     }
     </script>

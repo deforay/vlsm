@@ -136,6 +136,7 @@ try {
             $data = array(
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
+                'import_machine_name' => $_POST['configMachineName'],
                 'result_reviewed_by' => $_SESSION['userId'],
                 'sample_code' => $d['sampleCode'],
                 'result_value_log' => $d['logVal'],
