@@ -131,7 +131,7 @@ class Watermark extends PDF_Rotate {
       //Put the watermark
       $this->SetFont('helvetica', 'B', 50);
       $this->SetTextColor(148,162,204);
-      $this->RotatedText(67,119,'DRAFT',45);
+      $this->RotatedText(67,107,'DRAFT',45);
   
       if (is_null($this->_tplIdx)) {
           // THIS IS WHERE YOU GET THE NUMBER OF PAGES
@@ -389,19 +389,19 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
-              $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Prénom du patient</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de famille du patient</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Mobile No.</td>';
-              $html .='</tr>';
-              $html .='<tr>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']).'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_last_name']).'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
-              $html .='</tr>';
-              $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:10px;"></td>';
-              $html .='</tr>';
+              //$html .='<tr>';
+              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Prénom du patient</td>';
+              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de famille du patient</td>';
+              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Mobile No.</td>';
+              //$html .='</tr>';
+              //$html .='<tr>';
+              //  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']).'</td>';
+              //  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_last_name']).'</td>';
+              //  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
+              //$html .='</tr>';
+              //$html .='<tr>';
+               //$html .='<td colspan="3" style="line-height:10px;"></td>';
+              //$html .='</tr>';
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Âge</td>';
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sexe</td>';
