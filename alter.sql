@@ -1086,3 +1086,6 @@ CREATE TABLE IF NOT EXISTS `import_config_machines` (
 ALTER TABLE  `temp_sample_report` ADD  `import_machine_name` INT NULL DEFAULT NULL AFTER  `vl_test_platform` ;
 ALTER TABLE  `vl_request_form` ADD  `import_machine_name` INT NULL DEFAULT NULL AFTER  `vl_test_platform` ;
 ALTER TABLE  `hold_sample_report` ADD  `import_machine_name` INT NULL DEFAULT NULL AFTER  `vl_test_platform` ;
+--saravanan 25-may-2017
+INSERT INTO `vl_lab_request`.`resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'vl_monitoring_report', 'Sample Monitoring Report');
+INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'vlMonitoringReport.php', 'Sample Monitoring Report');
