@@ -196,7 +196,7 @@ if(sizeof($requestResult)> 0){
         $pdf->setHeading($arr['logo'],$arr['header'],$result['labName']);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        //$pdf->SetAuthor('Saravanan');
+        //$pdf->SetAuthor('Pal');
         $pdf->SetTitle('Viral Load Test Result');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');

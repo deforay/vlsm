@@ -1,7 +1,6 @@
 <?php
 
 try {
-    
     $db->delete('temp_sample_report');
     //set session for controller track id in hold_sample_record table
     $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_report";
