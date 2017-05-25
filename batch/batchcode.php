@@ -122,7 +122,7 @@ include('../header.php');
     $.post("generateBarcode.php",{id:bId},
       function(data){
 	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate download');
+	      alert('Unable to generate barcode');
 	  }else{
 	      window.open('.././uploads/barcode/'+data,'_blank');
 	  }
@@ -130,6 +130,18 @@ include('../header.php');
       });
   }
   
+  function generateQRcode(bId){
+     $.blockUI();
+     $.post("generateQRcode.php",{id:bId},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      alert('Unable to generate QR code');
+	  }else{
+	      window.open('.././uploads/qrcode/'+data,'_blank');
+	  }
+	  $.unblockUI();
+      });
+  }
 //  function updateStatus(id,value){
 //    conf = confirm("Do you wisht to change the status?");
 //    if(conf){

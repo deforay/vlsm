@@ -2,8 +2,9 @@
 include('../includes/MysqliDb.php');
 $importMachineTable="import_config_machines";
 $configId = base64_decode($_POST['configId']);
-$query="SELECT config_id,machine_name,import_machine_file_name FROM import_config where import_machine_file_name='$configId'";
-$iResult = $db->rawQuery($query);
+$iQuery="SELECT config_id,machine_name,import_machine_file_name FROM import_config where import_machine_file_name='$configId'";
+$iResult = $db->rawQuery($iQuery);
+
 $configMachineQuery="SELECT config_machine_id,config_machine_name from import_config_machines where config_id=".$iResult[0]['config_id'];
 $configMachineInfo=$db->query($configMachineQuery);
 $configMachine = '';

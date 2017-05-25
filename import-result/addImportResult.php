@@ -1,7 +1,6 @@
 <?php
 ob_start();
 include('../header.php');
-//include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
 $query="SELECT config_id,machine_name,import_machine_file_name FROM import_config where status='active'";
@@ -52,7 +51,7 @@ $lastResult = $db->rawQuery($lastQuery);
                                 <select name="machineName" id="machineName" class="form-control isRequired" title="Please select the import machine type" onchange="getConfigMachineName();">
                                   <option value=""> -- Select -- </option>
                                   <?php foreach($iResult as $val){ ?>
-                                  <option value="<?php echo base64_encode($val['import_machine_file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
+                                    <option value="<?php echo base64_encode($val['import_machine_file_name']); ?>"><?php echo ucwords($val['machine_name']); ?></option>
                                   <?php } ?>
                                 </select>
                                 </div>
@@ -86,7 +85,6 @@ $lastResult = $db->rawQuery($lastQuery);
                     </div>
                   </div>
                 </div>
-                
                 <div class="row setup-content step" id="step-2">
                   <div class="col-xs-12">
                     <div class="col-md-12" id="stepTwoForm">
@@ -100,19 +98,14 @@ $lastResult = $db->rawQuery($lastQuery);
                                   <?php
                                   foreach($fResult as $val){
                                   ?>
-				     <option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (isset($lastResult[0]['lab_id']) && $lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""; ?> ><?php echo ucwords($val['facility_name']); ?></option>
+				    <option value="<?php echo base64_encode($val['facility_id']); ?>" <?php echo (isset($lastResult[0]['lab_id']) && $lastResult[0]['lab_id'] == $val['facility_id']) ? "selected='selected'" : ""; ?> ><?php echo ucwords($val['facility_name']); ?></option>
                                   <?php } ?>
 			      </select>
                               </div>
                           </div>
                         </div>
-                        
-                      </div>
-                   
-                      
-                      
-                     
-                      <div class="row form-group">        
+                      </div>                     
+                      <div class="row form-group">      
                       <div class="box-footer">
 			<input type="hidden" id="vltestPlatform" name="vltestPlatform" value="" />
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>

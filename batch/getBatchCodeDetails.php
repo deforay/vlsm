@@ -153,12 +153,13 @@ $general=new Deforay_Commons_General();
 	    $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
 	    
         $row = array();
-	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-		$editPosition ='<a href="editBatchControlsPosition.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
+	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+	    $printQrcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-qrcode"> Print QR code</i></a>';
+	    $editPosition ='<a href="editBatchControlsPosition.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
 	    $date = '';
 	    if($noOfSampleLastDateTested[0]['last_tested_date']!='0000-00-00 00:00:00' && $noOfSampleLastDateTested[0]['last_tested_date']!=null){
-			$exp = explode(" ",$noOfSampleLastDateTested[0]['last_tested_date']);
-			$date = $general->humanDateFormat($exp[0]);
+		$exp = explode(" ",$noOfSampleLastDateTested[0]['last_tested_date']);
+		$date = $general->humanDateFormat($exp[0]);
 	    }
 	    $row[] = ucwords($aRow['batch_code']);
 	    $row[] = $aRow['sample_code'];
@@ -172,7 +173,7 @@ $general=new Deforay_Commons_General();
 	//		    <option value="completed" ' . ($aRow['batch_status'] == "completed" ? "selected=selected" : "") . '>Completed</option>
 	//	    </select>';
 	    if($batch){
-            $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>'.$printBarcode.$editPosition;
+            $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;'.$printBarcode.$printQrcode.'&nbsp;'.$editPosition;
 	    }
             $output['aaData'][] = $row;
         }
