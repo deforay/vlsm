@@ -273,7 +273,11 @@ $formConfigResult=$db->query($formConfigQuery);
                   <!--<li class="allMenu importTestResultMenu">
                     <a href="../vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
                   </li>-->
-              <?php }?>
+              <?php } if(isset($_SESSION['privileges']) && in_array("import.php", $_SESSION['privileges'])){ ?>
+                  <li class="allMenu vlRequestImportMenu">
+                    <a href="../vl-request/import.php?q="><i class="fa fa-circle-o"></i> Import Test Requests</a>
+                  </li>
+              <?php } ?>
             </ul>
         </li>
         <?php }

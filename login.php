@@ -44,29 +44,27 @@ $configResult=$db->query($globalConfigQuery);
 <body class="">
     <div class="container-fluid">
         <?php
-        $filePath = './uploads/login-logos';
+        $filePath = $_SERVER['DOCUMENT_ROOT']. DIRECTORY_SEPARATOR . 'uploads'. DIRECTORY_SEPARATOR .'login-logos';
         $dir = scandir($filePath);
         
         if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
         ?>
         <div style="margin-top:15px;float:left;">
-            <img src="./uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" style="max-width:120px;">
+            <img src="/uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" style="max-width:120px;">
         </div>
         <?php }
         
-        if(is_dir($filePath) && count($dir)>2)
-        {
+        if(is_dir($filePath) && count($dir)>2){
             $loginLogoFiles = array();
-            foreach($dir as $fileName)
-            {
+            foreach($dir as $fileName){
                 if($fileName!='.' && $fileName!='..'){
-                $loginLogoFiles[] = $fileName;
+                   $loginLogoFiles[] = $fileName;
                 }
             }
             ?>
             <div style="margin-top:15px;float:left;">
                 <?php foreach($loginLogoFiles as $fileName) { ?>
-                        &nbsp;<img src="./uploads/login-logos/<?php echo $fileName; ?>" alt="Logo image" style="max-width:80px;">
+                        &nbsp;<img src="/uploads/login-logos/<?php echo $fileName; ?>" alt="Logo image" style="max-width:80px;">
                 <?php }  ?>
             </div>
         <?php
