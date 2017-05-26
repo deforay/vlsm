@@ -259,11 +259,9 @@ $pages = array();
             $qrText[] = $vl['last_modified_datetime'];
             $qrText[] = $vl['import_machine_file_name'];
             $qrString = '';
-            for($f=0;$f<count($qrText);$f++){
-              $separator = ((count($qrText)- $f) >= 2)?',':'';
-              $qrString.= $f.'|'.$qrText[$f].$separator;
-            }
-            //$printData = json_encode($qrString,JSON_FORCE_OBJECT);
+            $jsonString = json_encode($qrText);
+            $gzencode = base64_encode(gzdeflate($jsonString, 9));
+            $qrString = urlencode($gzencode);
             $style = array(
                 'border' => 2,
                 'vpadding' => 'auto',
@@ -274,7 +272,6 @@ $pages = array();
                 'module_height' => 1 // height of a single module in points
             );
             $pdf->write2DBarcode($qrString, 'QRCODE,L', 80, 100, 50, 50, $style, 'N');
-            //$pdf->writeHTML($html);
             $pdf->lastPage();
             $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
             $pdf->Output($filename,"F");

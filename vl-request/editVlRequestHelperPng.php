@@ -151,9 +151,9 @@ try {
           'date_time'=>$general->getDateTime()
           );
           $db->insert($tableName1,$data);
-          header("location:vlRequest.php");
-          }else{
-             $_SESSION['alertMsg']="Please try again later";
+             header("location:vlRequest.php");
+        }else{
+            $_SESSION['alertMsg']="Please try again later";
         }
 } catch (Exception $exc) {
     error_log($exc->getMessage());
