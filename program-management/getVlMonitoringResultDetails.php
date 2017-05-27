@@ -140,9 +140,9 @@ $primaryKey="vl_sample_id";
 	    }
 	}
 	if($sWhere!=''){
-	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}else{
-	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' where vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
