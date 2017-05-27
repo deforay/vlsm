@@ -173,12 +173,12 @@ $sFormat = '';
                       <?php
                         if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
                       ?>
-                      <div class="col-xs-3 col-md-3 pull-right">
-                        <div class="form-group">
-                          <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
-                          <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
+                        <div class="col-xs-3 col-md-3 pull-right">
+                          <div class="form-group">
+                            <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
+                            <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
+                          </div>
                         </div>
-                      </div>
                       <?php
                         }
                       ?>

@@ -15,6 +15,14 @@ try {
     if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
        $status = 7;
     }
+    //add province
+    if(isset($_POST['province']) && trim($_POST['province'])!= ''){
+        $provinceQuery="SELECT * from province_details where province_name='".$_POST['province']."'";
+        $provinceInfo=$db->query($provinceQuery);
+        if(!isset($provinceInfo) || count($provinceInfo) == 0){
+            $db->insert('province_details',array('province_name'=>$_POST['province']));
+        }
+    }
     //var_dump($_POST);die;
     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
          $sampleDate = explode(" ",$_POST['sampleCollectionDate']);

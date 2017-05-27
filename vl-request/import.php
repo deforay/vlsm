@@ -25,17 +25,17 @@ if(isset($_GET['q']) && $_GET['q']!= ''){
           $clinicQuery = 'select facility_id from facility_details where facility_name = "'.$rjson[1].'"';
           $clinicResult = $db->rawQuery($clinicQuery);
         }
+        if(trim($rjson[2]) != '' && $rjson[2]!= null){
+            $provinceQuery="SELECT * from province_details where province_name='".$rjson[2]."'";
+            $provinceInfo=$db->query($provinceQuery);
+            if(!isset($provinceInfo) || count($provinceInfo) == 0){
+                $db->insert('province_details',array('province_name'=>$rjson[2]));
+            }
+        }
         if(isset($clinicResult[0]['facility_id'])){
             $data['facility_id'] = $clinicResult[0]['facility_id'];
         }else{
             if(($rjson[0] !='' && $rjson[0]!= null) || ($rjson[1] !='' && $rjson[1]!= null)){
-                if(trim($rjson[2]) != '' && $rjson[2]!= null){
-                    $provinceQuery="SELECT * from province_details where province_name='".$rjson[2]."'";
-                    $provinceInfo=$db->query($provinceQuery);
-                    if(!$provinceInfo || count($provinceInfo) == 0){
-                        $db->insert('province_details',array('province_name'=>$rjson[2]));
-                    }
-                }
                 $clinicData = array(
                   'facility_name'=>$rjson[1],
                   'facility_code'=>$rjson[0],

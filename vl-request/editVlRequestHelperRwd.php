@@ -10,6 +10,14 @@ $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
     //var_dump($_POST);die;
+    //add province
+    if(isset($_POST['province']) && trim($_POST['province'])!= ''){
+        $provinceQuery="SELECT * from province_details where province_name='".$_POST['province']."'";
+        $provinceInfo=$db->query($provinceQuery);
+        if(!isset($provinceInfo) || count($provinceInfo) == 0){
+            $db->insert('province_details',array('province_name'=>$_POST['province']));
+        }
+    }
     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
          $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
          $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
