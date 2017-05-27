@@ -12,12 +12,11 @@ try {
             $strSearch = $_POST['state'];
             $facilityQuery="SELECT * from province_details where province_name='".$strSearch."'";
             $facilityInfo=$db->query($facilityQuery);
-            if($facilityInfo){
-            }else{
-            $data=array(
-              'province_name'=>$_POST['state'],
-            );
-            $result=$db->insert($tableName1,$data);
+            if(!$facilityInfo || count($facilityInfo) == 0){
+		$data=array(
+		  'province_name'=>$_POST['state'],
+		);
+		$result=$db->insert($tableName1,$data);
             }
         }
 	$instanceId = '';
@@ -30,11 +29,11 @@ try {
 	    for($i=0;$i<count($expEmail);$i++){
 		$reportEmail = filter_var($expEmail[$i], FILTER_VALIDATE_EMAIL);
 		if($reportEmail!=''){
-		if($email!=''){
-		$email.= ",".$reportEmail;
-		}else{
-		$email.= $reportEmail;    
-		}
+		    if($email!=''){
+		       $email.= ",".$reportEmail;
+		    }else{
+		      $email.= $reportEmail;    
+		    }
 		}
 	    }
 	}
