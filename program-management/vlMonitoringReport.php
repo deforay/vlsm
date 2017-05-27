@@ -308,7 +308,7 @@ $fResult = $db->rawQuery($fQuery);
   function exportInexcel() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("vlMonitoringExportInExcel.php",{Sample_Collection_Date:$("#mrp-lowerDate").val() +' to '+ $("#mrp-upperDate").val(),Facility_Name:$("#facilityName  option:selected").text()},
+    $.post("vlMonitoringExportInExcel.php",{sampleCollectionDate:$("#mrp-lowerDate").val() +' to '+ $("#mrp-upperDate").val(),Facility_Name:$("#facilityName  option:selected").text()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate excel..');
