@@ -148,8 +148,11 @@ $pages = array();
             $pdf->SetFont('helvetica', '', 18);
     
             $pdf->AddPage();
-            $fQuery="SELECT * FROM facility_details WHERE facility_type ='2' AND facility_id='".$vl['lab_id']."'";
-            $fResult = $db->query($fQuery);
+            $fResult = array();
+            if(trim($vl['lab_id'])!= '' && $vl['lab_id']!= null && $vl['lab_id'] >0){
+              $fQuery="SELECT * FROM facility_details WHERE facility_type ='2' AND facility_id='".$vl['lab_id']."'";
+              $fResult = $db->query($fQuery);
+            }
             $routineSampleType = (isset($vl['routineSampleType']))?$vl['routineSampleType']:'';
             $acSampleType = (isset($vl['acSampleType']))?$vl['acSampleType']:'';
             $failureSampleType = (isset($vl['failureSampleType']))?$vl['failureSampleType']:'';
@@ -158,7 +161,7 @@ $pages = array();
             $rejectionReason = (isset($vl['rejectionReason']))?$vl['rejectionReason']:'';
             $batchCode = (isset($vl['batch_code']))?$vl['batch_code']:'';
             $resultReviewedBy = (isset($vl['resultReviewedBy']))?$vl['resultReviewedBy']:'';
-            $resultApprovedBy = (isset($vl['resultReviewedBy']))?$vl['resultReviewedBy']:'';
+            $resultApprovedBy = (isset($vl['resultApprovedBy']))?$vl['resultApprovedBy']:'';
             $requestCreatedBy = (isset($vl['requestCreatedBy']))?$vl['requestCreatedBy']:'';
             $lastModifiedBy = (isset($vl['lastModifiedBy']))?$vl['lastModifiedBy']:'';
             $vlCountry = (isset($vl['form_name']))?$vl['form_name']:$country;

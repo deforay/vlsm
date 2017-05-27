@@ -28,26 +28,28 @@ if(isset($_GET['q']) && $_GET['q']!= ''){
         if(isset($clinicResult[0]['facility_id'])){
             $data['facility_id'] = $clinicResult[0]['facility_id'];
         }else{
-            $clinicData = array(
-              'facility_name'=>$rjson[1],
-              'facility_code'=>$rjson[0],
-              'vlsm_instance_id'=>$vlInstanceId,
-              'other_id'=>null,
-              'contact_person'=>null,
-              'facility_mobile_numbers'=>$rjson[13],
-              'address'=>null,
-              'country'=>$country,
-              'facility_state'=>$rjson[2],
-              'facility_district'=>$rjson[3],
-              'facility_hub_name'=>$rjson[4],
-              'latitude'=>null,
-              'longitude'=>null,
-              'facility_emails'=>$rjson[14],
-              'facility_type'=>1,
-              'status'=>'active'
-            );
-            $id = $db->insert('facility_details',$clinicData);
-            $data['facility_id'] = $id;
+            if(($rjson[0] !='' && $rjson[0]!= null) || ($rjson[1] !='' && $rjson[1]!= null)){
+                $clinicData = array(
+                  'facility_name'=>$rjson[1],
+                  'facility_code'=>$rjson[0],
+                  'vlsm_instance_id'=>$vlInstanceId,
+                  'other_id'=>null,
+                  'contact_person'=>null,
+                  'facility_mobile_numbers'=>$rjson[13],
+                  'address'=>null,
+                  'country'=>$country,
+                  'facility_state'=>$rjson[2],
+                  'facility_district'=>$rjson[3],
+                  'facility_hub_name'=>$rjson[4],
+                  'latitude'=>null,
+                  'longitude'=>null,
+                  'facility_emails'=>$rjson[14],
+                  'facility_type'=>1,
+                  'status'=>'active'
+                );
+                $id = $db->insert('facility_details',$clinicData);
+                $data['facility_id'] = $id;
+            }
         }
         $data['facility_sample_id'] = $rjson[5];
         $data['request_clinician_name'] = $rjson[6];
@@ -158,10 +160,10 @@ if(isset($_GET['q']) && $_GET['q']!= ''){
         }
         $data['is_sample_rejected'] = $rjson[58];
         if(trim($rjson[59])!=''){
-            $clinicQuery = 'select facility_id from facility_details where facility_name = "'.$rjson[59].'"';
-            $clinicResult = $db->rawQuery($clinicQuery);
-            if(isset($clinicResult[0]['facility_id'])){
-              $data['sample_rejection_facility'] = $clinicResult[0]['facility_id'];
+            $rejectionClinicQuery = 'select facility_id from facility_details where facility_name = "'.$rjson[59].'"';
+            $rejectionClinicResult = $db->rawQuery($rejectionClinicQuery);
+            if(isset($rejectionClinicResult[0]['facility_id'])){
+              $data['sample_rejection_facility'] = $rejectionClinicResult[0]['facility_id'];
             }else{
               $clinicData = array(
                 'facility_name'=>$rjson[59],
@@ -217,35 +219,37 @@ if(isset($_GET['q']) && $_GET['q']!= ''){
         }
         //viral load lab section
         if(trim($rjson[65]) !=''){
-            $clinicQuery = 'select facility_id from facility_details where facility_code = "'.$rjson[65].'"';
-            $clinicResult = $db->rawQuery($clinicQuery);
+            $labQuery = 'select facility_id from facility_details where facility_code = "'.$rjson[65].'"';
+            $labResult = $db->rawQuery($labQuery);
         }else if(trim($rjson[66]) !=''){
-            $clinicQuery = 'select facility_id from facility_details where facility_name = "'.$rjson[66].'"';
-            $clinicResult = $db->rawQuery($clinicQuery);
+            $labQuery = 'select facility_id from facility_details where facility_name = "'.$rjson[66].'"';
+            $labResult = $db->rawQuery($labQuery);
         }
-        if(isset($clinicResult[0]['facility_id'])){
-            $data['lab_id'] = $clinicResult[0]['facility_id'];
+        if(isset($labResult[0]['facility_id'])){
+            $data['lab_id'] = $labResult[0]['facility_id'];
         }else{
-          $clinicData = array(
-            'facility_name'=>$rjson[66],
-            'facility_code'=>$rjson[65],
-            'vlsm_instance_id'=>$vlInstanceId,
-            'other_id'=>null,
-            'contact_person'=>null,
-            'facility_mobile_numbers'=>null,
-            'address'=>null,
-            'country'=>$country,
-            'facility_state'=>null,
-            'facility_district'=>null,
-            'facility_hub_name'=>null,
-            'latitude'=>null,
-            'longitude'=>null,
-            'facility_emails'=>null,
-            'facility_type'=>2,
-            'status'=>'active'
-          );
-          $id = $db->insert('facility_details',$clinicData);
-          $data['lab_id'] = $id;
+          if(trim($rjson[65]) !='' || trim($rjson[66]) !=''){
+            $labData = array(
+              'facility_name'=>$rjson[66],
+              'facility_code'=>$rjson[65],
+              'vlsm_instance_id'=>$vlInstanceId,
+              'other_id'=>null,
+              'contact_person'=>null,
+              'facility_mobile_numbers'=>null,
+              'address'=>null,
+              'country'=>$country,
+              'facility_state'=>null,
+              'facility_district'=>null,
+              'facility_hub_name'=>null,
+              'latitude'=>null,
+              'longitude'=>null,
+              'facility_emails'=>null,
+              'facility_type'=>2,
+              'status'=>'active'
+            );
+            $id = $db->insert('facility_details',$labData);
+            $data['lab_id'] = $id;
+          }
         }
         $data['lab_contact_person'] = $rjson[67];
         $data['lab_phone_number'] = $rjson[68];
@@ -386,7 +390,7 @@ if(isset($_GET['q']) && $_GET['q']!= ''){
           $db->insert($tableName,$data);
         }
       }
-    header("location:/vl-request/import.php?q=");
+    header("location:/vl-request/import.php?q=&action=next");
     }catch (Exception $exc) {
       error_log($exc->getMessage());
       error_log($exc->getTraceAsString());
