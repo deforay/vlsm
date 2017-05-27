@@ -330,16 +330,11 @@ $batResult = $db->rawQuery($batQuery);
     
   function convertSearchResultToPdf(id){
     <?php
+    $path = '';
     if($arr['vl_form'] == 3){
       $path = '../includes/vlRequestDrcSearchResultPdf.php';
-    }else if($arr['vl_form'] == 2){
-     $path = '../includes/vlRequestSearchResultPdf.php'; 
-    }else if($arr['vl_form'] == 4){
-     $path = '../includes/vlRequestZamSearchResultPdf.php';  
-    }else if($arr['vl_form'] == 6){
-     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
-    }else if($arr['vl_form'] == 7){
-     $path = '../includes/vlRequestRwdSearchResultPdf.php';  
+    }else {
+      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }
     ?>
       $.post("<?php echo $path; ?>", {source:'print',id : id},

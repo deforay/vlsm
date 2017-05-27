@@ -131,7 +131,7 @@ class Watermark extends PDF_Rotate {
       //Put the watermark
       $this->SetFont('helvetica', 'B', 50);
       $this->SetTextColor(148,162,204);
-      $this->RotatedText(67,119,'DRAFT',45);
+      $this->RotatedText(67,107,'DRAFT',45);
   
       if (is_null($this->_tplIdx)) {
           // THIS IS WHERE YOU GET THE NUMBER OF PAGES
@@ -196,7 +196,7 @@ if(sizeof($requestResult)> 0){
         $pdf->setHeading($arr['logo'],$arr['header'],$result['labName']);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        //$pdf->SetAuthor('Saravanan');
+        //$pdf->SetAuthor('Pal');
         $pdf->SetTitle('Viral Load Test Result');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -223,10 +223,10 @@ if(sizeof($requestResult)> 0){
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         // set some language-dependent strings (optional)
-        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-            require_once(dirname(__FILE__).'/lang/eng.php');
-            $pdf->setLanguageArray($l);
-        }
+        //if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+        //    require_once(dirname(__FILE__).'/lang/eng.php');
+        //    $pdf->setLanguageArray($l);
+        //}
 
         // ---------------------------------------------------------
 
@@ -389,19 +389,19 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
-              $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Prénom du patient</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de famille du patient</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Mobile No.</td>';
-              $html .='</tr>';
-              $html .='<tr>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']).'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_last_name']).'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
-              $html .='</tr>';
-              $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:10px;"></td>';
-              $html .='</tr>';
+              //$html .='<tr>';
+              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Prénom du patient</td>';
+              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de famille du patient</td>';
+              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Mobile No.</td>';
+              //$html .='</tr>';
+              //$html .='<tr>';
+              //  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']).'</td>';
+              //  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_last_name']).'</td>';
+              //  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
+              //$html .='</tr>';
+              //$html .='<tr>';
+               //$html .='<td colspan="3" style="line-height:10px;"></td>';
+              //$html .='</tr>';
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Âge</td>';
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sexe</td>';
@@ -433,7 +433,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de linstallation</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de l’installation</td>';
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom clinicien</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -545,7 +545,7 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
             $html.='</table>';
         if($result['result']!=''){
-          $pdf->writeHTML($html);
+          $pdf->writeHTML(utf8_encode($html));
           $pdf->lastPage();
           $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
           $pdf->Output($filename,"F");
