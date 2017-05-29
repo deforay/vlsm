@@ -35,7 +35,7 @@ $rInfo=$db->query($resourcesQuery);
                     <div class="form-group">
                         <label for="userName" class="col-lg-4 control-label">Role Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="roleName" name="roleName" placeholder="Role Name" title="Please enter user name"  onblur="checkNameValidation('roles','role_name',this,null,'This role name already exists.Try another role name',null)"/>
+                        <input type="text" class="form-control isRequired" id="roleName" name="roleName" placeholder="Role Name" title="Please enter user name"  onblur="checkNameValidation('roles','role_name',this,null,'This role name that you entered already exists.Try another role name',null)"/>
                         </div>
                     </div>
                   </div>
@@ -43,7 +43,7 @@ $rInfo=$db->query($resourcesQuery);
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Role Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="roleCode" name="roleCode" placeholder="Role Code" title="Please enter role code" onblur="checkNameValidation('roles','role_code',this,null,'This role code already exists.Try another role code',null)"/>
+                        <input type="text" class="form-control isRequired" id="roleCode" name="roleCode" placeholder="Role Code" title="Please enter role code" onblur="checkNameValidation('roles','role_code',this,null,'This role code that you entered already exists.Try another role code',null)"/>
                         </div>
                     </div>
                   </div>

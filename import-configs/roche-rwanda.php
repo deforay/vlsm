@@ -1,7 +1,6 @@
 <?php
 
 try {
-    
     $db->delete('temp_sample_report');
     //set session for controller track id in hold_sample_record table
     $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_report";
@@ -46,8 +45,8 @@ try {
         
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
         
-          $sheetData   = $sheetData->toArray(null, true, true, true);
-          $m           = 0;
+          $sheetData = $sheetData->toArray(null, true, true, true);
+          $m = 0;
           $skipTillRow = 2;
         
           $sampleIdCol='E';
@@ -88,7 +87,6 @@ try {
          
           $sampleCode = $row[$sampleIdCol];
           $sampleType = $row[$sampleTypeCol];
-          
           $batchCode = $row[$batchCodeCol];
           $resultFlag = $row[$flagCol];
           $reviewBy = $row[$reviewByCol];
@@ -121,7 +119,7 @@ try {
           }
         
           if($sampleCode == ""){
-          $sampleCode = $sampleType.$m;
+            $sampleCode = $sampleType.$m;
           }
            //   continue;
             
@@ -144,7 +142,7 @@ try {
         }
         $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
-            if($d['sampleCode']==$d['sampleType'].$inc){
+            if($d['sampleCode'] == $d['sampleType'].$inc){
                $d['sampleCode'] = ''; 
             }
             $data = array(

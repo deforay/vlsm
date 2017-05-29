@@ -47,7 +47,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="facilityCode" class="col-lg-4 control-label">Facility Code</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $facilityInfo[0]['facility_code']; ?>" onblur="checkNameValidation('facility_details','facility_code',this,'<?php echo "facility_id##".$facilityInfo[0]['facility_id'];?>','This code already exists.Try another code',null)"/>
+                        <input type="text" class="form-control" id="facilityCode" name="facilityCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $facilityInfo[0]['facility_code']; ?>" onblur="checkNameValidation('facility_details','facility_code',this,'<?php echo "facility_id##".$facilityInfo[0]['facility_id'];?>','The code that you entered already exists.Try another code',null)"/>
                         </div>
                     </div>
                   </div>
@@ -94,7 +94,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="reportEmail" class="col-lg-4 control-label">Report Email(s) </label>
                         <div class="col-lg-7">
-                        <textarea class="form-control" id="reportEmail" name="reportEmail" placeholder="E.g-jeeva@gmail.com,example@gmail.com" rows="3"><?php echo $facilityInfo[0]['report_email']; ?></textarea>
+                        <textarea class="form-control" id="reportEmail" name="reportEmail" placeholder="E.g-user1@gmail.com,user2@gmail.com" rows="3"><?php echo $facilityInfo[0]['report_email']; ?></textarea>
                         </div>
                     </div>
                   </div>

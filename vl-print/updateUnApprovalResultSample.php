@@ -19,8 +19,7 @@ try {
         }
         $db=$db->where('temp_sample_id',$_POST['tempsampleId']);
         $result = $db->update($tableName,array('batch_code'=>$_POST['batchCode']));
-    }
-    else if(isset($_POST['sampleCode']) && trim($_POST['sampleCode'])!=''){
+    }else if(isset($_POST['sampleCode']) && trim($_POST['sampleCode'])!=''){
         $sampleResult = $db->rawQuery("select sample_code from vl_request_form where sample_code='".trim($_POST['sampleCode'])."'");
         if($sampleResult){
             $sampleDetails = 'Result exists already';
@@ -29,8 +28,7 @@ try {
         }
         $db=$db->where('temp_sample_id',$_POST['tempsampleId']);
         $result = $db->update($tableName,array('sample_code'=>$_POST['sampleCode'],'sample_details'=>$sampleDetails));
-    }
-    else if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!=''){
+    }else if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!=''){
         $sampleControlResult = $db->rawQuery("select r_sample_control_name from r_sample_controls where r_sample_control_name='".trim($_POST['sampleType'])."'");
         $db=$db->where('temp_sample_id',$_POST['tempsampleId']);
         $result = $db->update($tableName,array('sample_type'=>trim($_POST['sampleType'])));
