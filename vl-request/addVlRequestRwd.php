@@ -690,7 +690,6 @@ $sFormat = '';
     </section>
   </div>
   <!-- BARCODESTUFF START -->
-  
 	<?php
 		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
 			if($global['bar_code_printing'] == 'dymo-labelwriter-450'){

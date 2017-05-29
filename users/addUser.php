@@ -42,7 +42,7 @@ $result = $db->rawQuery($query);
                     <div class="form-group">
                         <label for="email" class="col-lg-4 control-label">Email </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="email" name="email" placeholder="Email" title="Please enter email" onblur="checkNameValidation('user_details','email',this,null,'This email id already exists.Try another email id',null)" />
+                        <input type="text" class="form-control" id="email" name="email" placeholder="Email" title="Please enter email" onblur="checkNameValidation('user_details','email',this,null,'This email id that you entered already exists.Try another email id',null)" />
                         </div>
                     </div>
                   </div>
@@ -80,7 +80,7 @@ $result = $db->rawQuery($query);
                     <div class="form-group">
                         <label for="loginId" class="col-lg-4 control-label">Login Id <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" onblur="checkNameValidation('user_details','login_id',this,null,'This login id already exists.Try another login id',null)"/>
+                        <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" onblur="checkNameValidation('user_details','login_id',this,null,'This login id that you entered already exists.Try another login id',null)"/>
                         </div>
                     </div>
                   </div>
@@ -140,8 +140,7 @@ $result = $db->rawQuery($query);
   }
   
   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
+        var removeDots=obj.value.replace(/\,/g,"");
         //str=obj.value;
         removeDots = removeDots.replace(/\s{2,}/g,' ');
 

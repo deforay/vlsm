@@ -18,14 +18,14 @@ if(isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order'])!= '
 	for($j=0;$j<count($jsonToArray);$j++){
 		$displayOrder[] = $jsonToArray[$j];
 		$xplodJsonToArray = explode("_",$jsonToArray[$j]);
-		if(count($xplodJsonToArray)>1 && $xplodJsonToArray[0] == "s"){
-           $sampleQuery="SELECT sample_code from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
-           $sampleResult=$db->query($sampleQuery);
+		if(count($xplodJsonToArray)> 1 && $xplodJsonToArray[0] == "s"){
+		   $sampleQuery="SELECT sample_code from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
+		   $sampleResult=$db->query($sampleQuery);
 		   $label = $sampleResult[0]['sample_code'];
 		}else{
-			$label = str_replace("_"," ",$jsonToArray[$j]);
-            $label = str_replace("in house","In-House",$label);
-            $label = ucwords(str_replace("no of "," ",$label));
+		   $label = str_replace("_"," ",$jsonToArray[$j]);
+                   $label = str_replace("in house","In-House",$label);
+                   $label = ucwords(str_replace("no of "," ",$label));
 		}
         $content.='<li class="ui-state-default" id="'.$jsonToArray[$j].'">'.$label.'</li>';
     }
