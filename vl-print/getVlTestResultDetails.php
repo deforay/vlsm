@@ -280,6 +280,8 @@ $primaryKey="vl_sample_id";
 		  $sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";
 		  $sWhere = $sWhere." AND vl.result!=''";
 		  $dWhere = $dWhere. " AND vl.result!=''";
+		}else{
+		  $sQuery = $sQuery.' '.$sWhere;
 		}
 		$_SESSION['vlResultQuery']=$sQuery;
 		//echo $_SESSION['vlResultQuery'];die;
@@ -290,7 +292,7 @@ $primaryKey="vl_sample_id";
         }
         $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         if (isset($sLimit) && isset($sOffset)) {
-            $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
+          $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
 	
 	//die($sQuery);
