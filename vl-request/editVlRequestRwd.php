@@ -68,18 +68,6 @@ $sResult=$db->query($sQuery);
 
 $aQuery="SELECT * from r_art_code_details where nation_identifier='rwd' AND art_status ='active'";
 $aResult=$db->query($aQuery);
-$start_date = date('Y-m-01');
-$end_date = date('Y-m-31');
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlResult=$db->query($svlQuery);
-if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
- $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
- $strparam = strlen($maxId);
- $zeros = substr("000", $strparam);
- $maxId = $zeros.$maxId;
-}else{
- $maxId = '001';
-}
 
 $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
@@ -484,11 +472,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     $checked = '';
                                     $display = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine'){
-                                     $checked = 'checked="checked"';
-                                     $display = 'block';
+                                      $checked = 'checked="checked"';
+                                      $display = 'block';
                                     }else{
-                                     $checked = '';
-                                     $display = 'none';
+                                      $checked = '';
+                                      $display = 'none';
                                     }
                                     ?>
                                     <input type="radio" class="" id="rmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" <?php echo $checked;?> onclick="showTesting('rmTesting');">
@@ -852,29 +840,29 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       if(pName!='' && provinceName && facilityName){
         facilityName = false;
       }
-    if(pName!=''){
-      if(provinceName){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#district").html(details[1]);
-            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-            $(".facilityDetails").hide();
-            $(".facilityEmails").html('');
-            $(".facilityMobileNumbers").html('');
-            $(".facilityContactPerson").html('');
-	  }
-      });
+      if(pName!=''){
+        if(provinceName){
+        $.post("../includes/getFacilityForClinic.php", { pName : pName},
+        function(data){
+            if(data != ""){
+              details = data.split("###");
+              $("#district").html(details[1]);
+              $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+              $(".facilityDetails").hide();
+              $(".facilityEmails").html('');
+              $(".facilityMobileNumbers").html('');
+              $(".facilityContactPerson").html('');
+            }
+        });
+        }
+        
+      }else if(pName=='' && cName==''){
+        provinceName = true;
+        facilityName = true;
+        $("#province").html("<?php echo $province;?>");
+        $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
       }
-      
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-    }
-    $.unblockUI();
+      $.unblockUI();
   }
   
   function getFacilities(obj){

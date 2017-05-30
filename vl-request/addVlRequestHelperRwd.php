@@ -184,7 +184,7 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
-      //echo "<pre>";var_dump($vldata);die;
+        //echo "<pre>";var_dump($vldata);die;
         $id=$db->insert($tableName,$vldata);
         if($id>0){
              $_SESSION['alertMsg']="VL request added successfully";
