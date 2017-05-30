@@ -202,12 +202,12 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                         }
                         ?>
                         <input type="radio" class="" id="auto_generate_yy" name="sample_code" value="YY" <?php echo($arr['sample_code'] == 'YY')?'checked':''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay;?> type="text" class="boxWidth prefixYY" id="prefixYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY;?>"/>
-                        &nbsp;&nbsp;YY&nbsp;&nbsp;
+                        YY&nbsp;&nbsp;
                         <input type="radio" class="" id="auto_generate_mmyy" name="sample_code" value="MMYY" <?php echo($arr['sample_code'] == 'MMYY')?'checked':''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay;?>  type="text" class="boxWidth prefixMMYY" id="prefixMMYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY;?>"/>
-                        &nbsp;&nbsp;MMYY&nbsp;&nbsp;
-                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>&nbsp;&nbsp;Auto&nbsp;&nbsp;
-                        <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>&nbsp;&nbsp;Numeric
-                        <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>&nbsp;&nbsp;Alpha Numeric
+                        MMYY&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>Auto&nbsp;&nbsp;
+                        <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>Numeric&nbsp;&nbsp;
+                        <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>Alpha Numeric
                       </div>
                     </div>
                    </div>

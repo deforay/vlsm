@@ -238,7 +238,7 @@ try {
             }
             if ($vlResult && $sampleCode != '') {
                 if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
-                    $data['sample_details'] = 'Result exists already';
+                    $data['sample_details'] = 'Result already exists';
                 } else {
                     $data['result_status'] = '7';
                 }
