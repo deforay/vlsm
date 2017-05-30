@@ -159,7 +159,7 @@ $configMachineInfo=$db->query($configMachineQuery);
                                 <input type="text" name="configMachineName[]" id="configMachineName<?php echo $i;?>" class="form-control" placeholder="Machine Name" title="Please enter machine name" onblur="checkNameValidation('import_config_machines','config_machine_name',this,null,'This configuration machine name already exists.Try another name',null)";/>
                             </td>
                             <td align="center" style="vertical-align:middle;">
-                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
                             </td>
                         </tr>
 						<?php } ?>
@@ -186,7 +186,7 @@ $configMachineInfo=$db->query($configMachineQuery);
   </div>
   
   <script type="text/javascript">
-	tableRowId = '<?php echo $i; ?>';
+  tableRowId = '<?php echo $i; ?>';
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'editImportConfigForm'
@@ -221,7 +221,7 @@ $configMachineInfo=$db->query($configMachineQuery);
       c.setAttribute("style","vertical-align:middle");
       
       b.innerHTML = '<input type="text" name="configMachineName[]" id="configMachineName' + tableRowId + '"class="isRequired form-control" placeholder="Machine Name" title="Please enter machine name"  onblur="checkNameValidation(\'import_config_machines\',\'config_machine_name\',this,null,\'This configuration machine name already exists.Try another name\',null)"/ >';
-      c.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
+      c.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
       $(a).fadeIn(800);
       tableRowId++;
   }

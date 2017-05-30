@@ -141,9 +141,13 @@ try {
             $m++;
         }
         $inc = 0;
+        $refno = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
             if($d['sampleCode'] == $d['sampleType'].$inc){
                $d['sampleCode'] = ''; 
+            }
+            if($d['sampleType'] =='S' || $d['sampleType'] =='s'){
+              $refno+=1;  
             }
             $data = array(
                 'lab_id' => base64_decode($_POST['labId']),
@@ -209,7 +213,7 @@ try {
             }
             if ($vlResult && $sampleCode != '') {
                 if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
-                    $data['sample_details'] = 'Result exists already';
+                    $data['sample_details'] = 'Result already exists';
                 } else {
                     $data['result_status'] = '7';
                 }
@@ -223,6 +227,7 @@ try {
             }
             $inc++;
         }
+       setcookie('refno', $refno, time() + (86400 * 30), "/");
     }
 
     $_SESSION['alertMsg'] = "Imported results successfully";

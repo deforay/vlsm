@@ -5,11 +5,10 @@ include('../General.php');
 $general=new Deforay_Commons_General();
 $tableName="temp_sample_report";
 try {
-    $result = false;
+    $result = 0;
     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=''){
         $batchResult = $db->rawQuery("select batch_code from batch_details where batch_code='".trim($_POST['batchCode'])."'");
-        if($batchResult){}
-        else{
+        if(!$batchResult){
             $data=array(
                     'machine'=>0,
                     'batch_code'=>trim($_POST['batchCode']),
@@ -22,7 +21,7 @@ try {
     }else if(isset($_POST['sampleCode']) && trim($_POST['sampleCode'])!=''){
         $sampleResult = $db->rawQuery("select sample_code from vl_request_form where sample_code='".trim($_POST['sampleCode'])."'");
         if($sampleResult){
-            $sampleDetails = 'Result exists already';
+            $sampleDetails = 'Result already exists';
         }else{
             $sampleDetails = 'New Sample';
         }
@@ -33,9 +32,9 @@ try {
         $db=$db->where('temp_sample_id',$_POST['tempsampleId']);
         $result = $db->update($tableName,array('sample_type'=>trim($_POST['sampleType'])));
     }
+  echo $result;
 }
 catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
 }
-echo $result;
