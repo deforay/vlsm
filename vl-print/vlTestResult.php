@@ -291,6 +291,7 @@ $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'
 	        aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 		aoData.push({"name": "status", "value": $("#status").val()});
 		aoData.push({"name": "gender", "value": $("#gender").val()});
+		aoData.push({"name": "from", "value": "enterresult"});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
