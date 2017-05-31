@@ -16,8 +16,8 @@ $primaryKey="vl_sample_id";
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+        $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','f.facility_state','f.facility_district','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -110,6 +110,17 @@ $primaryKey="vl_sample_id";
 	     $end_date = trim($s_c_date[1])."-31";
 	   }
 	}
+	$sTestDate = '';
+	$eTestDate = '';
+	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+	   $s_t_date = explode("to", $_POST['sampleTestDate']);
+	   if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+	     $sTestDate = $general->dateFormat(trim($s_t_date[0]));
+	   }
+	   if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+	     $eTestDate = $general->dateFormat(trim($s_t_date[1]));
+	   }
+	}
 	
 	if (isset($sWhere) && $sWhere != "") {
            $sWhere=' where '.$sWhere;
@@ -121,21 +132,62 @@ $primaryKey="vl_sample_id";
 		   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
 		}
         }
+		if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+		if (trim($sTestDate) == trim($eTestDate)) {
+		    $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$sTestDate.'"';
+		}else{
+		   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
+		}
+        }
+		if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
+	    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+	   }
+	   if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		$sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+	   }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		$sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+	   }
 	}else{
 	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		  if (trim($start_date) == trim($end_date)) {
+		   $sWhere = 'where DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		  }else{
+		  $setWhr=' where ';
+		  $sWhere = ' where DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		  }
+		}
+		if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
 		if(isset($setWhr)){
-		    if (trim($start_date) == trim($end_date)) {
-		     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-		        $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }else{
-			$sWhere=' where '.$sWhere;
-			$sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }
-		    }
+		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
 		}else{
-		    $setWhr = 'where';
-		    $sWhere=' where '.$sWhere;
-		    $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
+		}
+	    }
+		if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		if(isset($setWhr)){
+		  $sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+		}else{
+		  $setWhr = 'where';
+		  $sWhere=' where '.$sWhere;
+		  $sWhere = $sWhere." f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+		}
+	    }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+	      if(isset($setWhr)){
+		  $sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+	      }else{
+		  $sWhere=' where '.$sWhere;
+		  $sWhere = $sWhere." f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+	      }
+	    }
+		if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
+		}else{
+		  $setWhr = 'where';
+		  $sWhere=' where '.$sWhere;
+	      $sWhere = $sWhere.' DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
 		}
 	    }
 	}
@@ -160,13 +212,13 @@ $primaryKey="vl_sample_id";
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery($sQuery);
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery($sQuery);
        // $aResultTotal = $countResult->fetch_row();
-        $iTotal = $aResultTotal[0]['total'];
+        $iTotal = count($aResultTotal);
 
         /*
          * Output
@@ -185,7 +237,9 @@ $primaryKey="vl_sample_id";
             $row[] = $aRow['patient_art_no'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
             $row[] = ucwords($aRow['facility_name']);
-            $row[] = ucwords($aRow['sample_name']);
+            $row[] = ucwords($aRow['facility_state']);
+            $row[] = ucwords($aRow['facility_district']);
+			$row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
             $row[] = ucwords($aRow['status_name']);
             $output['aaData'][] = $row;
