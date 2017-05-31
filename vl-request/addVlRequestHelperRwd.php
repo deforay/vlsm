@@ -16,11 +16,12 @@ try {
        $status = 7;
     }
     //add province
-    if(isset($_POST['province']) && trim($_POST['province'])!= ''){
-        $provinceQuery="SELECT * from province_details where province_name='".$_POST['province']."'";
+    $splitProvince = explode("##",$_POST['province']);
+    if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){
+        $provinceQuery="SELECT * from province_details where province_name='".$splitProvince[0]."'";
         $provinceInfo=$db->query($provinceQuery);
         if(!isset($provinceInfo) || count($provinceInfo) == 0){
-            $db->insert('province_details',array('province_name'=>$_POST['province']));
+            $db->insert('province_details',array('province_name'=>$splitProvince[0],'province_code'=>$splitProvince[1]));
         }
     }
     //var_dump($_POST);die;
@@ -183,7 +184,7 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
-      //echo "<pre>";var_dump($vldata);die;
+        //echo "<pre>";var_dump($vldata);die;
         $id=$db->insert($tableName,$vldata);
         if($id>0){
              $_SESSION['alertMsg']="VL request added successfully";

@@ -11,11 +11,12 @@ $fDetails="facility_details";
 try {
     //var_dump($_POST);die;
     //add province
-    if(isset($_POST['province']) && trim($_POST['province'])!= ''){
-        $provinceQuery="SELECT * from province_details where province_name='".$_POST['province']."'";
+    $splitProvince = explode("##",$_POST['province']);
+    if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){
+        $provinceQuery="SELECT * from province_details where province_name='".$splitProvince[0]."'";
         $provinceInfo=$db->query($provinceQuery);
         if(!isset($provinceInfo) || count($provinceInfo) == 0){
-            $db->insert('province_details',array('province_name'=>$_POST['province']));
+            $db->insert('province_details',array('province_name'=>$splitProvince[0],'province_code'=>$splitProvince[1]));
         }
     }
     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){

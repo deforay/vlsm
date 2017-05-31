@@ -297,6 +297,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       alert("Please select the status.");
     }
   }
+  
   function updateSampleCode(obj,oldSampleCode,tempsampleId) {
 	$(obj).fastConfirm({
             position: "right",
@@ -305,15 +306,12 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
                 var pos = oTable.fnGetPosition(obj);
 				$.blockUI();
 				$.post("updateUnApprovalResultSample.php", { sampleCode : obj.value,tempsampleId:tempsampleId},
-				   function(data){
-					if (data) {
-					  alert("Updated successfully!");
-                        oTable.fnDraw();
-                    }else{
-					  alert("Something went wrong!.Please try again");
-					}
-					
-				});
+				  function(data){
+				    if (data == 0) {
+				      alert("Something went wrong!.Please try again");
+				    }
+				   oTable.fnDraw();
+				  });
 				$.unblockUI();
             },
             onCancel: function(trigger) {
@@ -321,57 +319,55 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
             }
         });
   }
+  
   function updateBatchCode(obj,oldBatchCode,tempsampleId) {
 	$(obj).fastConfirm({
             position: "right",
             questionText: "Are you sure you want to rename this Batch?",
             onProceed: function(trigger) {
                 var pos = oTable.fnGetPosition(obj);
-				$.blockUI();
-				$.post("updateUnApprovalResultSample.php", { batchCode : obj.value,tempsampleId:tempsampleId},
-				   function(data){
-					if (data) {
-					  alert("Updated successfully!");
-                        oTable.fnDraw();
-                    }else{
-					  alert("Something went wrong!.Please try again");
-					}
-					
-				});
-				$.unblockUI();
+		$.blockUI();
+		$.post("updateUnApprovalResultSample.php", { batchCode : obj.value,tempsampleId:tempsampleId},
+		   function(data){
+		      if (data == 0) {
+			alert("Something went wrong!.Please try again");
+		      }
+		    oTable.fnDraw();
+		  });
+		$.unblockUI();
             },
             onCancel: function(trigger) {
-			  $("#"+obj.id).val(oldBatchCode);
+	      $("#"+obj.id).val(oldBatchCode);
             }
         });
   }
-  function sampleToControl(obj,oldValue,tempsampleId) {
-	$(obj).fastConfirm({
-            position: "left",
-            questionText: "Are you sure you want to change this Sample?",
-            onProceed: function(trigger) {
-                var pos = oTable.fnGetPosition(obj);
-				$.blockUI();
-				$.post("updateUnApprovalResultSample.php", { sampleType : obj.value,tempsampleId:tempsampleId},
-				   function(data){
-					if (data) {
-					  alert("Updated successfully!");
-                        oTable.fnDraw();
-                    }else{
-					  alert("Something went wrong!.Please try again");
-					}
-					
-				});
-				$.unblockUI();
-            },
-            onCancel: function(trigger) {
-			  $("#"+obj.id).val(oldValue);
-            }
-        });
-  }
-   
   
- 
+  function sampleToControl(obj,oldValue,tempsampleId) {
+      $(obj).fastConfirm({
+	  position: "left",
+	  questionText: "Are you sure you want to change this Sample?",
+	  onProceed: function(trigger) {
+	      var pos = oTable.fnGetPosition(obj);
+		  $.blockUI();
+		  $.post("updateUnApprovalResultSample.php", { sampleType : obj.value,tempsampleId:tempsampleId},
+		     function(data){
+			  if (data == 0) {
+			    alert("Something went wrong!.Please try again");
+			  }
+			oTable.fnDraw();
+		      });
+		$.unblockUI();
+	  },
+	  onCancel: function(trigger) {
+	    $("#"+obj.id).val(oldValue);
+	  }
+      });
+  }
+  
+  function sampleToControlAlert(number) {
+    alert("Max number of controls as per the config is "+number);
+    oTable.fnDraw();
+  }
 </script>
  <?php
  include('../footer.php');

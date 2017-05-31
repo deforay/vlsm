@@ -12,11 +12,15 @@ $scResult = $db->rawQuery($scQuery);
 //in-house control limit
 $inQuery = "select i.number_of_in_house_controls,i.number_of_manufacturer_controls,i.machine_name from temp_sample_report as ts INNER JOIN import_config as i ON i.machine_name=ts.vl_test_platform limit 0,1";
 $inResult = $db->rawQuery($inQuery);
-$tsrQuery = "select count(temp_sample_id) as count from temp_sample_report where sample_type!='s'";
+$tsrQuery = "select count(temp_sample_id) as count from temp_sample_report where sample_type ='s'";
 $tsrResult = $db->rawQuery($tsrQuery);
+$sampleTypeTotal = 0;
+if(isset($_COOKIE['refno']) && $_COOKIE['refno'] > 0){
+  $sampleTypeTotal = $_COOKIE['refno'];
+}
 $totalControls = 0;
-if($tsrResult[0]['count']!=0){
-	$totalControls = $inResult[0]['number_of_manufacturer_controls'] + $inResult[0]['number_of_in_house_controls'];
+if(isset($tsrResult[0]['count']) && $tsrResult[0]['count'] > 0){
+   $totalControls = $inResult[0]['number_of_manufacturer_controls'] + $inResult[0]['number_of_in_house_controls'];
 }
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
@@ -141,11 +145,13 @@ if($tsrResult[0]['count']!=0){
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
+	$refno = abs($sampleTypeTotal - $totalControls);
         foreach ($rResult as $aRow) {
 		$row = array();
 		$rsDetails = '';
 		$sampleCode = "'".$aRow['sample_code']."'";
 		$batchCode = "'".$aRow['batch_code']."'";
+		$controlCode = "'".$aRow['sample_type']."'";
 		$color = '';
 		$status ='';
 		if(isset($aRow['sample_code']) && trim($aRow['sample_code'])!= ''){
@@ -169,7 +175,7 @@ if($tsrResult[0]['count']!=0){
 		   $aRow['sample_tested_datetime'] = '';
 		}
 		//if($aRow['sample_type']=='s' || $aRow['sample_type']=='S'){
-		if($aRow['sample_details']== 'Result exists already'){
+		if($aRow['sample_details']== 'Result already exists'){
 			$rsDetails = 'Existing Result';
 			$color = '<span style="color:#86c0c8;font-weight:bold;"><i class="fa fa-exclamation"></i></span>';
 		}
@@ -191,19 +197,22 @@ if($tsrResult[0]['count']!=0){
 			<option value="4" '.($aRow['result_status']=="4"  ? "selected=selected" : "").'>Rejected</option>
 			</select><br><br>';
 		//}
-		//sample to control
-		if($scResult && ($aRow['sample_type']=='S' || $aRow['sample_type']=='s') && $inResult[0]['number_of_in_house_controls']!= 0 && $tsrResult[0]['count']!=0 && $tsrResult[0]['count']!=$totalControls){
-			$controlCode = "'".$aRow['sample_type']."'";
-			$controlName = '<select class="form-control" style="" name="controlName[]" id="controlName'.$aRow['temp_sample_id'].'" title="Please select control" onchange="sampleToControl(this,'.$controlCode.','.$aRow['temp_sample_id'].')"><option value="">-- Select --</option>';
-			foreach($scResult as $control){
-				if(trim($control['r_sample_control_name'])!= ''){
-				   $controlName .= '<option value="'.$control['r_sample_control_name'].'" '.($aRow['sample_type']==$control['r_sample_control_name'] || $aRow['sample_type'] == ucwords($control['r_sample_control_name']) ? "selected=selected" : "").'>'.ucwords($control['r_sample_control_name']).'</option>';
-				}
-			}
-			$controlName .= '</select><br><br>';
+		//sample to control & control to sample
+		if(count($scResult) > 0 && $inResult[0]['number_of_in_house_controls'] > 0 && $tsrResult[0]['count'] >0 && $tsrResult[0]['count'] > $refno){
+		   $controlName = '<select class="form-control" style="" name="controlName[]" id="controlName'.$aRow['temp_sample_id'].'" title="Please select control" onchange="sampleToControl(this,'.$controlCode.','.$aRow['temp_sample_id'].')"><option value="">-- Select --</option>';
 		}else{
-			$controlName = ucwords($aRow['sample_type']);
+		   if($aRow['sample_type']=='S' || $aRow['sample_type']=='s'){
+		      $controlName = '<select class="form-control" style="" name="controlName[]" id="controlName'.$aRow['temp_sample_id'].'" title="Please select control" onchange="sampleToControlAlert('.$totalControls.');"><option value="">-- Select --</option>';
+		   }else{
+		     $controlName = '<select class="form-control" style="" name="controlName[]" id="controlName'.$aRow['temp_sample_id'].'" title="Please select control" onchange="sampleToControl(this,'.$controlCode.','.$aRow['temp_sample_id'].')"><option value="">-- Select --</option>';
+		   }
 		}
+		foreach($scResult as $control){
+			if(trim($control['r_sample_control_name'])!= ''){
+			   $controlName .= '<option value="'.$control['r_sample_control_name'].'" '.($aRow['sample_type']==$control['r_sample_control_name'] || $aRow['sample_type'] == ucwords($control['r_sample_control_name']) ? "selected=selected" : "").'>'.ucwords($control['r_sample_control_name']).'</option>';
+			}
+		}
+		$controlName .= '</select><br><br>';
 		$row[] = '<input style="width:90%;" type="text" name="sampleCode" id="sampleCode'.$aRow['temp_sample_id'].'" title="'.$rsDetails.'" value="'.$aRow['sample_code'].'" onchange="updateSampleCode(this,'.$sampleCode.','.$aRow['temp_sample_id'].');"/>'.$color;
 		$row[] = $aRow['sample_collection_date'];
 		$row[] = $aRow['sample_tested_datetime'];

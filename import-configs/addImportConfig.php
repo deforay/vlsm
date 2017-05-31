@@ -123,7 +123,7 @@ include('../header.php');
                                 <input type="text" name="configMachineName[]" id="configMachineName1" class="form-control isRequired" placeholder="Machine Name" title="Please enter machine name" onblur="checkNameValidation('import_config_machines','config_machine_name',this,null,'This configuration machine name already exists.Try another name',null)";/>
                             </td>
                             <td align="center" style="vertical-align:middle;">
-                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
+                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -221,7 +221,7 @@ tableRowId = 2;
       c.setAttribute("style","vertical-align:middle");
       
       b.innerHTML = '<input type="text" name="configMachineName[]" id="configMachineName' + tableRowId + '"class="isRequired form-control" placeholder="Machine Name" title="Please enter machine name"  onblur="checkNameValidation(\'import_config_machines\',\'config_machine_name\',this,null,\'This configuration machine name already exists.Try another name\',null)"/ >';
-      c.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
+      c.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
       $(a).fadeIn(800);
       tableRowId++;
   }

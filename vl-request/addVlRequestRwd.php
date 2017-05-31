@@ -11,6 +11,12 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
 
+$autoApprovalFieldStatus = true;
+if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE"){
+  if($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '' || $arr['auto_approval'] == null){
+    $autoApprovalFieldStatus = false;
+  }
+}
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
   $sampleClass = '';
   $maxLength = '';
@@ -47,9 +53,9 @@ $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
-    foreach($pdResult as $provinceName){
-      $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-    }
+  foreach($pdResult as $provinceName){
+    $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  }
 
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
@@ -68,9 +74,9 @@ $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_
   $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MIN(length(sample_code_key)) from vl_request_form )';
 }
 $svlResult=$db->query($svlQuery);
-$lngth = strlen($svlResult[0]['MAX(sample_code_key)']);
+$length = strlen($svlResult[0]['MAX(sample_code_key)']);
 if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
-  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth > 3){
+  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $length > 3){
     $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
     $strparam = strlen($maxId);
     $zeros = substr("000000", $strparam);
@@ -78,6 +84,7 @@ if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
   }else{
     $maxId = '000001';
   }
+  
   if($arr['sample_code']=='MMYY'){
     $mnthYr = date('mY');
   }else{
@@ -85,14 +92,14 @@ if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
   }
   $prefix = $arr['sample_code_prefix'];
 }else{
-if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth < 3){
- $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
- $strparam = strlen($maxId);
- $zeros = substr("000", $strparam);
- $maxId = $zeros.$maxId;
-}else{
- $maxId = '001';
-}
+  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $length <= 3){
+   $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+   $strparam = strlen($maxId);
+   $zeros = substr("000", $strparam);
+   $maxId = $zeros.$maxId;
+  }else{
+   $maxId = '001';
+  }
 }
 $sKey = '';
 $sFormat = '';
@@ -625,21 +632,24 @@ $sFormat = '';
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
-                            <div class="col-lg-7">
-                              <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
-                                <option value="">-- Select --</option>
-                                <?php
-                                foreach($userResult as $uName){
-                                  ?>
-                                  <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                        <?php
+                        if($autoApprovalFieldStatus){ ?>
+                          <div class="col-md-4">
+                              <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
+                              <div class="col-lg-7">
+                                <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                                  <option value="">-- Select --</option>
                                   <?php
-                                }
-                                ?>
-                              </select>
-                            </div>
-                        </div>
+                                  foreach($userResult as $uName){
+                                    ?>
+                                    <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                                    <?php
+                                  }
+                                  ?>
+                                </select>
+                              </div>
+                          </div>
+                        <?php } ?>
                         <div class="col-md-8">
                             <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
                             <div class="col-lg-10">
@@ -714,9 +724,9 @@ $sFormat = '';
       // BARCODESTUFF START
 			
 	<?php
-		if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
-			echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
-		}
+          if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
+            echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
+          }
 	?>
   // BARCODESTUFF END
         $('.date').datepicker({
