@@ -1,11 +1,11 @@
 <?php
 include('../header.php');
 $startYear=date("Y", strtotime("-3 month"));
-$startMonth = date('m', strtotime('+1 month', strtotime('-3 month')));
+$startMonth = date('m', strtotime('-3 month'));
 $endYear = date('Y');
 $endMonth = date('m');
 
-$startDate = date('Y-m', strtotime('+1 month', strtotime('-3 month')));
+$startDate = date('Y-m', strtotime('-3 month'));
 $endDate=date('Y-m');
 
 $tsQuery="SELECT * FROM r_sample_status";
@@ -152,7 +152,7 @@ $fResult = $db->rawQuery($fQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-book"></i> Export Result
+      <h1><i class="fa fa-book"></i> VL Quarterly Monitoring Tool
       <!--<ol class="breadcrumb">-->
       <!--  <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
@@ -173,8 +173,7 @@ $fResult = $db->rawQuery($fQuery);
               <div id="sla-data-range" class="mrp-container form-control">
                                 <span class="mrp-icon"><i class="fa fa-calendar"></i> &nbsp;</span>
                                 <div class="mrp-monthdisplay ">
-                                  <span class="mrp-lowerMonth"><?php echo date('M', strtotime('+1 month', strtotime('-1 year')));; ?> <?php echo $startYear; ?></span>
-                                  <span class="mrp-to"> to </span>
+                                  <span class="mrp-lowerMonth"><?php echo date('M', strtotime('-3 month')); ?> <?php echo $startYear; ?></span>                                  <span class="mrp-to"> to </span>
                                   <span class="mrp-upperMonth"><?php echo date('M'); ?> <?php echo date('Y'); ?></span>
                                 </div>
                               <input type="hidden" value="<?php echo $startDate; ?>" id="mrp-lowerDate" onchange=""/>
@@ -184,7 +183,7 @@ $fResult = $db->rawQuery($fQuery);
 		    <td><b>Lab Name :</b></td>
 		    <td>
 		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
-		      <option value=""> -- Select -- </option>
+		      <option value="">-- Select --</option>
                 <?php
                 foreach($fResult as $name){
                  ?>
@@ -194,7 +193,21 @@ $fResult = $db->rawQuery($fQuery);
                 ?>
 		      </select>
 		    </td>
+            <td style=""><b>Region/Province&nbsp;:</b></td>
+		    <td>
+		      <input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter Province" style="background:#fff;" onkeyup="searchVlRequestData()"/>
+		    </td>
 		</tr>
+        <tr>
+		    <td><b>City :</b></td>
+		    <td>
+			<input type="text" id="city" name="city" class="form-control" placeholder="Enter City" onkeyup="searchVlRequestData()"/>
+		    </td>
+            <td><b>Sample Test Date&nbsp;:</b></td>
+            <td>
+              <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="background:#fff;"/>
+            </td>
+        </tr>
 		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -213,6 +226,8 @@ $fResult = $db->rawQuery($fQuery);
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
                   <th>Facility Name</th>
+                  <th>Province</th>
+                  <th>City</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -242,18 +257,26 @@ $fResult = $db->rawQuery($fQuery);
    var endDate = "";
    var oTable = null;
   $(document).ready(function() {
-     $('#sampleCollectionDate').daterangepicker({
-            
-            format: "mm-yyyy",
-        viewMode: "months", 
-        minViewMode: "months",
-            separator: ' to ',
+     $('#sampleTestDate').daterangepicker({
+            format: 'DD-MMM-YYYY',
+	    separator: ' to ',
+            startDate: moment().subtract('days', 29),
+            endDate: moment(),
+            maxDate: moment(),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                'Last 7 Days': [moment().subtract('days', 6), moment()],
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
         },
         function(start, end) {
-            startDate = start.format('mm-yyyy');
-            endDate = end.format('mm-yyyy');
+            startDate = start.format('YYYY-MM-DD');
+            endDate = end.format('YYYY-MM-DD');
       });
-     $('#sampleCollectionDate').val("");
+     $('#sampleTestDate').val("");
      loadVlRequestData();
   } );
   
@@ -279,6 +302,8 @@ $fResult = $db->rawQuery($fQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
             ],
             "aaSorting": [[ 0, "asc" ]],
             "bProcessing": true,
@@ -287,6 +312,9 @@ $fResult = $db->rawQuery($fQuery);
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 			  aoData.push({"name": "sampleCollectionDate", "value": $("#mrp-lowerDate").val() +' to '+ $("#mrp-upperDate").val()});
+              aoData.push({"name": "district", "value": $("#city").val()});
+              aoData.push({"name": "state", "value": $("#state").val()});
+              aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -308,7 +336,7 @@ $fResult = $db->rawQuery($fQuery);
   function exportInexcel() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("vlMonitoringExportInExcel.php",{sampleCollectionDate:$("#mrp-lowerDate").val() +' to '+ $("#mrp-upperDate").val(),Facility_Name:$("#facilityName  option:selected").text()},
+    $.post("vlMonitoringExportInExcel.php",{sampleCollectionDate:$("#mrp-lowerDate").val() +' to '+ $("#mrp-upperDate").val(),fyName:$("#facilityName  option:selected").text(),facilityName:$("#facilityName").val(),state:$("#state").val(),district:$("#city").val(),sampleTestDate:$("#sampleTestDate").val()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate excel..');
