@@ -14,8 +14,7 @@ try {
                         );
                 $db=$db->where('batch_id',$id);
                 $db->update($tableName1,$data);
-        
-                if($id!=0 && $id!=''){
+                if($id > 0){
                     $value = array('sample_batch_id'=>NULL);
                     $db=$db->where('sample_batch_id',$id);
                     $db->update($tableName2,$value);
@@ -69,7 +68,7 @@ try {
                                $remainSampleNewArray = array_values(array_diff($displaySampleOrderArray,$displaySampleArray));
                                //For new samples
                                 for($ns=0;$ns<count($remainSampleNewArray);$ns++){
-                                        $displayOrder[] = 's_'.$remainSampleNewArray[$ns];
+                                    $displayOrder[] = 's_'.$remainSampleNewArray[$ns];
                                 }
                                 $orderArray = array();
                                 for($o=0;$o<count($displayOrder);$o++){

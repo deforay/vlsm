@@ -141,18 +141,26 @@ if($id >0){
             }
             $xplodJsonToArray = explode("_",$jsonToArray[$j]);
             if(count($xplodJsonToArray)>1 && $xplodJsonToArray[0] == "s"){
-                $sampleQuery="SELECT sample_code from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
+                $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
                 $sampleResult=$db->query($sampleQuery);
                 
                 $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], 'C39', '', '','' ,15, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
-                
+                $lotDetails = '';
+                $lotExpirationDate = '';
+                if(isset($sampleResult[0]['lot_expiration_date']) && $sampleResult[0]['lot_expiration_date'] != '' && $sampleResult[0]['lot_expiration_date']!= NULL && $sampleResult[0]['lot_expiration_date'] != '0000-00-00'){
+                    if(trim($sampleResult[0]['lot_number'])!= ''){
+                        $lotExpirationDate.='<br>';
+                    }
+                    $lotExpirationDate.= $general->humanDateFormat($sampleResult[0]['lot_expiration_date']);
+                }
+                $lotDetails = $sampleResult[0]['lot_number'].$lotExpirationDate;
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
                 $tbl.='<tr>';
                 $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
                 $tbl.='<td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
                 $tbl.='<td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
+                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['result'].'</td>';
                 $tbl.='</tr>';
                 $tbl.='</table>';
             }else{

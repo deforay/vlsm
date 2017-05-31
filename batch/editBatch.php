@@ -266,36 +266,37 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 	      });
 	    },
 	    afterSelect: function(){
-	       //initial button disabled/enabled
-	       if(this.qs2.cache().matchedResultsCount == 1){
-		  $("#batchSubmit").attr("disabled",false);
-	       }
 	       //button disabled/enabled
 		if(this.qs2.cache().matchedResultsCount == noOfSamples){
 		   alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 		   $("#batchSubmit").attr("disabled",false);
+		   $("#batchSubmit").css("pointer-events","auto");
 		}else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 		  $("#batchSubmit").attr("disabled",false);
+		  $("#batchSubmit").css("pointer-events","auto");
 		}else if(this.qs2.cache().matchedResultsCount > noOfSamples){
 		  alert("You have already selected Maximum no. of sample "+noOfSamples);
 		  $("#batchSubmit").attr("disabled",true);
+		  $("#batchSubmit").css("pointer-events","none");
 		}
 		 this.qs1.cache();
 		 this.qs2.cache();
 	  },
 	  afterDeselect: function(){
-	    //after deselect button disabled/enabled
-	    if(this.qs2.cache().matchedResultsCount == 1){
-	       $("#batchSubmit").attr("disabled",false);
-	    }
 	    //button disabled/enabled
-	     if(this.qs2.cache().matchedResultsCount == noOfSamples){
+	      if(this.qs2.cache().matchedResultsCount == 0){
+		$("#batchSubmit").attr("disabled",true);
+		$("#batchSubmit").css("pointer-events","none");
+	      }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
 		alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 		$("#batchSubmit").attr("disabled",false);
+		$("#batchSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	       $("#batchSubmit").attr("disabled",false);
+	       $("#batchSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
 	       $("#batchSubmit").attr("disabled",true);
+	       $("#batchSubmit").css("pointer-events","none");
 	     }
 	     this.qs1.cache();
 	     this.qs2.cache();
@@ -307,13 +308,17 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
        });
        $('#deselect-all-samplecode').click(function(){
 	 $('#sampleCode').multiSelect('deselect_all');
+	 $("#batchSubmit").attr("disabled",true);
+	 $("#batchSubmit").css("pointer-events","none");
 	 return false;
        });
        
 	if(noOfSamples == 0){
 	  $("#batchSubmit").attr("disabled",true);
+	  $("#batchSubmit").css("pointer-events","none");
 	}else if($("#sampleCode :selected").length > noOfSamples) {
 	  $("#batchSubmit").attr("disabled",true);
+	  $("#batchSubmit").css("pointer-events","none");
 	}
        
 	<?php
@@ -354,7 +359,6 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
     $.blockUI();
     var fName = $("#facilityName").val();
     var sName = $("#sampleType").val();
-    var sCode= $("#sampleCode").val();
     var gender= $("#gender").val();
     var prg =   $("input:radio[name=pregnant]");
     var urgent =   $("input:radio[name=urgency]");
@@ -368,7 +372,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
     }else{
       urgent = $('input[name=urgency]:checked').val();
     }
-    $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
+    $.post("getSampleCodeDetails.php", { fName : fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
     function(data){
 	if(data != ""){
 	  $("#sampleDetails").html(data);

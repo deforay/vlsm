@@ -11,6 +11,8 @@ $mailconf = array();
 foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
+$filename = '';
+$downloadFile = '';
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sample']) >0){
      $filedGroup = array();
      if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
@@ -189,7 +191,6 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                  $colNo++;
                }
           }
-          $filename = '';
           $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
           $filename = 'vl-request-mail' . date('d-M-Y-H-i-s') . '.xls';
           $pathFront=realpath('../temporary');

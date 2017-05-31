@@ -22,45 +22,31 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 $rejected = '4';
 if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']=='' && $gender=='' && $pregnant=='' && $urgent==''){
-    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND sample_batch_id is NULL OR sample_batch_id=''";
-}else{
-if(isset($_POST['sCode']) && $_POST['sCode']!=''){
-    $ids = implode(",",$_POST['sCode']);
-    $query = "SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND vl_sample_id NOT IN (".$ids.") AND sample_batch_id is NULL";
+   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND sample_batch_id is NULL OR sample_batch_id=''";
 }else{
    $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL and vl.result_status NOT IN (".$rejected.")";
-}
-if($fName!=''){
-    $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
-}
-if($sample!=''){
-    $query = $query." AND vl.sample_type='".$sample."'";
-}if($gender!=''){
-    $query = $query." AND vl.patient_gender='".$gender."'";
-}if($pregnant!=''){
-    $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
-}if($urgent!=''){
-    $query = $query." AND vl.test_urgency='".$urgent."'";
-}
-
-$query." ORDER BY f.facility_name ASC";
-
-if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-    if (trim($start_date) == trim($end_date)) {
-        $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
-    }else{
-       $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
-    }
-}
+   if($fName!=''){
+      $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
+   }
+   if($sample!=''){
+      $query = $query." AND vl.sample_type='".$sample."'";
+   }if($gender!=''){
+      $query = $query." AND vl.patient_gender='".$gender."'";
+   }if($pregnant!=''){
+      $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
+   }if($urgent!=''){
+      $query = $query." AND vl.test_urgency='".$urgent."'";
+   }
+   if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+       if(trim($start_date) == trim($end_date)) {
+         $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
+       }else{
+         $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
+       }
+   }
+   $query = $query." ORDER BY f.facility_name ASC";
 }
 $result = $db->rawQuery($query);
-$sResult = array();
-if($_POST['sCode']!=''){
-    $ids = implode(",",$_POST['sCode']);
-    $sQuery="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id IN (".$ids.") ";
-    $sResult = $db->rawQuery($sQuery);
-}
-$merge = array_merge($sResult, $result);
 ?>
 <div class="col-md-8">
 <div class="form-group">
@@ -71,19 +57,11 @@ $merge = array_merge($sResult, $result);
           </div><br/><br/>
         <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
         <?php
-        $sampleIn = array();
-        foreach($merge as $sample){
-         if(!in_array($sample['vl_sample_id'],$sampleIn)){
-            $sampleIn[] = $sample['vl_sample_id'];
-            $selected = '';
-            if (in_array($sample['vl_sample_id'], $_POST['sCode'])){
-              $selected = "selected=selected";
-            }
+        foreach($result as $sample){
           ?>
-          <option value="<?php echo $sample['vl_sample_id'];?>"<?php echo $selected;?>><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
+          <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
           <?php
          }
-        }
         ?>
       </select>
       </div>
@@ -119,36 +97,37 @@ $merge = array_merge($sResult, $result);
           });
         },
         afterSelect: function(){
-            //initial button disabled/enabled
-            if(this.qs2.cache().matchedResultsCount == 1){
-               $("#batchSubmit").attr("disabled",false);
-            }
             //button disabled/enabled
 	     if(this.qs2.cache().matchedResultsCount == noOfSamples){
 		alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 		$("#batchSubmit").attr("disabled",false);
+                $("#batchSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	       $("#batchSubmit").attr("disabled",false);
+               $("#batchSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
                alert("You have already selected Maximum no. of sample "+noOfSamples);
 	       $("#batchSubmit").attr("disabled",true);
+               $("#batchSubmit").css("pointer-events","none");
 	     }
 	      this.qs1.cache();
 	      this.qs2.cache();
        },
        afterDeselect: function(){
-         //after deselect button disabled/enabled
-         if(this.qs2.cache().matchedResultsCount == 1){
-            $("#batchSubmit").attr("disabled",false);
-         }
          //button disabled/enabled
-	  if(this.qs2.cache().matchedResultsCount == noOfSamples){
+          if(this.qs2.cache().matchedResultsCount == 0){
+            $("#batchSubmit").attr("disabled",true);
+	    $("#batchSubmit").css("pointer-events","none");
+          }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
 	     alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 	     $("#batchSubmit").attr("disabled",false);
+             $("#batchSubmit").css("pointer-events","auto");
 	  }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	    $("#batchSubmit").attr("disabled",false);
+            $("#batchSubmit").css("pointer-events","auto");
 	  }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
 	    $("#batchSubmit").attr("disabled",true);
+            $("#batchSubmit").css("pointer-events","none");
 	  }
 	  this.qs1.cache();
 	  this.qs2.cache();
@@ -160,6 +139,8 @@ $merge = array_merge($sResult, $result);
       });
       $('#deselect-all-samplecode').click(function(){
         $('#sampleCode').multiSelect('deselect_all');
+        $("#batchSubmit").attr("disabled",true);
+        $("#batchSubmit").css("pointer-events","none");
         return false;
       });
    });
