@@ -95,7 +95,7 @@
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlResultMailMenu").addClass('active');
-  }else if (splitsUrl=='addImportResult.php') {
+  }else if (splitsUrl=='addImportResult.php' || splitsUrl =='vlResultUnApproval.php' || splitsUrl =='importedStatistics.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importResultMenu").addClass('active');

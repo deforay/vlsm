@@ -510,11 +510,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     $checked = '';
                                     $display = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure'){
-                                     $checked = 'checked="checked"';
-                                     $display = 'block';
+                                      $checked = 'checked="checked"';
+                                      $display = 'block';
                                     }else{
-                                     $checked = '';
-                                     $display = 'none';
+                                      $checked = '';
+                                      $display = 'none';
                                     }
                                     ?>
                                     <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $checked;?> onclick="showTesting('repeatTesting');">
@@ -548,11 +548,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     $checked = '';
                                     $display = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect'){
-                                     $checked = 'checked="checked"';
-                                     $display = 'block';
+                                      $checked = 'checked="checked"';
+                                      $display = 'block';
                                     }else{
-                                     $checked = '';
-                                     $display = 'none';
+                                      $checked = '';
+                                      $display = 'none';
                                     }
                                     ?>
                                     <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" <?php echo $checked;?> onclick="showTesting('suspendTreatment');">

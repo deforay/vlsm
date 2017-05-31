@@ -29,9 +29,9 @@ $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
-    foreach($pdResult as $provinceName){
-      $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-    }
+  foreach($pdResult as $provinceName){
+    $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  }
     
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
@@ -449,11 +449,11 @@ $disable = "disabled = 'disabled'";
                                     $checked = '';
                                     $display = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine'){
-                                     $checked = 'checked="checked"';
-                                     $display = 'block';
+                                      $checked = 'checked="checked"';
+                                      $display = 'block';
                                     }else{
-                                     $checked = '';
-                                     $display = 'none';
+                                      $checked = '';
+                                      $display = 'none';
                                     }
                                     ?>
                                     <input type="radio" class="" id="rmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('rmTesting');">
@@ -478,7 +478,7 @@ $disable = "disabled = 'disabled'";
                          </div>
                        </div>                 
                       </div>
-                      <div class="row">                
+                      <div class="row">        
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="col-lg-12">
@@ -487,11 +487,11 @@ $disable = "disabled = 'disabled'";
                                     $checked = '';
                                     $display = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure'){
-                                     $checked = 'checked="checked"';
-                                     $display = 'block';
+                                      $checked = 'checked="checked"';
+                                      $display = 'block';
                                     }else{
-                                     $checked = '';
-                                     $display = 'none';
+                                      $checked = '';
+                                      $display = 'none';
                                     }
                                     ?>
                                     <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('repeatTesting');">
@@ -525,11 +525,11 @@ $disable = "disabled = 'disabled'";
                                     $checked = '';
                                     $display = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect'){
-                                     $checked = 'checked="checked"';
-                                     $display = 'block';
+                                      $checked = 'checked="checked"';
+                                      $display = 'block';
                                     }else{
-                                     $checked = '';
-                                     $display = 'none';
+                                      $checked = '';
+                                      $display = 'none';
                                     }
                                     ?>
                                     <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('suspendTreatment');">

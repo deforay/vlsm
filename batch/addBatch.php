@@ -20,13 +20,13 @@ $batchResult=$db->query($batchQuery);
 
 if($batchResult[0]['MAX(batch_code_key)']!='' && $batchResult[0]['MAX(batch_code_key)']!=NULL){
  $maxId = $batchResult[0]['MAX(batch_code_key)']+1;
- $lngth = strlen($maxId);
- if($lngth==1){
-    $maxId = "00".$maxId;
- }else if($lngth==2){
-    $maxId = "0".$maxId; 
- }else if($lngth==3){
-    $maxId = $maxId; 
+ $length = strlen($maxId);
+ if($length==1){
+  $maxId = "00".$maxId;
+ }else if($length==2){
+  $maxId = "0".$maxId; 
+ }else if($length==3){
+   $maxId = $maxId; 
  }
 }else{
  $maxId = '001';
@@ -143,15 +143,15 @@ foreach($importConfigResult as $machine) {
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='addBatchForm' id='addBatchForm' autocomplete="off" action="addBatchCodeHelper.php">
+            <form class="form-horizontal" method="post" name="addBatchForm" id="addBatchForm" autocomplete="off" action="addBatchCodeHelper.php">
               <div class="box-body">
-								<div class="row">
+	        <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
                         <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo date('Ymd').$maxId;?>" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already exists.Try another batch code',null)" />
-			                  <input type="hidden" name="batchCodeKey" id="batchCodeKey" value="<?php echo $maxId;?>"/>
+			   <input type="hidden" name="batchCodeKey" id="batchCodeKey" value="<?php echo $maxId;?>"/>
                         </div>
                     </div>
                   </div>
@@ -181,10 +181,8 @@ foreach($importConfigResult as $machine) {
 				   <div class="col-md-12">
 					    <div style="width:60%;margin:0 auto;clear:both;">
 						   <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
-						   </div><br/><br/>
-					   <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
-					     
-					   </select>
+					     </div><br/><br/>
+					   <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search"></select>
 				   </div>
 			       </div>
 			    </div>
@@ -194,7 +192,7 @@ foreach($importConfigResult as $machine) {
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <a id="batchSubmit" class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;" disabled>Save and Next</a>
+                <a id="batchSubmit" class="btn btn-primary" href="javascript:void(0);" title="Please select machine" onclick="validateNow();return false;" style="pointer-events:none;" disabled>Save and Next</a>
                 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -222,7 +220,7 @@ foreach($importConfigResult as $machine) {
      $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	          separator: ' to ',
+	    separator: ' to ',
             startDate: moment().subtract('days', 29),
             endDate: moment(),
             maxDate: moment(),
@@ -282,36 +280,37 @@ foreach($importConfigResult as $machine) {
 	 });
        },
        afterSelect: function(){
-            //initial button disabled/enabled
-            if(this.qs2.cache().matchedResultsCount == 1){
-               $("#batchSubmit").attr("disabled",false);
-            }
             //button disabled/enabled
 	     if(this.qs2.cache().matchedResultsCount == noOfSamples){
 		alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 		$("#batchSubmit").attr("disabled",false);
+		$("#batchSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	       $("#batchSubmit").attr("disabled",false);
+	       $("#batchSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
 	       alert("You have already selected Maximum no. of sample "+noOfSamples);
 	       $("#batchSubmit").attr("disabled",true);
+	       $("#batchSubmit").css("pointer-events","none");
 	     }
-	      this.qs1.cache();
-	      this.qs2.cache();
+	     this.qs1.cache();
+	     this.qs2.cache();
        },
        afterDeselect: function(){
-         //after deselect button disabled/enabled
-         if(this.qs2.cache().matchedResultsCount == 1){
-            $("#batchSubmit").attr("disabled",false);
-         }
          //button disabled/enabled
-	  if(this.qs2.cache().matchedResultsCount == noOfSamples){
+	  if(this.qs2.cache().matchedResultsCount == 0){
+            $("#batchSubmit").attr("disabled",true);
+	    $("#batchSubmit").css("pointer-events","none");
+          }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
 	     alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 	     $("#batchSubmit").attr("disabled",false);
+	     $("#batchSubmit").css("pointer-events","auto");
 	  }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	    $("#batchSubmit").attr("disabled",false);
+	    $("#batchSubmit").css("pointer-events","auto");
 	  }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
 	    $("#batchSubmit").attr("disabled",true);
+	    $("#batchSubmit").css("pointer-events","none");
 	  }
 	  this.qs1.cache();
 	  this.qs2.cache();
@@ -324,11 +323,13 @@ foreach($importConfigResult as $machine) {
      });
      $('#deselect-all-samplecode').click(function(){
        $('#sampleCode').multiSelect('deselect_all');
+       $("#batchSubmit").attr("disabled",true);
+       $("#batchSubmit").css("pointer-events","none");
        return false;
      });
    });
-   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
-    {
+   
+   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
         var removeDots=obj.value.replace(/\./g,"");
         var removeDots=removeDots.replace(/\,/g,"");
         //str=obj.value;
@@ -348,7 +349,6 @@ foreach($importConfigResult as $machine) {
       $.blockUI();
       var fName = $("#facilityName").val();
       var sName = $("#sampleType").val();
-      var sCode = $("#sampleCode").val();
       var gender= $("#gender").val();
       var prg =   $("input:radio[name=pregnant]");
       var urgent =   $("input:radio[name=urgency]");
@@ -362,10 +362,12 @@ foreach($importConfigResult as $machine) {
       }else{
         urgent = $('input[name=urgency]:checked').val();
       }
-      $.post("getSampleCodeDetails.php", { fName : fName,sCode : sCode,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
+      $.post("getSampleCodeDetails.php", { fName : fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);
+	    $("#batchSubmit").attr("disabled",true);
+	    $("#batchSubmit").css("pointer-events","none");
 	  }
       });
       $.unblockUI();

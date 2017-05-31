@@ -11,12 +11,6 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
 
-$autoApprovalFieldStatus = true;
-if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE"){
-  if($arr['auto_approval'] == 'no' || $arr['auto_approval'] == '' || $arr['auto_approval'] == null){
-    $autoApprovalFieldStatus = false;
-  }
-}
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
   $sampleClass = '';
   $maxLength = '';
@@ -632,24 +626,21 @@ $sFormat = '';
                         </div>
                       </div>
                       <div class="row">
-                        <?php
-                        if($autoApprovalFieldStatus){ ?>
-                          <div class="col-md-4">
-                              <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
-                              <div class="col-lg-7">
-                                <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
-                                  <option value="">-- Select --</option>
-                                  <?php
-                                  foreach($userResult as $uName){
-                                    ?>
-                                    <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                                    <?php
-                                  }
+                        <div class="col-md-4">
+                            <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
+                            <div class="col-lg-7">
+                              <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                                <option value="">-- Select --</option>
+                                <?php
+                                foreach($userResult as $uName){
                                   ?>
-                                </select>
-                              </div>
-                          </div>
-                        <?php } ?>
+                                  <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                                  <?php
+                                }
+                                ?>
+                              </select>
+                            </div>
+                        </div>
                         <div class="col-md-8">
                             <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
                             <div class="col-lg-10">

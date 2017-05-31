@@ -1,7 +1,6 @@
 <?php
 ob_start();
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configResult = $db->rawQuery($configQuery);
 $formId = 0;
@@ -322,12 +321,17 @@ $batchResult = $db->rawQuery($batchQuery);
       var sTypeName = $("#sampleType").val();
       var gender= $("#gender").val();
       var prg =   $("input:radio[name=pregnant]");
+      var urgent =   $("input:radio[name=urgency]");
       if(prg[0].checked==false && prg[1].checked==false){
 	pregnant = "";
       }else{
 	pregnant = $('input[name=pregnant]:checked').val();
       }
-      var urgent = $('input[name=urgency]:checked').val();
+      if(urgent[0].checked==false && urgent[1].checked==false){
+        urgent = "";
+      }else{
+        urgent = $('input[name=urgency]:checked').val();
+      }
       var state = $('#state').val();
       var district = $('#district').val();
       var batch = $('#batch').val();
