@@ -43,10 +43,10 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
                WHEN (result >= 1000 AND (patient_gender='not_specified')) THEN 1 ELSE 0 END) AS gtNotSpecified1000,
          
          SUM(CASE
-               WHEN (result < 1000 AND (patient_gender='male' OR patient_gender='MALE') AND (patient_gender='female' OR patient_gender='FEMALE') AND (patient_gender='not_specified')) THEN 1 ELSE 0 END) AS ltTotalGender1000,
+               WHEN (result < 1000 AND patient_gender!='') THEN 1 ELSE 0 END) AS ltTotalGender1000,
          
          SUM(CASE
-               WHEN (result >= 1000 AND (patient_gender='male' OR patient_gender='MALE') AND (patient_gender='female' OR patient_gender='FEMALE') AND (patient_gender='not_specified')) THEN 1 ELSE 0 END) AS gtTotalGender1000,
+               WHEN (result >= 1000 AND patient_gender!='') THEN 1 ELSE 0 END) AS gtTotalGender1000,
          
 		SUM(CASE 
              WHEN (patient_age_in_years ='' AND patient_age_in_months<=12 AND result < 1000) THEN 1 ELSE 0 END) AS ltAgeOne1000,
@@ -268,8 +268,12 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
 	  $i++;$j++;
 	}
 	//total avg
-	$totalAvg = '';
+	$totalAvg = 0;
+	if(count($avgResult)==0){
+	$totalAvg = 0;  
+	}else{
 	$totalAvg = round(array_sum($avgResult)/count($avgResult));
+	}
 	
 	$startMonth = date("M-Y", strtotime($start_date));
 	$endMonth = date("M-Y", strtotime($end_date));
