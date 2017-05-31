@@ -16,7 +16,7 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
  $rResult = $db->rawQuery($_SESSION['vlMonitoringResultQuery']);
  
  //get current quarter total samples tested
- $sQuery="SELECT vl.facility_id,
+ $sQuery="SELECT vl.facility_id,f.facility_name,f.facility_code,f.facility_state,f.facility_district,
 
          SUM(CASE
                WHEN (result < 1000) THEN 1 ELSE 0 END) AS lt1000,
@@ -43,10 +43,10 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
                WHEN (result >= 1000 AND (patient_gender='not_specified')) THEN 1 ELSE 0 END) AS gtNotSpecified1000,
          
          SUM(CASE
-               WHEN (result < 1000 AND (patient_gender='male' OR patient_gender='MALE') AND (patient_gender='female' OR patient_gender='FEMALE') AND (patient_gender='not_specified')) THEN 1 ELSE 0 END) AS ltTotalGender1000,
+               WHEN (result < 1000 AND patient_gender!='') THEN 1 ELSE 0 END) AS ltTotalGender1000,
          
          SUM(CASE
-               WHEN (result >= 1000 AND (patient_gender='male' OR patient_gender='MALE') AND (patient_gender='female' OR patient_gender='FEMALE') AND (patient_gender='not_specified')) THEN 1 ELSE 0 END) AS gtTotalGender1000,
+               WHEN (result >= 1000 AND patient_gender!='') THEN 1 ELSE 0 END) AS gtTotalGender1000,
          
 		SUM(CASE 
              WHEN (patient_age_in_years ='' AND patient_age_in_months<=12 AND result < 1000) THEN 1 ELSE 0 END) AS ltAgeOne1000,
@@ -89,9 +89,14 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
              WHEN (patient_age_in_years >= 25 AND result >= 1000) THEN 1 ELSE 0 END) AS gtAgetwentyFive1000,
         
         SUM(CASE 
-             WHEN (patient_age_in_years !='' AND result < 1000) THEN 1 ELSE 0 END) AS ltAgeTotal1000,
+             WHEN (patient_age_in_years is NULL AND result < 1000) THEN 1 ELSE 0 END) AS ltAgeNotSpecified1000,
         SUM(CASE 
-             WHEN (patient_age_in_years !='' AND result >= 1000) THEN 1 ELSE 0 END) AS gtAgeTotal1000,
+             WHEN (patient_age_in_years is NULL AND result >= 1000) THEN 1 ELSE 0 END) AS gtAgeNotSpecified1000,
+        
+        SUM(CASE 
+             WHEN (result < 1000) THEN 1 ELSE 0 END) AS ltAgeTotal1000,
+        SUM(CASE 
+             WHEN (result >= 1000) THEN 1 ELSE 0 END) AS gtAgeTotal1000,
         
         SUM(CASE 
              WHEN (is_patient_pregnant = 'yes' AND result < 1000) THEN 1 ELSE 0 END) AS ltPatientPregnant1000,
@@ -102,7 +107,7 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
              WHEN (is_patient_breastfeeding = 'yes' AND result < 1000) THEN 1 ELSE 0 END) AS ltPatientBreastFeeding1000,
         SUM(CASE 
              WHEN (is_patient_breastfeeding = 'yes' AND result >= 1000) THEN 1 ELSE 0 END) AS gtPatientBreastFeeding1000
-		 FROM vl_request_form as vl 
+		 FROM vl_request_form as vl JOIN facility_details as f ON vl.facility_id=f.facility_id
        WHERE vl.vlsm_country_id = '".$arr['vl_form']."'";
        $start_date = '';
        $end_date = '';
@@ -116,16 +121,163 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
             $end_date = trim($s_c_date[1])."-31";
           }
        }
+	  $sTestDate = '';
+	  $eTestDate = '';
+	  if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+		 $s_t_date = explode("to", $_POST['sampleTestDate']);
+		 if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+		   $sTestDate = $general->dateFormat(trim($s_t_date[0]));
+		 }
+		 if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+		   $eTestDate = $general->dateFormat(trim($s_t_date[1]));
+		 }
+	  }
+	  
        $sWhere ='';
        if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
          if (trim($start_date) == trim($end_date)) {
              $sWhere = 'DATE(vl.sample_collection_date) = "'.$start_date.'"';
-         }
+         }else{
+		  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		 }
         }
+		if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+		if (trim($sTestDate) == trim($eTestDate)) {
+		    $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$sTestDate.'"';
+		}else{
+		   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
+		}
+        }
+		if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		  $sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+		}
+		if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		  $sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+		}
+		if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		  $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		}
         $sQuery = $sQuery.' '.$sWhere. ' AND vl.result!=""';
-    $sResult = $db->rawQuery($sQuery);
-    //echo "<pre>";print_r($sResult);die;
+		$sResult = $db->rawQuery($sQuery);
  
+ //question two query
+ //first check empty results
+ $sWhere = 'where ';
+ $checkEmptyResultQuery = "Select vl.sample_collection_date,vl.sample_tested_datetime,f.facility_name,f.facility_code,f.facility_state,f.facility_district from vl_request_form as vl JOIN facility_details as f ON vl.facility_id=f.facility_id";
+ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+	if (trim($start_date) == trim($end_date)) {
+	  $sWhere = ' DATE(vl.sample_collection_date) = "'.$start_date.'"';
+	}
+	else{
+		  $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+		}
+  }
+  if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+	$sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+  }
+  if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+	$sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+  }
+  if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		  $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		}
+  $checkEmptyResultQuery = $checkEmptyResultQuery.' '.$sWhere. ' AND vl.sample_tested_datetime IS NULL AND vl.sample_type!="" AND vl.sample_collection_date < NOW() - INTERVAL 1 MONTH AND vl.vlsm_country_id = "'.$arr['vl_form'].'"';
+  $checkEmptyResult = $db->rawQuery($checkEmptyResultQuery);
+  //get all sample type
+  $sampleType = "Select * from r_sample_type where status='active'";
+  $sampleTypeResult = $db->rawQuery($sampleType);
+  if(count($checkEmptyResult)>0){
+	$sWhere = '';
+	foreach($sampleTypeResult as $sample){
+	  $checkEmptyResultSampleQuery = 'Select vl.sample_collection_date,vl.sample_tested_datetime,COUNT(vl_sample_id) as total,f.facility_name,f.facility_code,f.facility_state,f.facility_district from vl_request_form as vl JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.sample_tested_datetime IS NULL AND vl.sample_type="'.$sample['sample_id'].'" AND vl.sample_collection_date < NOW() - INTERVAL 1 MONTH AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	  
+	  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		if (trim($start_date) == trim($end_date)) {
+		  $sWhere = ' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		}
+		else{
+			  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			}
+	  }
+	  
+	  if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		$sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+	  }
+	  if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		$sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+	  }
+	  if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		  $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		}
+		$checkEmptyResultSampleQuery = $checkEmptyResultSampleQuery.$sWhere;
+	  $checkEmptySampleResult[$sample['sample_name']] = $db->rawQuery($checkEmptyResultSampleQuery);
+	}
+  }
+  //get country name
+  $countryName = "Select * from form_details where vlsm_country_id=".$arr['vl_form'];
+  $countryResult = $db->rawQuery($countryName);
+  
+  //question three
+  $startMonth = date("Y-m", strtotime($start_date));
+	$endMonth = date("Y-m", strtotime($end_date));
+	$start = $month = strtotime($startMonth);
+	$end = strtotime($endMonth);
+	$i = 0;
+	$j = 0;
+	$avgResult = array();
+	while($month <= $end)
+	{
+	  $sWhere = '';
+	  $mnth = date('m', $month);$year = date('Y', $month);$dFormat = date("M-Y", $month);
+	  $checkResultAvgQuery = "Select vl.sample_collection_date,vl.sample_tested_datetime,f.facility_name,f.facility_code,f.facility_state,f.facility_district,DATEDIFF(sample_tested_datetime,sample_collection_date) as diff from vl_request_form as vl JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.sample_tested_datetime IS NOT NULL AND Month(sample_collection_date)='".$mnth."' AND Year(sample_collection_date)='".$year."'";
+	  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+		 if (trim($start_date) == trim($end_date)) {
+		   $sWhere = ' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		 }
+		 else{
+			   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			 }
+	   }
+	   if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+		if (trim($sTestDate) == trim($eTestDate)) {
+		    $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$sTestDate.'"';
+		}else{
+		   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
+		}
+        }
+	   if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		 $sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+	   }
+	   if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		 $sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+	   }
+	   
+	   if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		$sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+	  }
+	  $checkResultAvgQuery = $checkResultAvgQuery.' '.$sWhere. ' AND vl.result="" AND vl.vlsm_country_id = "'.$arr['vl_form'].'"';
+	  $checkResultAvgResult = $db->rawQuery($checkResultAvgQuery);
+	  if(count($checkResultAvgResult)>0){
+		 $total = 0;
+		 foreach($checkResultAvgResult as $data){
+			 $total = $total + $data['diff'];
+		 }
+		 $avgResult[$j] = round($total/count($checkResultAvgResult));
+	   }
+	  $month = strtotime("+1 month", $month);
+	  $i++;$j++;
+	}
+	//total avg
+	$totalAvg = 0;
+	if(count($avgResult)==0){
+	$totalAvg = 0;  
+	}else{
+	$totalAvg = round(array_sum($avgResult)/count($avgResult));
+	}
+	
+	$startMonth = date("M-Y", strtotime($start_date));
+	$endMonth = date("M-Y", strtotime($end_date));
+	
  $excel = new PHPExcel();
  $output = array();
  $sheet = $excel->getActiveSheet();
@@ -145,13 +297,14 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
      'font' => array(
          'bold' => true,
          'size' => '13',
+		 'color' => array('rgb' => 'FFFFFF'),
      ),
      'alignment' => array(
          'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
      ),
       'fill' => array(
          'type' => PHPExcel_Style_Fill::FILL_SOLID,
-         'color' => array('rgb' => 'A9A9A9')
+         'color' => array('rgb' => '5c5c5c')
       )
  );
  $questionStyle = array(
@@ -167,7 +320,7 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
          'color' => array('rgb' => 'A9A9A9')
       )
  );
- $sexquestionStyle = array(
+ $genderquestionStyle = array(
      'font' => array(
          //'bold' => true,
          'size' => '11',
@@ -197,30 +350,34 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
  );
  
  $borderStyle = array(
-     'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-     ),
+     //'alignment' => array(
+     //    'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+     //),
      'borders' => array(
          'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
+             'style' => \PHPExcel_Style_Border::BORDER_THICK,
          ),
      )
  );
+ if( $_POST['fyName']=='-- Select --')
+ {
+  $_POST['fyName'] = '';
+ }
  $atomcolumns = '';
- $atomcolumns .= "Country:______________________________&nbsp;&nbsp;&nbsp;";
- $atomcolumns .= "Region/Province:________________&nbsp;&nbsp;&nbsp;";
- $atomcolumns .= "City:________________\n\n";
- $atomcolumns .= "Laboratory Name:__________________________________\n\n";
+ $atomcolumns .= "Country:".ucwords($countryResult[0]['form_name'])."&nbsp;&nbsp;&nbsp;";
+ $atomcolumns .= "Region/Province:".ucwords($_POST['state'])."&nbsp;&nbsp;&nbsp;";
+ $atomcolumns .= "City:".ucwords($_POST['district'])."\n\n";
+ $atomcolumns .= "Laboratory Name:".ucwords($_POST['fyName'])."\n\n";
  $atomcolumns .= "Reporting POC Name:________________";
  $atomcolumns .= "Title:________________";
  $atomcolumns .= "Email:________________\n\n";
- $atomcolumns .= "Date:________________";
- $atomcolumns .= "Reporting Quarter:________________";
+ $atomcolumns .= "Date(MM/DD/YYYY): ".date('M/d/Y')."&nbsp;&nbsp;&nbsp;";
+ $atomcolumns .= "Reporting Quarter: ".$startMonth." to ".$endMonth;
  $sheet->getStyle('A1')->applyFromArray($headingStyle);
  $sheet->getStyle('A1')->applyFromArray($backgroundStyle);
  $sheet->getStyle('A3')->applyFromArray($styleArray);
  $sheet->mergeCells('A1:M2');
- $sheet->setCellValue('A1', html_entity_decode('Viral Load Quarterly Monitoring Tool: ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('A1', html_entity_decode('Viral Load Quarterly Monitoring Tool ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('A3:M10');
  $sheet->setCellValue('A3', html_entity_decode($atomcolumns , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('A11:A12');
@@ -233,6 +390,7 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
  $sheet->getStyle('B11')->applyFromArray($backgroundStyle);
  $sheet->getStyle('G11')->applyFromArray($backgroundStyle);
  $sheet->getStyle('J11')->applyFromArray($backgroundStyle);
+ $sheet->getStyle('A11:M12')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
  //question one start
  $sheet->mergeCells('A13:A14');
  $sheet->setCellValue('A13', html_entity_decode('Q1' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -354,40 +512,261 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
  $sheet->setCellValue('G31', html_entity_decode($sResult[0]['ltAgetwentyFive1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->setCellValue('H31', html_entity_decode($sResult[0]['gtAgetwentyFive1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('J31:M31');
+ 
  $sheet->mergeCells('B32:F32');
- $sheet->setCellValue('B32', html_entity_decode('Total' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('B32', html_entity_decode('Not Specified' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('G32:G32');
  $sheet->mergeCells('H32:I32');
- $sheet->setCellValue('G32', html_entity_decode($sResult[0]['ltAgeTotal1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
- $sheet->setCellValue('H32', html_entity_decode($sResult[0]['gtAgeTotal1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('G32', html_entity_decode($sResult[0]['ltAgeNotSpecified1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('H32', html_entity_decode($sResult[0]['gtAgeNotSpecified1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('J32:M32');
- $sheet->mergeCells('A33:A33');
- $sheet->setCellValue('A33', html_entity_decode('Q1.4' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ 
  $sheet->mergeCells('B33:F33');
- $sheet->setCellValue('B33', html_entity_decode('Pregnant Women' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('B33', html_entity_decode('Total' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('G33:G33');
  $sheet->mergeCells('H33:I33');
- $sheet->setCellValue('G33', html_entity_decode($sResult[0]['ltPatientPregnant1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
- $sheet->setCellValue('H33', html_entity_decode($sResult[0]['gtPatientPregnant1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('G33', html_entity_decode($sResult[0]['ltAgeTotal1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('H33', html_entity_decode($sResult[0]['gtAgeTotal1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('J33:M33');
  $sheet->mergeCells('A34:A34');
- $sheet->setCellValue('A34', html_entity_decode('Q1.5' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('A34', html_entity_decode('Q1.4' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('B34:F34');
- $sheet->setCellValue('B34', html_entity_decode('Women that are breastfeeding' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('B34', html_entity_decode('Pregnant Women' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('G34:G34');
  $sheet->mergeCells('H34:I34');
- $sheet->setCellValue('G34', html_entity_decode($sResult[0]['ltPatientBreastFeeding1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
- $sheet->setCellValue('H34', html_entity_decode($sResult[0]['gtPatientBreastFeeding1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('G34', html_entity_decode($sResult[0]['ltPatientPregnant1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('H34', html_entity_decode($sResult[0]['gtPatientPregnant1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
  $sheet->mergeCells('J34:M34');
- $sheet->getStyle('A13:F34')->applyFromArray($questionStyle);
- $sheet->getStyle('B18')->applyFromArray($sexquestionStyle);
- $sheet->getStyle('B23')->applyFromArray($sexquestionStyle);
- $sheet->getStyle('B34')->applyFromArray($sexquestionStyle);
- $sheet->getStyle('B33')->applyFromArray($sexquestionStyle);
- 
- $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.xls';
- $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
- echo $filename;
+ $sheet->mergeCells('A35:A35');
+ $sheet->setCellValue('A35', html_entity_decode('Q1.5' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->mergeCells('B35:F35');
+ $sheet->setCellValue('B35', html_entity_decode('Women that are breastfeeding' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->mergeCells('G35:G35');
+ $sheet->mergeCells('H35:I35');
+ $sheet->setCellValue('G35', html_entity_decode($sResult[0]['ltPatientBreastFeeding1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->setCellValue('H35', html_entity_decode($sResult[0]['gtPatientBreastFeeding1000'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->mergeCells('J35:M35');
+ $sheet->getStyle('A13:F37')->applyFromArray($questionStyle);
+ $sheet->getStyle('B18')->applyFromArray($genderquestionStyle);
+ $sheet->getStyle('B23')->applyFromArray($genderquestionStyle);
+ $sheet->getStyle('B34')->applyFromArray($genderquestionStyle);
+ $sheet->getStyle('B33')->applyFromArray($genderquestionStyle);
+ $sheet->getStyle('A35:M35')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+ //question two start
+ $sheet->mergeCells('A36:A36');
+ $sheet->setCellValue('A36', html_entity_decode('Q2' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->mergeCells('B36:F37');
+ $sheet->setCellValue('B36', html_entity_decode('Is there a backlog for viral load testing? (greater than 1 month testing volume) Choose from list' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->mergeCells('G36:I37');
+ $sheet->setCellValue('G36', html_entity_decode(count($checkEmptyResult) , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $sheet->mergeCells('J36:M37');
+ $sheet->setCellValue('J36', html_entity_decode('Reasons:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+ $s = 38; $ss = 39;
+ if(count($checkEmptyResult)>0){
+  foreach($sampleTypeResult as $sampleName){
+	if($checkEmptySampleResult[$sampleName['sample_name']][0]['total']!=0){
+	$sheet->mergeCells('B'.$s.':F'.$ss);
+	$sheet->setCellValue('B'.$s, html_entity_decode('If yes,which type of samples?' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+	$sheet->mergeCells('G'.$s.':I'.$ss);
+	$sheet->mergeCells('J'.$s.':M'.$ss);
+	$sheet->setCellValue('G'.$s, html_entity_decode($sampleName['sample_name'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+	$c = $s+2;
+	$cc = $ss+1;
+	$sheet->mergeCells('A'.$c.':A'.$cc);
+	$sheet->setCellValue('A'.$c, html_entity_decode('Q2.1' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+	$sheet->mergeCells('B'.$c.':F'.$cc);
+	$sheet->setCellValue('B'.$c, html_entity_decode('If yes,how many samples?' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+	$sheet->mergeCells('G'.$c.':I'.$cc);
+	$sheet->mergeCells('J'.$c.':M'.$cc);
+	$sheet->setCellValue('G'.$c, html_entity_decode($checkEmptySampleResult[$sampleName['sample_name']][0]['total'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+	$s = $c+1;
+	$ss = $cc+2;
+	}
+  }
+ }
+ $sheet->getStyle('A'.$c.':M'.$cc)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+  
+  //quetion three start
+  $q3 = $s;$q33 = $ss;
+  $sheet->mergeCells('A'.$q3.':A'.$q33);
+  $sheet->setCellValue('A'.$q3, html_entity_decode('Q3' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q3.':F'.$q33);
+  $sheet->setCellValue('B'.$q3, html_entity_decode('What is the average monthly/quarterly TAT? (sample collection to lab result release)' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q3.':I'.$q33);
+  $sheet->setCellValue('G'.$q3, html_entity_decode($totalAvg , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('J'.$q3.':M'.$q33);
+  $sheet->getStyle('A'.$q3.':M'.$q33)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+  
+  //quetion four start
+  $q4 = $s+2;$q44 = $ss + 2;
+  $sheet->mergeCells('A'.$q4.':A'.$q44);
+  $sheet->setCellValue('A'.$q4, html_entity_decode('Q4' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q4.':F'.$q44);
+  $sheet->setCellValue('B'.$q4, html_entity_decode('Are there planned procurements within this fiscal year? Choose from list' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q4.':I'.$q44);
+  $sheet->mergeCells('J'.$q4.':M'.$q44);
+  
+  $q4 = $s+4;$q44 = $ss + 4;
+  $sheet->mergeCells('A'.$q4.':A'.$q44);
+  $sheet->setCellValue('A'.$q4, html_entity_decode('Q4.1' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q4.':F'.$q44);
+  $sheet->setCellValue('B'.$q4, html_entity_decode('If yes, please list:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q4.':I'.$q44);
+  $sheet->mergeCells('J'.$q4.':M'.$q44);
+  $q4 = $q4+2;$q44 = $q44 + 2;
+  $sheet->mergeCells('B'.$q4.':F'.$q44);
+  $sheet->setCellValue('B'.$q4, html_entity_decode('Platform Type:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q4.':I'.$q44);
+  $sheet->mergeCells('J'.$q4.':M'.$q44);
+  $q4 = $q4+2;$q44 = $q44 + 2;
+  $sheet->mergeCells('B'.$q4.':F'.$q44);
+  $sheet->setCellValue('B'.$q4, html_entity_decode('Quantity:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q4.':I'.$q44);
+  $sheet->mergeCells('J'.$q4.':M'.$q44);
+  $q4 = $q4+2;$q44 = $q44 + 2;
+  $sheet->mergeCells('B'.$q4.':F'.$q44);
+  $sheet->setCellValue('B'.$q4, html_entity_decode('Planned location of placement:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q4.':I'.$q44);
+  $sheet->mergeCells('J'.$q4.':M'.$q44);
+  $sheet->getStyle('A'.$q4.':M'.$q44)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+  //question five start
+  $q5 = $q4+2;$q55 = $q44+2;
+  $sheet->mergeCells('A'.$q5.':A'.$q55);
+  $sheet->setCellValue('A'.$q5, html_entity_decode('Q5' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q5.':F'.$q55);
+  $sheet->setCellValue('B'.$q5, html_entity_decode('Number of Early Infant Diagnosis tests reported by the lab:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q5.':I'.$q55);
+  $sheet->mergeCells('J'.$q5.':M'.$q55);
+  
+  $q5 = $q5+2;$q55 = $q55+2;
+  $sheet->mergeCells('A'.$q5.':A'.$q55);
+  $sheet->setCellValue('A'.$q5, html_entity_decode('Q5.1' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q5.':F'.$q55);
+  $sheet->setCellValue('B'.$q5, html_entity_decode('Number of Early Infant Diagnosis tests with a positive result:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q5.':I'.$q55);
+  $sheet->mergeCells('J'.$q5.':M'.$q55);
+  $sheet->getStyle('A'.$q5.':M'.$q55)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+  //question six start
+  $q6 = $q5+2;$q66 = $q55+2;
+  $sheet->mergeCells('A'.$q6.':A'.$q66);
+  $sheet->setCellValue('A'.$q6, html_entity_decode('Q6' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q6.':F'.$q66);
+  $sheet->setCellValue('B'.$q6, html_entity_decode('Is there a backlog for Early Infant Diagnosis testing (greater than 1 month testing volume)? Choose from list' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q6.':I'.$q66);
+  $sheet->mergeCells('J'.$q6.':M'.$q66);
+  $sheet->setCellValue('J'.$q6, html_entity_decode('Reasons:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  
+  $q6 = $q6+2;$q66 = $q66+2;
+  $sheet->mergeCells('A'.$q6.':A'.$q66);
+  $sheet->setCellValue('A'.$q6, html_entity_decode('Q6.1' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q6.':F'.$q66);
+  $sheet->setCellValue('B'.$q6, html_entity_decode('If yes, how many samples?' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q6.':I'.$q66);
+  $sheet->mergeCells('J'.$q6.':M'.$q66);
+  $sheet->getStyle('A'.$q6.':M'.$q66)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+  
+  
+  //question seven start
+  $q7 = $q6+2;$q77 = $q66+2;
+  $mergeQ7 = $q7;
+  $sheet->mergeCells('A'.$q7.':A'.$q77);
+  $sheet->setCellValue('A'.$q7, html_entity_decode('Q7' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q7.':F'.$q77);
+  $sheet->setCellValue('B'.$q7, html_entity_decode('Number of invalid VL and EID tests reported by the lab per month:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  //check invalid result
+  if(trim($start_date)!= '' && trim($end_date)!= ''){
+	$startMonth = date("Y-m", strtotime($start_date));
+	$endMonth = date("Y-m", strtotime($end_date));
+	$start = $month = strtotime($startMonth);
+	$end = strtotime($endMonth);
+	$i = 0;
+	while($month <= $end)
+	{
+	  
+	  $sheet->getStyle('A38:F'.$q7)->applyFromArray($questionStyle);
+		$mnth = date('m', $month);$year = date('Y', $month);$dFormat = date("M-Y", $month);
+		$invalidResultQuery = "Select vl.sample_collection_date,f.facility_name,f.facility_code,f.facility_state,f.facility_district,
+							  SUM(CASE
+									 WHEN (result!='' AND result!='Target Not Detected') AND (result > 10000000 OR result < 20) THEN 1 ELSE 0 END) AS invalidTotal 
+							  FROM vl_request_form as vl JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE vl.vlsm_country_id = '".$arr['vl_form']."' AND 
+							  Month(sample_collection_date)='".$mnth."' AND Year(sample_collection_date)='".$year."'";
+		if(isset($_POST['district']) && trim($_POST['district'])!= ''){
+		  $sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+		}
+		if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+		if (trim($sTestDate) == trim($eTestDate)) {
+		    $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$sTestDate.'"';
+		}else{
+		   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$sTestDate.'" AND DATE(vl.sample_tested_datetime) <= "'.$eTestDate.'"';
+		}
+        }
+		if(isset($_POST['state']) && trim($_POST['state'])!= ''){
+		  $sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+		}
+		if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+		  $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		}
+		$invalidResult[$dFormat] = $db->rawQuery($invalidResultQuery);
+		
+		$sheet->setCellValue('G'.$q7, html_entity_decode($dFormat , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+		$sheet->mergeCells('H'.$q7.':I'.$q7);
+		$sheet->setCellValue('H'.$q7, html_entity_decode($invalidResult[$dFormat][0]['invalidTotal'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+		$sheet->mergeCells('J'.$q7.':M'.$q7);
+		$q7++;
+		$q77++;
+		$month = strtotime("+1 month", $month);
+        $i++;
+	}
+  }
+  $bQ7 =  $q7-1;
+  $sheet->mergeCells('A'.$mergeQ7.':A'.$bQ7);
+  $sheet->mergeCells('B'.$mergeQ7.':F'.$bQ7);
+  $sheet->getStyle('A'.$bQ7.':M'.$bQ7)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+  //question eight start
+  $q8 = $q7;$q88 = $q77;
+  $mergeQ8 = $q8;
+  $sheet->mergeCells('A'.$q8.':A'.$q88);
+  $sheet->setCellValue('A'.$q8, html_entity_decode('Q8' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q8.':F'.$q88);
+  $sheet->setCellValue('B'.$q8, html_entity_decode('Duration of equipment breakdown in number of days (provide per instrument type):' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->setCellValue('G'.$q8, html_entity_decode('Instrument' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('H'.$q8.':I'.$q8);
+  $sheet->mergeCells('J'.$q8.':M'.$q8);
+  $sheet->getStyle('G'.$q8.':M'.$q8)->applyFromArray($questionStyle);
+  $sheet->setCellValue('H'.$q8, html_entity_decode('Days Down' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $q8 = $q8+1;$q88 = $q88+1;
+  $sheet->mergeCells('H'.$q8.':I'.$q8);
+  $sheet->mergeCells('J'.$q8.':M'.$q8);
+  $q8 = $q8+1;$q88 = $q88+1;
+  $sheet->mergeCells('H'.$q8.':I'.$q8);
+  $sheet->mergeCells('J'.$q8.':M'.$q8);
+  $q8 = $q8+1;$q88 = $q88+1;
+  $sheet->mergeCells('H'.$q8.':I'.$q8);
+  $sheet->mergeCells('J'.$q8.':M'.$q8);
+  $q8 = $q8+1;$q88 = $q88+1;
+  $sheet->mergeCells('H'.$q8.':I'.$q8);
+  $sheet->mergeCells('J'.$q8.':M'.$q8);
+  $q8 = $q8+1;$q88 = $q88+1;
+  $sheet->mergeCells('H'.$q8.':I'.$q8);
+  $sheet->mergeCells('J'.$q8.':M'.$q8);
+  
+  $sheet->mergeCells('A'.$mergeQ8.':A'.$q8);
+  $sheet->mergeCells('B'.$mergeQ8.':F'.$q8);
+  $q8 = $q8+1;$q88 = $q88+1;
+  
+  $sheet->mergeCells('A'.$q8.':A'.$q88);
+  $sheet->setCellValue('A'.$q8, html_entity_decode('Q8.1' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('B'.$q8.':F'.$q88);
+  $sheet->setCellValue('B'.$q8, html_entity_decode(' Reason for instrument breakdown: ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+  $sheet->mergeCells('G'.$q8.':I'.$q88);
+  $sheet->mergeCells('J'.$q8.':M'.$q88);
+  $sheet->getStyle('A37:F'.$q8)->applyFromArray($questionStyle);
+  $sheet->getStyle('A'.$mergeQ8.':F'.$mergeQ8)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+  $sheet->getStyle('A'.$mergeQ7.':F'.$mergeQ7)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+  $sheet->getStyle('A11:M'.$q88)->applyFromArray($borderStyle);
+  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+  $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.xls';
+  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
+  echo $filename;
 }
 ?>

@@ -194,13 +194,10 @@ $primaryKey="vl_sample_id";
 	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
 		if(isset($setWhr)){
 		    if (trim($start_date) == trim($end_date)) {
-		     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 		        $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }else{
-			$sWhere=' where '.$sWhere;
-			$sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
-		     }
-		    }
+		    }else{
+				$sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"'; 
+			}
 		}else{
 		    $setWhr = 'where';
 		    $sWhere=' where '.$sWhere;
