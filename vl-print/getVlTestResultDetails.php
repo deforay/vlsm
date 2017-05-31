@@ -261,22 +261,28 @@ $primaryKey="vl_sample_id";
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
 		  if(!isset($_POST['status']) || trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND (vl.result_status =7)";
+		      $sWhere = $sWhere." AND (vl.result_status =7)";
 		    }else{
-		       $sWhere = "WHERE (vl.result_status =7)";
+		      $sWhere = "WHERE (vl.result_status =7)";
 		    }
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
 		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."'";
 		}else{
 		    if(trim($sWhere)!= ''){
-		        $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
+		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
 		    }else{
-		        $sWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
+		      $sWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
 		    }
 		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
 		}
-		$sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";
+		if(!isset($_POST['from'])){
+		  $sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";
+		  $sWhere = $sWhere." AND vl.result!=''";
+		  $dWhere = $dWhere. " AND vl.result!=''";
+		}else{
+		  $sQuery = $sQuery.' '.$sWhere;
+		}
 		$_SESSION['vlResultQuery']=$sQuery;
 		//echo $_SESSION['vlResultQuery'];die;
 		
@@ -286,7 +292,7 @@ $primaryKey="vl_sample_id";
         }
         $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         if (isset($sLimit) && isset($sOffset)) {
-            $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
+          $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
 	
 	//die($sQuery);
