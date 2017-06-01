@@ -17,6 +17,9 @@ foreach($geResult as $row){
 $configQuery="SELECT * from global_config WHERE name='logo'";
 $configResult=$db->query($configQuery);
 //print_r($configResult);die;
+$filename = '';
+$downloadFile1 = '';
+$downloadFile2 = '';
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['sample'])>0){
      if(isset($mailconf['rs_field']) && trim($mailconf['rs_field'])!= ''){
        //Pdf code start

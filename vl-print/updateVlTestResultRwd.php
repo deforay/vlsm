@@ -48,10 +48,21 @@ $aResult=$db->query($aQuery);
 $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 //facility details
-$facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."' AND status='active'";
-$facilityResult=$db->query($facilityQuery);
+if(isset($vlQueryInfo[0]['facility_id']) && $vlQueryInfo[0]['facility_id'] >0){
+  $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."' AND status='active'";
+  $facilityResult=$db->query($facilityQuery);
+}
 if(!isset($facilityResult[0]['facility_code'])){
   $facilityResult[0]['facility_code'] = '';
+}
+if(!isset($facilityResult[0]['facility_mobile_numbers'])){
+  $facilityResult[0]['facility_mobile_numbers'] = '';
+}
+if(!isset($facilityResult[0]['contact_person'])){
+  $facilityResult[0]['contact_person'] = '';
+}
+if(!isset($facilityResult[0]['facility_emails'])){
+  $facilityResult[0]['facility_emails'] = '';
 }
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
   $facilityResult[0]['facility_state'] = 0;
@@ -60,15 +71,19 @@ if(!isset($facilityResult[0]['facility_district']) || $facilityResult[0]['facili
   $facilityResult[0]['facility_district'] = 0;
 }
 $stateName = $facilityResult[0]['facility_state'];
-$stateQuery="SELECT * from province_details where province_name='".$stateName."'";
-$stateResult=$db->query($stateQuery);
+if(trim($stateName)!= ''){
+  $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
+  $stateResult=$db->query($stateQuery);
+}
 if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] == ''){
   $stateResult[0]['province_code'] = 0;
 }
 //district details
-$districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
-$districtResult=$db->query($districtQuery);
-
+$districtResult = array();
+if(trim($stateName)!= ''){
+  $districtQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
+  $districtResult = $db->query($districtQuery);
+}
 if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
  $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
 }else{
@@ -776,6 +791,7 @@ $disable = "disabled = 'disabled'";
             changeYear: true,
             dateFormat: 'dd-M-yy',
             timeFormat: "HH:mm",
+            maxDate: "Today",
             onChangeMonthYear: function(year, month, widget) {
                   setTimeout(function() {
                      $('.ui-datepicker-calendar').show();

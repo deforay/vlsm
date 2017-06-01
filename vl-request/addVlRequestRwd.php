@@ -725,6 +725,7 @@ $sFormat = '';
            changeYear: true,
            dateFormat: 'dd-M-yy',
            timeFormat: "hh:mm TT",
+           maxDate: "Today",
            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
           }).click(function(){
               $('.ui-datepicker-calendar').show();
@@ -734,6 +735,7 @@ $sFormat = '';
             changeYear: true,
             dateFormat: 'dd-M-yy',
             timeFormat: "HH:mm",
+            maxDate: "Today",
             onChangeMonthYear: function(year, month, widget) {
                   setTimeout(function() {
                      $('.ui-datepicker-calendar').show();

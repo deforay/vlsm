@@ -35,7 +35,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" />
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" onblur="checkNameValidation('facility_details','facility_name',this,null,'The facility name that you entered already exists.Enter another name',null)"/>
                         </div>
                     </div>
                   </div>
@@ -80,9 +80,9 @@ $pResult = $db->rawQuery($pQuery);
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email" class="col-lg-4 control-label">Email </label>
+                        <label for="email" class="col-lg-4 control-label">Email(s) </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isEmail" id="email" name="email" placeholder="Email" />
+                        <input type="text" class="form-control" id="email" name="email" placeholder="eg-f1@gmail.com,f2@gmail.com" />
                         </div>
                     </div>
                   </div>
@@ -90,7 +90,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="reportEmail" class="col-lg-4 control-label">Report Email(s) </label>
                         <div class="col-lg-7">
-                        <textarea class="form-control" id="reportEmail" name="reportEmail" placeholder="E.g-user1@gmail.com,user2@gmail.com" rows="3"></textarea>
+                        <textarea class="form-control" id="reportEmail" name="reportEmail" placeholder="eg-user1@gmail.com,user2@gmail.com" rows="3"></textarea>
                         </div>
                     </div>
                   </div>
@@ -108,7 +108,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" />
+                        <input type="text" class="form-control checkNum" id="phoneNo" name="phoneNo" placeholder="Phone Number" onblur="checkNameValidation('facility_details','facility_mobile_numbers',this,null,'The mobile no that you entered already exists.Enter another mobile no.',null)"/>
                         </div>
                     </div>
                   </div>
@@ -172,7 +172,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="latitude" class="col-lg-4 control-label">Latitude</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude"/>
+                        <input type="text" class="form-control checkNum" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude"/>
                         </div>
                     </div>
                   </div>
@@ -183,7 +183,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="longitude" class="col-lg-4 control-label">Longitude</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" />
+                        <input type="text" class="form-control checkNum" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" />
                         </div>
                     </div>
                 </div>
