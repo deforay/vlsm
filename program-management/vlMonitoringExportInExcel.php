@@ -218,7 +218,10 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
   $countryResult = $db->rawQuery($countryName);
   
   //question three
-  $startMonth = date("Y-m", strtotime($start_date));
+  
+    $s_c_date = explode(" to ", $_POST['sampleCollectionDate']);
+	$start_date = trim($s_c_date[0]);$end_date = trim($s_c_date[1]);
+	$startMonth = date("Y-m", strtotime($start_date));
 	$endMonth = date("Y-m", strtotime($end_date));
 	$start = $month = strtotime($startMonth);
 	$end = strtotime($endMonth);
@@ -678,12 +681,13 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
   $sheet->mergeCells('B'.$q7.':F'.$q77);
   $sheet->setCellValue('B'.$q7, html_entity_decode('Number of invalid VL and EID tests reported by the lab per month:' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
   //check invalid result
-  if(trim($start_date)!= '' && trim($end_date)!= ''){
+  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+    $s_c_date = explode(" to ", $_POST['sampleCollectionDate']);
+	$start_date = trim($s_c_date[0]);$end_date = trim($s_c_date[1]);
 	$startMonth = date("Y-m", strtotime($start_date));
 	$endMonth = date("Y-m", strtotime($end_date));
 	$start = $month = strtotime($startMonth);
 	$end = strtotime($endMonth);
-	error_log($end);
 	$i = 0;
 	while($month <= $end)
 	{
