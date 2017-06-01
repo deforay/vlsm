@@ -77,6 +77,7 @@ class MYPDF extends TCPDF {
           $this->SetFont('helvetica', '', 9);
           $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
         }
+        $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
     }
 
     // Page footer
@@ -375,8 +376,7 @@ if(sizeof($requestResult)> 0){
           $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
         }
         $html = '';
-            $html.='<table style="padding:2px;">';
-              $html .='<tr><td colspan="3" style="border-top:1px solid #333;height:10px;"></td></tr>';
+            $html.='<table style="padding:0px 2px 2px 2px;">';
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE NO.</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE COLLECTION DATE</td>';
