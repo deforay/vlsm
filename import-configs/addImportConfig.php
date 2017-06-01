@@ -41,7 +41,7 @@ include('../header.php');
                     <div class="form-group">
                         <label for="configurationFileName" class="col-lg-4 control-label">Configuration File <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter machine name" onblur="checkNameValidation('import_config','machine_name',this,null,'This configuration name already exists.Try another name',null)"/>
+                        <input type="text" class="form-control isRequired" id="configurationFile" name="configurationFile" placeholder="eg. roche.php or abbott.php" title="Please enter machine name" onblur="checkNameValidation('import_config','import_machine_file_name',this,null,'This file name already exists.Try another name',null)"/>
                         </div>
                     </div>
                   </div>
@@ -120,7 +120,7 @@ include('../header.php');
                     <tbody id="machineTable">
                         <tr>
                             <td>
-                                <input type="text" name="configMachineName[]" id="configMachineName1" class="form-control isRequired" placeholder="Machine Name" title="Please enter machine name" onblur="checkNameValidation('import_config_machines','config_machine_name',this,null,'This configuration machine name already exists.Try another name',null)";/>
+                                <input type="text" name="configMachineName[]" id="configMachineName1" class="form-control configMachineName isRequired" placeholder="Machine Name" title="Please enter machine name" onblur="checkMachineName(this);"/>
                             </td>
                             <td align="center" style="vertical-align:middle;">
                                 <a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>
@@ -162,12 +162,7 @@ tableRowId = 2;
   }
   
   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
-
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value.trim(),fnct : fnct, format: "html"},
         function(data){
             if(data==='1'){
                 alert(alrt);
@@ -220,7 +215,7 @@ tableRowId = 2;
       c.setAttribute("align", "center");
       c.setAttribute("style","vertical-align:middle");
       
-      b.innerHTML = '<input type="text" name="configMachineName[]" id="configMachineName' + tableRowId + '"class="isRequired form-control" placeholder="Machine Name" title="Please enter machine name"  onblur="checkNameValidation(\'import_config_machines\',\'config_machine_name\',this,null,\'This configuration machine name already exists.Try another name\',null)"/ >';
+      b.innerHTML = '<input type="text" name="configMachineName[]" id="configMachineName' + tableRowId + '" class="isRequired configMachineName form-control" placeholder="Machine Name" title="Please enter machine name" onblur="checkMachineName(this);"/ >';
       c.innerHTML = '<a class="btn btn-xs btn-primary" href="javascript:void(0);" onclick="insRow();"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a class="btn btn-xs btn-default" href="javascript:void(0);" onclick="removeAttributeRow(this.parentNode.parentNode);"><i class="fa fa-minus"></i></a>';
       $(a).fadeIn(800);
       tableRowId++;
@@ -234,6 +229,16 @@ tableRowId = 2;
               insRow();
           }
       });
+  }
+  
+  function checkMachineName(obj){
+    machineObj = document.getElementsByName("configMachineName[]");
+    for(m=0;m<machineObj.length;m++){
+      if(obj.value!= '' && obj.id != machineObj[m].id && obj.value == machineObj[m].value){
+        alert('Duplicate value not allowed');
+        $('#'+obj.id).val('');
+      }
+    }
   }
 </script>
   

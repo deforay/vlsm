@@ -7,25 +7,21 @@ $tsResult = $db->rawQuery($tsQuery);
 $hQuery="SELECT sample_code FROM hold_sample_report";
 $hResult = $db->rawQuery($hQuery);
 $holdSample = array();
-if($hResult)
-{
-    foreach($hResult as $sample)
-    {
+if($hResult){
+    foreach($hResult as $sample){
         $holdSample[] = $sample['sample_code'];
     }
 }
 $saQuery="SELECT sample_code FROM temp_sample_report";
 $saResult = $db->rawQuery($saQuery);
 $sampleCode = array();
-foreach($saResult as $sample)
-{
-    if(!in_array($sample['sample_code'],$holdSample))
-    {
+foreach($saResult as $sample){
+    if(!in_array($sample['sample_code'],$holdSample)){
         $sampleCode[] = "'".$sample['sample_code']."'";
     }
 }
 $sCode = implode( ', ', $sampleCode);
-$samplePrintQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";    
+$samplePrintQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
 $samplePrintQuery .= ' where vl.sample_code IN ( ' . $sCode . ')'; // Append to condition
 $_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
 
@@ -79,8 +75,10 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
             </div>
             <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:30px;width: 75%;">
 	    <tr>
-		  <td><input type="button" onclick="convertSearchResultToPdf('');" value="Print all results" class="btn btn-success btn-sm">
-          <a href="vlPrintResult.php" class="btn btn-success btn-sm">Continue without printing results</a></td>
+		<td>
+		 <input type="button" onclick="convertSearchResultToPdf();" value="Print all results" class="btn btn-success btn-sm">&nbsp;&nbsp;
+                 <a href="vlPrintResult.php" class="btn btn-success btn-sm">Continue without printing results</a>
+		</td>
 	    </tr>
 	    
 	  </table>
@@ -95,22 +93,17 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
     <!-- /.content -->
   </div>
   <script>
-    function convertSearchResultToPdf(id){
+    function convertSearchResultToPdf(){
     $.blockUI();
     <?php
+    $path = '';
     if($arr['vl_form'] == 3){
       $path = '../includes/vlRequestDrcSearchResultPdf.php';
-    }else if($arr['vl_form'] == 2){
-     $path = '../includes/vlRequestSearchResultPdf.php'; 
-    }else if($arr['vl_form'] == 4){
-     $path = '../includes/vlRequestZamSearchResultPdf.php';  
-    }else if($arr['vl_form'] == 6){
-     $path = '../includes/vlRequestWhoSearchResultPdf.php';  
-    }else if($arr['vl_form'] == 7){
-     $path = '../includes/vlRequestRwdSearchResultPdf.php.php';  
+    }else{
+      $path = '../includes/vlRequestSearchResultPdf.php'; 
     }
     ?>
-    $.post("<?php echo $path; ?>", { source:'print',id : id},
+    $.post("<?php echo $path; ?>", { source:'print',id : ''},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      $.unblockUI();

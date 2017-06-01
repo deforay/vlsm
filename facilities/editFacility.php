@@ -38,7 +38,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="facilityName" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" value="<?php echo $facilityInfo[0]['facility_name']; ?>" />
+                        <input type="text" class="form-control isRequired" id="facilityName" name="facilityName" placeholder="Facility Name" title="Please enter facility name" value="<?php echo $facilityInfo[0]['facility_name']; ?>" onblur="checkNameValidation('facility_details','facility_name',this,'<?php echo "facility_id##".$facilityInfo[0]['facility_id'];?>','The facility name that you entered already exists.Enter another name',null)"/>
                         <input type="hidden" class="form-control isRequired" id="facilityId" name="facilityId" value="<?php echo base64_encode($facilityInfo[0]['facility_id']); ?>" />
                         </div>
                     </div>
@@ -78,15 +78,13 @@ $pResult = $db->rawQuery($pQuery);
                         </div>
                     </div>
                   </div>
-                  
-                  
                 </div>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="email" class="col-lg-4 control-label">Email </label>
+                        <label for="email" class="col-lg-4 control-label">Email(s) </label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isEmail" id="email" name="email" placeholder="Email" value="<?php echo $facilityInfo[0]['facility_emails']; ?>"/>
+                        <input type="text" class="form-control" id="email" name="email" placeholder="eg-f1@gmail.com,f2@gmail.com" value="<?php echo $facilityInfo[0]['facility_emails']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -94,7 +92,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="reportEmail" class="col-lg-4 control-label">Report Email(s) </label>
                         <div class="col-lg-7">
-                        <textarea class="form-control" id="reportEmail" name="reportEmail" placeholder="E.g-user1@gmail.com,user2@gmail.com" rows="3"><?php echo $facilityInfo[0]['report_email']; ?></textarea>
+                        <textarea class="form-control" id="reportEmail" name="reportEmail" placeholder="eg-user1@gmail.com,user2@gmail.com" rows="3"><?php echo $facilityInfo[0]['report_email']; ?></textarea>
                         </div>
                     </div>
                   </div>
@@ -114,7 +112,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="phoneNo" class="col-lg-4 control-label">Phone Number</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="phoneNo" name="phoneNo" placeholder="Phone Number" value="<?php echo $facilityInfo[0]['facility_mobile_numbers']; ?>" />
+                        <input type="text" class="form-control checkNum" id="phoneNo" name="phoneNo" placeholder="Phone Number" value="<?php echo $facilityInfo[0]['facility_mobile_numbers']; ?>" onblur="checkNameValidation('facility_details','facility_mobile_numbers',this,'<?php echo "facility_id##".$facilityInfo[0]['facility_id'];?>','The mobile no that you entered already exists.Enter another mobile no.',null)"/>
                         </div>
                     </div>
                   </div>
@@ -181,7 +179,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="latitude" class="col-lg-4 control-label">Latitude</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude" value="<?php echo $facilityInfo[0]['latitude']; ?>"/>
+                        <input type="text" class="form-control checkNum" id="latitude" name="latitude" placeholder="Latitude" title="Please enter latitude" value="<?php echo $facilityInfo[0]['latitude']; ?>"/>
                         </div>
                     </div>
                   </div>
@@ -192,7 +190,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="longitude" class="col-lg-4 control-label">Longitude</label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" value="<?php echo $facilityInfo[0]['longitude']; ?>" />
+                        <input type="text" class="form-control checkNum" id="longitude" name="longitude" placeholder="Longitude" title="Please enter longitude" value="<?php echo $facilityInfo[0]['longitude']; ?>" />
                         </div>
                     </div>
                 </div>
