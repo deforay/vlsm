@@ -139,7 +139,10 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol6">Result</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol7">Status</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="last_modified_datetime"  class="showhideCheckBox" /> <label for="iCol8">Last Modified On</label>
+				    </div>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol7">Status</label>
 				    </div>
 				    
 				</div>
@@ -222,7 +225,7 @@ $batResult = $db->rawQuery($batQuery);
         
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
         
-        for(colNo=0;colNo <8;colNo++){
+        for(colNo=0;colNo <9;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(oTable.fnSettings().aoColumns[colNo].bVisible){
                 $("#iCol"+colNo+"-sort").show();    

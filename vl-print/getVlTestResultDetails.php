@@ -172,12 +172,9 @@ $primaryKey="vl_sample_id";
 			if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
 				if(isset($setWhr)){
 					if (trim($start_date) == trim($end_date)) {
-						if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-						   $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-						}else{
-						   $sWhere=' where '.$sWhere;
-						   $sWhere = $sWhere.' DATE(vl.sample_collection_date) = "'.$start_date.'"';
-						}
+						$sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+					}else{
+						$sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"'; 
 					}
 				}else{
 					$setWhr = 'where';
@@ -189,14 +186,13 @@ $primaryKey="vl_sample_id";
 			if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 				if(isset($setWhr)){
 					if (trim($t_start_date) == trim($t_end_date)) {
-						if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 						   $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$t_start_date.'"';
-						}else{
-						   $sWhere=' where '.$sWhere;
-						   $sWhere = $sWhere.' DATE(vl.sample_tested_datetime) = "'.$t_start_date.'"';
-						}
-					}
-				}else{
+					  }else{
+						 //$sWhere=' where '.$sWhere;
+						 $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$t_start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$t_end_date.'"';
+					  }
+				}
+				else{
 					$setWhr = 'where';
 					$sWhere=' where '.$sWhere;
 					$sWhere = $sWhere.' DATE(vl.sample_tested_datetime) >= "'.$t_start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$t_end_date.'"';
@@ -223,11 +219,13 @@ $primaryKey="vl_sample_id";
 			}
 			if(isset($_POST['artNo']) && trim($_POST['artNo'])!= ''){
 				if(isset($setWhr)){
-					$sWhere = $sWhere.' AND vl.patient_art_no = "'.$_POST['artNo'].'"';
+				  $sWhere = $sWhere." AND vl.patient_art_no LIKE '%" . $_POST['artNo'] . "%' ";
+					//$sWhere = $sWhere.' AND vl.patient_art_no = "'.$_POST['artNo'].'"';
 				}else{
 					$setWhr = 'where';
 					$sWhere=' where '.$sWhere;
-					$sWhere = $sWhere.' vl.patient_art_no = "'.$_POST['artNo'].'"';
+					$sWhere = $sWhere." vl.patient_art_no LIKE '%" . $_POST['artNo'] . "%' ";
+					//$sWhere = $sWhere.' vl.patient_art_no = "'.$_POST['artNo'].'"';
 				}
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){

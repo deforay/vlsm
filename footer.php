@@ -143,6 +143,10 @@
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".sampleRejectionReport").addClass('active');
+  }else if (splitsUrl=='vlMonitoringReport.php') {
+    $(".program").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlMonitoringReport").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');

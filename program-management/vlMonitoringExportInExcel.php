@@ -584,7 +584,11 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
 	}
   }
  }
+ if(isset($c) && isset($cc)){
  $sheet->getStyle('A'.$c.':M'.$cc)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+ }else{
+  $sheet->getStyle('A37:M37')->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+ }
   
   //quetion three start
   $q3 = $s;$q33 = $ss;
@@ -679,10 +683,10 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
 	$endMonth = date("Y-m", strtotime($end_date));
 	$start = $month = strtotime($startMonth);
 	$end = strtotime($endMonth);
+	error_log($end);
 	$i = 0;
 	while($month <= $end)
 	{
-	  
 	  $sheet->getStyle('A38:F'.$q7)->applyFromArray($questionStyle);
 		$mnth = date('m', $month);$year = date('Y', $month);$dFormat = date("M-Y", $month);
 		$invalidResultQuery = "Select vl.sample_collection_date,f.facility_name,f.facility_code,f.facility_state,f.facility_district,

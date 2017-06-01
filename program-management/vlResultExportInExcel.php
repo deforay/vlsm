@@ -49,7 +49,6 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $nameValue = '';
  foreach($_POST as $key=>$value)
  {
-  error_log($value);
   if(trim($value)!='' && trim($value)!='-- Select --'){
   $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
   }
