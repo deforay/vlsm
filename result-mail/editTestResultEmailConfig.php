@@ -186,16 +186,25 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
      });
    });
   
-  function validateNow(){
-    flag = deforayValidator.init({
-        formId: 'editTestResultEmailConfigForm'
-    });
-    
-    if(flag){
-        $.blockUI();
-      document.getElementById('editTestResultEmailConfigForm').submit();
+    $('#rs_email').on('change',function() {
+      if(/@gmail\.com$/.test(this.value)) {
+        //Perfect
+      }else{
+        alert('Please enter your gmail account');
+        $('#rs_email').val('');
+      }
+    })
+  
+    function validateNow(){
+      flag = deforayValidator.init({
+          formId: 'editTestResultEmailConfigForm'
+      });
+      
+      if(flag){
+          $.blockUI();
+        document.getElementById('editTestResultEmailConfigForm').submit();
+      }
     }
-  }
 </script>
   
  <?php
