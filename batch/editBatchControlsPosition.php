@@ -1,10 +1,9 @@
 <?php
 ob_start();
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 if(!isset($id) || trim($id)== ''){
-	header("location:batchcode.php");
+    header("location:batchcode.php");
 }
 $content = '';
 $displayOrder = array();
@@ -85,7 +84,7 @@ if(isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order'])!= '
       <!-- SELECT2 EXAMPLE -->
       <div class="box box-default">
         <div class="box-header with-border">
-			<h4><strong>Batch Code : <?php echo $batchInfo[0]['batch_code']; ?></strong></h4>
+		<h4><strong>Batch Code : <?php echo (isset($batchInfo[0]['batch_code']))?$batchInfo[0]['batch_code']:''; ?></strong></h4>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
