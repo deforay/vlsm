@@ -9,13 +9,12 @@ for ($i = 0; $i < sizeof($gResult); $i++) {
   $global[$gResult[$i]['name']] = $gResult[$i]['value'];
 }
 if(isset($global['default_time_zone']) && count($global['default_time_zone'])> 0){
-    date_default_timezone_set($global['default_time_zone']);
+  date_default_timezone_set($global['default_time_zone']);
 }else{
-    date_default_timezone_set("Europe/London");
+  date_default_timezone_set("Europe/London");
 }
 $hideResult = '';$hideRequest='';
-if(isset($global['instance_type']) && $global['instance_type']!='')
-{
+if(isset($global['instance_type']) && $global['instance_type']!=''){
     if($global['instance_type']=='Clinic/Lab'){
         $hideResult = "display:none;";
     }
@@ -273,10 +272,6 @@ $formConfigResult=$db->query($formConfigQuery);
                   <!--<li class="allMenu importTestResultMenu">
                     <a href="../vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
                   </li>-->
-              <?php } if(isset($_SESSION['privileges']) && in_array("import.php", $_SESSION['privileges'])){ ?>
-                  <li class="allMenu vlRequestImportMenu">
-                    <a href="../vl-request/import.php?q="><i class="fa fa-circle-o"></i> Import Test Requests</a>
-                  </li>
               <?php } ?>
             </ul>
         </li>
@@ -341,19 +336,25 @@ $formConfigResult=$db->query($formConfigQuery);
             </li>
         <?php
         }?>
-        <li class="treeview qr">
-          <a href="#">
-              <i class="fa fa-qrcode"></i>
-              <span>QR Code</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="allMenu generateQRCode"><a href="../qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
-            <li class="allMenu readQRCode"><a href="../qr-code/readQRCode.php?q="><i class="fa fa-circle-o"></i> Read QR Code</a></li>
-          </ul>
-        </li>
+        <?php
+        if(isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes'){ ?>
+          <li class="treeview qr">
+            <a href="#">
+                <i class="fa fa-qrcode"></i>
+                <span>QR Code</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+              <?php if(isset($_SESSION['privileges']) && in_array("generate.php", $_SESSION['privileges'])){ ?>
+                <li class="allMenu generateQRCode"><a href="../qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
+              <?php } if(isset($_SESSION['privileges']) && in_array("readQRCode.php", $_SESSION['privileges'])){ ?>
+                <li class="allMenu readQRCode"><a href="../qr-code/readQRCode.php?q="><i class="fa fa-circle-o"></i> Read QR Code</a></li>
+              <?php } ?>
+            </ul>
+          </li>
+        <?php } ?>
         <!---->
       </ul>
     </section>

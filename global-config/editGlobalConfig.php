@@ -317,6 +317,17 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
+                      <label for="enable_qr_mechanism" class="col-lg-4 control-label">Enable QR Code Mechanism </label>
+                      <div class="col-lg-8">
+                        <input type="radio" class="" id="enable_qr_mechanism_yes" name="enable_qr_mechanism" value="yes" <?php echo($arr['enable_qr_mechanism'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="enable_qr_mechanism_no" name="enable_qr_mechanism" value="no" <?php echo($arr['enable_qr_mechanism'] == 'no' || $arr['enable_qr_mechanism'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
                       <label for="r_mandatory_fields" class="col-lg-4 control-label">Result PDF Mandatory Fields </label>
                       <div class="col-lg-8">
                         <div class="form-group">

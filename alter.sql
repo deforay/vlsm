@@ -1102,3 +1102,5 @@ INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'generate.php', 'Generate QR Code');
 
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'readQRCode.php', 'Read QR Code');
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Enable QR Code Mechanism', 'enable_qr_mechanism', 'yes');
