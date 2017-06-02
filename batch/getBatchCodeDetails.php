@@ -4,6 +4,8 @@ include('../includes/MysqliDb.php');
 include('../General.php');
 $tableName="batch_details";
 $primaryKey="batch_id";
+$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configResult=$db->query($configQuery);
 $general=new Deforay_Commons_General();
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -90,11 +92,13 @@ $general=new Deforay_Commons_General();
         */
         
 	$sQuery="select b.request_created_datetime ,b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.sample_batch_id = b.batch_id";
-        
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
-            $sQuery = $sQuery.' '.$sWhere;
-        }
+            $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
+        }else{
+	   $sWhere=' where vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
+	}
+	$sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by b.batch_id';
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
@@ -114,7 +118,7 @@ $general=new Deforay_Commons_General();
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.sample_batch_id = b.batch_id group by b.batch_id");
+        $aResultTotal =  $db->rawQuery("select b.request_created_datetime, b.batch_code, b.batch_id,count(vl.sample_code) as sample_code from vl_request_form vl right join batch_details b on vl.sample_batch_id = b.batch_id where vl.vlsm_country_id ='".$configResult[0]['value']."' group by b.batch_id");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
