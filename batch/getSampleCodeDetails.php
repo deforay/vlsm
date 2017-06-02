@@ -7,9 +7,12 @@ $sample = $_POST['sName'];
 $gender = $_POST['gender'];
 $pregnant = $_POST['pregnant'];
 $urgent = $_POST['urgent'];
-
 $start_date = '';
 $end_date = '';
+//global config
+$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configResult=$db->query($configQuery);
+$country = $configResult[0]['value'];
 if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
    $s_c_date = explode("to", $_POST['sampleCollectionDate']);
    //print_r($s_c_date);die;
@@ -22,19 +25,18 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 $rejected = '4';
 if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']=='' && $gender=='' && $pregnant=='' && $urgent==''){
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND sample_batch_id is NULL OR sample_batch_id=''";
+   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND (sample_batch_id is NULL OR sample_batch_id='') AND vlsm_country_id = $country";
 }else{
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where sample_batch_id is NULL and vl.result_status NOT IN (".$rejected.")";
-   if($fName!=''){
+   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE sample_batch_id is NULL AND vl.result_status NOT IN (".$rejected.") AND vlsm_country_id = $country";
+   if(trim($fName)!=''){
       $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
-   }
-   if($sample!=''){
+   }if(trim($sample)!=''){
       $query = $query." AND vl.sample_type='".$sample."'";
-   }if($gender!=''){
+   }if(trim($gender)!=''){
       $query = $query." AND vl.patient_gender='".$gender."'";
-   }if($pregnant!=''){
+   }if(trim($pregnant)!=''){
       $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
-   }if($urgent!=''){
+   }if(trim($urgent)!=''){
       $query = $query." AND vl.test_urgency='".$urgent."'";
    }
    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){

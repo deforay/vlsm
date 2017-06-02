@@ -1,7 +1,13 @@
 <?php
 ob_start();
 include('../header.php');
-//include('../includes/MysqliDb.php');
+//global config
+$showUrgency = false;
+$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configResult=$db->query($configQuery);
+if($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2){
+ $showUrgency = true;
+}
 //Get active machines
 $importConfigQuery="SELECT * FROM import_config WHERE status ='active'";
 $importConfigResult = $db->rawQuery($importConfigQuery);
@@ -128,8 +134,8 @@ foreach($importConfigResult as $machine) {
 							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
 							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
 						</td>
-						<td class=""><b>Urgency&nbsp;:</b></td>
-						<td class="">
+						<td class="" style="display:<?php echo($showUrgency == true)?'':'none'; ?>"><b>Urgency&nbsp;:</b></td>
+						<td class="" style="display:<?php echo($showUrgency == true)?'':'none'; ?>">
 							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
 							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
 						</td>
@@ -206,7 +212,6 @@ foreach($importConfigResult as $machine) {
     </section>
     <!-- /.content -->
   </div>
-  
   <script src="../assets/js/jquery.multi-select.js"></script>
   <script src="../assets/js/jquery.quicksearch.js"></script>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
@@ -350,19 +355,19 @@ foreach($importConfigResult as $machine) {
       var fName = $("#facilityName").val();
       var sName = $("#sampleType").val();
       var gender= $("#gender").val();
-      var prg =   $("input:radio[name=pregnant]");
-      var urgent =   $("input:radio[name=urgency]");
-      if(prg[0].checked==false && prg[1].checked==false){
-	 pregnant = '';
+      var prg = $("input:radio[name=pregnant]");
+      var urgent = $("input:radio[name=urgency]");
+      if((prg[0].checked==false && prg[1].checked==false) || prg == 'undefined'){
+	pregnant = '';
       }else{
 	pregnant = $('input[name=pregnant]:checked').val();
       }
-      if(urgent[0].checked==false && urgent[1].checked==false){
-        urgent = '';
+      if((urgent[0].checked==false && urgent[1].checked==false) || urgent == 'undefined'){
+	urgent = '';
       }else{
-        urgent = $('input[name=urgency]:checked').val();
+	urgent = $('input[name=urgency]:checked').val();
       }
-      $.post("getSampleCodeDetails.php", { fName : fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
+      $.post("getSampleCodeDetails.php", {fName:fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);
