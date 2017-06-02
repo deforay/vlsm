@@ -25,9 +25,9 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 $rejected = '4';
 if($fName=='' && $sample=='' && $_POST['sampleCollectionDate']=='' && $gender=='' && $pregnant=='' && $urgent==''){
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND (sample_batch_id is NULL OR sample_batch_id='') AND vlsm_country_id = $country";
+   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.result_status NOT IN (".$rejected.") AND (sample_batch_id IS NULL OR sample_batch_id='') AND vlsm_country_id = $country";
 }else{
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE sample_batch_id is NULL AND vl.result_status NOT IN (".$rejected.") AND vlsm_country_id = $country";
+   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (sample_batch_id IS NULL OR sample_batch_id='') AND vl.result_status NOT IN (".$rejected.") AND vlsm_country_id = $country";
    if(trim($fName)!=''){
       $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
    }if(trim($sample)!=''){
