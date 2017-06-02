@@ -137,7 +137,7 @@ include('../header.php');
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate QR code');
 	  }else{
-	      window.open('.././uploads/qrcode/'+data,'_blank');
+	      window.open('../uploads/qrcode/'+data,'_blank');
 	  }
 	  $.unblockUI();
       });

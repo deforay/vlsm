@@ -1093,3 +1093,12 @@ INSERT INTO `vl_lab_request`.`privileges` (`privilege_id`, `resource_id`, `privi
 
 --Pal 26-may-2017
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'import.php', 'Import Vl Request');
+
+--Pal 02-Jun-2017
+DELETE FROM `privileges` WHERE `privileges`.`privilege_id` = 58
+
+INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'qr-code', 'QR Code');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'generate.php', 'Generate QR Code');
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'readQRCode.php', 'Read QR Code');

@@ -16,16 +16,16 @@ $batResult = $db->rawQuery($batQuery);
 $collectionDate = '';$batchCode = '';$sampleType = '';$facilityName = '';$gender = '';$status ='';
 $lastUrl = '';$lastUrl1 = '';
 if(isset($_SERVER['HTTP_REFERER'])){
-$lastUrl = strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");
-$lastUrl1 = strpos($_SERVER['HTTP_REFERER'],"vlTestResult.php");
+  $lastUrl = strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");
+  $lastUrl1 = strpos($_SERVER['HTTP_REFERER'],"vlTestResult.php");
 }
 if($lastUrl!='' || $lastUrl1!=''){
-$collectionDate=(isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate']!='' ? $_COOKIE['collectionDate'] :  '');
-$batchCode=(isset($_COOKIE['batchCode']) && $_COOKIE['batchCode']!='' ? $_COOKIE['batchCode'] :  '');
-$sampleType=(isset($_COOKIE['sampleType']) && $_COOKIE['sampleType']!='' ? $_COOKIE['sampleType'] :  '');
-$facilityName=(isset($_COOKIE['facilityName']) && $_COOKIE['facilityName']!='' ? $_COOKIE['facilityName'] :  '');
-$gender=(isset($_COOKIE['gender']) && $_COOKIE['gender']!='' ? $_COOKIE['gender'] :  '');
-$status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'] :  '');
+  $collectionDate=(isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate']!='' ? $_COOKIE['collectionDate'] :  '');
+  $batchCode=(isset($_COOKIE['batchCode']) && $_COOKIE['batchCode']!='' ? $_COOKIE['batchCode'] :  '');
+  $sampleType=(isset($_COOKIE['sampleType']) && $_COOKIE['sampleType']!='' ? $_COOKIE['sampleType'] :  '');
+  $facilityName=(isset($_COOKIE['facilityName']) && $_COOKIE['facilityName']!='' ? $_COOKIE['facilityName'] :  '');
+  $gender=(isset($_COOKIE['gender']) && $_COOKIE['gender']!='' ? $_COOKIE['gender'] :  '');
+  $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'] :  '');
 }
 ?>
   <!-- Content Wrapper. Contains page content -->
