@@ -1,7 +1,6 @@
 <?php
 ob_start();
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $batchQuery="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
@@ -12,6 +11,13 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
+//global config
+$showUrgency = false;
+$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configResult=$db->query($configQuery);
+if($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2){
+ $showUrgency = true;
+}
 //Get active machines
 $importConfigQuery="SELECT * FROM import_config WHERE status ='active'";
 $importConfigResult = $db->rawQuery($importConfigQuery);
@@ -99,8 +105,8 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
 							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
 						</td>
-						<td class=""><b>Urgency&nbsp;:</b></td>
-						<td class="">
+						<td class="" style="display:<?php echo($showUrgency == true)?'':'none'; ?>"><b>Urgency&nbsp;:</b></td>
+						<td class="" style="display:<?php echo($showUrgency == true)?'':'none'; ?>">
 							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
 							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
 						</td>
@@ -336,7 +342,9 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 	}
 	?>
 	$("#resultSample").val(resultSampleArray);
-	$('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of maximum '+noOfSamples+' samples to make it a batch');
+	if($("#machine option:selected").text() != ' -- Select -- '){
+	  $('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of maximum '+noOfSamples+' samples to make it a batch');
+	}
    });
    
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
@@ -360,22 +368,24 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
     var fName = $("#facilityName").val();
     var sName = $("#sampleType").val();
     var gender= $("#gender").val();
-    var prg =   $("input:radio[name=pregnant]");
-    var urgent =   $("input:radio[name=urgency]");
-    if(prg[0].checked==false && prg[1].checked==false){
+    var prg = $("input:radio[name=pregnant]");
+    var urgent = $("input:radio[name=urgency]");
+    if((prg[0].checked==false && prg[1].checked==false) || prg == 'undefined'){
       pregnant = '';
     }else{
       pregnant = $('input[name=pregnant]:checked').val();
     }
-    if(urgent[0].checked==false && urgent[1].checked==false){
+    if((urgent[0].checked==false && urgent[1].checked==false) || urgent == 'undefined'){
       urgent = '';
     }else{
       urgent = $('input[name=urgency]:checked').val();
     }
-    $.post("getSampleCodeDetails.php", { fName : fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
+    $.post("getSampleCodeDetails.php", {fName:fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
     function(data){
 	if(data != ""){
 	  $("#sampleDetails").html(data);
+	  $("#batchSubmit").attr("disabled",true);
+	  $("#batchSubmit").css("pointer-events","none");
 	}
     });
     $.unblockUI();

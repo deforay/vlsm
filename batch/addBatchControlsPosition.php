@@ -115,7 +115,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 		}
 	}
 	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id";
-    $samplesInfo=$db->query($samplesQuery);
+        $samplesInfo=$db->query($samplesQuery);
 	foreach($samplesInfo as $sample){
 		$displayOrder[] = "s_".$sample['vl_sample_id'];
 		$content.='<li class="ui-state-default" id="s_'.$sample['vl_sample_id'].'">'.$sample['sample_code'].'</li>';
@@ -172,8 +172,8 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-			    <input type="hidden" name="sortOrders" id="sortOrders" value="<?php echo implode(",",$displayOrder); ?>"/>
-			    <input type="hidden" name="batchId" id="batchId" value="<?php echo $id; ?>"/>
+		<input type="hidden" name="sortOrders" id="sortOrders" value="<?php echo implode(",",$displayOrder); ?>"/>
+		<input type="hidden" name="batchId" id="batchId" value="<?php echo $id; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="batchcode.php" class="btn btn-default"> Cancel</a>
               </div>
