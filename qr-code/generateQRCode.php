@@ -261,10 +261,8 @@ $pages = array();
             $qrText[] = $lastModifiedBy;
             $qrText[] = $vl['last_modified_datetime'];
             $qrText[] = $vl['import_machine_file_name'];
-            $qrString = '';
-            $jsonString = json_encode($qrText);
-            $gzencode = base64_encode(gzdeflate($jsonString, 9));
-            $qrString = urlencode($gzencode);
+            //generate string
+            $qrString = urlencode(implode(',',$qrText));
             $style = array(
                 'border' => 2,
                 'vpadding' => 'auto',
