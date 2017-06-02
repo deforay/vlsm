@@ -92,7 +92,7 @@ include('../header.php');
   
   function generateQRcode(bId){
      $.blockUI();
-     $.post("../qr-code/generateQRcode.php",{id:bId},
+     $.post("../qr-code/generateQRCode.php",{id:bId},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate QR code');
