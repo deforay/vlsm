@@ -1,11 +1,11 @@
 <?php
 include('../header.php');
-$startYear=date("Y", strtotime("-3 month"));
-$startMonth = date('m', strtotime('-3 month'));
+$startYear=date("Y", strtotime("-2 month"));
+$startMonth = date('m', strtotime('-2 month'));
 $endYear = date('Y');
 $endMonth = date('m');
 
-$startDate = date('Y-m', strtotime('-3 month'));
+$startDate = date('Y-m', strtotime('-2 month'));
 $endDate=date('Y-m');
 
 $tsQuery="SELECT * FROM r_sample_status";
@@ -173,7 +173,7 @@ $fResult = $db->rawQuery($fQuery);
               <div id="sla-data-range" class="mrp-container form-control">
                                 <span class="mrp-icon"><i class="fa fa-calendar"></i> &nbsp;</span>
                                 <div class="mrp-monthdisplay ">
-                                  <span class="mrp-lowerMonth"><?php echo date('M', strtotime('-3 month')); ?> <?php echo $startYear; ?></span>                                  <span class="mrp-to"> to </span>
+                                  <span class="mrp-lowerMonth"><?php echo date('M', strtotime('-2 month')); ?> <?php echo $startYear; ?></span>                                  <span class="mrp-to"> to </span>
                                   <span class="mrp-upperMonth"><?php echo date('M'); ?> <?php echo date('Y'); ?></span>
                                 </div>
                               <input type="hidden" value="<?php echo $startDate; ?>" id="mrp-lowerDate" onchange=""/>
