@@ -127,16 +127,16 @@ $general=new Deforay_Commons_General();
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-		$batch = false;
-		if(isset($_SESSION['privileges']) && (in_array("editBatch.php", $_SESSION['privileges']))){
-			$batch = true;
-		}
+	$batch = false;
+	if(isset($_SESSION['privileges']) && (in_array("editBatch.php", $_SESSION['privileges']))){
+	    $batch = true;
+	}
 	
         foreach ($rResult as $aRow) {
 	    $humanDate="";
 	    if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
-			$date = $aRow['request_created_datetime'];
-			$humanDate =  date("d-M-Y H:i:s",strtotime($date));
+		$date = $aRow['request_created_datetime'];
+		$humanDate =  date("d-M-Y H:i:s",strtotime($date));
 	    }
 	    //get no. of sample tested.
 	    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."' and vl.result_status=7";
@@ -152,7 +152,7 @@ $general=new Deforay_Commons_General();
 	    $noOfSampleLastDateTested = "select max(vl.sample_testing_date) as last_tested_date from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."'";
 	    $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
 	    
-        $row = array();
+           $row = array();
 	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    $printQrcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-qrcode"> Print QR code</i></a>';
 	    $editPosition ='<a href="editBatchControlsPosition.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
@@ -172,8 +172,12 @@ $general=new Deforay_Commons_General();
 	//		    <option value="pending" ' . ($aRow['batch_status'] == "pending" ? "selected=selected" : "") . '>Pending</option>
 	//		    <option value="completed" ' . ($aRow['batch_status'] == "completed" ? "selected=selected" : "") . '>Completed</option>
 	//	    </select>';
-	    if($batch){
-            $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;'.$printBarcode.$printQrcode.'&nbsp;'.$editPosition;
+	    if(isset($_POST['fromSource']) && $_POST['fromSource'] == 'qr'){
+		$row[] = $printQrcode;
+	    }else{
+		if($batch){
+		    $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;'.$printBarcode.'&nbsp;'.$editPosition;
+		}
 	    }
             $output['aaData'][] = $row;
         }

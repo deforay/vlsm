@@ -147,6 +147,14 @@
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlMonitoringReport").addClass('active');
+  }else if (splitsUrl=='generate.php') {
+    $(".qr").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".generateQRCode").addClass('active');
+  }else if (splitsUrl=='readQRCode.php') {
+    $(".qr").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".readQRCode").addClass('active');
   }else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');

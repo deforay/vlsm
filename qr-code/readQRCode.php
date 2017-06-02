@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../includes/MysqliDb.php');
+include('../header.php');
 include('../includes/General.php');
 $general = new Deforay_Commons_General();
 $tableName = "vl_request_form";
@@ -397,9 +397,19 @@ if(isset($_GET['q']) && $_GET['q']!= ''){
           $db->insert($tableName,$data);
         }
       }
-    header("location:/vl-request/import.php?q=&action=next");
+     header("location:/qr-code/readQRCode.php?q=&action=next");
     }catch (Exception $exc) {
       error_log($exc->getMessage());
       error_log($exc->getTraceAsString());
     }
 }
+?>
+<div class="content-wrapper" style="min-height: 347px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1><i class="fa fa-hand-o-right" aria-hidden="true"></i> Please connect your QR code scanner with the computer and then scan the QR code image.</h1>
+    </section>
+</div>
+<?php
+ include('../footer.php');
+?>

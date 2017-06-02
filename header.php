@@ -341,9 +341,21 @@ $formConfigResult=$db->query($formConfigQuery);
             </li>
         <?php
         }?>
+        <li class="treeview qr">
+          <a href="#">
+              <i class="fa fa-qrcode"></i>
+              <span>QR Code</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="allMenu generateQRCode"><a href="../qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
+            <li class="allMenu readQRCode"><a href="../qr-code/readQRCode.php?q="><i class="fa fa-circle-o"></i> Read QR Code</a></li>
+          </ul>
+        </li>
         <!---->
       </ul>
-      
     </section>
     <!-- /.sidebar -->
   </aside>
