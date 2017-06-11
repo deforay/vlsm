@@ -5,7 +5,7 @@ var selected_printer = null;
 //var format_start = "^XA^FO100,100^BY3^B3N,N,100,Y,N^FD123ABC^FS^XZ";
 //var format_end = "^FS^XZ";
 
-var format_start = "^XA^FO100,100^BY3^B3N,N,100,Y,N^FD";
+var format_start = "^XA^FWB^FO100,100^BY3^B3N,N,100,Y,N^FD";
 var format_end = "^FS^XZ";
 
 var default_mode = true;

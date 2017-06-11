@@ -36,12 +36,7 @@ include('../header.php');
     <section class="content-header">
       <h1>
         Dashboard
-        <small>Control panel</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -51,7 +46,7 @@ include('../header.php');
 	<div class="col-lg-7">
 	  <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
 		<tr>
-		    <td style=""><b>Date Range&nbsp;:</b></td>
+		    <td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
 		    <td>
 		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
