@@ -9,12 +9,7 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-    $status = 6;
-    $configQuery ="SELECT value FROM global_config where name='auto_approval'";
-    $configResult = $db->rawQuery($configQuery);
-    if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
-       $status = 7;
-    }
+    //var_dump($_POST);die;
     //add province
     $splitProvince = explode("##",$_POST['province']);
     if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){
@@ -24,7 +19,6 @@ try {
             $db->insert('province_details',array('province_name'=>$splitProvince[0],'province_code'=>$splitProvince[1]));
         }
     }
-    //var_dump($_POST);die;
     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
          $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
          $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
@@ -62,7 +56,7 @@ try {
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
          }else{
-          $_POST['artRegimen'] = $artResult[0]['art_code']; 
+          $_POST['artRegimen'] = $artResult[0]['art_code'];
          }
     }
     
@@ -140,14 +134,27 @@ try {
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
         $_POST['result'] = $_POST['vlResult'];
     }
+    $reasonForChanges = '';
+    $allChange = array();
+    if(isset($_POST['reasonForResultChangesHistory']) && $_POST['reasonForResultChangesHistory'] !=''){
+        $allChange = json_decode(base64_decode($_POST['reasonForResultChangesHistory']),true);
+    }
+    if(isset($_POST['reasonForResultChanges']) && trim($_POST['reasonForResultChanges'])!=''){
+        $allChange[] = array(
+            'usr' => $_SESSION['userId'],
+            'msg' => $_POST['reasonForResultChanges'],
+            'dtime' => $general->getDateTime()
+        );
+    }
+    if(count($allChange) > 0){
+       $reasonForChanges = json_encode($allChange);
+    }
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>7,
           'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
           'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
           'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-          'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL,
-          'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL,
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='') ? $_POST['patientFirstName'] :  NULL,
@@ -184,50 +191,56 @@ try {
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
           'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='') ? $_POST['noResult'] :  NULL,
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='') ? $_POST['rejectionReason'] :  NULL,
+          'result_value_log'=>NULL,
           'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['vlResult']!='Target Not Detected') ? $_POST['vlResult'] :  NULL,
+          'result_value_text'=>NULL,
           'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['vlResult']!='Target Not Detected') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
-          'result_status'=>$status,
-          'request_created_by'=>$_SESSION['userId'],
-          'request_created_datetime'=>$general->getDateTime(),
+          'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
+          'reason_for_vl_result_changes'=>$reasonForChanges,
           'last_modified_by'=>$_SESSION['userId'],
-          'last_modified_datetime'=>$general->getDateTime(),
-          'manual_result_entry'=>'yes'
+          'last_modified_datetime'=>$general->getDateTime()
         );
-        //echo "<pre>";var_dump($vldata);die;
-        $id=$db->insert($tableName,$vldata);
-        if($id>0){
-             $_SESSION['alertMsg']="VL request added successfully";
-             //Add event log
-             $eventType = 'add-vl-request-rwd';
-             $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
-             $resource = 'vl-request-rwd';
-             $data=array(
-             'event_type'=>$eventType,
-             'action'=>$action,
-             'resource'=>$resource,
-             'date_time'=>$general->getDateTime()
-             );
-             $db->insert($tableName1,$data);
-             
-             $barcode = "";
-            if(isset($_POST['printBarCode']) && $_POST['printBarCode'] =='on'){
-                  $s = $_POST['sampleCode'];
-                  $facQuery="SELECT * FROM facility_details where facility_id=".$_POST['fName'];
-                  $facResult = $db->rawQuery($facQuery);
-                  $f = ucwords($facResult[0]['facility_name'])." | ".$_POST['sampleCollectionDate'];
-                  $barcode = "?barcode=true&s=$s&f=$f";
-             }
-             
-             if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
-                header("location:addVlRequest.php");
-             }else{
-                header("location:vlRequest.php");
-             }
+       //echo "<pre>";var_dump($vldata);die;
+        $sampleQuery="SELECT vl_sample_id from vl_request_form where sample_code='".$_POST['sampleCode']."'";
+        $sampleResult=$db->query($sampleQuery);
+        if(isset($sampleResult[0]['vl_sample_id'])){
+            $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+            $db->update($tableName,$vldata);
+            $_SESSION['alertMsg']="VL request updated successfully";
+            //Add event log
+            $eventType = 'update-vl-request-rwd';
+            $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
+            $resource = 'vl-request-rwd';
+            $data=array(
+            'event_type'=>$eventType,
+            'action'=>$action,
+            'resource'=>$resource,
+            'date_time'=>$general->getDateTime()
+            );
+            $db->insert($tableName1,$data);
+            header("location:/vl-request/vlRequest.php");
         }else{
-             $_SESSION['alertMsg']="Please try again later";
+            $id=$db->insert($tableName,$vldata);
+            if($id>0){
+                $_SESSION['alertMsg']="VL request added successfully";
+                //Add event log
+                $eventType = 'add-vl-request-rwd';
+                $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
+                $resource = 'vl-request-rwd';
+                $data=array(
+                'event_type'=>$eventType,
+                'action'=>$action,
+                'resource'=>$resource,
+                'date_time'=>$general->getDateTime()
+                );
+                $db->insert($tableName1,$data);
+                header("location:/vl-request/vlRequest.php");
+            }else{
+                $_SESSION['alertMsg']="Please try again later";
+            }
         }
   
 } catch (Exception $exc) {

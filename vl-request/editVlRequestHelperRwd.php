@@ -146,7 +146,9 @@ try {
             'dtime' => $general->getDateTime()
         );
     }
-    $reasonForChanges = json_encode($allChange);
+    if(count($allChange) > 0){
+       $reasonForChanges = json_encode($allChange);
+    }
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
