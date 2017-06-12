@@ -3,12 +3,12 @@ ob_start();
 include('../General.php');
 $general=new Deforay_Commons_General();
 //global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
+$cQuery="SELECT * FROM global_config";
+$cResult=$db->query($cQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+for ($i = 0; $i < sizeof($cResult); $i++) {
+  $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
@@ -88,24 +88,24 @@ if(!isset($facilityResult[0]['contact_person'])){
 if(!isset($facilityResult[0]['facility_emails'])){
   $facilityResult[0]['facility_emails'] = '';
 }
-if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
-  $facilityResult[0]['facility_state'] = 0;
+if(!isset($facilityResult[0]['facility_state'])){
+  $facilityResult[0]['facility_state'] = '';
 }
-if(!isset($facilityResult[0]['facility_district']) || $facilityResult[0]['facility_district']==''){
-  $facilityResult[0]['facility_district'] = 0;
+if(!isset($facilityResult[0]['facility_district'])){
+  $facilityResult[0]['facility_district'] = '';
 }
-$stateName = $facilityResult[0]['facility_state'];
-if(trim($stateName)!= ''){
-  $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
+
+if(trim($facilityResult[0]['facility_state'])!= ''){
+  $stateQuery="SELECT * from province_details where province_name='".$facilityResult[0]['facility_state']."'";
   $stateResult=$db->query($stateQuery);
 }
-if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] == ''){
-  $stateResult[0]['province_code'] = 0;
+if(!isset($stateResult[0]['province_code'])){
+  $stateResult[0]['province_code'] = '';
 }
 //district details
 $districtResult = array();
-if(trim($stateName)!= ''){
-  $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
+if(trim($facilityResult[0]['facility_state'])!= ''){
+  $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$facilityResult[0]['facility_state']."' AND status='active'";
   $districtResult=$db->query($districtQuery);
 }
 if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
@@ -162,7 +162,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
 //set reason for changes history
 $rch = '';
 $allChange = array();
-if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= ''){
+if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){
   $rch.='<h4>Result Changes History</h4>';
   $rch.='<table style="width:100%;">';
   $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';

@@ -142,7 +142,7 @@ try {
     }
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
-          'vlsm_country_id'=>'7',
+          'vlsm_country_id'=>7,
           'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
           'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
           'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,

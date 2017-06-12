@@ -24,16 +24,17 @@
     //Get selected state
     $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
     $stateResult=$db->query($stateQuery);
-    if(!isset($stateResult[0]['facility_state']) || $stateResult[0]['facility_state']==''){
-      $stateResult[0]['facility_state'] = 0;
+    if(!isset($stateResult[0]['facility_state'])){
+      $stateResult[0]['facility_state'] = '';
     }
     //district details
     $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateResult[0]['facility_state']."'";
     $districtResult=$db->query($districtQuery);
+    
     $provinceQuery="SELECT * from province_details where province_name='".$stateResult[0]['facility_state']."'";
     $provinceResult=$db->query($provinceQuery);
-    if(!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_code']==''){
-      $provinceResult[0]['province_code'] = 0;
+    if(!isset($provinceResult[0]['province_code'])){
+      $provinceResult[0]['province_code'] = '';
     }
      //get lab facility details
     $lQuery="SELECT * FROM facility_details where facility_type='2'";
@@ -123,11 +124,11 @@
     $vlTestReasonQuery="SELECT * from r_vl_test_reasons where test_reason_status = 'active'";
     $vlTestReasonResult=$db->query($vlTestReasonQuery);
     //global config
-    $cSampleQuery="SELECT * FROM global_config";
-    $cSampleResult=$db->query($cSampleQuery);
+    $cQuery="SELECT * FROM global_config";
+    $cResult=$db->query($cQuery);
     $arr = array();
-    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+    for ($i = 0; $i < sizeof($cResult); $i++) {
+      $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
     }
     $disable = "disabled = 'disabled'";
     ?>
