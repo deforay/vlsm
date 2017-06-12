@@ -273,8 +273,14 @@ $pages = array();
                 'module_height' => 1 // height of a single module in points
             );
             $pdf->write2DBarcode($qrString, 'QRCODE,L', 80, 100, 50, 50, $style, 'N');
+            if($country=='7'){
+              include('generateRwdCountryForm.php');
+            }
+            $pdf->AddPage();
+            $pdf->writeHTML($html);
             $pdf->lastPage();
             $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
+            
             $pdf->Output($filename,"F");
             $pages[] = $filename;
             $qrText = array();

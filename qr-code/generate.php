@@ -97,19 +97,7 @@ include('../header.php');
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate QR code');
 	  }else{
-		  generateFormPdf(bId);
-	      window.open('../uploads/qrcode/'+data,'_blank');
-	  }
-	  $.unblockUI();
-      });
-  }
-  function generateFormPdf(bId){
-     $.blockUI();
-     $.post("../qr-code/generateCountryForm.php",{id:bId},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate country form');
-	  }else{
+		  //generateFormPdf(bId);
 	      window.open('../uploads/qrcode/'+data,'_blank');
 	  }
 	  $.unblockUI();
