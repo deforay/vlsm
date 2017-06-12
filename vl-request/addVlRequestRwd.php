@@ -3,12 +3,12 @@ ob_start();
 include('../General.php');
 $general=new Deforay_Commons_General();
 //global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
+$cQuery="SELECT * FROM global_config";
+$cResult=$db->query($cQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+for ($i = 0; $i < sizeof($cResult); $i++) {
+  $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
@@ -63,7 +63,7 @@ $aResult=$db->query($aQuery);
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
 if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MAX(length(sample_code_key)) from vl_request_form )';
+  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MAX(length(sample_code_key)) from vl_request_form )';
 }else{
   $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MIN(length(sample_code_key)) from vl_request_form )';
 }
@@ -947,7 +947,7 @@ $sFormat = '';
       var sCodeLentgh = $("#sampleCode").val();
       var minLength = '<?php echo $arr['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample id length atleast "+minLength+" characters");
+        alert("Sample id length must be a minimum length of "+minLength+" characters");
         return false;
       }
     
@@ -970,7 +970,7 @@ $sFormat = '';
       var sCodeLentgh = $("#sampleCode").val();
       var minLength = '<?php echo $arr['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample id length atleast "+minLength+" characters");
+        alert("Sample id length must be a minimum length of "+minLength+" characters");
         return false;
       }
       flag = deforayValidator.init({

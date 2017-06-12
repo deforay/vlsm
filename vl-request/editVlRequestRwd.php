@@ -3,12 +3,12 @@ ob_start();
 include('../General.php');
 $general=new Deforay_Commons_General();
 //global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
+$cQuery="SELECT * FROM global_config";
+$cResult=$db->query($cQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+for ($i = 0; $i < sizeof($cResult); $i++) {
+  $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
@@ -88,24 +88,24 @@ if(!isset($facilityResult[0]['contact_person'])){
 if(!isset($facilityResult[0]['facility_emails'])){
   $facilityResult[0]['facility_emails'] = '';
 }
-if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
-  $facilityResult[0]['facility_state'] = 0;
+if(!isset($facilityResult[0]['facility_state'])){
+  $facilityResult[0]['facility_state'] = '';
 }
-if(!isset($facilityResult[0]['facility_district']) || $facilityResult[0]['facility_district']==''){
-  $facilityResult[0]['facility_district'] = 0;
+if(!isset($facilityResult[0]['facility_district'])){
+  $facilityResult[0]['facility_district'] = '';
 }
-$stateName = $facilityResult[0]['facility_state'];
-if(trim($stateName)!= ''){
-  $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
+
+if(trim($facilityResult[0]['facility_state'])!= ''){
+  $stateQuery="SELECT * from province_details where province_name='".$facilityResult[0]['facility_state']."'";
   $stateResult=$db->query($stateQuery);
 }
-if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] == ''){
-  $stateResult[0]['province_code'] = 0;
+if(!isset($stateResult[0]['province_code'])){
+  $stateResult[0]['province_code'] = '';
 }
 //district details
 $districtResult = array();
-if(trim($stateName)!= ''){
-  $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
+if(trim($facilityResult[0]['facility_state'])!= ''){
+  $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$facilityResult[0]['facility_state']."' AND status='active'";
   $districtResult=$db->query($districtQuery);
 }
 if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
@@ -162,7 +162,7 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
 //set reason for changes history
 $rch = '';
 $allChange = array();
-if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= ''){
+if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){
   $rch.='<h4>Result Changes History</h4>';
   $rch.='<table style="width:100%;">';
   $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
@@ -427,7 +427,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                  ?>
                                  <option value="other">Other</option>
                             </select>
-                            <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
+                            <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;">
                           </div>
                        </div>
                       <div class="col-xs-3 col-md-3">
@@ -448,7 +448,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                     </div>
-                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"":"none"?>";>
+                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female' || $vlQueryInfo[0]['patient_gender']=='' || $vlQueryInfo[0]['patient_gender']== null)?"":"none"?>";>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="patientPregnant">Is Patient Pregnant? </label><br>
@@ -505,7 +505,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         <div class="col-md-6">
                              <label class="col-lg-5 control-label">Date of last viral load test</label>
                              <div class="col-lg-7">
-                             <input type="text" class="form-control date viralTestData" id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $general->humanDateFormat($vlQueryInfo[0]['last_vl_date_routine']); ?>"/>
+                             <input type="text" class="form-control date viralTestData" id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo(trim($vlQueryInfo[0]['last_vl_date_routine'])!= '' && $vlQueryInfo[0]['last_vl_date_routine']!= null && $vlQueryInfo[0]['last_vl_date_routine']!= '0000-00-00')?$general->humanDateFormat($vlQueryInfo[0]['last_vl_date_routine']):''; ?>"/>
                          </div>
                         </div>
                         <div class="col-md-6">
@@ -543,7 +543,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                        <div class="col-md-6">
                             <label class="col-lg-5 control-label">Date of last viral load test</label>
                             <div class="col-lg-7">
-                            <input type="text" class="form-control date viralTestData" id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure_ac']); ?>"/>
+                            <input type="text" class="form-control date viralTestData" id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo(trim($vlQueryInfo[0]['last_vl_date_failure_ac'])!= '' && $vlQueryInfo[0]['last_vl_date_failure_ac']!= null && $vlQueryInfo[0]['last_vl_date_failure_ac']!= '0000-00-00')?$general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure_ac']):''; ?>"/>
                             </div>
                       </div>
                        <div class="col-md-6">
@@ -581,7 +581,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         <div class="col-md-6">
                              <label class="col-lg-5 control-label">Date of last viral load test</label>
                              <div class="col-lg-7">
-                             <input type="text" class="form-control date viralTestData" id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure']); ?>"/>
+                             <input type="text" class="form-control date viralTestData" id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo(trim($vlQueryInfo[0]['last_vl_date_failure'])!= '' && $vlQueryInfo[0]['last_vl_date_failure']!= null && $vlQueryInfo[0]['last_vl_date_failure']!= '0000-00-00')?$general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure']):''; ?>"/>
                              </div>
                        </div>
                         <div class="col-md-6">
@@ -1034,14 +1034,6 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   }
   
   function validateNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample id length atleast "+minLength+" characters");
-        return false;
-      }
-    
     flag = deforayValidator.init({
         formId: 'vlRequestFormRwd'
     });

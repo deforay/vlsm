@@ -78,7 +78,9 @@ try {
             'dtime' => $general->getDateTime()
         );
     }
-    $reasonForChanges = json_encode($allChange);
+    if(count($allChange) > 0){
+      $reasonForChanges = json_encode($allChange);
+    }
     //echo $reasonForChanges;die;
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,

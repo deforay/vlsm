@@ -425,7 +425,7 @@ $disable = "disabled = 'disabled'";
                         </div>
                       </div>
                     </div>
-                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"":"none"?>";>
+                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female' || $vlQueryInfo[0]['patient_gender']=='' || $vlQueryInfo[0]['patient_gender']== null)?"":"none"?>";>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="patientPregnant">Is Patient Pregnant? </label><br>
@@ -482,7 +482,7 @@ $disable = "disabled = 'disabled'";
                         <div class="col-md-6">
                              <label class="col-lg-5 control-label">Date of last viral load test</label>
                              <div class="col-lg-7">
-                             <input type="text" class="form-control date viralTestData" id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $general->humanDateFormat($vlQueryInfo[0]['last_vl_date_routine']); ?>" <?php echo $disable;?>/>
+                             <input type="text" class="form-control date viralTestData" id="rmTestingLastVLDate" name="rmTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo(trim($vlQueryInfo[0]['last_vl_date_routine'])!= '' && $vlQueryInfo[0]['last_vl_date_routine']!= null && $vlQueryInfo[0]['last_vl_date_routine']!= '0000-00-00')?$general->humanDateFormat($vlQueryInfo[0]['last_vl_date_routine']):''; ?>" <?php echo $disable;?>/>
                          </div>
                         </div>
                         <div class="col-md-6">
@@ -520,7 +520,7 @@ $disable = "disabled = 'disabled'";
                        <div class="col-md-6">
                             <label class="col-lg-5 control-label">Date of last viral load test</label>
                             <div class="col-lg-7">
-                            <input type="text" class="form-control date viralTestData" id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure_ac']); ?>" <?php echo $disable;?>/>
+                            <input type="text" class="form-control date viralTestData" id="repeatTestingLastVLDate" name="repeatTestingLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo(trim($vlQueryInfo[0]['last_vl_date_failure_ac'])!= '' && $vlQueryInfo[0]['last_vl_date_failure_ac']!= null && $vlQueryInfo[0]['last_vl_date_failure_ac']!= '0000-00-00')?$general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure_ac']):''; ?>" <?php echo $disable;?>/>
                             </div>
                       </div>
                        <div class="col-md-6">
@@ -558,7 +558,7 @@ $disable = "disabled = 'disabled'";
                         <div class="col-md-6">
                              <label class="col-lg-5 control-label">Date of last viral load test</label>
                              <div class="col-lg-7">
-                             <input type="text" class="form-control date viralTestData" id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo $general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure']); ?>" <?php echo $disable;?>/>
+                             <input type="text" class="form-control date viralTestData" id="suspendTreatmentLastVLDate" name="suspendTreatmentLastVLDate" placeholder="Select Last VL Date" title="Please select Last VL Date" value="<?php echo(trim($vlQueryInfo[0]['last_vl_date_failure'])!= '' && $vlQueryInfo[0]['last_vl_date_failure']!= null && $vlQueryInfo[0]['last_vl_date_failure']!= '0000-00-00')?$general->humanDateFormat($vlQueryInfo[0]['last_vl_date_failure']):''; ?>" <?php echo $disable;?>/>
                              </div>
                        </div>
                         <div class="col-md-6">
