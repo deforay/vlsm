@@ -45,16 +45,18 @@ $configResult=$db->query($globalConfigQuery);
     <div class="container-fluid">
         <?php
         $filePath = $_SERVER['DOCUMENT_ROOT']. DIRECTORY_SEPARATOR . 'uploads'. DIRECTORY_SEPARATOR .'login-logos';
-        $dir = scandir($filePath);
+        
         
         if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])){
         ?>
         <div style="margin-top:15px;float:left;">
             <img src="/uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" style="max-width:120px;">
         </div>
-        <?php }
+        <?php
+        }
         
-        if(is_dir($filePath) && count($dir)>2){
+        if(is_dir($filePath) && count(scandir($filePath))>2){
+            $dir = scandir($filePath);
             $loginLogoFiles = array();
             foreach($dir as $fileName){
                 if($fileName!='.' && $fileName!='..'){
