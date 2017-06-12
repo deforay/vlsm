@@ -200,28 +200,46 @@ try {
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
           'reason_for_vl_result_changes'=>$reasonForChanges,
           'last_modified_by'=>$_SESSION['userId'],
-          'last_modified_datetime'=>$general->getDateTime(),
-          'manual_result_entry'=>'yes'
+          'last_modified_datetime'=>$general->getDateTime()
         );
        //echo "<pre>";var_dump($vldata);die;
-        $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
-        $id=$db->update($tableName,$vldata);
-        if($id>0){
-             $_SESSION['alertMsg']="VL request updated successfully";
-             //Add event log
-             $eventType = 'update-vl-request-rwd';
-             $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
-             $resource = 'vl-request-rwd';
-             $data=array(
-             'event_type'=>$eventType,
-             'action'=>$action,
-             'resource'=>$resource,
-             'date_time'=>$general->getDateTime()
-             );
-             $db->insert($tableName1,$data);
-             header("location:vlRequest.php");
+        $sampleQuery="SELECT vl_sample_id from vl_request_form where sample_code='".$_POST['sampleCode']."'";
+        $sampleResult=$db->query($sampleQuery);
+        if(isset($sampleResult[0]['vl_sample_id'])){
+            $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+            $db->update($tableName,$vldata);
+            $_SESSION['alertMsg']="VL request updated successfully";
+            //Add event log
+            $eventType = 'update-vl-request-rwd';
+            $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
+            $resource = 'vl-request-rwd';
+            $data=array(
+            'event_type'=>$eventType,
+            'action'=>$action,
+            'resource'=>$resource,
+            'date_time'=>$general->getDateTime()
+            );
+            $db->insert($tableName1,$data);
+            header("location:/vl-request/vlRequest.php");
         }else{
-             $_SESSION['alertMsg']="Please try again later";
+            $id=$db->insert($tableName,$vldata);
+            if($id>0){
+                $_SESSION['alertMsg']="VL request added successfully";
+                //Add event log
+                $eventType = 'add-vl-request-rwd';
+                $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
+                $resource = 'vl-request-rwd';
+                $data=array(
+                'event_type'=>$eventType,
+                'action'=>$action,
+                'resource'=>$resource,
+                'date_time'=>$general->getDateTime()
+                );
+                $db->insert($tableName1,$data);
+                header("location:/vl-request/vlRequest.php");
+            }else{
+                $_SESSION['alertMsg']="Please try again later";
+            }
         }
   
 } catch (Exception $exc) {

@@ -97,24 +97,24 @@ include('../header.php');
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate QR code');
 	  }else{
-		  generateFormPdf(bId);
+	      //generateFormPdf(bId);
 	      window.open('../uploads/qrcode/'+data,'_blank');
 	  }
 	  $.unblockUI();
       });
   }
-  function generateFormPdf(bId){
-     $.blockUI();
-     $.post("../qr-code/generateCountryForm.php",{id:bId},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate country form');
-	  }else{
-	      window.open('../uploads/qrcode/'+data,'_blank');
-	  }
-	  $.unblockUI();
-      });
-  }
+//  function generateFormPdf(bId){
+//     $.blockUI();
+//     $.post("../qr-code/generateRwdForm.php",{id:bId},
+//      function(data){
+//	  if(data == "" || data == null || data == undefined){
+//	      alert('Unable to generate country form');
+//	  }else{
+//	      window.open('../uploads/qrcode/'+data,'_blank');
+//	  }
+//	  $.unblockUI();
+//      });
+//  }
 </script>
  <?php
  include('../footer.php');
