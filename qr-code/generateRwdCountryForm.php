@@ -1,153 +1,4 @@
 <?php
-ob_start();
-session_start();
-include('../includes/MysqliDb.php');
-include ('../includes/tcpdf/tcpdf.php');
-include ('../includes/fpdi/fpdi.php');
-include('../General.php');
-define('UPLOAD_PATH','../uploads');
-$general=new Deforay_Commons_General();
-$id=base64_decode($_POST['id']);
-$pages = array();
-  if($id >0){
-    if (!file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . "qrcode") && !is_dir(UPLOAD_PATH. DIRECTORY_SEPARATOR."qrcode")) {
-        mkdir(UPLOAD_PATH. DIRECTORY_SEPARATOR."qrcode");
-    }
-    $configQuery="SELECT * from global_config";
-    $configResult=$db->query($configQuery);
-    $arr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($configResult); $i++) {
-      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-    }
-    $country = $arr['vl_form'];
-    if(isset($arr['default_time_zone']) && $arr['default_time_zone']!=''){
-      date_default_timezone_set($arr['default_time_zone']);
-    }else{
-      date_default_timezone_set("Europe/London");
-    }
-    //vl instance id
-    $vlInstanceQuery ="SELECT vlsm_instance_id FROM vl_instance";
-    $vlInstanceResult = $db->rawQuery($vlInstanceQuery);
-    $vlInstanceId = (isset($vlInstanceResult[0]['vlsm_instance_id']))?$vlInstanceResult[0]['vlsm_instance_id']:'';
-    //main query
-    $sQuery="SELECT vl.*,f.*,ts.*,s.*,b.batch_code,rby.user_name as resultReviewedBy,aby.user_name as resultApprovedBy,cby.user_name as requestCreatedBy,lmby.user_name as lastModifiedBy,r_f.facility_name as rejectionFacility,r_r_r.rejection_reason_name as rejectionReason,r_s_r.sample_name as routineSampleType,r_s_ac.sample_name as acSampleType,r_s_f.sample_name as failureSampleType,form.form_name from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as rby ON rby.user_id = vl.result_reviewed_by LEFT JOIN user_details as aby ON aby.user_id = vl.result_approved_by LEFT JOIN user_details as cby ON cby.user_id = vl.request_created_by LEFT JOIN user_details as lmby ON lmby.user_id = vl.last_modified_by LEFT JOIN facility_details as r_f ON r_f.facility_id = vl.sample_rejection_facility LEFT JOIN r_sample_rejection_reasons as r_r_r ON r_r_r.rejection_reason_id = vl.reason_for_sample_rejection LEFT JOIN r_sample_type as r_s_r ON r_s_r.sample_id = vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as r_s_ac ON r_s_ac.sample_id = vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as r_s_f ON r_s_f.sample_id = vl.last_vl_sample_type_failure LEFT JOIN form_details as form ON form.vlsm_country_id = vl.vlsm_country_id WHERE vl.vlsm_country_id = $country AND vl.sample_batch_id=$id";
-    $sResult=$db->query($sQuery);
-    if(count($sResult) > 0){
-        $_SESSION['nbPages'] = sizeof($sResult);
-        $_SESSION['aliasPage'] = 1;
-        //header and footer
-        class MYPDF extends TCPDF {
-          //Page header
-          public function setHeading($logo,$text,$lab) {
-            $this->logo = $logo;
-            $this->text = $text;
-            $this->lab = $lab;
-          }
-          //Page header
-          public function Header() {
-              // Logo
-              //$image_file = K_PATH_IMAGES.'logo_example.jpg';
-              //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-              // Set font
-              if(trim($this->logo)!=''){
-                  if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-                    $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
-                    $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
-                  }
-              }
-              $this->SetFont('helvetica', 'B', 7);
-              $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
-              $this->SetFont('helvetica', '', 18);
-              $this->writeHTMLCell(0,0,10,18,'VIRAL LOAD TEST RESULT', 0, 0, 0, true, 'C', true);
-              if(trim($this->lab)!= ''){
-                $this->SetFont('helvetica', '', 9);
-                $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
-              }
-              $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
-          }
-      
-          // Page footer
-          public function Footer() {
-              // Position at 15 mm from bottom
-              $this->SetY(-15);
-              // Set font
-              $this->SetFont('helvetica', '', 8);
-              // Page number
-              $this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');
-          }
-      }
-        class Pdf_concat extends FPDI {
-            var $files = array();
-        
-            function setFiles($files) {
-                $this->files = $files;
-            }
-        
-            function concat() {
-                foreach($this->files AS $file) {
-                     $pagecount = $this->setSourceFile($file);
-                     for ($i = 1; $i <= $pagecount; $i++) {
-                          $tplidx = $this->ImportPage($i);
-                          $s = $this->getTemplatesize($tplidx);
-                          $this->AddPage('P', array($s['w'], $s['h']));
-                          $this->useTemplate($tplidx);
-                     }
-                }
-            }
-        }
-        $_SESSION['rVal'] = $general->generateRandomString(6);
-        if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
-          mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
-        }
-        $pathFront = realpath('../uploads/'.$_SESSION['rVal'].'/');
-        $page = 1;
-        $qrText = array();
-        foreach($sResult as $vl){
-            $_SESSION['aliasPage'] = $page;
-            // create new PDF document
-            $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT,true, 'UTF-8', false);
-            $pdf->setHeading($arr['logo'],$arr['header'],(isset($vl['labName']))?$vl['labName']:'');
-            // set document information
-            $pdf->SetCreator(PDF_CREATOR);
-            //$pdf->SetAuthor('Pal');
-            $pdf->SetTitle('Viral Load Test Request');
-            //$pdf->SetSubject('TCPDF Tutorial');
-            //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-    
-            // set default header data
-            $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH,PDF_HEADER_TITLE, PDF_HEADER_STRING);
-    
-            // set header and footer fonts
-            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '',PDF_FONT_SIZE_MAIN));
-            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '',PDF_FONT_SIZE_DATA));
-    
-            // set default monospaced font
-            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-    
-            // set margins
-            $pdf->SetMargins(PDF_MARGIN_LEFT,PDF_MARGIN_TOP+14,PDF_MARGIN_RIGHT);
-            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-    
-            // set auto page breaks
-            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-    
-            // set image scale factor
-            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-    
-            // set some language-dependent strings (optional)
-            if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-                require_once(dirname(__FILE__).'/lang/eng.php');
-                $pdf->setLanguageArray($l);
-            }
-    
-            // ---------------------------------------------------------
-    
-            // set font
-            $pdf->SetFont('helvetica', '', 18);
-    
-            $pdf->AddPage();
             //sample reorder
             $sampleReorderChecked = '';
             if(trim($vl["sample_reordered"]) == "yes"){
@@ -214,8 +65,8 @@ $pages = array();
                $html .='<th colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h3>Clinic Information: (To be filled by requesting Clinican/Nurse)</h3><hr/></th>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE ID</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">SAMPLE Reordered</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sample ID</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sample Reordered</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Province</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -245,7 +96,7 @@ $pages = array();
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ART (TRACNET) No. </td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date of Birth</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">If DOB unknown,Age in Year</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">If DOB unknown,Age in Years</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['patient_art_no'].'</td>';
@@ -256,7 +107,7 @@ $pages = array();
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">If Age < 1, Age in Month</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">If Age < 1, Age in Months</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Patient Name</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Gender</td>';
               $html .='</tr>';
@@ -475,27 +326,4 @@ $pages = array();
                 $html .='<td colspan="3" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['approver_comments'].'</td>';
               $html .='</tr>';
               $html.='</table>';
-              
-            if($vl['result']!=''){
-              $pdf->writeHTML($html);
-              $pdf->lastPage();
-              $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
-              $pdf->Output($filename,"F");
-              $pages[] = $filename;
-              $page++;
-            }
-        }
-    }
-  }
-  $resultFilename = '';
-  if(count($pages) >0){
-    $resultPdf = new Pdf_concat();
-    $resultPdf->setFiles($pages);
-    $resultPdf->setPrintHeader(false);
-    $resultPdf->setPrintFooter(false);
-    $resultPdf->concat();
-    $resultFilename = 'vl-qrcode-country-form-' . date('d-M-Y-H-i-s') .'.pdf';
-    $resultPdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR. "qrcode" . DIRECTORY_SEPARATOR. $resultFilename, "F");
-    $general->removeDirectory($pathFront);
- }
-echo $resultFilename;
+  
