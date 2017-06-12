@@ -3,12 +3,12 @@ ob_start();
 include('../General.php');
 $general=new Deforay_Commons_General();
 //global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
+$cQuery="SELECT * FROM global_config";
+$cResult=$db->query($cQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+for ($i = 0; $i < sizeof($cResult); $i++) {
+  $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
