@@ -332,13 +332,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="ageInYears">If DOB unknown, Age in Year </label>
+                          <label for="ageInYears">If DOB unknown, Age in Years </label>
                             <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year" title="Enter age in years" value="<?php echo $vlQueryInfo[0]['patient_age_in_years'];?>"/>
                           </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="ageInMonths">If Age < 1, Age in Month </label>
+                          <label for="ageInMonths">If Age < 1, Age in Months </label>
                             <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>"/>
                           </div>
                       </div>
