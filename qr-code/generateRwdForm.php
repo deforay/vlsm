@@ -71,8 +71,8 @@
   $html .='</tr>';
   $html .='<tr>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_code'].'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['facility_state'].'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['sample_reordered']).'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['facility_state']).'</td>';
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -114,7 +114,7 @@
   $html .='<tr>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['patient_age_in_months'].'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['patient_first_name']).'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['patient_gender']).'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace("_"," ",$vl['patient_gender'])).'</td>';
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -166,7 +166,14 @@
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Is Patient Breastfeeding?</td>';
   $html .='</tr>';
   $html .='<tr>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['arv_adherance_percentage']).'</td>';
+  if($vl['arv_adherance_percentage']=='fair'){
+    $vl['arv_adherance_percentage'] = "Fair (85-94%)";
+  }else if($vl['arv_adherance_percentage']=='good'){
+    $vl['arv_adherance_percentage'] = "Good >= 95%";
+  }else if($vl['arv_adherance_percentage']=='poor'){
+    $vl['arv_adherance_percentage'] = "Poor < 85%";
+  }
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['arv_adherance_percentage'].'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['is_patient_pregnant'].'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['is_patient_breastfeeding'].'</td>';
   $html .='</tr>';
@@ -267,7 +274,7 @@
   $html .='</tr>';
   $html .='<tr>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['facility_name']).'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['import_machine_name']).'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['vl_test_platform']).'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_received_at_vl_lab_datetime'].'</td>';
   $html .='</tr>';
   $html .='<tr>';
@@ -307,7 +314,7 @@
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$targetNotDetected.'</td>';
   }else{
     $approveByColspan = '2';
-    $rejectedReason = (isset($vl['rejection_reason_name']))?ucwords($vl['rejection_reason_name']):'';
+    $rejectedReason = (isset($vl['rejectionReason']))?ucwords($vl['rejectionReason']):'';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$rejectedReason.'</td>';
   }
     $html .='<td colspan='.$approveByColspan.' style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['requestCreatedBy']).'</td>';
