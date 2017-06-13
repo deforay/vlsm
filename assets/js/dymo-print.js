@@ -5,9 +5,8 @@ function printBarcodeLabel(barcode,facility){
            
             $.blockUI();
             dymo.label.framework.trace = 1; //true
-            facility = urldecode(urldecode);
+            facility = urldecode(facility);
 
-  
             try{
                 // open label
                 var labelXml  = '<?xml version="1.0" encoding="utf-8"?>\
