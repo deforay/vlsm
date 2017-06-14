@@ -1104,3 +1104,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'readQRCode.php', 'Read QR Code');
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Enable QR Code Mechanism', 'enable_qr_mechanism', 'yes');
+
+--Pal 14-Jun-2017
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'vlRequestRwdForm.php', 'Manage QR Code Rwd Form');

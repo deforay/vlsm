@@ -1,4 +1,13 @@
 <?php
+ob_start();
+include('../header.php');
+include('../General.php');
+$general=new Deforay_Commons_General();
+$qrVal = explode(',',$_GET['q']);
+if(!isset($qrVal[56]) || $qrVal[56]== '' || $qrVal[56]== null){
+  $_SESSION['alertMsg']="OOPS..Please try again later";
+  header("location:readQRCode.php");
+}
 //global config
 $cQuery="SELECT * FROM global_config";
 $cResult=$db->query($cQuery);
@@ -160,24 +169,17 @@ if(isset($vlQueryInfo) && count($vlQueryInfo) > 0){
   }
   //set reason for changes history
   $erch = '';
-  $eallChange = array();
   if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){
     $erch.='<h4>Result Changes History</h4>';
     $erch.='<table style="width:100%;">';
     $erch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
     $erch.='<tbody>';
-    $eallChange = json_decode($vlQueryInfo[0]['reason_for_vl_result_changes'],true);
-    $eallChange = array_reverse($eallChange);
-    foreach($eallChange as $change){
-      $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
-      $usrResult = $db->rawQuery($usrQuery);
-      $name = '';
-      if(isset($usrResult[0]['user_name'])){
-        $name = ucwords($usrResult[0]['user_name']);
-      }
-      $expStr = explode(" ",$change['dtime']);
+    $splitChanges = explode('vlsm',$vlQueryInfo[0]['reason_for_vl_result_changes']);
+    for($c=0;$c<count($splitChanges);$c++){
+      $getData = explode("##",$splitChanges[$c]);
+      $expStr = explode(" ",$getData[2]);
       $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
-      $erch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
+      $erch.='<tr><td>'.ucwords($getData[0]).'</td><td>'.ucfirst($getData[1]).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
     }
     $erch.='</tbody>';
     $erch.='</table>';
@@ -292,7 +294,25 @@ if(isset($qrVal[64]) && trim($qrVal[64]) !='' && $qrVal[64]!= null){
   $testStatusResult = $db->rawQuery($testStatusQuery);
 }
 //set reason for changes history
-$reasonForChanges = '';
+$rch = '';
+if(isset($qrVal[100]) && trim($qrVal[100]) !='' && $qrVal[100]!= null){
+  $rch.='<h4>Result Changes History</h4>';
+  $rch.='<table style="width:100%;">';
+  $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
+  $rch.='<tbody>';
+  $splitChanges = explode('vlsm',$qrVal[100]);
+  for($c=0;$c<count($splitChanges);$c++){
+    $getData = explode("##",$splitChanges[$c]);
+    $expStr = explode(" ",$getData[2]);
+    $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
+    $rch.='<tr><td>'.ucwords($getData[0]).'</td><td>'.ucfirst($getData[1]).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
+  }
+  $rch.='</tbody>';
+  $rch.='</table>';
+}
+//current regimen
+$aCheckQuery="SELECT art_code from r_art_code_details where nation_identifier='rwd' AND art_code ='".$qrVal[96]."'";
+$aCheckResult=$db->query($aCheckQuery);
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -706,7 +726,7 @@ $reasonForChanges = '';
                   </div>
                 </div>
                 <?php
-                if(count($eallChange)>0){
+                if(trim($erch)!= ''){
                 ?>
                   <div class="row">
                     <div class="col-md-12"><?php echo $erch; ?></div>
@@ -915,9 +935,9 @@ $reasonForChanges = '';
                                  <?php
                                  }
                                  ?>
-                                 <option value="other">Other</option>
+                                 <option value="other" <?php echo(isset($qrVal[96]) && trim($qrVal[96])!='' && $qrVal[96]!= null && count($aCheckResult) == 0)?'selected="selected"':''; ?>>Other</option>
                             </select>
-                            <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
+                            <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" value="<?php echo(isset($qrVal[96]) && trim($qrVal[96])!='' && $qrVal[96]!= null && count($aCheckResult) == 0)?$qrVal[96]:''; ?>" style="width:100%;display:<?php echo(isset($qrVal[96]) && trim($qrVal[96])!='' && $qrVal[96]!= null && count($aCheckResult) == 0)?'':'none'; ?>;margin-top:2px;" >
                           </div>
                        </div>
                       <div class="col-xs-3 col-md-3">
@@ -1221,9 +1241,9 @@ $reasonForChanges = '';
                                   ?>
                                 </optgroup>
                                 <?php } ?>
-                                <option value="other">Other (Please Specify) </option>
+                                <option value="other" <?php echo(isset($qrVal[60]) && trim($qrVal[60])!='' && $qrVal[60]!= null && count($rejectionReasonQueryResult) == 0)?'selected="selected"':''; ?>>Other (Please Specify) </option>
                               </select>
-                              <input type="text" class="form-control labSection newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
+                              <input type="text" class="form-control labSection newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" vaue="<?php echo(isset($qrVal[60]) && trim($qrVal[60])!='' && $qrVal[60]!= null && count($rejectionReasonQueryResult) == 0)?$qrVal[60]:''; ?>" style="width:100%;display:<?php echo(isset($qrVal[60]) && trim($qrVal[60])!='' && $qrVal[60]!= null && count($rejectionReasonQueryResult) == 0)?'':'none'; ?>;margin-top:2px;">
                             </div>
                         </div>
                         <div class="col-md-4 vlResult" style="visibility:<?php echo(isset($qrVal[58]) && $qrVal[58] == 'yes')?'hidden':'visible'; ?>;">
@@ -1278,12 +1298,19 @@ $reasonForChanges = '';
                             </div>
                         </div>
                       </div>
+                      <?php
+                      if(trim($rch)!= ''){
+                      ?>
+                        <div class="row">
+                          <div class="col-md-12"><?php echo $rch; ?></div>
+                        </div>
+                      <?php } ?>
                     </div>
                   </div>
                </div>
               <div class="box-footer">
                 <input type="hidden" name="vlSampleCode" id="vlSampleCode" value="<?php echo $qrVal[56]; ?>"/>
-                <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo $reasonForChanges; ?>"/>
+                <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo $qrVal[100]; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>

@@ -161,24 +161,17 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
 }
 //set reason for changes history
 $rch = '';
-$allChange = array();
 if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){
   $rch.='<h4>Result Changes History</h4>';
   $rch.='<table style="width:100%;">';
   $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
   $rch.='<tbody>';
-  $allChange = json_decode($vlQueryInfo[0]['reason_for_vl_result_changes'],true);
-  $allChange = array_reverse($allChange);
-  foreach($allChange as $change){
-    $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
-    $usrResult = $db->rawQuery($usrQuery);
-    $name = '';
-    if(isset($usrResult[0]['user_name'])){
-      $name = ucwords($usrResult[0]['user_name']);
-    }
-    $expStr = explode(" ",$change['dtime']);
+  $splitChanges = explode('vlsm',$vlQueryInfo[0]['reason_for_vl_result_changes']);
+  for($c=0;$c<count($splitChanges);$c++){
+    $getData = explode("##",$splitChanges[$c]);
+    $expStr = explode(" ",$getData[2]);
     $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
-    $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
+    $rch.='<tr><td>'.ucwords($getData[0]).'</td><td>'.ucfirst($getData[1]).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
   }
   $rch.='</tbody>';
   $rch.='</table>';
@@ -238,9 +231,9 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
             <form class="form-inline" method="post" name="vlRequestFormRwd" id="vlRequestFormRwd" autocomplete="off" action="editVlRequestHelperRwd.php">
               <div class="box-body">
                 <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Clinic Information: (To be filled by requesting Clinican/Nurse)</h3>
-                    </div>
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Clinic Information: (To be filled by requesting Clinican/Nurse)</h3>
+                  </div>
                   <div class="box-body">
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
@@ -788,7 +781,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                       <?php
-                      if(count($allChange)>0){
+                      if(trim($rch)!= ''){
                       ?>
                         <div class="row">
                           <div class="col-md-12"><?php echo $rch; ?></div>
@@ -799,7 +792,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                </div>
               <div class="box-footer">
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
-                <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo base64_encode($vlQueryInfo[0]['reason_for_vl_result_changes']);?>"/>
+                <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo $vlQueryInfo[0]['reason_for_vl_result_changes']; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
