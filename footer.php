@@ -151,7 +151,7 @@
     $(".qr").addClass('active');
     $(".allMenu").removeClass('active');
     $(".generateQRCode").addClass('active');
-  }else if (splitsUrl=='readQRCode.php') {
+  }else if (splitsUrl=='readQRCode.php' || splitsUrl=='vlRequestRwdForm.php') {
     $(".qr").addClass('active');
     $(".allMenu").removeClass('active');
     $(".readQRCode").addClass('active');
