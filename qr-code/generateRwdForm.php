@@ -71,8 +71,8 @@
   $html .='</tr>';
   $html .='<tr>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_code'].'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['facility_state'].'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['sample_reordered']).'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['facility_state']).'</td>';
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td colspan="3" style="line-height:10px;"></td>';
