@@ -135,19 +135,17 @@ try {
         $_POST['result'] = $_POST['vlResult'];
     }
     $reasonForChanges = '';
-    $allChange = array();
+    $allChange = '';
     if(isset($_POST['reasonForResultChangesHistory']) && $_POST['reasonForResultChangesHistory'] !=''){
-        $allChange = json_decode(base64_decode($_POST['reasonForResultChangesHistory']),true);
+        $allChange = $_POST['reasonForResultChangesHistory'];
     }
     if(isset($_POST['reasonForResultChanges']) && trim($_POST['reasonForResultChanges'])!=''){
-        $allChange[] = array(
-            'usr' => $_SESSION['userId'],
-            'msg' => $_POST['reasonForResultChanges'],
-            'dtime' => $general->getDateTime()
-        );
+        $reasonForChanges = $_SESSION['userName'].'##'.$_POST['reasonForResultChanges'].'##'.$general->getDateTime();
     }
-    if(count($allChange) > 0){
-       $reasonForChanges = json_encode($allChange);
+    if(trim($allChange)!= '' && trim($reasonForChanges)!= ''){
+       $allChange = $reasonForChanges.'vlsm'.$allChange;
+    }else if(trim($reasonForChanges)!= ''){
+       $allChange =  $reasonForChanges;
     }
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
@@ -199,7 +197,7 @@ try {
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
-          'reason_for_vl_result_changes'=>$reasonForChanges,
+          'reason_for_vl_result_changes'=>$allChange,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime()
         );

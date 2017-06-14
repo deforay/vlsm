@@ -88,7 +88,6 @@
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['facility_code'].'</td>';
   $html .='</tr>';
   $html.='</table>';
-  
   $html.='<table style="padding:0px 2px 2px 2px;">';
   $html .='<tr>';
    $html .='<th colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h3>Patient Information</h3><hr/></th>';
@@ -114,7 +113,7 @@
   $html .='<tr>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['patient_age_in_months'].'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['patient_first_name']).'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['patient_gender']).'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace('_',' ',$vl['patient_gender'])).'</td>';
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -126,23 +125,20 @@
     $html .='<td colspan="3" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['patient_mobile_number'].'</td>';
   $html .='</tr>';
   $html.='</table>';
-  
   $html.='<table style="padding:0px 2px 2px 2px;">';
   $html .='<tr>';
    $html .='<th colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h3>Sample Information</h3><hr/></th>';
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date of Sample Collection  </td>';
-   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sample Type</td>';
-   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+   $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sample Type</td>';
   $html .='</tr>';
   $html .='<tr>';
+    $sampleName = (isset($vl['sample_name']))?ucwords($vl['sample_name']):'';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_collection_date']." ".$sampleCollectionTime.'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_name'].'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+    $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$sampleName.'</td>';
   $html .='</tr>';
   $html.='</table>';
-  
   $html.='<table style="padding:0px 2px 2px 2px;">';
   $html .='<tr>';
    $html .='<th colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h3>Treatment Information</h3><hr/></th>';
@@ -165,8 +161,16 @@
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Is Patient Pregnant?</td>';
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Is Patient Breastfeeding?</td>';
   $html .='</tr>';
+  $arvAdherencePercentage = '';
+  if($vl['arv_adherance_percentage'] == 'good'){
+    $arvAdherencePercentage = 'Good >= 95%';
+  }else if($vl['arv_adherance_percentage'] == 'fair'){
+    $arvAdherencePercentage = 'Fair (85-94%)';
+  }else if($vl['arv_adherance_percentage'] == 'poor'){
+    $arvAdherencePercentage = 'Poor < 85%';
+  }
   $html .='<tr>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['arv_adherance_percentage']).'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$arvAdherencePercentage.'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['is_patient_pregnant'].'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['is_patient_breastfeeding'].'</td>';
   $html .='</tr>';
@@ -181,13 +185,11 @@
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date of last viral load test </td>';
-      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Value(copies/ml)</td>';
-      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Value(copies/ml)</td>';
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$general->humanDateFormat($vl['last_vl_date_routine']).'</td>';
-      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_routine'].'</td>';
-      $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_routine'].'</td>';
     $html .='</tr>';
   }else if($vl['reason_for_vl_testing']=='failure'){
     $html .='<tr>';
@@ -195,13 +197,11 @@
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date of last viral load test </td>';
-      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Value(copies/ml)</td>';
-      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Value(copies/ml)</td>';
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$general->humanDateFormat($vl['last_vl_date_failure_ac']).'</td>';
-      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_failure_ac'].'</td>';
-      $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_failure_ac'].'</td>';
     $html .='</tr>';
   }else if($vl['reason_for_vl_testing']=='suspect'){
     $html .='<tr>';
@@ -209,13 +209,11 @@
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date of last viral load test </td>';
-      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Value(copies/ml)</td>';
-      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Value(copies/ml)</td>';
     $html .='</tr>';
     $html .='<tr>';
       $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$general->humanDateFormat($vl['last_vl_date_failure']).'</td>';
-      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_failure'].'</td>';
-      $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_failure'].'</td>';
     $html .='</tr>';
   }else{
     $html .='<tr>';
@@ -262,63 +260,63 @@
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Lab Name </td>';
-   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Testing Platform</td>';
-   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date Sample Received at Testing Lab</td>';
+   $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL Testing Platform</td>';
   $html .='</tr>';
+  $labName = (isset($vl['labName']))?ucwords($vl['labName']):'';
   $html .='<tr>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['facility_name']).'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['import_machine_name']).'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_received_at_vl_lab_datetime'].'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$labName.'</td>';
+    $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['vl_test_platform']).'</td>';
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td colspan="3" style="line-height:10px;"></td>';
   $html .='</tr>';
   $html .='<tr>';
+   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date Sample Received at Testing Lab</td>';
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sample Testing Date</td>';
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date Results Dispatched</td>';
-   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sample Rejection</td>';
   $html .='</tr>';
   $html .='<tr>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_received_at_vl_lab_datetime'].'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['sample_tested_datetime'].'</td>';
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['result_dispatched_datetime'].'</td>';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['is_sample_rejected']).'</td>';
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td colspan="3" style="line-height:10px;"></td>';
   $html .='</tr>';
-  $approveByColspan = '';
   $html .='<tr>';
-  if($vl['is_sample_rejected']=='no' || $vl['is_sample_rejected']=='' || $vl['is_sample_rejected'] == null){
-    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Result (copiesl/ml)</td>';
-    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Target Not Detected</td>';
-  }else{
-    $approveByColspan = '2';
-    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Rejection Reason</td>'; 
-  }  
-   $html .='<td colspan='.$approveByColspan.' style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Approved By</td>';
-  $html .='</tr>';
-  $html .='<tr>';
-  if($vl['is_sample_rejected']=='no' || $vl['is_sample_rejected']=='' || $vl['is_sample_rejected'] == null){
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['result_value_absolute'].'</td>';
-    $targetNotDetected = '';
-    if($vl['result'] == 'Target Not Detected'){
-      $targetNotDetected = 'Yes';
+    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sample Rejection</td>';
+    if($vl['is_sample_rejected'] == 'yes'){
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Rejection Reason</td>';
+    }else{
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Result (copiesl/ml)</td>'; 
     }
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$targetNotDetected.'</td>';
-  }else{
-    $approveByColspan = '2';
-    $rejectedReason = (isset($vl['rejection_reason_name']))?ucwords($vl['rejection_reason_name']):'';
-    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$rejectedReason.'</td>';
-  }
-    $html .='<td colspan='.$approveByColspan.' style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['requestCreatedBy']).'</td>';
+  $html .='</tr>';
+  $html .='<tr>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($vl['is_sample_rejected']).'</td>';
+    if($vl['is_sample_rejected'] == 'yes'){
+      $rejectedReason = (isset($vl['rejectionReason']))?ucwords($vl['rejectionReason']):'';
+      $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$rejectedReason.'</td>';
+    }else{
+      if($vl['result'] == 'Target Not Detected'){
+        $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">TND</td>';
+      }else{
+        $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['result_value_absolute'].'</td>';
+      }
+    }
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td colspan="3" style="line-height:10px;"></td>';
   $html .='</tr>';
   $html .='<tr>';
-   $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Laboratory Scientist Comments</td>';
+   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Approved By</td>';
+   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Laboratory Scientist Comments</td>';
+   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Status</td>';
   $html .='</tr>';
   $html .='<tr>';
-    $html .='<td colspan="3" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['approver_comments'].'</td>';
+    $approvedBy = (isset($vl['resultApprovedBy']))?ucwords($vl['resultApprovedBy']):'';
+    $statusName = (isset($vl['status_name']))?ucwords($vl['status_name']):'';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$approvedBy.'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucfirst($vl['approver_comments']).'</td>';
+    $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$statusName.'</td>';
   $html .='</tr>';
 $html.='</table>';

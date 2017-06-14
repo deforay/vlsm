@@ -265,7 +265,7 @@ $pages = array();
             $qrText[] = $vl['test_requested_on'];
             $qrText[] = $vl['sample_reordered'];
             $qrText[] = $vl['treatment_initiated_date'];
-            //$qrText[] = $vl['reason_for_vl_result_changes'];
+            $qrText[] = $vl['reason_for_vl_result_changes'];
             //generate string
             $qrString = urlencode(implode(',',$qrText));
             $style = array(
@@ -279,10 +279,9 @@ $pages = array();
             );
             $pdf->write2DBarcode($qrString, 'QRCODE,L', 80, 100, 50, 50, $style, 'N');
             
-            if($country=='7'){
+            if($country == '7'){
               include('generateRwdForm.php');
             }
-            
             $pdf->AddPage();
             $_SESSION['aliasPage'] = $page+1;
             $page = $page+1;

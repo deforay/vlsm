@@ -350,7 +350,7 @@ $formConfigResult=$db->query($formConfigQuery);
               <?php if(isset($_SESSION['privileges']) && in_array("generate.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu generateQRCode"><a href="../qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
               <?php } if(isset($_SESSION['privileges']) && in_array("readQRCode.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu readQRCode"><a href="../qr-code/readQRCode.php?q="><i class="fa fa-circle-o"></i> Read QR Code</a></li>
+                <li class="allMenu readQRCode"><a href="../qr-code/readQRCode.php"><i class="fa fa-circle-o"></i> Read QR Code</a></li>
               <?php } ?>
             </ul>
           </li>
