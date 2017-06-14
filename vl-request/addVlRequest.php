@@ -1,8 +1,7 @@
 <?php
 ob_start();
 include('../header.php');
-
-$configQuery="SELECT * from global_config";
+    $configQuery="SELECT * from global_config";
     $configResult=$db->query($configQuery);
     $arr = array();
     // now we create an associative array so that we can easily create view variables

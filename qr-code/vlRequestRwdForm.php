@@ -1312,7 +1312,7 @@ $aCheckResult=$db->query($aCheckQuery);
                 <input type="hidden" name="vlSampleCode" id="vlSampleCode" value="<?php echo $qrVal[56]; ?>"/>
                 <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo $qrVal[100]; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
-                <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
+                <a href="/vl-request/vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
             </form>
       </div>
@@ -1346,7 +1346,7 @@ $aCheckResult=$db->query($aCheckQuery);
             yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
             }).click(function(){
                $('.ui-datepicker-calendar').show();
-            });
+        });
         $('.date').mask('99-aaa-9999');
         $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#resultDispatchedOn').mask('99-aaa-9999 99:99');
         getDateOfBirth();
@@ -1558,3 +1558,6 @@ $aCheckResult=$db->query($aCheckQuery);
     }
   }
   </script>
+ <?php
+ include('../footer.php');
+ ?>
