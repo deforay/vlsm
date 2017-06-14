@@ -26,7 +26,7 @@ include('../header.php');
     function setRedirect() {
         window.open(
           '/qr-code/vlRequestRwdForm.php?q='+$('#qrText').val(),
-          '_blank'
+          '_self'
         );
     }
 </script>
