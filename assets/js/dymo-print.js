@@ -9,7 +9,7 @@ function printBarcodeLabel(barcode,facility){
 
             try{
                 // open label
-                var labelXml  = '<?xml version="1.0" encoding="utf-8"?>\
+               // var labelXml  = '<?xml version="1.0" encoding="utf-8"?>\
 <DieCutLabel Version="8.0" Units="twips">\
 	<PaperOrientation>Landscape</PaperOrientation>\
 	<Id>Small30345</Id>\
@@ -75,8 +75,14 @@ function printBarcodeLabel(barcode,facility){
                       var label = dymo.label.framework.openLabelXml(labelXml);
   
                       // set label text
-                      label.setObjectText('BARCODE', barcode);
-                      label.setObjectText('TEXT', facility);
+                      if(labelXml.indexOf("<Name>BARCODE</Name>") !== -1){
+                        label.setObjectText('BARCODE', barcode);
+                      }
+                      if(labelXml.indexOf("<Name>TEXT</Name>") !== -1){
+                        label.setObjectText('TEXT', barcode);
+                      }
+                      
+                      
                       // select printer to print on
                       // for simplicity sake just use the first LabelWriter printer
                       var printers = dymo.label.framework.getPrinters();
