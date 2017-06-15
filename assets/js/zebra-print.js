@@ -1,12 +1,29 @@
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
+
 var available_printers = null;
 var selected_category = null;
 var default_printer = null;
 var selected_printer = null;
-//var format_start = "^XA^FO100,100^BY3^B3N,N,100,Y,N^FD123ABC^FS^XZ";
-//var format_end = "^FS^XZ";
 
-var format_start = "^XA^FWB^FO100,100^BY3^B3N,N,100,Y,N^FD";
-var format_end = "^FS^XZ";
+var zebraFormat = "^XA~TA000~JSN^LT0^MNW^MTT^PON^PMN^LH0,0^JMA^PR3,3~SD5^JUS^LRN^CI0^XZ\
+^XA\
+^MMT\
+^PW1200\
+^LL0600\
+^LS0\
+^BY3,3,102^FT167,521^B3B,N,,Y,N\
+^FD1234567^FS\
+^BY3,3,102^FT1079,503^B3B,N,,Y,N\
+^FD1234567^FS\
+^BY3,3,102^FT784,514^B3B,N,,Y,N\
+^FD1234567^FS\
+^BY3,3,102^FT474,513^B3B,N,,Y,N\
+^FD1234567^FS\
+^PQ1,0,1,Y^XZ";
+
 
 var default_mode = true;
 
@@ -91,7 +108,10 @@ function printBarcodeLabel(bcode,facility)
 	checkPrinterStatus( function (text){
 		if (text == "Ready to Print")
 		{
-			selected_printer.send(format_start + bcode + format_end, printComplete, printerError);
+			//selected_printer.send(format_start + bcode + format_end, printComplete, printerError);
+			var strToPrint = zebraFormat.replaceAll("1234567",bcode);
+			strToPrint = strToPrint.replaceAll("FACILITY",facility);
+			selected_printer.send(strToPrint, printComplete, printerError);
 		}
 		else
 		{
