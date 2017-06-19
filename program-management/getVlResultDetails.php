@@ -214,13 +214,22 @@ $primaryKey="vl_sample_id";
 		}
 	    }
 	    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
-		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
-		}else{
+	      if(isset($setWhr)){
+		$sWhere = $sWhere." AND vl.facility_id IN (".$_POST['facilityName'].")";
+	      }else{
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
-		}
+		$sWhere = $sWhere." vl.facility_id IN (".$_POST['facilityName'].")";
+	      }
+	    }
+	    if(isset($_POST['vlLab']) && trim($_POST['vlLab'])!= ''){
+	      if(isset($setWhr)){
+		  $sWhere = $sWhere.' AND vl.lab_id = "'.$_POST['vlLab'].'"';
+	      }else{
+	      $setWhr = 'where';
+	      $sWhere=' where '.$sWhere;
+	      $sWhere = $sWhere.' vl.lab_id = "'.$_POST['vlLab'].'"';
+	      }
 	    }
 	    if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 		if(isset($setWhr)){
@@ -308,7 +317,7 @@ $primaryKey="vl_sample_id";
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-		//die($sQuery);
+	//die($sQuery);
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         

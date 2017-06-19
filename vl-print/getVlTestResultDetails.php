@@ -147,7 +147,7 @@ $primaryKey="vl_sample_id";
 				$sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
 			}
 			if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
-				$sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+			  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 			    $sWhere = $sWhere.' AND vl.result_status  IN ('.$_POST['status'].')';
@@ -207,15 +207,14 @@ $primaryKey="vl_sample_id";
 					$sWhere = $sWhere.' s.sample_id = "'.$_POST['sampleType'].'"';
 				}
 			}
-			
 			if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
-				if(isset($setWhr)){
-					$sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
-				}else{
-					$setWhr = 'where';
-					$sWhere=' where '.$sWhere;
-					$sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
-				}
+			    if(isset($setWhr)){
+			      $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
+			    }else{
+			      $setWhr = 'where';
+			      $sWhere=' where '.$sWhere;
+			      $sWhere = $sWhere.' f.facility_id IN ('.$_POST['facilityName'].')';
+			    }
 			}
 			if(isset($_POST['artNo']) && trim($_POST['artNo'])!= ''){
 				if(isset($setWhr)){

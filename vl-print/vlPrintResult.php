@@ -73,7 +73,7 @@ $batResult = $db->rawQuery($batQuery);
 		<tr>
 		    <td><b>Facility Name :</b></td>
 		    <td>
-		      <select class="form-control" id="facility" name="facility" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -192,6 +192,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
+     $("#facility").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate,#sampleTestDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',

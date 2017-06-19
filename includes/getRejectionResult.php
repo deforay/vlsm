@@ -24,8 +24,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    $vlQuery = $vlQuery.$sWhere." group by reason_for_sample_rejection";
    $vlResult = $db->rawQuery($vlQuery);
    $rejectionType = array();
-   foreach($vlResult as $rejectedResult)
-   {
+   foreach($vlResult as $rejectedResult){
 	  $tQuery="select COUNT(vl_sample_id) as total,vl.sample_collection_date FROM vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.reason_for_sample_rejection=".$rejectedResult['reason_for_sample_rejection'];
 	  //filter
 	  $sWhere = '';
@@ -90,7 +89,7 @@ if(count($tResult[$rejectedResult['rejection_reason_code']])>0){
    </thead>
    <tbody>
 		 <?php
-		 if(count($tableResult)>0){
+		 if(isset($tableResult) && count($tableResult)>0){
 			foreach($tableResult as $key=>$rejectedData){
 			   ?>
 			   <tr>
