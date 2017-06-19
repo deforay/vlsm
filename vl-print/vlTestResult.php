@@ -1,6 +1,5 @@
 <?php
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
@@ -11,21 +10,26 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
-
 //check filters
-$collectionDate = '';$batchCode = '';$sampleType = '';$facilityName = '';$gender = '';$status ='';
-$lastUrl = '';$lastUrl1 = '';
+$collectionDate = '';
+$batchCode = '';
+$sampleType = '';
+$facilityName = array();
+$gender = '';
+$status ='';
+$lastUrl1 = '';
+$lastUrl2 = '';
 if(isset($_SERVER['HTTP_REFERER'])){
-  $lastUrl = strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");
-  $lastUrl1 = strpos($_SERVER['HTTP_REFERER'],"vlTestResult.php");
+  $lastUrl1 = strpos($_SERVER['HTTP_REFERER'],"updateVlTestResult.php");
+  $lastUrl2 = strpos($_SERVER['HTTP_REFERER'],"vlTestResult.php");
 }
-if($lastUrl!='' || $lastUrl1!=''){
-  $collectionDate=(isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate']!='' ? $_COOKIE['collectionDate'] :  '');
-  $batchCode=(isset($_COOKIE['batchCode']) && $_COOKIE['batchCode']!='' ? $_COOKIE['batchCode'] :  '');
-  $sampleType=(isset($_COOKIE['sampleType']) && $_COOKIE['sampleType']!='' ? $_COOKIE['sampleType'] :  '');
-  $facilityName=(isset($_COOKIE['facilityName']) && $_COOKIE['facilityName']!='' ? $_COOKIE['facilityName'] :  '');
-  $gender=(isset($_COOKIE['gender']) && $_COOKIE['gender']!='' ? $_COOKIE['gender'] :  '');
-  $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='' ? $_COOKIE['status'] :  '');
+if($lastUrl1!='' || $lastUrl2!=''){
+  $collectionDate=(isset($_COOKIE['collectionDate']) && $_COOKIE['collectionDate']!='') ? $_COOKIE['collectionDate'] :  '';
+  $batchCode=(isset($_COOKIE['batchCode']) && $_COOKIE['batchCode']!='') ? $_COOKIE['batchCode'] :  '';
+  $sampleType=(isset($_COOKIE['sampleType']) && $_COOKIE['sampleType']!='') ? $_COOKIE['sampleType'] :  '';
+  $facilityName=(isset($_COOKIE['facilityName']) && $_COOKIE['facilityName']!='')? explode(',',$_COOKIE['facilityName']) :  array();
+  $gender=(isset($_COOKIE['gender']) && $_COOKIE['gender']!='') ? $_COOKIE['gender'] :  '';
+  $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='') ? $_COOKIE['status'] :  '';
 }
 ?>
   <!-- Content Wrapper. Contains page content -->
@@ -34,11 +38,10 @@ if($lastUrl!='' || $lastUrl1!=''){
     <section class="content-header">
       <h1><i class="fa fa-edit"></i> Enter VL Result</h1>
       <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home <?php echo $lastUrl;?></a></li>
+        <li><a href="../dashboard/index.php"><i class="fa fa-dashboard"></i> Home <?php echo $lastUrl1;?></a></li>
         <li class="active">Enter VL Result</li>
       </ol>
     </section>
-
      <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -81,12 +84,12 @@ if($lastUrl!='' || $lastUrl1!=''){
 		<tr>
 		    <td><b>Facility Name :</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
 			 ?>
-			 <option value="<?php echo $name['facility_id'];?>"<?php echo ($facilityName==$name['facility_id'])?"selected='selected'":""?>><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+			 <option value="<?php echo $name['facility_id'];?>"<?php echo (in_array($name['facility_id'],$facilityName))?"selected='selected'":""?>><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
 			 <?php
 			}
 			?>
@@ -198,6 +201,7 @@ if($lastUrl!='' || $lastUrl1!=''){
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
+     $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -222,7 +226,7 @@ if($lastUrl!='' || $lastUrl1!=''){
       ?>
       $('#sampleCollectionDate').val("");
       <?php
-     } else if(($lastUrl!='' || $lastUrl1!='') && isset($_COOKIE['collectionDate'])){ ?>
+     } else if(($lastUrl1!='' || $lastUrl2!='') && isset($_COOKIE['collectionDate'])){ ?>
       $('#sampleCollectionDate').val("<?php echo $_COOKIE['collectionDate'];?>");
      <?php } ?>
      

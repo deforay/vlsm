@@ -13,8 +13,10 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 }
 $sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery="SELECT * FROM facility_details where status='active' and facility_type=2";
+$fQuery="SELECT * FROM facility_details where status='active' and facility_type !=2";
 $fResult = $db->rawQuery($fQuery);
+$vlLabQuery="SELECT * FROM facility_details where status='active' and facility_type =2";
+$vlLabResult = $db->rawQuery($vlLabQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
@@ -72,32 +74,44 @@ $batResult = $db->rawQuery($batQuery);
 		<tr>		
 		    <td><b>Facility Name :</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
 		      <option value=""> -- Select -- </option>
-						<?php
-						foreach($fResult as $name){
-						 ?>
-						 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
-						 <?php
-						}
-						?>
+			  <?php
+			  foreach($fResult as $name){
+			   ?>
+			   <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+			   <?php
+			  }
+			  ?>
 		      </select>
 		    </td>
-		    
+		    <td><b>VL Lab :</b></td>
+		    <td>
+		      <select class="form-control" id="vlLab" name="vlLab" title="Please select vl lab" style="width:220px;">
+		      <option value=""> -- Select -- </option>
+			  <?php
+			  foreach($vlLabResult as $vlLab){
+			   ?>
+			   <option value="<?php echo $vlLab['facility_id'];?>"><?php echo ucwords($vlLab['facility_name']."-".$vlLab['facility_code']);?></option>
+			   <?php
+			  }
+			  ?>
+		      </select>
+		    </td>
 		    <td><b>Sample Test Date&nbsp;:</b></td>
 		    <td>
 		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
 		    </td>
+		</tr>
+		<tr>
 		    <td><b>Viral Load &nbsp;:</b></td>
 		    <td>
 		      <select class="form-control" id="vLoad" name="vLoad" title="Please select batch code" style="width:220px;">
-		         <option value=""> -- Select -- </option>
-			       <option value="<=<?php echo $arr['viral_load_threshold_limit'];?>"><= <?php echo $arr['viral_load_threshold_limit'];?> cp/ml</option>
-			       <option value="><?php echo $arr['viral_load_threshold_limit'];?>">> <?php echo $arr['viral_load_threshold_limit'];?> cp/ml</option>
+		        <option value=""> -- Select -- </option>
+			<option value="<=<?php echo $arr['viral_load_threshold_limit'];?>"><= <?php echo $arr['viral_load_threshold_limit'];?> cp/ml</option>
+			<option value="><?php echo $arr['viral_load_threshold_limit'];?>">> <?php echo $arr['viral_load_threshold_limit'];?> cp/ml</option>
 		      </select>
 		    </td>
-		</tr>
-		<tr>
 		    <td><b>Last Print Date&nbsp;:</b></td>
 		    <td>
 		      <input type="text" id="printDate" name="printDate" class="form-control" placeholder="Select Print Date" readonly style="width:220px;background:#fff;"/>
@@ -111,31 +125,29 @@ $batResult = $db->rawQuery($batQuery);
 			<option value="not_recorded">Not Recorded</option>
 		      </select>
 		    </td>
-		
-		    <td><b>Status&nbsp;:</b></td>
-		    <td>
+		</tr>
+		<tr>
+		  <td><b>Status&nbsp;:</b></td>
+		  <td>
 		      <select name="status" id="status" class="form-control" title="Please choose status">
 			<option value=""> -- Select -- </option>
 			<option value="7">Accepted</option>
 			<option value="4">Rejected</option>
 			<option value="6">Awaiting Clinic Approval</option>
 		      </select>
-		    </td>
-		</tr>
-		<tr>
+		  </td>
 		  <td><b>Show only Reordered Samples&nbsp;:</b></td>
 		    <td>
 		      <select name="showReordSample" id="showReordSample" class="form-control" title="Please choose record sample">
-				<option value=""> -- Select -- </option>
-				<option value="yes">Yes</option>
-				<option value="no" selected="selected">No</option>
+			  <option value=""> -- Select -- </option>
+			  <option value="yes">Yes</option>
+			  <option value="no" selected="selected">No</option>
 		      </select>
 		    </td>
 		</tr>
 		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-			
 			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 			&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
 			</td>
@@ -216,6 +228,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
+     $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate,#sampleTestDate,#printDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -242,7 +255,6 @@ $batResult = $db->rawQuery($batQuery);
      loadVlRequestData();
      
      $(".showhideCheckBox").change(function(){
-            
             if($(this).attr('checked')){
                 idpart = $(this).attr('data-showhide');
                 $("#"+idpart+"-sort").show();
@@ -305,6 +317,7 @@ $batResult = $db->rawQuery($batQuery);
 			  aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
 			  aoData.push({"name": "printDate", "value": $("#printDate").val()});
 			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+			  aoData.push({"name": "vlLab", "value": $("#vlLab").val()});
 			  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 			  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
 			  aoData.push({"name": "status", "value": $("#status").val()});

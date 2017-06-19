@@ -34,12 +34,12 @@ if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' &
   }
 }
 if(isset($_SERVER['HTTP_REFERER'])){
-    $previousUrl = $_SERVER['HTTP_REFERER'];
-    $urlLast = explode('/',$previousUrl);
-    if(end($urlLast)=='importedStatistics.php'){
-        $db->delete('temp_sample_report');
-        unset($_SESSION['controllertrack']);
-    }
+  $previousUrl = $_SERVER['HTTP_REFERER'];
+  $urlLast = explode('/',$previousUrl);
+  if(end($urlLast)=='importedStatistics.php'){
+      $db->delete('temp_sample_report');
+      unset($_SESSION['controllertrack']);
+  }
 }
 if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('roles.php', 'users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php'))) {
   $allAdminMenuAccess = true;
