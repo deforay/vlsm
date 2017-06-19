@@ -63,7 +63,7 @@ $cResult = $db->rawQuery($cQuery);
 		
 		    <td>&nbsp;<b>Clinic Name &nbsp;:</b></td>
 		    <td>
-			  <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" style="width:220px;">
+			  <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic name" multiple="multiple" style="width:220px;">
 		         <option value=""> -- Select -- </option>
 				  <?php
 				  foreach($cResult as $name){
@@ -102,6 +102,7 @@ $cResult = $db->rawQuery($cQuery);
   <script src="../assets/js/highchart.js"></script>
   <script>
   $(function () {
+    $("#clinicName").select2({placeholder:"Select Clinics"});
     $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',

@@ -71,7 +71,7 @@ $batResult = $db->rawQuery($batQuery);
 		
 		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -175,6 +175,7 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
   $(document).ready(function() {
+     $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleTestDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
@@ -256,11 +257,11 @@ $batResult = $db->rawQuery($batQuery);
             "bServerSide": true,
             "sAjaxSource": "getHighVlResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-			      aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
-			      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
-			      aoData.push({"name": "vlPrint", "value": 'print'});
+		aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+		aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
+		aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+		aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+		aoData.push({"name": "vlPrint", "value": 'print'});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",

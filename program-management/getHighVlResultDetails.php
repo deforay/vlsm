@@ -126,7 +126,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 	  $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
         }
         if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
-	  $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+	  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
         }
 	if($sWhere!=''){
 	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
