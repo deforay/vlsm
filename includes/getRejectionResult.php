@@ -29,16 +29,16 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 	  //filter
 	  $sWhere = '';
 	  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-		 $sWhere.= ' AND DATE(vl.sample_collection_date) <= "'.$end_date.' 23:59:00" AND DATE(vl.sample_collection_date) >= "'.$start_date.' 00:00:00"';
+	    $sWhere.= ' AND DATE(vl.sample_collection_date) <= "'.$end_date.' 23:59:00" AND DATE(vl.sample_collection_date) >= "'.$start_date.' 00:00:00"';
 	  }
 	  if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
-		 $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
+	    $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
 	  }
 	  if(isset($_POST['labName']) && trim($_POST['labName'])!= ''){
-		 $sWhere.= ' AND vl.lab_id = "'.$_POST['labName'].'"';
+	    $sWhere.= ' AND vl.lab_id = "'.$_POST['labName'].'"';
 	  }
-	  if(isset($_POST['clinicName']) && trim($_POST['clinicName'])!= ''){
-		 $sWhere.= ' AND vl.facility_id = "'.$_POST['clinicName'].'"';
+	  if(isset($_POST['clinicName']) && is_array($_POST['clinicName']) && count($_POST['clinicName']) > 0){
+	    $sWhere.= " AND vl.facility_id IN (".implode(',',$_POST['clinicName']).")";
 	  }
 	  $tQuery = $tQuery.' '.$sWhere;
 	  $tResult[$rejectedResult['rejection_reason_code']] = $db->rawQuery($tQuery);
@@ -58,16 +58,16 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    $rjQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl INNER JOIN 	r_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND sr.rejection_type='".$type."'";
    $sWhere = '';
 	  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-		 $sWhere.= ' AND DATE(vl.sample_collection_date) <= "'.$end_date.' 23:59:00" AND DATE(vl.sample_collection_date) >= "'.$start_date.' 00:00:00"';
+	    $sWhere.= ' AND DATE(vl.sample_collection_date) <= "'.$end_date.' 23:59:00" AND DATE(vl.sample_collection_date) >= "'.$start_date.' 00:00:00"';
 	  }
 	  if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
-		 $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
+	    $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
 	  }
 	  if(isset($_POST['labName']) && trim($_POST['labName'])!= ''){
-		 $sWhere.= ' AND vl.lab_id = "'.$_POST['labName'].'"';
+	    $sWhere.= ' AND vl.lab_id = "'.$_POST['labName'].'"';
 	  }
-	  if(isset($_POST['clinicName']) && trim($_POST['clinicName'])!= ''){
-		 $sWhere.= ' AND vl.facility_id = "'.$_POST['clinicName'].'"';
+	  if(isset($_POST['clinicName']) && is_array($_POST['clinicName']) && count($_POST['clinicName']) > 0){
+	    $sWhere.= " AND vl.facility_id IN (".implode(',',$_POST['clinicName']).")";
 	  }
 	  $rjQuery = $rjQuery.' '.$sWhere;
 	  $rjResult[$type] = $db->rawQuery($rjQuery);
