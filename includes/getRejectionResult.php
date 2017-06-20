@@ -73,7 +73,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 	  $rjResult[$type] = $db->rawQuery($rjQuery);
    }
 }
-if(count($tResult[$rejectedResult['rejection_reason_code']])>0){
+if(isset($tResult) && count($tResult)>0){
 ?>
 <div id="container" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;"></div>
 <!--<div id="rejectedType" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;float:right;"></div>-->
