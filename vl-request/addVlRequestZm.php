@@ -69,8 +69,14 @@ foreach($fResult as $fDetails){
 //sample code
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND vl.sample_code_title="'.$arr['sample_code'].'"  AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlResult=$db->query($svlQuery);
+if($arr['sample_code']=='MMYY'){
+    $mnthYr = date('my');
+  }else if($arr['sample_code']=='YY'){
+    $mnthYr = date('y');
+  }
+  $prefix = $arr['sample_code_prefix'];
   if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
  $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
  $strparam = strlen($maxId);
@@ -79,6 +85,7 @@ $svlResult=$db->query($svlQuery);
 }else{
  $maxId = '001';
 }
+
 //lab no increament
 $labvlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $labvlResult=$db->query($labvlQuery);
@@ -126,6 +133,16 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $sKey = $zeros.$maxId;
  $sFormat = $vlResult[0]['sample_code_format'];
  $sCodeValue = $vlResult[0]['sample_code_format'].$sKey;
+ 
+ if($arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
+ if($arr['sample_code']=='MMYY'){
+    $mnthYr = date('my');
+  }else if($arr['sample_code']=='YY'){
+    $mnthYr = date('y');
+  }
+  $prefix = $arr['sample_code_prefix'];
+  $sFormat = $prefix.$mnthYr;
+ }
  
  if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
@@ -677,11 +694,16 @@ if($urgency==''){
       if($arr['sample_code']=='auto'){
         ?>
         pNameVal = pName.split("##");
-        sCode = '<?php echo date('Ymd');?>';
+        sCode = '<?php echo date('ymd');?>';
         sCodeKey = '<?php echo $maxId;?>';
         $(".serialNo1,.serialNo,.reqBarcode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
+        <?php
+      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
+        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
+        $("#sampleCodeKey").val('<?php echo $maxId;?>');
         <?php
       }
       ?>
