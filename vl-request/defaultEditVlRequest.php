@@ -755,8 +755,9 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'readonly="readonly"':''; ?> style="width:100%;" />
-                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; ?> title="Please check tnd"> Target Not Detected
+                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" />
+                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected
+                              <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
                       </div>
@@ -964,16 +965,27 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
       $('#vlResult').attr('readonly',true);
+      $('#bdl').prop('checked', false).attr('disabled',true);
     }else{
       $('#vlResult').attr('readonly',false);
+      $('#bdl').attr('disabled',false);
+    }
+  });
+  $('#bdl').change(function() {
+    if($('#bdl').is(':checked')){
+      $('#vlResult').attr('readonly',true);
+      $('#tnd').prop('checked', false).attr('disabled',true);
+    }else{
+      $('#vlResult').attr('readonly',false);
+      $('#tnd').attr('disabled',false);
     }
   });
   
   $('#vlResult').on('input',function(e){
     if(this.value != ''){
-      $('#tnd').attr('disabled',true);
+      $('#tnd,#bdl').attr('disabled',true);
     }else{
-      $('#tnd').attr('disabled',false);
+      $('#tnd,#bdl').attr('disabled',false);
     }
   });
   
