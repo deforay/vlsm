@@ -77,7 +77,7 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                             <a href="#" id="select-all-field" style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href="#" id="deselect-all-field" style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
                             </div><br/><br/>
                             <select id="rs_field" name="rs_field[]" multiple="multiple" class="search isRequired" title="Please select email fields">
-                                <option value="Form Serial No" <?php echo(in_array("Form Serial No",$resultArr)?"selected='selected'":""); ?>>Form Serial No</option>
+                                <option value="Sample ID" <?php echo(in_array("Sample ID",$resultArr)?"selected='selected'":""); ?>>Sample ID</option>
                                 <option value="Urgency" <?php echo(in_array("Urgency",$resultArr)?"selected='selected'":""); ?>>Urgency</option>
                                 <option value="Province" <?php echo(in_array("Province",$resultArr)?"selected='selected'":""); ?>>Province</option>
                                 <option value="District Name" <?php echo(in_array("District Name",$resultArr)?"selected='selected'":""); ?>>District Name</option>

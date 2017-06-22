@@ -110,7 +110,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
             $pdfContent.='<tr>';
             $pdfContent.='<td style="border:1px solid #333;"><strong>'.$sampleResult[0]['sample_code'].'</strong></td>';
             for($f=0;$f<count($filedGroup);$f++){
-              if($filedGroup[$f] == "Form Serial No"){
+              if($filedGroup[$f] == "Sample ID"){
                     $field = 'serial_no';
                }elseif($filedGroup[$f] == "Urgency"){
                     $field = 'test_urgency';

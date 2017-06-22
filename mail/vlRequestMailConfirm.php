@@ -65,7 +65,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
             $sampleResult = $db->rawQuery($sampleQuery);
             $row[] = $sampleResult[0]['sample_code'];
             for($f=0;$f<count($filedGroup);$f++){
-               if($filedGroup[$f] == "Form Serial No"){
+               if($filedGroup[$f] == "Sample ID"){
                     $field = 'serial_no';
                }elseif($filedGroup[$f] == "Urgency"){
                     $field = 'test_urgency';
