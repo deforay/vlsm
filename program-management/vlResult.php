@@ -144,6 +144,14 @@ $batResult = $db->rawQuery($batQuery);
 			  <option value="no" selected="selected">No</option>
 		      </select>
 		    </td>
+		  <td><b>Pregnant&nbsp;:</b></td>
+		    <td>
+		      <select name="patientPregnant" id="patientPregnant" class="form-control" title="Please choose pregnant option">
+			  <option value=""> -- Select -- </option>
+			  <option value="yes">Yes</option>
+			  <option value="no">No</option>
+		      </select>
+		    </td>
 		</tr>
 		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -323,6 +331,7 @@ $batResult = $db->rawQuery($batQuery);
 			  aoData.push({"name": "status", "value": $("#status").val()});
 			  aoData.push({"name": "gender", "value": $("#gender").val()});
 			  aoData.push({"name": "showReordSample", "value": $("#showReordSample").val()});
+			  aoData.push({"name": "patientPregnant", "value": $("#patientPregnant").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",

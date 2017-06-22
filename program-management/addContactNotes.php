@@ -50,7 +50,7 @@ $general=new Deforay_Commons_General();
                   <table class="table">
                     <tr>
                       <td><b>Sample Code:<small><?php echo $vlResult[0]['sample_code'];?></small></b></td>
-                      <td><b>Collection Date:<small><?php echo $vlResult[0]['sample_collection_date'] ;?></small></b></td>
+                      <td><b>Contacted Date:<small><?php echo $vlResult[0]['sample_collection_date'] ;?></small></b></td>
                       <td><b>Patient Name:<small><?php echo $vlResult[0]['patient_first_name']." ".$vlResult[0]['patient_last_name'];?></small></b></td>
                       <td><b>Patient Code:<small><?php echo $vlResult[0]['patient_art_no'];?></small></b></td>
                     </tr>
@@ -67,9 +67,9 @@ $general=new Deforay_Commons_General();
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="address" class="col-lg-4 control-label">Collected On<span class="mandatory">*</span></label>
+                        <label for="address" class="col-lg-4 control-label">Contacted On<span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control date readonly" readonly='readonly' id="date" name="date" placeholder="Collected On" title="Enter Collected on"/>
+                        <input type="text" class="form-control date readonly" readonly='readonly' id="date" name="date" placeholder="Contacted On" title="Enter Contacted on"/>
                         </div>
                     </div>
                   </div>
@@ -94,7 +94,7 @@ $general=new Deforay_Commons_General();
                             <thead>
                             <tr>
                               <th>Contact Notes</th>
-                              <th>Collected On</th>
+                              <th>Contacted On</th>
                               <th>Added On</th>
                             </tr>
                             </thead>

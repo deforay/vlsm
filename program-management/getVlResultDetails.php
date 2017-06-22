@@ -185,6 +185,9 @@ $primaryKey="vl_sample_id";
 		if(isset($_POST['showReordSample']) && trim($_POST['showReordSample'])!= ''){
 	        $sWhere = $sWhere.' AND vl.sample_reordered ="'.$_POST['showReordSample'].'"';
 	    }
+		if(isset($_POST['patientPregnant']) && trim($_POST['patientPregnant'])!= ''){
+	        $sWhere = $sWhere.' AND vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
+	    }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 		$setWhr = 'where';
@@ -281,6 +284,15 @@ $primaryKey="vl_sample_id";
 		  $setWhr = 'where';
 		$sWhere=' where '.$sWhere;
 	        $sWhere = $sWhere.' vl.sample_reordered ="'.$_POST['showReordSample'].'"';
+		}
+	    }
+		if(isset($_POST['patientPregnant']) && trim($_POST['patientPregnant'])!= ''){
+		if(isset($setWhr)){
+		    $sWhere = $sWhere.' AND vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
+		}else{
+		  $setWhr = 'where';
+		  $sWhere=' where '.$sWhere;
+	      $sWhere = $sWhere.' vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
 		}
 	    }
 	    if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
