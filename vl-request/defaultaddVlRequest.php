@@ -622,6 +622,7 @@ $sFormat = '';
                             <div class="col-lg-7">
                               <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" />
                               <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected
+                              <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
                       </div>
@@ -866,16 +867,27 @@ $sFormat = '';
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
       $('#vlResult').attr('readonly',true);
+      $('#bdl').attr('disabled',true);
     }else{
       $('#vlResult').attr('readonly',false);
+      $('#bdl').attr('disabled',false);
+    }
+  });
+  $('#bdl').change(function() {
+    if($('#bdl').is(':checked')){
+      $('#vlResult').attr('readonly',true);
+      $('#tnd').attr('disabled',true);
+    }else{
+      $('#vlResult').attr('readonly',false);
+      $('#tnd').attr('disabled',false);
     }
   });
   
   $('#vlResult').on('input',function(e){
     if(this.value != ''){
-      $('#tnd').attr('disabled',true);
+      $('#tnd,#bdl').attr('disabled',true);
     }else{
-      $('#tnd').attr('disabled',false);
+      $('#tnd,#bdl').attr('disabled',false);
     }
   });
   
