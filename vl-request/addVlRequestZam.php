@@ -67,37 +67,21 @@ foreach($fResult as $fDetails){
 //sample code
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
-if($gconfig['sample_code']=='YY' || $gconfig['sample_code']=='MMYY'){
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="4" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MAX(length(sample_code_key)) from vl_request_form )';
-}else{
-  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="4" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MIN(length(sample_code_key)) from vl_request_form )';
-}
+$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="4" AND vl.sample_code_title="'.$gconfig['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlResult=$db->query($svlQuery);
-$lngth = strlen($svlResult[0]['MAX(sample_code_key)']);
-if($gconfig['sample_code']=='YY' || $gconfig['sample_code']=='MMYY'){
-  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth > 3){
-    $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
-    $strparam = strlen($maxId);
-    $zeros = substr("000000", $strparam);
-    $maxId = $zeros.$maxId;
-  }else{
-    $maxId = '000001';
+$prefix = $gconfig['sample_code_prefix'];
+if($gconfig['sample_code']=='MMYY'){
+    $mnthYr = date('my');
+  }else if($gconfig['sample_code']=='YY'){
+    $mnthYr = date('y');
   }
-  if($gconfig['sample_code']=='MMYY'){
-    $mnthYr = date('mY');
-  }else{
-    $mnthYr = date('Y');
-  }
-  $prefix = $gconfig['sample_code_prefix'];
-}else{
-if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $lngth < 3){
+if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
  $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
  $strparam = strlen($maxId);
  $zeros = substr("000", $strparam);
  $maxId = $zeros.$maxId;
 }else{
  $maxId = '001';
-}
 }
 $sKey = '';
 $sFormat = '';
@@ -137,12 +121,12 @@ if(isset($_SESSION['treamentIdZam']) && $_SESSION['treamentIdZam']!=''){
  $sKey = $vlResult[0]['sample_code_key']+1;
  $strparam = strlen($sKey);
  if($gconfig['sample_code']=='YY' || $gconfig['sample_code']=='MMYY'){
-  $zeros = substr("000000", $strparam);
+  $zeros = substr("000", $strparam);
   $sKey = $zeros.$sKey;
   if($gconfig['sample_code']=='MMYY'){
-    $mnthYr = date('mY');
+    $mnthYr = date('my');
   }else{
-    $mnthYr = date('Y');
+    $mnthYr = date('y');
   }
   $prefix = $gconfig['sample_code_prefix'];
  }else{
@@ -742,13 +726,13 @@ if(isset($_SESSION['treamentIdZam']) && $_SESSION['treamentIdZam']!=''){
       if($gconfig['sample_code']=='auto'){
         ?>
         pNameVal = pName.split("##");
-        sCode = '<?php echo date('Ymd');?>';
+        sCode = '<?php echo date('ymd');?>';
         sCodeKey = '<?php echo $maxId;?>';
         $(".sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
         <?php
-      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+      }else if($gconfig['sample_code']=='YY' || $gconfig['sample_code']=='MMYY'){ ?>
         $(".sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');

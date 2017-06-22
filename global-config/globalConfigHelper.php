@@ -93,6 +93,7 @@ try {
 			$vlDistinctQuery ="SELECT DISTINCT DATE_FORMAT( request_created_datetime,'%Y-%m' ) as month FROM vl_request_form";
 			$distnictResult = $db->rawQuery($vlDistinctQuery);
 			if($distnictResult){
+				$increment = 1;
 				foreach($distnictResult as $month){
 					$start_date = date($month['month'].'-01');
 					$end_date = date($month['month'].'-31');
@@ -100,16 +101,16 @@ try {
 					$svlResult=$db->query($vlQuery);
 					$y = explode("-",$month['month']);
 					if($_POST['sample_code']=='YY'){
-						$dtYr = $y[0];
+						$dtYr = substr($y[0],2);
 					}
 					else if($_POST['sample_code']=='MMYY'){
-						$dtYr = $y[1].$y[0];
+						$increment = 1;
+						$dtYr = $y[1].substr($y[0],2);
 					}
-					$increment = 1;
 					foreach($svlResult as $sample){
 						$maxId = $increment;
 						$strparam = strlen($maxId);
-						$zeros = substr("000000", $strparam);
+						$zeros = substr("000", $strparam);
 						$maxId = $zeros.$maxId;
 						$sampleCode = $prefix.$dtYr.$maxId;
 						$vlData = array('serial_no'=>$sampleCode,'sample_code'=>$sampleCode,'sample_code_format'=>$prefix.$dtYr,'sample_code_key'=>$maxId);

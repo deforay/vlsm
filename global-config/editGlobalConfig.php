@@ -218,10 +218,10 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                         eg. Province Code+Year+Month+Date+Increment Counter
                     </code>
                     <code id="auto-sample-code-MMYY" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'MMYY')?'block':'none'; ?>;">
-                        eg. Prefix+Month+Year+Increment Counter (VL052017999999)
+                        eg. Prefix+Month+Year+Increment Counter (VL0517999)
                     </code>
                     <code id="auto-sample-code-YY" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'YY')?'block':'none'; ?>;">
-                        eg. Prefix+Year+Increment Counter (VL2017999999)
+                        eg. Prefix+Year+Increment Counter (VL17999)
                     </code>
                   </div>
                 </div><br/>
