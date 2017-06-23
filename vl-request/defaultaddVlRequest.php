@@ -57,7 +57,9 @@ $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-
 //get active sample types
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
-
+//regimen heading
+$artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='sudan'";
+$artRegimenResult = $db->rawQuery($artRegimenQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='sudan' AND art_status ='active'";
 $aResult=$db->query($aQuery);
 $start_date = date('Y-m-01');
@@ -326,15 +328,21 @@ $sFormat = '';
                           <div class="form-group">
                           <label for="artRegimen">Current Regimen</label>
                             <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTValue();">
-                                 <option value=""> -- Select -- </option>
-                                 <?php
-                                 foreach($aResult as $regimen){
-                                 ?>
-                                  <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
-                                 <?php
-                                 }
-                                 ?>
-                                 <option value="other">Other</option>
+                              <option value="">-- Select --</option>
+                                <?php foreach($artRegimenResult as $heading) { ?>
+                                <optgroup label="<?php echo ucwords($heading['headings']); ?>">
+                                  <?php
+                                  foreach($aResult as $regimen){
+                                    if($heading['headings'] == $regimen['headings']){
+                                    ?>
+                                    <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
+                                    <?php
+                                    }
+                                  }
+                                  ?>
+                                </optgroup>
+                                <?php } ?>
+                                 <!--<option value="other">Other</option>-->
                             </select>
                             <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
                           </div>
