@@ -1,161 +1,95 @@
 <?php
 ob_start();
 include('../General.php');
-
 $general=new Deforay_Commons_General();
-//global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
-$gconfig = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $gconfig[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-}
-if($gconfig['sample_code']=='auto' || $gconfig['sample_code']=='alphanumeric' || $gconfig['sample_code']=='MMYY' || $gconfig['sample_code']=='YY'){
-  $numeric = '';
-  $maxLength = '';
-  if($gconfig['max_length']!='' && $gconfig['sample_code']=='alphanumeric'){
-  $maxLength = $gconfig['max_length'];
-  $maxLength = "maxlength=".$maxLength;
+//set sample code max length
+$sampleClass = '';
+$maxLength = '';
+if($global['sample_code']=='auto' || $global['sample_code']=='alphanumeric' || $global['sample_code']=='MMYY' || $global['sample_code']=='YY'){
+  if($global['max_length']!='' && $global['sample_code']=='alphanumeric'){
+    $maxLength = "maxlength=".$global['max_length'];
   }
 }else{
-  $numeric = 'checkNum';
-  $maxLength = '';
-  if($gconfig['max_length']!=''){
-  $maxLength = $gconfig['max_length'];
-  $maxLength = "maxlength=".$maxLength;
+  $sampleClass = 'checkNum';
+  if($global['max_length']!=''){
+    $maxLength = "maxlength=".$global['max_length'];
   }
 }
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-//get vltest reason details
-$testRQuery="SELECT * FROM r_vl_test_reasons";
-$testReason = $db->rawQuery($testRQuery);
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
-$lResult = $db->rawQuery($lQuery);
-
-$aQuery="SELECT * from r_art_code_details where nation_identifier='zam'";
-$aResult=$db->query($aQuery);
-
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
-
+//generate sample code
+$sKey = '';
+$sFormat = '';
+$start_date = date('Y-m-01');
+$end_date = date('Y-m-31');
+if($global['sample_code']=='YY' || $global['sample_code']=='MMYY'){
+  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MAX(length(sample_code_key)) from vl_request_form )';
+}else{
+  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MIN(length(sample_code_key)) from vl_request_form )';
+}
+$svlResult=$db->query($svlQuery);
+$length = strlen($svlResult[0]['MAX(sample_code_key)']);
+if($global['sample_code']=='YY' || $global['sample_code']=='MMYY'){
+  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $length > 3){
+    $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+    $strparam = strlen($maxId);
+    $zeros = substr("000000", $strparam);
+    $maxId = $zeros.$maxId;
+  }else{
+    $maxId = '000001';
+  }
+  $prefix = $global['sample_code_prefix'];
+  if($global['sample_code']=='MMYY'){
+    $mnthYr = date('mY');
+  }else{
+    $mnthYr = date('Y');
+  }
+}else{
+  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $length <= 3){
+    $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+    $strparam = strlen($maxId);
+    $zeros = substr("000", $strparam);
+    $maxId = $zeros.$maxId;
+  }else{
+    $maxId = '001';
+  }
+}
+//set province
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
-            foreach($pdResult as $provinceName){
-              $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-            }
+  foreach($pdResult as $provinceName){
+    $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  }
+  
+$district = '';
+$district.="<option value=''> -- Select -- </option>";
+
 $facility = '';
-$facility.="<option value=''> -- Select -- </option>";
-foreach($fResult as $fDetails){
-  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
-}
-//sample code
-$start_date = date('Y-m-01');
-$end_date = date('Y-m-31');
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="4" AND vl.sample_code_title="'.$gconfig['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlResult=$db->query($svlQuery);
-$prefix = $gconfig['sample_code_prefix'];
-if($gconfig['sample_code']=='MMYY'){
-    $mnthYr = date('my');
-  }else if($gconfig['sample_code']=='YY'){
-    $mnthYr = date('y');
-  }
-if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
- $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
- $strparam = strlen($maxId);
- $zeros = substr("000", $strparam);
- $maxId = $zeros.$maxId;
-}else{
- $maxId = '001';
-}
-$sKey = '';
-$sFormat = '';
-
-$facilityResult='';
-$stateResult='';
-$districtResult = '';
-$sDate ='';
-$cBy ='';
-$urgency ='';
-$clinicianName = '';
-$sKey = '';
-$sFormat = '';
-$sCodeValue = '';
-$sampleReceivedDate = '';
-$labNameId = '';
-$sCode = '';
-if(isset($_SESSION['treamentIdZam']) && $_SESSION['treamentIdZam']!=''){
-  //facility details
- $facilityQuery="SELECT * from facility_details where facility_id='".$_SESSION['facilityIdZam']."'";
- $facilityResult=$db->query($facilityQuery);
- 
- $stateName = $facilityResult[0]['facility_state'];
- $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
- $stateResult=$db->query($stateQuery);
- 
- //district details
- $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
- $districtResult=$db->query($districtQuery);
- 
- $vlQuery = 'select vl.test_urgency,vl.sample_collected_by,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentIdZam'].'"';
- $vlResult=$db->query($vlQuery);
- $urgency = $vlResult[0]['test_urgency'];
- $cBy = $vlResult[0]['sample_collected_by'];
- $clinicianName = $vlResult[0]['lab_contact_person'];
- $labNameId = $vlResult[0]['lab_id'];
- $sKey = $vlResult[0]['sample_code_key']+1;
- $strparam = strlen($sKey);
- if($gconfig['sample_code']=='YY' || $gconfig['sample_code']=='MMYY'){
-  $zeros = substr("000", $strparam);
-  $sKey = $zeros.$sKey;
-  if($gconfig['sample_code']=='MMYY'){
-    $mnthYr = date('my');
-  }else{
-    $mnthYr = date('y');
-  }
-  $prefix = $gconfig['sample_code_prefix'];
- }else{
- $zeros = substr("000", $strparam);
- $sKey = $zeros.$sKey;
- }
- $sFormat = $vlResult[0]['sample_code_format'];
- $sCodeValue = $vlResult[0]['sample_code_format'].$sKey;
- if($gconfig['sample_code']=='auto' || $gconfig['sample_code']=='YY' || $gconfig['sample_code']=='MMYY'){
-  $sCode = $sFormat.$sKey;
- }
- 
- if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
-  $vlResult[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
- }else{
-  $vlResult[0]['sample_collection_date']='';
- }
- $sDate = $vlResult[0]['sample_collection_date'];
- 
- if(isset($vlResult[0]['sample_received_at_vl_lab_datetime']) && trim($vlResult[0]['sample_received_at_vl_lab_datetime'])!='' && $vlResult[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$vlResult[0]['sample_received_at_vl_lab_datetime']);
-  $vlResult[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
- }else{
-  $vlResult[0]['sample_received_at_vl_lab_datetime']='';
- }
- $sampleReceivedDate = $vlResult[0]['sample_received_at_vl_lab_datetime'];
-}
-
+$facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
+//set lab facilities
+$lQuery="SELECT * FROM facility_details where facility_type='2' AND status='active'";
+$lResult = $db->rawQuery($lQuery);
+//get active sample types
+$sampleTypeQuery="SELECT * from r_sample_type where status='active'";
+$sampleTypeResult=$db->query($sampleTypeQuery);
+//sample rejection reason
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+//rejection type
+$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+//get active users
+$userQuery="SELECT * FROM user_details where status='active'";
+$userResult = $db->rawQuery($userQuery);
+//get suspected treatment failure at
+$suspectedTreatmentFailureAtQuery="SELECT DISTINCT vl_sample_suspected_treatment_failure_at FROM vl_request_form where vlsm_country_id='4'";
+$suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
+//get art regimen
+$artQuery="SELECT * from r_art_code_details where nation_identifier='zam' AND art_status ='active'";
+$artResult=$db->query($artQuery);
+//get vl test reasons
+$testReasonQuery="SELECT * FROM r_vl_test_reasons";
+$testReasonResult = $db->rawQuery($testReasonQuery);
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -178,6 +112,15 @@ if(isset($_SESSION['treamentIdZam']) && $_SESSION['treamentIdZam']!=''){
       }.ui_tpicker_time_input{
        width:100%;
       }
+      .table > tbody > tr > td{
+        border-top:none;
+      }
+      .form-control,.form-group{
+        width:100% !important;
+      }
+      .row{
+        margin-top:6px;
+      }
 </style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -189,7 +132,6 @@ if(isset($_SESSION['treamentIdZam']) && $_SESSION['treamentIdZam']!=''){
         <li class="active">Add Vl Request</li>
       </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -197,876 +139,784 @@ if(isset($_SESSION['treamentIdZam']) && $_SESSION['treamentIdZam']!=''){
         <div class="box-header with-border">
           <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
         </div>
-        <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-inline" method='post'  name='vlRequestForm' id='vlRequestForm' autocomplete="off" action="addVlRequestHelperZam.php">
+            <form class="form-inline" method="post" name="vlRequestFormZam" id="vlRequestFormZam" autocomplete="off" action="addVlRequestHelperZam.php">
               <div class="box-body">
-                <div class="box box-default">
+                 <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Section 1: Health Facility Information</h3>
+                    </div>
+                    <div class="box-body">
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                            <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
+                            <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;"/>
+                          </div>
+                        </div>
+                         <!-- BARCODESTUFF START -->
+                        <?php
+                          if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
+                        ?>
+                          <div class="col-xs-4 col-md-4 pull-right">
+                            <div class="form-group">
+                              <label for="printBarCode">Print Barcode Label<span class="mandatory">*</span> </label>
+                              <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
+                            </div>
+                          </div>
+                        <?php
+                          }
+                        ?>
+                        <!-- BARCODESTUFF END -->
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="province">Province <span class="mandatory">*</span></label>
+                            <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
+                              <?php echo $province;?>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="district">District  <span class="mandatory">*</span></label>
+                            <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
+                              <option value=""> -- Select -- </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                            <label for="fName">Health Facility <span class="mandatory">*</span></label>
+                              <select class="form-control isRequired" id="fName" name="fName" title="Please select health facility" style="width:100%;" onchange="fillFacilityDetails();">
+                                <option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>
+                              </select>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="fCode">Health Facility Code </label>
+                            <input type="text" class="form-control" style="width:100%;" name="fCode" id="fCode" placeholder="Health Facility Code" title="Please enter health facility code">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="reqClinician">Requesting Officer </label>
+                            <input type="text" class="form-control" style="width:100%;" name="reqClinician" id="reqClinician" placeholder="Requesting Officer" title="Please enter requesting officer">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="reqClinicianPhoneNumber">Contact Number </label>
+                            <input type="text" class="form-control checkNum" style="width:100%;" name="reqClinicianPhoneNumber" id="reqClinicianPhoneNumber" placeholder="Contact Number" title="Please enter contact number" maxlength="15">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="labId">Referral Laboratory for Sample </label>
+                            <select class="form-control" name="labId" id="labId" title="Please choose laboratory" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                                <?php
+                                foreach($lResult as $lab){
+                                  ?>
+                                  <option value="<?php echo $lab['facility_id'];?>"><?php echo ucwords($lab['facility_name']);?></option>
+                                  <?php
+                                }
+                                ?>
+                              <option value="other"> Other </option>
+                            </select>
+                            <input class="form-control newLab" name="newLab" id="newLab" placeholder="Lab Name" title="Please enter lab name" style="width:100%;margin-top: 2px;display:none;" type="text">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Section 2: Patient Information</h3>
+                    </div>
+                    <div class="box-body">
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="surName">Surname </label>
+                            <input type="text" class="form-control" style="width:100%;" name="surName" id="surName" placeholder="Patient Surname" title="Please enter patient surname">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="patientFname">First Name </label>
+                            <input type="text" class="form-control" style="width:100%;" name="patientFname" id="patientFname" placeholder="Patient First Name" title="Please enter patient first name">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="patientArtNo">ART No. <span class="mandatory">*</span></label>
+                            <input type="text" class="form-control isRequired" style="width:100%;" name="patientArtNo" id="patientArtNo" placeholder="ART Number" title="Please enter patient ART number">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="patientPhoneNumber">Contact No. </label>
+                            <input type="text" class="form-control checkNum" style="width:100%;" name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Patient Contact No." title="Please enter patient contact no." maxlength="15">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="">DOB </label>
+                            <input type="text" class="form-control date" style="width:100%;" name="dob" id="dob" placeholder="DOB" title="Please enter patient date of birth" onchange="getAgeInWeeks();">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="ageInWeeks">Age(weeks) </label>
+                            <input type="text" class="form-control checkNum" style="width:100%;" name="ageInWeeks" id="ageInWeeks" placeholder="Age in Weeks" title="Please enter age in weeks">
+                            <input type="hidden" name="ageInYears" id="ageInYears">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="gender">Sex</label><br>
+                            <label class="radio-inline" style="margin-left:0px;">
+                              <input class="" id="genderMale" name="gender" value="male" title="Please check gender" type="radio">Male
+                            </label>
+                            <label class="radio-inline" style="margin-left:0px;">
+                              <input class="" id="genderFemale" name="gender" value="female" type="radio">Female
+                            </label>
+                            <label class="radio-inline" style="margin-left:0px;">
+                              <input class="" id="genderNotRecorded" name="gender" value="not_recorded" type="radio">Not Recorded
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Is Patient Pregnant? </label><br>
+                            <label class="radio-inline">
+                              <input class="" id="pregYes" name="patientPregnant" value="yes" title="Please check one" type="radio"> Yes
+                              </label>
+                            <label class="radio-inline">
+                              <input class="" id="pregNo" name="patientPregnant" value="no" type="radio"> No
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="lineOfTreatment">Treatment Stage </label>
+                            <select name="lineOfTreatment" id="lineOfTreatment" class="form-control" title="Please choose treatment stage" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                              <option value="1">1st Line</option>
+                              <option value="2">2nd Line</option>
+                              <option value="3">3rd Line</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Date of ART Initiation </label><br>
+                             <input type="text" class="form-control date" style="width:100%;" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiated" title="Please enter date of art initiated">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">ART Regimen </label><br>
+                             <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTValue();">
+                                 <option value=""> -- Select -- </option>
+                                 <?php
+                                 foreach($artResult as $regimen){
+                                 ?>
+                                  <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
+                                 <?php
+                                 }
+                                 ?>
+                                 <option value="other">Other</option>
+                            </select>
+                            <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Reason VL Requested </label><br>
+                            <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" onchange="checkTestReason();">
+                              <option value=""> -- Select -- </option>
+                              <?php
+                              foreach($testReasonResult as $testReason){
+                                ?>
+                                <option value="<?php echo $testReason['test_reason_name'];?>"><?php echo ucwords($testReason['test_reason_name']);?></option>
+                                <?php
+                              }
+                              ?>
+                              <option value="other">Other</option>
+                            </select>
+                           <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="VL Test Reason" title="Please enter VL Test Reason" style="width:100%;display:none;margin-top:2px;">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Date Of Last Viral Load Test </label><br>
+                             <input type="text" class="form-control date" style="width:100%;" name="lastViralLoadTestDate" id="lastViralLoadTestDate" placeholder="Date Of Last Viral Load Test" title="Please enter date of last viral load test">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="lastViralLoadResult">Result Of Last Viral Load(copies/ml) </label><br>
+                             <input type="text" class="form-control checkNum" style="width:100%;" name="lastViralLoadResult" id="lastViralLoadResult" placeholder="Result Of Last Viral Load" title="Please enter result of last viral load test">
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="enhancedSession">Enhanced Sessions </label>
+                            <select name="enhancedSession" id="enhancedSession" class="form-control" title="Please choose enhanced session" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value=">3"> > 3</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Section 3: Specimen Information</h3>
+                  </div>
                   <div class="box-body">
                     <div class="row">
-                      <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $sCode;?>" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)" />
-                        </div>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="specimenType">Sample Type <span class="mandatory">*</span></label>
+                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                              <?php
+                              foreach($sampleTypeResult as $sampleType){
+                               ?>
+                               <option value="<?php echo $sampleType['sample_id'];?>"><?php echo ucwords($sampleType['sample_name']);?></option>
+                               <?php
+                              }
+                              ?>
+                            </select>
+                          </div>
                       </div>
-                      
-                      
-                      <!-- BARCODESTUFF START -->
-                      <?php
-                        if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
-                      ?>
-                      <div class="col-xs-3 col-md-3 pull-right">
-                        <div class="form-group">
-                          <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
-                          <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
-                        </div>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Repeat Sample? (due to rejection) </label><br>
+                            <label class="radio-inline">
+                              <input id="sampleReorderedYes" name="sampleReordered" value="yes" title="Please check one" type="radio"> Yes
+                              </label>
+                            <label class="radio-inline">
+                              <input id="sampleReorderedNo" name="sampleReordered" value="no" type="radio"> No
+                            </label>
+                          </div>
                       </div>
-                      <?php
-                        }
-                      ?>
-                      <!-- BARCODESTUFF END -->
-                      
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Date Sample Collected <span class="mandatory">*</span></label><br>
+                             <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collected Date" title="Please enter sample collected date">
+                          </div>
+                      </div>
                     </div>
                     <div class="row">
-                      <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
-                        <label for="province">Province <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
-                            <?php if($facilityResult!='') { ?>
-                            <option value=""> -- Select -- </option>
-                            <?php foreach($pdResult as $provinceName){ ?>
-                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
-                            <?php } } else { echo $province;  } ?>
-                          </select>
-                        </div>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="visitType">Visit Type </label>
+                            <select name="visitType" id="visitType" class="form-control" title="Please choose visit type" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                              <option value="6month">6 Months</option>
+                              <option value="12month">12 Months</option>
+                              <option value="repeat">Repeat</option>
+                            </select>
+                          </div>
                       </div>
-                      <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
-                        <label for="District">District  <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
-                            <option value=""> -- Select -- </option>
-                            <?php
-                            if($districtResult!=''){
-                            foreach($districtResult as $districtName){
-                              ?>
-                              <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="suspectedTreatmentFailureAt">Suspected Treatment Failure at </label>
+                            <select name="suspectedTreatmentFailureAt" id="suspectedTreatmentFailureAt" class="form-control" title="Please choose suspected treatment failure at" style="width:100%;">
+                              <option value=""> -- Select -- </option>
                               <?php
-                            }
-                            }
-                            ?>
-                          </select>
-                        </div>
+                              foreach($suspectedTreatmentFailureAtResult as $stfat){
+                              ?>
+                                <option value="<?php echo $stfat['vl_sample_suspected_treatment_failure_at']; ?>"><?php echo ucwords($stfat['vl_sample_suspected_treatment_failure_at']); ?></option>
+                              <?php } ?>
+                              <option value="other">Other(Specify)</option>
+                            </select>
+                            <input class="form-control newSuspectedTreatmentFailureAt" name="newSuspectedTreatmentFailureAt" id="newSuspectedTreatmentFailureAt" placeholder="Treatment Failure At" title="Please enter treatment failure at" style="width:100%;margin-top: 2px;display:none;" type="text">
+                          </div>
+                      </div>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="collectedBy">Collected By </label>
+                            <select name="collectedBy" id="collectedBy" class="form-control" title="Please choose collected by" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                              <?php
+                              foreach($userResult as $user){
+                                ?>
+                                <option value="<?php echo $user['user_id'];?>"><?php echo ucwords($user['user_name']);?></option>
+                                <?php
+                              }
+                              ?>
+                            </select>
+                          </div>
                       </div>
                     </div>
-                
-                <div class="row">
-                  <div class="col-xs-3 col-md-3">
-                    <div class="form-group">
-                    <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
-                      <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-			<?php if($facilityResult!=''){ ?>
-		      <option value=""> -- Select -- </option>
-			<?php foreach($fResult as $fDetails){ ?>
-                        <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_SESSION['facilityIdZam']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
-                        <?php } } else { echo $facility; } ?>
-		      </select>
+                    <div class="row">
+                      <div class="col-xs-8 col-md-8">
+                          <div class="form-group">
+                          <label for="facilityComments">Facility Comments </label>
+                            <textarea class="form-control" name="facilityComments" id="facilityComments" placeholder="Facility Comments" title="Please enter comments" style="width:100%"></textarea>
+                          </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-xs-3 col-md-3">
-                    <div class="form-group">
-                    <label for="clinicianName">Clinician Name </label>
-                    <input type="text" class="form-control  " name="clinicianName" id="clinicianName" placeholder="Enter Clinician Name" style="width:100%;"  value="<?php echo $clinicianName;?>">
-                    </div>
-                  </div>
-                  <div class="col-xs-3 col-md-3">
-                    <div class="form-group">
-                    <label for="sampleCollectionDate">Sample Collection Date <span class="mandatory">*</span></label>
-                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
-                    </div>
-                  </div>
-                  <div class="col-xs-3 col-md-3">
-                    <div class="form-group">
-                    <label for="">Sample Received Date</label>
-                    <input type="text" class="form-control" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" value="<?php echo $sampleReceivedDate; ?>"  onchange="checkSampleReceviedDate();">
-                    </div>
-                  </div>
-                </div>
-                <br/>
-                    <table class="table" style="width:100%">
-                      <tr>
-                        <td style="width:16%">
-                        <label for="patientFname">Patient First Name   <span class="mandatory">*</span></label>
-                        </td>
-                        <td style="width:20%">
-                          <input type="text" class="form-control isRequired " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" >
-                        </td>
-                        <td style="width:10%">
-                        <label for="surName">Surname  <span class="mandatory">*</span></label>
-                        </td>
-                        <td style="width:20%">
-                          <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Surname" title="Enter Surname"  style="width:100%;" >
-                        </td>
-                        <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
-                        <td style="width:20%;"><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile No." title="Please enter patient Phone No" style="width:100%;" /></td>
-                      </tr>
-                      <tr>
-                        <td colspan="2">
-                          <label for="gender">Gender &nbsp;&nbsp;</label>
-                           <label class="radio-inline">
-                            <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
-                            </label>
-                          <label class="radio-inline">
-                            <input type="radio" class=" " id="genderFemale" name="gender" value="female" title="Please check gender"> Female
-                          </label>
-                          <label class="radio-inline">
-                            <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"> Not Recorded
-                          </label>
-                        </td>
-                        <td><label>Date Of Birth</label></td>
-                        <td>
-                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" onchange="getDateOfBirth();checkARTInitiationDate();"/>
-                        </td>
-                        <td><label for="ageInYears">Age in years</label></td>
-                        <td>
-                          <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" style="width:100%;" >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="ageInMonths">Age in months</label></td>
-                        <td>
-                          <input type="text" class="form-control" name="ageInMonths" id="ageInMonths" placeholder="If age < 1 year" title="Enter age in months" style="width:100%;" >
-                        </td>
-                        <td class="femaleElements"><label for="patientPregnant">Is Patient Pregnant ?</label></td>
-                        <td class="femaleElements">
-                          <label class="radio-inline">
-                           <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Is Patient Pregnant"> Yes
-                          </label>
-                          <label class="radio-inline">
-                           <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" title="Please check Is Patient Pregnant" > No
-                          </label>
-                        </td>
-                         <td colspan="2" class="femaleElements"><label for="breastfeeding">Is Patient Breastfeeding?</label>
-                          <label class="radio-inline">
-                             <input type="radio" id="breastfeedingYes" name="breastfeeding" value="yes" title="Is Patient Breastfeeding">Yes
-                          </label>
-                          <label class="radio-inline">
-                            <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" title="Is Patient Breastfeeding">No
-                          </label>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="patientArtNo">Patient OI/ART Number</label></td>
-                        <td>
-                          <input type="text" class="form-control" name="patientArtNo" id="patientArtNo" placeholder="Patient OI/ART Number" title="Enter Patient OI/ART Number" style="width:100%;" >
-                        </td>
-                        <td><label for="dateOfArt">Date Of ART Initiation</label></td>
-                        <td>
-                          <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiation" title="Date Of ART Initiation" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;" >
-                        </td>
-                        <td><label for="artRegimen">ART Regimen</label></td>
-                        <td>
-                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" style="width:100%;" onchange="ARTValue();">
-                         <option value=""> -- Select -- </option>
-                         <?php
-                         foreach($aResult as $parentRow){
-                         ?>
-                          <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
-                         <?php
-                         }
-                         ?>
-                         <option value="other">Other</option>
-                        </select>
-                        <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art regimen" style="width:100%;display:none;margin-top:2px;" >
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="vlTestReason">Reason VL Requested</label></td>
-                        <td>
-                          <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" onchange="ReasonVLTest()">
-                            <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($testReason as $reason){
-                              ?>
-                              <option value="<?php echo $reason['test_reason_name'];?>"><?php echo ucwords($reason['test_reason_name']);?></option>
-                              <?php
-                            }
-                            ?>
-                            <option value="other">Other</option>
-                           </select>
-                            <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="New VL Test Reason" title="New VL Test Reason" style="width:100%;display:none;margin-top:2px;">
-                        </td>
-                        <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
-                        <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" onchange="checkLastVLTestDate();" style="width:100%;" /></td>
-                        <td><label for="lastViralLoadResult">Result Of Last Viral Load<br/>(copies/ml)</label></td>
-                        <td><input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Enter Result Of Last Viral Load" title="Enter Result Of Last Viral Load" style="width:100%;" /></td>
-                      </tr>
-                      <tr>
-                        <td><label for="enhanceSession">Enhanced Sessions</label></td>
-                        <td>
-                          <select name="enhanceSession" id="enhanceSession" class="form-control" title="Please choose enhance session">
-                          <option value=""> -- Select -- </option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value=">3"> > 3</option>
-                         </select>
-                        </td>
-                        <td colspan="3"><label>After Enhanced Adherence Poor Adherence was identified</label></td>
-                        <td>
-                          <label class="radio-inline">
-                             <input type="radio" class="" id="poorAdherence" name="poorAdherence" value="yes" title="After Enhanced Adherence Poor Adherence was identified" > Yes
-                          </label>
-                          <label class="radio-inline noResult" style="margin-left: 0px;">
-                                  <input type="radio" class="" id="poorAdherence1" name="poorAdherence" value="no" title="After Enhanced Adherence Poor Adherence was identified" > No
-                          </label>
-                        </td>
-                      </tr>
-                    </table>
                   </div>
                 </div>
                 <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Section 4: For Laboratory Use Only</h3>
+                  </div>
                   <div class="box-body">
-                    <div class="box-header with-border">
-                    <h3 class="box-title">FOR LABORATORY USE ONLY</h3>
-                    
+                    <div class="row">
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Date Sample Received at the Lab </label><br>
+                             <input type="text" class="form-control" style="width:100%;" name="sampleReceivedOn" id="sampleReceivedOn" placeholder="Sample Received Date" title="Please enter sample received date at lab">
+                          </div>
+                      </div>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Date Test Performed </label><br>
+                             <input type="text" class="form-control" style="width:100%;" name="sampleTestingDateAtLab" id="sampleTestingDateAtLab" placeholder="Test Performed Date" title="Please enter test performed date">
+                          </div>
+                      </div>
+                      <div class="col-xs-4 col-md-4">
+                        <div class="form-group">
+                          <label for="sampleValidity">Sample Validity </label><br>
+                            <label class="radio-inline">
+                             <input class="" id="sampleValidityYes" name="sampleValidity" value="passed" title="Please check one" type="radio"> Accepted
+                            </label>
+                            <label class="radio-inline">
+                             <input class="" id="sampleValidityNo" name="sampleValidity" value="invalid" title="Please check one" type="radio"> Rejected
+                            </label>
+                        </div>
+                      </div>
                     </div>
-                    <table class="table">
-                      <tr>
-                        <td><label for="testingPlatform">VL Testing Platform</label></td>
-                        <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                    <div class="row rejectionSection" style="display:none;">
+                      <div class="col-xs-4 col-md-4">
+                        <div class="form-group">
+                         <label for="">If Rejected, Repeat Sample Collection </label><br>
+                         <label class="radio-inline">
+                           <input class="" id="repeatSampleCollectionYes" name="repeatSampleCollection" value="yes" title="Please check one" type="radio"> Yes
+                           </label>
+                         <label class="radio-inline">
+                           <input class="" id="repeatSampleCollectionNo" name="repeatSampleCollection" value="no" type="radio"> No
+                         </label>
+                        </div>
+                      </div>
+                      <div class="col-xs-4 col-md-4">
+                        <div class="form-group">
+                          <label for="rejectionReason">Reason For Rejection </label>
+                          <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please choose rejection reason">
                             <option value="">-- Select --</option>
-                            <?php foreach($importResult as $mName) { ?>
-                              <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
+                            <?php foreach($rejectionTypeResult as $type) { ?>
+                            <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
                               <?php
-                            }
-                            ?>
-                          </select>
-                        </td>
-                        <td><?php if(isset($gconfig['sample_type']) && trim($gconfig['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
-                        <td>
-                          <?php if(isset($gconfig['sample_type']) && trim($gconfig['sample_type']) == "enabled"){ ?>
-                            <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
-                                <option value=""> -- Select -- </option>
-                                <?php
-                                foreach($sResult as $name){
-                                 ?>
-                                 <option value="<?php echo $name['sample_id'];?>"><?php echo ucwords($name['sample_name']);?></option>
-                                 <?php
-                                }
+                              foreach($rejectionResult as $reject){
+                                if($type['rejection_type'] == $reject['rejection_type']){
                                 ?>
-                            </select>
-                          <?php } ?>
-                        </td>
-                        <td><label for="testMethods">Test Methods</label></td>
-                        <td>
-                          <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
-                          <option value=""> -- Select -- </option>
-                          <option value="individual">Individual</option>
-                          <option value="minipool">Minipool</option>
-                          <option value="other pooling algorithm">Other Pooling Algorithm</option>
-                         </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" onchange="checkSampleTestingDate();"/></td>
-                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
-                        <td><label for="labId">Lab Name</label></td>
-                        <td>
-                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
-                            <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($lResult as $labName){
+                                <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
+                                <?php
+                                }
+                              }
                               ?>
-                              <option value="<?php echo $labName['facility_id'];?>" <?php echo ($labNameId==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                            </optgroup>
+                            <?php } ?>
+                            <option value="other">Other (Please Specify) </option>
                           </select>
-                        </td>
-                      </tr>
-                      <tr class="noResult">
-                        <td><label>If no result</label></td>
-                        <td colspan="2">
-                          <label class="radio-inline noResult">
-                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" onclick="checkRejectedReason();"> Sample Rejected
-                          </label>
-                          <label class="radio-inline noResult" style="margin-left: 0px;">
-                                  <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" onclick="checkRejectedReason();"> Lab testing Technical Error
-                          </label>
-                        </td>
-                        <td><label class="noResult">Rejection Reason</label></td>
-                        <td colspan="2">
-                         <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
-                           <option value="">-- Select --</option>
-                          <?php
-                          foreach($rejectionResult as $reject){
-                            ?>
-                            <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                            <?php
-                          }
-                          ?>
-                         </select>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><label>Approved By</label></td>
-                        <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
-                            <option value="">-- Select --</option>
-                            <?php
-                            foreach($userResult as $uName){
-                              ?>
-                              <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                              <?php
-                            }
-                            ?>
-                          </select>
-                         </td>
-                        <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
-                        <td colspan="3"><textarea class="form-control" name="labComments" id="labComments" title="Enter lab comments" style="width:100%"></textarea></td>
-                      </tr>
-                    </table>
-                    
-        
-                    
+                          <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                <div class="box box-primary">
+                  <div class="box-header with-border">
+                    <h3 class="box-title">Section 5: Results</h3>
+                  </div>
+                  <div class="box-body">
+                    <div class="row">
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="result">Results </label>
+                            <select name="result" id="result" class="form-control" title="Please choose test result" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                              <option value="tnd">Target Not Detected</option>
+                              <option value="ac">Actual Copies</option>
+                              <option value="invalid">Invalid</option>
+                              <option value="repeat">Repeat Sample Collection</option>
+                            </select>
+                            <span class="vlResult" style="display:none;"><input class="form-control checkNum" name="vlResult" id="vlResult" placeholder="Viral Load Result" title="Please enter vl result" style="width:75% !important;margin-top: 2px;" type="text">&nbsp;(copiesl/ml)</span>
+                          </div>
+                      </div>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                          <label for="reviewedBy">Reviewed By </label>
+                            <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" style="width:100%;">
+                              <option value=""> -- Select -- </option>
+                              <?php
+                              foreach($userResult as $user){
+                                ?>
+                                <option value="<?php echo $user['user_id'];?>"><?php echo ucwords($user['user_name']);?></option>
+                                <?php
+                              }
+                              ?>
+                            </select>
+                          </div>
+                      </div>
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="">Reviewed By Datetime </label><br>
+                             <input type="text" class="form-control" style="width:100%;" name="reviewedByDatetime" id="reviewedByDatetime" placeholder="Reviewed by Date" title="Please enter reviewed by date">
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xs-4 col-md-4">
+                          <div class="form-group">
+                           <label for="labContactPerson">Lab Staff Name </label><br>
+                             <input type="text" class="form-control" style="width:100%;" name="labContactPerson" id="labContactPerson" placeholder="Lab Staff Name" title="Please enter lab staff name">
+                          </div>
+                      </div>
+                      <div class="col-xs-8 col-md-8">
+                          <div class="form-group">
+                          <label for="labComments">Laboratory Comments </label>
+                            <textarea class="form-control" name="labComments" id="labComments" placeholder="Lab Comments" title="Please enter comments" style="width:100%"></textarea>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="box-footer">
+                <!-- BARCODESTUFF START -->
+                <?php
+                if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
+                ?>
+                  <div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br/>
+                    <div class="progress" style="width:100%">
+                        <div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        </div>
+                    </div>
+                  </div> <!-- /printer_data_loading -->
+                  <div id="printer_details" style="display:none">
+                          <span id="selected_printer">No printer selected!</span> 
+                          <button type="button" class="btn btn-success" onclick="changePrinter()">Change/Retry</button>
+                  </div><br /> <!-- /printer_details -->
+                  <div id="printer_select" style="display:none">
+                          Zebra Printer Options<br />
+                          Printer: <select id="printers"></select>
+                  </div> <!-- /printer_select -->
+                  <?php
+                  }
+                  ?>                    
+               <!-- BARCODESTUFF END -->
+                  <input type="hidden" name="saveNext" id="saveNext"/>
+                  <?php if($global['sample_code']=='auto' || $global['sample_code']=='YY' || $global['sample_code']=='MMYY'){ ?>
+                    <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
+                    <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
+                  <?php } ?>
+                  <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
+                  <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>&nbsp;
+                  <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
+                </div>
               </div>
-              <!-- /.box-body -->
-              <div class="box-footer">
-                
-             
-        <!-- BARCODESTUFF START -->                    
-        <?php
-					if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
-					?>
-							
-							<div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br/>
-								<div class="progress" style="width:100%">
-									<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-									</div>
-								</div>
-							</div> <!-- /printer_data_loading -->
-							<div id="printer_details" style="display:none">
-								<span id="selected_printer">No printer selected!</span> 
-								<button type="button" class="btn btn-success" onclick="changePrinter()">Change/Retry</button>
-							</div><br /> <!-- /printer_details -->
-							<div id="printer_select" style="display:none">
-								Zebra Printer Options<br />
-								Printer: <select id="printers"></select>
-							</div> <!-- /printer_select -->
-						
-						<?php
-						}
-						?>                    
-             <!-- BARCODESTUFF END -->                      
-                
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                <input type="hidden" name="saveNext" id="saveNext"/>
-                <input type="hidden" name="formId" id="formId" value="4"/>
-                <?php if($gconfig['sample_code']=='auto' || $gconfig['sample_code']=='MMYY' || $gconfig['sample_code']=='YY'){ ?>
-                <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
-                <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
-                <?php } ?>
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
-                <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
-              </div>
-              <!-- /.box-footer -->
             </form>
-          <!-- /.row -->
         </div>
-       
       </div>
-      <!-- /.box -->
-
     </section>
-    <!-- /.content -->
   </div>
-  
-  
   <!-- BARCODESTUFF START -->
-  
 	<?php
-		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
-			if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
-				?>
-					<script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
-					<script src="../assets/js/dymo-print.js"></script>    
-				<?php
-			}else if($global['bar_code_printing'] == 'zebra-printer'){
-				?>
-					<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
-					<script src="../assets/js/zebra-print.js"></script>				
-				<?php				
-			}
-		}
+          if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
+                  if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
+                          ?>
+                                  <script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
+                                  <script src="../assets/js/dymo-print.js"></script>    
+                          <?php
+                  }else if($global['bar_code_printing'] == 'zebra-printer'){
+                          ?>
+                                  <script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
+                                  <script src="../assets/js/zebra-print.js"></script>				
+                          <?php				
+                  }
+          }
 	?>
 
   <!-- BARCODESTUFF END -->
-  
-  <script type="text/javascript">
-  
-  provinceName = true;
-  facilityName = true;
-  machineName = true;
- $(document).ready(function() {
-	
-  // BARCODESTUFF START
-			
+  <script>
+    $(document).ready(function() {
+      // BARCODESTUFF START
 	<?php
-		if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
-			echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
-		}
+          if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
+            echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
+          }
 	?>
-  // BARCODESTUFF END
-  
-  $('.date').datepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "hh:mm TT",
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-   });
-   
-   $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
-   
-   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').datetimepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "HH:mm",
-     onChangeMonthYear: function(year, month, widget) {
-           setTimeout(function() {
+     //BARCODESTUFF END
+        $('.date').datepicker({
+           changeMonth: true,
+           changeYear: true,
+           dateFormat: 'dd-M-yy',
+           timeFormat: "hh:mm TT",
+           maxDate: "Today",
+           yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+          }).click(function(){
               $('.ui-datepicker-calendar').show();
-           });
-     },
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-     });
-  });
-    function validateNow(){
-      var format = '<?php echo $gconfig['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $gconfig['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
-        return false;
-      }
-    
-    flag = deforayValidator.init({
-        formId: 'vlRequestForm'
+         });
+        $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#reviewedByDatetime').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                  setTimeout(function() {
+                     $('.ui-datepicker-calendar').show();
+                  });
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+            }).click(function(){
+               $('.ui-datepicker-calendar').show();
+            });
+        $('.date').mask('99-aaa-9999');
+        $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#reviewedByDatetime').mask('99-aaa-9999 99:99');
     });
     
-    $('.isRequired').each(function () {
-          ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
-    });
-    $("#saveNext").val('save');
-    if(flag){
-      getMachineName();
-      if(machineName){
+    function getProvinceDistricts(){
       $.blockUI();
-      document.getElementById('vlRequestForm').submit();
-      }
-    }
-    }
-    function validateSaveNow(){
-      var format = '<?php echo $gconfig['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $gconfig['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
-        return false;
-      }
-      flag = deforayValidator.init({
-          formId: 'vlRequestForm'
-      });
-      
-    $('.isRequired').each(function () {
-        ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
-    });
-    $("#saveNext").val('next');
-    if(flag){
-      getMachineName();
-      if(machineName){
-        $.blockUI();
-        document.getElementById('vlRequestForm').submit();
-      }
-      }
-    }
-  function getfacilityDetails(obj)
-  {
-    $.blockUI();
-      var cName = $("#clinicName").val();
       var pName = $("#province").val();
-      if(pName!='' && provinceName && facilityName){
-        facilityName = false;
-      }
-    if(pName!=''){
-      if(provinceName){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
-      function(data){
-	  if(data != ""){
+      if($.trim(pName)!=''){
+        $.post("../includes/getFacilityForClinic.php", { pName : pName},
+        function(data){
+          $.unblockUI();
+          if(data != ""){
             details = data.split("###");
-            $("#clinicName").html(details[0]);
             $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
+            $("#fName").html("<?php echo $facility;?>");
+            $("#fCode").val("");
+          }
+        });
+      }else{
+        $.unblockUI();
+        $("#district").html("<?php echo $district;?>");
+        $("#fName").html("<?php echo $facility;?>");
+        $("#fCode").val("");
       }
       <?php
-      if($gconfig['sample_code']=='auto'){
-        ?>
-        pNameVal = pName.split("##");
-        sCode = '<?php echo date('ymd');?>';
-        sCodeKey = '<?php echo $maxId;?>';
-        $(".sampleCode").val(pNameVal[1]+sCode+sCodeKey);
+      if($global['sample_code']=='auto'){ ?>
+        var pNameVal = pName.split("##");
+        var sCode = '<?php echo date('Ymd');?>';
+        var sCodeKey = '<?php echo $maxId;?>';
+        $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
-        <?php
-      }else if($gconfig['sample_code']=='YY' || $gconfig['sample_code']=='MMYY'){ ?>
-        $(".sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
+      <?php } else if($global['sample_code']=='YY' || $global['sample_code']=='MMYY'){ ?>
+        $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        <?php
-      }
-      ?>
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
+      <?php } ?>
     }
-    $.unblockUI();
-  }
-  function getfacilityDistrictwise(obj)
-  {
-    $.blockUI();
-    var dName = $("#district").val();
-    var cName = $("#clinicName").val();
-    if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
-      function(data){
-	  if(data != ""){
-            $("#clinicName").html(data);
-	  }
-      });
-    }
-    $.unblockUI();
-  }
-  function getfacilityProvinceDetails(obj)
-  {
-    $.blockUI();
-     //check facility name
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
-    $.unblockUI();
-  }
-  
-  $("#vlResult").bind("keyup change", function(e) {
-      if($("#vlResult").val() == ""){
-        $(".noResult").show();
-      }else{
-        $( "#noResultRejected" ).prop( "checked", false );
-        $( "#noResultError" ).prop( "checked", false );
-        $("#rejectionReason").removeClass("isRequired");
-        $("#rejectionReason").val("");
-        $(".noResult").hide();
-      }
-  });
-  
-  function checkRejectedReason(){
-    $("#rejectionReason").addClass("isRequired");
-  }
-
-  function ARTValue(){
-    var artRegimen = $("#artRegimen").val();
-    if(artRegimen=='other'){
-      $("#newArtRegimen").show();
-      $("#newArtRegimen").addClass("isRequired");
-    }else{
-      $("#newArtRegimen").hide();
-      $("#newArtRegimen").removeClass("isRequired");
-    }
-  }
-  
-  function ReasonVLTest(){
-    var reason = $("#vlTestReason").val();
-    if(reason=='other'){
-      $("#newVlTestReason").show();
-      $("#newVlTestReason").addClass("isRequired");
-    }else{
-      $("#newVlTestReason").hide();
-      $("#newVlTestReason").removeClass("isRequired");
-    }
-  }
-  
-  $("input:radio[name=gender]").click(function() {
-    if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
-      $('input[name="patientPregnant"]').prop('checked', false);
-      $('input[name="patientPregnant"]').prop('disabled', true);
-      $('input[name="breastfeeding"]').prop('checked', false);
-      $('input[name="breastfeeding"]').prop('disabled', true);
-    }else if($(this).val() == 'female'){
-      $('input[name="patientPregnant"]').prop('disabled', false);
-      $('input[name="breastfeeding"]').prop('disabled', false);
-    }
-  });
-  
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
-
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+    
+    function getFacilities(obj){
+      $.blockUI();
+      var dName = $("#district").val();
+      if($.trim(dName)!=''){
+        $.post("../includes/getFacilityForClinic.php", {dName:dName},
         function(data){
-            if(data==='1'){
-                alert(alrt);
-                duplicateName=false;
-                $(".removeValue").val('');
+             $.unblockUI();
+            if(data != ""){
+              $("#fName").html(data);
+              $("#fCode").val("");
             }
         });
-  }
+      }else{
+        $.unblockUI();
+        $("#fName").html("<?php echo $facility;?>");
+        $("#fCode").val("");
+      }
+    }
     
-  function getDateOfBirth(){
-      var today = new Date();
+    function fillFacilityDetails(){
+      $("#fCode").val($('#fName').find(':selected').data('code'));
+    }
+    
+    $('#labId').on('change',function(){
+      if(this.value == 'other'){
+        $("#newLab").show();
+        $("#newLab").addClass("isRequired");
+        $("#newLab").focus();
+      }else{
+        $("#newLab").hide();
+        $("#newLab").removeClass("isRequired");
+        $('#newLab').val("");
+      }
+    });
+    
+    function getAgeInWeeks(){
       var dob = $("#dob").val();
       if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
+        $("#age").val("");
         return false;
       }
-      
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      }
-      if(mm<10) {
-       mm='0'+mm
-      }
-      
+      //calculate age
       splitDob = dob.split("-");
       var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
       var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
+      var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
       dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
+      dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
+      var years = moment().diff(dob, 'years',false);
+      var weeks = moment().diff(dob, 'weeks',false);
+      $("#ageInYears").val(years); // Gives difference as years
+      $("#ageInWeeks").val(weeks); // Gives difference as weeks
+    }
+    
+    $("input:radio[name=gender]").click(function() {
+      if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
+        $('input[name="patientPregnant"]').prop('checked', false);
+        $('#lineOfTreatment').val('');
+        $('#pregYes,#pregNo,#lineOfTreatment').prop('disabled',true);
+      }else if($(this).val() == 'female'){
+        $('#pregYes,#pregNo,#lineOfTreatment').prop('disabled',false);
+      }
+    });
+    
+    $('#rejectionReason').on('change',function(){
+      if(this.value == "other"){
+        $("#newRejectionReason").show();
+        $("#newRejectionReason").addClass("isRequired");
+        $("#newRejectionReason").focus();
       }else{
-        $("#ageInMonths").val("");
+        $("#newRejectionReason").hide();
+        $("#newRejectionReason").removeClass("isRequired");
+        $('#newRejectionReason').val("");
       }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
-      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
-  }
+    });
+    
+    
+    $("input:radio[name=sampleValidity]").click(function() {
+      if($(this).val() == 'passed'){
+        $('input[name="repeatSampleCollection"]').prop('checked', false);
+        $('#rejectionReason').val('');
+        $('#newRejectionReason').hide();
+        $('#newRejectionReason').val('');
+        $('.rejectionSection').hide();
+      }else if($(this).val() == 'invalid'){
+        $('.rejectionSection').show();
+      }
+    });
+    
+    $('#suspectedTreatmentFailureAt').on('change',function(){
+      if(this.value == "other"){
+        $("#newSuspectedTreatmentFailureAt").show();
+        $("#newSuspectedTreatmentFailureAt").addClass("isRequired");
+        $("#newSuspectedTreatmentFailureAt").focus();
+      }else{
+        $("#newSuspectedTreatmentFailureAt").hide();
+        $("#newSuspectedTreatmentFailureAt").removeClass("isRequired");
+        $('#newSuspectedTreatmentFailureAt').val("");
+      }
+    });
+    
+    $('#result').on('change',function(){
+      if(this.value == "ac"){
+        $(".vlResult").show();
+        $("#vlResult").addClass("isRequired");
+        $("#vlResult").focus();
+      }else{
+        $(".vlResult").hide();
+        $("#vlResult").removeClass("isRequired");
+        $('#vlResult').val("");
+      }
+    });
+    
+    function checkARTValue(){
+      var artRegimen = $("#artRegimen").val();
+      if(artRegimen=='other'){
+        $("#newArtRegimen").show();
+        $("#newArtRegimen").addClass("isRequired");
+        $("#newArtRegimen").focus();
+      }else{
+        $("#newArtRegimen").hide();
+        $("#newArtRegimen").removeClass("isRequired");
+        $('#newArtRegimen').val("");
+      }
+    }
   
-  function checkSampleReceviedDate(){
-      var sampleCollectionDate = $("#sampleCollectionDate").val();
-      var sampleReceivedDate = $("#sampleReceivedDate").val();
-      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= '') {
-        //Set sample coll. datetime
-        splitSampleCollDateTime = sampleCollectionDate.split(" ");
-        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
-        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
-        var monthDigit = sampleCollOn.getMonth();
-        var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = splitSampleCollDate[0];
-        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
-        //Set sample rece. datetime
-        splitSampleReceivedDateTime = sampleReceivedDate.split(" ");
-        splitSampleReceivedDate = splitSampleReceivedDateTime[0].split("-");
-        var sampleReceivedOn = new Date(splitSampleReceivedDate[1] + splitSampleReceivedDate[2]+", "+splitSampleReceivedDate[0]);
-        var monthDigit = sampleReceivedOn.getMonth();
-        var smplReceivedYear = splitSampleReceivedDate[2];
-        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplReceivedMonth = (smplReceivedMonth<10) ? '0'+smplReceivedMonth: smplReceivedMonth;
-        var smplReceivedDate = splitSampleReceivedDate[0];
-        sampleReceivedDateTime = smplReceivedYear+"-"+smplReceivedMonth+"-"+smplReceivedDate+" "+splitSampleReceivedDateTime[1]+":00";
-        //Check diff
-        if(moment(sampleCollDateTime).diff(moment(sampleReceivedDateTime)) > 0) {
-          alert("Sample Received Date could not be earlier than Sample Collection Date!");
-          $("#sampleReceivedDate").val("");
-        }
-      }
+    function checkTestReason(){
+      var reason = $("#vlTestReason").val();
+      if(reason=='other'){
+        $("#newVlTestReason").show();
+        $("#newVlTestReason").addClass("isRequired");
+        $("#newVlTestReason").focus();
+      }else{
+        $("#newVlTestReason").hide();
+        $("#newVlTestReason").removeClass("isRequired");
+      } 
     }
     
-  function checkSampleTestingDate(){
-      var sampleCollectionDate = $("#sampleCollectionDate").val();
-      var sampleTestingDate = $("#sampleTestingDateAtLab").val();
-      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= '') {
-        //Set sample coll. date
-        splitSampleCollDateTime = sampleCollectionDate.split(" ");
-        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
-        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
-        var monthDigit = sampleCollOn.getMonth();
-        var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = splitSampleCollDate[0];
-        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
-        //Set sample testing date
-        splitSampleTestedDateTime = sampleTestingDate.split(" ");
-        splitSampleTestedDate = splitSampleTestedDateTime[0].split("-");
-        var sampleTestingOn = new Date(splitSampleTestedDate[1] + splitSampleTestedDate[2]+", "+splitSampleTestedDate[0]);
-        var monthDigit = sampleTestingOn.getMonth();
-        var smplTestingYear = splitSampleTestedDate[2];
-        var smplTestingMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
-        var smplTestingDate = splitSampleTestedDate[0];
-        sampleTestingAtLabDateTime = smplTestingYear+"-"+smplTestingMonth+"-"+smplTestingDate+" "+splitSampleTestedDateTime[1]+":00";
-        //Check diff
-        if(moment(sampleCollDateTime).diff(moment(sampleTestingAtLabDateTime)) > 0) {
-          alert("Sample Testing Date could not be earlier than Sample Collection Date!");
-          $("#sampleTestingDateAtLab").val("");
-        }
+    function validateNow(){
+      var format = '<?php echo $arr['sample_code'];?>';
+      var sCodeLentgh = $("#sampleCode").val();
+      var minLength = '<?php echo $arr['min_length'];?>';
+      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+        alert("Sample id length must be a minimum length of "+minLength+" characters");
+        return false;
       }
-    }
     
-  function checkARTInitiationDate(){
-      var dob = $("#dob").val();
-      var artInitiationDate = $("#dateOfArtInitiation").val();
-      if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
-        //Set DOB date
-        splitDob = dob.split("-");
-        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-        var monthDigit = dobDate.getMonth();
-        var dobYear = splitDob[2];
-        var dobMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-        var dobDate = splitDob[0];
-        dobDate = dobYear+"-"+dobMonth+"-"+dobDate;
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Check diff
-        if(moment(dobDate).isAfter(artIniDate)) {
-          alert("ART Initiation Date could not be earlier than DOB!");
-          $("#dateOfArtInitiation").val("");
-        }
+      flag = deforayValidator.init({
+          formId: 'vlRequestFormZam'
+      });
+      
+      $('.isRequired').each(function () {
+        ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
+      });
+      $("#saveNext").val('save');
+      if(flag){
+        $.blockUI();
+        document.getElementById('vlRequestFormZam').submit();
       }
     }
-    
-  function checkLastVLTestDate(){
-      var artInitiationDate = $("#dateOfArtInitiation").val();
-      var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
-      if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Set Last VL Test date
-        splitLastVLTestDate = dateOfLastVLTest.split("-");
-        var lastVLTestOn = new Date(splitLastVLTestDate[1] + splitLastVLTestDate[2]+", "+splitLastVLTestDate[0]);
-        var monthDigit = lastVLTestOn.getMonth();
-        var lastVLTestYear = splitLastVLTestDate[2];
-        var lastVLTestMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
-        var lastVLTestDate = splitLastVLTestDate[0];
-        lastVLTestDate = lastVLTestYear+"-"+lastVLTestMonth+"-"+lastVLTestDate;
-        console.log(artIniDate);
-        console.log(lastVLTestDate);
-        //Check diff
-        if(moment(artIniDate).isAfter(lastVLTestDate)) {
-          alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
-          $("#lastViralLoadTestDate").val("");
-        }
+  
+    function validateSaveNow(){
+      var format = '<?php echo $arr['sample_code'];?>';
+      var sCodeLentgh = $("#sampleCode").val();
+      var minLength = '<?php echo $arr['min_length'];?>';
+      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+        alert("Sample id length must be a minimum length of "+minLength+" characters");
+        return false;
       }
-    }
-    //check machine name and limit
-  function getMachineName(){
-      machineName = true;
-      var mName = $("#testingPlatform").val();
-      var absValue = $("#vlResult").val();
-      if(mName!='' && absValue!=''){
-        //split the value
-        var result = mName.split("##");
-        if(result[0]=='Roche' && absValue!='<20' && absValue!='>10000000'){
-          var lowLimit = result[1];
-          var highLimit = result[2];
-            if(lowLimit!='' && lowLimit!=0 && parseInt(absValue) < 20){
-              alert("Value outside machine detection limit");
-              $("#vlResult").css('background-color', '#FFFF99');
-              machineName = false;
-            }else if(highLimit!='' && highLimit!=0 && parseInt(absValue) > 10000000){
-              alert("Value outside machine detection limit");
-              $("#vlResult").css('background-color', '#FFFF99');
-              machineName  = false;
-            }else{
-              lessSign = absValue.split("<");
-              greaterSign = absValue.split(">");
-              if(lessSign.length>1){
-                if(parseInt(lessSign[1])<parseInt(lowLimit)){
-                alert("Invalid value.Value Lesser than machine detection limit.");
-                $("#vlResult").css('background-color', '#FFFF99');
-                }else if(parseInt(lessSign[1])>parseInt(highLimit)){
-                  alert("Invalid value.Value Greater than machine detection limit.");
-                  $("#vlResult").css('background-color', '#FFFF99');
-                }else{
-                  alert("Invalid value.");  
-                }
-                $("#vlResult").css('background-color', '#FFFF99');
-                machineName = false;
-              }else if(greaterSign.length>1){
-                if(parseInt(greaterSign[1])<parseInt(lowLimit)){
-                alert("Invalid value.Value Lesser than machine detection limit.");  
-                }else if(parseInt(greaterSign[1])>parseInt(highLimit)){
-                  alert("Invalid value.Value Greater than machine detection limit");  
-                }else{
-                  alert("Invalid value.");  
-                }
-                $("#vlResult").css('background-color', '#FFFF99')
-                machineName = false;
-              }
-            }
-        }
-      }
+      flag = deforayValidator.init({
+          formId: 'vlRequestFormZam'
+      });
+      
+      $('.isRequired').each(function () {
+          ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
+      });
+      $("#saveNext").val('next');
+      if(flag){
+          $.blockUI();
+          document.getElementById('vlRequestFormZam').submit();
+         }
     }
   </script>

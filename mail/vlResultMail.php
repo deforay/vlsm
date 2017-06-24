@@ -9,7 +9,7 @@ if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
   $formId = intval($configResult[0]['value']);
 }
 //main query
-$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vlsm_country_id = $formId AND is_result_mail_sent ='no' ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vlsm_country_id = $formId AND is_result_mail_sent ='no' AND vl.result IS NOT NULL AND vl.result!= '' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 $sTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
@@ -370,8 +370,8 @@ $batchResult = $db->rawQuery($batchQuery);
     $.post("<?php echo($formId == 3)?'../includes/vlRequestDrcSearchResultPdf.php':'../includes/vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id,resultMail:'resultMail'},
       function(data){
 	  if(data === "" || data === null || data === undefined){
-	      $.unblockUI();
-	      alert('Please select the result sample!');
+	    $.unblockUI();
+	    alert('Oops..can\'t generate pdf for non-result sample(s)');
 	  }else{
 	    $.blockUI();
 	    $("#pdfFile").val(data);

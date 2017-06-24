@@ -47,10 +47,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
          $filedGroup = explode(",",$mailconf['rq_field']);
          $headings = $filedGroup;
          //Set heading row
-          $sheet->getCellByColumnAndRow(0, 1)->setValueExplicit(html_entity_decode('Sample'), PHPExcel_Cell_DataType::TYPE_STRING);
-          $cellName = $sheet->getCellByColumnAndRow(0,1)->getColumn();
-          $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
-          $colNo = 1;
+         $colNo = 0;
          foreach ($headings as $field => $value) {
           $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
           $cellName = $sheet->getCellByColumnAndRow($colNo,1)->getColumn();
@@ -63,82 +60,82 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
             $row = array();
             $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
             $sampleResult = $db->rawQuery($sampleQuery);
-            $row[] = $sampleResult[0]['sample_code'];
             for($f=0;$f<count($filedGroup);$f++){
+               $field = '';
                if($filedGroup[$f] == "Sample ID"){
-                    $field = 'serial_no';
+                  $field = 'sample_code';
                }elseif($filedGroup[$f] == "Urgency"){
-                    $field = 'test_urgency';
+                  $field = 'test_urgency';
                }elseif($filedGroup[$f] == "Province"){
-                    $field = 'facility_state';
+                  $field = 'facility_state';
                }elseif($filedGroup[$f] == "District Name"){
-                    $field = 'facility_district';
+                  $field = 'facility_district';
                }elseif($filedGroup[$f] == "Clinic Name"){
-                    $field = 'facility_name';
+                  $field = 'facility_name';
                }elseif($filedGroup[$f] == "Clinician Name"){
-                    $field = 'lab_contact_person';
+                  $field = 'lab_contact_person';
                }elseif($filedGroup[$f] == "Sample Collection Date"){
-                    $field = 'sample_collection_date';
+                  $field = 'sample_collection_date';
                }elseif($filedGroup[$f] == "Sample Received Date"){
-                    $field = 'sample_received_at_vl_lab_datetime';
+                  $field = 'sample_received_at_vl_lab_datetime';
                }elseif($filedGroup[$f] == "Collected by (Initials)"){
-                    $field = 'sample_collected_by';
+                  $field = 'sample_collected_by';
                }elseif($filedGroup[$f] == "Gender"){
-                    $field = 'patient_gender';
+                  $field = 'patient_gender';
                }elseif($filedGroup[$f] == "Date Of Birth"){
-                    $field = 'patient_dob';
+                  $field = 'patient_dob';
                }elseif($filedGroup[$f] == "Age in years"){
-                    $field = 'patient_age_in_years';
+                  $field = 'patient_age_in_years';
                }elseif($filedGroup[$f] == "Age in months"){
-                    $field = 'patient_age_in_months';
+                  $field = 'patient_age_in_months';
                }elseif($filedGroup[$f] == "Is Patient Pregnant?"){
-                    $field = 'is_patient_pregnant';
+                  $field = 'is_patient_pregnant';
                }elseif($filedGroup[$f] == "Is Patient Breastfeeding?"){
-                    $field = 'is_patient_breastfeeding';
+                  $field = 'is_patient_breastfeeding';
                }elseif($filedGroup[$f] == "Patient OI/ART Number"){
-                    $field = 'patient_art_no';
+                  $field = 'patient_art_no';
                }elseif($filedGroup[$f] == "Date Of ART Initiation"){
-                    $field = 'date_of_initiation_of_current_regimen';
+                  $field = 'date_of_initiation_of_current_regimen';
                }elseif($filedGroup[$f] == "ART Regimen"){
-                    $field = 'current_regimen';
+                  $field = 'current_regimen';
                }elseif($filedGroup[$f] == "Patient consent to SMS Notification?"){
-                    $field = 'consent_to_receive_sms';
+                  $field = 'consent_to_receive_sms';
                }elseif($filedGroup[$f] == "Patient Mobile Number"){
-                    $field = 'patient_mobile_number';
+                  $field = 'patient_mobile_number';
                }elseif($filedGroup[$f] == "Date Of Last Viral Load Test"){
-                    $field = 'last_viral_load_date';
+                  $field = 'last_viral_load_date';
                }elseif($filedGroup[$f] == "Result Of Last Viral Load"){
-                    $field = 'last_viral_load_result';
+                  $field = 'last_viral_load_result';
                }elseif($filedGroup[$f] == "Viral Load Log"){
-                    $field = 'last_vl_result_in_log';
+                  $field = 'last_vl_result_in_log';
                }elseif($filedGroup[$f] == "Reason For VL Test"){
-                    $field = 'reason_for_vl_testing';
+                  $field = 'reason_for_vl_testing';
                }elseif($filedGroup[$f] == "Lab Name"){
-                    $field = 'lab_id';
+                  $field = 'lab_id';
                }elseif($filedGroup[$f] == "LAB No"){
-                    $field = 'lab_code';
+                  $field = 'lab_code';
                }elseif($filedGroup[$f] == "VL Testing Platform"){
-                    $field = 'vl_test_platform';
+                  $field = 'vl_test_platform';
                }elseif($filedGroup[$f] == "Specimen type"){
-                    $field = 'sample_name';
+                  $field = 'sample_name';
                }elseif($filedGroup[$f] == "Sample Testing Date"){
-                    $field = 'sample_tested_datetime';
+                  $field = 'sample_tested_datetime';
                }elseif($filedGroup[$f] == "Viral Load Result(copiesl/ml)"){
-                    $field = 'result_value_absolute';
+                  $field = 'result_value_absolute';
                }elseif($filedGroup[$f] == "Log Value"){
-                    $field = 'result_value_log';
+                  $field = 'result_value_log';
                }elseif($filedGroup[$f] == "If no result"){
-                    $field = 'is_sample_rejected';
+                  $field = 'is_sample_rejected';
                }elseif($filedGroup[$f] == "Rejection Reason"){
-                    $field = 'rejection_reason_name';
+                  $field = 'rejection_reason_name';
                }elseif($filedGroup[$f] == "Reviewed By"){
-                    $field = 'result_reviewed_by';
+                  $field = 'result_reviewed_by';
                }elseif($filedGroup[$f] == "Approved By"){
-                    $field = 'result_approved_by';
+                  $field = 'result_approved_by';
                }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
-                    $field = 'approver_comments';
+                  $field = 'approver_comments';
                }elseif($filedGroup[$f] == "Status"){
-                    $field = 'status_name';
+                  $field = 'status_name';
                }
                
                if($field ==  'result_reviewed_by'){
@@ -154,24 +151,24 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                $fieldValue = '';
                if(count($fValueResult)>0){
                     if($field == 'sample_collection_date' || $field == 'sample_received_at_vl_lab_datetime' || $field == 'sample_tested_datetime'){
-                         if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
-                             $xplodDate = explode(" ",$fValueResult[0][$field]);
-                             $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];  
-                         }
+                        if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
+                           $xplodDate = explode(" ",$fValueResult[0][$field]);
+                           $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];  
+                        }
                     }elseif($field == 'patient_dob' || $field == 'date_of_initiation_of_current_regimen' || $field == 'last_viral_load_date'){
-                         if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
-                             $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
-                         }
+                        if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
+                           $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
+                        }
                     }elseif($field ==  'vl_test_platform' || $field ==  'patient_gender' || $field == 'is_sample_rejected'){
                       $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                     }elseif($field ==  'result_reviewed_by'){
-                      $fieldValue = $fValueResult[0]['reviewedBy'];
+                      $fieldValue = (isset($fValueResult[0]['reviewedBy']))?$fValueResult[0]['reviewedBy']:'';
                     }elseif($field ==  'result_approved_by'){
-                      $fieldValue = $fValueResult[0]['approvedBy'];
+                      $fieldValue = (isset($fValueResult[0]['approvedBy']))?$fValueResult[0]['approvedBy']:'';
                     }elseif($field ==  'lab_id'){
-                      $fieldValue = $fValueResult[0]['labName'];
+                      $fieldValue = (isset($fValueResult[0]['labName']))?$fValueResult[0]['labName']:'';
                     }else{
-                      $fieldValue = $fValueResult[0][$field];
+                      $fieldValue = (isset($fValueResult[0][$field]))?$fValueResult[0][$field]:'';
                     }
                }
               $row[] = $fieldValue;
@@ -228,8 +225,8 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                          <tbody>
                            <?php
                            for($s=0;$s<count($_POST['sample']);$s++){
-                               $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
-                               $sampleResult = $db->rawQuery($sampleQuery);
+                              $sampleQuery="SELECT sample_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."' ORDER BY f.facility_name ASC";
+                              $sampleResult = $db->rawQuery($sampleQuery);
                            ?>
                             <tr>
                              <td style="text-align:left;"><?php echo $sampleResult[0]['sample_code']; ?></td>
