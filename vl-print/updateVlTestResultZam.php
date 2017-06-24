@@ -488,9 +488,10 @@ $disabled = "disabled = 'disabled'";
                               <option value=""> -- Select -- </option>
                               <?php
                               foreach($suspectedTreatmentFailureAtResult as $stfat){
+                                if(trim($stfat['vl_sample_suspected_treatment_failure_at'])!= ''){
                               ?>
                                 <option value="<?php echo $stfat['vl_sample_suspected_treatment_failure_at']; ?>" <?php echo ($vlQueryInfo[0]['vl_sample_suspected_treatment_failure_at']== $stfat['vl_sample_suspected_treatment_failure_at'])?"selected='selected'":""?>><?php echo ucwords($stfat['vl_sample_suspected_treatment_failure_at']); ?></option>
-                              <?php } ?>
+                              <?php } } ?>
                               <option value="other">Other(Specify)</option>
                             </select>
                             <input class="form-control newSuspectedTreatmentFailureAt" name="newSuspectedTreatmentFailureAt" id="newSuspectedTreatmentFailureAt" placeholder="Treatment Failure At" title="Please enter treatment failure at" style="width:100%;margin-top: 2px;display:none;" type="text">
