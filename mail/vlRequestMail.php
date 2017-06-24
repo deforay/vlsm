@@ -378,7 +378,6 @@ $batchResult = $db->rawQuery($batchQuery);
     }
   }
 </script>
-  
  <?php
  include('../footer.php');
  ?>

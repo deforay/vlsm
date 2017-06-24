@@ -63,7 +63,7 @@ if(isset($facility) && count(array_filter($facility))>0){
    if(trim($type)== 'request'){
      $query = $query." AND vl.is_request_mail_sent='".$mailSentStatus."'";
    }elseif(trim($type)== 'result'){
-      $query = $query." AND vl.is_result_mail_sent='".$mailSentStatus."'";
+      $query = $query." AND vl.is_result_mail_sent='".$mailSentStatus."' AND vl.result IS NOT NULL AND vl.result!= ''";
    }
 }if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
     if (trim($start_date) == trim($end_date)) {
