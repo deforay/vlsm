@@ -266,6 +266,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                           <label for="ageInWeeks">Age(weeks) </label>
                             <input type="text" class="form-control checkNum" style="width:100%;" name="ageInWeeks" id="ageInWeeks" placeholder="Age in Weeks" title="Please enter age in weeks">
                             <input type="hidden" name="ageInYears" id="ageInYears">
+                            <input type="hidden" name="ageInMonths" id="ageInMonths">
                           </div>
                         </div>
                       </div>
@@ -780,8 +781,10 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
       dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
       dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
       var years = moment().diff(dob, 'years',false);
+      var months = moment().diff(dob, 'months',false);
       var weeks = moment().diff(dob, 'weeks',false);
       $("#ageInYears").val(years); // Gives difference as years
+      $("#ageInMonths").val(months); // Gives difference as months
       $("#ageInWeeks").val(weeks); // Gives difference as weeks
     }
     

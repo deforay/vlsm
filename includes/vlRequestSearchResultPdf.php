@@ -170,7 +170,7 @@ class Pdf_concat extends FPDI {
         }
     }
 }
-
+$resultFilename = '';
 if(sizeof($requestResult)> 0){
     $_SESSION['rVal'] = $general->generateRandomString(6);
     if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
@@ -577,7 +577,6 @@ if(sizeof($requestResult)> 0){
       }
     }
 
-    $resultFilename = '';
     if(count($pages) >0){
         $resultPdf = new Pdf_concat();
         $resultPdf->setFiles($pages);
@@ -589,7 +588,6 @@ if(sizeof($requestResult)> 0){
         $general->removeDirectory($pathFront);
         unset($_SESSION['rVal']);
     }
-
 }
 
 echo $resultFilename;
