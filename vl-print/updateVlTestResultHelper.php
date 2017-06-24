@@ -61,25 +61,26 @@ try {
     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
         $_POST['vlResult'] = 'Target Not Detected';
     }
+    if(isset($_POST['bdl']) && $_POST['bdl'] =='yes' && $isRejection == false){
+        $_POST['vlResult'] = 'Below Detection Level';
+    }
     
     $_POST['result'] = '';
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
         $_POST['result'] = $_POST['vlResult'];
     }
     $reasonForChanges = '';
-    $allChange = array();
+    $allChange = '';
     if(isset($_POST['reasonForResultChangesHistory']) && $_POST['reasonForResultChangesHistory'] !=''){
-        $allChange = json_decode(base64_decode($_POST['reasonForResultChangesHistory']),true);
+        $allChange = $_POST['reasonForResultChangesHistory'];
     }
     if(isset($_POST['reasonForResultChanges']) && trim($_POST['reasonForResultChanges'])!=''){
-        $allChange[] = array(
-            'usr' => $_SESSION['userId'],
-            'msg' => $_POST['reasonForResultChanges'],
-            'dtime' => $general->getDateTime()
-        );
+        $reasonForChanges = $_SESSION['userName'].'##'.$_POST['reasonForResultChanges'].'##'.$general->getDateTime();
     }
-    if(count($allChange) > 0){
-      $reasonForChanges = json_encode($allChange);
+    if(trim($allChange)!= '' && trim($reasonForChanges)!= ''){
+       $allChange = $reasonForChanges.'vlsm'.$allChange;
+    }else if(trim($reasonForChanges)!= ''){
+       $allChange =  $reasonForChanges;
     }
     //echo $reasonForChanges;die;
     $vldata=array(
@@ -93,14 +94,14 @@ try {
           'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='') ? $_POST['noResult'] :  NULL,
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='') ? $_POST['rejectionReason'] :  NULL,
           'result_value_log'=>NULL,
-          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['vlResult']!='Target Not Detected') ? $_POST['vlResult'] :  NULL,
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? $_POST['vlResult'] :  NULL,
           'result_value_text'=>NULL,
-          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['vlResult']!='Target Not Detected') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
+          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
-          'reason_for_vl_result_changes'=>$reasonForChanges,
+          'reason_for_vl_result_changes'=>$allChange,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'

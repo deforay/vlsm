@@ -90,7 +90,7 @@ try {
 		if($configResult[0]['value']!=$_POST['sample_code'])
 		{
 			$prefix = trim($_POST['sample_code_prefix']);
-			$vlDistinctQuery ="SELECT DISTINCT DATE_FORMAT( request_created_datetime,'%Y-%m' ) as month FROM vl_request_form";
+			$vlDistinctQuery ="SELECT DISTINCT DATE_FORMAT( request_created_datetime,'%Y-%m' ) as month FROM vl_request_form where vlsm_country_id=".$_POST['vl_form'];
 			$distnictResult = $db->rawQuery($vlDistinctQuery);
 			if($distnictResult){
 				$increment = 1;
@@ -113,7 +113,7 @@ try {
 						$zeros = substr("000", $strparam);
 						$maxId = $zeros.$maxId;
 						$sampleCode = $prefix.$dtYr.$maxId;
-						$vlData = array('serial_no'=>$sampleCode,'sample_code'=>$sampleCode,'sample_code_format'=>$prefix.$dtYr,'sample_code_key'=>$maxId);
+						$vlData = array('serial_no'=>$sampleCode,'sample_code_title'=>$_POST['sample_code'],'sample_code'=>$sampleCode,'sample_code_format'=>$prefix.$dtYr,'sample_code_key'=>$maxId);
 						$db=$db->where('vl_sample_id',$sample['vl_sample_id']);
 						$id=$db->update('vl_request_form',$vlData);
 						$increment++;
