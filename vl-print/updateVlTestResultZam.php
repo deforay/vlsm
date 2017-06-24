@@ -731,9 +731,7 @@ $disabled = "disabled = 'disabled'";
       var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
       dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
       dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
-      var years = moment().diff(dob, 'years',false);
       var weeks = moment().diff(dob, 'weeks',false);
-      $("#ageInYears").val(years); // Gives difference as years
       $("#ageInWeeks").val(weeks); // Gives difference as weeks
     }
     
