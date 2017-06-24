@@ -20,38 +20,22 @@ $sKey = '';
 $sFormat = '';
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
-if($global['sample_code']=='YY' || $global['sample_code']=='MMYY'){
-  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MAX(length(sample_code_key)) from vl_request_form )';
-}else{
-  $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND length( sample_code_key ) = ( select MIN(length(sample_code_key)) from vl_request_form )';
-}
+$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="4" AND vl.sample_code_title="'.$global['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlResult=$db->query($svlQuery);
-$length = strlen($svlResult[0]['MAX(sample_code_key)']);
-if($global['sample_code']=='YY' || $global['sample_code']=='MMYY'){
-  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $length > 3){
-    $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
-    $strparam = strlen($maxId);
-    $zeros = substr("000000", $strparam);
-    $maxId = $zeros.$maxId;
-  }else{
-    $maxId = '000001';
+if($global['sample_code']=='MMYY'){
+    $mnthYr = date('my');
+  }else if($global['sample_code']=='YY'){
+    $mnthYr = date('y');
   }
   $prefix = $global['sample_code_prefix'];
-  if($global['sample_code']=='MMYY'){
-    $mnthYr = date('mY');
+  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
+   $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+   $strparam = strlen($maxId);
+   $zeros = substr("000", $strparam);
+   $maxId = $zeros.$maxId;
   }else{
-    $mnthYr = date('Y');
+   $maxId = '001';
   }
-}else{
-  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL && $length <= 3){
-    $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
-    $strparam = strlen($maxId);
-    $zeros = substr("000", $strparam);
-    $maxId = $zeros.$maxId;
-  }else{
-    $maxId = '001';
-  }
-}
 //set province
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
@@ -85,6 +69,8 @@ $userResult = $db->rawQuery($userQuery);
 $suspectedTreatmentFailureAtQuery="SELECT DISTINCT vl_sample_suspected_treatment_failure_at FROM vl_request_form where vlsm_country_id='4'";
 $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
 //get art regimen
+$artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='zam'";
+$artRegimenResult = $db->rawQuery($artRegimenQuery);
 $artQuery="SELECT * from r_art_code_details where nation_identifier='zam' AND art_status ='active'";
 $artResult=$db->query($artQuery);
 //get vl test reasons
@@ -333,14 +319,19 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                            <label for="">ART Regimen </label><br>
                              <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTValue();">
                                  <option value=""> -- Select -- </option>
-                                 <?php
-                                 foreach($artResult as $regimen){
-                                 ?>
-                                  <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
-                                 <?php
-                                 }
-                                 ?>
-                                 <option value="other">Other</option>
+                                 <?php foreach($artRegimenResult as $heading) { ?>
+                                  <optgroup label="<?php echo ucwords($heading['headings']); ?>">
+                                    <?php
+                                    foreach($artResult as $regimen){
+                                      if($heading['headings'] == $regimen['headings']){
+                                      ?>
+                                      <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
+                                      <?php
+                                      }
+                                    }
+                                    ?>
+                                  </optgroup>
+                                  <?php } ?>
                             </select>
                             <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
                           </div>
@@ -632,6 +623,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                   ?>                    
                <!-- BARCODESTUFF END -->
                   <input type="hidden" name="saveNext" id="saveNext"/>
+                  <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $global['sample_code'];?>"/>
                   <?php if($global['sample_code']=='auto' || $global['sample_code']=='YY' || $global['sample_code']=='MMYY'){ ?>
                     <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                     <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
@@ -740,8 +732,9 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
     function getFacilities(obj){
       $.blockUI();
       var dName = $("#district").val();
+      var cName = $("#fName").val();
       if($.trim(dName)!=''){
-        $.post("../includes/getFacilityForClinic.php", {dName:dName},
+        $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
         function(data){
              $.unblockUI();
             if(data != ""){
@@ -876,9 +869,9 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
     }
     
     function validateNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
+      var format = '<?php echo $global['sample_code'];?>';
       var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
+      var minLength = '<?php echo $global['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
         alert("Sample id length must be a minimum length of "+minLength+" characters");
         return false;
@@ -899,9 +892,9 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
     }
   
     function validateSaveNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
+      var format = '<?php echo $global['sample_code'];?>';
       var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
+      var minLength = '<?php echo $global['min_length'];?>';
       if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
         alert("Sample id length must be a minimum length of "+minLength+" characters");
         return false;
