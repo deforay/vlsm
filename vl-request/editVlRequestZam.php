@@ -312,6 +312,7 @@ $statusResult = $db->rawQuery($statusQuery);
                           <label for="ageInWeeks">Age(weeks) </label>
                             <input type="text" class="form-control checkNum" style="width:100%;" name="ageInWeeks" id="ageInWeeks" placeholder="Age in Weeks" title="Please enter age in weeks">
                             <input type="hidden" name="ageInYears" id="ageInYears">
+                            <input type="hidden" name="ageInMonths" id="ageInMonths">
                           </div>
                         </div>
                       </div>
@@ -486,9 +487,10 @@ $statusResult = $db->rawQuery($statusQuery);
                               <option value=""> -- Select -- </option>
                               <?php
                               foreach($suspectedTreatmentFailureAtResult as $stfat){
+                                if(trim($stfat['vl_sample_suspected_treatment_failure_at'])!= ''){
                               ?>
                                 <option value="<?php echo $stfat['vl_sample_suspected_treatment_failure_at']; ?>" <?php echo ($vlQueryInfo[0]['vl_sample_suspected_treatment_failure_at']== $stfat['vl_sample_suspected_treatment_failure_at'])?"selected='selected'":""?>><?php echo ucwords($stfat['vl_sample_suspected_treatment_failure_at']); ?></option>
-                              <?php } ?>
+                              <?php } } ?>
                               <option value="other">Other(Specify)</option>
                             </select>
                             <input class="form-control newSuspectedTreatmentFailureAt" name="newSuspectedTreatmentFailureAt" id="newSuspectedTreatmentFailureAt" placeholder="Treatment Failure At" title="Please enter treatment failure at" style="width:100%;margin-top: 2px;display:none;" type="text">
@@ -600,11 +602,11 @@ $statusResult = $db->rawQuery($statusQuery);
                             <select name="result" id="result" class="form-control" title="Please choose test result" style="width:100%;">
                               <option value=""> -- Select -- </option>
                               <option value="tnd" <?php echo ($vlQueryInfo[0]['result']== 'tnd')?"selected='selected'":""?>>Target Not Detected</option>
-                              <option value="ac" <?php echo ($vlQueryInfo[0]['result']== 'ac')?"selected='selected'":""?>>Actual Copies</option>
+                              <option value="actual_copies" <?php echo (trim($vlQueryInfo[0]['result'])!= '' && is_numeric($vlQueryInfo[0]['result']))?"selected='selected'":""?>>Actual Copies</option>
                               <option value="invalid" <?php echo ($vlQueryInfo[0]['result']== 'invalid')?"selected='selected'":""?>>Invalid</option>
                               <option value="repeat" <?php echo ($vlQueryInfo[0]['result']== 'repeat')?"selected='selected'":""?>>Repeat Sample Collection</option>
                             </select>
-                            <span class="vlResult" style="display:<?php echo (trim($vlQueryInfo[0]['result'])!='' && $vlQueryInfo[0]['result']!= null && $vlQueryInfo[0]['result']=='ac')?'':'none'; ?>;"><input class="form-control checkNum" name="vlResult" id="vlResult" placeholder="Viral Load Result" title="Please enter vl result" style="width:75% !important;margin-top: 2px;" type="text" value="<?php echo $vlQueryInfo[0]['result_value_absolute']; ?>">&nbsp;(copiesl/ml)</span>
+                            <span class="vlResult" style="display:<?php echo (trim($vlQueryInfo[0]['result'])!='' && $vlQueryInfo[0]['result']!= null && is_numeric($vlQueryInfo[0]['result']))?'':'none'; ?>;"><input class="form-control checkNum" name="vlResult" id="vlResult" placeholder="Viral Load Result" title="Please enter vl result" style="width:75% !important;margin-top: 2px;" type="text" value="<?php echo $vlQueryInfo[0]['result_value_absolute']; ?>">&nbsp;(copiesl/ml)</span>
                           </div>
                       </div>
                       <div class="col-xs-4 col-md-4">
@@ -774,8 +776,10 @@ $statusResult = $db->rawQuery($statusQuery);
       dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
       dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
       var years = moment().diff(dob, 'years',false);
+      var months = moment().diff(dob, 'months',false);
       var weeks = moment().diff(dob, 'weeks',false);
       $("#ageInYears").val(years); // Gives difference as years
+      $("#ageInMonths").val(months); // Gives difference as months
       $("#ageInWeeks").val(weeks); // Gives difference as weeks
     }
     
@@ -827,7 +831,7 @@ $statusResult = $db->rawQuery($statusQuery);
     });
     
     $('#result').on('change',function(){
-      if(this.value == "ac"){
+      if(this.value == "actual_copies"){
         $(".vlResult").show();
         $("#vlResult").addClass("isRequired");
         $("#vlResult").focus();

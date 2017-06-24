@@ -13,22 +13,22 @@ try {
         $instanceId = $_SESSION['instanceId'];
      }
      //lab
-     if(isset($_POST['newLab']) && trim($_POST['newLab'])!=""){
-        $labQuery ="SELECT facility_id FROM facility_details where facility_name='".$_POST['newLab']."' OR facility_name='".strtolower($_POST['newLab'])."' OR facility_name='".ucfirst(strtolower($_POST['newLab']))."'";
-        $labResult = $db->rawQuery($labQuery);
-        if(!isset($labResult[0]['facility_id'])){
-           $data=array(
-           'facility_name'=>$_POST['newLab'],
-           'vlsm_instance_id'=>$instanceId,
-           'facility_type'=>2,
-           'country'=>4,
-           'status'=>'active'
-           );
-           $id=$db->insert('facility_details',$data);
-           $_POST['labId'] = $id;
-        }else{
-           $_POST['labId'] = $labResult[0]['facility_id'];
-        }
+     if(isset($_POST['newLab']) && trim($_POST['newLab'])!="" && trim($_POST['labId']) == 'other'){
+          $labQuery ="SELECT facility_id FROM facility_details where facility_name='".$_POST['newLab']."' OR facility_name='".strtolower($_POST['newLab'])."' OR facility_name='".ucfirst(strtolower($_POST['newLab']))."'";
+          $labResult = $db->rawQuery($labQuery);
+          if(!isset($labResult[0]['facility_id'])){
+             $data=array(
+             'facility_name'=>$_POST['newLab'],
+             'vlsm_instance_id'=>$instanceId,
+             'facility_type'=>2,
+             'country'=>4,
+             'status'=>'active'
+             );
+             $id=$db->insert('facility_details',$data);
+             $_POST['labId'] = $id;
+          }else{
+             $_POST['labId'] = $labResult[0]['facility_id'];
+          }
      }
      //sample received date
      if(isset($_POST['sampleReceivedOn']) && trim($_POST['sampleReceivedOn'])!=""){
@@ -51,9 +51,7 @@ try {
           if(isset($_POST['repeatSampleCollection']) && $_POST['repeatSampleCollection']!=""){
                $repeatSampleCollection = $_POST['repeatSampleCollection'];
           }
-          if(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!= 'other'){
-               $rejectionReason = $_POST['rejectionReason'];
-          }else if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
+          if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!="" && trim($_POST['rejectionReason']) =="other"){
                $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
                $rejectionResult = $db->rawQuery($rejectionReasonQuery);
                if(!isset($rejectionResult[0]['rejection_reason_id'])){
@@ -67,12 +65,14 @@ try {
                }else{
                   $rejectionReason = $rejectionResult[0]['rejection_reason_id'];
                }
+          }else{
+             $rejectionReason = $_POST['rejectionReason'];
           }
      }
      //reviewed by date time
      if(isset($_POST['reviewedByDatetime']) && trim($_POST['reviewedByDatetime'])!=""){
         $reviewedByDatetime = explode(" ",$_POST['reviewedByDatetime']);
-        $_POST['reviewedByDatetime']=$general->dateFormat($reviewedByDatetime[0])." ".$reviewedByDatetime[1];  
+        $_POST['reviewedByDatetime']=$general->dateFormat($reviewedByDatetime[0])." ".$reviewedByDatetime[1];
      }else{
         $_POST['reviewedByDatetime'] = NULL;
      }
@@ -83,9 +83,9 @@ try {
           'sample_test_quality'=>(isset($_POST['sampleValidity']) && $_POST['sampleValidity']!='') ? $_POST['sampleValidity'] :  NULL,
           'repeat_sample_collection'=>$repeatSampleCollection,
           'reason_for_sample_rejection'=>$rejectionReason,
-          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
-          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
-          'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['result'] == 'actual_copies') ? $_POST['vlResult'] :  NULL,
+          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['result'] == 'actual_copies') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
+          'result'=>(isset($_POST['result']) && trim($_POST['result'])!= '' && trim($_POST['result']) == 'actual_copies') ? $_POST['vlResult'] : $_POST['result'],
           'result_reviewed_by'=>(isset($_POST['reviewedBy']) && $_POST['reviewedBy']!='') ? $_POST['reviewedBy'] :  NULL,
           'result_reviewed_datetime'=>$_POST['reviewedByDatetime'],
           'lab_contact_person'=>(isset($_POST['labContactPerson']) && $_POST['labContactPerson']!='') ? $_POST['labContactPerson'] :  NULL,
