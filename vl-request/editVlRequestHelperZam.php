@@ -13,20 +13,8 @@ try {
      if(isset($_SESSION['instanceId'])){
           $instanceId = $_SESSION['instanceId'];
      }
-     //update facility code
-     if(trim($_POST['fCode'])!=''){
-        $fData = array('facility_code'=>$_POST['fCode']);
-        $db=$db->where('facility_id',$_POST['fName']);
-        $id=$db->update($fDetails,$fData);
-     }
-     //dob
-     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-        $_POST['dob']=$general->dateFormat($_POST['dob']);  
-     }else{
-        $_POST['dob'] = NULL;
-     }
      //lab
-     if(isset($_POST['newLab']) && trim($_POST['newLab'])!=""){
+     if(isset($_POST['newLab']) && trim($_POST['newLab'])!="" && trim($_POST['labId']) == 'other'){
           $labQuery ="SELECT facility_id FROM facility_details where facility_name='".$_POST['newLab']."' OR facility_name='".strtolower($_POST['newLab'])."' OR facility_name='".ucfirst(strtolower($_POST['newLab']))."'";
           $labResult = $db->rawQuery($labQuery);
           if(!isset($labResult[0]['facility_id'])){
@@ -42,6 +30,25 @@ try {
           }else{
              $_POST['labId'] = $labResult[0]['facility_id'];
           }
+     }
+     //update facility code
+     if(trim($_POST['fCode'])!=''){
+        $fData = array('facility_code'=>$_POST['fCode']);
+        $db=$db->where('facility_id',$_POST['fName']);
+        $id=$db->update($fDetails,$fData);
+     }
+     //dob
+     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
+        $_POST['dob']=$general->dateFormat($_POST['dob']);  
+     }else{
+        $_POST['dob'] = NULL;
+     }
+     //set female section values
+     $isPatientPregnant = NULL;
+     $treatmentStage = NULL;
+     if(isset($_POST['gender']) && trim($_POST['gender'])== "female"){
+         $isPatientPregnant = (isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='') ? $_POST['patientPregnant'] :  NULL;
+         $treatmentStage = (isset($_POST['lineOfTreatment']) && $_POST['lineOfTreatment']!='') ? $_POST['lineOfTreatment'] :  NULL;
      }
      //sample collected date
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
@@ -79,9 +86,7 @@ try {
           if(isset($_POST['repeatSampleCollection']) && $_POST['repeatSampleCollection']!=""){
                $repeatSampleCollection = $_POST['repeatSampleCollection'];
           }
-          if(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!= 'other'){
-               $rejectionReason = $_POST['rejectionReason'];
-          }else if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
+          if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!="" && trim($_POST['rejectionReason']) =="other"){
                $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
                $rejectionResult = $db->rawQuery($rejectionReasonQuery);
                if(!isset($rejectionResult[0]['rejection_reason_id'])){
@@ -95,6 +100,8 @@ try {
                }else{
                   $rejectionReason = $rejectionResult[0]['rejection_reason_id'];
                }
+          }else{
+             $rejectionReason = $_POST['rejectionReason'];
           }
      }
      //reviewed by date time
@@ -111,23 +118,31 @@ try {
         $_POST['dateOfArtInitiation'] = NULL;
      }
      //ART regimen
-     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!= ""){
-          $data=array(
-            'art_code'=>$_POST['newArtRegimen'],
-            'nation_identifier'=>'zam',
-            'parent_art'=>'4'
-          );
-          $result=$db->insert('r_art_code_details',$data);
-          $_POST['artRegimen'] = $_POST['newArtRegimen'];
+     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!= "" && trim($_POST['artRegimen'])== "other"){
+          $_POST['artRegimen'] = $_POST['newArtRegimen']; 
+          $checkArtQuery ="SELECT art_id FROM r_art_code_details where art_code='".$_POST['newArtRegimen']."' OR art_code='".strtolower($_POST['newArtRegimen'])."' OR art_code='".ucfirst(strtolower($_POST['newArtRegimen']))."'";
+          $checkArtResult = $db->rawQuery($checkArtQuery);
+          if(!isset($checkArtResult[0]['art_id'])){
+               $data=array(
+               'art_code'=>$_POST['newArtRegimen'],
+               'nation_identifier'=>'zam',
+               'parent_art'=>'4'
+             );
+             $db->insert('r_art_code_details',$data);
+          }
      }
      //vl test reason
-     if(isset($_POST['newVlTestReason']) && trim($_POST['newVlTestReason'])!=""){
-          $data=array(
-            'test_reason_name'=>$_POST['newVlTestReason'],
-            'test_reason_status'=>'active'
-          );
-          $result=$db->insert('r_vl_test_reasons',$data);
+     if(isset($_POST['newVlTestReason']) && trim($_POST['newVlTestReason'])!="" && trim($_POST['vlTestReason'])== "other"){
           $_POST['vlTestReason'] = $_POST['newVlTestReason'];
+          $checkTestReasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['newVlTestReason']."' OR test_reason_name='".strtolower($_POST['newVlTestReason'])."' OR test_reason_name='".ucfirst(strtolower($_POST['newVlTestReason']))."'";
+          $checkTestReasonResult = $db->rawQuery($checkTestReasonQuery);
+          if(!isset($checkTestReasonResult[0]['test_reason_id'])){
+               $data=array(
+               'test_reason_name'=>$_POST['newVlTestReason'],
+               'test_reason_status'=>'active'
+             );
+             $result=$db->insert('r_vl_test_reasons',$data);
+          }
      }
      //last vl test date
      if(isset($_POST['lastViralLoadTestDate']) && trim($_POST['lastViralLoadTestDate'])!=""){
@@ -147,10 +162,11 @@ try {
           'patient_art_no'=>(isset($_POST['patientArtNo']) && $_POST['patientArtNo']!='') ? $_POST['patientArtNo'] :  NULL,
           'patient_mobile_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='') ? $_POST['patientPhoneNumber'] :  NULL,
           'patient_dob'=>(isset($_POST['dob']) && $_POST['dob']!='') ? $_POST['dob'] :  NULL,
-          'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='') ? $_POST['ageInYears'] :  NULL,
+          'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='' && $_POST['ageInYears'] >0) ? $_POST['ageInYears'] :  NULL,
+          'patient_age_in_months'=>(isset($_POST['ageInMonths']) && $_POST['ageInMonths']!='' && $_POST['ageInMonths'] >0) ? $_POST['ageInMonths'] :  NULL,
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='') ? $_POST['gender'] :  NULL,
-          'is_patient_pregnant'=>(isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='') ? $_POST['patientPregnant'] :  NULL,
-          'line_of_treatment'=>(isset($_POST['lineOfTreatment']) && $_POST['lineOfTreatment']!='') ? $_POST['lineOfTreatment'] :  NULL,
+          'is_patient_pregnant'=>$isPatientPregnant,
+          'line_of_treatment'=>$treatmentStage,
           'treatment_initiated_date'=>$_POST['dateOfArtInitiation'],
           'current_regimen'=>(isset($_POST['artRegimen']) && trim($_POST['artRegimen'])!='') ? $_POST['artRegimen'] :  NULL,
           'reason_for_vl_testing'=>(isset($_POST['vlTestReason']) && trim($_POST['vlTestReason'])!='') ? $_POST['vlTestReason'] :  NULL,
@@ -158,7 +174,7 @@ try {
           'last_viral_load_result'=>(isset($_POST['lastViralLoadResult']) && trim($_POST['lastViralLoadResult'])!='') ? $_POST['lastViralLoadResult'] :  NULL,
           'number_of_enhanced_sessions'=>(isset($_POST['enhancedSession']) && $_POST['enhancedSession']!='') ? $_POST['enhancedSession'] :  NULL,
           'sample_type'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='') ? $_POST['specimenType'] :  NULL,
-          'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  NULL,
+          'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'sample_visit_type'=>(isset($_POST['visitType']) && $_POST['visitType']!='') ? $_POST['visitType'] :  NULL,
           'vl_sample_suspected_treatment_failure_at'=>$_POST['suspectedTreatmentFailureAt'],
@@ -169,9 +185,9 @@ try {
           'sample_test_quality'=>(isset($_POST['sampleValidity']) && $_POST['sampleValidity']!='') ? $_POST['sampleValidity'] :  NULL,
           'repeat_sample_collection'=>$repeatSampleCollection,
           'reason_for_sample_rejection'=>$rejectionReason,
-          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
-          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
-          'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['result'] == 'actual_copies') ? $_POST['vlResult'] :  NULL,
+          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['result'] == 'actual_copies') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
+          'result'=>(isset($_POST['result']) && trim($_POST['result'])!= '' && trim($_POST['result']) == 'actual_copies') ? $_POST['vlResult'] : $_POST['result'],
           'result_reviewed_by'=>(isset($_POST['reviewedBy']) && $_POST['reviewedBy']!='') ? $_POST['reviewedBy'] :  NULL,
           'result_reviewed_datetime'=>$_POST['reviewedByDatetime'],
           'lab_contact_person'=>(isset($_POST['labContactPerson']) && $_POST['labContactPerson']!='') ? $_POST['labContactPerson'] :  NULL,

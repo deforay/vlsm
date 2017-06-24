@@ -266,6 +266,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                           <label for="ageInWeeks">Age(weeks) </label>
                             <input type="text" class="form-control checkNum" style="width:100%;" name="ageInWeeks" id="ageInWeeks" placeholder="Age in Weeks" title="Please enter age in weeks">
                             <input type="hidden" name="ageInYears" id="ageInYears">
+                            <input type="hidden" name="ageInMonths" id="ageInMonths">
                           </div>
                         </div>
                       </div>
@@ -440,9 +441,10 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                               <option value=""> -- Select -- </option>
                               <?php
                               foreach($suspectedTreatmentFailureAtResult as $stfat){
+                                if(trim($stfat['vl_sample_suspected_treatment_failure_at'])!= ''){
                               ?>
                                 <option value="<?php echo $stfat['vl_sample_suspected_treatment_failure_at']; ?>"><?php echo ucwords($stfat['vl_sample_suspected_treatment_failure_at']); ?></option>
-                              <?php } ?>
+                              <?php } } ?>
                               <option value="other">Other(Specify)</option>
                             </select>
                             <input class="form-control newSuspectedTreatmentFailureAt" name="newSuspectedTreatmentFailureAt" id="newSuspectedTreatmentFailureAt" placeholder="Treatment Failure At" title="Please enter treatment failure at" style="width:100%;margin-top: 2px;display:none;" type="text">
@@ -554,7 +556,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                             <select name="result" id="result" class="form-control" title="Please choose test result" style="width:100%;">
                               <option value=""> -- Select -- </option>
                               <option value="tnd">Target Not Detected</option>
-                              <option value="ac">Actual Copies</option>
+                              <option value="actual_copies">Actual Copies</option>
                               <option value="invalid">Invalid</option>
                               <option value="repeat">Repeat Sample Collection</option>
                             </select>
@@ -779,8 +781,10 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
       dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
       dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
       var years = moment().diff(dob, 'years',false);
+      var months = moment().diff(dob, 'months',false);
       var weeks = moment().diff(dob, 'weeks',false);
       $("#ageInYears").val(years); // Gives difference as years
+      $("#ageInMonths").val(months); // Gives difference as months
       $("#ageInWeeks").val(weeks); // Gives difference as weeks
     }
     
@@ -832,7 +836,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
     });
     
     $('#result').on('change',function(){
-      if(this.value == "ac"){
+      if(this.value == "actual_copies"){
         $(".vlResult").show();
         $("#vlResult").addClass("isRequired");
         $("#vlResult").focus();
