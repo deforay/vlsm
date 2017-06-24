@@ -309,8 +309,8 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 				  function(data){
 				    if (data == 0) {
 				      alert("Something went wrong!.Please try again");
+					  oTable.fnDraw();
 				    }
-				   oTable.fnDraw();
 				  });
 				$.unblockUI();
             },
@@ -330,9 +330,9 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 		$.post("updateUnApprovalResultSample.php", { batchCode : obj.value,tempsampleId:tempsampleId},
 		   function(data){
 		      if (data == 0) {
-			alert("Something went wrong!.Please try again");
+			  alert("Something went wrong!.Please try again");
+			  oTable.fnDraw();
 		      }
-		    oTable.fnDraw();
 		  });
 		$.unblockUI();
             },
@@ -353,8 +353,8 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 		     function(data){
 			  if (data == 0) {
 			    alert("Something went wrong!.Please try again");
+				oTable.fnDraw();
 			  }
-			oTable.fnDraw();
 		      });
 		$.unblockUI();
 	  },

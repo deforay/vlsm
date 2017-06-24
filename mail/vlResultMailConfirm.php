@@ -118,9 +118,9 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                     $field = 'serial_no';
                }elseif($filedGroup[$f] == "Urgency"){
                     $field = 'test_urgency';
-               }elseif($filedGroup[$f] == "Province"){
+               }elseif($filedGroup[$f] == "Province/State"){
                     $field = 'facility_state';
-               }elseif($filedGroup[$f] == "District Name"){
+               }elseif($filedGroup[$f] == "District/County"){
                     $field = 'facility_district';
                }elseif($filedGroup[$f] == "Clinic Name"){
                     $field = 'facility_name';
