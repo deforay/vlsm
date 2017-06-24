@@ -35,6 +35,8 @@ $userResult = $db->rawQuery($userQuery);
 $suspectedTreatmentFailureAtQuery="SELECT DISTINCT vl_sample_suspected_treatment_failure_at FROM vl_request_form where vlsm_country_id='4'";
 $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
 //get art regimen
+$artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='zam'";
+$artRegimenResult = $db->rawQuery($artRegimenQuery);
 $artQuery="SELECT * from r_art_code_details where nation_identifier='zam' AND art_status ='active'";
 $artResult=$db->query($artQuery);
 //get vl test reasons
@@ -363,14 +365,19 @@ $statusResult = $db->rawQuery($statusQuery);
                            <label for="">ART Regimen </label><br>
                              <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTValue();">
                                  <option value=""> -- Select -- </option>
-                                 <?php
-                                 foreach($artResult as $regimen){
-                                 ?>
-                                  <option value="<?php echo $regimen['art_code']; ?>" <?php echo ($vlQueryInfo[0]['current_regimen']==$regimen['art_code'])?"selected='selected'":""?>><?php echo $regimen['art_code']; ?></option>
-                                 <?php
-                                 }
-                                 ?>
-                                 <option value="other">Other</option>
+                                 <?php foreach($artRegimenResult as $heading) { ?>
+                                  <optgroup label="<?php echo ucwords($heading['headings']); ?>">
+                                    <?php
+                                    foreach($artResult as $regimen){
+                                      if($heading['headings'] == $regimen['headings']){
+                                      ?>
+                                      <option value="<?php echo $regimen['art_code']; ?>" <?php echo ($vlQueryInfo[0]['current_regimen']==$regimen['art_code'])?"selected='selected'":""?>><?php echo $regimen['art_code']; ?></option>
+                                      <?php
+                                      }
+                                    }
+                                    ?>
+                                  </optgroup>
+                                  <?php } ?>
                             </select>
                             <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
                           </div>
