@@ -507,6 +507,7 @@
                 <?php } ?>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="formId" id="formId" value="3"/>
+                <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code'];?>"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -571,7 +572,7 @@
       if($arr['sample_code']=='auto'){
         ?>
         pNameVal = pName.split("##");
-        sCode = '<?php echo date('Ymd');?>';
+        sCode = '<?php echo date('ymd');?>';
         sCodeKey = '<?php echo $maxId;?>';
         $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);

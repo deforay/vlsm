@@ -130,7 +130,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $sKey = $vlResult[0]['sample_code_key']+1;
  $strparam = strlen($sKey);
  $zeros = substr("000", $strparam);
- $sKey = $zeros.$maxId;
+ $sKey = $zeros.$sKey;
  $sFormat = $vlResult[0]['sample_code_format'];
  $sCodeValue = $vlResult[0]['sample_code_format'].$sKey;
  
@@ -142,6 +142,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
   }
   $prefix = $arr['sample_code_prefix'];
   $sFormat = $prefix.$mnthYr;
+  $sCodeValue = $sFormat.$sKey;
  }
  
  if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
@@ -216,7 +217,7 @@ if($urgency==''){
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" />
+                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -455,10 +456,10 @@ if($urgency==''){
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control  reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This barcode already exists.Try another barcode',null)">
+                          <input type="text" class="form-control  reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This barcode already exists.Try another barcode',null)">
                           <!--<input type="hidden" class="form-control  sampleCode " name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $sCodeValue;?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -588,7 +589,8 @@ if($urgency==''){
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="2"/>
-                <?php if($arr['sample_code']=='auto'){ ?>
+                <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code'];?>"/>
+                <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
                 <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                 <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                 <?php } ?>

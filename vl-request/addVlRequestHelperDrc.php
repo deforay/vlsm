@@ -195,6 +195,7 @@ try {
     $vldata=array(
                   'vlsm_instance_id'=>$instanceId,
                   'vlsm_country_id'=>3,
+                  'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='' ? $_POST['sampleCodeTitle'] :  'auto'),
                   'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='' ? $_POST['sampleCodeFormat'] :  NULL),
                    'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
                   'facility_id'=>$_POST['clinicName'],

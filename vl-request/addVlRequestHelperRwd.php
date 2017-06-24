@@ -113,7 +113,7 @@ try {
     if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
          $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
          $rejectionResult = $db->rawQuery($rejectionReasonQuery);
-         if(!isset($rejectionResult[0]['rejection_reason_id'])){
+        if(!isset($rejectionResult[0]['rejection_reason_id'])){
             $data=array(
             'rejection_reason_name'=>$_POST['newRejectionReason'],
             'rejection_type'=>'general',
@@ -121,9 +121,9 @@ try {
             );
             $id=$db->insert('r_sample_rejection_reasons',$data);
             $_POST['rejectionReason'] = $id;
-         }else{
+        }else{
             $_POST['rejectionReason'] = $rejectionResult[0]['rejection_reason_id'];
-         }
+        }
     }
     
     $isRejection = false;
@@ -146,6 +146,7 @@ try {
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>7,
+          'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='') ? $_POST['sampleCodeTitle'] :  'auto' ,
           'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
           'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
           'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
