@@ -53,8 +53,8 @@ try {
      $isPatientPregnant = NULL;
      $treatmentStage = NULL;
      if(isset($_POST['gender']) && trim($_POST['gender'])== "female"){
-         $isPatientPregnant = (isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='') ? $_POST['patientPregnant'] :  NULL
-         $treatmentStage = (isset($_POST['lineOfTreatment']) && $_POST['lineOfTreatment']!='') ? $_POST['lineOfTreatment'] :  NULL
+         $isPatientPregnant = (isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='') ? $_POST['patientPregnant'] :  NULL;
+         $treatmentStage = (isset($_POST['lineOfTreatment']) && $_POST['lineOfTreatment']!='') ? $_POST['lineOfTreatment'] :  NULL;
      }
      //sample collected date
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
@@ -64,12 +64,8 @@ try {
          $_POST['sampleCollectionDate'] = NULL;
      }
     //vl suspected treatment failure at
-     if(isset($_POST['suspectedTreatmentFailureAt']) && trim($_POST['suspectedTreatmentFailureAt'])!= "other"){
-         $_POST['suspectedTreatmentFailureAt']= $_POST['suspectedTreatmentFailureAt'];
-     }else if(isset($_POST['newSuspectedTreatmentFailureAt']) && trim($_POST['newSuspectedTreatmentFailureAt'])!=""){
-         $_POST['suspectedTreatmentFailureAt'] = str_replace(' ','_',$_POST['newSuspectedTreatmentFailureAt']);
-     }else{
-         $_POST['suspectedTreatmentFailureAt'] = NULL; 
+     if(isset($_POST['newSuspectedTreatmentFailureAt']) && trim($_POST['newSuspectedTreatmentFailureAt'])!="" && trim($_POST['suspectedTreatmentFailureAt']) == "other"){
+         $_POST['suspectedTreatmentFailureAt'] = $_POST['newSuspectedTreatmentFailureAt'];
      }
      //sample received date
      if(isset($_POST['sampleReceivedOn']) && trim($_POST['sampleReceivedOn'])!=""){
@@ -92,9 +88,7 @@ try {
           if(isset($_POST['repeatSampleCollection']) && $_POST['repeatSampleCollection']!=""){
                $repeatSampleCollection = $_POST['repeatSampleCollection'];
           }
-          if(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!= 'other'){
-               $rejectionReason = $_POST['rejectionReason'];
-          }else if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
+          if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!="" && trim($_POST['rejectionReason']) =="other"){
                $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
                $rejectionResult = $db->rawQuery($rejectionReasonQuery);
                if(!isset($rejectionResult[0]['rejection_reason_id'])){
@@ -108,6 +102,8 @@ try {
                }else{
                   $rejectionReason = $rejectionResult[0]['rejection_reason_id'];
                }
+          }else{
+             $rejectionReason = $_POST['rejectionReason'];
           }
      }
      //reviewed by date time
@@ -139,12 +135,16 @@ try {
      }
      //vl test reason
      if(isset($_POST['newVlTestReason']) && trim($_POST['newVlTestReason'])!="" && trim($_POST['vlTestReason'])== "other"){
-          $data=array(
-            'test_reason_name'=>$_POST['newVlTestReason'],
-            'test_reason_status'=>'active'
-          );
-          $result=$db->insert('r_vl_test_reasons',$data);
           $_POST['vlTestReason'] = $_POST['newVlTestReason'];
+          $checkTestReasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['newVlTestReason']."' OR test_reason_name='".strtolower($_POST['newVlTestReason'])."' OR test_reason_name='".ucfirst(strtolower($_POST['newVlTestReason']))."'";
+          $checkTestReasonResult = $db->rawQuery($checkTestReasonQuery);
+          if(!isset($checkTestReasonResult[0]['test_reason_id'])){
+               $data=array(
+               'test_reason_name'=>$_POST['newVlTestReason'],
+               'test_reason_status'=>'active'
+             );
+             $result=$db->insert('r_vl_test_reasons',$data);
+          }
      }
      //last vl test date
      if(isset($_POST['lastViralLoadTestDate']) && trim($_POST['lastViralLoadTestDate'])!=""){
@@ -179,10 +179,10 @@ try {
           'last_viral_load_result'=>(isset($_POST['lastViralLoadResult']) && trim($_POST['lastViralLoadResult'])!='') ? $_POST['lastViralLoadResult'] :  NULL,
           'number_of_enhanced_sessions'=>(isset($_POST['enhancedSession']) && $_POST['enhancedSession']!='') ? $_POST['enhancedSession'] :  NULL,
           'sample_type'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='') ? $_POST['specimenType'] :  NULL,
-          'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  NULL,
+          'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'sample_visit_type'=>(isset($_POST['visitType']) && $_POST['visitType']!='') ? $_POST['visitType'] :  NULL,
-          'vl_sample_suspected_treatment_failure_at'=>$_POST['suspectedTreatmentFailureAt'],
+          'vl_sample_suspected_treatment_failure_at'=>(isset($_POST['suspectedTreatmentFailureAt']))?$_POST['suspectedTreatmentFailureAt']:NULL,
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='') ? $_POST['collectedBy'] :  NULL,
           'facility_comments'=>(isset($_POST['facilityComments']) && $_POST['facilityComments']!='') ? $_POST['facilityComments'] :  NULL,
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
@@ -190,9 +190,9 @@ try {
           'sample_test_quality'=>(isset($_POST['sampleValidity']) && $_POST['sampleValidity']!='') ? $_POST['sampleValidity'] :  NULL,
           'repeat_sample_collection'=>$repeatSampleCollection,
           'reason_for_sample_rejection'=>$rejectionReason,
-          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
-          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
-          'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['result'] == 'actual_copies') ? $_POST['vlResult'] :  NULL,
+          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && $_POST['result'] == 'actual_copies') ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
+          'result'=>(isset($_POST['result']) && trim($_POST['result'])!= '' && trim($_POST['result']) == 'actual_copies') ? $_POST['vlResult'] : $_POST['result'],
           'result_reviewed_by'=>(isset($_POST['reviewedBy']) && $_POST['reviewedBy']!='') ? $_POST['reviewedBy'] :  NULL,
           'result_reviewed_datetime'=>$_POST['reviewedByDatetime'],
           'lab_contact_person'=>(isset($_POST['labContactPerson']) && $_POST['labContactPerson']!='') ? $_POST['labContactPerson'] :  NULL,

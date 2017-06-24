@@ -563,7 +563,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                             <select name="result" id="result" class="form-control" title="Please choose test result" style="width:100%;">
                               <option value=""> -- Select -- </option>
                               <option value="tnd">Target Not Detected</option>
-                              <option value="ac">Actual Copies</option>
+                              <option value="actual_copies">Actual Copies</option>
                               <option value="invalid">Invalid</option>
                               <option value="repeat">Repeat Sample Collection</option>
                             </select>
@@ -839,7 +839,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
     });
     
     $('#result').on('change',function(){
-      if(this.value == "ac"){
+      if(this.value == "actual_copies"){
         $(".vlResult").show();
         $("#vlResult").addClass("isRequired");
         $("#vlResult").focus();

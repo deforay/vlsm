@@ -1108,6 +1108,11 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Enable QR
 --Pal 14-Jun-2017
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'vlRequestRwdForm.php', 'Manage QR Code Rwd Form');
 
-ALTER TABLE  `vl_request_form` ADD  `sample_code_title` VARCHAR( 45 ) NOT NULL DEFAULT  'auto' AFTER  `sample_code_format` ;
+--Pal 23-Jun-2017
+ALTER TABLE `vl_request_form` ADD `sample_visit_type` VARCHAR(45) NULL DEFAULT NULL AFTER `treatment_details`;
 
-ALTER TABLE  `r_art_code_details` ADD  `headings` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `parent_art` ;
+ALTER TABLE `vl_request_form` ADD `vl_sample_suspected_treatment_failure_at` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_visit_type`;
+
+ALTER TABLE `vl_request_form` ADD `facility_comments` TEXT NULL DEFAULT NULL AFTER `sample_collected_by`;
+
+ALTER TABLE `vl_request_form` ADD `repeat_sample_collection` VARCHAR(45) NULL DEFAULT NULL AFTER `sample_test_quality`;

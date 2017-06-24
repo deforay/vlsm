@@ -593,11 +593,11 @@ $statusResult = $db->rawQuery($statusQuery);
                             <select name="result" id="result" class="form-control" title="Please choose test result" style="width:100%;">
                               <option value=""> -- Select -- </option>
                               <option value="tnd" <?php echo ($vlQueryInfo[0]['result']== 'tnd')?"selected='selected'":""?>>Target Not Detected</option>
-                              <option value="ac" <?php echo ($vlQueryInfo[0]['result']== 'ac')?"selected='selected'":""?>>Actual Copies</option>
+                              <option value="actual_copies" <?php echo (trim($vlQueryInfo[0]['result'])!= '' && is_numeric($vlQueryInfo[0]['result']))?"selected='selected'":""?>>Actual Copies</option>
                               <option value="invalid" <?php echo ($vlQueryInfo[0]['result']== 'invalid')?"selected='selected'":""?>>Invalid</option>
                               <option value="repeat" <?php echo ($vlQueryInfo[0]['result']== 'repeat')?"selected='selected'":""?>>Repeat Sample Collection</option>
                             </select>
-                            <span class="vlResult" style="display:<?php echo (trim($vlQueryInfo[0]['result'])!='' && $vlQueryInfo[0]['result']!= null && $vlQueryInfo[0]['result']=='ac')?'':'none'; ?>;"><input class="form-control checkNum" name="vlResult" id="vlResult" placeholder="Viral Load Result" title="Please enter vl result" style="width:75% !important;margin-top: 2px;" type="text" value="<?php echo $vlQueryInfo[0]['result_value_absolute']; ?>">&nbsp;(copiesl/ml)</span>
+                            <span class="vlResult" style="display:<?php echo (trim($vlQueryInfo[0]['result'])!='' && $vlQueryInfo[0]['result']!= null && is_numeric($vlQueryInfo[0]['result']))?'':'none'; ?>;"><input class="form-control checkNum" name="vlResult" id="vlResult" placeholder="Viral Load Result" title="Please enter vl result" style="width:75% !important;margin-top: 2px;" type="text" value="<?php echo $vlQueryInfo[0]['result_value_absolute']; ?>">&nbsp;(copiesl/ml)</span>
                           </div>
                       </div>
                       <div class="col-xs-4 col-md-4">
@@ -820,7 +820,7 @@ $statusResult = $db->rawQuery($statusQuery);
     });
     
     $('#result').on('change',function(){
-      if(this.value == "ac"){
+      if(this.value == "actual_copies"){
         $(".vlResult").show();
         $("#vlResult").addClass("isRequired");
         $("#vlResult").focus();
