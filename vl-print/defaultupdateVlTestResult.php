@@ -735,7 +735,7 @@ $disable = "disabled = 'disabled'";
                               <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                             </div>
                         </div>
-                        <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                        <div class="col-md-4 vlResult" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'none':'block'; ?>;">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
                               <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" />
@@ -845,10 +845,10 @@ $disable = "disabled = 'disabled'";
     $("input:radio[name=noResult]").click(function() {
       if($(this).val() == 'yes'){
         $('.rejectionReason').show();
-        $('.vlResult').css('visibility','hidden');
+        $('.vlResult').css('display','none');
         $('#rejectionReason').addClass('isRequired');
       }else{
-        $('.vlResult').css('visibility','visible');
+        $('.vlResult').css('display','block');
         $('.rejectionReason').hide();
         $('#rejectionReason').removeClass('isRequired');
         $('#rejectionReason').val('');

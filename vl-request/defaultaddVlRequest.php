@@ -782,6 +782,7 @@ $sFormat = '';
             details = data.split("###");
             $("#district").html(details[1]);
             $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+            $("#fCode").val('');
             $(".facilityDetails").hide();
             $(".facilityEmails").html('');
             $(".facilityMobileNumbers").html('');
@@ -865,10 +866,10 @@ $sFormat = '';
   $("input:radio[name=noResult]").click(function() {
     if($(this).val() == 'yes'){
       $('.rejectionReason').show();
-      $('.vlResult').css('visibility','hidden');
+      $('.vlResult').css('display','none');
       $('#rejectionReason').addClass('isRequired');
     }else{
-      $('.vlResult').css('visibility','visible');
+      $('.vlResult').css('display','block');
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#rejectionReason').val('');

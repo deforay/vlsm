@@ -165,25 +165,27 @@ if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0][
 $rch = '';
 $allChange = array();
 if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){
-  $rch.='<h4>Result Changes History</h4>';
-  $rch.='<table style="width:100%;">';
-  $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
-  $rch.='<tbody>';
   $allChange = json_decode($vlQueryInfo[0]['reason_for_vl_result_changes'],true);
-  $allChange = array_reverse($allChange);
-  foreach($allChange as $change){
-    $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
-    $usrResult = $db->rawQuery($usrQuery);
-    $name = '';
-    if(isset($usrResult[0]['user_name'])){
-      $name = ucwords($usrResult[0]['user_name']);
+  if(count($allChange)>0){
+    $rch.='<h4>Result Changes History</h4>';
+    $rch.='<table style="width:100%;">';
+    $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
+    $rch.='<tbody>';
+    $allChange = array_reverse($allChange);
+    foreach($allChange as $change){
+      $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
+      $usrResult = $db->rawQuery($usrQuery);
+      $name = '';
+      if(isset($usrResult[0]['user_name'])){
+        $name = ucwords($usrResult[0]['user_name']);
+      }
+      $expStr = explode(" ",$change['dtime']);
+      $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
+      $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
     }
-    $expStr = explode(" ",$change['dtime']);
-    $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
-    $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
-  }
   $rch.='</tbody>';
   $rch.='</table>';
+  }
 }
 ?>
 <style>
@@ -761,11 +763,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                               <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                             </div>
                         </div>
-                        <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                        <div class="col-md-4 vlResult" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'none':'block'; ?>;">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
                               <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" />
-                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected
+                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br/>
                               <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
@@ -894,6 +896,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
               details = data.split("###");
               $("#district").html(details[1]);
               $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+              $("#fCode").val('');
               $(".facilityDetails").hide();
               $(".facilityEmails").html('');
               $(".facilityMobileNumbers").html('');
@@ -961,10 +964,10 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   $("input:radio[name=noResult]").click(function() {
     if($(this).val() == 'yes'){
       $('.rejectionReason').show();
-      $('.vlResult').css('visibility','hidden');
+      $('.vlResult').css('display','none');
       $('#rejectionReason').addClass('isRequired');
     }else{
-      $('.vlResult').css('visibility','visible');
+      $('.vlResult').css('display','block');
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#rejectionReason').val('');
