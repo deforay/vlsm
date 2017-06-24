@@ -422,8 +422,8 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">CLINIC/HEALTH CENTER CODE</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PROVINCE</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">DISTRICT</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Province/State</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">District/County</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['facility_code'].'</td>';

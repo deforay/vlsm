@@ -63,8 +63,8 @@
               <table id="vlWeeklyReportDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th rowspan="2">Province</th>
-		  <th rowspan="2">District</th>
+		  <th rowspan="2">Province/State</th>
+		  <th rowspan="2">District/County</th>
 		  <th rowspan="2">Site Name</th>
                   <th rowspan="2">IPSL</th>
                   <th rowspan="2">No. of Rejections</th>

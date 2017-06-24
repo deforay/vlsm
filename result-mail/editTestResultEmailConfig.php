@@ -79,8 +79,8 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                             <select id="rs_field" name="rs_field[]" multiple="multiple" class="search isRequired" title="Please select email fields">
                                 <option value="Sample ID" <?php echo(in_array("Sample ID",$resultArr)?"selected='selected'":""); ?>>Sample ID</option>
                                 <option value="Urgency" <?php echo(in_array("Urgency",$resultArr)?"selected='selected'":""); ?>>Urgency</option>
-                                <option value="Province" <?php echo(in_array("Province",$resultArr)?"selected='selected'":""); ?>>Province</option>
-                                <option value="District Name" <?php echo(in_array("District Name",$resultArr)?"selected='selected'":""); ?>>District Name</option>
+                                <option value="Province/State" <?php echo(in_array("Province/State",$resultArr)?"selected='selected'":""); ?>>Province/State</option>
+                                <option value="District/County" <?php echo(in_array("District/County",$resultArr)?"selected='selected'":""); ?>>District/County</option>
                                 <option value="Clinic Name" <?php echo(in_array("Clinic Name",$resultArr)?"selected='selected'":""); ?>>Clinic Name</option>
                                 <option value="Clinician Name" <?php echo(in_array("Clinician Name",$resultArr)?"selected='selected'":""); ?>>Clinician Name</option>
                                 <option value="Sample Collection Date" <?php echo(in_array("Sample Collection Date",$resultArr)?"selected='selected'":""); ?>>Sample Collection Date</option>

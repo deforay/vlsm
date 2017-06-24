@@ -348,7 +348,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="patientFirstName">Patient Name </label>
+                          <label for="patientFirstName">Patient Name (First Name, Last Name) </label>
                             <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter Patient Name" title="Enter patient name" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>"/>
                           </div>
                       </div>  
@@ -490,7 +490,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                           </label>
                         </div>
                       </div>
-                      <div class="col-xs-3 col-md-3">
+                      <div class="col-xs-3 col-md-3" style="display:none;">
                         <div class="form-group">
                         <label for="">How long has this patient been on treatment ? </label>
                           <input type="text" class="form-control" id="treatPeriod" name="treatPeriod" placeholder="Enter Treatment Period" title="Please enter how long has this patient been on treatment" value="<?php echo $vlQueryInfo[0]['treatment_initiation']; ?>" />
@@ -637,19 +637,8 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                      </div>
-                     <div class="row">
-                        <div class="col-md-4">
-                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person </label>
-                            <div class="col-lg-7">
-                               <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" value="<?php echo $vlQueryInfo[0]['vl_focal_person']; ?>"/>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number</label>
-                            <div class="col-lg-7">
-                               <input type="text" class="form-control checkNum" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" value="<?php echo $vlQueryInfo[0]['vl_focal_person_phone_number']; ?>"/>
-                            </div>
-                        </div>
+                     <div class="row" style="display:none;">
+                        
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="emailHf">Email for HF </label>
                             <div class="col-lg-7">
@@ -668,12 +657,12 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         <div class="col-md-4">
                             <label for="labId" class="col-lg-5 control-label">Lab Name </label>
                             <div class="col-lg-7">
-                              <select name="labId" id="labId" class="form-control labSection" title="Please choose lab">
+                              <select name="labId" id="labId" class="form-control labSection" title="Please choose lab" onchange="autoFillFocalDetails();">
                                 <option value="">-- Select --</option>
                                 <?php
                                 foreach($lResult as $labName){
                                   ?>
-                                  <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
+                                  <option data-focalperson = "<?php echo $labName['contact_person'];?>" data-focalphone = "<?php echo $labName['facility_mobile_numbers'];?>" value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
                                   <?php
                                 }
                                 ?>
@@ -681,16 +670,15 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="testingPlatform" class="col-lg-5 control-label">VL Testing Platform </label>
+                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person </label>
                             <div class="col-lg-7">
-                              <select name="testingPlatform" id="testingPlatform" class="form-control labSection" title="Please choose VL Testing Platform">
-                                <option value="">-- Select --</option>
-                                <?php foreach($importResult as $mName) { ?>
-                                  <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
-                                  <?php
-                                }
-                                ?>
-                              </select>
+                               <input type="text" class="form-control labSection" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" value="<?php echo $vlQueryInfo[0]['vl_focal_person']; ?>"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number</label>
+                            <div class="col-lg-7">
+                               <input type="text" class="form-control checkNum labSection" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" value="<?php echo $vlQueryInfo[0]['vl_focal_person_phone_number']; ?>"/>
                             </div>
                         </div>
                         <!--<div class="col-md-4">
@@ -726,6 +714,19 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                       <div class="row">
+                        <div class="col-md-4">
+                            <label for="testingPlatform" class="col-lg-5 control-label">VL Testing Platform </label>
+                            <div class="col-lg-7">
+                              <select name="testingPlatform" id="testingPlatform" class="form-control labSection" title="Please choose VL Testing Platform">
+                                <option value="">-- Select --</option>
+                                <?php foreach($importResult as $mName) { ?>
+                                  <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
+                                  <?php
+                                }
+                                ?>
+                              </select>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="noResult">Sample Rejection </label>
                             <div class="col-lg-7">
@@ -1092,5 +1093,12 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
    }else{
      $('#patientPhoneNumber').removeClass('isRequired');
    }
+  }
+  function autoFillFocalDetails() {
+    labId = $("#labId").val();
+    if ($.trim(labId)!='') {
+        $("#vlFocalPerson").val($('#labId option:selected').attr('data-focalperson'));
+        $("#vlFocalPersonPhoneNumber").val($('#labId option:selected').attr('data-focalphone'));
+    }
   }
   </script>
