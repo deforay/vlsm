@@ -79,8 +79,9 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
       );
       if($mail->send()){
            //Update result mail sent flag
-           for($s=0;$s<count($_POST['sample']);$s++){
-                $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+           $sampleId = explode(",",$_POST['sample']);
+           for($s=0;$s<count($sampleId);$s++){
+                $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$sampleId[$s]."'";
                 $sampleResult = $db->rawQuery($sampleQuery);
                 $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
                 $db->update($tableName,array('is_result_mail_sent'=>'yes')); 
