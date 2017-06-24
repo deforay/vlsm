@@ -155,6 +155,7 @@ try {
      $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>'4',
+          'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='') ? $_POST['sampleCodeTitle'] :  'auto',
           'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL,
@@ -231,7 +232,7 @@ try {
           
           if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
                $_SESSION['treamentIdZam'] = $id;
-               $_SESSION['facilityIdZam'] = $_POST['clinicName'];
+               //$_SESSION['facilityIdZam'] = $_POST['clinicName'];
                header("location:addVlRequest.php".$barcode);
           }else{
                $_SESSION['treamentIdZam'] = '';
