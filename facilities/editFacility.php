@@ -122,9 +122,9 @@ $pResult = $db->rawQuery($pQuery);
               <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="state" class="col-lg-4 control-label">State/Province <span class="mandatory">*</span> </label>
+                        <label for="state" class="col-lg-4 control-label">Province/State <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <select name="state" id="state" class="form-control isRequired" title="Please choose state/province">
+                        <select name="state" id="state" class="form-control isRequired" title="Please choose province/state">
                           <option value=""> -- Select -- </option>
                           <?php
                           foreach($pResult as $province){
@@ -133,15 +133,17 @@ $pResult = $db->rawQuery($pQuery);
                             <?php
                           }
                           ?>
+                          <option value="other">Other</option>
                         </select>
+                        <input type="text" class="form-control" name="provinceNew" id="provinceNew" placeholder="Enter Province/State" title="Please enter province/state" style="margin-top:4px;display:none;"/>
                         </div>
                     </div>
                   </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="district" class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
+                        <label for="district" class="col-lg-4 control-label">District/County <span class="mandatory">*</span></label>
                         <div class="col-lg-7">
-                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District" value="<?php echo $facilityInfo[0]['facility_district']; ?>"  title="Please enter district"/>
+                        <input type="text" class="form-control isRequired" id="district" name="district" placeholder="District/County" value="<?php echo $facilityInfo[0]['facility_district']; ?>"  title="Please enter district/county"/>
                         </div>
                     </div>
                   </div>
@@ -253,8 +255,19 @@ $pResult = $db->rawQuery($pQuery);
             }
         });
   }
-</script>
   
+  $('#state').on('change',function(){
+    if(this.value == 'other'){
+      $('#provinceNew').show();
+      $('#provinceNew').addClass('isRequired');
+      $('#provinceNew').focus();
+    }else{
+      $('#provinceNew').hide();
+      $('#provinceNew').removeClass('isRequired');
+      $('#provinceNew').val('');
+    }
+  });
+</script>
  <?php
  include('../footer.php');
  ?>
