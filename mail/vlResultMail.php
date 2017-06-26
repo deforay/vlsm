@@ -148,17 +148,17 @@ $batchResult = $db->rawQuery($batchQuery);
                                     <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
                                 </td>
                             </tr>
-														<tr>
-                                <td>&nbsp;<b>State/Province &nbsp;:</b></td>
+			    <tr>
+                                <td>&nbsp;<b>Province/State &nbsp;:</b></td>
                                 <td>
-                                    <input type="text" id="state" name="state" class="form-control" placeholder="State/Province" style="width:275px;"/>
+                                    <input type="text" id="state" name="state" class="form-control" placeholder="Province/State" style="width:275px;"/>
                                 </td>
-                                <td>&nbsp;<b>District&nbsp;:</b></td>
+                                <td>&nbsp;<b>District/County&nbsp;:</b></td>
                                 <td>
-                                    <input type="text" id="district" name="district" class="form-control" placeholder="District" style="width:275px;"/>
+                                    <input type="text" id="district" name="district" class="form-control" placeholder="District/County" style="width:275px;"/>
                                 </td>
                             </tr>
-														<tr>
+			    <tr>
                                 <td class=""><b>Batch&nbsp;:</b></td>
                                 <td>
                                     <select name="batch" id="batch" class="form-control" title="Please choose batch" style="width:275px;" multiple="multiple">

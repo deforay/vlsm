@@ -238,8 +238,8 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="province">Province <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDetails(this);">
+                        <label for="province">State <span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="province" id="province" title="Please choose state" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDetails(this);">
                             <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
                               <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
@@ -249,8 +249,8 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="district">District  <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                        <label for="district">County  <span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose county" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDistrictwise(this);">
                              <option value=""> -- Select -- </option>
                               <?php
                               foreach($districtResult as $districtName){
