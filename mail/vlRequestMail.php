@@ -148,13 +148,13 @@ $batchResult = $db->rawQuery($batchQuery);
                                 </td>
                             </tr>
                             <tr>
-                                <td>&nbsp;<b>State/Province &nbsp;:</b></td>
+                                <td>&nbsp;<b>Province/State &nbsp;:</b></td>
                                 <td>
-                                    <input type="text" id="state" name="state" class="form-control" placeholder="State/Province" style="width:275px;"/>
+                                    <input type="text" id="state" name="state" class="form-control" placeholder="Province/State" style="width:275px;"/>
                                 </td>
-                                <td>&nbsp;<b>District&nbsp;:</b></td>
+                                <td>&nbsp;<b>District/County&nbsp;:</b></td>
                                 <td>
-                                    <input type="text" id="district" name="district" class="form-control" placeholder="District" style="width:275px;"/>
+                                    <input type="text" id="district" name="district" class="form-control" placeholder="District/County" style="width:275px;"/>
                                 </td>
                             </tr>
                             <tr>

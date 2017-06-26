@@ -49,6 +49,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
          //Set heading row
          $colNo = 0;
          foreach ($headings as $field => $value) {
+          if($value == 'Province'){
+            $value = 'Province/State';
+          }else if($value == 'District Name'){
+            $value = 'District/County';
+          }
           $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
           $cellName = $sheet->getCellByColumnAndRow($colNo,1)->getColumn();
           $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
@@ -66,9 +71,9 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   $field = 'sample_code';
                }elseif($filedGroup[$f] == "Urgency"){
                   $field = 'test_urgency';
-               }elseif($filedGroup[$f] == "Province/State"){
+               }elseif($filedGroup[$f] == "Province"){
                   $field = 'facility_state';
-               }elseif($filedGroup[$f] == "District/County"){
+               }elseif($filedGroup[$f] == "District Name"){
                   $field = 'facility_district';
                }elseif($filedGroup[$f] == "Clinic Name"){
                   $field = 'facility_name';

@@ -99,6 +99,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
          $pdfContent.='<table style="width;100%;border:1px solid #333;padding:0px 2px 2px 2px;" cellspacing="0" cellpadding="2">';
            $pdfContent.='<tr>';
             for($f=0;$f<count($filedGroup);$f++){
+               if($filedGroup[$f] == 'Province'){
+                 $filedGroup[$f] = 'Province/State';
+               }else if($filedGroup[$f] == 'District Name'){
+                  $filedGroup[$f] = 'District/County';
+               } 
               $pdfContent.='<td style="border:1px solid #333;"><strong>'.$filedGroup[$f].'</strong></td>';
             }
            $pdfContent.='</tr>';
@@ -113,9 +118,9 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                      $field = 'sample_code';
                   }elseif($filedGroup[$f] == "Urgency"){
                      $field = 'test_urgency';
-               }elseif($filedGroup[$f] == "Province/State"){
+               }elseif($filedGroup[$f] == "Province"){
                      $field = 'facility_state';
-               }elseif($filedGroup[$f] == "District/County"){
+               }elseif($filedGroup[$f] == "District Name"){
                      $field = 'facility_district';
                   }elseif($filedGroup[$f] == "Clinic Name"){
                      $field = 'facility_name';

@@ -47,11 +47,10 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
 
  $sheet->mergeCells('A1:Z1');
  $nameValue = '';
- foreach($_POST as $key=>$value)
- {
-  if(trim($value)!='' && trim($value)!='-- Select --'){
-  $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
-  }
+ foreach($_POST as $key=>$value){
+   if(trim($value)!='' && trim($value)!='-- Select --'){
+     $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
+   }
  }
  $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
 
@@ -119,7 +118,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $aRow['result_printed_datetime']='';
   }
   
-  $row[] = $aRow['serial_no'];
+  $row[] = $aRow['sample_code'];
   $row[] = $aRow['batch_code'];
   $row[] = ucwords($aRow['test_urgency']);
   $row[] = ucwords($aRow['facility_state']);
