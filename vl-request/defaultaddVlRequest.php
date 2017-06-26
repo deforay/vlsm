@@ -227,7 +227,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="dob">Date of Birth </label>
-                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" onchange="getDateOfBirth();"/>
+                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" onchange="getAge();"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -903,43 +903,24 @@ $sFormat = '';
     }
   }
   
-  function getDateOfBirth(){
-      var today = new Date();
-      var dob = $("#dob").val();
-      if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
-      }
-      
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      }
-      if(mm<10) {
-       mm='0'+mm
-      }
-      
-      splitDob = dob.split("-");
-      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-      var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
-      }else{
-        $("#ageInMonths").val("");
-      }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
-      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
+  function getAge(){
+    var dob = $("#dob").val();
+    if($.trim(dob) == ""){
+      $("#ageInMonths").val("");
+      $("#ageInYears").val("");
+      return false;
+    }
+    //calculate age
+    splitDob = dob.split("-");
+    var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
+    var monthDigit = dobDate.getMonth();
+    var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
+    dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+    dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
+    var years = moment().diff(dob, 'years',false);
+    var months = (years == 0)?moment().diff(dob, 'months',false):'';
+    $("#ageInYears").val(years); // Gives difference as years
+    $("#ageInMonths").val(months); // Gives difference as months
   }
   
   function checkRejectionReason(){
@@ -998,19 +979,20 @@ $sFormat = '';
         document.getElementById('vlRequestFormRwd').submit();
       }
   }
-  function checkPatientReceivesms(val)
-  {
+  
+  function checkPatientReceivesms(val){
    if(val=='yes'){
     $('#patientPhoneNumber').addClass('isRequired');
    }else{
      $('#patientPhoneNumber').removeClass('isRequired');
    }
   }
+  
   function autoFillFocalDetails() {
     labId = $("#labId").val();
     if ($.trim(labId)!='') {
-        $("#vlFocalPerson").val($('#labId option:selected').attr('data-focalperson'));
-        $("#vlFocalPersonPhoneNumber").val($('#labId option:selected').attr('data-focalphone'));
+      $("#vlFocalPerson").val($('#labId option:selected').attr('data-focalperson'));
+      $("#vlFocalPersonPhoneNumber").val($('#labId option:selected').attr('data-focalphone'));
     }
   }
   </script>

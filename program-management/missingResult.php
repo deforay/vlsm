@@ -1,6 +1,5 @@
 <?php
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
@@ -65,7 +64,7 @@ $batResult = $db->rawQuery($batQuery);
 		
 		    <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" style="width:220px;">
+		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -104,6 +103,7 @@ $batResult = $db->rawQuery($batQuery);
   <script src="../assets/js/highchart.js"></script>
   <script>
   $(function () {
+    $("#facilityName").select2({placeholder:"Select Facilities"});
     $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',

@@ -306,7 +306,7 @@ $disabled = "disabled = 'disabled'";
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                           <label for="">DOB </label>
-                            <input type="text" class="form-control date" style="width:100%;" name="dob" id="dob" placeholder="DOB" title="Please enter patient date of birth" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disabled; ?> onchange="getAgeInWeeks();">
+                            <input type="text" class="form-control date" style="width:100%;" name="dob" id="dob" placeholder="DOB" title="Please enter patient date of birth" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disabled; ?>>
                           </div>
                         </div>
                         <div class="col-xs-4 col-md-4">
@@ -721,7 +721,9 @@ $disabled = "disabled = 'disabled'";
     function getAgeInWeeks(){
       var dob = $("#dob").val();
       if($.trim(dob) == ""){
-        $("#age").val("");
+        $("#ageInWeeks").val("");
+        $("#ageInMonths").val("");
+        $("#ageInYears").val("");
         return false;
       }
       //calculate age

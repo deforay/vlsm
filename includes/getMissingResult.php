@@ -33,9 +33,9 @@ foreach($tsResult as $tsId){
    }
    if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
       $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
-      }
-   if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
-      $sWhere.= ' AND f.facility_id = "'.$_POST['facilityName'].'"';
+   }
+   if(isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) >0){
+      $sWhere.= ' AND f.facility_id IN ('.implode(",",$_POST['facilityName']).')';
    }
    $tQuery = $tQuery.' '.$sWhere;
    $tResult[$i] = $db->rawQuery($tQuery);
