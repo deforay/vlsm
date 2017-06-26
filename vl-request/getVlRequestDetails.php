@@ -297,7 +297,7 @@ $primaryKey="vl_sample_id";
 		
 					
 						if($vlView){
-							$row[] = $edit.$barcode;//.$pdf.$view;
+							$row[] = $edit.'&nbsp;'.$barcode;//.$pdf.$view;
 						}else if($vlRequest || $editVlRequestZm){
 							$row[] = $edit;//.$pdf;
 						}else if($vlView){
