@@ -152,11 +152,11 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $aRow['result_printed_datetime'];
   $vlResult = '';
   if(isset($aRow['result_value_absolute']) && trim($aRow['result_value_absolute'])!= ''){
-       $vlResult = $aRow['result_value_absolute'];
+    $vlResult = $aRow['result_value_absolute'];
    }elseif(isset($aRow['result_value_log']) && trim($aRow['result_value_log'])!= ''){
-       $vlResult = $aRow['result_value_log'];
+    $vlResult = $aRow['result_value_log'];
    }elseif(isset($aRow['result_value_text']) && trim($aRow['result_value_text'])!= ''){
-       $vlResult = $aRow['result_value_text'];
+    $vlResult = $aRow['result_value_text'];
    }
   $row[] = $vlResult;
   

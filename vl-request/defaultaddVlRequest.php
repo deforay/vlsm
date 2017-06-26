@@ -546,18 +546,6 @@ $sFormat = '';
                                <input type="text" class="form-control checkNum" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" />
                             </div>
                         </div>
-                        
-                        <!--<div class="col-md-4">
-                            <label for="testMethods" class="col-lg-5 control-label">Test Methods</label>
-                            <div class="col-lg-7">
-                              <select name="testMethods" id="testMethods" class="form-control" title="Please choose test methods">
-                                <option value=""> -- Select -- </option>
-                                <option value="individual">Individual</option>
-                                <option value="minipool">Minipool</option>
-                                <option value="other pooling algorithm">Other Pooling Algorithm</option>
-                               </select>
-                            </div>
-                        </div>-->
                       </div>
                       <div class="row">
                         <div class="col-md-4">
@@ -631,7 +619,7 @@ $sFormat = '';
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
                               <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" />
-                              <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected
+                              <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
