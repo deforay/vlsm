@@ -145,20 +145,22 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
   $rch.='<tbody>';
   $allChange = json_decode($vlQueryInfo[0]['reason_for_vl_result_changes'],true);
-  $allChange = array_reverse($allChange);
-  foreach($allChange as $change){
-    $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
-    $usrResult = $db->rawQuery($usrQuery);
-    $name = '';
-    if(isset($usrResult[0]['user_name'])){
-      $name = ucwords($usrResult[0]['user_name']);
+  if(count($allChange)>0){
+    $allChange = array_reverse($allChange);
+    foreach($allChange as $change){
+      $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
+      $usrResult = $db->rawQuery($usrQuery);
+      $name = '';
+      if(isset($usrResult[0]['user_name'])){
+        $name = ucwords($usrResult[0]['user_name']);
+      }
+      $expStr = explode(" ",$change['dtime']);
+      $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
+      $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
     }
-    $expStr = explode(" ",$change['dtime']);
-    $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
-    $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
+    $rch.='</tbody>';
+    $rch.='</table>';
   }
-  $rch.='</tbody>';
-  $rch.='</table>';
 }
 $disable = "disabled = 'disabled'";
 ?>
@@ -305,7 +307,7 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="dob">Date of Birth </label>
-                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disable;?> onchange="getDateOfBirth();"/>
+                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disable;?>/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -854,14 +856,14 @@ $disable = "disabled = 'disabled'";
       }
     });
     $('#bdl').change(function() {
-    if($('#bdl').is(':checked')){
-      $('#vlResult').attr('readonly',true);
-      $('#tnd').prop('checked', false).attr('disabled',true);
-    }else{
-      $('#vlResult').attr('readonly',false);
-      $('#tnd').attr('disabled',false);
-    }
-  });
+      if($('#bdl').is(':checked')){
+        $('#vlResult').attr('readonly',true);
+        $('#tnd').prop('checked', false).attr('disabled',true);
+      }else{
+        $('#vlResult').attr('readonly',false);
+        $('#tnd').attr('disabled',false);
+      }
+    });
     
     $('#vlResult').on('input',function(e){
       if(this.value != ''){
@@ -908,11 +910,12 @@ $disable = "disabled = 'disabled'";
           document.getElementById('vlRequestFormSudan').submit();
         }
     }
+    
     function autoFillFocalDetails() {
-    labId = $("#labId").val();
-    if ($.trim(labId)!='') {
+      var labId = $("#labId").val();
+      if ($.trim(labId)!='') {
         $("#vlFocalPerson").val($('#labId option:selected').attr('data-focalperson'));
         $("#vlFocalPersonPhoneNumber").val($('#labId option:selected').attr('data-focalphone'));
-    }
+      }
     }
   </script>

@@ -765,7 +765,9 @@ $statusResult = $db->rawQuery($statusQuery);
     function getAgeInWeeks(){
       var dob = $("#dob").val();
       if($.trim(dob) == ""){
-        $("#age").val("");
+        $("#ageInWeeks").val("");
+        $("#ageInMonths").val("");
+        $("#ageInYears").val("");
         return false;
       }
       //calculate age
