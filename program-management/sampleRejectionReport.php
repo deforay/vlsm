@@ -10,6 +10,11 @@ $lResult = $db->rawQuery($lQuery);
 $cQuery="SELECT * FROM facility_details where status='active' and facility_type=1";
 $cResult = $db->rawQuery($cQuery);
 ?>
+  <style>
+    .select2-selection__choice{
+      color:black !important;
+    }
+  </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->

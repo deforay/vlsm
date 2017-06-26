@@ -13,6 +13,11 @@ $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 
 ?>
+  <style>
+    .select2-selection__choice{
+      color:black !important;
+    }
+  </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -65,7 +70,7 @@ $batResult = $db->rawQuery($batQuery);
 		<tr>
 		    <td><b>Facility Name :</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+		      <select class="form-control" id="facilityName" name="facilityName" multiple="multiple" title="Please select facility name" style="width:100%;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -257,12 +262,12 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
    $(document).ready(function() {
-		
 	<?php
 		if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
 			echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
 		}
 	?>
+     $("#facilityName").select2({placeholder:"Select Facilities"});
      loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -336,9 +341,9 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-								<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
-								{"sClass":"center","bSortable":false},
-								<?php } ?>
+		<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
+		{"sClass":"center","bSortable":false},
+		<?php } ?>
             ],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
