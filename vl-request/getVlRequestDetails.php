@@ -130,12 +130,12 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
 	   }
 	   if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
-	    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+	    $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 	   }
 	   if(isset($_POST['district']) && trim($_POST['district'])!= ''){
-		$sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
+	    $sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
 	   }if(isset($_POST['state']) && trim($_POST['state'])!= ''){
-		$sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
+	    $sWhere = $sWhere." AND f.facility_state LIKE '%" . $_POST['state'] . "%' ";
 	   }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
@@ -170,11 +170,11 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		  $sWhere = $sWhere.' f.facility_id IN ('.$_POST['facilityName'].')';
 		}else{
-		$setWhr = 'where';
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
+		  $setWhr = 'where';
+		  $sWhere=' where '.$sWhere;
+		  $sWhere = $sWhere.' f.facility_id IN ('.$_POST['facilityName'].')';
 		}
 	    }
 	    if(isset($_POST['district']) && trim($_POST['district'])!= ''){
@@ -248,12 +248,12 @@ $primaryKey="vl_sample_id";
         foreach ($rResult as $aRow) {
 	    $vlResult='';
 	    $edit='';
-			$barcode='';
+	    $barcode='';
 	    if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
-	       $xplodDate = explode(" ",$aRow['sample_collection_date']);
-	       $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+	      $xplodDate = explode(" ",$aRow['sample_collection_date']);
+	      $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
 	    }else{
-	       $aRow['sample_collection_date'] = '';
+	      $aRow['sample_collection_date'] = '';
 	    }
             $row = array();
 	    //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
@@ -297,7 +297,7 @@ $primaryKey="vl_sample_id";
 		
 					
 						if($vlView){
-							$row[] = $edit.$barcode;//.$pdf.$view;
+							$row[] = $edit.'&nbsp;'.$barcode;//.$pdf.$view;
 						}else if($vlRequest || $editVlRequestZm){
 							$row[] = $edit;//.$pdf;
 						}else if($vlView){

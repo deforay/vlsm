@@ -131,7 +131,7 @@ $primaryKey="vl_sample_id";
 			$sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
 		}
 		if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
-			$sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 		}
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
@@ -166,10 +166,10 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+		  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 		}else{
-		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
+		  $sWhere=' where '.$sWhere;
+		  $sWhere = $sWhere.' f.facility_id IN ('.$_POST['facilityName'].')';
 		}
 	    }
 	}

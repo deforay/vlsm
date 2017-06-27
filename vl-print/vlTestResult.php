@@ -32,6 +32,11 @@ if($lastUrl1!='' || $lastUrl2!=''){
   $status=(isset($_COOKIE['status']) && $_COOKIE['status']!='') ? $_COOKIE['status'] :  '';
 }
 ?>
+  <style>
+    .select2-selection__choice{
+      color:black !important;
+    }
+  </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->

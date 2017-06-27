@@ -96,15 +96,22 @@ try {
             if(trim($row[$absValCol])!=""){
                 $resVal=explode("(",$row[$absValCol]);
                 if(count($resVal)==2){
-                    $absVal= (float) trim($resVal[0]);
-                    $absDecimalVal=(float) trim($resVal[0]);
-                    //
-                    //$expAbsVal=explode("E",$absVal);
-                    //if(count($expAbsVal)==2){
-                    //     $multipleVal=substr($expAbsVal[1],1);
-                    //     $absDecimalVal=$expAbsVal[0]*pow(10,$multipleVal);
-                    //}
+                    
+                    if (strpos("<", $resVal[0]) !== false) {
+                        $resVal[0] = str_replace("<","",$resVal[0]);
+                        $absDecimalVal=(float) trim($resVal[0]);
+                        $absVal= "< " . (float) trim($resVal[0]);
+                    } else if (strpos(">", $resVal[0]) !== false) {
+                        $resVal[0] = str_replace(">","",$resVal[0]);
+                        $absDecimalVal=(float) trim($resVal[0]);
+                        $absVal= "> " . (float) trim($resVal[0]);
+                    } else{
+                        $absVal= (float) trim($resVal[0]);
+                        $absDecimalVal=(float) trim($resVal[0]);
+                    }
+                    
                     $logVal=substr(trim($resVal[1]),0,-1);
+                    
                 }else{
                     $txtVal=trim($row[$absValCol]);
                     if($txtVal=='Invalid'){

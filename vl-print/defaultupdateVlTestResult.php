@@ -145,20 +145,22 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   $rch.='<thead><tr style="border-bottom:2px solid #d3d3d3;"><th style="width:20%;">USER</th><th style="width:60%;">MESSAGE</th><th style="width:20%;text-align:center;">DATE</th></tr></thead>';
   $rch.='<tbody>';
   $allChange = json_decode($vlQueryInfo[0]['reason_for_vl_result_changes'],true);
-  $allChange = array_reverse($allChange);
-  foreach($allChange as $change){
-    $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
-    $usrResult = $db->rawQuery($usrQuery);
-    $name = '';
-    if(isset($usrResult[0]['user_name'])){
-      $name = ucwords($usrResult[0]['user_name']);
+  if(count($allChange)>0){
+    $allChange = array_reverse($allChange);
+    foreach($allChange as $change){
+      $usrQuery="SELECT user_name FROM user_details where user_id='".$change['usr']."'";
+      $usrResult = $db->rawQuery($usrQuery);
+      $name = '';
+      if(isset($usrResult[0]['user_name'])){
+        $name = ucwords($usrResult[0]['user_name']);
+      }
+      $expStr = explode(" ",$change['dtime']);
+      $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
+      $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
     }
-    $expStr = explode(" ",$change['dtime']);
-    $changedDate = $general->humanDateFormat($expStr[0])." ".$expStr[1];
-    $rch.='<tr><td>'.$name.'</td><td>'.ucfirst($change['msg']).'</td><td style="text-align:center;">'.$changedDate.'</td></tr>';
+    $rch.='</tbody>';
+    $rch.='</table>';
   }
-  $rch.='</tbody>';
-  $rch.='</table>';
 }
 $disable = "disabled = 'disabled'";
 ?>
@@ -238,8 +240,8 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="province">Province <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDetails(this);">
+                        <label for="province">State <span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="province" id="province" title="Please choose state" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDetails(this);">
                             <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
                               <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
@@ -249,8 +251,8 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="district">District  <span class="mandatory">*</span></label>
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                        <label for="district">County  <span class="mandatory">*</span></label>
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose county" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDistrictwise(this);">
                              <option value=""> -- Select -- </option>
                               <?php
                               foreach($districtResult as $districtName){
@@ -305,7 +307,7 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="dob">Date of Birth </label>
-                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disable;?> onchange="getDateOfBirth();"/>
+                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disable;?>/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -655,17 +657,6 @@ $disable = "disabled = 'disabled'";
                                <input type="text" class="form-control checkNum labSection" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" value="<?php echo $vlQueryInfo[0]['vl_focal_person_phone_number']; ?>"/>
                             </div>
                         </div>
-                        <!--<div class="col-md-4">
-                            <label for="testMethods" class="col-lg-5 control-label">Test Methods</label>
-                            <div class="col-lg-7">
-                              <select name="testMethods" id="testMethods" class="form-control labSection" title="Please choose test methods">
-                                <option value=""> -- Select -- </option>
-                                <option value="individual" < ?php echo($vlQueryInfo[0]['test_methods'] == 'individual')? 'selected="selected"':''; ?>>Individual</option>
-                                <option value="minipool" < ?php echo($vlQueryInfo[0]['test_methods'] == 'minipool')? 'selected="selected"':''; ?>>Minipool</option>
-                                <option value="other pooling algorithm" < ?php echo($vlQueryInfo[0]['test_methods'] == 'other pooling algorithm')? 'selected="selected"':''; ?>>Other Pooling Algorithm</option>
-                               </select>
-                            </div>
-                        </div>-->
                       </div>
                       <div class="row">
                         <div class="col-md-4">
@@ -739,7 +730,7 @@ $disable = "disabled = 'disabled'";
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
                               <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" />
-                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected
+                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Lev
                             </div>
                         </div>
@@ -865,14 +856,14 @@ $disable = "disabled = 'disabled'";
       }
     });
     $('#bdl').change(function() {
-    if($('#bdl').is(':checked')){
-      $('#vlResult').attr('readonly',true);
-      $('#tnd').prop('checked', false).attr('disabled',true);
-    }else{
-      $('#vlResult').attr('readonly',false);
-      $('#tnd').attr('disabled',false);
-    }
-  });
+      if($('#bdl').is(':checked')){
+        $('#vlResult').attr('readonly',true);
+        $('#tnd').prop('checked', false).attr('disabled',true);
+      }else{
+        $('#vlResult').attr('readonly',false);
+        $('#tnd').attr('disabled',false);
+      }
+    });
     
     $('#vlResult').on('input',function(e){
       if(this.value != ''){
@@ -919,11 +910,12 @@ $disable = "disabled = 'disabled'";
           document.getElementById('vlRequestFormSudan').submit();
         }
     }
+    
     function autoFillFocalDetails() {
-    labId = $("#labId").val();
-    if ($.trim(labId)!='') {
+      var labId = $("#labId").val();
+      if ($.trim(labId)!='') {
         $("#vlFocalPerson").val($('#labId option:selected').attr('data-focalperson'));
         $("#vlFocalPersonPhoneNumber").val($('#labId option:selected').attr('data-focalphone'));
-    }
+      }
     }
   </script>

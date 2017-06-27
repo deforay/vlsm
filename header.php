@@ -131,6 +131,17 @@ $formConfigResult=$db->query($formConfigQuery);
     padding: 15px 0 !important;
   }
   
+  
+  .select2-selection__choice__remove{
+    color: red !important;
+  }
+  .select2-container--default .select2-selection--multiple .select2-selection__choice{
+    background-color: #00c0ef;
+    border-color: #00acd6;
+    color: #fff !important;
+    font-family:helvetica, arial, sans-serif;
+  }
+  
 </style>
 </head>
 

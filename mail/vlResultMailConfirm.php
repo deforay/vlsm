@@ -61,7 +61,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
          }
       }
       $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-      $pdf->setHeading($arr['logo'],$arr['header']);
+      $pdf->setHeading($global['logo'],$global['header']);
       $pdf->setPageOrientation('L');
       // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -99,6 +99,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
          $pdfContent.='<table style="width;100%;border:1px solid #333;padding:0px 2px 2px 2px;" cellspacing="0" cellpadding="2">';
            $pdfContent.='<tr>';
             for($f=0;$f<count($filedGroup);$f++){
+               if($filedGroup[$f] == 'Province'){
+                 $filedGroup[$f] = 'Province/State';
+               }else if($filedGroup[$f] == 'District Name'){
+                  $filedGroup[$f] = 'District/County';
+               } 
               $pdfContent.='<td style="border:1px solid #333;"><strong>'.$filedGroup[$f].'</strong></td>';
             }
            $pdfContent.='</tr>';
@@ -113,9 +118,9 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                      $field = 'sample_code';
                   }elseif($filedGroup[$f] == "Urgency"){
                      $field = 'test_urgency';
-               }elseif($filedGroup[$f] == "Province/State"){
+                  }elseif($filedGroup[$f] == "Province"){
                      $field = 'facility_state';
-               }elseif($filedGroup[$f] == "District/County"){
+                  }elseif($filedGroup[$f] == "District Name"){
                      $field = 'facility_district';
                   }elseif($filedGroup[$f] == "Clinic Name"){
                      $field = 'facility_name';
@@ -185,6 +190,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                      $field = 'status_name';
                   }
                   
+                  if($field == '') { continue; }
                   if($field ==  'result_reviewed_by'){
                      $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_type LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                   }elseif($field ==  'result_approved_by'){

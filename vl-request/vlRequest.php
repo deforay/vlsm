@@ -13,6 +13,11 @@ $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 
 ?>
+  <style>
+    .select2-selection__choice{
+      color:black !important;
+    }
+  </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -65,7 +70,7 @@ $batResult = $db->rawQuery($batQuery);
 		<tr>
 		    <td><b>Facility Name :</b></td>
 		    <td>
-		      <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name">
+		      <select class="form-control" id="facilityName" name="facilityName" multiple="multiple" title="Please select facility name" style="width:100%;">
 		      <option value=""> -- Select -- </option>
 			<?php
 			foreach($fResult as $name){
@@ -76,13 +81,13 @@ $batResult = $db->rawQuery($batQuery);
 			?>
 		      </select>
 		    </td>
-		    <td style=""><b>State/Province&nbsp;:</b></td>
+		    <td style=""><b>Province/State&nbsp;:</b></td>
 		    <td>
-		      <input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()"/>
+		      <input style="" type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;" onkeyup="loadVlRequestStateDistrict()"/>
 		    </td>
-		    <td><b>District :</b></td>
+		    <td><b>District/County :</b></td>
 		    <td>
-			<input type="text" id="district" name="district" class="form-control" placeholder="Enter District" onkeyup="loadVlRequestStateDistrict()"/>
+			<input type="text" id="district" name="district" class="form-control" placeholder="Enter District/County" onkeyup="loadVlRequestStateDistrict()"/>
 		    </td>
 		</tr>
 		<tr>
@@ -148,10 +153,10 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol5">Facility Name</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="state"  class="showhideCheckBox" /> <label for="iCol6">Province</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="state"  class="showhideCheckBox" /> <label for="iCol6">Province/State</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="district"  class="showhideCheckBox" /> <label for="iCol7">District</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="district"  class="showhideCheckBox" /> <label for="iCol7">District/County</label>
 				    </div>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="sample_name"  class="showhideCheckBox" /> <label for="iCol8">Sample Type</label>
@@ -177,8 +182,8 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
 		  <th>Facility Name</th>
-		  <th>Province</th>
-		  <th>District</th>
+		  <th>Province/State</th>
+		  <th>District/County</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
@@ -257,12 +262,12 @@ $batResult = $db->rawQuery($batQuery);
    var selectedTestsId=[];
    var oTable = null;
    $(document).ready(function() {
-		
 	<?php
 		if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
 			echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
 		}
 	?>
+     $("#facilityName").select2({placeholder:"Select Facilities"});
      loadVlRequestData(); 
      $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -336,9 +341,9 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-								<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
-								{"sClass":"center","bSortable":false},
-								<?php } ?>
+		<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
+		{"sClass":"center","bSortable":false},
+		<?php } ?>
             ],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
