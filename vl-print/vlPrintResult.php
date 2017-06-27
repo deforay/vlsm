@@ -302,9 +302,9 @@ $batResult = $db->rawQuery($batQuery);
       <?php
       $path = '';
       if($configFormResult[0]['value'] == 3){
-	$path = '../includes/vlRequestDrcSearchResultPdf.php';
+	$path = '../result-pdf/vlRequestDrcSearchResultPdf.php';
       }else {
-	$path = '../includes/vlRequestSearchResultPdf.php'; 
+	$path = '../result-pdf/vlRequestSearchResultPdf.php'; 
       }
       ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id},
@@ -324,9 +324,9 @@ $batResult = $db->rawQuery($batQuery);
     <?php
     $path = '';
     if($configFormResult[0]['value'] == 3){
-      $path = '../includes/vlRequestDrcSearchResultPdf.php';
+      $path = '../result-pdf/vlRequestDrcSearchResultPdf.php';
     }else {
-      $path = '../includes/vlRequestSearchResultPdf.php'; 
+      $path = '../result-pdf/vlRequestSearchResultPdf.php'; 
     }
     ?>
     $.post("<?php echo $path; ?>", { source:'print',id : id},

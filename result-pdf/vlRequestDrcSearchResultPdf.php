@@ -1,11 +1,11 @@
 <?php
 session_start();
 ob_start();
-include('MysqliDb.php');
-include('General.php');
-include ('tcpdf/tcpdf.php');
-include ('fpdi/fpdi.php');
-include ('fpdf/fpdf.php');
+include('../includes/MysqliDb.php');
+include('../includes/General.php');
+include ('../includes/tcpdf/tcpdf.php');
+include ('../includes/fpdi/fpdi.php');
+include ('../includes/fpdf/fpdf.php');
 define('UPLOAD_PATH','../uploads');
 $tableName1="activity_log";
 $tableName2="vl_request_form";

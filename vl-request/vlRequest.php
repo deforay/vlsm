@@ -386,7 +386,7 @@ $batResult = $db->rawQuery($batQuery);
     oTable.fnDraw();
   }
   function convertPdf(id){
-      $.post("../includes/vlRequestPdf.php", { id : id, format: "html"},
+      $.post("../result-pdf/vlRequestPdf.php", { id : id, format: "html"},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');

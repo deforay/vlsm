@@ -329,9 +329,9 @@ if($lastUrl1!='' || $lastUrl2!=''){
     <?php
     $path = '';
     if($configFormResult[0]['value'] == 3){
-      $path = '../includes/vlRequestDrcSearchResultPdf.php';
+      $path = '../result-pdf/vlRequestDrcSearchResultPdf.php';
     }else {
-      $path = '../includes/vlRequestSearchResultPdf.php';  
+      $path = '../result-pdf/vlRequestSearchResultPdf.php';  
     }
     ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id},
@@ -349,9 +349,9 @@ if($lastUrl1!='' || $lastUrl2!=''){
     <?php
     $path = '';
     if($configFormResult[0]['value'] == 3){
-      $path = '../includes/vlRequestDrcSearchResultPdf.php';
+      $path = '../result-pdf/vlRequestDrcSearchResultPdf.php';
     }else {
-      $path = '../includes/vlRequestSearchResultPdf.php'; 
+      $path = '../result-pdf/vlRequestSearchResultPdf.php'; 
     }
     ?>
     $.post("<?php echo $path;?>", { source:'print',id:id},

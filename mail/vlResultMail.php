@@ -367,7 +367,7 @@ $batchResult = $db->rawQuery($batchQuery);
     $.blockUI();
     var sample = $("#sample").val();
     var id = sample.toString();
-    $.post("<?php echo($formId == 3)?'../includes/vlRequestDrcSearchResultPdf.php':'../includes/vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id,resultMail:'resultMail'},
+    $.post("<?php echo($formId == 3)?'../result-pdf/vlRequestDrcSearchResultPdf.php':'../result-pdf/vlRequestSearchResultPdf.php'; ?>", { source:'print',id : id,resultMail:'resultMail'},
       function(data){
 	  if(data === "" || data === null || data === undefined){
 	    $.unblockUI();
