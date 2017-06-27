@@ -31,7 +31,7 @@ try {
         }
         $_SESSION['alertMsg']="Result Import configuration initited for ".$_POST['configurationName'].". Please proceed to write the import logic in the file ".$_POST['configurationFile']." present in import-configs folder" ;
         
-        $configDir = __DIR__.DIRECTORY_SEPARATOR.'import-configs';
+        $configDir = __DIR__;
         $configFile = $configDir.DIRECTORY_SEPARATOR.$_POST['configurationFile'];
         
         
