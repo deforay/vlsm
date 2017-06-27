@@ -8,16 +8,19 @@ $tableName1="province_details";
 
 try {
     if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!=""){
-         if(trim($_POST['state'])!=""){
-            $strSearch = $_POST['state'];
-            $facilityQuery="SELECT * from province_details where province_name='".$strSearch."'";
+        if(trim($_POST['state'])!=""){
+            $strSearch = (isset($_POST['provinceNew']) && trim($_POST['provinceNew'])!= '' && $_POST['state'] == 'other')?$_POST['provinceNew']:$_POST['state'];
+            $facilityQuery="SELECT province_name from province_details where province_name='".$strSearch."'";
             $facilityInfo=$db->query($facilityQuery);
-            if(!$facilityInfo || count($facilityInfo) == 0){
+	    if(isset($facilityInfo[0]['province_name'])){
+		$_POST['state'] = $facilityInfo[0]['province_name'];
+	    }else{
 		$data=array(
-		  'province_name'=>$_POST['state'],
+		  'province_name'=>$_POST['provinceNew']
 		);
-		$result=$db->insert($tableName1,$data);
-            }
+		$db->insert($tableName1,$data);
+		$_POST['state'] = $_POST['provinceNew'];
+	    }
         }
 	$instanceId = '';
 	if(isset($_SESSION['instanceId'])){

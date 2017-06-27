@@ -48,15 +48,15 @@ $type=$_GET['type'];
 		    <td>
 		      <input type="text" id="hub" name="hub" class="form-control" placeholder="Enter Hub" style="background:#fff;"/>
 		    </td>
-                    <td>&nbsp;<b>District&nbsp;:</b></td>
+                    <td>&nbsp;<b>District/County&nbsp;:</b></td>
 		    <td>
-			<input type="text" id="district" name="district" class="form-control" placeholder="Enter District"/>
+			<input type="text" id="district" name="district" class="form-control" placeholder="Enter District/County"/>
 		    </td>
 		</tr>
 		<tr>
-		    <td style=""><b>State/Province&nbsp;:</b></td>
+		    <td style=""><b>Province/State&nbsp;:</b></td>
 		    <td>
-		      <input type="text" id="state" name="state" class="form-control" placeholder="Enter State" style="background:#fff;"/>
+		      <input type="text" id="state" name="state" class="form-control" placeholder="Enter Province/State" style="background:#fff;"/>
 		    </td>
 		    <td>&nbsp;<b>Clinic Type&nbsp;:</b></td>
 		    <td>
