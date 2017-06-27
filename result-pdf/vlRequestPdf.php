@@ -1,9 +1,9 @@
 <?php
 //print_r($result);die;
 ob_start();
-include('MysqliDb.php');
-include('General.php');
-include ('tcpdf/tcpdf.php');
+include('../includes/MysqliDb.php');
+include('../includes/General.php');
+include ('../includes/tcpdf/tcpdf.php');
 define('UPLOAD_PATH','../uploads');
 //header and footer
 class MYPDF extends TCPDF {
