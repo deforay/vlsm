@@ -62,8 +62,8 @@ $sWhere = '';
    $vlSampleResult['hvl'] = $db->rawQuery($hvlQuery);
    $vlSampleResult['lvl'] = $db->rawQuery($lvlQuery);
 ?>
-<span id="container" style="float:left;min-width: 550px; height: 480px; max-width: 700px; margin: 0 auto;"></span>
-<span id="container1" style="float:right;min-width: 410px; height: 490px; max-width: 610px; margin: 0 auto;"></span>
+<div id="container" style="float:left;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
+<div id="container1" style="float:right;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
 <script>
     <?php
     if(isset($tResult) && count($tResult)>0){ ?>
@@ -85,6 +85,7 @@ $sWhere = '';
                 },
                 plotOptions: {
                     pie: {
+                        size:'70%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
@@ -139,6 +140,7 @@ $sWhere = '';
                 },
                 plotOptions: {
                     pie: {
+                        size:'70%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
