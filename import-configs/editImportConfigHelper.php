@@ -39,7 +39,7 @@ try {
         }
     }
         $_SESSION['alertMsg']="Import config details updated successfully";    
-        $configDir = __DIR__.DIRECTORY_SEPARATOR.'import-configs';
+        $configDir = __DIR__;
         $configFile = $configDir.DIRECTORY_SEPARATOR.$_POST['configurationFile'];
         
         if (!file_exists($configDir)) {
