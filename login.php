@@ -106,9 +106,10 @@ $configResult=$db->query($globalConfigQuery);
         </div>
     </div>
     <div style="opacity: 0.9;bottom:7vh;padding-left:1%;width:100%;position:fixed;">
-        <a id="download-form" href="#" style="color:#fff;text-decoration:underline;"><h3>Download VL Form</h3></a>
+        <a id="download-form" href="#" style="color:#fff;text-decoration:underline;"><h4>Download VL Form</h4></a>
         <select id="country" name="country" class="form-control" style="width:220px;display:none;">
             <option value=""> -- Select Country -- </option>
+            <option value="6">South Sudan</option>
             <option value="5">Rwanda</option>
             <option value="3">DRC</option>
             <option value="4">Zambia</option>
@@ -156,6 +157,9 @@ $configResult=$db->query($globalConfigQuery);
          else if($('#country').val() == 5){
             $('#download').attr('onclick','downloadVLForm("rwanda")');
          }
+         else if($('#country').val() == 6){
+            $('#download').attr('onclick','downloadVLForm("south-sudan")');
+         }
          else{
             $('#download').removeAttr('onclick');
          }
@@ -179,6 +183,10 @@ $configResult=$db->query($globalConfigQuery);
         else if(country == 'rwanda'){
           $.unblockUI();
           window.open('../uploads/vl-rwanda-form.pdf','_blank');
+        }
+        else if(country == 'south-sudan'){
+          $.unblockUI();
+          window.open('../uploads/vl-south-sudan-form.pdf','_blank');
         }
     }
     </script>
