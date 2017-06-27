@@ -41,9 +41,29 @@ foreach($tsResult as $tsId){
    $tResult[$i] = $db->rawQuery($tQuery);
    $i++;
 }
+//HVL and LVL Samples
+$hvlQuery = '';$lvlQuery = '';
+$vlSampleQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."'";
+$sWhere = '';
+   if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
+      $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';
+   }
+   if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+      $sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+   }
+   if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
+      $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
+   }
+   if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
+      $sWhere.= ' AND f.facility_id = "'.$_POST['facilityName'].'"';
+   }
+   $hvlQuery = $vlSampleQuery.' '.$sWhere ." AND vl.result > 1000";
+   $lvlQuery = $vlSampleQuery.' '.$sWhere ." AND vl.result <= 1000";
+   $vlSampleResult['hvl'] = $db->rawQuery($hvlQuery);
+   $vlSampleResult['lvl'] = $db->rawQuery($lvlQuery);
 ?>
-<h4>Samples Overview</h4>
-<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+<span id="container" style="float:left;min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;"></span>
+<span id="container1" style="float:right;min-width: 370px; height: 400px; max-width: 570px; margin: 0 auto;"></span>
 <script>
     <?php
     if(isset($tResult) && count($tResult)>0){ ?>
@@ -55,7 +75,7 @@ foreach($tsResult as $tsId){
                     type: 'pie'
                 },
                 title: {
-                    text: ''
+                    text: 'Samples Status Overview'
                 },
                 credits: {
                   enabled: false
@@ -95,6 +115,46 @@ foreach($tsResult as $tsId){
                 <?php
             }
             ?>
+            ]
+        }]
+      });
+	  Highcharts.setOptions({
+     colors: ['#FF0000', '#50B432']
+    });
+      $('#container1').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Samples VL Overview'
+                },
+                credits: {
+                  enabled: false
+               },
+                tooltip: {
+                    pointFormat: '{point.name}: <b>{point.y}</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.y}',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+        series: [{
+            colorByPoint: true,
+            data: [
+			   {name:'High Viral Load',y:<?php echo ucwords($vlSampleResult['hvl'][0]['total']);?>},
+			   {name:'Low Viral Load',y:<?php echo ucwords($vlSampleResult['lvl'][0]['total']);?>},
             ]
         }]
       });
