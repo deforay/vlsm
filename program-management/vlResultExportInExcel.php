@@ -158,7 +158,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    }elseif(isset($aRow['result_value_text']) && trim($aRow['result_value_text'])!= ''){
     $vlResult = $aRow['result_value_text'];
    }
-  $row[] = $vlResult;
+  $row[] = $aRow['result'];
   
   $row[] = ucwords(str_replace("_"," ",$aRow['is_sample_rejected']));
   $row[] = ucwords($aRow['rejection_reason_name']);

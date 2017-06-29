@@ -166,11 +166,11 @@ $primaryKey="vl_sample_id";
 		  $vLoad ='';
 		  //just comment if condition
 		  if($_POST['vLoad']=='<=1000'){
-		    $vLoad = " AND vl.result_status != '4' AND vl.result!='>10000000'";
+		    $vLoad = " AND vl.result_status != '4'";
 		  }else{
-		    $vLoad = " OR (vl.result = '>10000000')";
+		    //$vLoad = " OR (vl.result = '>10000000')";
 		  }
-	        $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
+	        $sWhere = $sWhere.' AND vl.result_value_absolute '.$_POST['vLoad'].' AND vl.result_value_absolute!=""'.$vLoad;
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 	        $sWhere = $sWhere.' AND vl.result_status ='.$_POST['status'];
@@ -261,11 +261,11 @@ $primaryKey="vl_sample_id";
 		    //$vLoad = " OR (vl.result = '>10000000')";
 		  }
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
+		    $sWhere = $sWhere.' AND vl.result_value_absolute '.$_POST['vLoad'].' AND vl.result_value_absolute!=""'.$vLoad;
 		}else{
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
+	        $sWhere = $sWhere.' vl.result_value_absolute '.$_POST['vLoad'].' AND vl.result_value_absolute!=""'.$vLoad;
 		}
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
