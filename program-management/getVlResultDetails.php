@@ -170,7 +170,7 @@ $primaryKey="vl_sample_id";
 		  }else{
 		    //$vLoad = " OR (vl.result = '>10000000')";
 		  }
-	        $sWhere = $sWhere.' AND vl.result_value_absolute '.$_POST['vLoad'].' AND vl.result_value_absolute!=""'.$vLoad;
+	        $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 	        $sWhere = $sWhere.' AND vl.result_status ='.$_POST['status'];
@@ -261,11 +261,11 @@ $primaryKey="vl_sample_id";
 		    //$vLoad = " OR (vl.result = '>10000000')";
 		  }
 		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND vl.result_value_absolute '.$_POST['vLoad'].' AND vl.result_value_absolute!=""'.$vLoad;
+		    $sWhere = $sWhere.' AND vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
 		}else{
 		$setWhr = 'where';
 		$sWhere=' where '.$sWhere;
-	        $sWhere = $sWhere.' vl.result_value_absolute '.$_POST['vLoad'].' AND vl.result_value_absolute!=""'.$vLoad;
+	        $sWhere = $sWhere.' vl.result '.$_POST['vLoad'].' AND vl.result!=""'.$vLoad;
 		}
 	    }
 	    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
@@ -318,7 +318,7 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
-	//echo $sQuery;die;
+	echo $sQuery;die;
 	$_SESSION['vlResultQuery']=$sQuery;
 	//echo $_SESSION['vlResultQuery'];die;
         if (isset($sOrder) && $sOrder != "") {

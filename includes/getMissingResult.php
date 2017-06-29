@@ -57,8 +57,8 @@ $sWhere = '';
    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
       $sWhere.= ' AND f.facility_id = "'.$_POST['facilityName'].'"';
    }
-   $hvlQuery = $vlSampleQuery.' '.$sWhere ." AND vl.result > 1000";
-   $lvlQuery = $vlSampleQuery.' '.$sWhere ." AND vl.result <= 1000";
+   $hvlQuery = $vlSampleQuery.' '.$sWhere ." AND vl.result > 1000 AND vl.result!=''";
+   $lvlQuery = $vlSampleQuery.' '.$sWhere ." AND vl.result <= 1000 AND vl.result!='' AND vl.result_status != '4'";
    $vlSampleResult['hvl'] = $db->rawQuery($hvlQuery);
    $vlSampleResult['lvl'] = $db->rawQuery($lvlQuery);
 ?>
