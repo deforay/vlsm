@@ -43,7 +43,7 @@ foreach($vlResult as $vlData){
       $sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$date.' 00:00:00" AND DATE(vl.sample_collection_date) <= "'.$date.' 23:59:59"';
    }
    //get waiting data
-    $waitingWhere.= ' and vl.result_status=6';
+    $waitingWhere.= ' and vl.result_status=8';
     $waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
     $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
     if($waitingResult[$i][0]['total']!= 0){
