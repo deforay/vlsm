@@ -111,6 +111,10 @@ try {
                     }
                     
                     $logVal=substr(trim($resVal[1]),0,-1);
+                    if($logVal == "1.30" || $logVal == "1.3"){
+                       $absDecimalVal = 20;
+                       $absVal = "< 20";
+                    }
                     
                 }else{
                     $txtVal=trim($row[$absValCol]);
@@ -126,7 +130,10 @@ try {
           }
         
           if($sampleCode == ""){
-            $sampleCode = $sampleType.$m;
+            //$sampleCode = $sampleType.$m;
+            $sampleCode1 = $general->generateRandomString(3,'alpha');
+            $sampleCode2 = $general->generateRandomString(3,'numeric');
+            $sampleCode = $sampleType."-".strtoupper($sampleCode1).$sampleCode2;
           }
            //   continue;
             
@@ -228,7 +235,7 @@ try {
             } else {
                 $data['sample_details'] = 'New Sample';
             }
-            //echo "<pre>";var_dump($data);echo "</pre>";continue;
+            //echo "<pre>";var_dump($data);echo "</pre>";continue; 
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $id = $db->insert("temp_sample_report", $data);
             }
