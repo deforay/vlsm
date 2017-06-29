@@ -381,12 +381,14 @@ $batResult = $db->rawQuery($batQuery);
     //$.post("vlResultAllFieldExportInExcel.php",
     function(data){
 	  if(data == "" || data == null || data == undefined){
+	  $.unblockUI();
 	      alert('Unable to generate excel..');
 	  }else{
+		$.unblockUI();
 	     location.href = '../temporary/'+data;
 	  }
     });
-    $.unblockUI();
+    
   }
   
 </script>
