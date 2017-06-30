@@ -91,7 +91,19 @@ try {
           $resultFlag = $row[$flagCol];
           $reviewBy = $row[$reviewByCol];
           
-          $testingDate = date('Y-m-d H:i', strtotime($row[$testingDateCol]));
+          if($row[$testingDateCol]!=''){
+            $alterDateTime = explode(" ",$row[$testingDateCol]);
+            $alterDate = str_replace("/","-",$alterDateTime[0]);
+            $strToArray = explode("-",$alterDate);
+            if(strlen($strToArray[0])==2 && strlen($strToArray[2])==2){
+                if($strToArray[0]==date('y')){
+                    $alterDate = date('Y')."-".$strToArray[1]."-".$strToArray[2];
+                }else{
+                    $alterDate = $strToArray[0]."-".$strToArray[1]."-".date('Y');
+                }
+            }
+            $testingDate = date('Y-m-d H:i', strtotime($alterDate." ".$alterDateTime[1]));
+          }
           
             if(trim($row[$absValCol])!=""){
                 $resVal=explode("(",$row[$absValCol]);
@@ -122,11 +134,20 @@ try {
                         $resultFlag=trim($txtVal);
                     }
                 }
-            } 
+            }
             
           $lotNumberVal = $row[$lotNumberCol];
           if(trim($row[$lotExpirationDateCol]) !=''){
-            $lotExpirationDateVal = date('Y-m-d', strtotime($row[$lotExpirationDateCol]));
+            $alterDate = str_replace("/","-",$row[$lotExpirationDateCol]);
+            $strToArray = explode("-",$alterDate);
+            if(strlen($strToArray[0])==2 && strlen($strToArray[2])==2){
+                if($strToArray[0]==date('y')){
+                    $alterDate = date('Y')."-".$strToArray[1]."-".$strToArray[2];
+                }else{
+                    $alterDate = $strToArray[0]."-".$strToArray[1]."-".date('Y');
+                }
+            }
+            $lotExpirationDateVal = date('Y-m-d', strtotime($alterDate));
           }
         
           if($sampleCode == ""){
