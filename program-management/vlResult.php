@@ -159,11 +159,12 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		</tr>
 		<tr>
-		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+		  <td colspan="4">
+		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-			&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
-			&nbsp;<button class="btn btn-info" type="button" onclick="exportInexcel()">Export to excel</button>
-			</td>
+		    &nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
+		    &nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
+		  </td>
 		</tr>
 		
 	    </table>
@@ -378,7 +379,6 @@ $batResult = $db->rawQuery($batQuery);
     $.blockUI();
     oTable.fnDraw();
     $.post("vlResultExportInExcel.php",{Sample_Collection_Date:$("#sampleCollectionDate").val(),Batch_Code:$("#batchCode  option:selected").text(),Sample_Type:$("#sampleType  option:selected").text(),Facility_Name:$("#facilityName  option:selected").text(),sample_Test_Date:$("#sampleTestDate").val(),Viral_Load:$("#vLoad  option:selected").text(),Print_Date:$("#printDate").val(),Gender:$("#gender  option:selected").text(),Status:$("#status  option:selected").text(),Show_Reorder_Sample:$("#showReordSample option:selected").text()},
-    //$.post("vlResultAllFieldExportInExcel.php",
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
@@ -390,7 +390,6 @@ $batResult = $db->rawQuery($batQuery);
     });
     
   }
-  
 </script>
  <?php
  include('../footer.php');
