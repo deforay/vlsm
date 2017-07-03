@@ -14,7 +14,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Sample ID","Batch Code","Urgency","Province/State","District/County","Clinic Name","Clinician Name","Sample Collection Date","Sample Received Date","Collected By","Patient Name","Gender","DOB","Age In Years","Age In Months","Patient Pregnant","Patient BreastFeeding","ART Number","ART Initiation","ART Regimen","SMS Notification","Mobile Number","Date Of Last Viral Load Test","Result Of Last Viral Load","Viral Load Log","Reason For VL Test","LAB Name","LAB No.","VL Testing Platform","Specimen Type","Sample Testing Date","Last Print On","Viral Load Result","No Result","Rejection Reason","Reviewed By","Approved By","Approved On","Comments","Status");
+ $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant","Is Patient Breastfeeding","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Rejection","Date Sample Received at PHL","Date Sent to NHRL","Date Results Received at PHL","Value(Results)","Results in Log","Date Results Dispatched Facilities","TAT Result Dispatch(days)","Comments");
  
  $colNo = 0;
  
@@ -45,7 +45,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
      )
  );
 
- $sheet->mergeCells('A1:Z1');
+ $sheet->mergeCells('A1:AE1');
  $nameValue = '';
  foreach($_POST as $key=>$value){
    if(trim($value)!='' && trim($value)!='-- Select --'){
@@ -53,122 +53,119 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    }
  }
  $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
-
- //if($_POST['sampleCollectionDate']!='' || $_POST['batchCode']!='-- Select --' || $_POST['sampleType']!='-- Select --' || $_POST['facilityName']!='-- Select --' || $_POST['sampleTestDate']!='' || $_POST['vLoad']!='-- Select --' || $_POST['printDate']!='' || $_POST['gender']!='-- Select --' || $_POST['status']!='-- Select --' || $_POST['showReordSample']!='-- Select --')
- //{
- // 
- //}
  
  foreach ($headings as $field => $value) {
-  $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-  $colNo++;
+   $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+   $colNo++;
  }
- $sheet->getStyle('A3:AN3')->applyFromArray($styleArray);
+ $sheet->getStyle('A3:AE3')->applyFromArray($styleArray);
  
+ $no =1;
  foreach ($rResult as $aRow) {
   $row = array();
-  if(isset($aRow['patient_dob']) && trim($aRow['patient_dob'])!='' && $aRow['patient_dob']!='0000-00-00'){
-   $aRow['patient_dob']=$general->humanDateFormat($aRow['patient_dob']);
-  }else{
-   $aRow['patient_dob']='';
+  //date of birth
+  $dob = '';
+  if($aRow['patient_dob']!= NULL && trim($aRow['patient_dob'])!='' && $aRow['patient_dob']!='0000-00-00'){
+   $dob =  date("d-m-Y", strtotime($aRow['patient_dob']));
   }
-  
-  if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['sample_collection_date']);
-   $aRow['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['sample_collection_date']='';
+  //set gender
+  $gender = '';
+  if($aRow['patient_gender'] == 'male'){
+    $gender = 'M';
+  }else if($aRow['patient_gender'] == 'female'){
+    $gender = 'F';
+  }else if($aRow['patient_gender'] == 'not_recorded'){
+   $gender = 'N/R';
   }
-  
-  if(isset($aRow['date_of_initiation_of_current_regimen']) && trim($aRow['date_of_initiation_of_current_regimen'])!='' && $aRow['date_of_initiation_of_current_regimen']!='0000-00-00'){
-   $aRow['date_of_initiation_of_current_regimen']=$general->humanDateFormat($aRow['date_of_initiation_of_current_regimen']);
-  }else{
-   $aRow['date_of_initiation_of_current_regimen']='';
+  //sample collecion date
+  $sampleCollectionDate = '';
+  if($aRow['sample_collection_date']!= NULL && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00 00:00:00'){
+   $expStr = explode(" ",$aRow['sample_collection_date']);
+   $sampleCollectionDate =  date("d-m-Y", strtotime($expStr[0]));
   }
-  
-  if(isset($aRow['sample_tested_datetime']) && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00'){
-   $expStr=explode(" ",$aRow['sample_tested_datetime']);
-   $aRow['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['sample_tested_datetime']='';
+  //treatment initiation date
+  $treatmentInitiationDate = '';
+  if($aRow['treatment_initiated_date']!= NULL && trim($aRow['treatment_initiated_date'])!='' && $aRow['treatment_initiated_date']!='0000-00-00'){
+   $treatmentInitiationDate =  date("d-m-Y", strtotime($aRow['treatment_initiated_date']));
   }
-  if(isset($aRow['last_viral_load_date']) && trim($aRow['last_viral_load_date'])!='' && $aRow['last_viral_load_date']!='0000-00-00'){
- $aRow['last_viral_load_date']=$general->humanDateFormat($aRow['last_viral_load_date']);
-  }else{
-   $aRow['last_viral_load_date']='';
+  //date of initiation of current regimen
+  $dateOfInitiationOfCurrentRegimen = '';
+  if($aRow['date_of_initiation_of_current_regimen']!= NULL && trim($aRow['date_of_initiation_of_current_regimen'])!='' && $aRow['date_of_initiation_of_current_regimen']!='0000-00-00'){
+   $dateOfInitiationOfCurrentRegimen =  date("d-m-Y", strtotime($aRow['date_of_initiation_of_current_regimen']));
   }
-  
-  if(isset($aRow['sample_received_at_vl_lab_datetime']) && trim($aRow['sample_received_at_vl_lab_datetime'])!='' && $aRow['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['sample_received_at_vl_lab_datetime']);
-   $aRow['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['sample_received_at_vl_lab_datetime']='';
+  //requested date
+  $requestedDate = '';
+  if($aRow['test_requested_on']!= NULL && trim($aRow['test_requested_on'])!='' && $aRow['test_requested_on']!='0000-00-00'){
+   $requestedDate =  date("d-m-Y", strtotime($aRow['test_requested_on']));
   }
-  if(isset($aRow['result_approved_datetime']) && trim($aRow['result_approved_datetime'])!='' && $aRow['result_approved_datetime']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['result_approved_datetime']);
-   $aRow['result_approved_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['result_approved_datetime']='';
+  //set ARV adherecne
+  $arvAdherence = '';
+  if(trim($aRow['arv_adherance_percentage']) == 'good'){
+    $arvAdherence = 'Good >= 95%';
+  }else if(trim($aRow['arv_adherance_percentage']) == 'fair'){
+   $arvAdherence = 'Fair 85-94%';
+  }else if(trim($aRow['arv_adherance_percentage']) == 'poor'){
+   $arvAdherence = 'Poor <85%';
   }
-  
-  if(isset($aRow['result_printed_datetime']) && trim($aRow['result_printed_datetime'])!='' && $aRow['result_printed_datetime']!='0000-00-00 00:00:00'){
-   $expStr=explode(" ",$aRow['result_printed_datetime']);
-   $aRow['result_printed_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-  }else{
-   $aRow['result_printed_datetime']='';
+  //set sample rejection
+  $sampleRejection = 'No';
+  if(trim($aRow['is_sample_rejected']) == 'yes' || ($aRow['reason_for_sample_rejection']!= NULL && trim($aRow['reason_for_sample_rejection'])!= '' && $aRow['reason_for_sample_rejection'] >0)){
+    $sampleRejection = 'Yes';
   }
-  
+  //result dispatched date
+  $resultDispatchedDate = '';
+  if($aRow['result_dispatched_datetime']!= NULL && trim($aRow['result_dispatched_datetime'])!='' && $aRow['result_dispatched_datetime']!='0000-00-00 00:00:00'){
+   $expStr = explode(" ",$aRow['result_dispatched_datetime']);
+   $resultDispatchedDate =  date("d-m-Y", strtotime($expStr[0]));
+  }
+  //TAT result dispatched(in days)
+  $tatdays = '';
+  if(trim($sampleCollectionDate)!= '' && trim($resultDispatchedDate)!= ''){
+    $sample_collection_date = strtotime($sampleCollectionDate);
+    $result_dispatched_date = strtotime($resultDispatchedDate);
+    $dayDiff = $result_dispatched_date - $sample_collection_date;
+    $tatdays = (int)floor($dayDiff / (60 * 60 * 24));
+  }
+  //set result log value
+  $logVal = '0.0';
+  if($aRow['result_value_log']!= NULL && trim($aRow['result_value_log'])!= ''){
+   $logVal = $aRow['result_value_log'];
+  }else if($aRow['result_value_absolute']!= NULL && trim($aRow['result_value_absolute'])!= ''){
+   $logVal = round(log10($aRow['result_value_absolute']),1);
+  }
+  $row[] = $no;
   $row[] = $aRow['sample_code'];
-  $row[] = $aRow['batch_code'];
-  $row[] = ucwords($aRow['test_urgency']);
-  $row[] = ucwords($aRow['facility_state']);
-  $row[] = ucwords($aRow['facility_district']);
   $row[] = ucwords($aRow['facility_name']);
-  $row[] = ucwords($aRow['lab_contact_person']);
-  $row[] = $aRow['sample_collection_date'];
-  $row[] = $aRow['sample_received_at_vl_lab_datetime'];
-  $row[] = $aRow['sample_collected_by'];
-  $row[] = ucwords($aRow['patient_first_name'].$aRow['patient_last_name']);
-  $row[] = ucwords(str_replace("_"," ",$aRow['patient_gender']));
-  $row[] = $aRow['patient_dob'];
-  $row[] = $aRow['patient_age_in_years'];
-  $row[] = $aRow['patient_age_in_months'];
-  $row[] = ucwords($aRow['is_patient_pregnant']);
-  $row[] = ucwords($aRow['is_patient_breastfeeding']);
+  $row[] = $aRow['facility_code'];
+  $row[] = ucwords($aRow['facility_district']);
+  $row[] = ucwords($aRow['facility_state']);
   $row[] = $aRow['patient_art_no'];
-  $row[] = $aRow['date_of_initiation_of_current_regimen'];
+  $row[] = '';
+  $row[] = $dob;
+  $row[] = ($aRow['patient_age_in_years']!= NULL && trim($aRow['patient_age_in_years'])!= '' && $aRow['patient_age_in_years'] >0)?$aRow['patient_age_in_years']:0;
+  $row[] = $gender;
+  $row[] = $sampleCollectionDate;
+  $row[] = (isset($aRow['sample_name']))?ucwords($aRow['sample_name']):'';
+  $row[] = $treatmentInitiationDate;
   $row[] = $aRow['current_regimen'];
-  $row[] = ucwords($aRow['consent_to_receive_sms']);
-  $row[] = $aRow['patient_mobile_number'];
-  $row[] = $aRow['last_viral_load_date'];
-  $row[] = $aRow['last_viral_load_result'];
-  $row[] = $aRow['last_vl_result_in_log'];
-  $row[] = ucwords($aRow['test_reason_name']);
-  $row[] = ucwords($aRow['labName']);
-  $row[] = $aRow['lab_code'];
-  $row[] = ucwords($aRow['vl_test_platform']);
-  $row[] = $aRow['sample_name'];
-  $row[] = $aRow['sample_tested_datetime'];
-  $row[] = $aRow['result_printed_datetime'];
-  $vlResult = '';
-  if(isset($aRow['result_value_absolute']) && trim($aRow['result_value_absolute'])!= ''){
-    $vlResult = $aRow['result_value_absolute'];
-   }elseif(isset($aRow['result_value_log']) && trim($aRow['result_value_log'])!= ''){
-    $vlResult = $aRow['result_value_log'];
-   }elseif(isset($aRow['result_value_text']) && trim($aRow['result_value_text'])!= ''){
-    $vlResult = $aRow['result_value_text'];
-   }
+  $row[] = $dateOfInitiationOfCurrentRegimen;
+  $row[] = ucfirst($aRow['is_patient_pregnant']);
+  $row[] = ucfirst($aRow['is_patient_breastfeeding']);
+  $row[] = $arvAdherence;
+  $row[] = ucwords(str_replace("_"," ",$aRow['reason_for_vl_testing']));
+  $row[] = ucwords($aRow['request_clinician_name']);
+  $row[] = $requestedDate;
+  $row[] = $sampleRejection;
+  $row[] = '';
+  $row[] = '';
+  $row[] = '';
   $row[] = $aRow['result'];
-  
-  $row[] = ucwords(str_replace("_"," ",$aRow['is_sample_rejected']));
-  $row[] = ucwords($aRow['rejection_reason_name']);
-  $row[] = ucwords($aRow['reviewedBy']);
-  $row[] = ucwords($aRow['approvedBy']);
-  $row[] = $aRow['result_approved_datetime'];
-  $row[] = $aRow['approver_comments'];
-  $row[] = ucwords($aRow['status_name']);
-  
+  $row[] = $logVal;
+  $row[] = $resultDispatchedDate;
+  $row[] = $tatdays;
+  $row[] = ucfirst($aRow['approver_comments']);
   $output[] = $row;
+  $no++;
  }
 
  $start = (count($output))+2;
