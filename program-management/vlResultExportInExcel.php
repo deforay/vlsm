@@ -129,7 +129,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   //set result log value
   $logVal = '0.0';
   if($aRow['result_value_log']!= NULL && trim($aRow['result_value_log'])!= ''){
-   $logVal = $aRow['result_value_log'];
+   $logVal = round($aRow['result_value_log'],1);
   }else if($aRow['result_value_absolute']!= NULL && trim($aRow['result_value_absolute'])!= ''){
    $logVal = round(log10($aRow['result_value_absolute']),1);
   }
