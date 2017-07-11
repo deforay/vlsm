@@ -68,7 +68,7 @@ if($arr['sample_code']=='MMYY'){
     $mnthYr = date('y');
 }
 $start_date = date('Y-01-01');
-$end_date = date('Y-m-31');
+$end_date = date('Y-12-31');
 $svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlResult=$db->query($svlQuery);
   
