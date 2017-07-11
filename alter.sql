@@ -1122,3 +1122,6 @@ ALTER TABLE `vl_request_form` ADD `repeat_sample_collection` VARCHAR(45) NULL DE
 ALTER TABLE  `vl_request_form` ADD  `sample_code_title` VARCHAR( 45 ) NOT NULL DEFAULT  'auto' AFTER  `sample_code_format`;
 
 
+--saravanan 11-July-2017
+ALTER TABLE `vl_request_form` ADD `request_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `is_request_mail_sent`;
+ALTER TABLE `vl_request_form` ADD `result_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `is_result_mail_sent`;
