@@ -6,7 +6,10 @@ if(isset($_SESSION['userId'])){
 include('./includes/MysqliDb.php');
 $globalConfigQuery ="SELECT * from global_config where name='logo'";
 $configResult=$db->query($globalConfigQuery);
-
+$myfile = fopen("vlsm-setup.html", "w") or die("Unable to open file!");
+$txt = "<script>\n window.location.href='http://".$_SERVER['REMOTE_ADDR'].":3435'\n</script>";
+fwrite($myfile, $txt);
+fclose($myfile);
 ?>
 <!DOCTYPE html>
 <html>
