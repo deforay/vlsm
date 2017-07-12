@@ -203,6 +203,7 @@ try {
             }
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
+                $data['result_imported_datetime'] = $general->getDateTime();
                 $id = $db->insert("temp_sample_report", $data);
             }
         }
