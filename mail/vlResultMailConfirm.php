@@ -234,7 +234,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           $pdf->writeHTML($pdfContent);
           $pdf->lastPage();
           $pathFront=realpath('../uploads');
-          $filename = 'vl-result-form-' . date('d-M-Y-H-i-s') . '.pdf';
+          $filename = 'vlsm-result-' . date('d-M-Y-H-i-s') . '.pdf';
           $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
           $downloadFile1 = '../uploads' . DIRECTORY_SEPARATOR . $_POST['pdfFile'];
           $downloadFile2 = '../uploads' . DIRECTORY_SEPARATOR . $filename;
@@ -292,6 +292,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                   <input type="hidden" id="sample" name="sample" value="<?php echo implode(',',$resultOlySamples); ?>"/>
                   <input type="hidden" id="pdfFile1" name="pdfFile1" value="<?php echo $_POST['pdfFile']; ?>"/>
                   <input type="hidden" id="pdfFile2" name="pdfFile2" value="<?php echo $filename; ?>"/>
+                  <input type="hidden" id="storeFile" name="storeFile" value="no"/>
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlResultMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmResultMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
@@ -305,6 +306,18 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
 </div>
 <script>
     function confirmResultMail(){
+      <?php
+      if($global['sync_path']!=''){
+         ?>
+         conf = confirm("Do you also want to store this file on the shared directory <?php echo $global['sync_path'];?> ?");
+         if(conf){
+            $("#storeFile").val('yes');
+         }else{
+            $("#storeFile").val('no');
+         }
+         <?php
+      }
+      ?>
         $.blockUI();
         document.getElementById('vlResultMailConfirmForm').submit();
     }

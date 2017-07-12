@@ -11,6 +11,9 @@ $mailconf = array();
 foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
+$configSyncQuery ="SELECT value FROM global_config where name='sync_path'";
+$configSyncResult = $db->rawQuery($configSyncQuery);
+
 $filename = '';
 $downloadFile = '';
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sample']) >0){
@@ -195,7 +198,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                }
           }
           $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-          $filename = 'vl-request-mail' . date('d-M-Y-H-i-s') . '.xls';
+          $filename = 'vlsm-requests-' . date('d-M-Y-H-i-s') . '.xls';
           $pathFront=realpath('../temporary');
           $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
           $downloadFile = '../temporary'. DIRECTORY_SEPARATOR . $filename;
@@ -249,6 +252,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   <input type="hidden" id="message" name="message" value="<?php echo $_POST['message']; ?>"/>
                   <input type="hidden" id="sample" name="sample" value="<?php echo implode(',',$_POST['sample']); ?>"/>
                   <input type="hidden" id="fileName" name="fileName" value="<?php echo $filename; ?>"/>
+                  <input type="hidden" id="storeFile" name="storeFile" value="no"/>
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlRequestMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmRequestMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
@@ -261,6 +265,18 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
 </div>
 <script>
     function confirmRequestMail(){
+      <?php
+      if($configSyncResult[0]['value']!=''){
+         ?>
+         conf = confirm("Do you also want to store this file on the shared directory <?php echo $configSyncResult[0]['value'];?> ?");
+         if(conf){
+            $("#storeFile").val('yes');
+         }else{
+            $("#storeFile").val('no');
+         }
+         <?php
+      }
+      ?>
         $.blockUI();
         document.getElementById('vlRequestMailConfirmForm').submit();
     }
