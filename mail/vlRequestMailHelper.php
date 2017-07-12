@@ -13,6 +13,9 @@ $mailconf = array();
 foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
+$configSyncQuery ="SELECT value FROM global_config where name='sync_path'";
+$configSyncResult = $db->rawQuery($configSyncQuery);
+
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
      if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
           //Create a new PHPMailer instance
@@ -84,6 +87,14 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                     $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
                     $db->update($tableName,array('is_request_mail_sent'=>'yes','request_mail_datetime'=>$general->getDateTime())); 
                }
+               //put file in sync path
+               if(file_exists($configSyncResult[0]['value']) && $_POST['storeFile']=='yes'){
+                  if(!file_exists($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "request-email") && !is_dir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "request-email")) {
+                        mkdir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "request-email");
+                  }
+                  copy($pathFront. DIRECTORY_SEPARATOR. $_POST['fileName'], $configSyncResult[0]['value']. DIRECTORY_SEPARATOR ."request-email" . DIRECTORY_SEPARATOR . $_POST['fileName']);
+               }
+               
                $_SESSION['alertMsg']='Email sent successfully';
                header('location:vlRequestMail.php');
           }else{
