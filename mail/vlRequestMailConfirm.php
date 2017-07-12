@@ -256,6 +256,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   <div class="col-lg-12" style="text-align:center;padding-left:0;">
                       <a href="../mail/vlRequestMail.php" class="btn btn-default"> Cancel</a>&nbsp;
                       <a class="btn btn-primary" href="javascript:void(0);" onclick="confirmRequestMail();"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send</a>
+                      <div><code><?php echo ($configSyncResult[0]['value']=='')?'Please enter the Sync Path in General Config to enable sharing the file via shared folder':'' ?></code></div>
                       <p style="margin-top:10px;"><a id="send-mail" href="<?php echo $downloadFile; ?>" style="text-decoration:none;">Click here to download the excel</a></p>
                   </div>
                </div>
