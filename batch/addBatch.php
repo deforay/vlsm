@@ -367,7 +367,7 @@ foreach($importConfigResult as $machine) {
       }else{
 	urgent = $('input[name=urgency]:checked').val();
       }
-      $.post("getSampleCodeDetails.php", {fName:fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
+      $.post("getSampleCodeDetails.php", {sampleCollectionDate:$("#sampleCollectionDate").val(),fName:fName,sName:sName,gender:gender,pregnant:pregnant,urgent:urgent},
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);
