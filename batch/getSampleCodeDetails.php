@@ -24,50 +24,51 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 
-if($_POST['sampleCollectionDate']=='' && $fName=='' && $sample=='' && $gender=='' && $pregnant=='' && $urgent==''){
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (sample_batch_id IS NULL OR sample_batch_id='') AND vlsm_country_id = $country";
+$query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vlsm_country_id = $country";
+if(isset($_POST['batchId'])){
+  $query = $query." AND (sample_batch_id = '".$_POST['batchId']."' OR sample_batch_id IS NULL OR sample_batch_id = '')";
 }else{
-   $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (sample_batch_id IS NULL OR sample_batch_id='') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vlsm_country_id = $country";
-   if(is_array($fName) && count($fName) > 0){
-      $query = $query." AND vl.facility_id IN (".implode(',',$fName).")";
-   }if(trim($sample)!=''){
-      $query = $query." AND vl.sample_type='".$sample."'";
-   }if(trim($gender)!=''){
-      $query = $query." AND vl.patient_gender='".$gender."'";
-   }if(trim($pregnant)!=''){
-      $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
-   }if(trim($urgent)!=''){
-      $query = $query." AND vl.test_urgency='".$urgent."'";
-   }
-   if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-       if(trim($start_date) == trim($end_date)) {
-         $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
-       }else{
-         $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
-       }
-   }
-   $query = $query." ORDER BY f.facility_name ASC";
+  $query = $query." AND (sample_batch_id IS NULL OR sample_batch_id='')";
 }
+if(is_array($_POST['fName']) && count($_POST['fName']) > 0){
+   $query = $query." AND vl.facility_id IN (".implode(',',$_POST['fName']).")";
+}if(trim($sample)!=''){
+   $query = $query." AND vl.sample_type='".$sample."'";
+}if(trim($gender)!=''){
+   $query = $query." AND vl.patient_gender='".$gender."'";
+}if(trim($pregnant)!=''){
+   $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
+}if(trim($urgent)!=''){
+   $query = $query." AND vl.test_urgency='".$urgent."'";
+}
+if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+   if(trim($start_date) == trim($end_date)) {
+     $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
+   }else{
+     $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
+   }
+}
+$query = $query." ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
 ?>
 <div class="col-md-8">
 <div class="form-group">
-    <div class="col-md-12">
+   <div class="col-md-12">
       <div class="col-md-12">
          <div style="width:60%;margin:0 auto;clear:both;">
-          <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+          <a href="#" id="select-all-samplecode" style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
           </div><br/><br/>
-        <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
-        <?php
-        foreach($result as $sample){
-          ?>
-          <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
-          <?php
-         }
-        ?>
-      </select>
+         <select id="sampleCode" name="sampleCode[]" multiple="multiple" class="search">
+            <?php
+            foreach($result as $sample){
+              ?>
+              <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code'])." - ".ucwords($sample['facility_name']);?></option>
+              <?php
+             }
+            ?>
+         </select>
       </div>
-    </div>
+   </div>
 </div>
 </div>
 <script>

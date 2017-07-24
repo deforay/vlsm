@@ -2,22 +2,23 @@
 ob_start();
 include('../header.php');
 $id=base64_decode($_GET['id']);
+//global config
+$showUrgency = false;
+$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configResult=$db->query($configQuery);
+$country = $configResult[0]['value'];
+if($country == 1 || $country == 2){
+ $showUrgency = true;
+}
 $batchQuery="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
-$query="SELECT vl.sample_code,vl.sample_batch_id,vl.vl_sample_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id where (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vl.sample_batch_id=$id ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.sample_batch_id,vl.vl_sample_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id = $id OR vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vlsm_country_id = '".$country."' ORDER BY f.facility_name ASC";
 //error_log($query);
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-//global config
-$showUrgency = false;
-$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
-$configResult=$db->query($configQuery);
-if($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2){
- $showUrgency = true;
-}
 //Get active machines
 $importConfigQuery="SELECT * FROM import_config WHERE status ='active'";
 $importConfigResult = $db->rawQuery($importConfigQuery);
@@ -160,13 +161,9 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 																</div><br/><br/>
 																<select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
 																<?php
-																foreach($result as $key=>$sample){
-																	$selected = '';
-																	if(isset($sample['sample_batch_id']) && trim($sample['sample_batch_id']) == $id){
-																	  $selected = "selected=selected";
-																	}
+																foreach($result as $sample){
 																	?>
-																	  <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo $selected;?>><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
+																	  <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo (trim($sample['sample_batch_id']) == $id)?'selected="selected"':''; ?>><?php  echo $sample['sample_code']." - ".ucwords($sample['facility_name']);?></option>
 																	<?php
 																}
 																?>
@@ -380,7 +377,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
     }else{
       urgent = $('input[name=urgency]:checked').val();
     }
-    $.post("getSampleCodeDetails.php", {fName:fName,sName:sName,sampleCollectionDate:$("#sampleCollectionDate").val(),gender:gender,pregnant:pregnant,urgent:urgent},
+    $.post("getSampleCodeDetails.php", {sampleCollectionDate:$("#sampleCollectionDate").val(),fName:fName,sName:sName,gender:gender,pregnant:pregnant,urgent:urgent,batchId:'<?php echo $id; ?>'},
     function(data){
 	if(data != ""){
 	  $("#sampleDetails").html(data);
