@@ -5,9 +5,6 @@ include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
 
-$tableName1="activity_log";
-$tableName2 = 'vl_instance';
-$tableName3 = 'facility_details';
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
         $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
@@ -24,24 +21,29 @@ try {
             if($instanceResult){
                 $_SESSION['instanceId']=$instanceResult[0]['vlsm_instance_id'];
             }else{
-                $id = $general->generateRandomString(30);
-                $db->insert($tableName2,array('vlsm_instance_id'=>$id));
+                $id = $general->generateRandomString(32);
+                $db->insert('vl_instance',array('vlsm_instance_id'=>$id));
                 $_SESSION['instanceId']=$id;
-                //Update instance ID into facility tbl
+                
+                //Update instance ID in facility and vl_request_form tbl
                 $data=array('vlsm_instance_id'=>$id);
-                $db->update($tableName3,$data);
+                $db->update('facility_details',$data);
+                
+                //$data=array('vlsm_instance_id'=>$id);
+                $db->update('vl_request_form',$data);                
+                
             }
             //Add event log
             $eventType = 'login';
             $action = ucwords($admin[0]['user_name']).' logged in';
             $resource = 'user-login';
             $data=array(
-            'event_type'=>$eventType,
-            'action'=>$action,
-            'resource'=>$resource,
-            'date_time'=>$general->getDateTime()
+                'event_type'=>$eventType,
+                'action'=>$action,
+                'resource'=>$resource,
+                'date_time'=>$general->getDateTime()
             );
-            $db->insert($tableName1,$data);
+            $db->insert('activity_log',$data);
     
             $_SESSION['userId']=$admin[0]['user_id'];
             $_SESSION['userName']=ucwords($admin[0]['user_name']);
