@@ -2287,7 +2287,7 @@ class MysqliDb
 
 // END class
 
-$HOST = 'localhost';
+$HOST = '127.0.0.1';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
