@@ -13,6 +13,9 @@ try {
      if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
           $status = 7;
      }
+     if(isset($_POST['noResult']) && $_POST['noResult']!=''){
+        $status = 4;
+     }
      //set lab no
      $start_date = date('Y-m-01');
      $end_date = date('Y-m-31');
