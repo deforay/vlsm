@@ -529,7 +529,7 @@ if($urgency==''){
                           </label>
                         </td>
                         <td><label class="noResult">Rejection Reason</label></td>
-                        <td><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width:200px;">
                         <option value="">-- Select --</option>
                           <?php
                           foreach($rejectionResult as $reject){

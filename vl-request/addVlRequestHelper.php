@@ -15,6 +15,9 @@ try {
     if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
        $status = 7;
     }
+    if(isset($_POST['noResult']) && $_POST['noResult']=='yes'){
+        $status = 4;
+    }
     //add province
     $splitProvince = explode("##",$_POST['province']);
     if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){
