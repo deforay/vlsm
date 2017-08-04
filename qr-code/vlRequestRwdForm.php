@@ -362,7 +362,7 @@ $aCheckResult=$db->query($aCheckQuery);
         <!-- SELECT2 EXAMPLE -->
         <div class="box box-default">
           <div class="box-header with-border">
-            <div class="pull-left" style="font-size:18px;">Existing VL Request Data</div>
+            <div class="pull-left" style="font-size:18px;">Existing Request Data</div>
           </div>
           <div class="box-body">
         <div class="box-body">
