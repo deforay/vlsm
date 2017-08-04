@@ -117,10 +117,22 @@ include ('../includes/PHPExcel.php');
   $row[] = ucwords($aRow['status_name']);
   $output[] = $row;
  }
- 
+
+ $start = (count($output));
+ foreach ($output as $rowNo => $rowData) {
+  $colNo = 0;
+  foreach ($rowData as $field => $value) {
+    $rRowCount = $rowNo + 2;
+    $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
+    $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+    $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
+    $sheet->getDefaultRowDimension()->setRowHeight(15);
+    $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+    $colNo++;
+  }
+ }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.csv';
+ $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
- //error_log($filename);
  echo $filename;
 ?>
