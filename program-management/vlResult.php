@@ -388,6 +388,7 @@ $batResult = $db->rawQuery($batQuery);
 	     location.href = '../temporary/'+data;
 	  }
     });
+    
   }
 </script>
  <?php
