@@ -812,6 +812,7 @@ $disable = "disabled = 'disabled'";
         if($(this).val() == 'yes'){
           $('.rejectionReason').show();
           $('#rejectionReason').addClass('isRequired');
+          $("#status").val(4);
         }else{
           $('.rejectionReason').hide();
           $('#rejectionReason').removeClass('isRequired');
@@ -892,6 +893,12 @@ $disable = "disabled = 'disabled'";
           ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
         });
         if(flag){
+          if($('#noResultYes').is(':checked')){
+            if($("#status").val()!=4){
+              alert("Status should be Rejected.Because you have chosen Sample Rejection");
+              return false;
+            }
+          }
           $.blockUI();
           document.getElementById('vlRequestFormRwd').submit();
         }
