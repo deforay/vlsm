@@ -333,7 +333,7 @@ try {
                 'facility_hub_name'=>null,
                 'latitude'=>null,
                 'longitude'=>null,
-                'facility_emails'=>null,
+                'facility_emails'=>(isset($xml->viral_load_lab->viral_load_lab_email_id))?(string)$xml->viral_load_lab->viral_load_lab_email_id:null,
                 'facility_type'=>2,
                 'status'=>'active'
               );
@@ -479,10 +479,8 @@ try {
         }
         //request/result flag set
         if(isset($param) && $param == 'request'){
-          $data['test_request_export'] = 1;
           $data['test_request_import'] = 1;
         }if(isset($param) && $param == 'result'){
-          $data['test_result_export'] = 1;
           $data['test_result_import'] = 1;
         }
         //update request source
@@ -494,21 +492,24 @@ try {
         if(isset($sampleResult[0]['vl_sample_id'])){
           $db=$db->where('sample_code',(string)$xml->sample->sample_code);
           $db->update($tableName,$data);
-          //move xml file
+          //move file to respective sync folder
           if(isset($param) && $param == 'result'){
+            if(file_exists($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml')){
+            unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
+            }
             copy($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml',$configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
             unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
           }else if(isset($param) && $param == 'request'){
             if(file_exists($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml')){
-              unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
+            unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
             }
             copy($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml',$configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
             unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
           }
         }else{
           $id = $db->insert($tableName,$data);
-          //move xml file
           if($id >0){
+            //move file to respective sync folder
             if(isset($param) && $param == 'request'){
               copy($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml',$configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
               unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
@@ -517,10 +518,13 @@ try {
               unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
             }
           }else{
+            //move file to respective error folder
             if(isset($param) && $param == 'request'){
               copy($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml',$configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "error" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
+              unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
             }else if(isset($param) && $param == 'result'){
               copy($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml',$configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "error" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
+              unlink($configResult[0]['value'] . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new" . DIRECTORY_SEPARATOR . (string)$xml->sample->sample_code.'.xml');
             }
           }
         }
@@ -544,6 +548,6 @@ try {
     }
   }
 }catch (Exception $exc) {
-    error_log($exc->getMessage());
-    error_log($exc->getTraceAsString());
+  error_log($exc->getMessage());
+  error_log($exc->getTraceAsString());
 }

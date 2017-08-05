@@ -10,21 +10,21 @@
                                           <xs:element name="facility_name">
                                                 <xs:simpleType>
                                                       <xs:restriction base="xs:string">
-                                                            <xs:minLength value = "2"/>
+                                                            <xs:minLength value = "1"/>
                                                       </xs:restriction>
                                                 </xs:simpleType>
                                           </xs:element>
                                           <xs:element name="facility_state">
                                                 <xs:simpleType>
                                                       <xs:restriction base="xs:string">
-                                                            <xs:minLength value = "2"/>
+                                                            <xs:minLength value = "1"/>
                                                       </xs:restriction>
                                                 </xs:simpleType>
                                           </xs:element>
                                           <xs:element name="facility_district">
                                                 <xs:simpleType>
                                                       <xs:restriction base="xs:string">
-                                                            <xs:minLength value = "2"/>
+                                                            <xs:minLength value = "1"/>
                                                       </xs:restriction>
                                                 </xs:simpleType>
                                           </xs:element>
@@ -46,7 +46,13 @@
                         <xs:element name="patient">
                               <xs:complexType>
                                     <xs:sequence>
-                                          <xs:element name="patient_art_no" type="xs:string"></xs:element>
+                                          <xs:element name="patient_art_no">
+                                                <xs:simpleType>
+                                                      <xs:restriction base="xs:string">
+                                                            <xs:minLength value = "1"/>
+                                                      </xs:restriction>
+                                                </xs:simpleType>
+                                          </xs:element>
                                           <xs:element name="patient_anc_no"></xs:element>
                                           <xs:element name="patient_nationality"></xs:element>
                                           <xs:element name="patient_other_id"></xs:element>
@@ -98,11 +104,17 @@
                         <xs:element name="sample">
                               <xs:complexType>
                                     <xs:sequence>
-                                          <xs:element name="sample_code" type="xs:string"></xs:element>
+                                          <xs:element name="sample_code">
+                                                <xs:simpleType>
+                                                      <xs:restriction base="xs:string">
+                                                            <xs:minLength value = "1"/>
+                                                      </xs:restriction>
+                                                </xs:simpleType>
+                                          </xs:element>
                                           <xs:element name="sample_type">
                                                 <xs:simpleType>
                                                       <xs:restriction base="xs:string">
-                                                            <xs:minLength value = "2"/>
+                                                            <xs:minLength value = "1"/>
                                                       </xs:restriction>
                                                 </xs:simpleType>
                                           </xs:element>
