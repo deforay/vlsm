@@ -5,10 +5,9 @@
     $sampleReorderChecked = "checked='checked'";
   }
   //patient DOB
+  $patientDob = '';
   if(isset($vl['patient_dob']) && trim($vl['patient_dob'])!='' && $vl['patient_dob']!='0000-00-00'){
     $patientDob=$general->humanDateFormat($vl['patient_dob']);
-  }else{
-    $patientDob='';
   }
   //sample collection date
   if(isset($vl['sample_collection_date']) && trim($vl['sample_collection_date'])!='' && $vl['sample_collection_date']!='0000-00-00 00:00:00'){
