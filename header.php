@@ -28,7 +28,7 @@ if(!isset($_SESSION['userId'])){
 
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/',$link);
-if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='importedStatistics.php'){
+if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='importedStatistics.php' && end($link_array)!='vlExportField.php'){
   if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
     header("location:../error/error.php");
   }

@@ -560,11 +560,22 @@ machineName = true;
           alert("Same person is reviewing and approving result!");
           return false;
         }
+        if($('#noResultRejected').is(':checked')){
+            if($("#status").val()!=4){
+              alert("Status should be Rejected.Because you have chosen Sample Rejection");
+              return false;
+            }
+          }
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
       }
     }
   }
+  $("input:radio[name=noResult]").click(function() {
+        if($(this).val() == 'sample_rejected'){
+          $("#status").val(4);
+        }
+  });
   function getfacilityDetails(obj)
   {
       var cName = $("#clinicName").val();

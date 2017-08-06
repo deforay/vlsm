@@ -362,7 +362,7 @@ $aCheckResult=$db->query($aCheckQuery);
         <!-- SELECT2 EXAMPLE -->
         <div class="box box-default">
           <div class="box-header with-border">
-            <div class="pull-left" style="font-size:18px;">Existing VL Request Data</div>
+            <div class="pull-left" style="font-size:18px;">Existing Data</div>
           </div>
           <div class="box-body">
         <div class="box-body">
@@ -1184,7 +1184,7 @@ $aCheckResult=$db->query($aCheckQuery);
                                 <option value="">-- Select --</option>
                                 <?php foreach($importResult as $mName) { ?>
                                   <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo(isset($qrVal[63]) && $qrVal[63] == $mName['machine_name'])?'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
-                                  <?php
+                                <?php
                                 }
                                 ?>
                               </select>
@@ -1370,25 +1370,26 @@ $aCheckResult=$db->query($aCheckQuery);
       }
       if(pName!=''){
         if(provinceName){
-        $.post("../includes/getFacilityForClinic.php", { pName : pName},
-        function(data){
-            if(data != ""){
-              details = data.split("###");
-              $("#district").html(details[1]);
-              $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-              $(".facilityDetails").hide();
-              $(".facilityEmails").html('');
-              $(".facilityMobileNumbers").html('');
-              $(".facilityContactPerson").html('');
-            }
-        });
+          $.post("../includes/getFacilityForClinic.php", { pName : pName},
+          function(data){
+              if(data != ""){
+                details = data.split("###");
+                $("#district").html(details[1]);
+                $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+                $("#fCode").val('');
+                $(".facilityDetails").hide();
+                $(".facilityEmails").html('');
+                $(".facilityMobileNumbers").html('');
+                $(".facilityContactPerson").html('');
+              }
+          });
         }
-        
       }else if(pName=='' && cName==''){
         provinceName = true;
         facilityName = true;
         $("#province").html("<?php echo $province;?>");
         $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+        $("#fCode").val('');
       }
       $.unblockUI();
   }
@@ -1402,6 +1403,7 @@ $aCheckResult=$db->query($aCheckQuery);
       function(data){
 	  if(data != ""){
             $("#fName").html(data);
+            $("#fCode").val('');
             $(".facilityDetails").hide();
             $(".facilityEmails").html('');
             $(".facilityMobileNumbers").html('');
@@ -1482,42 +1484,23 @@ $aCheckResult=$db->query($aCheckQuery);
   }
   
   function getDateOfBirth(){
-      var today = new Date();
-      var dob = $("#dob").val();
-      if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
-      }
-      
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      }
-      if(mm<10) {
-       mm='0'+mm
-      }
-      
-      splitDob = dob.split("-");
-      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-      var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
-      }else{
-        $("#ageInMonths").val("");
-      }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
-      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
+    var dob = $("#dob").val();
+    if($.trim(dob) == ""){
+      $("#ageInYears").val("");
+      $("#ageInMonths").val("");
+      return false;
+    }
+    //calculate age
+    splitDob = dob.split("-");
+    dob = splitDob[2]+'-'+moment().month(splitDob[1]).format("M")+'-'+splitDob[0];
+    var years = moment().diff(dob, 'years',false);
+    $("#ageInYears").val(years); // Gives difference as year
+    if(years == 0){
+      var months = moment().diff(dob, 'months',false);
+      $("#ageInMonths").val(months); // Gives difference as months
+    }else{
+      $("#ageInMonths").val("");
+    }
   }
   
   $("#vlRequestFormRwd .labSection").on("change", function() {
