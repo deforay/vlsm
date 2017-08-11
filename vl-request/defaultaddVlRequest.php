@@ -62,15 +62,19 @@ $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='sudan' AND art_status ='active'";
 $aResult=$db->query($aQuery);
-$start_date = date('Y-m-01');
-$end_date = date('Y-m-31');
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="1" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlResult=$db->query($svlQuery);
 if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
+    $end_date = date('Y-m-31');
+    $start_date = date('Y-m-01');
   }else if($arr['sample_code']=='YY'){
     $mnthYr = date('y');
+    $end_date = date('Y-12-31');
+    $start_date = date('Y-01-01');
   }
+
+$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="1" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+$svlResult=$db->query($svlQuery);
+
   $prefix = $arr['sample_code_prefix'];
   if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
    $maxId = $svlResult[0]['MAX(sample_code_key)']+1;

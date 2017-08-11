@@ -143,6 +143,22 @@ try {
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
         $_POST['result'] = $_POST['vlResult'];
     }
+    //check existing sample code
+    $existSampleQuery ="SELECT sample_code FROM vl_request_form where sample_code='".trim($_POST['sampleCode'])."'";
+    $existResult = $db->rawQuery($existSampleQuery);
+    if($existResult){
+        if(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!=''){
+            $sCode = $_POST['sampleCodeKey'] + 1;
+            $strparam = strlen($sCode);
+            $zeros = substr("000", $strparam);
+            $maxId = $zeros.$sCode;
+            $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+            $_POST['sampleCodeKey'] = $maxId;
+        }else{
+            $_SESSION['alertMsg']="Please check your sample ID";
+            header("location:addVlRequest.php");
+        }
+    }
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>7,
