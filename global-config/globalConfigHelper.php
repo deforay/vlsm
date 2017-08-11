@@ -10,6 +10,8 @@ $tableName="global_config";
 try {
 	$configQuery ="SELECT value FROM global_config where name='sample_code'";
 	$configResult = $db->rawQuery($configQuery);
+	$configFormQuery ="SELECT value FROM global_config where name='vl_form'";
+	$configFormResult = $db->rawQuery($configFormQuery);
 	
     if(isset($_POST['removedLogoImage']) && trim($_POST['removedLogoImage']) != "" && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage'])){
         unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage']);
@@ -87,26 +89,30 @@ try {
     }
 	//update all sample code in database
 	if(isset($_POST['sample_code_prefix']) && trim($_POST['sample_code_prefix'])!='' && ($_POST['vl_form']==7 || $_POST['vl_form']==3 || $_POST['vl_form']==4)){
-		if($configResult[0]['value']!=$_POST['sample_code'])
+		if(($configResult[0]['value']!=$_POST['sample_code']) || ($_POST['vl_form']!=$configFormResult[0]['value']))
 		{
 			$prefix = trim($_POST['sample_code_prefix']);
 			$vlDistinctQuery ="SELECT DISTINCT DATE_FORMAT( request_created_datetime,'%Y-%m' ) as month FROM vl_request_form where vlsm_country_id=".$_POST['vl_form'];
 			$distnictResult = $db->rawQuery($vlDistinctQuery);
 			if($distnictResult){
-				$increment = 1;
+				$increment = 1;				
 				foreach($distnictResult as $month){
-					$start_date = date($month['month'].'-01');
-					$end_date = date($month['month'].'-31');
-					$vlQuery = 'select sample_code,vl_sample_id from vl_request_form as vl where vl.vlsm_country_id='.$_POST['vl_form'].' AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" order by vl_sample_id';
-					$svlResult=$db->query($vlQuery);
 					$y = explode("-",$month['month']);
 					if($_POST['sample_code']=='YY'){
 						$dtYr = substr($y[0],2);
+						$start_date = date('Y-01-01');$end_date = date('Y-12-31');
 					}
 					else if($_POST['sample_code']=='MMYY'){
 						$increment = 1;
 						$dtYr = $y[1].substr($y[0],2);
+						$start_date = date($month['month'].'-01');$end_date = date($month['month'].'-31');
 					}
+					if($_POST['vl_form']==7){
+						$start_date = date('Y-01-01');$end_date = date('Y-12-31');
+					}
+					$vlQuery = 'select sample_code,vl_sample_id from vl_request_form as vl where vl.vlsm_country_id='.$_POST['vl_form'].' AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" order by vl_sample_id';
+					$svlResult=$db->query($vlQuery);
+					
 					foreach($svlResult as $sample){
 						$maxId = $increment;
 						$strparam = strlen($maxId);
