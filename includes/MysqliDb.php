@@ -2287,9 +2287,17 @@ class MysqliDb
 
 // END class
 
-$HOST = '127.0.0.1';
-$USER = 'root';
-$PASSWORD = 'zaq12345';
-$DBNAME = 'vl_lab_request';
-$PORT = 3306;
+
+
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? 
+                                  getenv('APPLICATION_ENV') : 
+                                  'production'));
+
+if(APPLICATION_ENV == 'production'){
+	require_once('config.production.php');
+}else{
+	require_once('config.development.php');
+}
+
 $db = new MysqliDb($HOST, $USER, $PASSWORD, $DBNAME, $PORT);
