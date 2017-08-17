@@ -12,7 +12,7 @@ try {
         $adminUsername=$db->escape($_POST['username']);
         $adminPassword=$db->escape($password);
         $params = array($adminUsername,$adminPassword,'active');
-        $admin = $db->rawQuery("SELECT ud.user_id,ud.user_name,ud.email,r.role_name,r.role_code,r.role_id,r.landing_page FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $params);
+        $admin = $db->rawQuery("SELECT * FROM user_details as ud INNER JOIN roles as r ON ud.role_id=r.role_id WHERE ud.login_id = ? AND ud.password = ? AND ud.status = ?", $params);
         
         if(count($admin)>0){
             //add random key
@@ -48,6 +48,7 @@ try {
             $_SESSION['userId']=$admin[0]['user_id'];
             $_SESSION['userName']=ucwords($admin[0]['user_name']);
             $_SESSION['roleCode']=$admin[0]['role_code'];
+            $_SESSION['roleId']=$admin[0]['role_id'];
             $_SESSION['email']=$admin[0]['email'];
             
             $redirect = 'error/error.php';
