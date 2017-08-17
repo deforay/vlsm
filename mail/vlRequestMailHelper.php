@@ -79,7 +79,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                )
           );
           if($mail->send()){
-                //Update request mail sent flag
+                //update request mail sent flag
                 $sampleArray = explode(',',$_POST['sample']);
                 for($s=0;$s<count($sampleArray);$s++){
                     $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$sampleArray[$s]."'";
@@ -90,7 +90,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                //put file in sync path
                if(file_exists($configSyncResult[0]['value']) && $_POST['storeFile']=='yes'){
                   if(!file_exists($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "request-email") && !is_dir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "request-email")) {
-                        mkdir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "request-email");
+                     mkdir($configSyncResult[0]['value'] . DIRECTORY_SEPARATOR . "request-email");
                   }
                   copy($pathFront. DIRECTORY_SEPARATOR. $_POST['fileName'], $configSyncResult[0]['value']. DIRECTORY_SEPARATOR ."request-email" . DIRECTORY_SEPARATOR . $_POST['fileName']);
                }
