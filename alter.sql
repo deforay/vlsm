@@ -1130,3 +1130,6 @@ ALTER TABLE `vl_request_form` ADD `result_mail_datetime` DATETIME NULL DEFAULT N
 ALTER TABLE `vl_request_form` ADD `request_exported_datetime` DATETIME NULL DEFAULT NULL AFTER `test_result_import`, ADD `request_imported_datetime` DATETIME NULL DEFAULT NULL AFTER `request_exported_datetime`, ADD `result_exported_datetime` DATETIME NULL DEFAULT NULL AFTER `request_imported_datetime`, ADD `result_imported_datetime` DATETIME NULL DEFAULT NULL AFTER `result_exported_datetime`;
 
 ALTER TABLE `temp_sample_report` ADD `request_exported_datetime` DATETIME NULL DEFAULT NULL AFTER `import_machine_name`, ADD `request_imported_datetime` DATETIME NULL DEFAULT NULL AFTER `request_exported_datetime`, ADD `result_exported_datetime` DATETIME NULL DEFAULT NULL AFTER `request_imported_datetime`, ADD `result_imported_datetime` DATETIME NULL DEFAULT NULL AFTER `result_exported_datetime`;
+
+--Pal 17-Aug-2017
+ALTER TABLE `vl_request_form` ADD `request_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `date_dispatched_from_clinic_to_lab`, ADD `result_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `request_mail_datetime`;
