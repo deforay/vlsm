@@ -139,13 +139,16 @@ $result = $db->rawQuery($query);
   </div>
   
   <script type="text/javascript">
+    pwdflag = true;
     function validateNow(){
       flag = deforayValidator.init({
           formId: 'userEditForm'
       });
       
       if(flag){
-        pwdflag = checkPasswordLength();
+        if($('.ppwd').val() != ''){
+          pwdflag = checkPasswordLength();
+        }
         if(pwdflag){
           $.blockUI();
           document.getElementById('userEditForm').submit();
