@@ -1,7 +1,6 @@
 <?php
 ob_start();
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $userQuery="SELECT * from user_details where user_id=$id";
 $userInfo=$db->query($userQuery);
@@ -92,7 +91,7 @@ $result = $db->rawQuery($query);
                     <div class="form-group">
                         <label for="password" class="col-lg-4 control-label">Password </label>
                         <div class="col-lg-7">
-                        <input type="password" class="form-control" id="confirmPassword" name="password" placeholder="Password" title="Please enter the password"/>
+                        <input type="password" class="form-control ppwd" id="confirmPassword" name="password" placeholder="Password" title="Please enter the password"/>
                         </div>
                     </div>
                   </div>
@@ -103,7 +102,7 @@ $result = $db->rawQuery($query);
                     <div class="form-group">
                         <label for="confirmPassword" class="col-lg-4 control-label">Confirm Password</label>
                         <div class="col-lg-7">
-                        <input type="password" class="form-control confirmPassword" id="confirmPassword" name="password" placeholder="Confirm Password" title="" />
+                        <input type="password" class="form-control cpwd confirmPassword" id="confirmPassword" name="password" placeholder="Confirm Password" title="" />
                         </div>
                     </div>
                   </div>
@@ -139,35 +138,45 @@ $result = $db->rawQuery($query);
     <!-- /.content -->
   </div>
   
-  
   <script type="text/javascript">
-
-  function validateNow(){
-    flag = deforayValidator.init({
-        formId: 'userEditForm'
-    });
-    
-    if(flag){
-      $.blockUI();
-      document.getElementById('userEditForm').submit();
+    function validateNow(){
+      flag = deforayValidator.init({
+          formId: 'userEditForm'
+      });
+      
+      if(flag){
+        pwdflag = checkPasswordLength();
+        if(pwdflag){
+          $.blockUI();
+          document.getElementById('userEditForm').submit();
+        }
+      }
     }
-  }
-  
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
-        var removeDots=obj.value.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
-
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
-        function(data){
-            if(data==='1'){
-                alert(alrt);
-                document.getElementById(obj.id).value="";
-            }
-        });
-  }
-</script>
-  
+    
+    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
+          var removeDots=obj.value.replace(/\,/g,"");
+          //str=obj.value;
+          removeDots = removeDots.replace(/\s{2,}/g,' ');
+          $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+          function(data){
+              if(data==='1'){
+                  alert(alrt);
+                  document.getElementById(obj.id).value="";
+              }
+          });
+    }
+    
+    function checkPasswordLength(){
+      var pwd = $('#confirmPassword').val();
+      var regex = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9!@#\$%\^\&*\)\(+=. _-]+){8,}$/;
+      if(regex.test(pwd) == false){
+        alert('Password must be at least 8 characters and must include at least one numeric, one alpha value and may have special characters');
+        $('.ppwd,.cpwd').val('');
+        $('.ppwd').focus();
+      }
+      return regex.test(pwd);
+    }
+ </script>
  <?php
  include('../footer.php');
  ?>
