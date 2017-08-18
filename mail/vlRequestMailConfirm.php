@@ -45,7 +45,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                        'style' => \PHPExcel_Style_Border::BORDER_THIN,
                    ),
                )
-          );
+         );
          $allField = array('Sample ID','Urgency','Province','District Name','Clinic Name','Clinician Name','Sample Collection Date','Sample Received Date','Collected by (Initials)','Gender','Date Of Birth','Age in years','Age in months','Is Patient Pregnant?','Is Patient Breastfeeding?','Patient OI/ART Number','Date Of ART Initiation','ART Regimen','Patient consent to SMS Notification?','Patient Mobile Number','Date Of Last Viral Load Test','Result Of Last Viral Load','Viral Load Log','Reason For VL Test','Lab Name','LAB No','VL Testing Platform','Specimen type','Sample Testing Date','Viral Load Result(copiesl/ml)','Log Value','If no result','Rejection Reason','Reviewed By','Approved By','Laboratory Scientist Comments','Status');
          $filedGroup = explode(",",$mailconf['rq_field']);
          //Set heading row
@@ -147,10 +147,10 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   $field = 'status_name';
                }
                if(!in_array($allField[$f],$filedGroup)){
-                  $field = 'hidden';
+                  $field = 'hide';
                }
                if($field == '') { continue; }
-               if($field == 'hidden') { $row[] = 'hidden'; continue; }
+               if($field == 'hide') { $row[] = 'hide'; continue; }
                if($field ==  'result_reviewed_by'){
                   $fValueQuery="SELECT u.user_name as reviewedBy FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s_type ON s_type.sample_id=vl.sample_type LEFT JOIN r_sample_rejection_reasons as s_r_r ON s_r_r.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN user_details as u ON u.user_id = vl.result_reviewed_by where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
                }elseif($field ==  'result_approved_by'){
@@ -194,11 +194,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
             foreach ($rowData as $field => $value) {
               $rRowCount = $rowNo + 2;
               $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
-              $sheet->getColumnDimension($cellName)->setVisible(($value == 'hidden')?FALSE:TRUE);
+              $sheet->getColumnDimension($cellName)->setVisible(($value == 'hide')?FALSE:TRUE);
               $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
               $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
               $sheet->getDefaultRowDimension()->setRowHeight(15);
-              $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode(($value == 'hidden')?'':$value), PHPExcel_Cell_DataType::TYPE_STRING);
+              $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode(($value == 'hide')?'':$value), PHPExcel_Cell_DataType::TYPE_STRING);
              $colNo++;
             }
          }
