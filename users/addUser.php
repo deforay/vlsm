@@ -154,7 +154,6 @@ $result = $db->rawQuery($query);
     var regex = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9!@#\$%\^\&*\)\(+=. _-]+){8,}$/;
     if(regex.test(pwd) == false){
       alert('Password must be at least 8 characters and must include at least one numeric, one alpha value and may have special characters');
-      $('.ppwd,.cpwd').val('');
       $('.ppwd').focus();
     }
     return regex.test(pwd);
