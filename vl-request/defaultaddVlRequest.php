@@ -225,7 +225,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="artNo">ART (TRACNET) No. <span class="mandatory">*</span></label>
-                          <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number"/>
+                          <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number" onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -998,5 +998,47 @@ $sFormat = '';
       $("#vlFocalPerson").val($('#labId option:selected').attr('data-focalperson'));
       $("#vlFocalPersonPhoneNumber").val($('#labId option:selected').attr('data-focalphone'));
     }
+  }
+    function checkNameValidation(tableName,fieldName,obj,fnct)
+    {
+      if($.trim(obj.value)!=''){
+        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                showModal('patientModal.php?artNo='+obj.value,900,520);
+            }
+        });
+      }
+    }
+  function setPatientDetails(pDetails){
+      patientArray = pDetails.split("##");
+      $("#patientFirstName").val(patientArray[0]+" "+patientArray[1]);
+      $("#patientPhoneNumber").val(patientArray[8]);
+      if($.trim(patientArray[3])!=''){
+        $("#dob").val(patientArray[3]);
+        getAge();
+      }
+      if($.trim(patientArray[2])!=''){
+        if(patientArray[2] == 'male' || patientArray[2] == 'not_recorded'){
+        $('.femaleSection').hide();
+        $('input[name="breastfeeding"]').prop('checked', false);
+        $('input[name="patientPregnant"]').prop('checked', false);
+          if(patientArray[2] == 'male'){
+            $("#genderMale").prop('checked', true);
+          }else{
+            $("#genderNotRecorded").prop('checked', true);
+          }
+        }else if($(this).val() == 'female'){
+          $('.femaleSection').show();
+          $("#genderFemale").prop('checked', true);
+        }
+      }
+      if($.trim(patientArray[9])!=''){
+        if(patientArray[9] == 'yes'){
+          $("#receivesmsYes").prop('checked', true);
+        }else if(patientArray[9] == 'no'){
+          $("#receivesmsNo").prop('checked', true);
+        }
+      }
   }
   </script>
