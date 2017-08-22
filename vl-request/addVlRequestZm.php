@@ -382,7 +382,7 @@ if($urgency==''){
                       <tr>
                         <td><label for="patientArtNo">Patient OI/ART Number</label></td>
                         <td>
-                          <input type="text" class="form-control" name="patientArtNo" id="patientArtNo" placeholder="Patient OI/ART Number" title="Enter Patient OI/ART Number" style="width:100%;" >
+                          <input type="text" class="form-control" name="patientArtNo" id="patientArtNo" placeholder="Patient OI/ART Number" title="Enter Patient OI/ART Number" style="width:100%;"  onchange="checkPatientDetails('vl_request_form','patient_art_no',this,null)">
                         </td>
                         <td><label for="dateOfArt">Date Of ART Initiation</label></td>
                         <td>
@@ -1146,6 +1146,85 @@ $("#vlLog").bind("keyup change", function(e) {
         }
       }
     }
+    function checkPatientDetails(tableName,fieldName,obj,fnct)
+    {
+      if($.trim(obj.value)!=''){
+        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                showModal('patientModal.php?artNo='+obj.value,900,520);
+            }
+        });
+      }
+    }
+  function setPatientDetails(pDetails){
+      patientArray = pDetails.split("##");
+      $("#patientFname").val(patientArray[0]);
+      $("#surName").val(patientArray[1]);
+      $("#patientPhoneNumber").val(patientArray[8]);
+      if($.trim(patientArray[3])!=''){
+        $("#dob").val(patientArray[3]);
+        getAge();
+      }
+      if($.trim(patientArray[2])!=''){
+        if(patientArray[2] == 'male' || patientArray[2] == 'not_recorded'){
+        $('.femaleElements').hide();
+        $('input[name="breastfeeding"]').prop('checked', false);
+        $('input[name="patientPregnant"]').prop('checked', false);
+          if(patientArray[2] == 'male'){
+            $("#genderMale").prop('checked', true);
+          }else{
+            $("#genderNotRecorded").prop('checked', true);
+          }
+        }else if(patientArray[2] == 'female'){
+          $('.femaleElements').show();
+          $("#genderFemale").prop('checked', true);
+          if($.trim(patientArray[6])!=''){
+            if($.trim(patientArray[6])=='yes'){
+              $("#pregYes").prop('checked', true);
+            }else if($.trim(patientArray[6])=='no'){
+              $("#pregNo").prop('checked', true);
+            }
+          }
+          if($.trim(patientArray[7])!=''){
+            if($.trim(patientArray[7])=='yes'){
+              $("#breastfeedingYes").prop('checked', true);
+            }else if($.trim(patientArray[7])=='no'){
+              $("#breastfeedingNo").prop('checked', true);
+            }
+          }
+        }
+      }
+      if($.trim(patientArray[9])!=''){
+        if(patientArray[9] == 'yes'){
+          $("#receivesmsYes").prop('checked', true);
+          $("#patientPhoneNumber").removeAttr("disabled");
+        }else if(patientArray[9] == 'no'){
+          $("#receivesmsNo").prop('checked', true);
+          $("#patientPhoneNumber").attr("disabled","disabled");
+        }
+      }
+  }
+  function getAge(){
+    var dob = $("#dob").val();
+    if($.trim(dob) == ""){
+      $("#ageInMonths").val("");
+      $("#ageInYears").val("");
+      return false;
+    }
+    //calculate age
+    splitDob = dob.split("-");
+    var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
+    var monthDigit = dobDate.getMonth();
+    var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
+    dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+    dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
+    var years = moment().diff(dob, 'years',false);
+    var months = (years == 0)?moment().diff(dob, 'months',false):'';
+    $("#ageInYears").val(years); // Gives difference as years
+    $("#ageInMonths").val(months); // Gives difference as months
+  }
+  
 </script>
   
  <?php

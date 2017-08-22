@@ -248,7 +248,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                           <label for="patientArtNo">ART No. <span class="mandatory">*</span></label>
-                            <input type="text" class="form-control isRequired" style="width:100%;" name="patientArtNo" id="patientArtNo" placeholder="ART Number" title="Please enter patient ART number">
+                            <input type="text" class="form-control isRequired" style="width:100%;" name="patientArtNo" id="patientArtNo" placeholder="ART Number" title="Please enter patient ART number" onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)">
                           </div>
                         </div>
                       </div>
@@ -922,4 +922,55 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
           document.getElementById('vlRequestFormZam').submit();
          }
     }
+    function checkNameValidation(tableName,fieldName,obj,fnct)
+    {
+      if($.trim(obj.value)!=''){
+        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                showModal('patientModal.php?artNo='+obj.value,900,520);
+            }
+        });
+      }
+    }
+  function setPatientDetails(pDetails){
+      patientArray = pDetails.split("##");
+      $("#patientFname").val(patientArray[0]);
+      $("#surName").val(patientArray[1]);
+      $("#patientPhoneNumber").val(patientArray[8]);
+      if($.trim(patientArray[3])!=''){
+        $("#dob").val(patientArray[3]);
+        getAgeInWeeks();
+      }
+      if($.trim(patientArray[2])!=''){
+        if(patientArray[2] == 'male' || patientArray[2] == 'not_recorded'){
+        $('input[name="patientPregnant"]').prop('checked', false);
+        $('#lineOfTreatment').val('');
+        $('#pregYes,#pregNo,#lineOfTreatment').prop('disabled',true);
+          if(patientArray[2] == 'male'){
+            $("#genderMale").prop('checked', true);
+          }else{
+            $("#genderNotRecorded").prop('checked', true);
+          }
+        }else if(patientArray[2] == 'female'){
+          $('#pregYes,#pregNo,#lineOfTreatment').prop('disabled',false);
+          $("#genderFemale").prop('checked', true);
+          if($.trim(patientArray[6])!=''){
+            if($.trim(patientArray[6])=='yes'){
+              $("#pregYes").prop('checked', true);
+            }else if($.trim(patientArray[6])=='no'){
+              $("#pregNo").prop('checked', true);
+            }
+          }
+        }
+      }
+      if($.trim(patientArray[9])!=''){
+        if(patientArray[9] == 'yes'){
+          $("#receivesmsYes").prop('checked', true);
+        }else if(patientArray[9] == 'no'){
+          $("#receivesmsNo").prop('checked', true);
+        }
+      }
+      
+  }
   </script>
