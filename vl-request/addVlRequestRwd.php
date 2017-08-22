@@ -1002,9 +1002,23 @@ $sFormat = '';
           }else{
             $("#genderNotRecorded").prop('checked', true);
           }
-        }else if($(this).val() == 'female'){
+        }else if(patientArray[2] == 'female'){
           $('.femaleSection').show();
           $("#genderFemale").prop('checked', true);
+          if($.trim(patientArray[6])!=''){
+            if($.trim(patientArray[6])=='yes'){
+              $("#pregYes").prop('checked', true);
+            }else if($.trim(patientArray[6])=='no'){
+              $("#pregNo").prop('checked', true);
+            }
+          }
+          if($.trim(patientArray[7])!=''){
+            if($.trim(patientArray[7])=='yes'){
+              $("#breastfeedingYes").prop('checked', true);
+            }else if($.trim(patientArray[7])=='no'){
+              $("#breastfeedingNo").prop('checked', true);
+            }
+          }
         }
       }
       if($.trim(patientArray[9])!=''){

@@ -200,7 +200,7 @@
                             <tr>
                                 <td><label for="patientArtNo">Code du patient </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"  onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)"/>
                                 </td>
                                 <td colspan="2"><label for="isPatientNew">Si S/ ARV </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
@@ -905,6 +905,50 @@
         document.getElementById('addVlRequestForm').submit();
       }
     }
+    function checkNameValidation(tableName,fieldName,obj,fnct)
+    {
+      if($.trim(obj.value)!=''){
+        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
+        function(data){
+            if(data==='1'){
+                showModal('patientModal.php?artNo='+obj.value,900,520);
+            }
+        });
+      }
+    }
+  function setPatientDetails(pDetails){
+      patientArray = pDetails.split("##");
+      if($.trim(patientArray[3])!=''){
+        $("#dob").val(patientArray[3]);
+        getAge();
+      }
+      if($.trim(patientArray[2])!=''){
+        if(patientArray[2] == 'male'){
+        $("#genderMale").prop('checked', true);
+        }else if(patientArray[2] == 'female'){
+          $("#genderFemale").prop('checked', true);
+        }
+      }
+  }
+  function getAge(){
+    var dob = $("#dob").val();
+    if($.trim(dob) == ""){
+      $("#ageInMonths").val("");
+      $("#ageInYears").val("");
+      return false;
+    }
+    //calculate age
+    splitDob = dob.split("-");
+    var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
+    var monthDigit = dobDate.getMonth();
+    var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
+    dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
+    dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
+    var years = moment().diff(dob, 'years',false);
+    var months = (years == 0)?moment().diff(dob, 'months',false):'';
+    $("#ageInYears").val(years); // Gives difference as years
+    $("#ageInMonths").val(months); // Gives difference as months
+  }
   </script>
   
  <?php
