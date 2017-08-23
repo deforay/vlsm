@@ -42,7 +42,7 @@ $pResult = $db->rawQuery($pQuery);
   <div class="content-wrapper" style="">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="pull-left" style="font-size:22px;padding:15px;">Matched Patient List with ART Number OR Patient Name(<?php echo $artNo;?>)</div>
+      <h4 class="pull-left bg-primary" style="width:100%;padding:8px;font-weight:normal;">Results matching your search - <?php echo $artNo;?></h4>
     </section>
      <!-- Main content -->
     <section class="content">
