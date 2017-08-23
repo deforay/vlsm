@@ -220,7 +220,7 @@ $sFormat = '';
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Patient Information</h3>&nbsp;&nbsp;&nbsp;
-                        <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter ART Number or Patient" title="Enter art number" onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)"/>&nbsp;&nbsp;
+                        <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter ART Number or Patient Name" title="Enter art number or patient name"/>&nbsp;&nbsp;
                         <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a>
                     </div>
                   <div class="box-body">

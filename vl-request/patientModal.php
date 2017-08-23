@@ -11,7 +11,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($cResult); $i++) {
   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
-$pQuery="SELECT * FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."' AND (patient_art_no like '%".$artNo."%' OR patient_first_name like '%".$artNo."%' OR patient_middle_name like '%".$artNo."%' OR patient_last_name like '%".$artNo."%')";
+$pQuery="SELECT * FROM vl_request_form as vl inner join facility_details as fd ON fd.facility_id=vl.facility_id where vlsm_country_id='".$arr['vl_form']."' AND (patient_art_no like '%".$artNo."%' OR patient_first_name like '%".$artNo."%' OR patient_middle_name like '%".$artNo."%' OR patient_last_name like '%".$artNo."%')";
 $pResult = $db->rawQuery($pQuery);
 ?>
   <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui.1.11.0.css" />
@@ -32,6 +32,8 @@ $pResult = $db->rawQuery($pQuery);
       overflow-x: hidden;
       /*overflow-y: hidden;*/
     }
+		td{font-size:13px;font-weight:500;}
+		th{font-size:15px;}
   </style>
   <script type="text/javascript" src="../assets/js/jquery.min.2.0.2.js"></script>
   <script type="text/javascript" src="../assets/js/jquery-ui.1.11.0.js"></script>
@@ -52,10 +54,12 @@ $pResult = $db->rawQuery($pQuery);
               <table id="patientModalDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th style="width:10%;">Action</th>
+                  <th style="width:10%;">Select</th>
+                  <th>ART Number</th>
                   <th>Patient Name</th>
+                  <th>Age</th>
                   <th>Gender</th>
-                  <th>ART No</th>
+                  <th>Facility</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -65,9 +69,12 @@ $pResult = $db->rawQuery($pQuery);
 											?>
 												<tr>
 													 <td><input type="radio" id="patient<?php echo $patient['vl_sample_id'];?>" name="patient" value="<?php echo $patientDetails;?>" onclick="getPatientDetails(this.value);"></td>
-													 <td><?php echo ucfirst($patient['patient_first_name'])." ".$patient['patient_last_name'];?></td>
-													 <td><?php echo $patient['patient_gender'];?></td>
 													 <td><?php echo $patient['patient_art_no'];?></td>
+													 <td><?php echo ucfirst($patient['patient_first_name'])." ".$patient['patient_last_name'];?></td>
+													 <td><?php echo $patient['patient_age_in_years'];?></td>
+													 <td><?php echo ucwords(str_replace("_"," ", $patient['patient_gender']));?></td>
+													 <td><?php echo ucwords($patient['facility_name']);?></td>
+													 
 												</tr>
 											<?php
 										}
