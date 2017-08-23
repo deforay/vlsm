@@ -58,7 +58,8 @@ $aQuery="SELECT * from r_art_code_details where nation_identifier='who'";
 $aResult=$db->query($aQuery);
 $start_date = date('Y-m-01');
 $end_date = date('Y-m-31');
-$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="6" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+//$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="6" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+$svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
@@ -66,8 +67,8 @@ if($arr['sample_code']=='MMYY'){
     $mnthYr = date('y');
   }
   $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0]['MAX(sample_code_key)']!='' && $svlResult[0]['MAX(sample_code_key)']!=NULL){
- $maxId = $svlResult[0]['MAX(sample_code_key)']+1;
+  if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
+ $maxId = $svlResult[0]['sample_code_key']+1;
  $strparam = strlen($maxId);
  $zeros = substr("000", $strparam);
  $maxId = $zeros.$maxId;
