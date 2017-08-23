@@ -215,7 +215,9 @@ $sFormat = '';
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Patient Information</h3>
+                        <h3 class="box-title">Patient Information</h3>&nbsp;&nbsp;&nbsp;
+                        <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter ART Number or Patient" title="Enter art number" onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)"/>&nbsp;&nbsp;
+                        <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a>
                     </div>
                   <div class="box-body">
                     <div class="row">
@@ -985,48 +987,62 @@ $sFormat = '';
       }
     }
   function setPatientDetails(pDetails){
-      patientArray = pDetails.split("##");
-      $("#patientFirstName").val(patientArray[0]+" "+patientArray[1]);
-      $("#patientPhoneNumber").val(patientArray[8]);
-      if($.trim(patientArray[3])!=''){
-        $("#dob").val(patientArray[3]);
-        getAge();
-      }
-      if($.trim(patientArray[2])!=''){
-        if(patientArray[2] == 'male' || patientArray[2] == 'not_recorded'){
-        $('.femaleSection').hide();
-        $('input[name="breastfeeding"]').prop('checked', false);
-        $('input[name="patientPregnant"]').prop('checked', false);
-          if(patientArray[2] == 'male'){
-            $("#genderMale").prop('checked', true);
-          }else{
-            $("#genderNotRecorded").prop('checked', true);
+    patientArray = pDetails.split("##");
+    $("#patientFirstName").val(patientArray[0]+" "+patientArray[1]);
+    $("#patientPhoneNumber").val(patientArray[8]);
+    if($.trim(patientArray[3])!=''){
+      $("#dob").val(patientArray[3]);
+      getAge();
+    }
+    if($.trim(patientArray[2])!=''){
+      if(patientArray[2] == 'male' || patientArray[2] == 'not_recorded'){
+      $('.femaleSection').hide();
+      $('input[name="breastfeeding"]').prop('checked', false);
+      $('input[name="patientPregnant"]').prop('checked', false);
+        if(patientArray[2] == 'male'){
+          $("#genderMale").prop('checked', true);
+        }else{
+          $("#genderNotRecorded").prop('checked', true);
+        }
+      }else if(patientArray[2] == 'female'){
+        $('.femaleSection').show();
+        $("#genderFemale").prop('checked', true);
+        if($.trim(patientArray[6])!=''){
+          if($.trim(patientArray[6])=='yes'){
+            $("#pregYes").prop('checked', true);
+          }else if($.trim(patientArray[6])=='no'){
+            $("#pregNo").prop('checked', true);
           }
-        }else if(patientArray[2] == 'female'){
-          $('.femaleSection').show();
-          $("#genderFemale").prop('checked', true);
-          if($.trim(patientArray[6])!=''){
-            if($.trim(patientArray[6])=='yes'){
-              $("#pregYes").prop('checked', true);
-            }else if($.trim(patientArray[6])=='no'){
-              $("#pregNo").prop('checked', true);
-            }
-          }
-          if($.trim(patientArray[7])!=''){
-            if($.trim(patientArray[7])=='yes'){
-              $("#breastfeedingYes").prop('checked', true);
-            }else if($.trim(patientArray[7])=='no'){
-              $("#breastfeedingNo").prop('checked', true);
-            }
+        }
+        if($.trim(patientArray[7])!=''){
+          if($.trim(patientArray[7])=='yes'){
+            $("#breastfeedingYes").prop('checked', true);
+          }else if($.trim(patientArray[7])=='no'){
+            $("#breastfeedingNo").prop('checked', true);
           }
         }
       }
-      if($.trim(patientArray[9])!=''){
-        if(patientArray[9] == 'yes'){
-          $("#receivesmsYes").prop('checked', true);
-        }else if(patientArray[9] == 'no'){
-          $("#receivesmsNo").prop('checked', true);
-        }
+    }
+    if($.trim(patientArray[9])!=''){
+      if(patientArray[9] == 'yes'){
+        $("#receivesmsYes").prop('checked', true);
+      }else if(patientArray[9] == 'no'){
+        $("#receivesmsNo").prop('checked', true);
+      }
+    }
+    if($.trim(patientArray[15])!=''){
+      $("#artNo").val($.trim(patientArray[15]));
+    }
+  }
+  function showPatientList()
+  {
+      if($.trim($("#artPatientNo").val())!=''){
+        $.post("checkPatientExist.php", { artPatientNo : $("#artPatientNo").val()},
+        function(data){
+            if(data >= '1'){
+                showModal('patientModal.php?artNo='+$.trim($("#artPatientNo").val()),900,520);
+            }
+        });
       }
   }
   </script>

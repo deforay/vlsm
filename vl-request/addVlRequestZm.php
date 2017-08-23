@@ -310,6 +310,8 @@ if($urgency==''){
                   </div>
                 </div>
                 <br/>
+                <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter ART Number or Patient" title="Enter art number" onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)"/>&nbsp;&nbsp;
+                <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a>
                     <table class="table" style="width:100%">
                       <tr>
                         <!--<td style="width:18%">
@@ -1204,6 +1206,9 @@ $("#vlLog").bind("keyup change", function(e) {
           $("#patientPhoneNumber").attr("disabled","disabled");
         }
       }
+      if($.trim(patientArray[15])!=''){
+      $("#patientArtNo").val($.trim(patientArray[15]));
+      }
   }
   function getAge(){
     var dob = $("#dob").val();
@@ -1223,6 +1228,17 @@ $("#vlLog").bind("keyup change", function(e) {
     var months = (years == 0)?moment().diff(dob, 'months',false):'';
     $("#ageInYears").val(years); // Gives difference as years
     $("#ageInMonths").val(months); // Gives difference as months
+  }
+  function showPatientList()
+  {
+      if($.trim($("#artPatientNo").val())!=''){
+        $.post("checkPatientExist.php", { artPatientNo : $("#artPatientNo").val()},
+        function(data){
+            if(data >= '1'){
+                showModal('patientModal.php?artNo='+$.trim($("#artPatientNo").val()),900,520);
+            }
+        });
+      }
   }
   
 </script>
