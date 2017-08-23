@@ -229,7 +229,9 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Section 2: Patient Information</h3>
+                        <h3 class="box-title">Section 2: Patient Information</h3>&nbsp;&nbsp;&nbsp;
+                        <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Enter ART Number or Patient" title="Enter art number" onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)"/>&nbsp;&nbsp;
+                        <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a>
                     </div>
                     <div class="box-body">
                       <div class="row">
@@ -971,6 +973,19 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
           $("#receivesmsNo").prop('checked', true);
         }
       }
-      
+      if($.trim(patientArray[15])!=''){
+      $("#patientArtNo").val($.trim(patientArray[15]));
+      }
+  }
+  function showPatientList()
+  {
+      if($.trim($("#artPatientNo").val())!=''){
+        $.post("checkPatientExist.php", { artPatientNo : $("#artPatientNo").val()},
+        function(data){
+            if(data >= '1'){
+                showModal('patientModal.php?artNo='+$.trim($("#artPatientNo").val()),900,520);
+            }
+        });
+      }
   }
   </script>

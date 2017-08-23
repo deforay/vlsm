@@ -11,7 +11,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($cResult); $i++) {
   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
-$pQuery="SELECT * FROM vl_request_form where patient_art_no='".$_GET['artNo']."' AND vlsm_country_id='".$arr['vl_form']."'";
+$pQuery="SELECT * FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."' AND (patient_art_no like '%".$artNo."%' OR patient_first_name like '%".$artNo."%' OR patient_middle_name like '%".$artNo."%' OR patient_last_name like '%".$artNo."%')";
 $pResult = $db->rawQuery($pQuery);
 ?>
   <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui.1.11.0.css" />
@@ -40,7 +40,7 @@ $pResult = $db->rawQuery($pQuery);
   <div class="content-wrapper" style="">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="pull-left" style="font-size:22px;padding:15px;">Matched Patient List with ART Number(<?php echo $artNo;?>)</div>
+      <div class="pull-left" style="font-size:22px;padding:15px;">Matched Patient List with ART Number OR Patient Name(<?php echo $artNo;?>)</div>
     </section>
      <!-- Main content -->
     <section class="content">
@@ -55,17 +55,19 @@ $pResult = $db->rawQuery($pQuery);
                   <th style="width:10%;">Action</th>
                   <th>Patient Name</th>
                   <th>Gender</th>
+                  <th>ART No</th>
                 </tr>
                 </thead>
                 <tbody>
 										<?php
 										foreach($pResult as $patient){
-											$patientDetails = $patient['patient_first_name']."##".$patient['patient_last_name']."##".$patient['patient_gender']."##".$general->humanDateFormat($patient['patient_dob'])."##".$patient['patient_age_in_years']."##".$patient['patient_age_in_months']."##".$patient['is_patient_pregnant']."##".$patient['is_patient_breastfeeding']."##".$patient['patient_mobile_number']."##".$patient['consent_to_receive_sms']."##".$general->humanDateFormat($patient['treatment_initiated_date'])."##".$patient['current_regimen']."##".$general->humanDateFormat($patient['last_viral_load_date'])."##".$patient['last_viral_load_result']."##".$patient['number_of_enhanced_sessions'];
+											$patientDetails = $patient['patient_first_name']."##".$patient['patient_last_name']."##".$patient['patient_gender']."##".$general->humanDateFormat($patient['patient_dob'])."##".$patient['patient_age_in_years']."##".$patient['patient_age_in_months']."##".$patient['is_patient_pregnant']."##".$patient['is_patient_breastfeeding']."##".$patient['patient_mobile_number']."##".$patient['consent_to_receive_sms']."##".$general->humanDateFormat($patient['treatment_initiated_date'])."##".$patient['current_regimen']."##".$general->humanDateFormat($patient['last_viral_load_date'])."##".$patient['last_viral_load_result']."##".$patient['number_of_enhanced_sessions']."##".$patient['patient_art_no'];
 											?>
 												<tr>
 													 <td><input type="radio" id="patient<?php echo $patient['vl_sample_id'];?>" name="patient" value="<?php echo $patientDetails;?>" onclick="getPatientDetails(this.value);"></td>
 													 <td><?php echo ucfirst($patient['patient_first_name'])." ".$patient['patient_last_name'];?></td>
 													 <td><?php echo $patient['patient_gender'];?></td>
+													 <td><?php echo $patient['patient_art_no'];?></td>
 												</tr>
 											<?php
 										}
