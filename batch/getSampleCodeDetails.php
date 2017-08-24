@@ -48,7 +48,8 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
      $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
    }
 }
-$query = $query." ORDER BY f.facility_name ASC";
+//$query = $query." ORDER BY f.facility_name ASC";
+$query = $query." ORDER BY vl.request_created_datetime DESC";
 $result = $db->rawQuery($query);
 ?>
 <div class="col-md-8">
