@@ -64,8 +64,12 @@ $pResult = $db->rawQuery($pQuery);
                 </thead>
                 <tbody>
 										<?php
+										$artNoList = array();
 										foreach($pResult as $patient){
-											$patientDetails = $patient['patient_first_name']."##".$patient['patient_last_name']."##".$patient['patient_gender']."##".$general->humanDateFormat($patient['patient_dob'])."##".$patient['patient_age_in_years']."##".$patient['patient_age_in_months']."##".$patient['is_patient_pregnant']."##".$patient['is_patient_breastfeeding']."##".$patient['patient_mobile_number']."##".$patient['consent_to_receive_sms']."##".$general->humanDateFormat($patient['treatment_initiated_date'])."##".$patient['current_regimen']."##".$general->humanDateFormat($patient['last_viral_load_date'])."##".$patient['last_viral_load_result']."##".$patient['number_of_enhanced_sessions']."##".$patient['patient_art_no'];
+											$value = $patient['patient_art_no'].strtolower($patient['patient_first_name']).strtolower($patient['patient_last_name']).$patient['patient_age_in_years'].strtolower($patient['patient_gender']).strtolower($patient['facility_name']);
+											if(!in_array($value,$artNoList)){
+												$artNoList [] = $value;
+												$patientDetails = $patient['patient_first_name']."##".$patient['patient_last_name']."##".$patient['patient_gender']."##".$general->humanDateFormat($patient['patient_dob'])."##".$patient['patient_age_in_years']."##".$patient['patient_age_in_months']."##".$patient['is_patient_pregnant']."##".$patient['is_patient_breastfeeding']."##".$patient['patient_mobile_number']."##".$patient['consent_to_receive_sms']."##".$general->humanDateFormat($patient['treatment_initiated_date'])."##".$patient['current_regimen']."##".$general->humanDateFormat($patient['last_viral_load_date'])."##".$patient['last_viral_load_result']."##".$patient['number_of_enhanced_sessions']."##".$patient['patient_art_no'];
 											?>
 												<tr>
 													 <td><input type="radio" id="patient<?php echo $patient['vl_sample_id'];?>" name="patient" value="<?php echo $patientDetails;?>" onclick="getPatientDetails(this.value);"></td>
@@ -74,9 +78,9 @@ $pResult = $db->rawQuery($pQuery);
 													 <td><?php echo $patient['patient_age_in_years'];?></td>
 													 <td><?php echo ucwords(str_replace("_"," ", $patient['patient_gender']));?></td>
 													 <td><?php echo ucwords($patient['facility_name']);?></td>
-													 
 												</tr>
 											<?php
+											}
 										}
 										?>
                 </tbody>
