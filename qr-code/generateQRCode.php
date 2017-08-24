@@ -38,7 +38,7 @@ $pages = array();
     $sQuery="SELECT vl.*,f.*,ts.*,s.*,l.facility_name as labName,l.facility_code as labCode,l.facility_emails as labEmails,b.batch_code,rby.user_name as resultReviewedBy,aby.user_name as resultApprovedBy,cby.user_name as requestCreatedBy,lmby.user_name as lastModifiedBy,r_f.facility_name as rejectionFacility,r_r_r.rejection_reason_name as rejectionReason,r_s_r.sample_name as routineSampleType,r_s_ac.sample_name as acSampleType,r_s_f.sample_name as failureSampleType,form.form_name from vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as rby ON rby.user_id = vl.result_reviewed_by LEFT JOIN user_details as aby ON aby.user_id = vl.result_approved_by LEFT JOIN user_details as cby ON cby.user_id = vl.request_created_by LEFT JOIN user_details as lmby ON lmby.user_id = vl.last_modified_by LEFT JOIN facility_details as r_f ON r_f.facility_id = vl.sample_rejection_facility LEFT JOIN r_sample_rejection_reasons as r_r_r ON r_r_r.rejection_reason_id = vl.reason_for_sample_rejection LEFT JOIN r_sample_type as r_s_r ON r_s_r.sample_id = vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as r_s_ac ON r_s_ac.sample_id = vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as r_s_f ON r_s_f.sample_id = vl.last_vl_sample_type_failure LEFT JOIN form_details as form ON form.vlsm_country_id = vl.vlsm_country_id LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id WHERE vl.vlsm_country_id = $country AND vl.vl_sample_id IN (".$id.")";
     $sResult=$db->query($sQuery);
     if(count($sResult) > 0){
-        $_SESSION['nbPages'] = sizeof($sResult) * 2;
+        $_SESSION['nbPages'] = sizeof($sResult);
         $_SESSION['aliasPage'] = 1;
         //header and footer
         class MYPDF extends TCPDF {
@@ -276,14 +276,14 @@ $pages = array();
                 'module_width' => 1, // width of a single module in points
                 'module_height' => 1 // height of a single module in points
             );
-            $pdf->write2DBarcode($qrString, 'QRCODE,L', 80, 100, 50, 50, $style, 'N');
+            $pdf->write2DBarcode($qrString, 'QRCODE,L', 165, 2, 65, 65, $style, 'N');
             
             if($country == '7'){
               include('generateRwdForm.php');
             }
-            $pdf->AddPage();
-            $_SESSION['aliasPage'] = $page+1;
-            $page = $page+1;
+            //$pdf->AddPage();
+            //$_SESSION['aliasPage'] = $page+1;
+            //$page = $page+1;
             $pdf->writeHTML($html);
             $pdf->lastPage();
             $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
