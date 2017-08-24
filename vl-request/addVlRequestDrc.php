@@ -924,7 +924,13 @@
       if($.trim(patientArray[3])!=''){
         $("#dob").val(patientArray[3]);
         getAge();
+      }else if($.trim(patientArray[4])!='' && $.trim(patientArray[4]) != 0){
+        $("#ageInYears").val(patientArray[4]);
+      }else if($.trim(patientArray[5])!=''){
+        $("#ageInMonths").val(patientArray[5]);
       }
+      
+      
       if($.trim(patientArray[2])!=''){
         if(patientArray[2] == 'male'){
         $("#genderMale").prop('checked', true);
