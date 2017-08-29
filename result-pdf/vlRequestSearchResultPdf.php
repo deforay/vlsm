@@ -390,6 +390,28 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
+             if($arr['vl_form']=='1')
+             {
+              $html .='<tr>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">MOBILE NO.</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE</td>';
+              $html .='</tr>';
+              $html .='<tr>';
+                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']." ".$result['patient_last_name']).'</td>';
+                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
+                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$age.'</td>';
+              $html .='</tr>';
+              $html .='<tr>';
+               $html .='<td colspan="3" style="line-height:10px;"></td>';
+              $html .='</tr>';
+              $html .='<tr>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">GENDER</td>';
+              $html .='</tr>';
+              $html .='<tr>';
+                $html .='<td colspan="3" style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
+              $html .='</tr>';
+             }else{
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT FIRST NAME</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT LAST NAME</td>';
@@ -411,6 +433,7 @@ if(sizeof($requestResult)> 0){
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$age.'</td>';
                 $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
               $html .='</tr>';
+              }
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
