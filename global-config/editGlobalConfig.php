@@ -104,7 +104,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group">
                       <label for="patient_name_pdf" class="col-lg-4 control-label">Patient Name in Result PDF </label>
                       <div class="col-lg-8">
-                        <select type="text" class="form-control" id="patient_name_pdf" name="patient_name_pdf" placeholder="Low Viral Load Message" title="Please enter low viral load message" value="<?php echo $arr['patient_name_pdf']; ?>">
+                        <select type="text" class="form-control" id="patient_name_pdf" name="patient_name_pdf" title="Choose one option" value="<?php echo $arr['patient_name_pdf']; ?>">
                             <option value="flname" <?php echo ('flname'==$arr['patient_name_pdf'])?"selected='selected'":""?>>First Name + Last Name</option>
                             <option value="fullname" <?php echo ('fullname'==$arr['patient_name_pdf'])?"selected='selected'":""?>>Full Name</option>
                             <option value="hidename" <?php echo ('hidename'==$arr['patient_name_pdf'])?"selected='selected'":""?>>Hide Patient Name</option>
