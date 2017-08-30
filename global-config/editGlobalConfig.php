@@ -48,6 +48,14 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
           <!-- form start -->
             <form class="form-horizontal" method='post' name='editGlobalConfigForm' id='editGlobalConfigForm' enctype="multipart/form-data" autocomplete="off" action="globalConfigHelper.php">
               <div class="box-body">
+                
+                             
+                
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Global Settings</h3>
+  </div>
+  <div class="panel-body">
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
@@ -68,51 +76,10 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="show_smiley" class="col-lg-4 control-label">Do you want to show smiley in the result PDF? </label>
-                      <div class="col-lg-8">
-                        <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
-                        <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
-                      </div>
-                    </div>
-                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="h_vl_msg" class="col-lg-4 control-label">Result PDF High Viral Load Message </label>
-                      <div class="col-lg-8">
-                        <textarea class="form-control" id="h_vl_msg" name="h_vl_msg" placeholder="High Viral Load Message" title="Please enter high viral load message" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['h_vl_msg']; ?></textarea>
-                      </div>
-                    </div>
-                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="l_vl_msg" class="col-lg-4 control-label">Result PDF Low Viral Load Message </label>
-                      <div class="col-lg-8">
-                        <textarea class="form-control" id="l_vl_msg" name="l_vl_msg" placeholder="Low Viral Load Message" title="Please enter low viral load message" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['l_vl_msg']; ?></textarea>
-                      </div>
-                    </div>
-                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="patient_name_pdf" class="col-lg-4 control-label">Patient Name in Result PDF </label>
-                      <div class="col-lg-8">
-                        <select type="text" class="form-control" id="patient_name_pdf" name="patient_name_pdf" title="Choose one option" value="<?php echo $arr['patient_name_pdf']; ?>">
-                            <option value="flname" <?php echo ('flname'==$arr['patient_name_pdf'])?"selected='selected'":""?>>First Name + Last Name</option>
-                            <option value="fullname" <?php echo ('fullname'==$arr['patient_name_pdf'])?"selected='selected'":""?>>Full Name</option>
-                            <option value="hidename" <?php echo ('hidename'==$arr['patient_name_pdf'])?"selected='selected'":""?>>Hide Patient Name</option>
-                        </select>
-                      </div>
-                    </div>
-                   </div>
-                </div>
+                
+
+
+                
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
@@ -270,21 +237,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-7" style="height:38px;">
-                    <div class="form-group" style="height:38px;">
-                      <label for="sync_path" class="col-lg-4 control-label">Sync Path</label>
-                      <div class="col-lg-8">
-                        <input type="text" class="form-control" id="sync_path" name="sync_path" placeholder="Sync Path" title="Please enter sync path" value="<?php echo $arr['sync_path']; ?>"/>
-                      </div>
-                    </div>
-                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-7" style="text-align:center;">
-                      <code>Used for Dropbox or shared folder sync using the vlsm-connect module</code>
-                  </div>
-                </div><br/>
+
                 <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">
@@ -306,8 +259,9 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                       <label for="instance_type" class="col-lg-4 control-label">Instance Type <span class="mandatory">*</span> </label>
                       <div class="col-lg-8">
                         <select class="form-control isRequired" name="instance_type" id="instance_type" title="Please select the instance type">
-                            <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
                             <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
+                            <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
+                            
                             <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
                         </select>
                       </div>
@@ -328,6 +282,37 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
+
+                
+                
+              </div>
+        </div>
+
+          
+                
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">VLSM Connect</h3>
+  </div>
+  <div class="panel-body">
+    
+    
+                <div class="row">
+                  <div class="col-md-7" style="height:38px;">
+                    <div class="form-group" style="height:38px;">
+                      <label for="sync_path" class="col-lg-4 control-label">Sync Path (Dropbox or Shared folder)</label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control" id="sync_path" name="sync_path" placeholder="Sync Path" title="Please enter sync path" value="<?php echo $arr['sync_path']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7 col-md-offset-2" style="text-align:center;">
+                      <code>Used for Dropbox or shared folder sync using the vlsm-connect module</code>
+                  </div>
+                </div><br/>
+                
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
@@ -338,19 +323,85 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                       </div>
                     </div>
                   </div>
+                </div>    
+    
+  </div>
+</div>
+                
+                
+                
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Result PDF Settings</h3>
+  </div>
+  <div class="panel-body">
+            <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="show_smiley" class="col-lg-4 control-label">Show Emoticon </label>
+                      <div class="col-lg-8">
+                        <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
+                      </div>
+                    </div>
+                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="r_mandatory_fields" class="col-lg-4 control-label">Result PDF Mandatory Fields </label>
+                      <label for="h_vl_msg" class="col-lg-4 control-label">High Viral Load Message </label>
                       <div class="col-lg-8">
+                        <textarea class="form-control" id="h_vl_msg" name="h_vl_msg" placeholder="High Viral Load message that will appear for results >= the VL threshold limit" title="Please enter high viral load message" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['h_vl_msg']; ?></textarea>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="l_vl_msg" class="col-lg-4 control-label">Low Viral Load Message </label>
+                      <div class="col-lg-8">
+                        <textarea class="form-control" id="l_vl_msg" name="l_vl_msg" placeholder="Low Viral Load message that will appear for results lesser than the VL threshold limit" title="Please enter low viral load message" style="width:100%;min-height:80px;max-height:100px;"><?php echo $arr['l_vl_msg']; ?></textarea>
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="patient_name_pdf" class="col-lg-4 control-label">Patient Name </label>
+                      <div class="col-lg-8">
+                        <select type="text" class="form-control" id="patient_name_pdf" name="patient_name_pdf" title="Choose one option" value="<?php echo $arr['patient_name_pdf']; ?>">
+                            <option value="flname" <?php echo ('flname'==$arr['patient_name_pdf'])?"selected='selected'":""?>>First Name + Last Name</option>
+                            <option value="fullname" <?php echo ('fullname'==$arr['patient_name_pdf'])?"selected='selected'":""?>>Full Name</option>
+                            <option value="hidename" <?php echo ('hidename'==$arr['patient_name_pdf'])?"selected='selected'":""?>>Hide Patient Name</option>
+                        </select>
+                      </div>
+                    </div>
+                   </div>
+            </div>
+                
+   
+            <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="r_mandatory_fields" class="col-lg-4 control-label">Mandatory Fields for COMPLETED Result PDF: </label>
+                      <div class="col-lg-8">
+                        
                         <div class="form-group">
-                            <div class="col-md-12">
+                            
+                            
+
                                 <div class="col-md-12">
-                                    <div style="width:60%;margin:0 auto;clear:both;">
-                                    <a href="#" id="select-all-field" style="float:left;" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href="#" id="deselect-all-field" style="float:right;" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align:justify;">
+                                            <code>If any of the selected fields are incomplete, the Result PDF appears with a <strong>DRAFT</strong> watermark. Leave right block blank (Deselect All) to disable this.</code>
+                                        </div>
+                                    </div>
+                                    <div style="width:100%;margin:10px auto;clear:both;">
+                                        <a href="#" id="select-all-field" style="float:left;" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href="#" id="deselect-all-field" style="float:right;" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
                                     </div><br/><br/>
-                                   <select id="r_mandatory_fields" name="r_mandatory_fields[]" multiple="multiple" class="search">
+                                    <select id="r_mandatory_fields" name="r_mandatory_fields[]" multiple="multiple" class="search">
                                      <option value="facility_code" <?php echo (in_array('facility_code',$mFieldArray))?'selected="selected"':''; ?>>Facility Code</option>
                                      <option value="facility_state" <?php echo (in_array('facility_state',$mFieldArray))?'selected="selected"':''; ?>>Facility Province</option>
                                      <option value="facility_district" <?php echo (in_array('facility_district',$mFieldArray))?'selected="selected"':''; ?>>Facility District</option>
@@ -365,13 +416,34 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                                      <option value="result" <?php echo (in_array('result',$mFieldArray))?'selected="selected"':''; ?>>VL Result</option>
                                      <option value="approvedBy" <?php echo (in_array('approvedBy',$mFieldArray))?'selected="selected"':''; ?>>Approved By</option>
                                    </select>
+                                   
                                 </div>
-                            </div>
+                                
+                                
+                            
                         </div>
+
                       </div>
+
                     </div>
+                    
                    </div>
-                </div>
+                  
+                  
+                  
+                  
+                  
+                </div>                
+                
+  </div>
+</div>                
+                
+                
+                
+                
+                
+                
+                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
