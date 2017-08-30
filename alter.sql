@@ -1133,3 +1133,6 @@ ALTER TABLE `temp_sample_report` ADD `request_exported_datetime` DATETIME NULL D
 
 --Pal 17-Aug-2017
 ALTER TABLE `vl_request_form` ADD `request_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `date_dispatched_from_clinic_to_lab`, ADD `result_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `request_mail_datetime`;
+
+--saravanna 30-aug-2017
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Patient Name in Result PDF', 'patient_name_pdf', 'flname');

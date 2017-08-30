@@ -390,7 +390,7 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
-             if($arr['vl_form']=='1')
+             if($arr['patient_name_pdf']=='fullname')
              {
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
@@ -410,6 +410,21 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td colspan="3" style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
+              $html .='</tr>';
+             }else if($arr['patient_name_pdf']=='hidename')
+             {
+              $html .='<tr>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">MOBILE NO.</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">GENDER</td>';
+              $html .='</tr>';
+              $html .='<tr>';
+                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
+                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$age.'</td>';
+                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
+              $html .='</tr>';
+              $html .='<tr>';
+               $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
              }else{
               $html .='<tr>';
