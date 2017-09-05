@@ -237,7 +237,6 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-
                 <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">
@@ -261,7 +260,6 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                         <select class="form-control isRequired" name="instance_type" id="instance_type" title="Please select the instance type">
                             <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
                             <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
-                            
                             <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
                         </select>
                       </div>
@@ -282,14 +280,24 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-
-                
-                
+                <div class="row" style="margin-top:10px;">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="import_non_matching_sample" class="col-lg-4 control-label">Import Non matching Sample Results from Machine generated file </label>
+                      <div class="col-lg-8">
+                        <input type="radio" id="import_non_matching_sample_yes" name="import_non_matching_sample" value="yes" <?php echo($arr['import_non_matching_sample'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" id="import_non_matching_sample_no" name="import_non_matching_sample" value="no" <?php echo($arr['import_non_matching_sample'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
+                      </div>
+                    </div>
+                   </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-10" style="text-align:left;">
+                      <code>"This option is used to check how to handle Sample IDs which do not match the VLSM Sample IDs, while importing results manually from a machine generated CSV/Excel/Text file"</code>
+                  </div>
+                </div><br/>
               </div>
         </div>
-
-          
-                
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">VLSM Connect</h3>
