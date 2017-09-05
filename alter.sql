@@ -1136,3 +1136,6 @@ ALTER TABLE `vl_request_form` ADD `request_mail_datetime` DATETIME NULL DEFAULT 
 
 --saravanna 30-aug-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Patient Name in Result PDF', 'patient_name_pdf', 'flname');
+
+--Pal 05-Sep-2017
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Import Non matching Sample Results from Machine generated file', 'import_non_matching_sample', 'no'); 

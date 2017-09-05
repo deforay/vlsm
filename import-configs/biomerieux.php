@@ -188,7 +188,7 @@ try {
         }
     }
 
-    $_SESSION['alertMsg'] = "Imported results successfully";
+    $_SESSION['alertMsg'] = "Results imported successfully";
     //Add event log
     $eventType            = 'import';
     $action               = ucwords($_SESSION['userName']) . ' imported a new test result with the sample code ' . $sampleCode;
