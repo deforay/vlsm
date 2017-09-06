@@ -3,6 +3,11 @@ ob_start();
 include('../header.php');
 //include('../includes/MysqliDb.php');
 define('UPLOAD_PATH','../uploads');
+$instanceQuery ="SELECT * from vl_instance where vlsm_instance_id='".$_SESSION['instanceId']."'";
+$instanceResult=$db->query($instanceQuery);
+$fType="SELECT * FROM facility_type";
+$fTypeResult = $db->rawQuery($fType);
+
 $formQuery ="SELECT * from form_details";
 $formResult=$db->query($formQuery);
 $globalConfigQuery ="SELECT * from global_config";
@@ -85,7 +90,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group">
                       <label for="" class="col-lg-4 control-label">Logo Image </label>
                       <div class="col-lg-8">
-                       <div class="fileinput fileinput-new" data-provides="fileinput">
+                       <div class="fileinput fileinput-new logo" data-provides="fileinput">
                         <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
                           <?php
                           if(isset($arr['logo']) && trim($arr['logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $arr['logo'])){
@@ -426,9 +431,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                                    </select>
                                    
                                 </div>
-                                
-                                
-                            
+                               
                         </div>
 
                       </div>
@@ -437,14 +440,82 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     
                    </div>
                   
-                  
-                  
-                  
-                  
                 </div>                
                 
   </div>
-</div>                
+  
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Instance Settings</h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+        <div class="col-md-7">
+          <div class="form-group">
+            <label for="h_vl_msg" class="col-lg-4 control-label">Facility Name <span class="mandatory">*</span></label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter facility name" placeholder="Facility Name" value="<?php echo $instanceResult[0]['instance_facility_name'];?>"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="form-group">
+            <label for="h_vl_msg" class="col-lg-4 control-label">Facility Code </label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control " id="fCode" name="fCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $instanceResult[0]['instance_facility_code'];?>"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="form-group">
+            <label for="h_vl_msg" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span></label>
+            <div class="col-lg-8">
+                <select class="form-control isRequired" id="fType" name="fType" placeholder="Facility Type" title="Please enter facility type">
+                    <option value="">-- Select --</option>
+                    <?php foreach($fTypeResult as $result){ ?>
+                        <option value="<?php echo base64_encode($result['facility_type_id']);?>" <?php echo ($result['facility_type_id']==$instanceResult[0]['instance_facility_type'])?"selected='selected'":""?>><?php echo ucwords($result['facility_type_name']);?></option>
+                    <?php } ?>
+                </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+              <div class="form-group">
+                <label for="" class="col-lg-4 control-label">Logo Image </label>
+                <div class="col-lg-8">
+                 <div class="fileinput fileinput-new instanceLogo" data-provides="fileinput">
+                  <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
+                    <?php
+                    if(isset($instanceResult[0]['instance_facility_logo']) && trim($instanceResult[0]['instance_facility_logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo" . DIRECTORY_SEPARATOR . $instanceResult[0]['instance_facility_logo'])){
+                    ?>
+                     <img src=".././uploads/instance-logo/<?php echo $instanceResult[0]['instance_facility_logo']; ?>" alt="Logo image">
+                    <?php } else { ?>
+                     <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
+                    <?php } ?>
+                  </div>
+                  <div>
+                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span>
+                    <input type="file" id="instanceLogo" name="instanceLogo" title="Please select logo image" onchange="getNewInstanceImage('<?php echo $instanceResult[0]['instance_facility_logo']; ?>');">
+                    </span>
+                    <?php
+                    if(isset($instanceResult[0]['instance_facility_logo']) && trim($instanceResult[0]['instance_facility_logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo" . DIRECTORY_SEPARATOR . $instanceResult[0]['instance_facility_logo'])){
+                    ?>
+                      <a id="clearInstanceImage" href="javascript:void(0);" class="btn btn-default" data-dismiss="fileupload" onclick="clearInstanceImage('<?php echo $instanceResult[0]['instance_facility_logo']; ?>')">Clear</a>
+                    <?php } ?>
+                    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                  </div>
+                  </div>
+                  <div class="box-body">
+                      Please make sure logo image size of: <code>80x80</code>
+                  </div>
+                </div>
+              </div>
+             </div>
+        </div>
+    </div>
+  </div>
                 
                 
                 
@@ -456,6 +527,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" name="removedLogoImage" id="removedLogoImage"/>
+                <input type="hidden" name="removedInstanceLogoImage" id="removedInstanceLogoImage"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="globalConfig.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -533,14 +605,23 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
   }
   
   function clearImage(img){
-    $(".fileinput").fileinput("clear");
+    $(".logo").fileinput("clear");
     $("#clearImage").addClass("hide");
     $("#removedLogoImage").val(img);
+  }
+function clearInstanceImage(img){
+    $(".instanceLogo").fileinput("clear");
+    $("#clearInstanceImage").addClass("hide");
+    $("#removedInstanceLogoImage").val(img);
   }
   
   function getNewImage(img){
     $("#clearImage").addClass("hide");
     $("#removedLogoImage").val(img);
+  }
+function getNewInstanceImage(img){
+    $("#clearInstanceImage").addClass("hide");
+    $("#removedInstanceLogoImage").val(img);
   }
   
   $("input:radio[name=sample_code]").click(function() {
