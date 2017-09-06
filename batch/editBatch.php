@@ -3,16 +3,12 @@ ob_start();
 include('../header.php');
 $id=base64_decode($_GET['id']);
 //global config
-$showUrgency = false;
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
-$country = $configResult[0]['value'];
-if($country == 1 || $country == 2){
- $showUrgency = true;
-}
+$showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2)?true:false;
 $batchQuery="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
-$query="SELECT vl.sample_code,vl.sample_batch_id,vl.vl_sample_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id = $id OR vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vlsm_country_id = '".$country."' ORDER BY f.facility_name ASC";
+$query="SELECT vl.sample_code,vl.sample_batch_id,vl.vl_sample_id,vl.facility_id,vl.result,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.sample_batch_id = $id OR vl.sample_batch_id IS NULL OR vl.sample_batch_id = '') AND (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND vlsm_country_id = '".$configResult[0]['value']."' ORDER BY f.facility_name ASC";
 //error_log($query);
 $result = $db->rawQuery($query);
 $fQuery="SELECT * FROM facility_details where status='active'";
@@ -29,7 +25,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
     color:#000000 !important;
   }
   #ms-sampleCode{width: 110%;}
-  .showPregnant{display: none;}
+  .showFemaleSection{display: none;}
     #sortableRow { list-style-type: none; margin: 10px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
     #sortableRow li{
       color:#333 !important;
@@ -58,6 +54,13 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
           <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
         </div>
 				<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
+				        <tr style="display:<?php echo($showUrgency == true)?'':'none'; ?>">
+					  <td><b>Urgency&nbsp;:</b></td>
+						 <td colspan="3">
+							 <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
+							 <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+						 </td>
+					 </tr>
 					<tr>
 						<td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
 						<td>
@@ -92,7 +95,7 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 							</td>
 							<td><b>Gender&nbsp;:</b></td>
 							<td>
-								<select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enablePregnant(this);">
+								<select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enableFemaleSection(this);">
 									<option value=""> -- Select -- </option>
 									<option value="male">Male</option>
 									<option value="female">Female</option>
@@ -100,20 +103,20 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 								</select>
 							</td>
 					</tr>
-					<tr>
-						<td class="showPregnant"><b>Pregnant&nbsp;:</b></td>
-						<td class="showPregnant">
+					<tr class="showFemaleSection">
+						<td><b>Pregnant&nbsp;:</b></td>
+						<td>
 							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
 							<input type="radio" name="pregnant" title="Please choose type" class="pregnant" id="prgNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
 						</td>
-						<td class="" style="display:<?php echo($showUrgency == true)?'':'none'; ?>"><b>Urgency&nbsp;:</b></td>
-						<td class="" style="display:<?php echo($showUrgency == true)?'':'none'; ?>">
-							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
-							<input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
+						<td><b>Is Patient Breastfeeding&nbsp;:</b></td>
+						<td>
+							<input type="radio" name="breastfeeding" title="Please choose type" class="breastfeeding" id="breastFeedingYes" value="yes" disabled="disabled"/>&nbsp;&nbsp;Yes
+							<input type="radio" name="breastfeeding" title="Please choose type" class="breastfeeding" id="breastFeedingNo" value="no" disabled="disabled"/>&nbsp;&nbsp;No
 						</td>
 					</tr>
 					<tr>
-						<td>&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
+						<td colspan="4">&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
 							&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 						</td>
 					</tr>
@@ -361,42 +364,48 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
   }
   
   function getSampleCodeDetails(){
-    $.blockUI();
-    var fName = $("#facilityName").val();
-    var sName = $("#sampleType").val();
-    var gender= $("#gender").val();
-    var prg = $("input:radio[name=pregnant]");
-    var urgent = $("input:radio[name=urgency]");
-    if((prg[0].checked==false && prg[1].checked==false) || prg == 'undefined'){
-      pregnant = '';
-    }else{
-      pregnant = $('input[name=pregnant]:checked').val();
-    }
-    if((urgent[0].checked==false && urgent[1].checked==false) || urgent == 'undefined'){
-      urgent = '';
-    }else{
-      urgent = $('input[name=urgency]:checked').val();
-    }
-    $.post("getSampleCodeDetails.php", {sampleCollectionDate:$("#sampleCollectionDate").val(),fName:fName,sName:sName,gender:gender,pregnant:pregnant,urgent:urgent,batchId:'<?php echo $id; ?>'},
-    function(data){
-	if(data != ""){
-	  $("#sampleDetails").html(data);
-	  $("#batchSubmit").attr("disabled",true);
-	  $("#batchSubmit").css("pointer-events","none");
-	}
-    });
-    $.unblockUI();
+      $.blockUI();
+      var urgent = $("input:radio[name=urgency]");
+      if((urgent[0].checked==false && urgent[1].checked==false) || urgent == 'undefined'){
+	urgent = '';
+      }else{
+	urgent = $('input[name=urgency]:checked').val();
+      }
+      var fName = $("#facilityName").val();
+      var sName = $("#sampleType").val();
+      var gender= $("#gender").val();
+      var prg = $("input:radio[name=pregnant]");
+      if((prg[0].checked==false && prg[1].checked==false) || prg == 'undefined'){
+	pregnant = '';
+      }else{
+	pregnant = $('input[name=pregnant]:checked').val();
+      }
+      var breastfeeding = $("input:radio[name=breastfeeding]");
+      if((breastfeeding[0].checked==false && breastfeeding[1].checked==false) || breastfeeding == 'undefined'){
+	breastfeeding = '';
+      }else{
+	breastfeeding = $('input[name=breastfeeding]:checked').val();
+      }
+      $.post("getSampleCodeDetails.php", {urgent:urgent,sampleCollectionDate:$("#sampleCollectionDate").val(),fName:fName,sName:sName,gender:gender,pregnant:pregnant,breastfeeding:breastfeeding},
+      function(data){
+	  if(data != ""){
+	    $("#sampleDetails").html(data);
+	    $("#batchSubmit").attr("disabled",true);
+	    $("#batchSubmit").css("pointer-events","none");
+	  }
+      });
+      $.unblockUI();
   }
   
-  function enablePregnant(obj){
-      if(obj.value=="female"){
-	$(".showPregnant").show();
-	$(".pregnant").prop("disabled",false);
-      }else{
-	$(".showPregnant").hide();
-	$(".pregnant").prop("checked",false);
-	$(".pregnant").attr("disabled","");
-      }
+  function enableFemaleSection(obj){
+    if(obj.value=="female"){
+       $(".showFemaleSection").show();
+       $(".pregnant,.breastfeeding").prop("disabled",false);
+       }else{
+       $(".showFemaleSection").hide();
+       $(".pregnant,.breastfeeding").prop("checked",false);
+       $(".pregnant,.breastfeeding").attr("disabled",true);
+    }
   }
   
   $("#machine").change(function(){

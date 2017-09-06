@@ -2,13 +2,14 @@
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
+$start_date = '';
+$end_date = '';
+$urgent = $_POST['urgent'];
 $fName = $_POST['fName'];
 $sample = $_POST['sName'];
 $gender = $_POST['gender'];
 $pregnant = $_POST['pregnant'];
-$urgent = $_POST['urgent'];
-$start_date = '';
-$end_date = '';
+$breastfeeding = $_POST['breastfeeding'];
 //global config
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
@@ -30,7 +31,9 @@ if(isset($_POST['batchId'])){
 }else{
   $query = $query." AND (sample_batch_id IS NULL OR sample_batch_id='')";
 }
-if(is_array($_POST['fName']) && count($_POST['fName']) > 0){
+if(trim($urgent)!=''){
+   $query = $query." AND vl.test_urgency='".$urgent."'";
+}if(is_array($_POST['fName']) && count($_POST['fName']) > 0){
    $query = $query." AND vl.facility_id IN (".implode(',',$_POST['fName']).")";
 }if(trim($sample)!=''){
    $query = $query." AND vl.sample_type='".$sample."'";
@@ -38,8 +41,8 @@ if(is_array($_POST['fName']) && count($_POST['fName']) > 0){
    $query = $query." AND vl.patient_gender='".$gender."'";
 }if(trim($pregnant)!=''){
    $query = $query." AND vl.is_patient_pregnant='".$pregnant."'";
-}if(trim($urgent)!=''){
-   $query = $query." AND vl.test_urgency='".$urgent."'";
+}if(trim($breastfeeding)!=''){
+   $query = $query." AND vl.is_patient_breastfeeding='".$breastfeeding."'";
 }
 if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
    if(trim($start_date) == trim($end_date)) {
