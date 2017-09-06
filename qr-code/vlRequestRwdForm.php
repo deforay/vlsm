@@ -362,7 +362,7 @@ $aCheckResult=$db->query($aCheckQuery);
         <!-- SELECT2 EXAMPLE -->
         <div class="box box-default">
           <div class="box-header with-border">
-            <div class="pull-left" style="font-size:18px;">Existing Data</div>
+            <div class="pull-left" style="font-size:18px;">Existing Information</div>
           </div>
           <div class="box-body">
         <div class="box-body">
@@ -707,6 +707,10 @@ $aCheckResult=$db->query($aCheckQuery);
                   <div class="col-md-4" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
                     <label class="col-lg-5 control-label" for="">Viral Load Result (copiesl/ml) </label>
                     <span><?php echo $vlQueryInfo[0]['result']; ?> </span>
+                  </div>
+                  <div class="col-md-4" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                    <label class="col-lg-5 control-label" for="">Viral Load Log </label>
+                    <span><?php echo $vlQueryInfo[0]['result_value_log']; ?> </span>
                   </div>
                 </div>
                 <div class="row">
@@ -1249,8 +1253,14 @@ $aCheckResult=$db->query($aCheckQuery);
                         <div class="col-md-4 vlResult" style="visibility:<?php echo(isset($qrVal[58]) && $qrVal[58] == 'yes')?'hidden':'visible'; ?>;">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo(isset($qrVal[75]) && $qrVal[75]!= '')?$qrVal[75]:''; ?>" <?php echo(isset($qrVal[77]) && $qrVal[77] == 'Target Not Detected')?'readonly="readonly"':''; ?> style="width:100%;" />
+                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo(isset($qrVal[75]) && $qrVal[75]!= '')?$qrVal[75]:''; ?>" <?php echo(isset($qrVal[77]) && $qrVal[77] == 'Target Not Detected')?'readonly="readonly"':''; ?> onchange="calculateLogValue(this);" style="width:100%;" />
                               <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo(isset($qrVal[77]) && $qrVal[77] == 'Target Not Detected')?'checked="checked"':''; ?> title="Please check tnd"> Target Not Detected
+                            </div>
+                        </div>
+                        <div class="col-md-4 vlResult" style="visibility:<?php echo(isset($qrVal[58]) && $qrVal[58] == 'yes')?'hidden':'visible'; ?>;">
+                            <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
+                            <div class="col-lg-7">
+                              <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" value="<?php echo(isset($qrVal[74]) && $qrVal[74]!= '')?$qrVal[74]:''; ?>" <?php echo(isset($qrVal[77]) && $qrVal[77] == 'Target Not Detected')?'readonly="readonly"':''; ?> onchange="calculateLogValue(this);" style="width:100%;" />
                             </div>
                         </div>
                       </div>
@@ -1457,13 +1467,13 @@ $aCheckResult=$db->query($aCheckQuery);
   
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
-      $('#vlResult').attr('readonly',true);
+      $('#vlResult,#vlLog').attr('readonly',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
     }
   });
   
-  $('#vlResult').on('input',function(e){
+  $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
       $('#tnd').attr('disabled',true);
     }else{
@@ -1538,6 +1548,28 @@ $aCheckResult=$db->query($aCheckQuery);
     if(flag){
       $.blockUI();
       document.getElementById('vlRequestFormRwd').submit();
+    }
+  }
+  
+  function calculateLogValue(obj){
+    if(obj.id=="vlResult") {
+      absValue = $("#vlResult").val();
+      if(absValue!='' && absValue!=0 && !isNaN(absValue)){
+        $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+      }else{
+        $("#vlLog").val('');
+      }
+    }
+    if(obj.id=="vlLog") {
+      logValue = $("#vlLog").val();
+      if(logValue!='' && logValue!=0 && !isNaN(logValue)){
+        var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+        if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+        }
+      }else{
+        $("#vlResult").val('');
+      }
     }
   }
   </script>
