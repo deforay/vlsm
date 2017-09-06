@@ -63,7 +63,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
     <div class="row">
         <div class="col-md-7">
           <div class="form-group">
-            <label for="h_vl_msg" class="col-lg-4 control-label">Instance Name <span class="mandatory">*</span></label>
+            <label for="fName" class="col-lg-4 control-label">Instance Name <span class="mandatory">*</span></label>
             <div class="col-lg-8">
               <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter instance name" placeholder="instance Name" value="<?php echo $instanceResult[0]['instance_facility_name'];?>"/>
             </div>
@@ -71,7 +71,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
         </div>
         <div class="col-md-7">
           <div class="form-group">
-            <label for="h_vl_msg" class="col-lg-4 control-label">Facility Code </label>
+            <label for="fCode" class="col-lg-4 control-label">Facility Code </label>
             <div class="col-lg-8">
               <input type="text" class="form-control " id="fCode" name="fCode" placeholder="Facility Code" title="Please enter facility code" value="<?php echo $instanceResult[0]['instance_facility_code'];?>"/>
             </div>
@@ -79,13 +79,12 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
         </div>
         <div class="col-md-7">
           <div class="form-group">
-            <label for="h_vl_msg" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span></label>
+            <label for="instance_type" class="col-lg-4 control-label">Instance Type <span class="mandatory">*</span></label>
             <div class="col-lg-8">
-                <select class="form-control isRequired" id="fType" name="fType" placeholder="Facility Type" title="Please enter facility type">
-                    <option value="">-- Select --</option>
-                    <?php foreach($fTypeResult as $result){ ?>
-                        <option value="<?php echo base64_encode($result['facility_type_id']);?>" <?php echo ($result['facility_type_id']==$instanceResult[0]['instance_facility_type'])?"selected='selected'":""?>><?php echo ucwords($result['facility_type_name']);?></option>
-                    <?php } ?>
+                <select class="form-control isRequired" name="instance_type" id="instance_type" title="Please select the instance type">
+                    <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
+                    <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
+                    <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
                 </select>
             </div>
           </div>
@@ -152,9 +151,6 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-                
-
-
                 
                 <div class="row">
                   <div class="col-md-7">
@@ -328,20 +324,6 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                       <code>You can enter multiple email by separating them with comma</code>
                   </div>
                 </div><br/>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="instance_type" class="col-lg-4 control-label">Instance Type <span class="mandatory">*</span> </label>
-                      <div class="col-lg-8">
-                        <select class="form-control isRequired" name="instance_type" id="instance_type" title="Please select the instance type">
-                            <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
-                            <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
-                            <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
-                        </select>
-                      </div>
-                    </div>
-                   </div>
-                </div>
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
