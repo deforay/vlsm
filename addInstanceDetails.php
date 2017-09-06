@@ -21,6 +21,7 @@ $fTypeResult = $db->rawQuery($fType);
   <script src="assets/js/deforayValidation.js"></script>
   <style>
     b{font-size: 12px;}
+    .closeModal{display: none;}
   </style>
 
 <div class="content-wrapper" style="padding: 20px;">
@@ -44,17 +45,17 @@ $fTypeResult = $db->rawQuery($fType);
                         <div class="box">
                             <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;">
                                 <tr>
-                                    <td style=""><b>Facility Name&nbsp;:</b></td>
+                                    <td style=""><b>Instance Name&nbsp;<span class="mandatory">*</span></b></td>
                                     <td>
-                                      <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter facility name" placeholder="Facility Name"/>
+                                      <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter instance name" placeholder="Instance Name"/>
                                     </td>
-                                    <td>&nbsp;<b>Facility Code/ID&nbsp;:</b></td>
+                                    <td>&nbsp;<b>Facility Code/ID&nbsp;</b></td>
                                     <td>
                                       <input type="text" class="form-control " id="fCode" name="fCode" placeholder="Facility Code" title="Please enter facility code"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style=""><b>Facility Type&nbsp;:</b></td>
+                                    <td style=""><b>Facility Type&nbsp;<span class="mandatory">*</span></b></td>
                                     <td>
                                         <select class="form-control isRequired" id="fType" name="fType" placeholder="Facility Type" title="Please enter facility type">
                                             <option value="">-- Select --</option>
@@ -63,7 +64,7 @@ $fTypeResult = $db->rawQuery($fType);
                                             <?php } ?>
                                         </select>
                                     </td>
-                                    <td>&nbsp;<b>Logo Image&nbsp;:</b></td>
+                                    <td>&nbsp;<b>Logo Image&nbsp;</b></td>
                                     <td>
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
