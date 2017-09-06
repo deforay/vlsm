@@ -1138,4 +1138,8 @@ ALTER TABLE `vl_request_form` ADD `request_mail_datetime` DATETIME NULL DEFAULT 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Patient Name in Result PDF', 'patient_name_pdf', 'flname');
 
 --Pal 05-Sep-2017
-INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Import Non matching Sample Results from Machine generated file', 'import_non_matching_sample', 'no'); 
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Import Non matching Sample Results from Machine generated file', 'import_non_matching_sample', 'no');
+
+--saravanan 06-Sep-2017
+ALTER TABLE `vl_instance` ADD `instance_facility_name` VARCHAR(255) NULL DEFAULT NULL AFTER `vlsm_instance_id`, ADD `instance_facility_code` VARCHAR(255) NULL DEFAULT NULL AFTER `instance_facility_name`, ADD `instance_facility_type` INT NULL DEFAULT NULL AFTER `instance_facility_code`, ADD `instance_facility_logo` VARCHAR(255) NULL DEFAULT NULL AFTER `instance_facility_type`;
+ALTER TABLE `vl_instance` ADD `instance_added_on` DATETIME NULL DEFAULT NULL AFTER `instance_facility_logo`, ADD `instance_update_on` DATETIME NULL DEFAULT NULL AFTER `instance_added_on`;

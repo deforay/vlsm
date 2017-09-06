@@ -20,10 +20,12 @@ try {
             $instanceResult=$db->query($instanceQuery);
             if($instanceResult){
                 $_SESSION['instanceId']=$instanceResult[0]['vlsm_instance_id'];
+                $_SESSION['instanceFname']=$instanceResult[0]['instance_facility_name'];
             }else{
                 $id = $general->generateRandomString(32);
                 $db->insert('vl_instance',array('vlsm_instance_id'=>$id));
                 $_SESSION['instanceId']=$id;
+                $_SESSION['instanceFname']='';
                 
                 //Update instance ID in facility and vl_request_form tbl
                 $data=array('vlsm_instance_id'=>$id);
