@@ -35,6 +35,12 @@
   $_SESSION['alertMsg']='';
   unset($_SESSION['alertMsg']);
   }
+  if(isset($_SESSION['instanceFname']) && $_SESSION['instanceFname']=='')
+  {
+    ?>
+    showModal('../addInstanceDetails.php',900,520);
+    <?php
+  }
   ?>
   });
   str=$(location).attr('pathname');

@@ -7,12 +7,20 @@ include('../includes/ImageResize.php');
 define('UPLOAD_PATH','../uploads');
 $general = new Deforay_Commons_General();
 $tableName="global_config";
+$instanceTableName="vl_instance";
 try {
 	$configQuery ="SELECT value FROM global_config where name='sample_code'";
 	$configResult = $db->rawQuery($configQuery);
 	$configFormQuery ="SELECT value FROM global_config where name='vl_form'";
 	$configFormResult = $db->rawQuery($configFormQuery);
 	
+	//remove instance table data
+	if(isset($_POST['removedInstanceLogoImage']) && trim($_POST['removedInstanceLogoImage']) != "" && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo" . DIRECTORY_SEPARATOR . $_POST['removedInstanceLogoImage'])){
+        unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo" . DIRECTORY_SEPARATOR . $_POST['removedInstanceLogoImage']);
+        $data=array('instance_facility_logo'=>'');
+        $db=$db->where('vlsm_instance_id',$_SESSION['instanceId']);
+        $db->update($instanceTableName,$data);
+    }
     if(isset($_POST['removedLogoImage']) && trim($_POST['removedLogoImage']) != "" && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage'])){
         unlink(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $_POST['removedLogoImage']);
         $data=array('value'=>'');
@@ -21,6 +29,43 @@ try {
         $_SESSION['alertMsg']="Logo deleted successfully";
     }
     
+	if(isset($_FILES['instanceLogo']['name']) && $_FILES['instanceLogo']['name'] != ""){
+		if(!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo")) {
+			mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo");
+		}
+		$extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['instanceLogo']['name'], PATHINFO_EXTENSION));
+		$string = $general->generateRandomString(6).".";
+		$imageName = "logo".$string.$extension;
+		if (move_uploaded_file($_FILES["instanceLogo"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo" . DIRECTORY_SEPARATOR . $imageName)) {
+			$resizeObj = new Deforay_Image_Resize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."instance-logo". DIRECTORY_SEPARATOR .$imageName);
+			  $resizeObj->resizeImage(80, 80, 'auto');
+			$resizeObj->saveImage(UPLOAD_PATH . DIRECTORY_SEPARATOR ."instance-logo". DIRECTORY_SEPARATOR. $imageName, 100);
+			$image=array('instance_facility_logo'=>$imageName);
+			$db=$db->where('vlsm_instance_id',$_SESSION['instanceId']);
+			$db->update($instanceTableName,$image);
+		}
+    }
+		$instanceData=array(
+        'instance_facility_name'=>$_POST['fName'],
+        'instance_facility_code'=>$_POST['fCode'],
+        'instance_facility_type'=>base64_decode($_POST['fType']),
+        'instance_update_on'=>$general->getDateTime(),
+        );
+        $db=$db->where('vlsm_instance_id',$_SESSION['instanceId']);
+        $updateInstance = $db->update($instanceTableName,$instanceData);
+		if($updateInstance>0){
+			//Add event log
+            $eventType = 'update-instance';
+            $action = ucwords($_SESSION['userName']).' update instance id';
+            $resource = 'instance-details';
+            $data=array(
+                'event_type'=>$eventType,
+                'action'=>$action,
+                'resource'=>$resource,
+                'date_time'=>$general->getDateTime()
+            );
+            $db->insert('activity_log',$data);
+		}
     if(isset($_FILES['logo']['name']) && $_FILES['logo']['name'] != ""){
        if(!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo")) {
            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo");
