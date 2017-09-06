@@ -1,7 +1,5 @@
 <?php
 ob_start();
-//include('../header.php');
-//include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
 $autoApprovalFieldStatus = 'show';
@@ -769,28 +767,28 @@ if($urgency==''){
   $(document).ready(function() {
     
   
-$("#vlResult").bind("keyup change", function(e) {
-    if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
-      $(".noResult").show();
-    }else{
-      $( "#noResultRejected" ).prop( "checked", false );
-      $( "#noResultError" ).prop( "checked", false );
-      $("#rejectionReason").removeClass("isRequired");
-      $("#rejectionReason").val("");
-      $(".noResult").hide();
-    }
-});
-$("#vlLog").bind("keyup change", function(e) {
-    if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
-      $(".noResult").show();
-    }else{
-      $( "#noResultRejected" ).prop( "checked", false );
-      $( "#noResultError" ).prop( "checked", false );
-      $("#rejectionReason").removeClass("isRequired");
-      $("#rejectionReason").val("");
-      $(".noResult").hide();
-    }
-});
+  $("#vlResult").bind("keyup change", function(e) {
+      if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
+        $(".noResult").show();
+      }else{
+        $( "#noResultRejected" ).prop( "checked", false );
+        $( "#noResultError" ).prop( "checked", false );
+        $("#rejectionReason").removeClass("isRequired");
+        $("#rejectionReason").val("");
+        $(".noResult").hide();
+      }
+  });
+  $("#vlLog").bind("keyup change", function(e) {
+      if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
+        $(".noResult").show();
+      }else{
+        $( "#noResultRejected" ).prop( "checked", false );
+        $( "#noResultError" ).prop( "checked", false );
+        $("#rejectionReason").removeClass("isRequired");
+        $("#rejectionReason").val("");
+        $(".noResult").hide();
+      }
+  });
     
   $('.date').datepicker({
      changeMonth: true,
@@ -1129,8 +1127,8 @@ $("#vlLog").bind("keyup change", function(e) {
         }
       }
     }
-    function calculateLogValue(obj)
-    {
+    
+    function calculateLogValue(obj){
       if(obj.id=="vlResult") {
         absValue = $("#vlResult").val();
         if(absValue!='' && absValue!=0){
@@ -1149,6 +1147,7 @@ $("#vlLog").bind("keyup change", function(e) {
         }
       }
     }
+    
     function checkPatientDetails(tableName,fieldName,obj,fnct)
     {
       if($.trim(obj.value)!=''){
