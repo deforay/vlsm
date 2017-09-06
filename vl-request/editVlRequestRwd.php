@@ -53,10 +53,10 @@ $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
-    foreach($pdResult as $provinceName){
-      $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-    }
-    
+  foreach($pdResult as $provinceName){
+    $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  }
+  
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
@@ -738,9 +738,15 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" />
+                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
                               <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
+                            </div>
+                        </div>
+                        <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                            <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
+                            <div class="col-lg-7">
+                              <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
                             </div>
                         </div>
                       </div>
@@ -843,6 +849,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
         __clone = $("#vlRequestFormRwd .labSection").clone();
         reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
         result = ($("#vlResult").length)?$("#vlResult").val():'';
+        //logVal = ($("#vlLog").length)?$("#vlLog").val():'';
     });
     
     function showTesting(chosenClass){
@@ -945,25 +952,25 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
-      $('#vlResult').attr('readonly',true);
-      $('#bdl').prop('checked', false);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#bdl').attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#bdl').attr('disabled',false);
     }
   });
+  
   $('#bdl').change(function() {
     if($('#bdl').is(':checked')){
-      $('#vlResult').attr('readonly',true);
-      $('#tnd').prop('checked', false);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#tnd').attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#tnd').attr('disabled',false);
     }
   });
-  $('#vlResult').on('input',function(e){
+  
+  $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
       $('#tnd').attr('disabled',true);
       $('#bdl').attr('disabled',true);
@@ -1026,6 +1033,28 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       $("#newRejectionReason").hide();
       $("#newRejectionReason").removeClass("isRequired");
       $('#newRejectionReason').val("");
+    }
+  }
+  
+  function calculateLogValue(obj){
+    if(obj.id=="vlResult") {
+      absValue = $("#vlResult").val();
+      if(absValue!='' && absValue!=0 && !isNaN(absValue)){
+        $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+      }else{
+        $("#vlLog").val('');
+      }
+    }
+    if(obj.id=="vlLog") {
+      logValue = $("#vlLog").val();
+      if(logValue!='' && logValue!=0 && !isNaN(logValue)){
+        var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+        if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+        }
+      }else{
+        $("#vlResult").val('');
+      }
     }
   }
   

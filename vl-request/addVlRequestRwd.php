@@ -72,16 +72,15 @@ $end_date = date('Y-12-31');
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
-  
-  $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
-   $maxId = $svlResult[0]['sample_code_key']+1;
-   $strparam = strlen($maxId);
-   $zeros = substr("000", $strparam);
-   $maxId = $zeros.$maxId;
-  }else{
-   $maxId = '001';
-  }
+$prefix = $arr['sample_code_prefix'];
+if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
+ $maxId = $svlResult[0]['sample_code_key']+1;
+ $strparam = strlen($maxId);
+ $zeros = substr("000", $strparam);
+ $maxId = $zeros.$maxId;
+}else{
+ $maxId = '001';
+}
 $sKey = '';
 $sFormat = '';
 ?>
@@ -614,9 +613,15 @@ $sFormat = '';
                         <div class="col-md-4 vlResult">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" />
+                              <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/>
                               <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Below Detection Level
+                            </div>
+                        </div>
+                        <div class="col-md-4 vlResult">
+                            <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
+                            <div class="col-lg-7">
+                              <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);"/>
                             </div>
                         </div>
                       </div>
@@ -861,24 +866,24 @@ $sFormat = '';
   
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
-      $('#vlResult').attr('readonly',true);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#bdl').attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#bdl').attr('disabled',false);
     }
   });
   $('#bdl').change(function() {
     if($('#bdl').is(':checked')){
-      $('#vlResult').attr('readonly',true);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#tnd').attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#tnd').attr('disabled',false);
     }
   });
   
-  $('#vlResult').on('input',function(e){
+  $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
       $('#tnd').attr('disabled',true);
       $('#bdl').attr('disabled',true);
@@ -1040,8 +1045,8 @@ $sFormat = '';
       $("#artNo").val($.trim(patientArray[15]));
     }
   }
-  function showPatientList()
-  {
+  
+  function showPatientList(){
       if($.trim($("#artPatientNo").val())!=''){
         $.post("checkPatientExist.php", { artPatientNo : $("#artPatientNo").val()},
         function(data){
@@ -1050,5 +1055,27 @@ $sFormat = '';
             }
         });
       }
+  }
+  
+  function calculateLogValue(obj){
+    if(obj.id=="vlResult") {
+      absValue = $("#vlResult").val();
+      if(absValue!='' && absValue!=0 && !isNaN(absValue)){
+        $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+      }else{
+        $("#vlLog").val('');
+      }
+    }
+    if(obj.id=="vlLog") {
+      logValue = $("#vlLog").val();
+      if(logValue!='' && logValue!=0 && !isNaN(logValue)){
+        var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+        if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+        }
+      }else{
+        $("#vlResult").val('');
+      }
+    }
   }
   </script>
