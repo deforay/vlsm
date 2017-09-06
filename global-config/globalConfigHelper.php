@@ -52,8 +52,20 @@ try {
         'instance_update_on'=>$general->getDateTime(),
         );
         $db=$db->where('vlsm_instance_id',$_SESSION['instanceId']);
-        $db->update($instanceTableName,$instanceData);
-			
+        $updateInstance = $db->update($instanceTableName,$instanceData);
+		if($updateInstance>0){
+			//Add event log
+            $eventType = 'update-instance';
+            $action = ucwords($_SESSION['userName']).' update instance id';
+            $resource = 'instance-details';
+            $data=array(
+                'event_type'=>$eventType,
+                'action'=>$action,
+                'resource'=>$resource,
+                'date_time'=>$general->getDateTime()
+            );
+            $db->insert('activity_log',$data);
+		}
     if(isset($_FILES['logo']['name']) && $_FILES['logo']['name'] != ""){
        if(!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo")) {
            mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo");

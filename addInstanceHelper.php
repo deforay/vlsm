@@ -40,6 +40,17 @@ try {
                     $db->update($tableName,$image);
                 }
             }
+			//Add event log
+            $eventType = 'add-instance';
+            $action = ucwords($_SESSION['userName']).' added instance id';
+            $resource = 'instance-details';
+            $data=array(
+                'event_type'=>$eventType,
+                'action'=>$action,
+                'resource'=>$resource,
+                'date_time'=>$general->getDateTime()
+            );
+            $db->insert('activity_log',$data);
             $_SESSION['alertMsg']="Instance details added successfully";
             $_SESSION['success']="success";
         }else{
