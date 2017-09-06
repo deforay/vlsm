@@ -2,7 +2,6 @@
 ob_start();
 session_start();
 include('../includes/MysqliDb.php');
-
 $tableName="facility_details";
 $tableName1="province_details";
 
@@ -27,7 +26,7 @@ try {
 	    $instanceId = $_SESSION['instanceId'];
 	}
 	$email = '';
-	if(trim($_POST['reportEmail'])!=''){
+	if(isset($_POST['reportEmail']) && trim($_POST['reportEmail'])!=''){
 	    $expEmail = explode(",",$_POST['reportEmail']);
 	    for($i=0;$i<count($expEmail);$i++){
 		$reportEmail = filter_var($expEmail[$i], FILTER_VALIDATE_EMAIL);
