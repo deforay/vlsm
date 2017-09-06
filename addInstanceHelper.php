@@ -7,16 +7,19 @@ include('includes/ImageResize.php');
 define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
 $tableName="vl_instance";
+$globalTable="global_config";
 try {
     if(isset($_POST['fName']) && trim($_POST['fName'])!=""){
 	$instanceId = '';
 	if(isset($_SESSION['instanceId'])){
 	    $instanceId = $_SESSION['instanceId'];
 	}
+	$db=$db->where('name','instance_type');
+	$db->update($globalTable,array('value'=>$_POST['fType']));
         $data=array(
         'instance_facility_name'=>$_POST['fName'],
         'instance_facility_code'=>$_POST['fCode'],
-        'instance_facility_type'=>base64_decode($_POST['fType']),
+        'instance_facility_type'=>$_POST['fType'],
         'instance_added_on'=>$general->getDateTime(),
         'instance_update_on'=>$general->getDateTime(),
         );

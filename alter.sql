@@ -1143,3 +1143,5 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Import No
 --saravanan 06-Sep-2017
 ALTER TABLE `vl_instance` ADD `instance_facility_name` VARCHAR(255) NULL DEFAULT NULL AFTER `vlsm_instance_id`, ADD `instance_facility_code` VARCHAR(255) NULL DEFAULT NULL AFTER `instance_facility_name`, ADD `instance_facility_type` INT NULL DEFAULT NULL AFTER `instance_facility_code`, ADD `instance_facility_logo` VARCHAR(255) NULL DEFAULT NULL AFTER `instance_facility_type`;
 ALTER TABLE `vl_instance` ADD `instance_added_on` DATETIME NULL DEFAULT NULL AFTER `instance_facility_logo`, ADD `instance_update_on` DATETIME NULL DEFAULT NULL AFTER `instance_added_on`;
+
+ALTER TABLE `vl_instance` CHANGE `instance_facility_type` `instance_facility_type` VARCHAR(255) NULL DEFAULT NULL;

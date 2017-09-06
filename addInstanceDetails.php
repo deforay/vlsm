@@ -57,11 +57,11 @@ $fTypeResult = $db->rawQuery($fType);
                                 <tr>
                                     <td style=""><b>Facility Type&nbsp;<span class="mandatory">*</span></b></td>
                                     <td>
-                                        <select class="form-control isRequired" id="fType" name="fType" placeholder="Facility Type" title="Please enter facility type">
+                                        <select class="form-control isRequired" id="fType" name="fType"  title="Please choose instance type">
                                             <option value="">-- Select --</option>
-                                            <?php foreach($fTypeResult as $result){ ?>
-                                                <option value="<?php echo base64_encode($result['facility_type_id']);?>"><?php echo ucwords($result['facility_type_name']);?></option>
-                                            <?php } ?>
+                                            <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
+                                            <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
+                                            <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
                                         </select>
                                     </td>
                                     <td>&nbsp;<b>Logo Image&nbsp;</b></td>

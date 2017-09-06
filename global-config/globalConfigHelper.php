@@ -48,7 +48,7 @@ try {
 		$instanceData=array(
         'instance_facility_name'=>$_POST['fName'],
         'instance_facility_code'=>$_POST['fCode'],
-        'instance_facility_type'=>base64_decode($_POST['fType']),
+        'instance_facility_type'=>$_POST['instance_type'],
         'instance_update_on'=>$general->getDateTime(),
         );
         $db=$db->where('vlsm_instance_id',$_SESSION['instanceId']);
