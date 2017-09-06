@@ -91,7 +91,7 @@ $general=new Deforay_Commons_General();
          * Get data to display
         */
         
-        $sQuery="select vl.vl_sample_id,vl.sample_code,vl.sample_testing_date,vl.result,vl.request_created_datetime from vl_request_form vl";
+        $sQuery="select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result,vl.request_created_datetime from vl_request_form as vl";
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
             $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
@@ -114,11 +114,11 @@ $general=new Deforay_Commons_General();
        //echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
-        $aResultFilterTotal =$db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_testing_date,vl.result from vl_request_form vl $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result from vl_request_form vl $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_testing_date,vl.result from vl_request_form vl where vl.vlsm_country_id ='".$configResult[0]['value']."'");
+        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result from vl_request_form vl where vl.vlsm_country_id ='".$configResult[0]['value']."'");
         $iTotal = count($aResultTotal);
         /*
          * Output
@@ -131,25 +131,23 @@ $general=new Deforay_Commons_General();
         );
 	
         foreach ($rResult as $aRow) {
-            $humanDate="";
-            if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
-            $date = $aRow['request_created_datetime'];
-            $humanDate =  date("d-M-Y H:i:s",strtotime($date));
+	    $sampleTestedDate = "";
+	    $requestCreatedDate="";
+            if($aRow['sample_tested_datetime']!='0000-00-00 00:00:00' && $aRow['sample_tested_datetime']!=null && trim($aRow['sample_tested_datetime'])!= ''){
+              $exp = explode(" ",$aRow['sample_tested_datetime']);
+              $sampleTestedDate = $general->humanDateFormat($exp[0]);
             }
-            $row = array();
-            $printQrcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\''.$aRow['vl_sample_id'].'\');"><i class="fa fa-qrcode"> Print QR code</i></a>';	    
-            $date = '';
-            if($aRow['sample_testing_date']!='0000-00-00 00:00:00' && $aRow['sample_testing_date']!=null){
-            $exp = explode(" ",$aRow['last_tested_date']);
-            $date = $general->humanDateFormat($exp[0]);
+	    if($aRow['request_created_datetime']!='0000-00-00 00:00:00' && $aRow['request_created_datetime']!= null && trim($aRow['request_created_datetime'])!=""){
+              $requestCreatedDate =  date("d-M-Y H:i:s",strtotime($aRow['request_created_datetime']));
             }
+	    $row = array();
             $row[] = $aRow['sample_code'];
-            $row[] = ($aRow['sample_testing_date']!='' && $aRow['sample_testing_date']!='0000-00-00')?"Yes":"No";
-            $row[] = ($aRow['result']!='' && $aRow['result']<1000)?"Yes":"No";
-            $row[] = ($aRow['result']!='' && $aRow['result']>=1000)?"Yes":"No";
-            $row[] = $date;
-            $row[] = $humanDate;
-            $row[] = $printQrcode;
+            $row[] = (trim($sampleTestedDate)!= '')?"Yes":"No";
+            $row[] = ($aRow['result']!= null && trim($aRow['result'])!='' && $aRow['result']<1000)?"Yes":"No";
+            $row[] = ($aRow['result']!= null && trim($aRow['result'])!='' && $aRow['result']>=1000)?"Yes":"No";
+            $row[] = $sampleTestedDate;
+            $row[] = $requestCreatedDate;
+            $row[] = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\''.$aRow['vl_sample_id'].'\');"><i class="fa fa-qrcode"> Print QR code</i></a>';
             $output['aaData'][] = $row;
         }
         echo json_encode($output);

@@ -1,4 +1,4 @@
-<?php
+  <?php
   //sample reorder
   $sampleReorderChecked = '';
   if(trim($vl["sample_reordered"]) == "yes"){
@@ -287,7 +287,8 @@
     if($vl['is_sample_rejected'] == 'yes'){
       $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Rejection Reason</td>';
     }else{
-      $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Result (copiesl/ml)</td>'; 
+      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Result (copiesl/ml)</td>'; 
+      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Log </td>';
     }
   $html .='</tr>';
   $html .='<tr>';
@@ -299,7 +300,8 @@
       if($vl['result'] == 'Target Not Detected'){
         $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">TND</td>';
       }else{
-        $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['result_value_absolute'].'</td>';
+        $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['result_value_absolute'].'</td>';
+        $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['result_value_log'].'</td>';
       }
     }
   $html .='</tr>';
