@@ -96,6 +96,7 @@ $pResult = $db->rawQuery($pQuery);
                     </div>
                   </div>-->
                 </div>
+                <br>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
