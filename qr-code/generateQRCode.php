@@ -7,13 +7,16 @@ include ('../includes/fpdi/fpdi.php');
 include('../General.php');
 define('UPLOAD_PATH','../uploads');
 $general=new Deforay_Commons_General();
-$id=$_POST['id'];
-if(is_array($id))
-{
-  $id = implode(',',$id);
+$sampleArray = array();
+if(is_array($_POST['id'])){
+  $sampleArray = $_POST['id'];
+  $id = implode(',',$sampleArray);
+}else{
+  $sampleArray[] = $_POST['id'];
+  $id = $_POST['id'];
 }
 $pages = array();
-  if($id >0){
+  if(count($sampleArray) >0){
     if (!file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . "qrcode") && !is_dir(UPLOAD_PATH. DIRECTORY_SEPARATOR."qrcode")) {
       mkdir(UPLOAD_PATH. DIRECTORY_SEPARATOR."qrcode");
     }

@@ -78,7 +78,7 @@ $sResult = $db->rawQuery($sQuery);
   <script>
   var oTable = null;
   $(document).ready(function() {
-		$('#sampleCode').select2({width:"350",placeholder:"Samples"});
+		$('#sampleCode').select2({width:"100%",placeholder:"Choose Samples"});
 		$('#sampleCode').on('change',function(){
 			oTable.fnDraw();
 		});
@@ -122,26 +122,24 @@ $sResult = $db->rawQuery($sQuery);
   });
   
   function generateQRcode(bId){
-		if(bId=='')
-		{
-			if($('#sampleCode').val()!='' && $('#sampleCode').val()!=null)
-			{
-				bId = $('#sampleCode').val();
-			}else{
-				alert("Please choose Sample Code");
-				return false;
-			}
-		}
-     $.blockUI();
-     $.post("../qr-code/generateQRCode.php",{id:bId},
-      function(data){
-	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate QR code');
-	  }else{
-	      window.open('../uploads/qrcode/'+data,'_blank');
-	  }
-	  $.unblockUI();
-      });
+    if($.trim(bId)==''){
+	if($('#sampleCode').val()!='' && $('#sampleCode').val()!=null){
+	  bId = $('#sampleCode').val();
+	}else{
+	  alert("Please choose atleast one sample");
+	  return false;
+	}
+    }
+    $.blockUI();
+    $.post("../qr-code/generateQRCode.php",{id:bId},
+     function(data){
+	 if(data == "" || data == null || data == undefined){
+	     alert('Unable to generate QR code');
+	 }else{
+	     window.open('../uploads/qrcode/'+$.trim(data),'_blank');
+	 }
+	 $.unblockUI();
+     });
   }
 </script>
  <?php

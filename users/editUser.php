@@ -92,7 +92,7 @@ $result = $db->rawQuery($query);
                         <label for="password" class="col-lg-4 control-label">Password </label>
                         <div class="col-lg-7">
                            <input type="password" class="form-control ppwd" id="confirmPassword" name="password" placeholder="Password" title="Please enter the password"/>
-                           <code>"Note - Password must be at least 8 characters and must include at least one numeric, one alpha value and may have special characters"</code>
+                           <code>Note:- Password must be at least 8 characters and must include at least one numeric, one alpha value and may have special characters</code>
                         </div>
                     </div>
                   </div>
