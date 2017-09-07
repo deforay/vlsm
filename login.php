@@ -75,7 +75,7 @@ $configResult=$db->query($globalConfigQuery);
         
         ?>
         <div id="loginbox" style="margin-top:15px;margin-bottom:70px;float:right;margin-right:-15px;" class="mainbox col-md-3 col-sm-8 ">
-            <div class="panel panel-default" style="opacity: 0.9;">
+            <div class="panel panel-default" style="opacity: 0.93;">
                 <div class="panel-heading">
                     <div class="panel-title">Viral Load Sample Management</div>
                     
