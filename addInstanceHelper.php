@@ -8,6 +8,45 @@ define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
 $tableName="vl_instance";
 $globalTable="global_config";
+function getMacLinux() {
+  exec('netstat -ie', $result);
+  if(is_array($result)) {
+    $iface = array();
+    foreach($result as $key => $line) {
+      if($key > 0) {
+        $tmp = str_replace(" ", "", substr($line, 0, 10));
+        if($tmp <> "") {
+          $macpos = strpos($line, "HWaddr");
+          if($macpos !== false) {
+            $iface[] = array('iface' => $tmp, 'mac' => strtolower(substr($line, $macpos+7, 17)));
+          }
+        }
+      }
+    }
+    return $iface[0]['mac'];
+  } else {
+    return "notfound";
+  }
+}
+function getMacWindows() {
+  // Turn on output buffering
+ob_start();
+//Get the ipconfig details using system commond
+system('ipconfig /all');
+ 
+// Capture the output into a variable
+$mycom=ob_get_contents();
+// Clean (erase) the output buffer
+ob_clean();
+ 
+$findme = "Physical";
+//Search the "Physical" | Find the position of Physical text
+$pmac = strpos($mycom, $findme);
+ 
+// Get Physical Address
+$mac=substr($mycom,($pmac+36),17);
+return $mac;
+}
 try {
     if(isset($_POST['fName']) && trim($_POST['fName'])!=""){
 	$instanceId = '';
@@ -23,6 +62,11 @@ try {
         'instance_added_on'=>$general->getDateTime(),
         'instance_update_on'=>$general->getDateTime(),
         );
+		if(PHP_OS=='Linux'){
+			$data['instance_mac_address'] = getMacLinux();
+		}else if(PHP_OS=='WINNT'){
+			$data['instance_mac_address'] = getMacWindows();
+		}
         $db=$db->where('vlsm_instance_id',$instanceId);
         $id = $db->update($tableName,$data);
         if($id>0){
