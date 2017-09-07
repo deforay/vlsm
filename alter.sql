@@ -1145,3 +1145,6 @@ ALTER TABLE `vl_instance` ADD `instance_facility_name` VARCHAR(255) NULL DEFAULT
 ALTER TABLE `vl_instance` ADD `instance_added_on` DATETIME NULL DEFAULT NULL AFTER `instance_facility_logo`, ADD `instance_update_on` DATETIME NULL DEFAULT NULL AFTER `instance_added_on`;
 
 ALTER TABLE `vl_instance` CHANGE `instance_facility_type` `instance_facility_type` VARCHAR(255) NULL DEFAULT NULL;
+
+--saravanna 07-sep-2017
+ALTER TABLE `vl_instance` ADD `instance_mac_address` VARCHAR(255) NULL DEFAULT NULL AFTER `instance_update_on`;
