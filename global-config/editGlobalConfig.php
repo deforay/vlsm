@@ -211,9 +211,13 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="viral_load_threshold_limit" class="col-lg-4 control-label">Viral Load Threshold Limit <span class="mandatory">*</span></label>
+                      <label for="viral_load_threshold_limit" class="col-lg-4 control-label">Viral Load Threshold Limit<span class="mandatory">*</span></label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control checkNum isNumeric isRequired" id="viral_load_threshold_limit" name="viral_load_threshold_limit" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['viral_load_threshold_limit']; ?>"/>
+                        <div class="input-group">
+                            <input type="text" class="form-control checkNum isNumeric isRequired" id="viral_load_threshold_limit" name="viral_load_threshold_limit" placeholder="Viral Load Threshold Limit" title="Please enter VL threshold limit" value="<?php echo $arr['viral_load_threshold_limit']; ?>"/>
+                            <span class="input-group-addon">cp/ml</span>
+                        </div>
+                        
                       </div>
                     </div>
                    </div>
