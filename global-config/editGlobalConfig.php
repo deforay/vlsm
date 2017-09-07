@@ -89,7 +89,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row" style="display:none;">
             <div class="col-md-7">
               <div class="form-group">
                 <label for="" class="col-lg-4 control-label">Logo Image </label>
