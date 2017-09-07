@@ -59,9 +59,9 @@ $fTypeResult = $db->rawQuery($fType);
                                     <td>
                                         <select class="form-control isRequired" id="fType" name="fType"  title="Please choose instance type">
                                             <option value="">-- Select --</option>
-                                            <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
-                                            <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
-                                            <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
+                                            <option value="Viral Load Lab">Viral Load Lab</option>
+                                            <option value="Clinic/Lab">Clinic/Lab</option>
+                                            <option value="Both">Both</option>
                                         </select>
                                     </td>
                                     <td>&nbsp;<b>Logo Image&nbsp;</b></td>
