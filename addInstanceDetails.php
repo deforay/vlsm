@@ -27,7 +27,8 @@ $fTypeResult = $db->rawQuery($fType);
 <div class="content-wrapper" style="padding: 20px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h4>Instance Setup</h4>
+      <h3>Instance Setup</h3>
+      <small>Please enter the information for this installation.</small>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -45,13 +46,14 @@ $fTypeResult = $db->rawQuery($fType);
                         <div class="box">
                             <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;">
                                 <tr>
-                                    <td style=""><b>Instance Name&nbsp;<span class="mandatory">*</span></b></td>
+                                    <td style=""><b>Instance Name&nbsp;<span class="mandatory">*</span></b> <br>
+                                    </td>
                                     <td>
-                                      <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter instance name" placeholder="Instance Name"/>
+                                      <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter instance name" placeholder="Instance/Facility Name"/>
                                     </td>
                                     <td>&nbsp;<b>Instance Code/ID&nbsp;</b></td>
                                     <td>
-                                      <input type="text" class="form-control " id="fCode" name="fCode" placeholder="Facility Code" title="Please enter facility code"/>
+                                      <input type="text" class="form-control " id="fCode" name="fCode" placeholder="Instance/Facility Code" title="Please enter facility code"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -99,10 +101,10 @@ $fTypeResult = $db->rawQuery($fType);
   <!-- DataTables -->
  <script type="text/javascript">
     <?php if(isset($_SESSION['success']) && trim($_SESSION['success'])!=""){ ?>
-        alert('<?php echo $_SESSION['alertMsg']; ?>');
-    <?php $_SESSION['alertMsg']=''; unset($_SESSION['alertMsg']); $_SESSION['success']=''; unset($_SESSION['success']);
-    ?>
-    window.parent.closeModal();
+         window.parent.closeModal();
+         window.parent.alert('<?php echo $_SESSION['alertMsg']; ?>');
+      <?php $_SESSION['alertMsg']=''; unset($_SESSION['alertMsg']); $_SESSION['success']=''; unset($_SESSION['success']); ?>
+    
     <?php } ?>
   function validateNow(){
     flag = deforayValidator.init({
