@@ -1,4 +1,5 @@
 <?php
+$title = "VLSM | Configuration";
 include('../header.php');
 ?>
 <style>

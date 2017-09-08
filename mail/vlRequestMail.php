@@ -1,5 +1,6 @@
 <?php
 ob_start();
+$title = "VLSM | Send Request Email";
 include('../header.php');
 $configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configResult = $db->rawQuery($configQuery);

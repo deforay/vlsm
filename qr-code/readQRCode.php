@@ -1,5 +1,6 @@
 <?php
 ob_start();
+$title = "VLSM | Read QR Code";
 include('../header.php');
 ?>
 <div class="content-wrapper" style="min-height: 347px;">

@@ -1,4 +1,5 @@
    <?php
+   $title = "VLSM | VL Weekly Report";
    include('../header.php');
    $facilityQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
    $facilityResult = $db->rawQuery($facilityQuery);

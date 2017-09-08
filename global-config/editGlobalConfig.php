@@ -1,5 +1,6 @@
 <?php
 ob_start();
+$title = "VLSM | Edit Configuration";
 include('../header.php');
 //include('../includes/MysqliDb.php');
 define('UPLOAD_PATH','../uploads');
