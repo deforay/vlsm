@@ -1,5 +1,6 @@
 <?php
 ob_start();
+$title = "VLSM | Add New Request";
 include('../header.php');
     $configQuery="SELECT * from global_config";
     $configResult=$db->query($configQuery);

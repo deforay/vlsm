@@ -1,5 +1,8 @@
 <?php
 ob_start();
+
+$title = "VLSM | Add Batch";
+
 include('../header.php');
 //global config
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";

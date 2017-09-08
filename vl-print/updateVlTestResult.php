@@ -1,5 +1,6 @@
 <?php
 ob_start();
+$title = "VLSM | Enter VL Result";
 include('../header.php');
 $id=base64_decode($_GET['id']);
 $configQuery="SELECT * from global_config";

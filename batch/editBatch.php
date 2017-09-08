@@ -1,5 +1,8 @@
 <?php
 ob_start();
+
+$title = "VLSM | Edit Batch";
+
 include('../header.php');
 $id=base64_decode($_GET['id']);
 //global config

@@ -1,4 +1,5 @@
 <?php
+$title = "VLSM | Generate QR Code";
 include('../header.php');
 $sQuery="SELECT serial_no,vl_sample_id FROM vl_request_form where vlsm_country_id=".$global['vl_form'];
 $sResult = $db->rawQuery($sQuery);

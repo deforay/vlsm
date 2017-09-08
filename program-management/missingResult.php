@@ -1,4 +1,5 @@
 <?php
+$title = "VLSM | Sample Status Report";
 include('../header.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
