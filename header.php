@@ -80,6 +80,8 @@ $formConfigResult=$db->query($formConfigQuery);
   <title>VLSM</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" media="all" type="text/css" href="../assets/css/fonts.css" />
+
   <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui.1.11.0.css" />
   <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui-timepicker-addon.css" />
 
