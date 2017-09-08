@@ -13,12 +13,12 @@ $resultmailSentQuery ="SELECT result_mail_datetime FROM vl_request_form where MO
 $resultmailSentResult = $db->rawQuery($resultmailSentQuery);
 $sourcecode = sprintf("%02d",(count($resultmailSentResult)+1));
 //get instance facility code
-$mailsource = '';
+$sequencenumber = '';
 $instancefacilityCodeQuery ="SELECT instance_facility_code FROM vl_instance";
 $instancefacilityCodeResult = $db->rawQuery($instancefacilityCodeQuery);
 $instancefacilityCode = (isset($instancefacilityCodeResult[0]['instance_facility_code']) && trim($instancefacilityCodeResult[0]['instance_facility_code'])!= '')? '/'.$instancefacilityCodeResult[0]['instance_facility_code']:'';
 $year = date("Y");$month = strtolower(date("M"));
-$mailsource = 'Ref : vlsm/results/'.$year.'/'.$month.$instancefacilityCode.'/'.$sourcecode;
+$sequencenumber = 'Ref : vlsm/results/'.$year.'/'.$month.$instancefacilityCode.'/'.$sourcecode;
 //get other config values
 $geQuery="SELECT * FROM other_config WHERE type = 'result'";
 $geResult = $db->rawQuery($geQuery);
@@ -84,7 +84,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
       if(isset($_POST['message']) && trim($_POST['message'])!=""){
         $message =ucfirst(nl2br($_POST['message']));
       }
-      $message = $mailsource.'<br><br>'.$message;
+      $message = $sequencenumber.'<br><br>'.$message;
       $mail->msgHTML($message);
       $mail->SMTPOptions = array(
          'ssl' => array(
