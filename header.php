@@ -37,7 +37,7 @@ if(isset($_SERVER['HTTP_REFERER'])){
   $previousUrl = $_SERVER['HTTP_REFERER'];
   $urlLast = explode('/',$previousUrl);
   if(end($urlLast)=='importedStatistics.php'){
-      $db->delete('temp_sample_report');
+      $db->delete('temp_sample_import');
       unset($_SESSION['controllertrack']);
   }
 }
@@ -71,13 +71,16 @@ if(isset($_SESSION['privileges']) && in_array(('index.php'),$_SESSION['privilege
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
 $formConfigResult=$db->query($formConfigQuery);
 
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <title>VLSM</title>
+  <title><?php echo (isset($title) && $title != null && $title != "") ? $title : "VLSM | Viral Load LIS" ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" media="all" type="text/css" href="../assets/css/fonts.css" />

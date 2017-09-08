@@ -1,4 +1,5 @@
 <?php
+$title = "VLSM | Facilities";
 include('../header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->

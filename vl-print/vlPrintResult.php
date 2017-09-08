@@ -1,4 +1,5 @@
 <?php
+$title = "VLSM | Print VL Results";
 include('../header.php');
 //include('../includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";
