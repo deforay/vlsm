@@ -85,19 +85,20 @@ $sWhere = '';
                 },
                 plotOptions: {
                     pie: {
-                        size:'66%',
+                        size:'70%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
-                            useHTML: true,
                             enabled: true,
-                            format: '<div style="padding-bottom:6px;"><b>{point.name}</b>: {point.y}</div>',
+                            useHTML: true,
+                            format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
                             style: {
-                              width: '110px',
+                              width: '80px',
                               //crop:false,
                               //overflow:'none',
                               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            }
+                            },
+                            distance:14
                         },
                         showInLegend: true
                     }
@@ -153,7 +154,8 @@ $sWhere = '';
                             format: '<b>{point.name}</b>: {point.y}',
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            }
+                            },
+                            distance:20
                         },
                         showInLegend: true
                     }
