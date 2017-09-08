@@ -4,7 +4,7 @@ $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $userQuery="SELECT * FROM user_details where status='active'";
 $userResult = $db->rawQuery($userQuery);
-$tQuery = "select sample_review_by from temp_sample_report limit 0,1";
+$tQuery = "select sample_review_by from temp_sample_import limit 0,1";
 $tResult = $db->rawQuery($tQuery);
 $reviewBy = $_SESSION['userId'];
 if($tResult){

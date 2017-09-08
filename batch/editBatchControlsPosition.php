@@ -1,5 +1,8 @@
 <?php
 ob_start();
+
+$title = "VLSM | Edit Batch Position";
+
 include('../header.php');
 $id=base64_decode($_GET['id']);
 if(!isset($id) || trim($id)== ''){

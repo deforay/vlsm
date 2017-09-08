@@ -17,7 +17,7 @@ try {
   $formResult = $db->rawQuery($formQuery);
   $country = $formResult[0]['value'];
   //vl instance id
-  $vlInstanceQuery ="SELECT vlsm_instance_id FROM vl_instance";
+  $vlInstanceQuery ="SELECT vlsm_instance_id FROM s_vlsm_instance";
   $vlInstanceResult = $db->rawQuery($vlInstanceQuery);
   $vlInstanceId = $vlInstanceResult[0]['vlsm_instance_id'];
   //get synced path

@@ -4,9 +4,9 @@
 
 try {
     
-    $db->delete('temp_sample_report');
+    $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
-    $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_report";
+    $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_import";
     $cResult = $db->query($cQuery);
     if ($cResult[0]['MAX(import_batch_tracking)'] != '') {
         $maxId = $cResult[0]['MAX(import_batch_tracking)'] + 1;
@@ -204,7 +204,7 @@ try {
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
-                $id = $db->insert("temp_sample_report", $data);
+                $id = $db->insert("temp_sample_import", $data);
             }
         }
     }

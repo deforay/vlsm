@@ -6,7 +6,7 @@ include('General.php');
 include('includes/ImageResize.php');
 define('UPLOAD_PATH','uploads');
 $general=new Deforay_Commons_General();
-$tableName="vl_instance";
+$tableName="s_vlsm_instance";
 $globalTable="global_config";
 function getMacLinux() {
   exec('netstat -ie', $result);

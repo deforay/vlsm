@@ -1,4 +1,7 @@
 <?php
+
+$title = "VLSM | Manage Batch";
+
 include('../header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->

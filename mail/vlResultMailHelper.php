@@ -14,7 +14,7 @@ $resultmailSentResult = $db->rawQuery($resultmailSentQuery);
 $sourcecode = sprintf("%02d",(count($resultmailSentResult)+1));
 //get instance facility code
 $sequencenumber = '';
-$instancefacilityCodeQuery ="SELECT instance_facility_code FROM vl_instance";
+$instancefacilityCodeQuery ="SELECT instance_facility_code FROM s_vlsm_instance";
 $instancefacilityCodeResult = $db->rawQuery($instancefacilityCodeQuery);
 $instancefacilityCode = (isset($instancefacilityCodeResult[0]['instance_facility_code']) && trim($instancefacilityCodeResult[0]['instance_facility_code'])!= '')? '/'.$instancefacilityCodeResult[0]['instance_facility_code']:'';
 $year = date("Y");$month = strtolower(date("M"));
