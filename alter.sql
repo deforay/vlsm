@@ -1148,3 +1148,10 @@ ALTER TABLE `vl_instance` CHANGE `instance_facility_type` `instance_facility_typ
 
 --saravanna 07-sep-2017
 ALTER TABLE `vl_instance` ADD `instance_mac_address` VARCHAR(255) NULL DEFAULT NULL AFTER `instance_update_on`;
+
+
+-- Amit 08-Sep-2017
+ALTER TABLE vl_instance RENAME s_vlsm_instance;
+ALTER TABLE temp_sample_report RENAME temp_sample_import;
+ALTER TABLE hold_sample_report RENAME hold_sample_import;
+

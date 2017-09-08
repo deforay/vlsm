@@ -37,7 +37,7 @@ if(isset($_SERVER['HTTP_REFERER'])){
   $previousUrl = $_SERVER['HTTP_REFERER'];
   $urlLast = explode('/',$previousUrl);
   if(end($urlLast)=='importedStatistics.php'){
-      $db->delete('temp_sample_report');
+      $db->delete('temp_sample_import');
       unset($_SESSION['controllertrack']);
   }
 }

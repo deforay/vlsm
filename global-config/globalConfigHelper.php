@@ -7,7 +7,7 @@ include('../includes/ImageResize.php');
 define('UPLOAD_PATH','../uploads');
 $general = new Deforay_Commons_General();
 $tableName="global_config";
-$instanceTableName="vl_instance";
+$instanceTableName="s_vlsm_instance";
 try {
 	$configQuery ="SELECT value FROM global_config where name='sample_code'";
 	$configResult = $db->rawQuery($configQuery);

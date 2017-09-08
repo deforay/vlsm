@@ -3,7 +3,7 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
-$tableName="temp_sample_report";
+$tableName="temp_sample_import";
 try {
     $result = 0;
     if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=''){
