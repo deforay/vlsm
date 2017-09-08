@@ -2,14 +2,12 @@
 session_start();
 ob_start();
 include('../includes/MysqliDb.php');
-include('../includes/General.php');
 include ('../includes/tcpdf/tcpdf.php');
 include ('../includes/fpdi/fpdi.php');
 include ('../includes/fpdf/fpdf.php');
 define('UPLOAD_PATH','../uploads');
 $tableName1="activity_log";
 $tableName2="vl_request_form";
-$general=new Deforay_Commons_General();
 
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);
@@ -110,7 +108,6 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
        }
   }
   
-  $reportFilename = '';
   if(sizeof($vlLabResult)> 0){
     $_SESSION['rVal'] = $general->generateRandomString(6);
     if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
@@ -124,7 +121,7 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
         $_SESSION['aliasPage'] = $page;
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-      $pdf->setHeading('VIRAL LOAD LAB WEEKLY REPORT',$arr['logo'],$arr['header'],$vlLab['facility_name'],$_POST['reportedDate']);
+      $pdf->setHeading('VIRAL LOAD STATISTICS',$arr['logo'],$arr['header'],$vlLab['facility_name'],$_POST['reportedDate']);
       $pdf->setPageOrientation('L');
       // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -287,24 +284,24 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
                   }
                 }else{
                   $html.='<tr>';
-                  $html.='<td style="min-height:20px;border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
-                  $html.='<td align="center" style="border:1px solid #f4f4f4;">-</td>';
+                  $html.='<td style="min-height:20px;border:1px solid #f4f4f4;"></td>';
+                  $html.='<td style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
+                  $html.='<td align="center" style="border:1px solid #f4f4f4;"></td>';
                   $html.='</tr>';
                 }
                 $html.='</tbody>';
@@ -327,7 +324,7 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
         $pdf->setPageOrientation('L');
       // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle('SUPER LAB PERFORMANCE REPORT');
+        $pdf->SetTitle('VIRAL LOAD LAB WEEKLY REPORT');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -472,6 +469,4 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
         }
     }
 }
-
-echo $reportFilename;
 ?>

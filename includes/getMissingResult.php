@@ -62,12 +62,12 @@ $sWhere = '';
    $vlSampleResult['hvl'] = $db->rawQuery($hvlQuery);
    $vlSampleResult['lvl'] = $db->rawQuery($lvlQuery);
 ?>
-<div id="container" style="float:left;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
-<div id="container1" style="float:right;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
+<div id="sampleStatusOverviewContainer" style="float:left;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
+<div id="samplesVlOverview" style="float:right;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
 <script>
     <?php
     if(isset($tResult) && count($tResult)>0){ ?>
-      $('#container').highcharts({
+      $('#sampleStatusOverviewContainer').highcharts({
                 chart: {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
@@ -81,20 +81,25 @@ $sWhere = '';
                   enabled: false
                },
                 tooltip: {
-                    pointFormat: '{point.name}: <b>{point.y}</b>'
+                    pointFormat: 'Samples :<b>{point.y}</b>'
                 },
                 plotOptions: {
                     pie: {
-                        size:'70%',
+                        size:'66%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
+                            useHTML: true,
                             enabled: true,
-                            format: '<b>{point.name}</b>: {point.y}',
+                            format: '<div style="padding-bottom:6px;"><b>{point.name}</b>: {point.y}</div>',
                             style: {
-                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                              width: '110px',
+                              //crop:false,
+                              //overflow:'none',
+                              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             }
-                        }
+                        },
+                        showInLegend: true
                     }
                 },
         series: [{
@@ -122,7 +127,7 @@ $sWhere = '';
 	  Highcharts.setOptions({
      colors: ['#FF0000', '#50B432']
     });
-      $('#container1').highcharts({
+      $('#samplesVlOverview').highcharts({
                 chart: {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
@@ -136,7 +141,7 @@ $sWhere = '';
                   enabled: false
                },
                 tooltip: {
-                    pointFormat: '{point.name}: <b>{point.y}</b>'
+                    pointFormat: 'Samples :<b>{point.y}</b>'
                 },
                 plotOptions: {
                     pie: {
@@ -149,7 +154,8 @@ $sWhere = '';
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             }
-                        }
+                        },
+                        showInLegend: true
                     }
                 },
         series: [{

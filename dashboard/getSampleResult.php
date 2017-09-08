@@ -233,7 +233,7 @@ foreach($stVlResult as $vlData){
         },
         series: [{
             showInLegend: false,  
-            name: 'Samples Received',
+            name: 'Samples',
             data: [<?php
             foreach($tResult as $total){
                 echo ucwords($total[0]['total']).",";
@@ -288,7 +288,7 @@ foreach($stVlResult as $vlData){
         },
         series: [{
             showInLegend: false,  
-            name: 'Samples Waiting',
+            name: 'Samples',
             data: [<?php
             foreach($waitingResult as $total){
                 echo ucwords($total[0]['total']).",";
@@ -344,7 +344,7 @@ $('#samplesTestedChart').highcharts({
         },
         series: [{
             showInLegend: false,  
-            name: 'Samples Tested',
+            name: 'Samples',
             data: [<?php
             foreach($acceptedResult as $total){
                 echo ucwords($total[0]['total']).",";
@@ -359,7 +359,6 @@ if($rejectedTotal>0){
 ?>
     
     
-
 $('#samplesRejectedChart').highcharts({
         chart: {
             type: 'column',
@@ -402,7 +401,7 @@ $('#samplesRejectedChart').highcharts({
         },
         series: [{
             showInLegend: false,  
-            name: 'Samples Rejected',
+            name: 'Samples',
             data: [<?php
             foreach($rejectedResult as $total){
                 echo ucwords($total[0]['total']).",";
