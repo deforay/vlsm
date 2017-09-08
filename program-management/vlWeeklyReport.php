@@ -19,7 +19,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-signal"></i> VL LAB Weekly Report
+      <h1><i class="fa fa-calendar-check-o" aria-hidden="true"></i> VL LAB Weekly Report
       <!--<ol class="breadcrumb">-->
       <!--  <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
@@ -37,7 +37,7 @@
 		    <td style="width:20% !important;">
 		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Sample Test Date Range" readonly style="background:#eee;font-size:0.9em"/>
 		    </td>
-      <td><b>VL Lab(s)&nbsp;:</b></td>
+                    <td><b>VL Lab(s)&nbsp;:</b></td>
 		    <td style="width:32%;">
 		      <select id="lab" name="lab" class="form-control" title="Please select lab" multiple>
                          <option value=""> -- Select -- </option>
