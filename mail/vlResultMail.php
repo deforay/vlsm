@@ -2,7 +2,6 @@
 ob_start();
 $title = "VLSM | Email VL Test Results";
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configResult = $db->rawQuery($configQuery);
 $formId = 0;
