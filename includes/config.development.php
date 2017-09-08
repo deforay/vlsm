@@ -2,7 +2,7 @@
 
 require_once('config.production.php');
 
-$HOST = '127.0.0.1';
+$HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';

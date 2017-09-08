@@ -38,7 +38,7 @@
   if(isset($_SESSION['instanceFname']) && $_SESSION['instanceFname']=='')
   {
     ?>
-    showModal('../addInstanceDetails.php',900,520);
+    showModal('../addInstanceDetails.php',900,420);
     <?php
   }
   ?>

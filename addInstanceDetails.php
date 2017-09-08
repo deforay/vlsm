@@ -27,7 +27,7 @@ $fTypeResult = $db->rawQuery($fType);
 <div class="content-wrapper" style="padding: 20px;">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h4>Add Instance Details</h4>
+      <h4>Instance Setup</h4>
     </section>
     <!-- Main content -->
     <section class="content">
@@ -49,23 +49,23 @@ $fTypeResult = $db->rawQuery($fType);
                                     <td>
                                       <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter instance name" placeholder="Instance Name"/>
                                     </td>
-                                    <td>&nbsp;<b>Facility Code/ID&nbsp;</b></td>
+                                    <td>&nbsp;<b>Instance Code/ID&nbsp;</b></td>
                                     <td>
                                       <input type="text" class="form-control " id="fCode" name="fCode" placeholder="Facility Code" title="Please enter facility code"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style=""><b>Facility Type&nbsp;<span class="mandatory">*</span></b></td>
+                                    <td style=""><b>Instance Type&nbsp;<span class="mandatory">*</span></b></td>
                                     <td>
                                         <select class="form-control isRequired" id="fType" name="fType"  title="Please choose instance type">
                                             <option value="">-- Select --</option>
-                                            <option value="Viral Load Lab" <?php echo ('Viral Load Lab'==$arr['instance_type'])?"selected='selected'":""?>>Viral Load Lab</option>
-                                            <option value="Clinic/Lab" <?php echo ('Clinic/Lab'==$arr['instance_type'])?"selected='selected'":""?>>Clinic/Lab</option>
-                                            <option value="Both" <?php echo ('Both'==$arr['instance_type'])?"selected='selected'":""?>>Both</option>
+                                            <option value="Viral Load Lab">Viral Load Lab</option>
+                                            <option value="Clinic/Lab">Clinic/Lab</option>
+                                            <option value="Both">Both</option>
                                         </select>
                                     </td>
-                                    <td>&nbsp;<b>Logo Image&nbsp;</b></td>
-                                    <td>
+                                    <td style="display:none">&nbsp;<b>Logo Image&nbsp;</b></td>
+                                    <td style="display:none">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
                                                <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
