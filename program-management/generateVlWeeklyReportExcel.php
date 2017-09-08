@@ -26,21 +26,30 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
          'size' => '11',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
      )
  );
- $backgroundStyle = array(
+ $backgroundTitleStyle = array(
      'font' => array(
          'bold' => true,
          'size' => '11',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
      ),
       'fill' => array(
          'type' => PHPExcel_Style_Fill::FILL_SOLID,
          'color' => array('rgb' => 'FFFF00')
       )
+ );
+ $backgroundFieldStyle = array(
+     'font' => array(
+         'bold' => false,
+         'size' => '11',
+     ),
+     'alignment' => array(
+         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+     )
  );
  $styleArray = array(
      'font' => array(
@@ -80,8 +89,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
  //echo $vlLabQuery;die;
  
  //Statistics sheet start
- $sheet->mergeCells('C1:D1');
- $sheet->mergeCells('F1:G1');
  $sheet->mergeCells('A2:A3');
  $sheet->mergeCells('B2:B3');
  $sheet->mergeCells('C2:C3');
@@ -99,7 +106,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
  $c = 0;
  foreach($vlLabResult as $vlLab){
     $sQuery="SELECT
-	
 		 vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
 		
 		SUM(CASE
@@ -171,113 +177,136 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
     $sQuery = $sQuery.' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
     //error_log($sQuery);
-    if(count($sResult)>0){
-
-        $sheet = new PHPExcel_Worksheet($excel, '');
-        $excel->addSheet($sheet, $c);
-        $sheet->setTitle($vlLab['facility_name']);
-        
-        $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('E1', html_entity_decode('Super Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('F1', html_entity_decode(ucwords($vlLab['facility_name']), ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('D2', html_entity_decode('Site Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('E2', html_entity_decode('IPSL ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('F2', html_entity_decode('No. of Rejections ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('G2', html_entity_decode('Viral Load Result- Peds ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('G3', html_entity_decode('<14 yrs <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('H3', html_entity_decode('<14 yrs >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('I2', html_entity_decode('Viral Load Result- Adults ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('I3', html_entity_decode('>14yrs Male <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('J3', html_entity_decode('>14yrs Male >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('K3', html_entity_decode('>14yrs Female <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('L3', html_entity_decode('>14yrs  Female >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('M2', html_entity_decode('Viral Load Results- Pregnant/Breastfeeding Women ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('M3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('N3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('O2', html_entity_decode('Age/Sex Unknown ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('O3', html_entity_decode('Unknown Age/Sex <= 1000ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('P3', html_entity_decode('Unknown Age/Sex > 1000ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('Q2', html_entity_decode('Totals ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('Q3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('R3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('S2', html_entity_decode('Total Test per Clinic ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        $sheet->setCellValue('T2', html_entity_decode('Comments ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-        
-        $sheet->getStyle('B1')->applyFromArray($backgroundStyle);
-        $sheet->getStyle('E1')->applyFromArray($backgroundStyle);
-        $sheet->getStyle('B2:B3')->applyFromArray($styleArray);
-        $sheet->getStyle('C2:C3')->applyFromArray($styleArray);
-        $sheet->getStyle('D2:D3')->applyFromArray($styleArray);
-        $sheet->getStyle('E2:E3')->applyFromArray($styleArray);
-        $sheet->getStyle('F2:F3')->applyFromArray($styleArray);
-        $sheet->getStyle('G2:H2')->applyFromArray($styleArray);
-        $sheet->getStyle('G3')->applyFromArray($styleArray);
-        $sheet->getStyle('H3')->applyFromArray($styleArray);
-        $sheet->getStyle('I2:L2')->applyFromArray($styleArray);
-        $sheet->getStyle('I3')->applyFromArray($styleArray);
-        $sheet->getStyle('J3')->applyFromArray($styleArray);
-        $sheet->getStyle('K3')->applyFromArray($styleArray);
-        $sheet->getStyle('L3')->applyFromArray($styleArray);
-        $sheet->getStyle('M2:N2')->applyFromArray($styleArray);
-        $sheet->getStyle('M3')->applyFromArray($styleArray);
-        $sheet->getStyle('N3')->applyFromArray($styleArray);
-        $sheet->getStyle('O2:P2')->applyFromArray($styleArray);
-        $sheet->getStyle('O3')->applyFromArray($styleArray);
-        $sheet->getStyle('P3')->applyFromArray($styleArray);
-        $sheet->getStyle('Q2:R2')->applyFromArray($styleArray);
-        $sheet->getStyle('Q3')->applyFromArray($styleArray);
-        $sheet->getStyle('R3')->applyFromArray($styleArray);
-        $sheet->getStyle('S2:S3')->applyFromArray($styleArray);
-        $sheet->getStyle('T2:T3')->applyFromArray($styleArray);
-        
-        $output = array();
-        $r=1;
-        foreach($sResult as $aRow) {
-          
-          
-           $row = array();
+      $sheet = new PHPExcel_Worksheet($excel, '');
+      $excel->addSheet($sheet, $c);
+      $sheet->setTitle($vlLab['facility_name']);
+      
+      $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('D1', html_entity_decode('Super Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('E1', html_entity_decode(ucwords($vlLab['facility_name']), ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('D2', html_entity_decode('Site Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('E2', html_entity_decode('IPSL ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('F2', html_entity_decode('No. of Rejections ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('G2', html_entity_decode('Viral Load Result- Peds ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('G3', html_entity_decode('<14 yrs <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('H3', html_entity_decode('<14 yrs >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('I2', html_entity_decode('Viral Load Result- Adults ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('I3', html_entity_decode('>14yrs Male <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('J3', html_entity_decode('>14yrs Male >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('K3', html_entity_decode('>14yrs Female <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('L3', html_entity_decode('>14yrs  Female >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('M2', html_entity_decode('Viral Load Results- Pregnant/Breastfeeding Women ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('M3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('N3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('O2', html_entity_decode('Age/Sex Unknown ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('O3', html_entity_decode('Unknown Age/Sex <= 1000ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('P3', html_entity_decode('Unknown Age/Sex > 1000ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('Q2', html_entity_decode('Totals ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('Q3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('R3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('S2', html_entity_decode('Total Test per Clinic ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('T2', html_entity_decode('Comments ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      
+      $sheet->getStyle('B1')->applyFromArray($backgroundTitleStyle);
+      $sheet->getStyle('C1')->applyFromArray($backgroundFieldStyle);
+      $sheet->getStyle('D1')->applyFromArray($backgroundTitleStyle);
+      $sheet->getStyle('E1')->applyFromArray($backgroundFieldStyle);
+      $sheet->getStyle('B2:B3')->applyFromArray($styleArray);
+      $sheet->getStyle('C2:C3')->applyFromArray($styleArray);
+      $sheet->getStyle('D2:D3')->applyFromArray($styleArray);
+      $sheet->getStyle('E2:E3')->applyFromArray($styleArray);
+      $sheet->getStyle('F2:F3')->applyFromArray($styleArray);
+      $sheet->getStyle('G2:H2')->applyFromArray($styleArray);
+      $sheet->getStyle('G3')->applyFromArray($styleArray);
+      $sheet->getStyle('H3')->applyFromArray($styleArray);
+      $sheet->getStyle('I2:L2')->applyFromArray($styleArray);
+      $sheet->getStyle('I3')->applyFromArray($styleArray);
+      $sheet->getStyle('J3')->applyFromArray($styleArray);
+      $sheet->getStyle('K3')->applyFromArray($styleArray);
+      $sheet->getStyle('L3')->applyFromArray($styleArray);
+      $sheet->getStyle('M2:N2')->applyFromArray($styleArray);
+      $sheet->getStyle('M3')->applyFromArray($styleArray);
+      $sheet->getStyle('N3')->applyFromArray($styleArray);
+      $sheet->getStyle('O2:P2')->applyFromArray($styleArray);
+      $sheet->getStyle('O3')->applyFromArray($styleArray);
+      $sheet->getStyle('P3')->applyFromArray($styleArray);
+      $sheet->getStyle('Q2:R2')->applyFromArray($styleArray);
+      $sheet->getStyle('Q3')->applyFromArray($styleArray);
+      $sheet->getStyle('R3')->applyFromArray($styleArray);
+      $sheet->getStyle('S2:S3')->applyFromArray($styleArray);
+      $sheet->getStyle('T2:T3')->applyFromArray($styleArray);
+      
+      $output = array();
+      $r=1;
+      if(count($sResult) > 0){
+         foreach($sResult as $aRow) {
+            $row = array();
+             $row[] = $r;
+             $row[] = ucwords($aRow['facility_state']);
+             $row[] = ucwords($aRow['facility_district']);
+             $row[] = ucwords($aRow['facility_name']);
+             $row[] = $aRow['facility_code'];
+             $row[] = $aRow['rejections'];
+             $row[] = $aRow['lt14lt1000'];
+             $row[] = $aRow['lt14gt1000'];
+             $row[] = $aRow['gt14lt1000M'];
+             $row[] = $aRow['gt14gt1000M'];			
+             $row[] = $aRow['gt14lt1000F'];
+             $row[] = $aRow['gt14gt1000F'];
+             $row[] = $aRow['preglt1000'];
+             $row[] = $aRow['preggt1000'];
+             $row[] = $aRow['ult1000'];
+             $row[] = $aRow['ugt1000'];
+             $row[] = $aRow['totalLessThan1000'];
+             $row[] = $aRow['totalGreaterThan1000'];
+             $row[] = $aRow['total'];
+             $row[] = '';
+            $output[] = $row;
+          $r++;
+         }
+      }else{
+         $row = array();
             $row[] = $r;
-            $row[] = ucwords($aRow['facility_state']);
-            $row[] = ucwords($aRow['facility_district']);
-            $row[] = ucwords($aRow['facility_name']);
-            $row[] = $aRow['facility_code'];
-            $row[] = $aRow['rejections'];
-            $row[] = $aRow['lt14lt1000'];
-            $row[] = $aRow['lt14gt1000'];
-            $row[] = $aRow['gt14lt1000M'];
-            $row[] = $aRow['gt14gt1000M'];			
-            $row[] = $aRow['gt14lt1000F'];
-            $row[] = $aRow['gt14gt1000F'];
-            $row[] = $aRow['preglt1000'];
-            $row[] = $aRow['preggt1000'];
-            $row[] = $aRow['ult1000'];
-            $row[] = $aRow['ugt1000'];
-            $row[] = $aRow['totalLessThan1000'];
-            $row[] = $aRow['totalGreaterThan1000'];
-            $row[] = $aRow['total'];
+            $row[] = '-';
+            $row[] = '-';
+            $row[] = '-';
+            $row[] = '-';
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;			
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
+            $row[] = 0;
             $row[] = '';
            $output[] = $row;
          $r++;
-        }
-       
-        $start = (count($output));
-        foreach ($output as $rowNo => $rowData) {
-         $colNo = 0;
-         foreach ($rowData as $field => $value) {
-           $rRowCount = $rowNo + 4;
-           $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
-           $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
-           $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
-           $sheet->getDefaultRowDimension()->setRowHeight(15);
-           $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-           $colNo++;
-         }
-        }
-      $c++;
-    }
+      }
+     
+      $start = (count($output));
+      foreach ($output as $rowNo => $rowData) {
+       $colNo = 0;
+       foreach ($rowData as $field => $value) {
+         $rRowCount = $rowNo + 4;
+         $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
+         $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+         $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
+         $sheet->getDefaultRowDimension()->setRowHeight(15);
+         $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+         $colNo++;
+       }
+      }
+    $c++;
   }
  //Statistics sheet end
  //Super lab performance sheet start
@@ -285,8 +314,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
    $sheet = new PHPExcel_Worksheet($excel, '');
    $excel->addSheet($sheet, $c);
    $sheet->setTitle('Super Lab Performance Report');
-   
-   $sheet->mergeCells('C1:D1');
     
    $sheet->setCellValue('A1', html_entity_decode('VL ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
    $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -303,7 +330,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
    $sheet->setCellValue('K2', html_entity_decode('Average Result TAT -Total (from sample  collection to results getting to the facility/hub) ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
    
    $sheet->getStyle('A1')->applyFromArray($headingStyle);
-   $sheet->getStyle('B1')->applyFromArray($backgroundStyle);
+   $sheet->getStyle('B1')->applyFromArray($backgroundTitleStyle);
    $sheet->getStyle('B2')->applyFromArray($styleArray);
    $sheet->getStyle('C2')->applyFromArray($styleArray);
    $sheet->getStyle('D2')->applyFromArray($styleArray);
@@ -338,7 +365,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
        foreach($sResult as $result){
          $sampleCollectionDate = '';
          $dateOfSampleReceivedAtTestingLab = '';
-         $labTestedDate = '';
          $dateResultPrinted = '';
          if(trim($result['sample_collection_date'])!= '' && $result['sample_collection_date'] != NULL && $result['sample_collection_date'] != '0000-00-00 00:00:00'){
             $sampleCollectionDate = $result['sample_collection_date'];
@@ -350,7 +376,6 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
          }
          
          if(trim($result['sample_tested_datetime'])!= '' && $result['sample_tested_datetime'] != NULL && $result['sample_tested_datetime'] != '0000-00-00 00:00:00'){
-            $labTestedDate = $result['sample_tested_datetime'];
             $noOfSampleTested[] = $result['vl_sample_id'];
          }else{
             if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
@@ -386,7 +411,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
        $row[] = ucwords($vlLab['facility_district']);
        $row[] = ucwords($vlLab['facility_name']);
        $row[] = $vlLab['facility_code'];
-       $row[] = (count($noOfSampleReceivedAtLab) == 0) ? count($noOfSampleTested) : 0;
+       $row[] = count($noOfSampleReceivedAtLab);
        $row[] = count($noOfSampleTested);
        $row[] = count($noOfSampleNotTested);
        $row[] = (count($sResult) >0) ? (round(count($assayFailures)/count($sResult)))*100 : 0;

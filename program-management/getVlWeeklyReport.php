@@ -223,30 +223,51 @@ $country = $configResult[0]['value'];
             "aaData" => array()
         );
 	
-        
-        foreach ($sResult as $aRow) {
-			
+        if(count($sResult) > 0){
+	    foreach ($sResult as $aRow) {
+		$row = array();
+		$row[] = ucwords($aRow['facility_state']);
+		$row[] = ucwords($aRow['facility_district']);
+		$row[] = ucwords($aRow['facility_name']);
+		$row[] = $aRow['facility_code'];
+		$row[] = $aRow['rejections'];
+		$row[] = $aRow['lt14lt1000'];
+		$row[] = $aRow['lt14gt1000'];
+		$row[] = $aRow['gt14lt1000M'];
+		$row[] = $aRow['gt14gt1000M'];			
+		$row[] = $aRow['gt14lt1000F'];
+		$row[] = $aRow['gt14gt1000F'];
+		$row[] = $aRow['preglt1000'];
+		$row[] = $aRow['preggt1000'];
+		$row[] = $aRow['ult1000'];
+		$row[] = $aRow['ugt1000'];
+		$row[] = $aRow['totalLessThan1000'];
+		$row[] = $aRow['totalGreaterThan1000'];
+		$row[] = $aRow['total'];
+		$output['aaData'][] = $row;
+	    }
+	}else{
 	    $row = array();
-            $row[] = ucwords($aRow['facility_state']);
-            $row[] = ucwords($aRow['facility_district']);
-            $row[] = ucwords($aRow['facility_name']);
-            $row[] = $aRow['facility_code'];
-            $row[] = $aRow['rejections'];
-            $row[] = $aRow['lt14lt1000'];
-            $row[] = $aRow['lt14gt1000'];
-            $row[] = $aRow['gt14lt1000M'];
-	    $row[] = $aRow['gt14gt1000M'];			
-            $row[] = $aRow['gt14lt1000F'];
-            $row[] = $aRow['gt14gt1000F'];
-            $row[] = $aRow['preglt1000'];
-            $row[] = $aRow['preggt1000'];
-            $row[] = $aRow['ult1000'];
-            $row[] = $aRow['ugt1000'];
-            $row[] = $aRow['totalLessThan1000'];
-            $row[] = $aRow['totalGreaterThan1000'];
-            $row[] = $aRow['total'];
-            $output['aaData'][] = $row;
-        }
+	    $row[] = '-';
+	    $row[] = '-';
+	    $row[] = '-';
+	    $row[] = '-';
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;			
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $row[] = 0;
+	    $output['aaData'][] = $row;
+	}
         
     echo json_encode($output);
 ?>
