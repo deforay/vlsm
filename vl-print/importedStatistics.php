@@ -10,10 +10,10 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
 $import_decided = (isset($arr['import_non_matching_sample']) && $arr['import_non_matching_sample'] == 'no')?'INNER JOIN':'LEFT JOIN';
-$tsQuery="SELECT count(temp_sample_id) as totalCount,SUM(CASE WHEN tsr.result = 'Target Not Detected' OR tsr.result = 'target not detected' THEN 1 ELSE 0 END) AS TargetNotDetected,SUM(CASE WHEN tsr.result > 1000 AND (tsr.result !='Target Not Detected' OR tsr.result != 'target not detected') THEN 1 ELSE 0 END) AS HighViralLoad,SUM(CASE WHEN tsr.result < 1000 AND (tsr.result !='Target Not Detected' OR tsr.result != 'target not detected') THEN 1 ELSE 0 END) AS LowViralLoad,SUM(CASE WHEN tsr.result = 'Invalid' OR tsr.result = 'invalid' THEN 1 ELSE 0 END) AS invalid FROM temp_sample_report as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code";
+$tsQuery="SELECT count(temp_sample_id) as totalCount,SUM(CASE WHEN tsr.result = 'Target Not Detected' OR tsr.result = 'target not detected' THEN 1 ELSE 0 END) AS TargetNotDetected,SUM(CASE WHEN tsr.result > 1000 AND (tsr.result !='Target Not Detected' OR tsr.result != 'target not detected') THEN 1 ELSE 0 END) AS HighViralLoad,SUM(CASE WHEN tsr.result < 1000 AND (tsr.result !='Target Not Detected' OR tsr.result != 'target not detected') THEN 1 ELSE 0 END) AS LowViralLoad,SUM(CASE WHEN tsr.result = 'Invalid' OR tsr.result = 'invalid' THEN 1 ELSE 0 END) AS invalid FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code";
 $tsResult = $db->rawQuery($tsQuery);
 //set print query
-$hQuery="SELECT hsr.sample_code FROM hold_sample_report as hsr $import_decided vl_request_form as vl ON vl.sample_code=hsr.sample_code";
+$hQuery="SELECT hsr.sample_code FROM hold_sample_import as hsr $import_decided vl_request_form as vl ON vl.sample_code=hsr.sample_code";
 $hResult = $db->rawQuery($hQuery);
 $holdSample = array();
 if($hResult){
@@ -21,7 +21,7 @@ if($hResult){
         $holdSample[] = $sample['sample_code'];
     }
 }
-$saQuery="SELECT tsr.sample_code FROM temp_sample_report as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code";
+$saQuery="SELECT tsr.sample_code FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code";
 $saResult = $db->rawQuery($saQuery);
 $sampleCode = array();
 foreach($saResult as $sample){

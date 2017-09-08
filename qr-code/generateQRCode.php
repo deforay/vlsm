@@ -34,7 +34,7 @@ $pages = array();
       date_default_timezone_set("Europe/London");
     }
     //vl instance id
-    $vlInstanceQuery ="SELECT vlsm_instance_id FROM vl_instance";
+    $vlInstanceQuery ="SELECT vlsm_instance_id FROM s_vlsm_instance";
     $vlInstanceResult = $db->rawQuery($vlInstanceQuery);
     $vlInstanceId = (isset($vlInstanceResult[0]['vlsm_instance_id']))?$vlInstanceResult[0]['vlsm_instance_id']:'';
     //main query

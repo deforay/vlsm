@@ -16,14 +16,14 @@ try {
         
         if(count($admin)>0){
             //add random key
-            $instanceQuery="SELECT * FROM vl_instance";
+            $instanceQuery="SELECT * FROM s_vlsm_instance";
             $instanceResult=$db->query($instanceQuery);
             if($instanceResult){
                 $_SESSION['instanceId']=$instanceResult[0]['vlsm_instance_id'];
                 $_SESSION['instanceFname']=$instanceResult[0]['instance_facility_name'];
             }else{
                 $id = $general->generateRandomString(32);
-                $db->insert('vl_instance',array('vlsm_instance_id'=>$id));
+                $db->insert('s_vlsm_instance',array('vlsm_instance_id'=>$id));
                 $_SESSION['instanceId']=$id;
                 $_SESSION['instanceFname']='';
                 

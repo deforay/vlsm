@@ -3,7 +3,7 @@ session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
-$tableName="temp_sample_report";
+$tableName="temp_sample_import";
 $primaryKey="temp_sample_id";
 $configQuery="SELECT value FROM global_config WHERE name ='import_non_matching_sample'";
 $configResult=$db->query($configQuery);
@@ -13,9 +13,9 @@ $tsResult = $db->rawQuery($tsQuery);
 $scQuery = "select r_sample_control_name from r_sample_controls ORDER BY r_sample_control_name DESC";
 $scResult = $db->rawQuery($scQuery);
 //in-house control limit
-$inQuery = "select i.number_of_in_house_controls,i.number_of_manufacturer_controls,i.machine_name from temp_sample_report as ts INNER JOIN import_config as i ON i.machine_name=ts.vl_test_platform limit 0,1";
+$inQuery = "select i.number_of_in_house_controls,i.number_of_manufacturer_controls,i.machine_name from temp_sample_import as ts INNER JOIN import_config as i ON i.machine_name=ts.vl_test_platform limit 0,1";
 $inResult = $db->rawQuery($inQuery);
-$tsrQuery = "select count(temp_sample_id) as count from temp_sample_report where sample_type ='s'";
+$tsrQuery = "select count(temp_sample_id) as count from temp_sample_import where sample_type ='s'";
 $tsrResult = $db->rawQuery($tsrQuery);
 $sampleTypeTotal = 0;
 if(isset($_COOKIE['refno']) && $_COOKIE['refno'] > 0){
@@ -109,7 +109,7 @@ if(isset($tsrResult[0]['count']) && $tsrResult[0]['count'] > 0){
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,tsr.lot_number,tsr.lot_expiration_date,tsr.batch_code,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.result_status,ts.status_name FROM temp_sample_report as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_status as ts ON ts.status_id=tsr.result_status";
+	$sQuery="SELECT tsr.temp_sample_id,tsr.sample_code,tsr.sample_details,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,tsr.lot_number,tsr.lot_expiration_date,tsr.batch_code,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.result_status,ts.status_name FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_status as ts ON ts.status_id=tsr.result_status";
 	$sOrder = 'temp_sample_id ASC';
         //echo $sQuery;die;
 	
@@ -133,11 +133,11 @@ if(isset($tsrResult[0]['count']) && $tsrResult[0]['count'] > 0){
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT tsr.temp_sample_id,tsr.sample_details,tsr.sample_code,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.result_status,ts.status_name FROM temp_sample_report as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_status as ts ON ts.status_id=tsr.result_status $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT tsr.temp_sample_id,tsr.sample_details,tsr.sample_code,tsr.result_value_absolute,tsr.result_value_log,tsr.result_value_text,vl.sample_collection_date,tsr.sample_tested_datetime,fd.facility_name,rsrr.rejection_reason_name,tsr.sample_type,tsr.result,tsr.result_status,ts.status_name FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code LEFT JOIN facility_details as fd ON fd.facility_id=vl.facility_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_status as ts ON ts.status_id=tsr.result_status $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(temp_sample_id) as total FROM temp_sample_report as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code where temp_sample_status=0");
+        $aResultTotal =  $db->rawQuery("select COUNT(temp_sample_id) as total FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code where temp_sample_status=0");
         $iTotal = $aResultTotal[0]['total'];
         /*
          * Output
