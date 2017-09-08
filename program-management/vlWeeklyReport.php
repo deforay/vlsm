@@ -1,4 +1,4 @@
-  <?php
+   <?php
    include('../header.php');
    $facilityQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
    $facilityResult = $db->rawQuery($facilityQuery);
@@ -55,6 +55,7 @@
 		       &nbsp;<input type="button" onclick="searchData();" value="Search" class="btn btn-success btn-sm">
 									&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		       &nbsp;<button class="btn btn-info btn-sm" type="button" onclick="exportVLWeeklyReport()">Excel Export</button>
+		       &nbsp;<button class="btn btn-default btn-sm" type="button" onclick="exportVLWeeklyReportPdf()"><i class="fa fa-file-text"></i> PDF </button>
 		    </td>
                 </tr>
             </table>
@@ -202,6 +203,24 @@
 	     }else{
 	        $.unblockUI();
 		location.href = '../temporary/'+data;
+	     }
+       });
+    }
+    
+    function exportVLWeeklyReportPdf(){
+      $.blockUI();
+       $.post("generateVlWeeklyReportPdf.php",{reportedDate:$("#sampleTestDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
+       function(data){
+	     $.unblockUI();
+	     if(data == "" || data == null || data == undefined){
+		 alert('Unable to generate pdf..');
+	     }else{
+	        $.unblockUI();
+		window.open(
+		  '../uploads/'+data,
+		  '_blank' // <- This is what makes it open in a new window.
+		);
+
 	     }
        });
     }
