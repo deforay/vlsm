@@ -19,7 +19,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-calendar-check-o" aria-hidden="true"></i> VL LAB Weekly Report
+      <h1><i class="fa fa-calendar-check-o" aria-hidden="true"></i> VL Lab Weekly Report
       <!--<ol class="breadcrumb">-->
       <!--  <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>-->
       <!--  <li class="active">Export Result</li>-->
@@ -209,7 +209,7 @@
     
     function exportVLWeeklyReportPdf(){
       $.blockUI();
-       $.post("generateVlWeeklyReportPdf.php",{reportedDate:$("#sampleTestDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
+       $.post("getVlWeeklyReportPdf.php",{reportedDate:$("#sampleTestDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){

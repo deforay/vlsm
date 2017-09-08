@@ -107,7 +107,7 @@ include('../header.php');
     $(function () {
     $.post("../includes/getMissingResult.php",{sampleCollectionDate:'',batchCode:'',facilityName:'',sampleType:''},
       function(data){
-	  if(data!=''){
+	  if($.trim(data)!=''){
 	    $("#pieChartDiv").html(data);
 	  }
       });
@@ -149,7 +149,7 @@ include('../header.php');
       $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
-            startDate: moment().subtract('days', 7),
+            startDate: moment().subtract('days', 6),
             endDate: moment(),
             maxDate: moment(),
             ranges: {
@@ -167,7 +167,6 @@ include('../header.php');
       });
       searchVlRequestData();
     }
-    
   </script>
  <?php
  include('../footer.php');

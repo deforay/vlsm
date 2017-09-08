@@ -1,10 +1,9 @@
 <?php
 include('../header.php');
-//include('../includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $tsQuery = "SELECT status_name FROM r_sample_status WHERE status_id = '".$id."'";
 $tsResult = $db->rawQuery($tsQuery);
-if(!isset($tsResult) || count($tsResult) == 0){
+if(count($tsResult) == 0){
   header("location:/dashboard/index.php");exit;
 }
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";

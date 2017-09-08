@@ -179,7 +179,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
     //error_log($sQuery);
       $sheet = new PHPExcel_Worksheet($excel, '');
       $excel->addSheet($sheet, $c);
-      $sheet->setTitle($vlLab['facility_name']);
+      $sheet->setTitle('Viral Load Statistics '.$vlLab['facility_name']);
       
       $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -269,25 +269,25 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
          }
       }else{
          $row = array();
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
-            $row[] = '-';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
+            $row[] = '';
             $row[] = '';
            $output[] = $row;
          $r++;
@@ -353,7 +353,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
           }
        }
        if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-          $sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
+         //$sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
        }
        $sResult = $db->rawQuery($sQuery);
        $noOfSampleReceivedAtLab = array();
