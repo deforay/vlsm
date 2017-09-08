@@ -17,8 +17,8 @@ $mailsource = '';
 $instancefacilityCodeQuery ="SELECT instance_facility_code FROM vl_instance";
 $instancefacilityCodeResult = $db->rawQuery($instancefacilityCodeQuery);
 $instancefacilityCode = (isset($instancefacilityCodeResult[0]['instance_facility_code']) && trim($instancefacilityCodeResult[0]['instance_facility_code'])!= '')? '/'.$instancefacilityCodeResult[0]['instance_facility_code']:'';
-$year = date("Y");$month = date("M");
-$mailsource = '<span style="padding:1px;background-color:#ffff4d;">Reference : VLSM/Results/'.$year.'/'.$month.$instancefacilityCode.'/'.$sourcecode.'</span>';
+$year = date("Y");$month = strtolower(date("M"));
+$mailsource = 'Ref : vlsm/results/'.$year.'/'.$month.$instancefacilityCode.'/'.$sourcecode;
 //get other config values
 $geQuery="SELECT * FROM other_config WHERE type = 'result'";
 $geResult = $db->rawQuery($geQuery);
