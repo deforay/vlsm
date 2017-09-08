@@ -307,6 +307,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group">
                       <label for="auto_approval" class="col-lg-4 control-label">Same user can Review and Approve </label>
                       <div class="col-lg-8">
+                        <br>    
                         <input type="radio" class="" id="user_review_yes" name="user_review_approve" value="yes" <?php echo($arr['user_review_approve'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
                         <input type="radio" class="" id="user_review_no" name="user_review_approve" value="no" <?php echo($arr['user_review_approve'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
                       </div>
@@ -345,19 +346,17 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                 <div class="row" style="margin-top:10px;">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="import_non_matching_sample" class="col-lg-4 control-label">Import Non matching Sample Results from Machine generated file </label>
+                      <label for="import_non_matching_sample" class="col-lg-4 control-label">Allow Samples not matching the VLSM Sample IDs while importing results manually</label>
                       <div class="col-lg-8">
+                        <br>
+                        <br>
                         <input type="radio" id="import_non_matching_sample_yes" name="import_non_matching_sample" value="yes" <?php echo($arr['import_non_matching_sample'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
                         <input type="radio" id="import_non_matching_sample_no" name="import_non_matching_sample" value="no" <?php echo($arr['import_non_matching_sample'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
                       </div>
                     </div>
                    </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-10" style="text-align:left;">
-                      <code>"This option is used to check how to handle Sample IDs which do not match the VLSM Sample IDs, while importing results manually from a machine generated CSV/Excel/Text file"</code>
-                  </div>
-                </div><br/>
+               
               </div>
         </div>
 <div class="panel panel-default">
@@ -408,7 +407,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
             <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="show_smiley" class="col-lg-4 control-label">Show Emoticon </label>
+                      <label for="show_smiley" class="col-lg-4 control-label">Show Emoticon/Smiley </label>
                       <div class="col-lg-8">
                         <input type="radio" class="" id="show_smiley_yes" name="show_smiley" value="yes" <?php echo($arr['show_smiley'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
                         <input type="radio" class="" id="show_smiley_no" name="show_smiley" value="no" <?php echo($arr['show_smiley'] == 'no' || $arr['show_smiley'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
@@ -439,7 +438,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="patient_name_pdf" class="col-lg-4 control-label">Patient Name </label>
+                      <label for="patient_name_pdf" class="col-lg-4 control-label">Patient Name Format</label>
                       <div class="col-lg-8">
                         <select type="text" class="form-control" id="patient_name_pdf" name="patient_name_pdf" title="Choose one option" value="<?php echo $arr['patient_name_pdf']; ?>">
                             <option value="flname" <?php echo ('flname'==$arr['patient_name_pdf'])?"selected='selected'":""?>>First Name + Last Name</option>
