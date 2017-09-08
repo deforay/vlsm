@@ -6,6 +6,19 @@ require '../includes/mail/PHPMailerAutoload.php';
 include('../General.php');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
+$configSyncQuery ="SELECT value FROM global_config where name='sync_path'";
+$configSyncResult = $db->rawQuery($configSyncQuery);
+//get vl result mail sent list
+$resultmailSentQuery ="SELECT result_mail_datetime FROM vl_request_form where MONTH(result_mail_datetime) = MONTH(CURRENT_DATE())";
+$resultmailSentResult = $db->rawQuery($resultmailSentQuery);
+$sourcecode = sprintf("%02d",(count($resultmailSentResult)+1));
+//get instance facility code
+$sequencenumber = '';
+$instancefacilityCodeQuery ="SELECT instance_facility_code FROM vl_instance";
+$instancefacilityCodeResult = $db->rawQuery($instancefacilityCodeQuery);
+$instancefacilityCode = (isset($instancefacilityCodeResult[0]['instance_facility_code']) && trim($instancefacilityCodeResult[0]['instance_facility_code'])!= '')? '/'.$instancefacilityCodeResult[0]['instance_facility_code']:'';
+$year = date("Y");$month = strtolower(date("M"));
+$sequencenumber = 'Ref : vlsm/results/'.$year.'/'.$month.$instancefacilityCode.'/'.$sourcecode;
 //get other config values
 $geQuery="SELECT * FROM other_config WHERE type = 'result'";
 $geResult = $db->rawQuery($geQuery);
@@ -13,9 +26,6 @@ $mailconf = array();
 foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
-$configSyncQuery ="SELECT value FROM global_config where name='sync_path'";
-$configSyncResult = $db->rawQuery($configSyncQuery);
-
 if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
    if(isset($mailconf['rs_field']) && trim($mailconf['rs_field'])!= ''){
       //Create a new PHPMailer instance
@@ -74,6 +84,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
       if(isset($_POST['message']) && trim($_POST['message'])!=""){
         $message =ucfirst(nl2br($_POST['message']));
       }
+      $message = $sequencenumber.'<br><br>'.$message;
       $mail->msgHTML($message);
       $mail->SMTPOptions = array(
          'ssl' => array(
