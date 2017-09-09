@@ -62,7 +62,7 @@ $sWhere = '';
    $vlSampleResult['hvl'] = $db->rawQuery($hvlQuery);
    $vlSampleResult['lvl'] = $db->rawQuery($lvlQuery);
 ?>
-<div id="sampleStatusOverviewContainer" style="float:left;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
+<div id="sampleStatusOverviewContainer" style="float:left;min-width: 480px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
 <div id="samplesVlOverview" style="float:right;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
 <script>
     <?php
@@ -93,7 +93,7 @@ $sWhere = '';
                             useHTML: true,
                             format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
                             style: {
-                              width: '80px',
+                              width: '120px',
                               //crop:false,
                               //overflow:'none',
                               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
