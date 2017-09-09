@@ -93,12 +93,12 @@ $sWhere = '';
                             useHTML: true,
                             format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
                             style: {
-                              width: '120px',
+                              width: '100px',
                               //crop:false,
                               //overflow:'none',
                               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             },
-                            distance:14
+                            distance:10
                         },
                         showInLegend: true
                     }
@@ -151,11 +151,13 @@ $sWhere = '';
                         cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.name}</b>: {point.y}',
+                            useHTML: true,
+                            format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
                             style: {
+                                width: '100px',
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             },
-                            distance:20
+                            distance:10
                         },
                         showInLegend: true
                     }
