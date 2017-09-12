@@ -172,7 +172,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur le patient </h3>&nbsp;&nbsp;&nbsp;
                         <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Code du patient" title="Please enter code du patient"/>&nbsp;&nbsp;
-                        <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a>
+                        <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a><span id="showEmptyResult" style="display:none;color: #ff0000;font-size: 15px;"><b>&nbsp;No Result</b></span>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
@@ -963,11 +963,14 @@
   }
   function showPatientList()
   {
+    $("#showEmptyResult").hide();
       if($.trim($("#artPatientNo").val())!=''){
         $.post("checkPatientExist.php", { artPatientNo : $("#artPatientNo").val()},
         function(data){
             if(data >= '1'){
                 showModal('patientModal.php?artNo='+$.trim($("#artPatientNo").val()),900,520);
+            }else{
+              $("#showEmptyResult").show();
             }
         });
       }
