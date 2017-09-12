@@ -115,6 +115,15 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 	if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 	    $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
 	}
+	if(isset($_POST['contactStatus']) && trim($_POST['contactStatus'])!= ''){
+		if($_POST['contactStatus']=='all')
+		{
+			$sWhere = $sWhere.' AND (contact_complete_status = "no" OR contact_complete_status="yes" OR contact_complete_status IS NULL)';
+		}else{
+	    $sWhere = $sWhere.' AND contact_complete_status = "'.$_POST['contactStatus'].'"';
+		}
+	}
+	
 	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
 	    if (trim($start_date) == trim($end_date)) {
 		$sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
@@ -154,7 +163,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where result_status=7 AND result > $thresholdLimit AND vlsm_country_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status=7 AND result > $thresholdLimit AND vlsm_country_id='".$arr['vl_form']."' $sWhere");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
