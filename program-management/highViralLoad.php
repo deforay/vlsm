@@ -91,6 +91,17 @@ $batResult = $db->rawQuery($batQuery);
 		    
 		</tr>
 		<tr>
+			<td>&nbsp;<b>Contact Status&nbsp;:</b></td>
+			<td>
+		      <select class="form-control" id="contactStatus" name="contactStatus" title="Please select contact status" style="width:220px;">
+		      <option value=""> -- Select -- </option>
+					<option value="yes">Completed</option>
+					<option value="no" selected="selected">Not Completed</option>
+					<option value="all">All</option>
+		      </select>
+		    </td>
+		</tr>
+		<tr>
 		  <td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
@@ -268,6 +279,7 @@ $batResult = $db->rawQuery($batQuery);
 		aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
 		aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
 		aoData.push({"name": "vlPrint", "value": 'print'});
+		aoData.push({"name": "contactStatus", "value": $("#contactStatus").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
