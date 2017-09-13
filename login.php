@@ -106,16 +106,19 @@ $configResult=$db->query($globalConfigQuery);
             </div>  
         </div>
     </div>
-    <div style="opacity: 0.9;bottom:7vh;padding-left:1%;width:100%;position:fixed;">
-        <a id="download-form" href="#" style="color:#fff;text-decoration:underline;"><h4>Download VL Form</h4></a>
-        <select id="country" name="country" class="form-control" style="width:220px;display:none;">
+    <div style="padding:1% 2%;width:100%;position:absolute;bottom:1.5%;color:#fff;background:rgba(0,0,0,0);">
+        <span>
+        <a id="download-form" href="#" style="color:#fff;text-decoration:underline;">Download VL Form</a>
+        <select id="country" name="country" class="form-control" style="width:200px;display:none;">
             <option value=""> -- Select Country -- </option>
             <option value="6">South Sudan</option>
             <option value="5">Rwanda</option>
             <option value="3">DRC</option>
             <option value="4">Zambia</option>
         </select>
-        <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h5>Clik here to download</h5></a>
+        <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h5>Click here to Download</h5></a>
+        </span>
+        <span class="pull-right" style="font-weight:bold;">v <?php echo VERSION; ?></span>
     </div>
     <script src="assets/js/deforayValidation.js"></script>
     <script src="assets/js/jquery.blockUI.js"></script>

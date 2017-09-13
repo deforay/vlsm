@@ -1,6 +1,6 @@
 <?php
 
-require_once('config.production.php');
+require_once(__DIR__.'/config.production.php');
 
 $HOST = 'localhost';
 $USER = 'root';
