@@ -2287,17 +2287,11 @@ class MysqliDb
 
 // END class
 
-
-
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? 
                                   getenv('APPLICATION_ENV') : 
                                   'production'));
 
-if(APPLICATION_ENV == 'production'){
-	require_once('config.production.php');
-}else{
-	require_once('config.development.php');
-}
+require_once(realpath(__DIR__."/../configs/config.".APPLICATION_ENV.".php"));
 
 $db = new MysqliDb($HOST, $USER, $PASSWORD, $DBNAME, $PORT);
