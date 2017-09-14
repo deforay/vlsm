@@ -73,14 +73,12 @@ $configResult=$db->query($globalConfigQuery);
         <?php
         }
         
-        
         ?>
         <div id="loginbox" style="margin-top:20px;margin-bottom:70px;float:right;margin-right:10px;" class="mainbox col-md-3 col-sm-8 ">
             <div class="panel panel-default" style="opacity: 0.93;">
                 <div class="panel-heading">
                     <div class="panel-title">Viral Load Sample Management</div>
-                    
-                </div>     
+                </div>
     
                 <div style="padding-top:10px;" class="panel-body" >
                     <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
