@@ -25,18 +25,7 @@ var selected_printer = null;
 // ^PQ1,0,1,Y^XZ";
 
 
-var zebraFormat = "^XA~TA000~JSN^LT0^MNW^MTD^PON^PMN^LH0,0^JMA^PR5,5~SD15^JUS^LRN^CI0^XZ\
-^XA\
-^MMT\
-^PW695\
-^LL0176\
-^LS0\
-^BY2,3,96^FT325,40^BCI,,Y,N\
-^FD>:DEF>512345678>69^FS\
-^BY2,3,96^FT660,41^BCI,,Y,N\
-^FD>:ACK>512345678>69^FS\
-^PQ1,0,1,Y^XZ\
-";
+
 
 
 var default_mode = true;

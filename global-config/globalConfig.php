@@ -31,7 +31,7 @@ include('../header.php');
               <table id="globalConfigDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-		  <th>Config Name</th>
+		             <th style="width:55%;">Config Name</th>
                   <th>Value</th>
                 </tr>
                 </thead>
