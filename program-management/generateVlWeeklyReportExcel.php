@@ -114,29 +114,29 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
 		           END) AS rejections,
 
 		SUM(CASE 
-			 WHEN (patient_age_in_years <= 14 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+			 WHEN (patient_age_in_years <= 15 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
 		             ELSE 0
-		           END) AS lt14lt1000, 
+		           END) AS lt15lt1000, 
 		SUM(CASE 
-             WHEN (patient_age_in_years <= 14 AND result > 1000) THEN 1
+             WHEN (patient_age_in_years <= 15 AND result > 1000) THEN 1
              ELSE 0
-           END) AS lt14gt1000,
+           END) AS lt15gt1000,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
-           END) AS gt14lt1000M,
+           END) AS gt15lt1000M,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND result > 1000) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND result > 1000) THEN 1
              ELSE 0
-           END) AS gt14gt1000M,
+           END) AS gt15gt1000M,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
-           END) AS gt14lt1000F,
+           END) AS gt15lt1000F,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND result > 1000) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND result > 1000) THEN 1
              ELSE 0
-           END) AS gt14gt1000F,	
+           END) AS gt15gt1000F,	
 		SUM(CASE 
              WHEN ((is_patient_pregnant ='yes') OR (is_patient_breastfeeding ='yes') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
@@ -188,16 +188,16 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
       $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('D2', html_entity_decode('Site Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('E2', html_entity_decode('IPSL ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('E2', html_entity_decode('Facility ID ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('F2', html_entity_decode('No. of Rejections ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('G2', html_entity_decode('Viral Load Result- Peds ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('G3', html_entity_decode('<14 yrs <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('H3', html_entity_decode('<14 yrs >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('G3', html_entity_decode('<15 yrs <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('H3', html_entity_decode('<15 yrs >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('I2', html_entity_decode('Viral Load Result- Adults ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('I3', html_entity_decode('>14yrs Male <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('J3', html_entity_decode('>14yrs Male >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('K3', html_entity_decode('>14yrs Female <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('L3', html_entity_decode('>14yrs  Female >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('I3', html_entity_decode('>15yrs Male <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('J3', html_entity_decode('>15yrs Male >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('K3', html_entity_decode('>15yrs Female <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('L3', html_entity_decode('>15yrs  Female >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('M2', html_entity_decode('Viral Load Results- Pregnant/Breastfeeding Women ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('M3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('N3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -250,12 +250,12 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
              $row[] = ucwords($aRow['facility_name']);
              $row[] = $aRow['facility_code'];
              $row[] = $aRow['rejections'];
-             $row[] = $aRow['lt14lt1000'];
-             $row[] = $aRow['lt14gt1000'];
-             $row[] = $aRow['gt14lt1000M'];
-             $row[] = $aRow['gt14gt1000M'];			
-             $row[] = $aRow['gt14lt1000F'];
-             $row[] = $aRow['gt14gt1000F'];
+             $row[] = $aRow['lt5lt1000'];
+             $row[] = $aRow['lt15gt1000'];
+             $row[] = $aRow['gt15lt1000M'];
+             $row[] = $aRow['gt15gt1000M'];			
+             $row[] = $aRow['gt15lt1000F'];
+             $row[] = $aRow['gt15gt1000F'];
              $row[] = $aRow['preglt1000'];
              $row[] = $aRow['preggt1000'];
              $row[] = $aRow['ult1000'];
@@ -321,7 +321,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
    $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
    $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
    $sheet->setCellValue('D2', html_entity_decode('Super Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('E2', html_entity_decode('IPSL ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+   $sheet->setCellValue('E2', html_entity_decode('Lab ID ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
    $sheet->setCellValue('F2', html_entity_decode('Total Number of VL samples Received at Laboratory ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
    $sheet->setCellValue('G2', html_entity_decode('Total Number of Viral load tests done (inc failed tests) ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
    $sheet->setCellValue('H2', html_entity_decode('No. of Samples Not Tested ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -435,8 +435,9 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         }
     }
    //Super lab performance sheet end
+   $instance = isset($_SESSION['instanceFname']) ? $_SESSION['instanceFname'] : $_SESSION['instanceId'];
    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-   $filename = 'vl-lab-weekly-report-' . date('d-M-Y-H-i-s') . '.xls';
+   $filename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') ."-".$instance. '.xls';
    $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
    echo $filename;
  }else{

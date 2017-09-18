@@ -102,29 +102,29 @@ $country = $configResult[0]['value'];
 		             ELSE 0
 		           END) AS rejections,
 		SUM(CASE 
-			WHEN (patient_age_in_years <= 14 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+			WHEN (patient_age_in_years <= 15 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
 		             ELSE 0
-		           END) AS lt14lt1000, 
+		           END) AS lt15lt1000, 
 		SUM(CASE 
-             WHEN (patient_age_in_years <= 14 AND result > 1000) THEN 1
+             WHEN (patient_age_in_years <= 15 AND result > 1000) THEN 1
              ELSE 0
-           END) AS lt14gt1000,
+           END) AS lt15gt1000,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
-           END) AS gt14lt1000M,
+           END) AS gt15lt1000M,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND result > 1000) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND result > 1000) THEN 1
              ELSE 0
-           END) AS gt14gt1000M,
+           END) AS gt15gt1000M,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
-           END) AS gt14lt1000F,
+           END) AS gt15lt1000F,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND result > 1000) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND result > 1000) THEN 1
              ELSE 0
-           END) AS gt14gt1000F,	
+           END) AS gt15gt1000F,	
 		SUM(CASE 
              WHEN ((is_patient_pregnant ='yes') OR (is_patient_breastfeeding ='yes') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
@@ -191,7 +191,7 @@ $country = $configResult[0]['value'];
 		$sQuery = $sQuery.' '.$sWhere;
 		$sQuery = $sQuery.' GROUP BY vl.facility_id';
 		
-		
+		//die($sQuery);
 		$_SESSION['vlStatisticsQuery']=$sQuery;
 		
 		
@@ -207,7 +207,7 @@ $country = $configResult[0]['value'];
         $sResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $sWhere GROUP BY vl.facility_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $sWhere GROUP BY vl.facility_id");
         $iFilteredTotal = count($aResultFilterTotal);
         /* Total data set length */
         $aResultTotal =  $db->rawQuery("select vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $tWhere GROUP BY vl.facility_id");
@@ -228,14 +228,14 @@ $country = $configResult[0]['value'];
 	    $row[] = ucwords($aRow['facility_state']);
 	    $row[] = ucwords($aRow['facility_district']);
 	    $row[] = ucwords($aRow['facility_name']);
-	    $row[] = $aRow['facility_code'];
+	    // $row[] = $aRow['facility_code'];
 	    $row[] = $aRow['rejections'];
-	    $row[] = $aRow['lt14lt1000'];
-	    $row[] = $aRow['lt14gt1000'];
-	    $row[] = $aRow['gt14lt1000M'];
-	    $row[] = $aRow['gt14gt1000M'];			
-	    $row[] = $aRow['gt14lt1000F'];
-	    $row[] = $aRow['gt14gt1000F'];
+	    $row[] = $aRow['lt15lt1000'];
+	    $row[] = $aRow['lt15gt1000'];
+	    $row[] = $aRow['gt15lt1000M'];
+	    $row[] = $aRow['gt15gt1000M'];			
+	    $row[] = $aRow['gt15lt1000F'];
+	    $row[] = $aRow['gt15gt1000F'];
 	    $row[] = $aRow['preglt1000'];
 	    $row[] = $aRow['preggt1000'];
 	    $row[] = $aRow['ult1000'];
