@@ -63,33 +63,33 @@
             <div class="box-body">
               <table id="vlWeeklyReportDataTable" class="table table-bordered table-striped">
                 <thead>
-                <tr>
-		  <th rowspan="2">Province/State</th>
-		  <th rowspan="2">District/County</th>
-		  <th rowspan="2">Site Name</th>
-                  <th rowspan="2">IPSL</th>
-                  <th rowspan="2">No. of Rejections</th>
-                  <th colspan="2" style="text-align:center;">Viral Load Results - Peds</th>
-                  <th colspan="4" style="text-align:center;">Viral Load Results - Adults</th>
-                  <th colspan="2" style="text-align:center;">Viral Load Results - Pregnant/Breastfeeding Women</th>
-                  <th colspan="2" style="text-align:center;">Age/Sex Unknown</th>
-                  <th colspan="2" style="text-align:center;">Totals</th>
-                  <th rowspan="2">Total Test per Clinic</th>
-                </tr>
-		<tr>
-		  <th><= 14 yrs <=1000 copies/ml</th>
-		  <th><= 14 yrs >1000 copies/ml</th>
-		  <th>> 14yrs Male <= 1000 copies/ml</th>
-		  <th>> 14yrs Male > 1000 copies/ml</th>
-		  <th>> 14yrs Female <= 1000 copies/ml</th>
-		  <th>> 14yrs  Female > 1000 copies/ml</th>
-		  <th><= 1000 copies/ml</th>
-		  <th>> 1000 copies/ml</th>
-		  <th>Unknown Age/Sex <= 1000ml</th>
-		  <th>Unknown Age/Sex > 1000ml</th>
-		  <th><= 1000 copies/ml</th>
-		  <th>> 1000 copies/ml</th>
-		</tr>
+                  <tr>
+                    <th rowspan="2">Province/State</th>
+                    <th rowspan="2">District/County</th>
+                    <th rowspan="2">Site Name</th>
+                    <!-- <th rowspan="2">IPSL</th> -->
+                    <th rowspan="2">No. of Rejections</th>
+                    <th colspan="2" style="text-align:center;">Viral Load Results - Peds</th>
+                    <th colspan="4" style="text-align:center;">Viral Load Results - Adults</th>
+                    <th colspan="2" style="text-align:center;">Viral Load Results - Pregnant/Breastfeeding Female</th>
+                    <th colspan="2" style="text-align:center;">Age/Sex Unknown</th>
+                    <th colspan="2" style="text-align:center;">Totals</th>
+                    <th rowspan="2">Total Test per Clinic</th>
+                  </tr>
+                  <tr>
+                    <th><= 15 y &amp; <=1000 cp/ml</th>
+                    <th><= 15  y &amp; >1000 cp/ml</th>
+                    <th>> 15  y &amp; Male <=1000 cp/ml</th>
+                    <th>> 15  y &amp; Male >1000 cp/ml</th>
+                    <th>> 15  y &amp; Female <=1000 cp/ml</th>
+                    <th>> 15  y &amp; Female >1000 cp/ml</th>
+                    <th><=1000 cp/ml</th>
+                    <th>>1000 cp/ml</th>
+                    <th>Unknown Age/Sex <=1000 cp/ml</th>
+                    <th>Unknown Age/Sex >1000 cp/ml</th>
+                    <th><=1000 cp/ml</th>
+                    <th>>1000 cp/ml</th>
+                  </tr>
                 </thead>
                 <tbody>
                   <tr>
@@ -152,7 +152,7 @@
             "aoColumns": [
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center"},
+                // {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},

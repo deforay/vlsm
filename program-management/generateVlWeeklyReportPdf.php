@@ -162,29 +162,29 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
 		           END) AS rejections,
 
 		SUM(CASE 
-			 WHEN (patient_age_in_years <= 14 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+			 WHEN (patient_age_in_years <= 15 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
 		             ELSE 0
-		           END) AS lt14lt1000, 
+		           END) AS lt15lt1000, 
 		SUM(CASE 
-             WHEN (patient_age_in_years <= 14 AND result > 1000) THEN 1
+             WHEN (patient_age_in_years <= 15 AND result > 1000) THEN 1
              ELSE 0
-           END) AS lt14gt1000,
+           END) AS lt15gt1000,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
-           END) AS gt14lt1000M,
+           END) AS gt15lt1000M,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND result > 1000) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='male') AND result > 1000) THEN 1
              ELSE 0
-           END) AS gt14gt1000M,
+           END) AS gt15gt1000M,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
-           END) AS gt14lt1000F,
+           END) AS gt15lt1000F,
 		SUM(CASE 
-             WHEN (patient_age_in_years > 14 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND result > 1000) THEN 1
+             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND result > 1000) THEN 1
              ELSE 0
-           END) AS gt14gt1000F,	
+           END) AS gt15gt1000F,	
 		SUM(CASE 
              WHEN ((is_patient_pregnant ='yes') OR (is_patient_breastfeeding ='yes') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
              ELSE 0
@@ -234,7 +234,7 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
 		  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Province/State</strong></th>';
 		  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>District/County</strong></th>';
 		  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Site Name</strong></th>';
-                  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>IPSL</strong></th>';
+                  $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Site ID</strong></th>';
                   $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>No. of Rejections</strong></th>';
                   $html.='<th colspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Peds</strong></th>';
                   $html.='<th colspan="4" align="center" style="border:1px solid #f4f4f4;"><strong>Viral Load Results - Adults</strong></th>';
@@ -244,12 +244,12 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
                   $html.='<th rowspan="2" align="center" style="border:1px solid #f4f4f4;"><strong>Total Test per Clinic</strong></th>';
                 $html.='</tr>';
 		$html.='<tr>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 14 yrs &lt;= 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 14 yrs &gt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 14yrs Male &lt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 14yrs Male &gt; 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 14yrs Female &lt;= 1000 cp/ml</strong></th>';
-		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 14yrs  Female &gt; 1000 cp/ml</strong></th>';
+		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 15 yrs &lt;= 1000 cp/ml</strong></th>';
+		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 15 yrs &gt; 1000 cp/ml</strong></th>';
+		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Male &lt; 1000 cp/ml</strong></th>';
+		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Male &gt; 1000 cp/ml</strong></th>';
+		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs Female &lt;= 1000 cp/ml</strong></th>';
+		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 15yrs  Female &gt; 1000 cp/ml</strong></th>';
 		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&lt;= 1000 cp/ml</strong></th>';
 		  $html.='<th align="center" style="border:1px solid #f4f4f4;"> <strong>&gt; 1000 cp/ml</strong></th>';
 		  $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Unknown Age/Sex &lt;= 1000ml</strong></th>';
@@ -267,12 +267,12 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
                     $html.='<td style="border:1px solid #f4f4f4;">'.ucwords($result['facility_name']).'</td>';
                     $html.='<td style="border:1px solid #f4f4f4;">'.$result['facility_code'].'</td>';
                     $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['rejections'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['lt14lt1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['lt14gt1000'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt14lt1000M'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt14gt1000M'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt14lt1000F'].'</td>';
-                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt14gt1000F'].'</td>';
+                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['lt15lt1000'].'</td>';
+                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['lt15gt1000'].'</td>';
+                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15lt1000M'].'</td>';
+                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15gt1000M'].'</td>';
+                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15lt1000F'].'</td>';
+                    $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['gt15gt1000F'].'</td>';
                     $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['preglt1000'].'</td>';
                     $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['preggt1000'].'</td>';
                     $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$result['ult1000'].'</td>';
@@ -359,7 +359,7 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
                 $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Province/State</strong></th>';
                 $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>District/County </strong></th>';
                 $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Super Lab Name </strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>IPSL</strong></th>';
+                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Lab ID</strong></th>';
                 $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Total Number of VL samples Received at Laboratory</strong></th>';
                 $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Total Number of Viral load tests done (inc failed tests)</strong></th>';
                 $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>No. of Samples Not Tested</strong></th>';
@@ -462,7 +462,8 @@ if(isset($_POST['lab']) && $_POST['lab']!= '' && count(array_filter($_POST['lab'
           $resultPdf->setPrintHeader(false);
           $resultPdf->setPrintFooter(false);
           $resultPdf->concat();
-          $reportFilename = 'vl-lab-weekly-report-' . date('d-M-Y-H-i-s') .'.pdf';
+          $instance = isset($_SESSION['instanceFname']) ? $_SESSION['instanceFname'] : $_SESSION['instanceId'];
+          $reportFilename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') ."-".$instance.'.pdf';
           $resultPdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR.$reportFilename, "F");
           $general->removeDirectory($pathFront);
           unset($_SESSION['rVal']);
