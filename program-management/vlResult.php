@@ -124,7 +124,7 @@ $batResult = $db->rawQuery($batQuery);
 		    </td>
 		    <td><b>Gender&nbsp;:</b></td>
 		    <td>
-		      <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
+		      <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;" onchange="hideFemaleDetails(this.value)">
 			<option value=""> -- Select -- </option>
 			<option value="male">Male</option>
 			<option value="female">Female</option>
@@ -145,18 +145,30 @@ $batResult = $db->rawQuery($batQuery);
 		  <td><b>Show only Reordered Samples&nbsp;:</b></td>
 		    <td>
 		      <select name="showReordSample" id="showReordSample" class="form-control" title="Please choose record sample">
-			  <option value=""> -- Select -- </option>
-			  <option value="yes">Yes</option>
-			  <option value="no" selected="selected">No</option>
+						<option value=""> -- Select -- </option>
+						<option value="yes">Yes</option>
+						<option value="no" selected="selected">No</option>
 		      </select>
 		    </td>
-		  <td><b>Pregnant&nbsp;:</b></td>
-		    <td>
+				<td  colspan="2">
+					<div class="col-md-12">
+					<div class="col-md-6">
+						<b>Pregnant&nbsp;:</b>
 		      <select name="patientPregnant" id="patientPregnant" class="form-control" title="Please choose pregnant option">
-			  <option value=""> -- Select -- </option>
-			  <option value="yes">Yes</option>
-			  <option value="no">No</option>
+						<option value=""> -- Select -- </option>
+						<option value="yes">Yes</option>
+						<option value="no">No</option>
 		      </select>
+					</div>
+					<div class="col-md-6">
+						<b>Breastfeeding&nbsp;:</b>
+					<select name="breastFeeding" id="breastFeeding" class="form-control" title="Please choose pregnant option">
+						<option value=""> -- Select -- </option>
+						<option value="yes">Yes</option>
+						<option value="no">No</option>
+		      </select>
+					</div>
+					</div>
 		    </td>
 		</tr>
 		<tr>
@@ -339,6 +351,7 @@ $batResult = $db->rawQuery($batQuery);
 			  aoData.push({"name": "gender", "value": $("#gender").val()});
 			  aoData.push({"name": "showReordSample", "value": $("#showReordSample").val()});
 			  aoData.push({"name": "patientPregnant", "value": $("#patientPregnant").val()});
+			  aoData.push({"name": "breastFeeding", "value": $("#breastFeeding").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -391,6 +404,18 @@ $batResult = $db->rawQuery($batQuery);
     });
     
   }
+	function hideFemaleDetails(value)
+	{
+		if(value=='female'){
+			$("#patientPregnant").attr("disabled",false);
+			$("#breastFeeding").attr("disabled",false);
+		}else{
+			$('select#patientPregnant option').removeAttr("selected");
+			$('select#breastFeeding option').removeAttr("selected");
+			$("#patientPregnant").attr("disabled",true);
+			$("#breastFeeding").attr("disabled",true);
+		}
+	}
 </script>
  <?php
  include('../footer.php');
