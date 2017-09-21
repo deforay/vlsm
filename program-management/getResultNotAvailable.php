@@ -13,13 +13,12 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-$thresholdLimit = $arr['viral_load_threshold_limit'];
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('f.facility_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name','vl.result');
-        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.patient_mobile_number','vl.sample_collection_date','fd.facility_name','vl.result');
+        $aColumns = array('f.facility_name','vl.patient_art_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name');
+        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.sample_collection_date','fd.facility_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -98,67 +97,62 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT vl.*,f.*,s.*,b.*,art.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id where vl.result_status=7 AND vl.result > ".$thresholdLimit;
-	
-	if(isset($_POST['hvlBatchCode']) && trim($_POST['hvlBatchCode'])!= ''){
-	    $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['hvlBatchCode'].'%"';
-	}
-	if(isset($_POST['hvlContactStatus']) && trim($_POST['hvlContactStatus'])!= ''){
-		if($_POST['hvlContactStatus']=='all')
-		{
-			$sWhere = $sWhere.' AND (contact_complete_status = "no" OR contact_complete_status="yes" OR contact_complete_status IS NULL OR contact_complete_status="")';
-		}else{
-	    $sWhere = $sWhere.' AND contact_complete_status = "'.$_POST['hvlContactStatus'].'"';
-		}
+	$sQuery="SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id where vl.result_status=7 AND (vl.result IS NULL OR vl.result='')";
+		
+	if(isset($_POST['noResultBatchCode']) && trim($_POST['noResultBatchCode'])!= ''){
+	    $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['noResultBatchCode'].'%"';
 	}
 	
-	if(isset($_POST['hvlSampleTestDate']) && trim($_POST['hvlSampleTestDate'])!= ''){
+	if(isset($_POST['noResultSampleTestDate']) && trim($_POST['noResultSampleTestDate'])!= ''){
 	    if (trim($start_date) == trim($end_date)) {
 					$sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
 	    }else{
 	       $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
 	    }
   }
-	if(isset($_POST['hvlSampleType']) && $_POST['hvlSampleType']!=''){
-		$sWhere = $sWhere.' AND s.sample_id = "'.$_POST['hvlSampleType'].'"';
+	if(isset($_POST['noResultSampleType']) && $_POST['noResultSampleType']!=''){
+		$sWhere = $sWhere.' AND s.sample_id = "'.$_POST['noResultSampleType'].'"';
 	}
-	if(isset($_POST['hvlFacilityName']) && $_POST['hvlFacilityName']!=''){
-		$sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['hvlFacilityName'].')';
+	if(isset($_POST['noResultFacilityName']) && $_POST['noResultFacilityName']!=''){
+		$sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['noResultFacilityName'].')';
 	}
-	if(isset($_POST['hvlGender']) && $_POST['hvlGender']!=''){
-		$sWhere = $sWhere.' AND vl.patient_gender = "'.$_POST['hvlGender'].'"';
+	if(isset($_POST['noResultGender']) && $_POST['noResultGender']!=''){
+		$sWhere = $sWhere.' AND vl.patient_gender = "'.$_POST['noResultGender'].'"';
 	}
-	if(isset($_POST['hvlPatientPregnant']) && $_POST['hvlPatientPregnant']!=''){
-		$sWhere = $sWhere.' AND vl.is_patient_pregnant = "'.$_POST['hvlPatientPregnant'].'"';
+	if(isset($_POST['noResultPatientPregnant']) && $_POST['noResultPatientPregnant']!=''){
+		$sWhere = $sWhere.' AND vl.is_patient_pregnant = "'.$_POST['noResultPatientPregnant'].'"';
 	}
-	if(isset($_POST['hvlPatientBreastfeeding']) && $_POST['hvlPatientBreastfeeding']!=''){
-		$sWhere = $sWhere.' AND vl.is_patient_breastfeeding = "'.$_POST['hvlPatientBreastfeeding'].'"';
+	if(isset($_POST['noResultPatientBreastfeeding']) && $_POST['noResultPatientBreastfeeding']!=''){
+		$sWhere = $sWhere.' AND vl.is_patient_breastfeeding = "'.$_POST['noResultPatientBreastfeeding'].'"';
 	}
+	
 	if($sWhere!=''){
-			$sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}else{
-			$sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
 	}
-       
 	$sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by vl.vl_sample_id';
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
         }
-        $_SESSION['highViralResult'] = $sQuery;
+				$_SESSION['resultNotAvailable'] = $sQuery;
+        
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
+        
+        //echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.*,f.*,s.*,b.*,art.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id where vl.result_status=7 AND vl.result > $thresholdLimit $sWhere group by vl.vl_sample_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id where vl.result_status=7 AND (vl.result IS NULL OR vl.result='') $sWhere group by vl.vl_sample_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status=7 AND result > $thresholdLimit AND vlsm_country_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status=7 AND vlsm_country_id='".$arr['vl_form']."'");
         $iTotal = $aResultTotal[0]['total'];
         /*
          * Output
@@ -180,15 +174,8 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
             $row = array();
 						$row[] = ucwords($aRow['facility_name']);
 						$row[] = $aRow['patient_art_no'];
-						$row[] = $aRow['patient_mobile_number'];
 						$row[] = $aRow['sample_collection_date'];
-						$row[] = $aRow['labName'];
-            $row[] = $aRow['result'];
-            $row[] = '<select class="form-control" name="status" id=' . $aRow['vl_sample_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
-												<option value=""> -- Select -- </option>
-												<option value="yes" ' . ($aRow['contact_complete_status'] == "yes" ? "selected=selected" : "") . '>Yes</option>
-												<option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
-											</select>';
+            $row[] = ucwords($aRow['labName']);
 						$output['aaData'][] = $row;
         }
         echo json_encode($output);
