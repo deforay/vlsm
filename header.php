@@ -338,7 +338,7 @@ $formConfigResult=$db->query($formConfigQuery);
                     <?php } if(isset($_SESSION['privileges']) && in_array("vlPrintResult.php", $_SESSION['privileges'])){ ?>
                     <li class="allMenu vlPrintResultMenu"><a href="../vl-print/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
                     <?php } if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu vlHighMenu"><a href="../program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> High Viral Load</a></li>
+                    <li class="allMenu vlHighMenu"><a href="../program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>
                     <?php }  if(isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])){ ?>
                     <!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
                     <?php } if(isset($_SESSION['privileges']) && in_array("vlWeeklyReport.php", $_SESSION['privileges'])){ ?>
