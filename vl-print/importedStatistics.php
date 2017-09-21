@@ -115,6 +115,7 @@ $_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
 	      alert('Unable to generate download');
 	  }else{
 	      $.unblockUI();
+				window.location.href="importedStatistics.php";
 	      window.open('../uploads/'+data,'_blank');
 	  }
 	  
