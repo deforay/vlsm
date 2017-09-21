@@ -97,7 +97,7 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
   }
  }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.xls';
+ $filename = 'vl-highviral-load-report' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
  
