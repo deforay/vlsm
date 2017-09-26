@@ -333,7 +333,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="instance_type" class="col-lg-4 control-label">Barcode Printing  (Experimental) <span class="mandatory">*</span> </label>
+                      <label for="instance_type" class="col-lg-4 control-label">Barcode Printing <span class="mandatory">*</span> </label>
                       <div class="col-lg-8">
                         <select class="form-control isRequired" name="bar_code_printing" id="bar_code_printing" title="Please select the barcode printing">
                             <option value="off" <?php echo ('off'==$arr['bar_code_printing'])?"selected='selected'":""?>>Off</option>
@@ -353,6 +353,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                         <br>
                         <input type="radio" id="import_non_matching_sample_yes" name="import_non_matching_sample" value="yes" <?php echo($arr['import_non_matching_sample'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
                         <input type="radio" id="import_non_matching_sample_no" name="import_non_matching_sample" value="no" <?php echo($arr['import_non_matching_sample'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
+                        <br><br> <code>While importing results from CSV/Excel file, should we import results of Sample IDs that do not match the Sample IDs present in VLSM database</code>
                       </div>
                     </div>
                    </div>
