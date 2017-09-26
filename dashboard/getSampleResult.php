@@ -43,8 +43,9 @@ foreach($vlResult as $vlData){
       $sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$date.' 00:00:00" AND DATE(vl.sample_collection_date) <= "'.$date.' 23:59:59"';
    }
    //get waiting data
-    $waitingWhere.= ' and vl.result_status=8';
-    $waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
+    $waitingWhere.= " AND (vl.result is null or vl.result = '')";
+    //$waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
+    $waitingQuery = $tQuery.' '.$waitingWhere;
     $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
     if($waitingResult[$i][0]['total']!= 0){
       $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
@@ -55,7 +56,7 @@ foreach($vlResult as $vlData){
     }
     
    //get rejected data
-    $rejectedWhere.= ' and vl.result_status=4';
+    $rejectedWhere.= " AND vl.is_sample_rejected='yes'";
     $rejectedQuery = $tQuery.' '.$sWhere.$rejectedWhere;
     $rejectedResult[$i] = $db->rawQuery($rejectedQuery);//rejected result
     if($rejectedResult[$i][0]['total']!= 0){
@@ -98,6 +99,9 @@ foreach($stVlResult as $vlData){
       $sWhere.= ' AND DATE(vl.sample_tested_datetime) >= "'.$date.' 00:00:00" AND DATE(vl.sample_tested_datetime) <= "'.$date.' 23:59:59"';
    }
    $acceptedQuery = $tQuery.' '.$sWhere;
+
+   //echo ($acceptedQuery); die;
+
    $acceptedResult[$j] = $db->rawQuery($acceptedQuery);
    if($acceptedResult[$j][0]['total']!= 0){
      $acceptedTotal = $acceptedTotal + $acceptedResult[$j][0]['total'];
@@ -117,6 +121,7 @@ foreach($stVlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $receivedTotal; ?>"><?php echo $receivedTotal; ?></span>
                 </h3>
                 <small class="font-green-sharp">SAMPLES ACCESSION</small><br>
+                <small class="font-green-sharp" style="font-size:0.75em;">in selected range</small>
                 <!--<small class="font-green-sharp"><?php echo $dFormat;?></small>-->
             </div>
             <div class="icon">
@@ -134,6 +139,7 @@ foreach($stVlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
                 </h3>
                 <small class="font-purple-soft">SAMPLES WAITING</small><br>
+                <small class="font-purple-soft"  style="font-size:0.75em;">As of today</small>
                 <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
             </div>
             <div class="icon">
@@ -151,6 +157,7 @@ foreach($stVlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $acceptedTotal; ?>"><?php echo $acceptedTotal; ?></span>
                 </h3>
                 <small class="font-blue-sharp">SAMPLES TESTED</small><br>
+                <small class="font-blue-sharp"  style="font-size:0.75em;">In Selected Range</small>
                 <!--<small class="font-blue-sharp"><?php echo $acceptedDate;?></small>-->
             </div>
             <div class="icon">
@@ -168,6 +175,7 @@ foreach($stVlResult as $vlData){
                     <span data-counter="counterup" data-value="<?php echo $rejectedTotal; ?>"><?php echo $rejectedTotal; ?></span>
                 </h3>
                 <small class="font-red-haze">SAMPLES REJECTED</small><br>
+                <small class="font-red-haze" style="font-size:0.75em;">In Selected Range</small>
                 <!--<small class="font-red-haze"><?php echo $rejectedDate;?></small>-->
             </div>
             <div class="icon">
