@@ -1,7 +1,7 @@
 <?php
 ob_start();
 
-$title = "VLSM | Add Batch";
+$title = "VLSM | Add New Batch";
 
 include('../header.php');
 //global config
@@ -361,24 +361,24 @@ foreach($importConfigResult as $machine) {
       $.blockUI();
       var urgent = $("input:radio[name=urgency]");
       if((urgent[0].checked==false && urgent[1].checked==false) || urgent == 'undefined'){
-	urgent = '';
+	      urgent = '';
       }else{
-	urgent = $('input[name=urgency]:checked').val();
+	      urgent = $('input[name=urgency]:checked').val();
       }
       var fName = $("#facilityName").val();
       var sName = $("#sampleType").val();
       var gender= $("#gender").val();
       var prg = $("input:radio[name=pregnant]");
       if((prg[0].checked==false && prg[1].checked==false) || prg == 'undefined'){
-	pregnant = '';
+	      pregnant = '';
       }else{
-	pregnant = $('input[name=pregnant]:checked').val();
+	      pregnant = $('input[name=pregnant]:checked').val();
       }
       var breastfeeding = $("input:radio[name=breastfeeding]");
       if((breastfeeding[0].checked==false && breastfeeding[1].checked==false) || breastfeeding == 'undefined'){
-	breastfeeding = '';
+	      breastfeeding = '';
       }else{
-	breastfeeding = $('input[name=breastfeeding]:checked').val();
+	      breastfeeding = $('input[name=breastfeeding]:checked').val();
       }
       $.post("getSampleCodeDetails.php", {urgent:urgent,sampleCollectionDate:$("#sampleCollectionDate").val(),fName:fName,sName:sName,gender:gender,pregnant:pregnant,breastfeeding:breastfeeding},
       function(data){
@@ -405,13 +405,13 @@ foreach($importConfigResult as $machine) {
     $("#machine").change(function(){
       var self = this.value;
       if(self!= ''){
-	getSampleCodeDetails();
-	var selected = $(this).find('option:selected');
+      	getSampleCodeDetails();
+	      var selected = $(this).find('option:selected');
         noOfSamples = selected.data('no-of-samples');
-	$('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of maximum '+noOfSamples+' samples to make it a batch');
+	      $('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of maximum '+noOfSamples+' samples to make it a batch');
       }else{
-	$('.ms-list').html('');
-	$('#alertText').html('');
+	      $('.ms-list').html('');
+    	  $('#alertText').html('');
       }
     });
   </script>
