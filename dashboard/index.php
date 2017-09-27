@@ -112,6 +112,7 @@ include('../header.php');
       function(data){
 	  if($.trim(data)!=''){
 	    $("#pieChartDiv").html(data);
+		$("#labAverageTat").hide();
 	  }
       });
     
