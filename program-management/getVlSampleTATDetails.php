@@ -111,30 +111,30 @@ $primaryKey="vl_sample_id";
 	     $end_date = $general->dateFormat(trim($s_c_date[1]));
 	   }
 	}
-	  //$sWhere = '';
+	  $seWhere = '';
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-	         $sWhere = $sWhere.' AND b.batch_code = "'.$_POST['batchCode'].'"';
+	         $seWhere = $seWhere.' AND b.batch_code = "'.$_POST['batchCode'].'"';
 	    }
 	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
             if (trim($start_date) == trim($end_date)) {
-		    $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+		    $seWhere = $seWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
             }else{
-               $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+               $seWhere = $seWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
             }
 	    }
 	    if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
-		    $sWhere = $sWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
+		    $seWhere = $seWhere.' AND s.sample_id = "'.$_POST['sampleType'].'"';
 	    }
 	    if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
-		  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
+		  $seWhere = $seWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 	    }
 	if($sWhere!='')
     {
-        $saWhere = "AND ".$sWhere;
+        $saWhere = "AND ".$sWhere.' '.$seWhere;
         $sQuery = $sQuery.' '.$saWhere;
     }else{
-        $saWhere = $sWhere;
-        $sQuery = $sQuery.' '.$sWhere;
+        $saWhere = $sWhere.' '.$seWhere;
+        $sQuery = $sQuery.' '.$saWhere;
     }
     //echo $sQuery;die;
         $_SESSION['vlTATDetails'] = $sQuery;
