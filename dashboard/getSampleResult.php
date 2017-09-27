@@ -22,6 +22,8 @@ $sWhere = '';
 $vlQuery = "select DISTINCT YEAR(sample_collection_date), MONTH(sample_collection_date), DAY(sample_collection_date)  from vl_request_form as vl ";
 $sWhere.= ' where DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
 $vlQuery = $vlQuery.$sWhere;
+
+
 $vlResult = $db->rawQuery($vlQuery);
 
 $waitingTotal = 0;
@@ -31,29 +33,35 @@ $dFormat = '';
 $waitingDate = '';
 $rejectedDate = '';
 $i = 0;
+
+//get waiting data
+$tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
+$waitingWhere = "";
+$waitingWhere .= " AND (vl.result is null or vl.result = '')";
+//$waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
+$waitingQuery = $tQuery.' '.$waitingWhere;
+
+$waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
+if($waitingResult[$i][0]['total']!= 0){
+  $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
+  $waitingResult[$i]['date'] = $dFormat;
+  $waitingDate = $dFormat;
+}else{
+  unset($waitingResult[$i]);
+}
+
 foreach($vlResult as $vlData){
    $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
    $date = $vlData['YEAR(sample_collection_date)']."-".$vlData['MONTH(sample_collection_date)']."-".$vlData['DAY(sample_collection_date)'];
    $dFormat = date("d M", strtotime($date));
    //filter
    $sWhere = '';
-   $waitingWhere = '';
+   
    $rejectedWhere = '';
    if(isset($cDate) && trim($cDate)!= ''){
       $sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$date.' 00:00:00" AND DATE(vl.sample_collection_date) <= "'.$date.' 23:59:59"';
    }
-   //get waiting data
-    $waitingWhere.= " AND (vl.result is null or vl.result = '')";
-    //$waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
-    $waitingQuery = $tQuery.' '.$waitingWhere;
-    $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
-    if($waitingResult[$i][0]['total']!= 0){
-      $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
-      $waitingResult[$i]['date'] = $dFormat;
-      $waitingDate = $dFormat;
-    }else{
-      unset($waitingResult[$i]);
-    }
+
     
    //get rejected data
     $rejectedWhere.= " AND vl.is_sample_rejected='yes'";
