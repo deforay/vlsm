@@ -715,6 +715,7 @@ $sFormat = '';
     provinceName = true;
     facilityName = true;
     $(document).ready(function() {
+      $('#fName').select2({placeholder:"Select Clinic/Health Center"});
       // BARCODESTUFF START
 			
 	<?php
@@ -722,7 +723,7 @@ $sFormat = '';
             echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
           }
 	?>
-  // BARCODESTUFF END
+      // BARCODESTUFF END
         $('.date').datepicker({
            changeMonth: true,
            changeYear: true,

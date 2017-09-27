@@ -818,6 +818,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     provinceName = true;
     facilityName = true;
     $(document).ready(function() {
+        $('#fName').select2({placeholder:"Select Clinic/Health Center"});
         $('.date').datepicker({
            changeMonth: true,
            changeYear: true,

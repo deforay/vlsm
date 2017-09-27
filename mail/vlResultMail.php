@@ -4,7 +4,7 @@ $title = "VLSM | Email VL Test Results";
 include('../header.php');
 $configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configResult = $db->rawQuery($configQuery);
-$formId = 0;
+$formId=0;
 if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
   $formId = intval($configResult[0]['value']);
 }
@@ -15,7 +15,8 @@ $sTypeQuery="SELECT * FROM r_sample_type where status='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 $facilityQuery="SELECT * FROM facility_details where status='active'";
 $facilityResult = $db->rawQuery($facilityQuery);
-//Get batches
+$pdQuery="SELECT * from province_details";
+$pdResult=$db->query($pdQuery);
 $batchQuery="SELECT * FROM batch_details";
 $batchResult = $db->rawQuery($batchQuery);
 ?>
@@ -151,11 +152,20 @@ $batchResult = $db->rawQuery($batchQuery);
 			    <tr>
                                 <td>&nbsp;<b>Province/State &nbsp;:</b></td>
                                 <td>
-                                    <input type="text" id="state" name="state" class="form-control" placeholder="Province/State" style="width:275px;"/>
+				    <select name="state" id="state" class="form-control" title="Please choose province/state" onchange="getProvinceDistricts();" style="width:275px;">
+                                          <option value=""> -- Select -- </option>
+                                          <?php
+                                          foreach($pdResult as $province){
+                                          ?>
+                                           <option value="<?php echo $province['province_name']; ?>"><?php echo ucwords($province['province_name']); ?></option>
+                                          <?php } ?>
+                                    </select>
                                 </td>
                                 <td>&nbsp;<b>District/County&nbsp;:</b></td>
                                 <td>
-                                    <input type="text" id="district" name="district" class="form-control" placeholder="District/County" style="width:275px;"/>
+				    <select name="district" id="district" class="form-control" title="Please choose district/county">
+                                        <option value=""> -- Select -- </option>
+                                    </select>
                                 </td>
                             </tr>
 			    <tr>
@@ -182,7 +192,7 @@ $batchResult = $db->rawQuery($batchQuery);
                             <tr>
                                 <td class=""><b>Mail Sent Status&nbsp;:</b></td>
                                 <td>
-                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:275px;">
+                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status">
                                             <option value="no">Samples Not yet Mailed</option>
                                             <option value="">All Samples</option>
                                             <option value="yes">Already Mailed Samples</option>
@@ -253,7 +263,8 @@ $batchResult = $db->rawQuery($batchQuery);
   var endDate = ""; 
   $(document).ready(function() {
       document.getElementById('message').value = "Hi, \nPFA the viral load test results. \n\nThanks";
-      $('#facilityName').select2({placeholder:"Select Facilities"});
+      $('#facility').select2({placeholder: "Select Facility"});
+      $('#facilityName').select2({placeholder: "Select Facilities"});
       $('#batch').select2({placeholder:"Select Batches"});
       $('#sampleCollectionDate').daterangepicker({
         format: 'DD-MMM-YYYY',
@@ -401,6 +412,23 @@ $batchResult = $db->rawQuery($batchQuery);
      }
   });
   
+  function getProvinceDistricts(){
+    var pName = $("#state").val();
+    if($.trim(pName)!=''){
+      $.post("../includes/getFacilityForClinic.php", { pName : pName},
+      function(data){
+	if($.trim(data) != ""){
+          details = data.split("###");
+          $("#district").html(details[1]);
+	}else{
+	  $("#district").html('<option value=""> -- Select -- </option>');
+	}
+      });
+    }else{
+      $("#district").html('<option value=""> -- Select -- </option>');
+    }
+  }
+  
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'mailForm'
@@ -412,7 +440,6 @@ $batchResult = $db->rawQuery($batchQuery);
     }
   }
 </script>
-  
  <?php
  include('../footer.php');
  ?>
