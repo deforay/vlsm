@@ -182,7 +182,7 @@ $batchResult = $db->rawQuery($batchQuery);
                                 </td>
 																<td class=""><b>Sample Status&nbsp;:</b></td>
                                 <td>
-                                    <select name="sampleStatus" id="sampleStatus" class="form-control" title="Please choose sample status" style="width:275px;">
+                                    <select name="sampleStatus" id="sampleStatus" class="form-control" title="Please choose sample status">
                                             <option value=""> -- Select -- </option>
                                             <option value="7">Accepted</option>
                                             <option value="4">Rejected</option>
@@ -192,7 +192,7 @@ $batchResult = $db->rawQuery($batchQuery);
                             <tr>
                                 <td class=""><b>Mail Sent Status&nbsp;:</b></td>
                                 <td>
-                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status">
+                                    <select name="sampleMailSentStatus" id="sampleMailSentStatus" class="form-control" title="Please choose sample mail sent status" style="width:275px;">
                                             <option value="no">Samples Not yet Mailed</option>
                                             <option value="">All Samples</option>
                                             <option value="yes">Already Mailed Samples</option>
