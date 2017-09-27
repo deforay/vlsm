@@ -84,7 +84,7 @@ $batResult = $db->rawQuery($batQuery);
 		    
 		</tr>
 		<tr>
-		  <td colspan="4">&nbsp;<input type="button" onclick="searchResultData();" value="Search" class="btn btn-success btn-sm">
+		  <td colspan="4">&nbsp;<input type="button" onclick="searchResultData(),searchVlTATData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		  </td>
 		</tr>
@@ -93,6 +93,26 @@ $batResult = $db->rawQuery($batQuery);
             <!-- /.box-header -->
             <div class="box-body" id="pieChartDiv">
               
+            </div>
+						<div class="box-body">
+							<button class="btn btn-success pull-right" type="button" onclick="exportInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
+              <table id="vlRequestDataTable" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+									<th>Sample Id</th>
+									<th>Sample Collection Date</th>
+                  <th>Sample Received Date in Lab</th>
+                  <th>Sample Test Date</th>
+                  <th>Sample Print Date</th>
+									<th>Sample Email Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="6" class="dataTables_empty">Loading data from server</td>
+                </tr>
+                </tbody>
+              </table>
             </div>
             <!-- /.box-body -->
           </div>
@@ -131,6 +151,7 @@ $batResult = $db->rawQuery($batQuery);
       });
      $('#sampleCollectionDate').val("");
      searchResultData();
+     loadVlTATData();
      
   });
   function searchResultData()
@@ -143,6 +164,67 @@ $batResult = $db->rawQuery($batQuery);
 	  }
       });
     $.unblockUI();
+  }
+	function searchVlTATData(){
+    $.blockUI();
+    oTable.fnDraw();
+    $.unblockUI();
+  }
+	function loadVlTATData(){
+    $.blockUI();
+     oTable = $('#vlRequestDataTable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page"
+            },
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            //"bStateSave" : true,
+            "iDisplayLength": 10,
+            "bRetrieve": true,
+            "aoColumns": [
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+            ],
+            "aaSorting": [[ 0, "asc" ]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "getVlSampleTATDetails.php",
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+			  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+			  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+			  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+              $.ajax({
+                  "dataType": 'json',
+                  "type": "POST",
+                  "url": sSource,
+                  "data": aoData,
+                  "success": fnCallback
+              });
+            }
+        });
+     $.unblockUI();
+  }
+	function exportInexcel() {
+    $.blockUI();
+    oTable.fnDraw();
+    $.post("vlSampleTATDetailsExportInExcel.php",{Sample_Collection_Date:$("#sampleCollectionDate").val(),Batch_Code:$("#batchCode  option:selected").text(),Sample_Type:$("#sampleType  option:selected").text(),Facility_Name:$("#facilityName  option:selected").text()},
+    function(data){
+	  if(data == "" || data == null || data == undefined){
+	  $.unblockUI();
+	      alert('Unable to generate excel..');
+	  }else{
+		$.unblockUI();
+	     location.href = '../temporary/'+data;
+	  }
+    });
+    
   }
 </script>
  <?php

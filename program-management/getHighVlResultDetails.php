@@ -134,11 +134,9 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 	if(isset($_POST['hvlPatientBreastfeeding']) && $_POST['hvlPatientBreastfeeding']!=''){
 		$sWhere = $sWhere.' AND vl.is_patient_breastfeeding = "'.$_POST['hvlPatientBreastfeeding'].'"';
 	}
-	if($sWhere!=''){
+
 			$sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
-	}else{
-			$sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
-	}
+
        
 	$sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by vl.vl_sample_id';
