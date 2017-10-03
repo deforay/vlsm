@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/system.php'); 
+require_once(__DIR__.'/../system/system.php'); 
 
 // These settings are for the portable Uniform Server distribution
 $HOST = '127.0.0.1';
