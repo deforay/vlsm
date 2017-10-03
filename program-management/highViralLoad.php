@@ -48,6 +48,7 @@ $batResult = $db->rawQuery($batQuery);
 												<li class="active"><a href="#highViralLoadReport" data-toggle="tab">High Viral Load Report</a></li>
 												<li><a href="#sampleRjtReport" data-toggle="tab">Sample Rejection Report</a></li>
 												<li><a href="#notAvailReport" data-toggle="tab">Results not Available Report</a></li>
+												<li><a href="#incompleteFormReport" data-toggle="tab">Data Quality Check</a></li>
 											</ul>
 											<div id="myTabContent" class="tab-content" >
 												<div class="tab-pane fade in active" id="highViralLoadReport">
@@ -361,6 +362,62 @@ $batResult = $db->rawQuery($batQuery);
 															</tbody>
 													</table>
 												</div>
+												<div class="tab-pane fade" id="incompleteFormReport">
+													<table class="table" style="margin-left:1%;margin-top:20px;width:98%;padding: 3%;">
+															<tr>
+																	<td><b>Sample Collection Date&nbsp;:</b></td>
+																	<td>
+																		<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Sample Collection Date" readonly style="width:220px;background:#fff;"/>
+																	</td>
+																	<td>&nbsp;<b>Fields&nbsp;:</b></td>
+																	<td>
+																		<select class="form-control" id="formField" name="formField" multiple="multiple" title="Please fields" style="width:220px;">
+																			<option value=""> -- Select -- </option>
+																			<option value="serial_no">Sample Code</option>
+																			<option value="sample_collection_date">Sample Collection Date</option>
+																			<option value="sample_batch_id">Batch Code</option>
+																			<option value="patient_art_no">Unique ART No.</option>
+																			<option value="patient_first_name">Patient Name</option>
+																			<option value="facility_id">Facility Name</option>
+																			<option value="facility_state">Province</option>
+																			<option value="facility_district">County</option>
+																			<option value="sample_type">Sample Type</option>
+																			<option value="result">Result</option>
+																			<option value="result_status">Status</option>
+																		</select>
+																	</td>
+															</tr>
+															
+															<tr>
+																<td colspan="4">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+																	&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+																	<button class="btn btn-success btn-sm" type="button" onclick="exportDataQualityInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
+																	</td>
+															</tr>
+													</table>
+													<table id="incompleteReport" class="table table-bordered table-striped">
+															<thead>
+																	<tr>															
+																		<th>Sample Code</th>
+																		<th>Sample Collection Date</th>
+																		<th>Batch Code</th>
+																		<th>Unique ART No</th>
+																		<th>Patient's Name</th>
+																		<th>Facility Name</th>
+																		<th>Province/State</th>
+																		<th>District/County</th>
+																		<th>Sample Type</th>
+																		<th>Result</th>
+																		<th>Status</th>
+																	</tr>
+															</thead>
+															<tbody>
+																	<tr>
+																			<td colspan="13" class="dataTables_empty">Loading data from server</td>
+																	</tr>
+															</tbody>
+													</table>
+												</div>
 											</div>
 									</div>
 							</div>
@@ -379,9 +436,11 @@ $batResult = $db->rawQuery($batQuery);
 			var oTableViralLoad = null;
 			var oTableRjtReport = null;
 			var oTablenotAvailReport = null;
+			var oTableincompleteReport = null;
       $(document).ready(function() {
 				$("#hvlFacilityName,#rjtFacilityName,#noResultFacilityName").select2({placeholder:"Select Facilities"});
-				$('#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate').daterangepicker({
+				$("#formField").select2({placeholder:"Select Fields"});
+				$('#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate,#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 						separator: ' to ',
             startDate: moment().subtract('days', 29),
@@ -400,10 +459,11 @@ $batResult = $db->rawQuery($batQuery);
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
 				});
-				$('#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate').val('');
+				$('#hvlSampleTestDate,#rjtSampleTestDate,#noResultSampleTestDate,#sampleCollectionDate').val('');
 				highViralLoadReport();
 				sampleRjtReport();
 				notAvailReport();
+				//incompleteForm();
 			});
   function highViralLoadReport(){
     $.blockUI();
@@ -534,12 +594,57 @@ $batResult = $db->rawQuery($batQuery);
         });
      $.unblockUI();
   }
+function incompleteForm(){
+    $.blockUI();
+     oTableincompleteReport = $('#incompleteReport').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page"
+            },
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            //"bStateSave" : true,
+            "bRetrieve": true,
+            "aoColumns": [
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+            ],
+            "aaSorting": [[ 1, "DESC" ]],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "dataQualityCheck.php",
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+							aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+							aoData.push({"name": "formField", "value": $("#formField").val()});
+              $.ajax({
+                  "dataType": 'json',
+                  "type": "POST",
+                  "url": sSource,
+                  "data": aoData,
+                  "success": fnCallback
+              });
+            }
+        });
+     $.unblockUI();
+  }
 	function searchVlRequestData()
 	{
     $.blockUI();
     oTableViralLoad.fnDraw();
     oTableRjtReport.fnDraw();
     oTablenotAvailReport.fnDraw();
+		incompleteForm();
+		oTableincompleteReport.fnDraw();
     $.unblockUI();
 	}
   function updateStatus(id,value){
@@ -589,6 +694,19 @@ $batResult = $db->rawQuery($batQuery);
 	function exportNotAvailableResultInexcel() {
     $.blockUI();
     $.post("vlNotAvailableResultExportInExcel.php",{Sample_Test_Date:$("#noResultSampleTestDate").val(),Batch_Code:$("#noResultBatchCode  option:selected").text(),Sample_Type:$("#noResultSampleType  option:selected").text(),Facility_Name:$("#noResultFacilityName  option:selected").text(),Gender:$("#noResultGender  option:selected").text(),Pregnant:$("#noResultPatientPregnant  option:selected").text(),Breastfeeding:$("#noResultPatientBreastfeeding  option:selected").text()},
+    function(data){
+	  if(data == "" || data == null || data == undefined){
+	  $.unblockUI();
+	      alert('Unable to generate excel..');
+	  }else{
+		$.unblockUI();
+	     location.href = '../temporary/'+data;
+	  }
+    });
+	}
+	function exportDataQualityInexcel() {
+    $.blockUI();
+    $.post("vlDataQualityExportInExcel.php",{Sample_Collection_Date:$("#sampleCollectionDate").val(),Field_Name:$("#formField  option:selected").text()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
