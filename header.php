@@ -211,9 +211,7 @@ $formConfigResult=$db->query($formConfigQuery);
 		<i class="fa fa-dashboard"></i> <span>Dashboard</span>
 	      </a>
 	    </li>
-	<?php } ?>
-	
-	<?php
+	<?php } 
 	if($allAdminMenuAccess == true){ ?>
 	    <li class="treeview manage">
 	      <a href="#">
@@ -330,7 +328,9 @@ $formConfigResult=$db->query($formConfigQuery);
                 <ul class="treeview-menu">
                     <?php if(isset($_SESSION['privileges']) && in_array("missingResult.php", $_SESSION['privileges'])){ ?>
                     <li class="allMenu missingResultMenu"><a href="../program-management/missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
-                    <?php } ?>
+                    <?php } if(isset($_SESSION['privileges']) && in_array("vlControlReport.php", $_SESSION['privileges'])){ ?>
+                    <li class="allMenu vlControlReport"><a href="../program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
+                      <?php } ?>
                     <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
                     <?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
