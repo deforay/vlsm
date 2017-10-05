@@ -37,7 +37,54 @@ try {
                 $comments = $_POST['comments'];
             }
             
-            $data=array(
+            if(($rResult[0]['sample_type']!='S' || $rResult[0]['sample_type']!='s') && $status[$i]!='1'){
+                $data = array('control_code'=>$rResult[0]['sample_code'],
+                              'lab_id'=>$rResult[0]['lab_id'],
+                              'control_type'=>$rResult[0]['sample_type'],
+                              'lot_number'=>$rResult[0]['lot_number'],
+                              'lot_expiration_date'=>$rResult[0]['lot_expiration_date'],
+                              'sample_tested_datetime'=>$rResult[0]['sample_tested_datetime'],
+                              //'is_sample_rejected'=>'yes',
+                              //'reason_for_sample_rejection'=>$rResult[0]['reason_for_sample_rejection'],
+                              'result_value_log'=>$rResult[0]['result_value_log'],
+                              'result_value_absolute'=>$rResult[0]['result_value_absolute'],
+                               'result_value_text'=>$rResult[0]['result_value_text'],
+                               'result_value_absolute_decimal'=>$rResult[0]['result_value_absolute_decimal'],
+                               'result'=>$rResult[0]['result'],
+                               'approver_comments'=>$comments,
+                               'result_reviewed_by'=>$rResult[0]['result_reviewed_by'],
+                               'result_reviewed_datetime'=>$general->getDateTime(),
+                               'result_approved_by'=>$_POST['appBy'],
+                               'result_approved_datetime'=>$general->getDateTime(),
+                               'vlsm_country_id'=>$arr['vl_form'],
+                               'file_name'=>$rResult[0]['import_machine_file_name'],
+                               'imported_date_time'=>$rResult[0]['result_imported_datetime'],
+                              );
+                if($status[$i]==4){
+                    $data['is_sample_rejected'] = 'yes';
+                }else{
+                    $data['is_sample_rejected'] = 'no';
+                }
+                //get bacth code
+                $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
+                $bvlResult=$db->rawQuery($bquery);
+                if($bvlResult){
+                    $data['batch_id'] = $bvlResult[0]['batch_id'];
+                }else{
+                    $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','request_created_datetime'=>$general->getDateTime()));
+                    $data['batch_id'] = $db->getInsertId();
+                }
+                $query="select control_id,result from vl_imported_controls where control_code='".$rResult[0]['sample_code']."'";
+                $vlResult=$db->rawQuery($query);
+                $data['status']=$status[$i];
+                if(count($vlResult)>0){
+                    $db=$db->where('control_code',$rResult[0]['sample_code']);
+                    $result=$db->update('vl_imported_controls',$data);
+                }else{
+                    $db->insert('vl_imported_controls',$data);
+                }
+            }else{
+                $data=array(
                         'lab_name'=>$rResult[0]['lab_name'],
                         'lab_contact_person'=>$rResult[0]['lab_contact_person'],
                         'lab_phone_number'=>$rResult[0]['lab_phone_number'],
@@ -66,6 +113,7 @@ try {
                $data['facility_id']=$rResult[0]['facility_id'];
                $data['sample_code']=$rResult[0]['sample_code'];
                $data['batch_code']=$rResult[0]['batch_code'];
+               $data['sample_type']=$rResult[0]['sample_type'];
                 //$data['last_modified_by']=$rResult[0]['result_reviewed_by'];
                 //$data['last_modified_datetime']=$general->getDateTime();               
                $data['status']=$status[$i];
@@ -86,6 +134,7 @@ try {
                 }else if($rResult[0]['result_value_text']!=''){
                     $data['result'] = $rResult[0]['result_value_text'];
                 }
+                
                 //get bacth code
                 $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
                 $bvlResult=$db->rawQuery($bquery);
@@ -95,6 +144,7 @@ try {
                     $batchResult = $db->insert('batch_details',array('batch_code'=>$rResult[0]['batch_code'],'batch_code_key'=>$rResult[0]['batch_code_key'],'sent_mail'=>'no','request_created_datetime'=>$general->getDateTime()));
                     $data['sample_batch_id'] = $db->getInsertId();
                 }
+                
                 $query="select vl_sample_id,result from vl_request_form where sample_code='".$sampleVal."'";
                 $vlResult=$db->rawQuery($query);
                 $data['result_status']=$status[$i];
@@ -111,7 +161,7 @@ try {
                 }
                 $printSampleCode[] = "'".$rResult[0]['sample_code']."'";
             }
-            
+            }
             $db=$db->where('temp_sample_id',$id[$i]);
             $result=$db->update($tableName,array('temp_sample_status'=>1));
         }

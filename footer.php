@@ -122,6 +122,10 @@
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".missingResultMenu").addClass('active');
+  }else if (splitsUrl=='vlControlReport.php') {
+    $(".program").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".vlControlReport").addClass('active');
   }else if (splitsUrl=='vlResult.php') {
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');

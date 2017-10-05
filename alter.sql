@@ -1155,3 +1155,8 @@ ALTER TABLE vl_instance RENAME s_vlsm_instance;
 ALTER TABLE temp_sample_report RENAME temp_sample_import;
 ALTER TABLE hold_sample_report RENAME hold_sample_import;
 
+
+--saravanan 04-Oct-2017
+INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'control_report', 'Manage Control Reports');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '22', 'controlReport.php', 'Control Report');
+UPDATE `privileges` SET `privilege_name` = 'vlControlReport.php' WHERE `privileges`.`privilege_id` = 63;
