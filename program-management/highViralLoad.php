@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | HVL Report";
+$title = "VLSM | Clinics Report";
 include('../header.php');
 //include('../includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";

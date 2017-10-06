@@ -5,7 +5,7 @@ require_once(__DIR__.'/config.production.php');
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vl_lab_request_rwanda';
+$DBNAME = 'vl_lab_request';
 $PORT = 3306;
 
 // If using WAMP default settings, then uncomment the following 2 lines

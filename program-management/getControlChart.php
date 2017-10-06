@@ -45,9 +45,9 @@ $tsQuery="SELECT DATE_FORMAT(sample_tested_datetime,'%d-%M-%Y') AS sample_tested
 	$sQuery = $sQuery.' '.$sWhere."  group by control_id";
 	$controlResult = $db->rawQuery($sQuery);
 	$array = array_map('current', $controlResult);
-	$mean = array_sum($array)/count($array);
+	$mean = (isset($array) && count($array) > 0) ?  (array_sum($array)/count($array)) : 0;
 	function sd_square($x, $mean) { return pow($x - $mean,2); }
-	$sd = sqrt(array_sum(array_map("sd_square", $array, array_fill(0,count($array), (array_sum($array) / count($array)) ) ) ) / (count($array)-1) );
+	$sd = (isset($array) && count($array) > 0) ?  (sqrt(array_sum(array_map("sd_square", $array, array_fill(0,count($array), (array_sum($array) / count($array)) ) ) ) / (count($array)-1) )) : 0;
 	?>
 <div id="container" style="height: 400px"></div>
 <script>
