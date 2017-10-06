@@ -35,11 +35,7 @@ $rejectedDate = '';
 $i = 0;
 
 //get waiting data
-$tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
-$waitingWhere = "";
-$waitingWhere .= " AND (vl.result is null or vl.result = '')";
-//$waitingQuery = $tQuery.' '.$sWhere.$waitingWhere;
-$waitingQuery = $tQuery.' '.$waitingWhere;
+$waitingQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (vl.result is null or vl.result = '')";
 
 $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
 if($waitingResult[$i][0]['total']!= 0){
@@ -140,24 +136,6 @@ foreach($stVlResult as $vlData){
     </div>
 </div>
 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-    <div class="dashboard-stat2 " style="cursor:pointer;">
-        <div class="display">
-            <div class="number">
-                <h3 class="font-purple-soft">
-                    <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
-                </h3>
-                <small class="font-purple-soft">SAMPLES WAITING</small><br>
-                <small class="font-purple-soft"  style="font-size:0.75em;">As of today</small>
-                <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
-            </div>
-            <div class="icon">
-                <i class="icon-pie-chart"></i>
-            </div>
-        </div>
-        <div id="samplesWaitingChart" width="210" height="150" style="min-height:150px;"></div>
-    </div>
-</div>
-<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
     <div class="dashboard-stat2 " style="cursor:pointer;" >
         <div class="display">
             <div class="number">
@@ -175,6 +153,26 @@ foreach($stVlResult as $vlData){
         <div id="samplesTestedChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
+
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+    <div class="dashboard-stat2 " style="cursor:pointer;">
+        <div class="display">
+            <div class="number">
+                <h3 class="font-purple-soft">
+                    <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
+                </h3>
+                <small class="font-purple-soft">SAMPLES WAITING</small><br>
+                <small class="font-purple-soft"  style="font-size:0.75em;">As of today</small>
+                <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
+            </div>
+            <div class="icon">
+                <i class="icon-pie-chart"></i>
+            </div>
+        </div>
+        <div id="samplesWaitingChart" width="210" height="150" style="min-height:150px;"></div>
+    </div>
+</div>
+
 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
     <div class="dashboard-stat2 " style="cursor:pointer;" >
         <div class="display">
@@ -193,9 +191,10 @@ foreach($stVlResult as $vlData){
         <div id="samplesRejectedChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
+
 <script>
     <?php
-    if(isset($tResult) && count($tResult)>0){
+    //if(isset($tResult) && count($tResult)>0){
         if($receivedTotal>0){
         ?>
       
@@ -427,5 +426,7 @@ $('#samplesRejectedChart').highcharts({
         }],
         colors : ['#5C9BD1']
     });   
-    <?php } }?>
+    <?php } 
+    //}
+    ?>
 </script>
