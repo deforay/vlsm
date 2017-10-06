@@ -46,18 +46,18 @@ $fTypeResult = $db->rawQuery($fType);
                         <div class="box">
                             <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;">
                                 <tr>
-                                    <td style=""><b>Instance Name&nbsp;<span class="mandatory">*</span></b> <br>
+                                    <td style=""><b>Instance/Facility Name&nbsp;<span class="mandatory">*</span></b> <br>
                                     </td>
                                     <td>
                                       <input type="text" class="form-control isRequired" name="fName" id="fName" title="Please enter instance name" placeholder="Instance/Facility Name"/>
                                     </td>
-                                    <td>&nbsp;<b>Instance Code/ID&nbsp;</b></td>
+                                    <td>&nbsp;<b>Instance/Facility ID&nbsp;</b></td>
                                     <td>
                                       <input type="text" class="form-control " id="fCode" name="fCode" placeholder="Instance/Facility Code" title="Please enter facility code"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style=""><b>Instance Type&nbsp;<span class="mandatory">*</span></b></td>
+                                    <td style=""><b>Instance/Facility Type&nbsp;<span class="mandatory">*</span></b></td>
                                     <td>
                                         <select class="form-control isRequired" id="fType" name="fType"  title="Please choose instance type">
                                             <option value="">-- Select --</option>
