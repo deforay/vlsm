@@ -1160,3 +1160,35 @@ ALTER TABLE hold_sample_report RENAME hold_sample_import;
 INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'control_report', 'Manage Control Reports');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '22', 'controlReport.php', 'Control Report');
 UPDATE `privileges` SET `privilege_name` = 'vlControlReport.php' WHERE `privileges`.`privilege_id` = 63;
+
+CREATE TABLE `vl_imported_controls` (
+  `control_id` int(11) NOT NULL,
+  `control_code` varchar(255) NOT NULL,
+  `lab_id` int(11) DEFAULT NULL,
+  `batch_id` int(11) DEFAULT NULL,
+  `control_type` varchar(255) DEFAULT NULL,
+  `lot_number` varchar(255) DEFAULT NULL,
+  `lot_expiration_date` date DEFAULT NULL,
+  `sample_tested_datetime` datetime DEFAULT NULL,
+  `is_sample_rejected` varchar(255) DEFAULT NULL,
+  `reason_for_sample_rejection` varchar(255) DEFAULT NULL,
+  `result_value_absolute` varchar(255) DEFAULT NULL,
+  `result_value_log` varchar(255) DEFAULT NULL,
+  `result_value_text` varchar(255) DEFAULT NULL,
+  `result_value_absolute_decimal` varchar(255) DEFAULT NULL,
+  `result` varchar(255) DEFAULT NULL,
+  `approver_comments` varchar(255) DEFAULT NULL,
+  `result_approved_by` varchar(255) DEFAULT NULL,
+  `result_approved_datetime` datetime DEFAULT NULL,
+  `result_reviewed_by` varchar(15) DEFAULT NULL,
+  `result_reviewed_datetime` datetime DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `vlsm_country_id` varchar(10) DEFAULT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `imported_date_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `vl_imported_controls`
+  ADD PRIMARY KEY (`control_id`);
+  ALTER TABLE `vl_imported_controls`
+  MODIFY `control_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
