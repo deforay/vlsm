@@ -224,9 +224,28 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
     $("#checkedTests").val(selectedTests.join());
     $("#checkedTestsIdValue").val(selectedTestsIdValue.join());
   }
+
+
    function submitTestStatus(){
-    id = $("#checkedTests").val();
-    status = $("#checkedTestsIdValue").val();
+
+    var idArray = [];
+    var statusArray= [];
+    var somethingmissing = false;
+    $('[name="status[]"]').each(function(){
+      
+      if($(this).val() == null || $(this).val() == ''){
+        somethingmissing = true;
+      }
+
+      idArray.push($(this).attr('id'));
+      statusArray.push($(this).val());
+
+
+      
+    });
+
+    id = idArray.join();
+    status = statusArray.join();
     comments = $("#comments").val();
     appBy = $("#approvedBy").val();
     reviewedBy = $("#reviewedBy").val();
@@ -240,8 +259,16 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       alert("Same person is reviewing and approving result!");
       return false;
     }
+
+    //alert(somethingmissing);return false;
+
+    if(somethingmissing == true){
+      alert("Please ensure that you have updated the status of all the Controls and Samples");
+      $.unblockUI();
+      return false;
+    }
     
-    if(appBy!=''){
+    if(appBy!='' && somethingmissing == false){
 		conf=confirm("Are you sure you want to continue ?");
 		if(conf){
 			$.blockUI();
@@ -266,12 +293,13 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 			oTable.fnDraw();
 		}
     }else{
-      alert("Please choose approved by field");
+      alert("Please ensure you have updated the status and the approved by field");
+      return false;
     }
    }
    function submitTestStatusAndPrint() {
     $("#print").val('print');
-	submitTestStatus();
+	  submitTestStatus();
    }
    
   function updateStatus(value,status){
