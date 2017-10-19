@@ -37,7 +37,7 @@ try {
                 $comments = $_POST['comments'];
             }
             
-            if(($rResult[0]['sample_type']!='S' || $rResult[0]['sample_type']!='s') && $status[$i]!='1'){
+            if($rResult[0]['sample_type']!='S' && $rResult[0]['sample_type']!='s' && $status[$i]!='1'){
                 $data = array('control_code'=>$rResult[0]['sample_code'],
                               'lab_id'=>$rResult[0]['lab_id'],
                               'control_type'=>$rResult[0]['sample_type'],
