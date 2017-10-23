@@ -676,7 +676,6 @@ $sFormat = '';
 						}
 						?>                    
              <!-- BARCODESTUFF END -->
-             
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code'];?>"/>

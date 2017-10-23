@@ -23,6 +23,8 @@ $configQuery="SELECT * from global_config";
       include('editVlRequestWho.php');
     }else if($arr['vl_form']==7){
       include('editVlRequestRwd.php');
+    }else if($arr['vl_form']==8){
+      include('editVlRequestAng.php');
     }
 include('../footer.php');
  ?>

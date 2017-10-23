@@ -1192,3 +1192,13 @@ ALTER TABLE `vl_imported_controls`
   ADD PRIMARY KEY (`control_id`);
   ALTER TABLE `vl_imported_controls`
   MODIFY `control_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  
+  --saravanan 20-oct-2017
+  INSERT INTO `form_details` (`vlsm_country_id`, `form_name`) VALUES (NULL, 'Angola Form');
+  
+  --saravanan 23-oct-2017
+  ALTER TABLE `vl_request_form` ADD `professional_number` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_to_transport`, ADD `category` VARCHAR(255) NULL DEFAULT NULL AFTER `professional_number`;
+  ALTER TABLE `vl_request_form` ADD `patient_province` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_nationality`, ADD `patient_district` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_province`;
+  ALTER TABLE `vl_request_form` ADD `patient_responsible_person` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_last_name`;
+  ALTER TABLE `vl_request_form` ADD `line_of_treatment_ref_type` VARCHAR(255) NULL DEFAULT NULL AFTER `line_of_treatment`;
+  ALTER TABLE `vl_request_form` ADD `patient_group` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_district`;
