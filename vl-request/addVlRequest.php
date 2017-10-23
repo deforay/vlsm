@@ -23,6 +23,8 @@ include('../header.php');
       include('addVlRequestWho.php');
     }else if($arr['vl_form']==7){
       include('addVlRequestRwd.php');
+    }else if($arr['vl_form']==8){
+      include('addVlRequestAng.php');
     }
 include('../footer.php');
  ?>
