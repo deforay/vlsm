@@ -127,7 +127,7 @@ $disabled = "disabled = 'disabled'";
 ?>
 <style>
   :disabled {background:white;}
-  .ui_tpicker_second_label {
+      .ui_tpicker_second_label {
        display: none !important;
       }
       .ui_tpicker_second_slider {

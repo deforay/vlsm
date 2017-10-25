@@ -107,8 +107,7 @@ $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 ?>
 <style>
- :disabled {background:white;}
- .form-control{background: #fff !important;}
+ :disabled {background:white !important;}
   .ui_tpicker_second_label {
        display: none !important;
       }.ui_tpicker_second_slider {

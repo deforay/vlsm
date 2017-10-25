@@ -186,14 +186,6 @@ try {
           'sample_type'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='') ? $_POST['specimenType'] :  NULL,
           'line_of_treatment'=>(isset($_POST['lineTreatment']) && $_POST['lineTreatment']!='') ? $_POST['lineTreatment'] :  NULL,
           'line_of_treatment_ref_type'=>(isset($_POST['lineTreatmentRefType']) && $_POST['lineTreatmentRefType']!='') ? $_POST['lineTreatmentRefType'] :  NULL,
-          //'arv_adherance_percentage'=>(isset($_POST['arvAdherence']) && $_POST['arvAdherence']!='') ? $_POST['arvAdherence'] :  NULL,
-          //'reason_for_vl_testing'=>(isset($_POST['stViralTesting']))?$_POST['stViralTesting']:NULL,
-          //'last_vl_date_routine'=>(isset($_POST['rmTestingLastVLDate']) && $_POST['rmTestingLastVLDate']!='') ? $general->dateFormat($_POST['rmTestingLastVLDate']) :  NULL,
-          //'last_vl_result_routine'=>(isset($_POST['rmTestingVlValue']) && $_POST['rmTestingVlValue']!='') ? $_POST['rmTestingVlValue'] :  NULL,
-          //'last_vl_date_failure_ac'=>(isset($_POST['repeatTestingLastVLDate']) && $_POST['repeatTestingLastVLDate']!='') ? $general->dateFormat($_POST['repeatTestingLastVLDate']) :  NULL,
-          //'last_vl_result_failure_ac'=>(isset($_POST['repeatTestingVlValue']) && $_POST['repeatTestingVlValue']!='') ? $_POST['repeatTestingVlValue'] :  NULL,
-          //'last_vl_date_failure'=>(isset($_POST['suspendTreatmentLastVLDate']) && $_POST['suspendTreatmentLastVLDate']!='') ? $general->dateFormat($_POST['suspendTreatmentLastVLDate']) :  NULL,
-          //'last_vl_result_failure'=>(isset($_POST['suspendTreatmentVlValue']) && $_POST['suspendTreatmentVlValue']!='') ? $_POST['suspendTreatmentVlValue'] :  NULL,
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='') ? $_POST['reqClinician'] :  NULL,
           'request_clinician_phone_number'=>(isset($_POST['reqClinicianPhoneNumber']) && $_POST['reqClinicianPhoneNumber']!='') ? $_POST['reqClinicianPhoneNumber'] :  NULL,
           'test_requested_on'=>(isset($_POST['requestDate']) && $_POST['requestDate']!='') ? $general->dateFormat($_POST['requestDate']) :  NULL,
@@ -224,6 +216,32 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
+        if(isset($_POST['indicateVlTesing']) && $_POST['indicateVlTesing']!='')
+        {
+            $vldata['reason_for_vl_testing'] = $_POST['indicateVlTesing'];
+            $lastVlDate = (isset($_POST['lastVlDate']) && $_POST['lastVlDate']!='') ? $general->dateFormat($_POST['lastVlDate']) :  NULL;
+            $lastVlResult = (isset($_POST['lastVlResult']) && $_POST['lastVlResult']!='') ? $_POST['lastVlResult'] :  NULL;
+            if($_POST['indicateVlTesing']=='routine'){
+                $vldata['last_vl_date_routine'] = $lastVlDate;
+                $vldata['last_vl_result_routine'] = $lastVlResult;
+            }else if($_POST['indicateVlTesing']=='expose'){
+                $vldata['last_vl_date_ecd'] = $lastVlDate;
+                $vldata['last_vl_result_ecd'] = $lastVlResult;
+            }else if($_POST['indicateVlTesing']=='suspect'){
+                $vldata['last_vl_date_failure'] = $lastVlDate;
+                $vldata['last_vl_result_failure'] = $lastVlResult;
+            }else if($_POST['indicateVlTesing']=='repetition'){
+                $vldata['last_vl_date_failure_ac'] = $lastVlDate;
+                $vldata['last_vl_result_failure_ac'] = $lastVlResult;
+            }else if($_POST['indicateVlTesing']=='clinical'){
+                $vldata['last_vl_date_cf'] = $lastVlDate;
+                $vldata['last_vl_result_cf'] = $lastVlResult;
+            }else if($_POST['indicateVlTesing']=='immunological'){
+                $vldata['last_vl_date_if'] = $lastVlDate;
+                $vldata['last_vl_result_if'] = $lastVlResult;
+            }
+        }
+          
         //echo "<pre>";var_dump($vldata);die;
         $id=$db->insert($tableName,$vldata);
         if($id>0){

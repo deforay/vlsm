@@ -1202,3 +1202,5 @@ ALTER TABLE `vl_imported_controls`
   ALTER TABLE `vl_request_form` ADD `patient_responsible_person` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_last_name`;
   ALTER TABLE `vl_request_form` ADD `line_of_treatment_ref_type` VARCHAR(255) NULL DEFAULT NULL AFTER `line_of_treatment`;
   ALTER TABLE `vl_request_form` ADD `patient_group` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_district`;
+  
+  ALTER TABLE `vl_request_form` ADD `last_vl_date_ecd` DATE NULL DEFAULT NULL AFTER `last_vl_sample_type_failure`, ADD `last_vl_result_ecd` VARCHAR(255) NULL DEFAULT NULL AFTER `last_vl_date_ecd`, ADD `last_vl_date_cf` DATE NULL DEFAULT NULL AFTER `last_vl_result_ecd`, ADD `last_vl_result_cf` VARCHAR(255) NULL DEFAULT NULL AFTER `last_vl_date_cf`, ADD `last_vl_date_if` DATE NULL DEFAULT NULL AFTER `last_vl_result_cf`, ADD `last_vl_result_if` VARCHAR(255) NULL DEFAULT NULL AFTER `last_vl_date_if`;

@@ -24,6 +24,8 @@ $configQuery="SELECT * from global_config";
      include('updateVlTestResultWho.php');
     }else if($arr['vl_form']==7){
      include('updateVlTestResultRwd.php');
+    }else if($arr['vl_form']==8){
+     include('updateVlTestResultAng.php');
     }
 include('../footer.php');
  ?>
