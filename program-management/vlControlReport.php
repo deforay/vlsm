@@ -29,8 +29,8 @@ $sResult = $db->rawQuery($sQuery);
           <div class="box">
 						<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:80%;">
 							<tr>
-								<td><b>Sample Tested Date&nbsp;:</b></td><td><input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Tested Date" readonly style="width:220px;background:#fff;"/></td>
-								<td><b>Control Type&nbsp;:</b></td>
+								<td><b>Sample Tested Date&nbsp;</b><span class="mandatory">*</span></td><td><input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Tested Date" readonly style="width:220px;background:#fff;"/></td>
+								<td><b>Control Type&nbsp;</b><span class="mandatory">*</span></td>
 								<td>
 									<select id="cType" name="cType" class="form-control" title="Choose control type">
 										<option value="">-- Select --</option>
@@ -94,16 +94,20 @@ $sResult = $db->rawQuery($sQuery);
             endDate = end.format('YYYY-MM-DD');
       });
      $('#sampleTestDate').val("");
-		 loadControlChart();
+		 //loadControlChart();
   });
 
   function loadControlChart(){
-    $.blockUI();
-    $.post("../program-management/getControlChart.php",{sampleTestDate:$("#sampleTestDate").val(),cType:$("#cType").val()},
-      function(data){
-				$("#chart").html(data);
-      });
-		$.unblockUI();
+		if($("#sampleTestDate").val()!='' && $("#cType").val()!=''){
+			$.blockUI();
+			$.post("../program-management/getControlChart.php",{sampleTestDate:$("#sampleTestDate").val(),cType:$("#cType").val()},
+				function(data){
+					$("#chart").html(data);
+				});
+			$.unblockUI();
+		}else{
+			alert("Please choose Sample Test Date Range and Control Type to generate the report");
+		}
   }
 </script>
  <?php
