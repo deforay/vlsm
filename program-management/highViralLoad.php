@@ -528,7 +528,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                {"sClass":"center"},
+                //{"sClass":"center"},
             ],
             "aaSorting": [[ 1, "DESC" ]],
             "bProcessing": true,

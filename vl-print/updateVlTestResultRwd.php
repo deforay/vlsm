@@ -156,6 +156,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
 $disable = "disabled = 'disabled'";
 ?>
 <style>
+  :disabled {background:white !important;}
   .ui_tpicker_second_label {
        display: none !important;
       }
