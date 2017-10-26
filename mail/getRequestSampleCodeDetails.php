@@ -126,10 +126,24 @@ $result = $db->rawQuery($query);
           });
         },
         afterSelect: function(){
+          if(this.qs2.cache().matchedResultsCount > noOfAllowedSamples){
+          $("#errorMsg").html("<b>You have selected "+this.qs2.cache().matchedResultsCount+" Samples out of the maximum allowed "+noOfAllowedSamples+" samples</b>");
+					$("#requestSubmit").attr("disabled",true);
+          $("#requestSubmit").css("pointer-events","none");
+          }
           this.qs1.cache();
           this.qs2.cache();
         },
         afterDeselect: function(){
+          if(this.qs2.cache().matchedResultsCount > noOfAllowedSamples){
+          $("#errorMsg").html("<b>You have selected "+this.qs2.cache().matchedResultsCount+" Samples out of the maximum allowed "+noOfAllowedSamples+" samples</b>");
+					$("#requestSubmit").attr("disabled",true);
+          $("#requestSubmit").css("pointer-events","none");
+          }else if(this.qs2.cache().matchedResultsCount <= noOfAllowedSamples){
+          $("#errorMsg").html("");
+					$("#requestSubmit").attr("disabled",false);
+          $("#requestSubmit").css("pointer-events","auto");
+          }
           this.qs1.cache();
           this.qs2.cache();
         }

@@ -197,6 +197,10 @@ $batchResult = $db->rawQuery($batchQuery);
                         </table>
                     </div>
                 </div>
+								<div class="row">
+									<div class="col-md-4"></div>
+									<div class="col-md-8"><b>Please select maximum 100 samples</b></div>
+								</div>
                 <div class="row" id="sampleDetails">
                     <div class="col-md-9">
                     <div class="form-group">
@@ -219,7 +223,12 @@ $batchResult = $db->rawQuery($batchQuery);
                         </div>
                     </div>
                   </div>
+										
                 </div>
+								<div class="row">
+									<div class="col-md-3"></div>
+									<div class="col-md-9" id="errorMsg" style="color: #dd4b39;"></div>
+								</div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -228,7 +237,7 @@ $batchResult = $db->rawQuery($batchQuery);
 		<input type="hidden" id="toEmail" name="toEmail"/>
 		<input type="hidden" id="reportEmail" name="reportEmail"/>
 		<a href="../request-mail/testRequestEmailConfig.php" class="btn btn-default"> Cancel</a>&nbsp;
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                <a class="btn btn-primary" id="requestSubmit" href="javascript:void(0);" onclick="validateNow();return false;">Next <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -246,6 +255,7 @@ $batchResult = $db->rawQuery($batchQuery);
   <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
+		noOfAllowedSamples = 100;
   $(document).ready(function() {
       document.getElementById('message').value = "Hi, \nPFA the new test requests. \n\nThanks";
       $('#facility').select2({placeholder: "Select Facility"});
@@ -299,10 +309,25 @@ $batchResult = $db->rawQuery($batchQuery);
 	 });
        },
        afterSelect: function(){
+				//button disabled/enabled
+					if(this.qs2.cache().matchedResultsCount > noOfAllowedSamples){
+          $("#errorMsg").html("<b>You have selected "+this.qs2.cache().matchedResultsCount+" Samples out of the maximum allowed "+noOfAllowedSamples+" samples</b>");
+					$("#requestSubmit").attr("disabled",true);
+					$("#requestSubmit").css("pointer-events","none");
+          }
          this.qs1.cache();
          this.qs2.cache();
        },
        afterDeselect: function(){
+					if(this.qs2.cache().matchedResultsCount > noOfAllowedSamples){
+          $("#errorMsg").html("<b>You have selected "+this.qs2.cache().matchedResultsCount+" Samples out of the maximum allowed "+noOfAllowedSamples+ " samples</b>");
+					$("#requestSubmit").attr("disabled",true);
+					$("#requestSubmit").css("pointer-events","none");
+          }else if(this.qs2.cache().matchedResultsCount <= noOfAllowedSamples){
+          $("#errorMsg").html("");
+					$("#requestSubmit").attr("disabled",false);
+					$("#requestSubmit").css("pointer-events","auto");
+          }
         this.qs1.cache();
         this.qs2.cache();
        }
@@ -344,6 +369,7 @@ $batchResult = $db->rawQuery($batchQuery);
       }else{
         urgent = $('input[name=urgency]:checked').val();
       }
+			$("#errorMsg").html("");
       var state = $('#state').val();
       var district = $('#district').val();
       var batch = $('#batch').val();
