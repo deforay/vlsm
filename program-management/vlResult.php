@@ -373,11 +373,7 @@ $batResult = $db->rawQuery($batQuery);
   function convertSearchResultToPdf(id){
     <?php
     $path = '';
-    if($arr['vl_form'] == 3){
-      $path = '../result-pdf/vlRequestDrcSearchResultPdf.php';
-    }else {
-      $path = '../result-pdf/vlRequestSearchResultPdf.php'; 
-    }
+    $path = '../result-pdf/vlRequestSearchResultPdf.php'; 
     ?>
       $.post("<?php echo $path; ?>", {source:'print',id : id},
       function(data){
