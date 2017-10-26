@@ -302,11 +302,7 @@ $batResult = $db->rawQuery($batQuery);
       $.blockUI();
       <?php
       $path = '';
-      if($configFormResult[0]['value'] == 3){
-	$path = '../result-pdf/vlRequestDrcSearchResultPdf.php';
-      }else {
-	$path = '../result-pdf/vlRequestSearchResultPdf.php'; 
-      }
+			$path = '../result-pdf/vlRequestSearchResultPdf.php';
       ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id},
       function(data){
@@ -324,11 +320,7 @@ $batResult = $db->rawQuery($batQuery);
     $.blockUI();
     <?php
     $path = '';
-    if($configFormResult[0]['value'] == 3){
-      $path = '../result-pdf/vlRequestDrcSearchResultPdf.php';
-    }else {
-      $path = '../result-pdf/vlRequestSearchResultPdf.php'; 
-    }
+    $path = '../result-pdf/vlRequestSearchResultPdf.php';
     ?>
     $.post("<?php echo $path; ?>", { source:'print',id : id},
       function(data){
