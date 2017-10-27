@@ -58,6 +58,10 @@
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".facilityMenu").addClass('active');
+  }else if (splitsUrl=='facilityMap.php' || splitsUrl=='addFacilityMap.php' || splitsUrl=='editFacilityMap.php') {
+    $(".manage").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".facilityMapMenu").addClass('active');
   }else if (splitsUrl=='globalConfig.php' || splitsUrl=='editGlobalConfig.php') {
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');

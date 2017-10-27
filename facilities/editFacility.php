@@ -8,6 +8,10 @@ $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
 $pQuery="SELECT * FROM province_details";
 $pResult = $db->rawQuery($pQuery);
+$chkvlLabQuery = "SELECT * from vl_facility_map as vlfm where vl_lab_id IN(".$id.")";
+$chkvlLabResult = $db->rawQuery($chkvlLabQuery);
+$chkHcQuery = "SELECT * from vl_facility_map as vlfm where facility_id IN(".$id.")";
+$chkHcResult = $db->rawQuery($chkHcQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -114,7 +118,6 @@ $pResult = $db->rawQuery($pQuery);
                         </div>
                     </div>
                   </div>
-                  
                 </div>
                
               <div class="row">
@@ -265,6 +268,20 @@ $pResult = $db->rawQuery($pQuery);
       $('#provinceNew').val('');
     }
   });
+  <?php
+  if(count($chkvlLabResult)>0){
+    ?>
+    $("select option[value*='1']").prop('disabled',true);
+    $("select option[value*='3']").prop('disabled',true);
+    $("select option[value*='4']").prop('disabled',true);
+    <?php
+  }
+  if(count($chkHcResult)>0){
+    ?>
+    $("select option[value*='2']").prop('disabled',true);
+    <?php
+  }
+  ?>
 </script>
  <?php
  include('../footer.php');

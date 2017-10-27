@@ -1204,3 +1204,16 @@ ALTER TABLE `vl_imported_controls`
   ALTER TABLE `vl_request_form` ADD `patient_group` VARCHAR(255) NULL DEFAULT NULL AFTER `patient_district`;
   
   ALTER TABLE `vl_request_form` ADD `last_vl_date_ecd` DATE NULL DEFAULT NULL AFTER `last_vl_sample_type_failure`, ADD `last_vl_result_ecd` VARCHAR(255) NULL DEFAULT NULL AFTER `last_vl_date_ecd`, ADD `last_vl_date_cf` DATE NULL DEFAULT NULL AFTER `last_vl_result_ecd`, ADD `last_vl_result_cf` VARCHAR(255) NULL DEFAULT NULL AFTER `last_vl_date_cf`, ADD `last_vl_date_if` DATE NULL DEFAULT NULL AFTER `last_vl_result_cf`, ADD `last_vl_result_if` VARCHAR(255) NULL DEFAULT NULL AFTER `last_vl_date_if`;
+  
+  --saravanan 26-oct-2017
+  INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '2', 'addVlFacilityMap.php', 'Add Facility Map');
+  INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '2', 'facilityMap.php', 'Access Facility Map');
+  INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '2', 'editVlFacilityMap.php', 'Edit Facility Map');
+  
+  CREATE TABLE `vl_facility_map` (
+  `facility_map_id` int(11) NOT NULL,
+  `vl_lab_id` int(11) NOT NULL,
+  `facility_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE `vl_facility_map`
+  ADD PRIMARY KEY (`facility_map_id`);

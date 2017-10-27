@@ -44,6 +44,8 @@
     for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
     }
+    $start_date = date('Y-01-01');
+    $end_date = date('Y-12-31');
   if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $start_date = date('Y-m-01');
