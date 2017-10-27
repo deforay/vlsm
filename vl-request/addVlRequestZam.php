@@ -18,6 +18,8 @@ if($global['sample_code']=='auto' || $global['sample_code']=='alphanumeric' || $
 //generate sample code
 $sKey = '';
 $sFormat = '';
+$start_date = date('Y-01-01');
+$end_date = date('Y-12-31');
 if($global['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $start_date = date('Y-m-01');

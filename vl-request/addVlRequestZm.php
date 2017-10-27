@@ -65,6 +65,8 @@ foreach($fResult as $fDetails){
   $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 //sample code
+$start_date = date('Y-01-01');
+$end_date = date('Y-12-31');
 if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $start_date = date('Y-m-01');

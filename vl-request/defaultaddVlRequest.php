@@ -62,6 +62,8 @@ $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='sudan' AND art_status ='active'";
 $aResult=$db->query($aQuery);
+$end_date = date('Y-12-31');
+$start_date = date('Y-01-01');
 if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $end_date = date('Y-m-31');
