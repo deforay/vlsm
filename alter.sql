@@ -1217,3 +1217,9 @@ ALTER TABLE `vl_imported_controls`
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ALTER TABLE `vl_facility_map`
   ADD PRIMARY KEY (`facility_map_id`);
+
+ALTER TABLE vl_facility_map
+ADD FOREIGN KEY (vl_lab_id) REFERENCES facility_details(facility_id);
+ALTER TABLE vl_facility_map
+ADD FOREIGN KEY (facility_id) REFERENCES facility_details(facility_id);
+--saravanan 30-oct-2017

@@ -6,6 +6,7 @@ include('../includes/MysqliDb.php');
 $tableName="facility_details";
 $facilityId=base64_decode($_POST['facilityId']);
 $tableName1="province_details";
+$tableName2="vl_user_facility_map";
 try {
     if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!=""){
         if(trim($_POST['state'])!=""){
@@ -54,9 +55,21 @@ try {
 	    'facility_type'=>$_POST['facilityType'],
 	    'status'=>$_POST['status']
         );
-        //print_r($data);die;
         $db=$db->where('facility_id',$facilityId);
         $db->update($tableName,$data);
+		$db=$db->where('facility_id',$facilityId);
+		$delId = $db->delete($tableName2);
+		if($facilityId>0 && trim($_POST['selectedUser'])!='')
+		{
+			$selectedUser = explode(",",$_POST['selectedUser']);
+			for($j = 0; $j < count($selectedUser); $j++){
+				$data=array(
+					'user_id'=>$selectedUser[$j],
+					'facility_id'=>$facilityId,
+				);
+				$db->insert($tableName2,$data);
+			}
+		}
         $_SESSION['alertMsg']="Facility details updated successfully";
     }
     header("location:facilities.php");

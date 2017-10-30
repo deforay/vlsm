@@ -4,7 +4,7 @@ session_start();
 include('../includes/MysqliDb.php');
 $tableName="facility_details";
 $tableName1="province_details";
-
+$tableName2="vl_user_facility_map";
 try {
     if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!=""){
         if(trim($_POST['state'])!=""){
@@ -60,6 +60,18 @@ try {
         );
         
         $db->insert($tableName,$data);
+		$lastId = $db->getInsertId();
+		if($lastId>0 && trim($_POST['selectedUser'])!='')
+		{
+			$selectedUser = explode(",",$_POST['selectedUser']);
+			for($j = 0; $j < count($selectedUser); $j++){
+				$data=array(
+					'user_id'=>$selectedUser[$j],
+					'facility_id'=>$lastId,
+				);
+				$db->insert($tableName2,$data);
+			}
+		}
         $_SESSION['alertMsg']="Facility details added successfully";
     }
     header("location:facilities.php");
