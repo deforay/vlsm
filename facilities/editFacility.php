@@ -221,8 +221,9 @@ $selectedResult = $db->rawQuery($selectedQuery);
                     </div>
                   </div>
                </div>
-               <div class="row">
-                <h4>User Facility Map Details</h4>
+               
+               <div class="row" id="userDetails">
+                <?php if($facilityInfo[0]['facility_type']==1 || $facilityInfo[0]['facility_type']==4){ ?>                <h4>User Facility Map Details</h4>
                   <div class="col-xs-5">
                       <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">
                           <?php
@@ -253,6 +254,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
                           ?>
                       </select>
                   </div>
+                  <?php } ?>
                </div>
                </div>
               <!-- /.box-body -->
@@ -347,6 +349,17 @@ $selectedResult = $db->rawQuery($selectedQuery);
     <?php
   }
   ?>
+  function getFacilityUser()
+  {
+    if($("#facilityType").val()=='1' || $("#facilityType").val()=='4'){
+      $.post("getFacilityMapUser.php", {fType: $("#facilityType").val()},
+        function(data){
+          $("#userDetails").html(data);
+        });
+    }else{
+      $("#userDetails").html('');
+    }
+  }
 </script>
  <?php
  include('../footer.php');
