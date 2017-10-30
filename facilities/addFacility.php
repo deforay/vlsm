@@ -62,7 +62,7 @@ $pResult = $db->rawQuery($pQuery);
                     <div class="form-group">
                         <label for="facilityType" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type">
+                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange = "getFacilityUser()">
                           <option value=""> -- Select -- </option>
                             <?php
                             foreach($fResult as $type){
@@ -191,10 +191,14 @@ $pResult = $db->rawQuery($pQuery);
                     </div>
                 </div>
               </div>
+               <div class="row" id="userDetails">
+                
+               </div>
                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+                <input type="hidden" name="selectedUser" id="selectedUser"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="facilities.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -202,7 +206,6 @@ $pResult = $db->rawQuery($pQuery);
             </form>
           <!-- /.row -->
         </div>
-       
       </div>
       <!-- /.box -->
 
@@ -210,10 +213,15 @@ $pResult = $db->rawQuery($pQuery);
     <!-- /.content -->
   </div>
   
-  
+  <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
   <script type="text/javascript">
 
   function validateNow(){
+    var selVal = []; 
+    $('#search_to option').each(function(i, selected){
+      selVal[i] = $(selected).val(); 
+    });
+    $("#selectedUser").val(selVal);
     flag = deforayValidator.init({
         formId: 'addFacilityForm'
     });
@@ -250,6 +258,17 @@ $pResult = $db->rawQuery($pQuery);
       $('#provinceNew').val('');
     }
   });
+  function getFacilityUser()
+  {
+    if($("#facilityType").val()=='1' || $("#facilityType").val()=='4'){
+      $.post("getFacilityMapUser.php", {fType: $("#facilityType").val()},
+        function(data){
+          $("#userDetails").html(data);
+        });
+    }else{
+      $("#userDetails").html('');
+    }
+  }
   </script>
   
  <?php
