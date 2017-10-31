@@ -1,6 +1,11 @@
 <?php
 ob_start();
+session_start();
 include('MysqliDb.php');
+if($_SESSION['userType']!=''){
+    $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id=".$_SESSION['userId'];
+    $vlfmResult = $db->rawQuery($vlfmQuery);
+}
 if(isset($_POST['cName'])){
     $id=$_POST['cName'];
     $facilityQuery="SELECT * from facility_details where facility_id=$id";
@@ -34,6 +39,10 @@ if(isset($_POST['pName'])){
      $dName = " AND facility_district ='".$_POST['dName']."'";
     }
     $facilityQuery="SELECT * from facility_details where facility_state='".$provinceName[0]."' AND status='active'".$dName;
+    if(isset($vlfmResult[0]['facilityId']))
+    {
+      $facilityQuery = $facilityQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
+    }
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
@@ -46,6 +55,10 @@ if(isset($_POST['pName'])){
     }
     $district = '';
     $facilityDistQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$provinceName[0]."' AND status='active'";
+    if(isset($vlfmResult[0]['facilityId']))
+    {
+      $facilityDistQuery = $facilityDistQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
+    }
     $facilityDistInfo=$db->query($facilityDistQuery);
     if($facilityDistInfo){
         $district.="<option value=''> -- Select -- </option>";
@@ -62,6 +75,10 @@ if(isset($_POST['pName'])){
 if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     $distName=$_POST['dName'];
     $facilityQuery="SELECT * from facility_details where facility_district='".$distName."' AND status='active'";
+    if(isset($vlfmResult[0]['facilityId']))
+    {
+      $facilityQuery = $facilityQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
+    }
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){ ?>
