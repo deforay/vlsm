@@ -5,7 +5,7 @@ include('General.php');
 $general=new Deforay_Commons_General();
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
-$tsQuery = "select * from r_sample_status";
+$tsQuery = "select * from r_sample_status where status_id!=9";
 $tsResult = $db->rawQuery($tsQuery);
 //date
 $start_date = '';
@@ -43,7 +43,7 @@ foreach($tsResult as $tsId){
 }
 //HVL and LVL Samples
 $hvlQuery = '';$lvlQuery = '';
-$vlSampleQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."'";
+$vlSampleQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status!=9";
 $sWhere = '';
    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
       $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';
@@ -74,7 +74,7 @@ $sWhere = '';
                         AND vl.result is not null
                         AND vl.result != ''
                         AND DATE(vl.sample_collection_date) >= '".$start_date."'
-                        AND DATE(vl.sample_collection_date) <= '".$end_date."' AND vl.vlsm_country_id='".$configFormResult[0]['value']."' group by MONTH(vl.sample_collection_date) order by DATE(vl.sample_collection_date)";
+                        AND DATE(vl.sample_collection_date) <= '".$end_date."' AND vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status !=9 group by MONTH(vl.sample_collection_date) order by DATE(vl.sample_collection_date)";
    $sWhere = '';
    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
       $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';

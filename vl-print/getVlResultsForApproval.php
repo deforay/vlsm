@@ -174,9 +174,9 @@ $primaryKey="vl_sample_id";
 	    }
 	}
 	if($sWhere!=''){
-	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}else{
-	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
@@ -200,7 +200,7 @@ $primaryKey="vl_sample_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."' AND result_status!=9");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];

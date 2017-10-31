@@ -56,7 +56,7 @@ try {
 	    'status'=>$_POST['status']
         );
         $db=$db->where('facility_id',$facilityId);
-        $id = $db->update($tableName,$data);		
+        $id = $db->update($tableName,$data);
 		$db=$db->where('facility_id',$facilityId);
 		$delId = $db->delete($tableName2);
 		if($facilityId>0 && trim($_POST['selectedUser'])!='')

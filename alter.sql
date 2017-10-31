@@ -1223,3 +1223,22 @@ ADD FOREIGN KEY (vl_lab_id) REFERENCES facility_details(facility_id);
 ALTER TABLE vl_facility_map
 ADD FOREIGN KEY (facility_id) REFERENCES facility_details(facility_id);
 --saravanan 30-oct-2017
+INSERT INTO `r_sample_status` (`status_id`, `status_name`, `status`) VALUES (NULL, 'Sample Registered at Health Center', 'active');
+
+
+CREATE TABLE `vl_user_facility_map` (
+  `user_facility_map_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `facility_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE `vl_user_facility_map`
+  ADD PRIMARY KEY (`user_facility_map_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `facility_id` (`facility_id`);
+  
+  ALTER TABLE `vl_user_facility_map`
+  MODIFY `user_facility_map_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  
+ALTER TABLE `vl_user_facility_map`
+  ADD CONSTRAINT `vl_user_facility_map_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_details` (`user_id`),
+  ADD CONSTRAINT `vl_user_facility_map_ibfk_2` FOREIGN KEY (`facility_id`) REFERENCES `facility_details` (`facility_id`);

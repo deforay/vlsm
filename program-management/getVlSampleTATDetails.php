@@ -98,7 +98,7 @@ $primaryKey="vl_sample_id";
 	$sQuery="select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime,vl.serial_no from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
-                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."'";
+                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' AND vl.result_status!=9";
 	
 	$start_date = '';
 	$end_date = '';
@@ -151,14 +151,14 @@ $primaryKey="vl_sample_id";
         $aResultFilterTotal =$db->rawQuery("select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
-                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' $saWhere");
+                        AND vl.result != '' AND vl.result_status!=9 AND vl.vlsm_country_id='".$gconfig['vl_form']."' $saWhere");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
         $aResultTotal =  $db->rawQuery("select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
-                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."'");
+                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' AND vl.result_status!=9");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
