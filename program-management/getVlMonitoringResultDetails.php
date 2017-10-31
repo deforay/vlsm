@@ -192,9 +192,9 @@ $primaryKey="vl_sample_id";
 	    }
 	}
 	if($sWhere!=''){
-	    $sWhere = $sWhere.' AND vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' AND vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}else{
-	    $sWhere = $sWhere.' where vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
+	    $sWhere = $sWhere.' where vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;

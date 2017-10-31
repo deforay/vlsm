@@ -267,11 +267,11 @@ $primaryKey="vl_sample_id";
 		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."'";
 		}else{
 		    if(trim($sWhere)!= ''){
-		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
+		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
 		    }else{
-		      $sWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
+		      $sWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
 		    }
-		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."'";
+		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
 		}
 		if(!isset($_POST['from'])){
 		  $sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";

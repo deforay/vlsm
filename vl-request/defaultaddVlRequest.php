@@ -152,7 +152,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;"/>
+                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -798,11 +798,13 @@ $sFormat = '';
         $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
+        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null);
         <?php
       }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
         $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
+        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null)
         <?php
       }
       ?>
@@ -1013,6 +1015,27 @@ $sFormat = '';
         function(data){
             if(data==='1'){
                 showModal('patientModal.php?artNo='+obj.value,900,520);
+            }
+        });
+      }
+    }
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                conf = confirm("Do you wish to edit this sample details?");
+                if(conf){
+                  document.location.href = "editVlRequest.php?id="+data;
+                }else{
+                  $("#"+id).val('');
+                }
+                <?php } ?>
             }
         });
       }

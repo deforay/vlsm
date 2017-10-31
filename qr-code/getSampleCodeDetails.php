@@ -94,9 +94,9 @@ $general=new Deforay_Commons_General();
         $sQuery="select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result,vl.request_created_datetime from vl_request_form as vl";
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
-            $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
+            $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'" AND vl.result_status!=9';
         }else{
-            $sWhere=' where vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
+            $sWhere=' where vl.vlsm_country_id ="'.$configResult[0]['value'].'" AND vl.result_status!=9';
         }
         if(isset($_POST['sampleCode']) && trim($_POST['sampleCode'])!='')
         {
@@ -118,7 +118,7 @@ $general=new Deforay_Commons_General();
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result from vl_request_form vl where vl.vlsm_country_id ='".$configResult[0]['value']."'");
+        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result from vl_request_form vl where vl.vlsm_country_id ='".$configResult[0]['value']."' AND result_status!=9");
         $iTotal = count($aResultTotal);
         /*
          * Output
