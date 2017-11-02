@@ -25,7 +25,6 @@ try {
             $db->insert('province_details',array('province_name'=>$splitProvince[0],'province_code'=>$splitProvince[1]));
         }
     }
-    //var_dump($_POST);die;
     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
          $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
          $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
