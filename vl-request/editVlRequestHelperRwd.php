@@ -9,7 +9,11 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-    //var_dump($_POST);die;
+    if(($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $_POST['oldStatus']==9){
+        $_POST['status'] = 9;
+    }else if($_POST['oldStatus']==9){
+        $_POST['status'] = 6;
+    }
     //add province
     $splitProvince = explode("##",$_POST['province']);
     if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){
