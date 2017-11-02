@@ -316,30 +316,30 @@ $primaryKey="vl_sample_id";
 	
         foreach ($rResult as $aRow) {
             $row = array();
+						if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
+							$row[]='<input type="checkbox" name="chk[]" class="checkRows" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="checkedRow(this);"  />';
+							$print = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-print"> Print</i></a>';
+						}else{
+									 //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
+									 //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
+						 $print = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
+						}
             $row[] = $aRow['sample_code'];
             $row[] = $aRow['batch_code'];
             $row[] = $aRow['patient_art_no'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
-	    $row[] = ucwords($aRow['facility_name']);
+						$row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
-	    if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
-	       $xplodDate = explode(" ",$aRow['last_modified_datetime']);
-	       $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
-	    }else{
-	       $aRow['last_modified_datetime'] = '';
-	    }			
-	    $row[] = $aRow['last_modified_datetime'];
+						if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
+							 $xplodDate = explode(" ",$aRow['last_modified_datetime']);
+							 $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+						}else{
+							 $aRow['last_modified_datetime'] = '';
+						}
+						$row[] = $aRow['last_modified_datetime'];
             $row[] = ucwords($aRow['status_name']);
-	    
-	    if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
-	      $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-print"> Print</i></a>';
-	    }else{
-             //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
-             //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
-	     $row[] = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
-	    }
-           
+						$row[] = $print;
             $output['aaData'][] = $row;
         }
         
