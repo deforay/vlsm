@@ -1022,6 +1022,7 @@ $sFormat = '';
     function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
     {
       if($.trim($("#"+id).val())!=''){
+        $.blockUI();
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
@@ -1029,10 +1030,12 @@ $sFormat = '';
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>
+                    
                     document.location.href = "editVlRequest.php?id="+data;
                 <?php } ?>
             }
         });
+        $.unblockUI();
       }
     }
   function setPatientDetails(pDetails){

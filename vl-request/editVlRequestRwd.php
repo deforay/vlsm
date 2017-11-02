@@ -241,7 +241,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This sample number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -1058,20 +1058,24 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       }
     }
   }
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
-      var removeDots=obj.value.replace(/\./g,"");
-      var removeDots=removeDots.replace(/\,/g,"");
-      //str=obj.value;
-      removeDots = removeDots.replace(/\s{2,}/g,' ');
-      $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
-      function(data){
-	  if(data==='1'){
-	      alert(alrt);
-	      duplicateName=false;
-	      document.getElementById(obj.id).value="";
-	  }
-      });
-  }
+  function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                  document.location.href = "editVlRequest.php?id="+data;
+                <?php } ?>
+            }
+        });
+        $.unblockUI();
+      }
+    }
   
   function validateNow(){
     flag = deforayValidator.init({
