@@ -18,7 +18,7 @@ $batResult = $db->rawQuery($batQuery);
     color:#000000 !important;
   }
   .center{
-    text-align:center;
+    /*text-align:left;*/
   }
 </style>
   <!-- Content Wrapper. Contains page content -->
@@ -155,6 +155,7 @@ $batResult = $db->rawQuery($batQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
+									<th><input type="checkbox" id="checkRowsData" onclick="toggleAllVisible()"/></th>
 		  <th>Sample Code</th>
                   <th>Batch Code</th>
                   <th>Unique ART No.</th>
@@ -173,6 +174,8 @@ $batResult = $db->rawQuery($batQuery);
                 </tr>
                 </tbody>
               </table>
+							<input type="hidden" name="checkedRows" id="checkedRows"/>
+							<input type="hidden" name="totalSamplesList" id="totalSamplesList"/>
             </div>
             <!-- /.box-body -->
           </div>
@@ -189,8 +192,8 @@ $batResult = $db->rawQuery($batQuery);
   <script type="text/javascript">
    var startDate = "";
    var endDate = "";
-   var selectedTests=[];
-   var selectedTestsId=[];
+   var selectedRows=[];
+   var selectedRowsId=[];
    var oTable = null;
   $(document).ready(function() {
      $("#facility").select2({placeholder:"Select Facilities"});
@@ -256,6 +259,7 @@ $batResult = $db->rawQuery($batQuery);
             "iDisplayLength": 100,
             "bRetrieve": true,                        
             "aoColumns": [
+								{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -268,6 +272,15 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 7, "desc" ]],
+						"fnDrawCallback": function() {
+							var checkBoxes=document.getElementsByName("chk[]");
+              len = checkBoxes.length;
+              for(c=0;c<len;c++){
+                if (jQuery.inArray(checkBoxes[c].id, selectedRowsId) != -1 ){
+									checkBoxes[c].setAttribute("checked",true);
+                  }
+                }
+							},
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
@@ -285,7 +298,10 @@ $batResult = $db->rawQuery($batQuery);
                   "type": "POST",
                   "url": sSource,
                   "data": aoData,
-                  "success": fnCallback
+                  "success": function(json){
+                      $("#totalSamplesList").val(json.iTotalDisplayRecords);
+											fnCallback(json);
+                     }
               });
             }
         });
@@ -322,6 +338,17 @@ $batResult = $db->rawQuery($batQuery);
     $path = '';
     $path = '../result-pdf/vlRequestSearchResultPdf.php';
     ?>
+		if(selectedRows.length!=0 && selectedRows.length > 20 ){
+			$.unblockUI();
+			alert("You have selected "+ selectedRows.length +" Sample out of the maximum allowed 20 samples");
+			return false;
+		}else if($("#totalSamplesList").val()!=0 && $("#totalSamplesList").val() > 20 && selectedRows.length==0){
+				$.unblockUI();
+				alert("Maximum allowed 20 samples to print.");
+				return false;
+		}else{
+			id = $("#checkedRows").val();
+		}
     $.post("<?php echo $path; ?>", { source:'print',id : id},
       function(data){
 	  if(data == "" || data == null || data == undefined){
@@ -329,11 +356,50 @@ $batResult = $db->rawQuery($batQuery);
 	      alert('Unable to generate download');
 	  }else{
 	      $.unblockUI();
+				selectedRows = [];
+				$(".checkRows").prop('checked', false);
+				$("#checkRowsData").prop('checked', false);
 	      window.open('../uploads/'+data,'_blank');
 	  }
-	  
       });
   }
+	function checkedRow(obj){
+			if ($(obj).is(':checked')) {
+	     if($.inArray(obj.value, selectedRows) == -1){
+				selectedRows.push(obj.value);
+				selectedRowsId.push(obj.id);
+	     }
+			} else {
+	     selectedRows.splice( $.inArray(obj.value, selectedRows), 1 );
+	     selectedRowsId.splice( $.inArray(obj.id, selectedRowsId), 1 );
+	     $("#checkRowsData").attr("checked",false);
+			}
+			$("#checkedRows").val(selectedRows.join());
+  }
+      
+    function toggleAllVisible(){
+        //alert(tabStatus);
+			$(".checkRows").each(function(){
+	     $(this).prop('checked', false);
+	     selectedRows.splice( $.inArray(this.value, selectedRows), 1 );
+	     selectedRowsId.splice( $.inArray(this.id, selectedRowsId), 1 );
+			});
+			if ($("#checkRowsData").is(':checked')) {
+			$(".checkRows").each(function(){
+					$(this).prop('checked', true);
+				selectedRows.push(this.value);
+				selectedRowsId.push(this.id);
+			});
+			} else{
+			$(".checkRows").each(function(){
+	     $(this).prop('checked', false);
+	     selectedRows.splice( $.inArray(this.value, selectedRows), 1 );
+	     selectedRowsId.splice( $.inArray(this.id, selectedRowsId), 1 );
+	     $("#status").prop('disabled', true);
+			});
+     }
+     $("#checkedRows").val(selectedRows.join());
+   }
 </script>
  <?php
  include('../footer.php');

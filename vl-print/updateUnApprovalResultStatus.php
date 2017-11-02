@@ -29,7 +29,7 @@ try {
             $rResult = $db->rawQuery($sQuery);
             
             if(isset($rResult[0]['approver_comments']) && $rResult[0]['approver_comments'] != ""){
-                $comments = $rResult[0]['approver_comments'] ;//
+                $comments = $rResult[0]['approver_comments'];//
                 if($_POST['comments'] != ""){
                     $comments .=" - " .$_POST['comments'];
                 }
