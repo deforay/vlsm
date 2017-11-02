@@ -7,6 +7,11 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
+    if(($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $_POST['oldStatus']==9){
+        $_POST['status'] = 9;
+    }else if($_POST['oldStatus']==9){
+        $_POST['status'] = 6;
+    }
     //Set Date of demand
     if(isset($_POST['dateOfDemand']) && trim($_POST['dateOfDemand'])!=""){
         $_POST['dateOfDemand']=$general->dateFormat($_POST['dateOfDemand']);  

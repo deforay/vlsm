@@ -222,7 +222,7 @@ if($urgency==''){
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" />
+                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo',null,'This sample number already exists.Try another number',null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -463,10 +463,10 @@ if($urgency==''){
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This serial number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo1',null,'This sample number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control  reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkNameValidation('vl_request_form','serial_no',this,null,'This barcode already exists.Try another barcode',null)">
+                          <input type="text" class="form-control  reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','serial_no','reqBarcode',null,'This barcode already exists.Try another barcode',null)">
                           <!--<input type="hidden" class="form-control  sampleCode " name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $sCodeValue;?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -708,11 +708,13 @@ if($urgency==''){
         $(".serialNo1,.serialNo,.reqBarcode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
+        checkSampleNameValidation('vl_request_form','serial_no','serialNo',null,'This sample number already exists.Try another number',null);
         <?php
       }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
         $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
+        checkSampleNameValidation('vl_request_form','serial_no','serialNo1',null,'This sample number already exists.Try another number',null);
         <?php
       }
       ?>
@@ -917,21 +919,23 @@ if($urgency==''){
       facilityArray = fDetails.split("##");
       $("#labId").val(facilityArray[0]);
     }
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
+  function checkSampleNameValidation(tableName,fieldName,className,fnct,alrt)
     {
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
-
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+      if($.trim($("."+className).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("."+className).val(),fnct : fnct, format: "html"},
         function(data){
-            if(data==='1'){
-                alert(alrt);
-                duplicateName=false;
-                $(".removeValue").val('');
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("."+className).val('');
+                <?php } else { ?>
+                    document.location.href = "editVlRequest.php?id="+data;
+                <?php } ?>
             }
         });
+        $.unblockUI();
+      }
     }
     
     function checkPatientIsPregnant(value){

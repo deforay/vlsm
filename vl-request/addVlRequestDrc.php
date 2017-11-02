@@ -410,7 +410,7 @@
                                 </td>
                             </tr>
                             <?php
-                            if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){
+                            if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled" && $_SESSION['userType']==''){
                             ?>
                               <tr>
                                 <td><label for="">Décision prise </label></td>
@@ -442,7 +442,7 @@
                             <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:30%;"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:30%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
                                 </td>
                             </tr>
                             <tr>
@@ -585,11 +585,13 @@
         $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
+        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null);
         <?php
       }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
         $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
+        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null);
         <?php
       }
       ?>
@@ -919,6 +921,24 @@
                 showModal('patientModal.php?artNo='+obj.value,900,520);
             }
         });
+      }
+    }
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                    document.location.href = "editVlRequest.php?id="+data;
+                <?php } ?>
+            }
+        });
+        $.unblockUI();
       }
     }
   function setPatientDetails(pDetails){
