@@ -9,6 +9,11 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
+     if(($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $_POST['oldStatus']==9){
+        $_POST['status'] = 9;
+    }else if($_POST['oldStatus']==9){
+        $_POST['status'] = 6;
+    }
      $instanceId = '';
      if(isset($_SESSION['instanceId'])){
           $instanceId = $_SESSION['instanceId'];

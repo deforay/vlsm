@@ -9,15 +9,13 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-     $configQuery ="SELECT value FROM global_config where name='auto_approval'";
-     $configResult = $db->rawQuery($configQuery);
      $status = 6;
-     if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
-          $status = 7;
-     }
-     if(isset($_POST['sampleValidity']) && $_POST['sampleValidity']!=''){
+    if(isset($_POST['sampleValidity']) && $_POST['sampleValidity']!=''){
         $status = 4;
-     }
+    }
+    if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){
+        $status = 9;
+    }
      $instanceId = '';
      if(isset($_SESSION['instanceId'])){
           $instanceId = $_SESSION['instanceId'];

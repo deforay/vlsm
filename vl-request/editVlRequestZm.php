@@ -168,7 +168,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This serial number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"  onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo',null,'This sample number already exists.Try another number',null)"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -406,10 +406,10 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This serial number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"  onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo1',null,'This sample number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This barcode already exists.Try another barcode',null)"/>
+                          <input type="text" class="form-control reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"  onblur="checkSampleNameValidation('vl_request_form','serial_no','reqBarcode',null,'This sample number already exists.Try another number',null)"/>
                           <!--<input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -478,7 +478,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                           </label>
                         </td>
                         <td><label class="noResult">Rejection Reason</label></td>
-                        <td><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
                         <option value="">-- Select --</option>
                           <?php
                           foreach($rejectionResult as $reject){
@@ -537,6 +537,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="treamentId" id="treamentId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
+                <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -829,22 +830,23 @@ $("#vlLog").bind("keyup change", function(e) {
       facilityArray = fDetails.split("##");
       $("#labId").val(facilityArray[0]);
     }
-    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
+    function checkSampleNameValidation(tableName,fieldName,className,fnct,alrt)
     {
-      console.log(obj);
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
-
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+      if($.trim($("."+className).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("."+className).val(),fnct : fnct, format: "html"},
         function(data){
-            if(data==='1'){
-                alert(alrt);
-                duplicateName=false;
-                $(".removeValue").val('');
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("."+className).val('');
+                <?php } else { ?>
+                    document.location.href = "editVlRequest.php?id="+data;
+                <?php } ?>
             }
         });
+        $.unblockUI();
+      }
     }
     
     function checkPatientIsPregnant(value){

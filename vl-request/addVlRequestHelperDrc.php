@@ -7,6 +7,7 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
+    
     $instanceId = '';
     if(isset($_SESSION['instanceId'])){
         $instanceId = $_SESSION['instanceId'];
@@ -163,6 +164,9 @@ try {
     }else{
         $_POST['status'] = 6;
         $_POST['rejectionReason'] = NULL;
+    }
+    if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){
+        $_POST['status'] = 9;
     }
     //Set sample testing date
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){

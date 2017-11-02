@@ -8,7 +8,11 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
-     //var_dump($_POST);die;
+     if(($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $_POST['oldStatus']==9){
+        $status = 9;
+    }else if($_POST['oldStatus']==9){
+        $status = 6;
+    }
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
           $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
@@ -112,6 +116,7 @@ try {
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='' ? $_POST['rejectionReason'] :  NULL),
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='' ? $_POST['approvedBy'] :  NULL),
           'sample_type'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='' ? $_POST['specimenType'] :  NULL),
+          'result_status'=>(isset($status) && $status!='') ? $status :  NULL,
           'last_modified_datetime'=>$general->getDateTime()
         );
           

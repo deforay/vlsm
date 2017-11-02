@@ -145,7 +145,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                             <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                            <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;"/>
+                            <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
                           </div>
                         </div>
                          <!-- BARCODESTUFF START -->
@@ -735,10 +735,12 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
         $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
+        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null);
       <?php } else if($global['sample_code']=='YY' || $global['sample_code']=='MMYY'){ ?>
         $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
+        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null);
       <?php } ?>
     }
     
@@ -928,6 +930,24 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
           $.blockUI();
           document.getElementById('vlRequestFormZam').submit();
          }
+    }
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                    document.location.href = "editVlRequest.php?id="+data;
+                <?php } ?>
+            }
+        });
+        $.unblockUI();
+      }
     }
     function checkNameValidation(tableName,fieldName,obj,fnct)
     {

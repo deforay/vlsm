@@ -185,7 +185,7 @@ $statusResult = $db->rawQuery($statusQuery);
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                             <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                            <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;"/>
+                            <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
                           </div>
                         </div>
                       </div>
@@ -645,7 +645,7 @@ $statusResult = $db->rawQuery($statusQuery);
                           </div>
                       </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="<?php echo (($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="status">Status <span class="mandatory">*</span></label><br>
@@ -664,6 +664,7 @@ $statusResult = $db->rawQuery($statusQuery);
                 </div>
                 <div class="box-footer">
                   <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
+                  <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>"/>
                   <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
                   <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
                 </div>
@@ -880,6 +881,24 @@ $statusResult = $db->rawQuery($statusQuery);
       if(flag){
         $.blockUI();
         document.getElementById('vlRequestFormZam').submit();
+      }
+    }
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                  document.location.href = "editVlRequest.php?id="+data;
+                <?php } ?>
+            }
+        });
+        $.unblockUI();
       }
     }
   </script>

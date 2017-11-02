@@ -502,7 +502,7 @@
                             <?php
                             if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){
                             ?>
-                              <tr>
+                              <tr style="<?php echo (($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
@@ -532,7 +532,7 @@
                             <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
                                 </td>
                             </tr>
                             <tr>
@@ -600,6 +600,7 @@
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" id="vlSampleId" name="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id']; ?>"/>
+                <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -925,7 +926,24 @@
         }
       }
     }
-    
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                  document.location.href = "editVlRequest.php?id="+data;
+                <?php } ?>
+            }
+        });
+        $.unblockUI();
+      }
+    }
     function validateNow(){
       flag = deforayValidator.init({
         formId: 'editVlRequestForm'
