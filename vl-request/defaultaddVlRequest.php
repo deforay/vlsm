@@ -1029,12 +1029,7 @@ $sFormat = '';
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>
-                conf = confirm("Do you wish to edit this sample details?");
-                if(conf){
-                  document.location.href = "editVlRequest.php?id="+data;
-                }else{
-                  $("#"+id).val('');
-                }
+                    document.location.href = "editVlRequest.php?id="+data;
                 <?php } ?>
             }
         });
