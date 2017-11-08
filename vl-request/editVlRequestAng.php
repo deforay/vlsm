@@ -70,6 +70,8 @@
     for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
     }
+    $start_date = date('Y-m-01');
+    $end_date = date('Y-m-31');
   if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $start_date = date('Y-m-01');
@@ -681,102 +683,99 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                               </label>
                           </td>
                       </tr>
-                    </table>
-                    <div class="box-body">
-                      <div class="row">
-                        <div class="col-md-4 rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
-                            <label class="col-lg-5 control-label" for="rejectionReason">Razão de rejeição </label>
-                            <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose Razão de rejeição" onchange="checkRejectionReason();">
-                                <option value="">-- Select --</option>
-                                <?php foreach($rejectionTypeResult as $type) { ?>
-                                <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
-                                  <?php
-                                  foreach($rejectionResult as $reject){
-                                    if($type['rejection_type'] == $reject['rejection_type']){
-                                    ?>
-                                    <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $reject['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                    <?php
-                                    }
-                                  }
-                                  ?>
-                                </optgroup>
-                                <?php } ?>
-                                <option value="other">Outro (por favor, especifique) </option>
-                              </select>
-                              <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
-                            </div>
-                        </div>
-                        <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                            <label class="col-lg-5 control-label" for="vlResult">Resultado da carga viral (cópias / ml) </label>
-                            <div class="col-lg-7">
-                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter resultado da carga viral" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
-                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target não detectado<br>
-                              <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> 
-Abaixo do nível de detecção
-                            </div>
-                        </div>
-                        <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                            <label class="col-lg-5 control-label" for="vlLog">Registro de carga viral </label>
-                            <div class="col-lg-7">
-                              <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Registro de carga viral" title="Please enter Registro de carga viral" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
-                            </div>
-                        </div>
-                        
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="approvedBy">Aprovado por </label>
-                            <div class="col-lg-7">
-                              <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por">
-                                <option value="">-- Select --</option>
+                      <tr>
+                        <td class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
+                            <label for="rejectionReason">Razão de rejeição </label>
+                        </td>
+                        <td class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
+                          <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose Razão de rejeição" onchange="checkRejectionReason();" style="width: 193px;">
+                            <option value="">-- Select --</option>
+                            <?php foreach($rejectionTypeResult as $type) { ?>
+                            <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
+                              <?php
+                              foreach($rejectionResult as $reject){
+                                if($type['rejection_type'] == $reject['rejection_type']){
+                                ?>
+                                <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $reject['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
                                 <?php
-                                foreach($userResult as $uName){
-                                  ?>
-                                  <option value="<?php echo $uName['user_id'];?>" <?php echo ($vlQueryInfo[0]['result_approved_by'] == $uName['user_id'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                                  <?php
                                 }
-                                ?>
-                              </select>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <label class="col-lg-2 control-label" for="labComments">Comentários do cientista de laboratório </label>
-                            <div class="col-lg-10">
-                              <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"></textarea>
-                            </div>
-                        </div>
+                              }
+                              ?>
+                            </optgroup>
+                            <?php } ?>
+                            <option value="other">Outro (por favor, especifique) </option>
+                          </select>
+                          <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
+                        </td>
+                        <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                            <label for="vlResult">Resultado da carga viral (cópias / ml) </label>
+                        </td>
+                        <td  class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                          <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter resultado da carga viral" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+                          <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target não detectado<br>
+                          <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Abaixo do nível de detecção
+                        </td>
+                        <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                          <label for="vlLog">Registro de carga viral </label>
+                        </td>
+                        <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                          <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Registro de carga viral" title="Please enter Registro de carga viral" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                            <label for="approvedBy">Aprovado por </label>
+                        </td>
+                        <td>
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por">
+                            <option value="">-- Select --</option>
+                            <?php
+                            foreach($userResult as $uName){
+                              ?>
+                              <option value="<?php echo $uName['user_id'];?>" <?php echo ($vlQueryInfo[0]['result_approved_by'] == $uName['user_id'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
+                        <td>
+                          <label for="labComments">Comentários do cientista de laboratório </label>
+                        </td>
+                        <td colspan="3">
+                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"></textarea>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                            <label for="status">Status <span class="mandatory">*</span></label>
+                        </td>
+                        <td>
+                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
+                            <option value="">-- Select --</option>
+                            <?php
+                            foreach($statusResult as $status){
+                            ?>
+                              <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>
+                            <?php } ?>
+                          </select>
+                        </td>
+                        <td class=" reasonForResultChanges" style="visibility:hidden;">
+                            <label for="reasonForResultChanges">Reason For Changes in Result </label>
+                        </td>
+                        <td class=" reasonForResultChanges" style="visibility:hidden;">
+                          <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
+                        </td>
+                      </tr>
+                    </table>
+                      <div class="box-body">
+                        <?php
+                        if(trim($rch)!= ''){
+                        ?>
+                          <div class="row">
+                            <div class="col-md-12"><?php echo $rch; ?></div>
+                          </div>
+                        <?php } ?>
                       </div>
-                      <div class="row">
-                        <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
-                            <div class="col-lg-7">
-                              <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
-                                <option value="">-- Select --</option>
-                                <?php
-                                foreach($statusResult as $status){
-                                ?>
-                                  <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>
-                                <?php } ?>
-                              </select>
-                            </div>
-                        </div>
-                        <div class="col-md-8 reasonForResultChanges" style="visibility:hidden;">
-                            <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result </label>
-                            <div class="col-lg-10">
-                              <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
-                            </div>
-                        </div>
-                      </div>
-                      <?php
-                      if(trim($rch)!= ''){
-                      ?>
-                        <div class="row">
-                          <div class="col-md-12"><?php echo $rch; ?></div>
-                        </div>
-                      <?php } ?>
-                    </div>
-                  </div>
                     </div>
                 </div>
               </div>

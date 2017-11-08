@@ -1226,7 +1226,6 @@ ADD FOREIGN KEY (facility_id) REFERENCES facility_details(facility_id);
 --saravanan 30-oct-2017
 INSERT INTO `r_sample_status` (`status_id`, `status_name`, `status`) VALUES (NULL, 'Sample Registered at Health Center', 'active');
 
-
 CREATE TABLE `vl_user_facility_map` (
   `user_facility_map_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -1243,3 +1242,7 @@ ALTER TABLE `vl_user_facility_map`
 ALTER TABLE `vl_user_facility_map`
   ADD CONSTRAINT `vl_user_facility_map_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_details` (`user_id`),
   ADD CONSTRAINT `vl_user_facility_map_ibfk_2` FOREIGN KEY (`facility_id`) REFERENCES `facility_details` (`facility_id`);
+  
+  --saravanan 06-nov-2017
+  ALTER TABLE `vl_request_form` ADD `remote_sample_code` VARCHAR(255) NULL DEFAULT NULL AFTER `vlsm_country_id`;
+ALTER TABLE `vl_request_form` ADD `remote_sample_code_key` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_reordered`;

@@ -11,7 +11,7 @@ try {
     if(isset($_POST['noResult']) && $_POST['noResult']=='yes'){
         $status = 4;
     }
-    if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){
+    if(USERTYPE=='remoteuser'){
         $status = 9;
     }
      //set lab no
@@ -86,14 +86,13 @@ try {
      $vldata=array(
           'test_urgency'=>(isset($_POST['urgency']) && $_POST['urgency']!='' ? $_POST['urgency'] :  NULL),
           'vlsm_instance_id'=>$instanceId,
-          'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='' ? $_POST['sampleCodeTitle'] :  'auto'),
+          //'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='' ? $_POST['sampleCodeTitle'] :  'auto'),
           'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='' ? $_POST['sampleCodeFormat'] :  NULL),
-          'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
+          //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
           'vlsm_country_id'=>'2',
-          'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
-          'sample_code'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
+          //'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
+          //'sample_code'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
           'facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='' ? $_POST['clinicName'] :  NULL),
-          //'sample_code'=>$_POST['sampleCode'],
           'request_clinician_name'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
           'sample_collection_date'=>(isset($_POST['sampleCollectionDate']) && $_POST['sampleCollectionDate']!='' ? $_POST['sampleCollectionDate'] :  NULL),
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='' ? $_POST['collectedBy'] :  NULL),
@@ -136,9 +135,15 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
-         //print_r($vldata);die;
+         if(USERTYPE=='remoteuser'){
+            $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+            $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+        }else{
+            $vldata['sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+            $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+        }
           $id=$db->insert($tableName,$vldata);
-          //echo $id;die;
           if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log

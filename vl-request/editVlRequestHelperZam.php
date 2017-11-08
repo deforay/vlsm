@@ -9,7 +9,7 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-     if(($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $_POST['oldStatus']==9){
+     if(USERTYPE=='remoteuser' && $_POST['oldStatus']==9){
         $_POST['status'] = 9;
     }else if($_POST['oldStatus']==9){
         $_POST['status'] = 6;
@@ -201,7 +201,12 @@ try {
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime()
      );
-     //echo "<pre>";var_dump($vldata);die;
+     if(USERTYPE=='remoteuser'){
+            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+     }else if($_POST['sampleCodeCol']!=''){
+            $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+     }
      $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
      $id = $db->update($tableName,$vldata);
      if($id>0){

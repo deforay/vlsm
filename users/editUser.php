@@ -68,7 +68,7 @@ $result = $db->rawQuery($query);
                         <?php
                         foreach ($result as $row) {
                         ?>
-                        <option value="<?php echo $row['role_id']; ?>" <?php echo ($userInfo[0]['role_id']==$row['role_id'])?"selected='selected'":""?>><?php echo $row['role_name']; ?></option>
+                        <option value="<?php echo $row['role_id']; ?>" <?php echo ($userInfo[0]['role_id']==$row['role_id'])?"selected='selected'":""?>><?php echo ucwords($row['role_name']); ?></option>
                         <?php
                         }
                         ?>

@@ -16,8 +16,13 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        $aColumns = array('vl.serial_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_received_at_vl_lab_datetime,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')","DATE_FORMAT(vl.result_printed_datetime,'%d-%b-%Y')","DATE_FORMAT(vl.result_mail_datetime,'%d-%b-%Y')");
-        $orderColumns = array('vl.serial_no','vl.sample_collection_date','vl.sample_received_at_vl_lab_datetime','vl.sample_tested_datetime','vl.result_printed_datetime','vl.result_mail_datetime');
+				if(USERTYPE=='remoteuser'){
+					$sampleCode = 'remote_sample_code';
+				}else{
+					$sampleCode = 'sample_code';
+				}
+        $aColumns = array('vl.'.$sampleCode,"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_received_at_vl_lab_datetime,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')","DATE_FORMAT(vl.result_printed_datetime,'%d-%b-%Y')","DATE_FORMAT(vl.result_mail_datetime,'%d-%b-%Y')");
+        $orderColumns = array('vl.'.$sampleCode,'vl.sample_collection_date','vl.sample_received_at_vl_lab_datetime','vl.sample_tested_datetime','vl.result_printed_datetime','vl.result_mail_datetime');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -95,11 +100,13 @@ $primaryKey="vl_sample_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime,vl.serial_no from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
+	$sQuery="select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime,vl.request_created_by,vl.".$sampleCode." from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
                         AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' AND vl.result_status!=9";
-	
+	if(USERTYPE=='remoteuser'){
+			$sQuery = $sQuery." AND request_created_by=".$_SESSION['userId'];
+	}
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -117,9 +124,9 @@ $primaryKey="vl_sample_id";
 	    }
 	    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
             if (trim($start_date) == trim($end_date)) {
-		    $seWhere = $seWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+							$seWhere = $seWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
             }else{
-               $seWhere = $seWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+              $seWhere = $seWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
             }
 	    }
 	    if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
@@ -148,17 +155,21 @@ $primaryKey="vl_sample_id";
         }
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
+				$rUser = '';
+				if(USERTYPE=='remoteuser'){
+					$rUser = $rUser." AND request_created_by=".$_SESSION['userId'];
+				}
         $aResultFilterTotal =$db->rawQuery("select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
-                        AND vl.result != '' AND vl.result_status!=9 AND vl.vlsm_country_id='".$gconfig['vl_form']."' $saWhere");
+                        AND vl.result != '' AND vl.result_status!=9 AND vl.vlsm_country_id='".$gconfig['vl_form']."' $saWhere $rUser");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
         $aResultTotal =  $db->rawQuery("select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
-                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' AND vl.result_status!=9");
+                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' AND vl.result_status!=9 $rUser");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
@@ -205,7 +216,7 @@ $primaryKey="vl_sample_id";
 	      $aRow['result_mail_datetime'] = '';
 	    }
             $row = array();
-            $row[] = $aRow['serial_no'];
+            $row[] = $aRow[$sampleCode];
             $row[] = $aRow['sample_collection_date'];
             $row[] = $aRow['sample_received_at_vl_lab_datetime'];
             $row[] = $aRow['sample_tested_datetime'];

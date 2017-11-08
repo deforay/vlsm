@@ -18,8 +18,13 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        $aColumns = array('vl.serial_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.serial_no','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+				if(USERTYPE=='remoteuser'){
+					$sampleCode = 'remote_sample_code';
+				}else{
+					$sampleCode = 'sample_code';
+				}
+        $aColumns = array('vl.'.$sampleCode,"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+        $orderColumns = array('vl.'.$sampleCode,'vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -205,7 +210,7 @@ $primaryKey="vl_sample_id";
 	}else{
 	    $sWhere = $sWhere.' where '.$whereResult.'vl.vlsm_country_id="'.$gconfig['vl_form'].'"';
 	}
-	if($_SESSION['userType']!=''){
+	if(USERTYPE=='remoteuser'){
 		$sWhere = $sWhere.' AND vl.request_created_by='.$_SESSION['userId'];
 		$sFilter = ' AND request_created_by='.$_SESSION['userId'];
 	}else{
@@ -214,6 +219,7 @@ $primaryKey="vl_sample_id";
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	$sQuery = $sQuery." ORDER BY vl.request_created_datetime DESC";
+
 	$_SESSION['vlRequestSearchResultQuery'] = $sQuery;
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
@@ -251,8 +257,8 @@ $primaryKey="vl_sample_id";
 	if(isset($_SESSION['privileges']) && (in_array("viewVlRequest.php", $_SESSION['privileges']))){
 	    $vlView = true;
 	}
-        
-        foreach ($rResult as $aRow) {
+
+    foreach ($rResult as $aRow) {
 	    $vlResult='';
 	    $edit='';
 	    $barcode='';
@@ -262,25 +268,24 @@ $primaryKey="vl_sample_id";
 	    }else{
 	      $aRow['sample_collection_date'] = '';
 	    }
-            $row = array();
+      $row = array();
 	    //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
-	    $row[] = $aRow['serial_no'];
+	    $row[] = ($aRow['sample_code']!='')?$aRow['sample_code']:$aRow['remote_sample_code'];
 	    $row[] = $aRow['sample_collection_date'];
 	    $row[] = $aRow['batch_code'];
 	    $row[] = $aRow['patient_art_no'];
-            $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
+      $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
 	    $row[] = ucwords($aRow['facility_name']);
 	    $row[] = ucwords($aRow['facility_state']);
 	    $row[] = ucwords($aRow['facility_district']);
-            $row[] = ucwords($aRow['sample_name']);
-            $row[] = $aRow['result'];
-            $row[] = ucwords($aRow['status_name']);
+			$row[] = ucwords($aRow['sample_name']);
+			$row[] = $aRow['result'];
+			$row[] = ucwords($aRow['status_name']);
 	    //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
 		if($aRow['vlsm_country_id']==2){
 			if($vlRequest){
 				$edit='<a href="editVlRequest.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
-				
 			}
 			$pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertZmbPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
 			if($vlView){
@@ -297,7 +302,7 @@ $primaryKey="vl_sample_id";
 		  
 			if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){
 				$fac = ucwords($aRow['facility_name'])." | ".$aRow['sample_collection_date'];
-				$barcode='<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\''.$aRow['serial_no'].'\',\''.$fac.'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
+				$barcode='<br><a href="javascript:void(0)" onclick="printBarcodeLabel(\''.$aRow[$sampleCode].'\',\''.$fac.'\')" class="btn btn-default btn-xs" style="margin-right: 2px;" title="Barcode"><i class="fa fa-barcode"> </i> Barcode </a>';
 			}
 			
 		}

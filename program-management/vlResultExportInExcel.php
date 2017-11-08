@@ -133,8 +133,13 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }else if($aRow['result_value_absolute']!= NULL && trim($aRow['result_value_absolute'])!= ''){
    $logVal = round(log10($aRow['result_value_absolute']),1);
   }
+  if(USERTYPE=='remoteuser'){
+					$sampleCode = 'remote_sample_code';
+				}else{
+					$sampleCode = 'sample_code';
+				}
   $row[] = $no;
-  $row[] = $aRow['sample_code'];
+  $row[] = $aRow[$sampleCode];
   $row[] = ucwords($aRow['facility_name']);
   $row[] = $aRow['facility_code'];
   $row[] = ucwords($aRow['facility_district']);

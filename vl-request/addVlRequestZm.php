@@ -76,14 +76,22 @@ $end_date = date('Y-m-31');
     $start_date = date('Y-01-01');
     $end_date = date('Y-12-31');
 }
+//check remote user
+  if(USERTYPE=='remoteuser'){
+    $sampleCodeKey = 'remote_sample_code_key';
+    $sampleCode = 'remote_sample_code';
+  }else{
+    $sampleCodeKey = 'sample_code_key';
+    $sampleCode = 'sample_code';
+  }
 
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND vl.sample_code_title="'.$arr['sample_code'].'"  AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
+$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 
   $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
- $maxId = $svlResult[0]['sample_code_key']+1;
+  if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+ $maxId = $svlResult[0][$sampleCodeKey]+1;
  $strparam = strlen($maxId);
  $zeros = substr("000", $strparam);
  $maxId = $zeros.$maxId;
@@ -125,14 +133,14 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
  $districtResult=$db->query($districtQuery);
  
- $vlQuery = 'select vl.test_urgency,vl.sample_collected_by,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentId'].'"';
+ $vlQuery = 'select vl.test_urgency,vl.sample_collected_by,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.lab_contact_person,vl.sample_code_key,vl.sample_code_format,vl.lab_id,vl.remote_sample_code,vl.remote_sample_code_key from vl_request_form as vl where vl.vl_sample_id="'.$_SESSION['treamentId'].'"';
  $vlResult=$db->query($vlQuery);
  $urgency = $vlResult[0]['test_urgency'];
  $cBy = $vlResult[0]['sample_collected_by'];
  $clinicianName = $vlResult[0]['lab_contact_person'];
  $labNameId = $vlResult[0]['lab_id'];
  
- $sKey = $vlResult[0]['sample_code_key']+1;
+ $sKey = $vlResult[0][$sampleCodeKey]+1;
  $strparam = strlen($sKey);
  $zeros = substr("000", $strparam);
  $sKey = $zeros.$sKey;
@@ -169,7 +177,6 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
 if($urgency==''){
   $urgency= 'normal';
 }
-
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -222,7 +229,7 @@ if($urgency==''){
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo',null,'This sample number already exists.Try another number',null)" />
+                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -463,10 +470,10 @@ if($urgency==''){
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo1',null,'This sample number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo1',null,'This sample number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control  reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','serial_no','reqBarcode',null,'This barcode already exists.Try another barcode',null)">
+                          <input type="text" class="form-control  reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','reqBarcode',null,'This barcode already exists.Try another barcode',null)">
                           <!--<input type="hidden" class="form-control  sampleCode " name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $sCodeValue;?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -708,13 +715,13 @@ if($urgency==''){
         $(".serialNo1,.serialNo,.reqBarcode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
-        checkSampleNameValidation('vl_request_form','serial_no','serialNo',null,'This sample number already exists.Try another number',null);
+        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null);
         <?php
       }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
         $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        checkSampleNameValidation('vl_request_form','serial_no','serialNo1',null,'This sample number already exists.Try another number',null);
+        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo1',null,'This sample number already exists.Try another number',null);
         <?php
       }
       ?>
@@ -926,11 +933,12 @@ if($urgency==''){
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("."+className).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+              <?php if(USERTYPE=='remoteuser'){ ?>
                   alert(alrt);
                   $("."+className).val('');
                 <?php } else { ?>
-                    document.location.href = "editVlRequest.php?id="+data;
+                    data = data.split("##");
+                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                 <?php } ?>
             }
         });

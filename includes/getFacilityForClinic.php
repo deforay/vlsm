@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 include('MysqliDb.php');
-if($_SESSION['userType']!=''){
+if(USERTYPE=='remoteuser'){
     $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id=".$_SESSION['userId'];
     $vlfmResult = $db->rawQuery($vlfmQuery);
 }

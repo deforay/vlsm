@@ -64,7 +64,7 @@ $aQuery="SELECT * from r_art_code_details where nation_identifier='sudan' AND ar
 $aResult=$db->query($aQuery);
 $end_date = date('Y-12-31');
 $start_date = date('Y-01-01');
-if($arr['sample_code']=='MMYY'){
+  if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $end_date = date('Y-m-31');
     $start_date = date('Y-m-01');
@@ -73,14 +73,22 @@ if($arr['sample_code']=='MMYY'){
     $end_date = date('Y-12-31');
     $start_date = date('Y-01-01');
   }
+  //check remote user
+  if(USERTYPE=='remoteuser'){
+    $sampleCodeKey = 'remote_sample_code_key';
+    $sampleCode = 'remote_sample_code';
+  }else{
+    $sampleCodeKey = 'sample_code_key';
+    $sampleCode = 'sample_code';
+  }
 
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="1" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
+$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 
   $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
-   $maxId = $svlResult[0]['sample_code_key']+1;
+  if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+   $maxId = $svlResult[0][$sampleCodeKey]+1;
    $strparam = strlen($maxId);
    $zeros = substr("000", $strparam);
    $maxId = $zeros.$maxId;
@@ -152,7 +160,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)" />
+                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -798,13 +806,13 @@ $sFormat = '';
         $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
         $("#sampleCodeFormat").val(pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
-        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null);
+        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
         <?php
       }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
         $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
         $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        checkSampleNameValidation('vl_request_form','serial_no','sampleCode',null,'This sample number already exists.Try another number',null)
+        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
         <?php
       }
       ?>
@@ -1026,12 +1034,12 @@ $sFormat = '';
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+              <?php if(USERTYPE=='remoteuser'){ ?>
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>
-                    
-                    document.location.href = "editVlRequest.php?id="+data;
+                    data = data.split("##");
+                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                 <?php } ?>
             }
         });
