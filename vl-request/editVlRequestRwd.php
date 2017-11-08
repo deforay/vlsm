@@ -178,6 +178,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   $rch.='</tbody>';
   $rch.='</table>';
 }
+if(USERTYPE=='remoteuser'){
+    $sampleCode = 'remote_sample_code';
+  }else{
+    $sampleCode = 'sample_code';
+  }
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -241,7 +246,8 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                          <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -774,7 +780,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4" style="<?php echo ((USERTYPE=='remoteuser') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
                             <label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
                               <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
@@ -1066,11 +1072,12 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+              <?php if(USERTYPE=='remoteuser'){ ?>
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>
-                  document.location.href = "editVlRequest.php?id="+data;
+                  data = data.split("##");
+                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                 <?php } ?>
             }
         });

@@ -49,6 +49,8 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
     for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
     }
+    $start_date = date('Y-01-01');
+    $end_date = date('Y-12-31');
   if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $start_date = date('Y-m-01');
@@ -57,7 +59,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
     $mnthYr = date('y');
     $start_date = date('Y-01-01');
     $end_date = date('Y-12-31');
-  }  
+  }
   
   //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
   $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
@@ -78,8 +80,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
     <style>
       .ui_tpicker_second_label {
        display: none !important;
-      }
-      .ui_tpicker_second_slider {
+      }.ui_tpicker_second_slider {
        display: none !important;
       }.ui_tpicker_millisec_label {
        display: none !important;
@@ -95,8 +96,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
        display: none !important;
       }.ui_tpicker_time_input{
        width:100%;
-      }
-      .translate-content{
+      }.translate-content{
         color:#0000FF;
         font-size:12.5px;
       }
@@ -271,7 +271,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                 <td style="width:14%;"><label for="ageInYears"> Esquema de TARV actual </label></td>
                                 <td style="width:14%;">
                                     <select class="form-control " id="artRegimen" name="artRegimen" placeholder="Esquema de TARV actual" title="Please enter Esquema de TARV actual" style="width:100%;"  onchange="checkARTValue();">
-                                          <option value="">-- Select --</option>
+                                        <option value="">-- Select --</option>
                                         <?php foreach($artRegimenResult as $heading) { ?>
                                         <optgroup label="<?php echo ucwords($heading['headings']); ?>">
                                           <?php
@@ -286,10 +286,10 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                         </optgroup>
                                         <?php } ?>
                                         <option value="other">Other</option>
-                                  </select>
+                                    </select>
                                   <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
                                 </td>
-                                <td><label for="sex">Linha de TARV actua </label></td>
+                                <td><label for="lineTreatment">Linha de TARV actua </label></td>
                                 <td style="width:32%;">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Primeira</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
@@ -541,72 +541,69 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                               </label>
                           </td>
                       </tr>
-                    </table>
-                    <div class="box-body">
-                      <div class="row">
-                        <div class="col-md-4 rejectionReason" style="display:none;">
-                            <label class="col-lg-5 control-label" for="rejectionReason">Razão de rejeição </label>
-                            <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose Razão de rejeição" onchange="checkRejectionReason();">
-                                <option value="">-- Select --</option>
-                                <?php foreach($rejectionTypeResult as $type) { ?>
-                                <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
-                                  <?php
-                                  foreach($rejectionResult as $reject){
-                                    if($type['rejection_type'] == $reject['rejection_type']){
-                                    ?>
-                                    <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                    <?php
-                                    }
-                                  }
+                      <tr>
+                          <td class=" rejectionReason" style="display:none;">
+                            <label for="rejectionReason">Razão de rejeição </label>
+                          </td>
+                          <td class="rejectionReason" style="display:none;">
+                            <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose Razão de rejeição" onchange="checkRejectionReason();" style="width: 193px;">
+                              <option value="">-- Select --</option>
+                              <?php foreach($rejectionTypeResult as $type) { ?>
+                              <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
+                                <?php
+                                foreach($rejectionResult as $reject){
+                                  if($type['rejection_type'] == $reject['rejection_type']){
                                   ?>
-                                </optgroup>
-                                <?php } ?>
-                                <option value="other">Outro (por favor, especifique) </option>
-                              </select>
-                              <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Razão de rejeição" title="Please enter Razão de rejeição" style="width:100%;display:none;margin-top:2px;">
-                            </div>
-                        </div>
-                        <div class="col-md-4 vlResult">
-                            <label class="col-lg-5 control-label" for="vlResult">Resultado da carga viral (cópias / ml) </label>
-                            <div class="col-lg-7">
+                                  <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
+                                  <?php
+                                  }
+                                }
+                                ?>
+                              </optgroup>
+                              <?php } ?>
+                              <option value="other">Outro (por favor, especifique) </option>
+                            </select>
+                            <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Razão de rejeição" title="Please enter Razão de rejeição" style="width:100%;display:none;margin-top:2px;">
+                          </td>
+                        <td>
+                          <label for="vlResult">Resultado da carga viral (cópias / ml) </label>
+                        </td>
+                        <td>
                               <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="resultado da carga viral" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/>
                               <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target não detectado<br>
                               <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Abaixo do nível de detecção
-                            </div>
-                        </div>
-                        <div class="col-md-4 vlResult">
-                            <label class="col-lg-5 control-label" for="vlLog">Registro de carga viral </label>
-                            <div class="col-lg-7">
+                        </td>
+                        <td>
+                          <label for="vlLog">Registro de carga viral </label>
+                        </td>
+                            <td>
                               <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Registro de carga viral" title="Please enter Registro de carga viral" style="width:100%;" onchange="calculateLogValue(this);"/>
-                            </div>
-                        </div>
-                        
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="approvedBy">Aprovado por </label>
-                            <div class="col-lg-7">
-                              <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por">
-                                <option value="">-- Select --</option>
-                                <?php
-                                foreach($userResult as $uName){
-                                  ?>
-                                  <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                                  <?php
-                                }
-                                ?>
-                              </select>
-                            </div>
-                        </div>
-                        <div class="col-md-8">
-                            <label class="col-lg-2 control-label" for="labComments">Comentários do cientista de laboratório </label>
-                            <div class="col-lg-10">
+                            </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label for="approvedBy">Aprovado por </label>
+                        </td>
+                        <td>
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por">
+                            <option value="">-- Select --</option>
+                            <?php
+                            foreach($userResult as $uName){
+                              ?>
+                              <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
+                        </td>
+                        <td>
+                          <label for="labComments">Comentários do cientista de laboratório </label>
+                        </td>
+                            <td colspan="3">
                               <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"></textarea>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
+                            </td>
+                      </tr>
+                    </table>
                   </div>
                     </div>
                 </div>

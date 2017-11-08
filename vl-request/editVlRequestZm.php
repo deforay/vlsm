@@ -81,8 +81,6 @@ $province.="<option value=''> -- Select -- </option>";
     foreach($fResult as $fDetails){
       $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
     }
-            
-            
 if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
  $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -116,6 +114,11 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
 }else{
  $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
 }
+if(USERTYPE=='remoteuser'){
+    $sampleCode = 'remote_sample_code';
+  }else{
+    $sampleCode = 'sample_code';
+  }
 ?>
 <style> 
   .ui_tpicker_second_label {
@@ -168,7 +171,8 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"  onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo',null,'This sample number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>"  onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo','<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                          <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -406,10 +410,10 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                     <table class="table">
                       <tr>
                         <td><label for="serialNo">Form Serial No. <span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"  onblur="checkSampleNameValidation('vl_request_form','serial_no','serialNo1',null,'This sample number already exists.Try another number',null)" /></td>
+                        <td><input type="text" class="form-control serialNo1 <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>"  onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo1','<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)" /></td>
                         <td><label for="sampleCode">Request Barcode <span class="mandatory">*</span></label></td>
                         <td>
-                          <input type="text" class="form-control reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"  onblur="checkSampleNameValidation('vl_request_form','serial_no','reqBarcode',null,'This sample number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control reqBarcode <?php echo $numeric;?> isRequired removeValue" name="reqBarcode" id="reqBarcode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>"  onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','reqBarcode','<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
                           <!--<input type="hidden" class="form-control sampleCode" name="sampleCode" id="sampleCode" placeholder="Request Barcode" title="Enter Request Barcode"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">-->
                         </td>
                         <td><label for="labId">Lab Name</label></td>
@@ -478,7 +482,7 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
                           </label>
                         </td>
                         <td><label class="noResult">Rejection Reason</label></td>
-                        <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                        <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width: 200px;">
                         <option value="">-- Select --</option>
                           <?php
                           foreach($rejectionResult as $reject){
@@ -837,11 +841,12 @@ $("#vlLog").bind("keyup change", function(e) {
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("."+className).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+              <?php if(USERTYPE=='remoteuser'){ ?>
                   alert(alrt);
                   $("."+className).val('');
                 <?php } else { ?>
-                    document.location.href = "editVlRequest.php?id="+data;
+                    data = data.split("##");
+                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                 <?php } ?>
             }
         });

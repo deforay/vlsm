@@ -10,9 +10,13 @@ $general=new Deforay_Commons_General();
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        
-        $aColumns = array('vl.serial_no',"DATE_FORMAT(vl.request_created_datetime,'%d-%b-%Y %H:%i:%s')");
-        $orderColumns = array('vl.serial_no','','','','','vl.request_created_datetime');
+        if(USERTYPE=='remoteuser'){
+			$sampleCode = 'remote_sample_code';
+		}else{
+			$sampleCode = 'sample_code';
+		}
+        $aColumns = array('vl.'.$sampleCode,"DATE_FORMAT(vl.request_created_datetime,'%d-%b-%Y %H:%i:%s')");
+        $orderColumns = array('vl.'.$sampleCode,'','','','','vl.request_created_datetime');
 		
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -91,13 +95,18 @@ $general=new Deforay_Commons_General();
          * Get data to display
         */
         
-        $sQuery="select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result,vl.request_created_datetime from vl_request_form as vl";
+        $sQuery="select vl.vl_sample_id,vl.$sampleCode,vl.sample_tested_datetime,vl.result,vl.request_created_datetime from vl_request_form as vl";
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
             $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'" AND vl.result_status!=9';
         }else{
             $sWhere=' where vl.vlsm_country_id ="'.$configResult[0]['value'].'" AND vl.result_status!=9';
         }
+		$cWhere = '';
+		if(USERTYPE=='remoteuser'){
+		$sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
+		$cWhere = " AND request_created_by=".$_SESSION['userId'];
+	   }
         if(isset($_POST['sampleCode']) && trim($_POST['sampleCode'])!='')
         {
             $sWhere.=" AND vl_sample_id IN (".$_POST['sampleCode'].")";
@@ -114,11 +123,11 @@ $general=new Deforay_Commons_General();
        //echo $sQuery;die;
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
-        $aResultFilterTotal =$db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result from vl_request_form vl $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("select vl.vl_sample_id,vl.$sampleCode,vl.sample_tested_datetime,vl.result from vl_request_form vl $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id,vl.sample_code,vl.sample_tested_datetime,vl.result from vl_request_form vl where vl.vlsm_country_id ='".$configResult[0]['value']."' AND result_status!=9");
+        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id,vl.$sampleCode,vl.sample_tested_datetime,vl.result from vl_request_form vl where vl.vlsm_country_id ='".$configResult[0]['value']."' AND result_status!=9 $cWhere");
         $iTotal = count($aResultTotal);
         /*
          * Output
@@ -141,7 +150,7 @@ $general=new Deforay_Commons_General();
               $requestCreatedDate =  date("d-M-Y H:i:s",strtotime($aRow['request_created_datetime']));
             }
 	    $row = array();
-            $row[] = $aRow['sample_code'];
+            $row[] = $aRow[$sampleCode];
             $row[] = (trim($sampleTestedDate)!= '')?"Yes":"No";
             $row[] = ($aRow['result']!= null && trim($aRow['result'])!='' && $aRow['result']<1000)?"Yes":"No";
             $row[] = ($aRow['result']!= null && trim($aRow['result'])!='' && $aRow['result']>=1000)?"Yes":"No";

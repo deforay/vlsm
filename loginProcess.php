@@ -79,17 +79,6 @@ try {
             }
             //check clinic or lab user
             $_SESSION['userType'] = '';
-            if($admin[0]['role_code']!='ad' && $admin[0]['role_code']!='AD'){
-                $vlfmQuery="SELECT * from vl_user_facility_map as vlfm INNER JOIN facility_details as fd ON fd.facility_id=vlfm.facility_id where vlfm.user_id='".$admin[0]['user_id']."' limit 1";
-                $vlfmInfo=$db->query($vlfmQuery);
-                if($vlfmInfo){
-                    if($vlfmInfo[0]['facility_type']==1){
-                        $_SESSION['userType'] = 'clinic';
-                    }else if($vlfmInfo[0]['facility_type']==4){
-                        $_SESSION['userType'] = 'lab';
-                    }
-                }
-            }
             $_SESSION['privileges'] = $priId;
             header("location:".$redirect);
         }else{

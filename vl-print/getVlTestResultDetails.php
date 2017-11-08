@@ -16,9 +16,14 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
+				if(USERTYPE=='remoteuser'){
+					$sampleCode = 'remote_sample_code';
+				}else{
+					$sampleCode = 'sample_code';
+				}
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
-        $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
+        $aColumns = array('vl.'.$sampleCode,'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
+        $orderColumns = array('vl.'.$sampleCode,'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -273,6 +278,10 @@ $primaryKey="vl_sample_id";
 		    }
 		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
 		}
+		if(USERTYPE=='remoteuser'){
+			$sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
+			$dWhere = $dWhere." AND request_created_by=".$_SESSION['userId'];
+		}
 		if(!isset($_POST['from'])){
 		  $sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";
 		  $sWhere = $sWhere." AND vl.result!=''";
@@ -324,7 +333,7 @@ $primaryKey="vl_sample_id";
 									 //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
 						 $print = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
 						}
-            $row[] = $aRow['sample_code'];
+            $row[] = $aRow[$sampleCode];
             $row[] = $aRow['batch_code'];
             $row[] = $aRow['patient_art_no'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);

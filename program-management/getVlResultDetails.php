@@ -15,9 +15,14 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
+				if(USERTYPE=='remoteuser'){
+					$sampleCode = 'remote_sample_code';
+				}else{
+					$sampleCode = 'sample_code';
+				}
         
-        $aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $aColumns = array('vl.'.$sampleCode,'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $orderColumns = array('vl.'.$sampleCode,'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -328,6 +333,11 @@ $primaryKey="vl_sample_id";
 	}else{
 	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}
+	$cWhere = '';
+	if(USERTYPE=='remoteuser'){
+	 $sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
+	 $cWhere = " AND request_created_by=".$_SESSION['userId'];
+	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
 	$_SESSION['vlResultQuery']=$sQuery;
@@ -348,7 +358,7 @@ $primaryKey="vl_sample_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."' AND result_status!=9");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."' AND result_status!=9 $cWhere");
        // $aResultTotal = $countResult->fetch_row();
         $iTotal = $aResultTotal[0]['total'];
 
@@ -364,7 +374,7 @@ $primaryKey="vl_sample_id";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = $aRow['sample_code'];
+	    $row[] = $aRow[$sampleCode];
 	    $row[] = $aRow['batch_code'];
 	    $row[] = $aRow['patient_art_no'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);

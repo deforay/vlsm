@@ -8,7 +8,7 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
-     if(($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $_POST['oldStatus']==9){
+     if(USERTYPE=='remoteuser' && $_POST['oldStatus']==9){
         $status = 9;
     }else if($_POST['oldStatus']==9){
         $status = 6;
@@ -77,10 +77,9 @@ try {
      }
      $vldata=array(
           'test_urgency'=>(isset($_POST['urgency']) && $_POST['urgency']!='' ? $_POST['urgency'] :  NULL),
-          'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
-          'sample_code'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
+          //'serial_no'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
+          //'sample_code'=>(isset($_POST['serialNo']) && $_POST['serialNo']!='' ? $_POST['serialNo'] :  NULL),
           'facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='' ? $_POST['clinicName'] :  NULL),
-          //'sample_code'=>$_POST['sampleCode'],
           'request_clinician_name'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
           'sample_collection_date'=>(isset($_POST['sampleCollectionDate']) && $_POST['sampleCollectionDate']!='' ? $_POST['sampleCollectionDate'] :  NULL),
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='' ? $_POST['collectedBy'] :  NULL),
@@ -119,12 +118,16 @@ try {
           'result_status'=>(isset($status) && $status!='') ? $status :  NULL,
           'last_modified_datetime'=>$general->getDateTime()
         );
-          
+          if(USERTYPE=='remoteuser'){
+            $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+        }else if($_POST['sampleCodeCol']!=''){
+            $vldata['sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+        }
           if($vloadResultUpdate){
             $vldata['manual_result_entry']='yes';
             $vldata['import_machine_file_name']='';
           }
-          //print_r($vldata);die;
           $db=$db->where('vl_sample_id',$_POST['treamentId']);
           $id = $db->update($tableName,$vldata);
           if($id>0){

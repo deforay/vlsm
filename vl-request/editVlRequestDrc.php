@@ -135,6 +135,11 @@
     for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
     }
+    if(USERTYPE=='remoteuser'){
+    $sampleCode = 'remote_sample_code';
+    }else{
+      $sampleCode = 'sample_code';
+    }
     ?>
     <style>
       .ui_tpicker_second_label {
@@ -532,7 +537,7 @@
                             <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
                                 </td>
                             </tr>
                             <tr>
@@ -937,7 +942,8 @@
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>
-                  document.location.href = "editVlRequest.php?id="+data;
+                  data = data.split("##");
+                  document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                 <?php } ?>
             }
         });

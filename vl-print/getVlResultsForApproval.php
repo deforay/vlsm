@@ -16,9 +16,13 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        
-        $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
-        $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
+        if(USERTYPE=='remoteuser'){
+					$sampleCode = 'remote_sample_code';
+				}else{
+					$sampleCode = 'sample_code';
+				}
+        $aColumns = array('vl.'.$sampleCode,"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
+        $orderColumns = array('vl.'.$sampleCode,'vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -178,6 +182,9 @@ $primaryKey="vl_sample_id";
 	}else{
 	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}
+	if(USERTYPE=='remoteuser'){
+			$sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
+		}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
 	//echo $sQuery;die;
@@ -196,14 +203,9 @@ $primaryKey="vl_sample_id";
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id,vl.facility_id,vl.patient_first_name,vl.result,f.facility_name,f.facility_code,vl.patient_art_no,s.sample_name,b.batch_code,vl.sample_batch_id,ts.status_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery($sQuery);
         $iFilteredTotal = count($aResultFilterTotal);
-
-        /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."' AND result_status!=9");
-       // $aResultTotal = $countResult->fetch_row();
-       //print_r($aResultTotal);
-        $iTotal = $aResultTotal[0]['total'];
+				$iTotal = $iFilteredTotal;
 
         /*
          * Output
@@ -240,7 +242,7 @@ $primaryKey="vl_sample_id";
 			
 			$row = array();
 			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
-			$row[] = $aRow['sample_code'];
+			$row[] = $aRow[$sampleCode];
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['batch_code'];
 			$row[] = $aRow['patient_art_no'];

@@ -123,6 +123,11 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
 //get active sample test status
 $statusQuery="SELECT * FROM r_sample_status where status = 'active'";
 $statusResult = $db->rawQuery($statusQuery);
+if(USERTYPE=='remoteuser'){
+  $sampleCode = 'remote_sample_code';
+}else{
+  $sampleCode = 'remote_sample_code_key';
+}
 ?>
 <style>
   .ui_tpicker_second_label {
@@ -185,7 +190,8 @@ $statusResult = $db->rawQuery($statusQuery);
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                             <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                            <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','serial_no',this.id,null,'This sample number already exists.Try another number',null)"/>
+                            <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                            <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                           </div>
                         </div>
                       </div>
@@ -645,7 +651,7 @@ $statusResult = $db->rawQuery($statusQuery);
                           </div>
                       </div>
                     </div>
-                    <div class="row" style="<?php echo (($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
+                    <div class="row" style="<?php echo (USERTYPE=='remoteuser' && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="status">Status <span class="mandatory">*</span></label><br>
@@ -890,11 +896,12 @@ $statusResult = $db->rawQuery($statusQuery);
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+              <?php if(USERTYPE=='remoteuser'){ ?>
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>
-                  document.location.href = "editVlRequest.php?id="+data;
+                  data = data.split("##");
+                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                 <?php } ?>
             }
         });
