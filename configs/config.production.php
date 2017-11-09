@@ -9,6 +9,12 @@ $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
 $PORT = 3436;
 
+$sHOST = '127.0.0.1';
+$sUSER = 'root';
+$sPASSWORD = 'zaq12345';
+$sDBNAME = 'vl_lab_request_rwanda';
+$sPORT = 3436;
+
 // If using WAMP default settings, then uncomment the following 2 lines
 //$PASSWORD = '';
 //$PORT = 3306;

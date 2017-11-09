@@ -358,6 +358,16 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="data_sync_interval" class="col-lg-4 control-label">Data Sync Interval <span class="mandatory">*</span> </label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control checkNum" id="data_sync_interval" name="data_sync_interval" placeholder="Data Sync Interval" title="Please enter sync interval" value="<?php echo $arr['data_sync_interval']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
                
               </div>
         </div>
