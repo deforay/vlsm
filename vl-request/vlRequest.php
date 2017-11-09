@@ -136,37 +136,40 @@ $batResult = $db->rawQuery($batQuery);
 			<div class="row" style="background:#e0e0e0;float: right !important;padding: 15px;">
 			    <div class="col-md-12" >
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="vlsm_country_id" class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="sample_code" class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="sample_collection_date" class="showhideCheckBox"  /> <label for="iCol1">Sample Collection Date</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol1">Remote Sample Code</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="batch_code" class="showhideCheckBox"  /> <label for="iCol2">Batch Code</label> <br>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="sample_collection_date" class="showhideCheckBox"  /> <label for="iCol2">Sample Collection Date</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol3">Art No</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="batch_code" class="showhideCheckBox"  /> <label for="iCol3">Batch Code</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="patient_first_name" class="showhideCheckBox" /> <label for="iCol4">Patient's Name</label> <br>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="patient_art_no" class="showhideCheckBox" /> <label for="iCol4">Art No</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol5">Facility Name</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="patient_first_name"  class="showhideCheckBox" /> <label for="iCol5">Patient's Name</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="state"  class="showhideCheckBox" /> <label for="iCol6">Province/State</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol6">Facility Name</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="district"  class="showhideCheckBox" /> <label for="iCol7">District/County</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="state"  class="showhideCheckBox" /> <label for="iCol7">Province/State</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="sample_name"  class="showhideCheckBox" /> <label for="iCol8">Sample Type</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="district"  class="showhideCheckBox" /> <label for="iCol8">District/County</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="9" id="iCol9" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol9">Result</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="9" id="iCol9" data-showhide="sample_name"  class="showhideCheckBox" /> <label for="iCol9">Sample Type</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="10" id="iCol10" data-showhide="status_name" class="showhideCheckBox" /> <label for="iCol10">Status</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="10" id="iCol10" data-showhide="result" class="showhideCheckBox" /> <label for="iCol10">Result</label>
+				    </div>
+						<div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="11" id="iCol11" data-showhide="status_name" class="showhideCheckBox" /> <label for="iCol11">Status</label>
 				    </div>
 				</div>
 			    </div>
@@ -178,7 +181,8 @@ $batResult = $db->rawQuery($batQuery);
                 <tr>
 		  <!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 		  <th>Sample Code</th>
-                  <th>Sample Collection Date</th>
+		  <th>Remote Sample <br/>Code</th>
+                  <th>Sample Collection<br/> Date</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
@@ -222,7 +226,6 @@ $batResult = $db->rawQuery($batQuery);
 						}
 						?>
 						
-							
             </div>
 						
           </div>
@@ -304,7 +307,7 @@ $batResult = $db->rawQuery($batQuery);
         });
         
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
-        for(colNo=0;colNo <=10;colNo++){
+        for(colNo=0;colNo <=11;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(oTable.fnSettings().aoColumns[colNo].bVisible){
                 $("#iCol"+colNo+"-sort").show();    
@@ -333,6 +336,7 @@ $batResult = $db->rawQuery($batQuery);
             "bRetrieve": true,                        
             "aoColumns": [
 		//{"sClass":"center","bSortable":false},
+                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -428,7 +432,6 @@ $batResult = $db->rawQuery($batQuery);
 	 }else{
 	  $("#status").prop('disabled', true);
 	 }
-	 
     }
       
     function toggleAllVisible(){
