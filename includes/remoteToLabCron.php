@@ -20,11 +20,12 @@ $start_date = date('Y-01-01');
     $start_date = date('Y-01-01');
   }
 //get remote data
-$vlQuery="SELECT * FROM vl_request_form WHERE `last_modified_datetime` < SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+$vlQuery="SELECT * FROM vl_request_form WHERE `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $syncdb->rawQuery($vlQuery);
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$sDBNAME' AND table_name='vl_request_form'";
 $allColResult = $syncdb->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
+if(count($vlRemoteResult)>0){
 foreach($vlRemoteResult as $key=>$remoteData){
     foreach($oneDimensionalArray as $result){
         $lab[$result] = $remoteData[$result];
@@ -66,5 +67,6 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $lab['result_status'] = 6;
         $id = $db->insert('vl_request_form',$lab);
     }
+}
 }
 ?>
