@@ -25,6 +25,7 @@ $vlRemoteResult = $syncdb->rawQuery($vlQuery);
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
 $allColResult = $syncdb->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
+if(count($vlRemoteResult)>0){
 foreach($vlRemoteResult as $key=>$remoteData){
     foreach($oneDimensionalArray as $result){
         $lab[$result] = $remoteData[$result];
@@ -63,5 +64,6 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $lab['result_status'] = 6;
         $id = $db->insert('vl_request_form',$lab);
     }
+}
 }
 ?>
