@@ -211,13 +211,14 @@ try {
           'reason_for_vl_result_changes'=>$allChange,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
-          'manual_result_entry'=>'yes'
+          'manual_result_entry'=>'yes',
+          'data_sync'=>0
         );
        if(USERTYPE=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
         }else if($_POST['sampleCodeCol']!=''){
-            $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
         }
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $id=$db->update($tableName,$vldata);

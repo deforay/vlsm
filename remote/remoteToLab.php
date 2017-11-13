@@ -1,6 +1,6 @@
 <?php
-include('MysqliDb.php');
-include('General.php');
+include('../includes/MysqliDb.php');
+include('../General.php');
 $general=new Deforay_Commons_General();
 //global config
 $cQuery="SELECT * FROM global_config";
@@ -24,7 +24,7 @@ $start_date = date('Y-01-01');
 //get remote data
 $vlQuery="SELECT * FROM vl_request_form WHERE data_sync = 0 AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $syncdb->rawQuery($vlQuery);
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$sDBNAME' AND table_name='vl_request_form'";
+$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
 $allColResult = $syncdb->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 if(count($vlRemoteResult)>0){
@@ -42,6 +42,7 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $sQuery = "Select vl_sample_id from vl_request_form where sample_code='".$lab['sample_code']."'";
         $sResult = $db->rawQuery($sQuery);
         $lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.
+        unset($lab['request_created_by']);unset($lab['last_modified_by']);unset($lab['request_created_datetime']);
         $lab['last_modified_datetime'] = $general->getDateTime();
         $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
         $id = $db->update('vl_request_form',$lab);
