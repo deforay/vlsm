@@ -140,6 +140,7 @@ if(USERTYPE=='remoteuser'){
       }.ui_tpicker_time_input{
        width:100%;
       }
+      .serialNo{background-color: #fff;}
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
