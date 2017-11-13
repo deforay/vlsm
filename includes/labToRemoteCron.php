@@ -31,7 +31,7 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $lab[$result] = $remoteData[$result];
     }
     //remove result value
-    $removeKeys = array('vl_sample_id');
+    $removeKeys = array('vl_sample_id','request_created_by');
     foreach($removeKeys as $keys){
         unset($lab[$keys]);
     }

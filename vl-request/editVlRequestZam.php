@@ -159,6 +159,7 @@ if(USERTYPE=='remoteuser'){
       .row{
         margin-top:6px;
       }
+      #sampleCode{background-color: #fff;}
 </style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -190,7 +191,7 @@ if(USERTYPE=='remoteuser'){
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                             <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                            <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                            <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" readonly="readonly" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
                             <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                           </div>
                         </div>

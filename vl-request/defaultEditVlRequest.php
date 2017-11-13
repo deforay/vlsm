@@ -226,6 +226,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       .row{
         margin-top:6px;
       }
+      #sampleCode{background-color: #fff;}
 </style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
