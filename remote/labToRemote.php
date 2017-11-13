@@ -1,6 +1,6 @@
 <?php
-include('MysqliDb.php');
-include('General.php');
+include('../includes/MysqliDb.php');
+include('../General.php');
 $general=new Deforay_Commons_General();
 //global config
 $cQuery="SELECT * FROM global_config";
@@ -43,6 +43,7 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $sResult = $db->rawQuery($sQuery);
         $lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.
         $lab['last_modified_datetime'] = $general->getDateTime();
+        unset($lab['request_created_by']);unset($lab['last_modified_by']);unset($lab['request_created_datetime']);
         $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
         $id = $db->update('vl_request_form',$lab);
         //update in lab database

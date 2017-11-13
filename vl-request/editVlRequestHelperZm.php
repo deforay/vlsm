@@ -116,13 +116,14 @@ try {
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='' ? $_POST['approvedBy'] :  NULL),
           'sample_type'=>(isset($_POST['specimenType']) && $_POST['specimenType']!='' ? $_POST['specimenType'] :  NULL),
           'result_status'=>(isset($status) && $status!='') ? $status :  NULL,
-          'last_modified_datetime'=>$general->getDateTime()
+          'last_modified_datetime'=>$general->getDateTime(),
+          'data_sync'=>0
         );
           if(USERTYPE=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
         }else if($_POST['sampleCodeCol']!=''){
-            $vldata['sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+            $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
         }
           if($vloadResultUpdate){
             $vldata['manual_result_entry']='yes';
