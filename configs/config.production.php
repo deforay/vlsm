@@ -3,17 +3,20 @@
 require_once(__DIR__.'/../system/system.php'); 
 
 // These settings are for the portable Uniform Server distribution
-$HOST = '127.0.0.1';
+
+$HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vl_lab_request';
-$PORT = 3436;
+//$DBNAME = 'vl_lab_request';
+$DBNAME = 'vl_lab_request_rwanda';
+$PORT = 3306;
 
-$sHOST = '127.0.0.1';
+$sHOST = 'localhost';
 $sUSER = 'root';
 $sPASSWORD = 'zaq12345';
-$sDBNAME = 'vl_lab_request_rwanda';
-$sPORT = 3436;
+//$sDBNAME = 'vl_lab_request_rwanda';
+$sDBNAME = 'vl_lab_request';
+$sPORT = 3306;
 
 // If using WAMP default settings, then uncomment the following 2 lines
 //$PASSWORD = '';

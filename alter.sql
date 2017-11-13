@@ -1248,3 +1248,6 @@ ALTER TABLE `vl_user_facility_map`
 ALTER TABLE `vl_request_form` ADD `remote_sample_code_key` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_reordered`;
 --saravanan 09-nov-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Data Sync Interval', 'data_sync_interval', '3');
+
+--saravanna 13-nov-2017
+ALTER TABLE `vl_request_form` ADD `data_sync` VARCHAR(10) NOT NULL DEFAULT '0' AFTER `vl_service_sector`;
