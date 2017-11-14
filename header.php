@@ -25,7 +25,6 @@ if(isset($global['instance_type']) && $global['instance_type']!=''){
 if(!isset($_SESSION['userId'])){
     header("location:../login.php");
 }
-
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/',$link);
 if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='importedStatistics.php' && end($link_array)!='vlExportField.php'){
@@ -51,15 +50,20 @@ if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], ar
 }else{
   $requestMenuAccess = false;  
 }
-if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlPrintResult.php','vlTestResult.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlPrintResult.php','vlTestResult.php','vlResultApproval.php','vlResultMail.php','vlWeeklyReport.php','sampleRejectionReport.php','vlMonitoringReport.php'))) {
   $testResultMenuAccess = true;
 }else{
   $testResultMenuAccess = false;  
 }
-if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('missingResult.php', 'vlResult.php','highViralLoad.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('missingResult.php', 'vlResult.php','highViralLoad.php','vlControlReport.php'))) {
   $managementMenuAccess = true;
 }else{
   $managementMenuAccess = false;  
+}
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('readQRCode.php', 'generate.php'))) {
+  $grCodeMenuAccess = true;
+}else{
+  $grCodeMenuAccess = false;  
 }
 if(isset($_SESSION['privileges']) && in_array(('index.php'),$_SESSION['privileges']))
 {
@@ -70,10 +74,6 @@ if(isset($_SESSION['privileges']) && in_array(('index.php'),$_SESSION['privilege
 
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
 $formConfigResult=$db->query($formConfigQuery);
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
@@ -136,7 +136,6 @@ $formConfigResult=$db->query($formConfigQuery);
     padding: 15px 0 !important;
   }
   
-  
   .select2-selection__choice__remove{
     color: red !important;
   }
@@ -193,26 +192,21 @@ $formConfigResult=$db->query($formConfigQuery);
     <section class="sidebar">
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <!-- Sidebar user panel -->
-      <?php
-        if(isset($global['logo']) && trim($global['logo'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $global['logo'])){
-        ?>
+      <?php if(isset($global['logo']) && trim($global['logo'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $global['logo'])){ ?>
       <div class="user-panel">
         <div align="center">
           <img src="../uploads/logo/<?php echo $global['logo']; ?>"  alt="Logo Image" style="max-width:120px;" >
         </div>
-        
       </div>
       <?php } ?>
       <ul class="sidebar-menu">
-	<?php
-	if($dashBoardMenuAccess == true){ ?>
+      <?php if($dashBoardMenuAccess == true){ ?>
 	    <li class="allMenu dashboardMenu active">
 	      <a href="../dashboard/index.php">
-		<i class="fa fa-dashboard"></i> <span>Dashboard</span>
+      <i class="fa fa-dashboard"></i> <span>Dashboard</span>
 	      </a>
 	    </li>
-	<?php } 
-	if($allAdminMenuAccess == true){ ?>
+    <?php } if($allAdminMenuAccess == true){ ?>
 	    <li class="treeview manage">
 	      <a href="#">
           <i class="fa fa-gears"></i>
@@ -257,9 +251,7 @@ $formConfigResult=$db->query($formConfigQuery);
           <?php } ?>
 	      </ul>
 	    </li>
-	<?php }
-        if($requestMenuAccess == true){
-        ?>
+	<?php } if($requestMenuAccess == true){ ?>
         <li class="treeview request" style="<?php echo $hideRequest;?>">
             <a href="#">
                 <i class="fa fa-edit"></i>
@@ -293,9 +285,7 @@ $formConfigResult=$db->query($formConfigQuery);
               <?php } ?>
             </ul>
         </li>
-        <?php }
-        if($testResultMenuAccess == true){
-        ?>
+        <?php } if($testResultMenuAccess == true){ ?>
         <li class="treeview test" style="<?php echo $hideResult;?>">
             <a href="#">
                 <i class="fa fa-edit"></i>
@@ -318,9 +308,7 @@ $formConfigResult=$db->query($formConfigQuery);
               <?php }?>
             </ul>
         </li>
-        <?php }
-        if($managementMenuAccess == true){
-        ?>
+        <?php } if($managementMenuAccess == true){ ?>
             <li class="treeview program">
                 <a href="#">
                     <i class="fa fa-book"></i>
@@ -355,9 +343,8 @@ $formConfigResult=$db->query($formConfigQuery);
                 </ul>
             </li>
         <?php
-        }?>
-        <?php
-        if(isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes'){ ?>
+        }
+        if(isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true){ ?>
           <li class="treeview qr">
             <a href="#">
                 <i class="fa fa-qrcode"></i>
