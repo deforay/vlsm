@@ -92,7 +92,8 @@ try {
           'approver_comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='') ? $_POST['labComments'] :  NULL,
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
           'last_modified_by'=>$_SESSION['userId'],
-          'last_modified_datetime'=>$general->getDateTime()
+          'last_modified_datetime'=>$general->getDateTime(),
+          'data_sync'=>0
        );
        //echo "<pre>";var_dump($vldata);die;
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
