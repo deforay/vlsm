@@ -76,11 +76,13 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $lab['request_created_datetime'] = $general->getDateTime();
         $lab['last_modified_datetime'] = $general->getDateTime();
         //$lab['result_status'] = 6;
-        $lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.
+        $lab['data_sync'] = 1;//column data_sync value is 1 equal to data_sync done.value 0 is not done.
         $id = $db->insert('vl_request_form',$lab);
         //update in lab database
+        if($id){
         $syncdb = $syncdb->where('remote_sample_code',$lab['remote_sample_code']);
         $id = $syncdb->update('vl_request_form',array('data_sync'=>1));
+        }
     }
 }
 }
