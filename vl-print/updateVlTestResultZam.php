@@ -126,36 +126,9 @@ $statusResult = $db->rawQuery($statusQuery);
 $disabled = "disabled = 'disabled'";
 ?>
 <style>
-  :disabled {background:white;}
-      .ui_tpicker_second_label {
-       display: none !important;
-      }
-      .ui_tpicker_second_slider {
-       display: none !important;
-      }.ui_tpicker_millisec_label {
-       display: none !important;
-      }.ui_tpicker_millisec_slider {
-       display: none !important;
-      }.ui_tpicker_microsec_label {
-       display: none !important;
-      }.ui_tpicker_microsec_slider {
-       display: none !important;
-      }.ui_tpicker_timezone_label {
-       display: none !important;
-      }.ui_tpicker_timezone {
-       display: none !important;
-      }.ui_tpicker_time_input{
-       width:100%;
-      }
-      .table > tbody > tr > td{
-        border-top:none;
-      }
-      .form-control,.form-group{
-        width:100% !important;
-      }
-      .row{
-        margin-top:6px;
-      }
+  .table > tbody > tr > td{ border-top:none; }
+  .form-control,.form-group{ width:100% !important; }
+  .row{ margin-top:6px; }
 </style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

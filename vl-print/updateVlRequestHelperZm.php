@@ -44,7 +44,8 @@ try {
           'result_approved_by'=>$_POST['approvedBy'],
           'result_reviewed_by'=>$_POST['reviewedBy'],
           'is_sample_rejected'=>$_POST['noResult'],
-          'last_modified_datetime'=>$general->getDateTime()
+          'last_modified_datetime'=>$general->getDateTime(),
+          'data_sync'=>0
         );
           if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
                $vldata['sample_type']=$_POST['specimenType'];

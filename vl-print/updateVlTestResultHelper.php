@@ -106,7 +106,8 @@ try {
           'reason_for_vl_result_changes'=>$allChange,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
-          'manual_result_entry'=>'yes'
+          'manual_result_entry'=>'yes',
+          'data_sync'=>0
         );
        //echo "<pre>";var_dump($vldata);die;
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
