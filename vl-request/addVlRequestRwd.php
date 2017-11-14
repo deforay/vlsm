@@ -43,7 +43,17 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
 $rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
-$pdQuery="SELECT * from province_details";
+$rKey = '';
+if(USERTYPE=='remoteuser'){
+    $sampleCodeKey = 'remote_sample_code_key';
+    $sampleCode = 'remote_sample_code';
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+    $rKey = 'R';
+  }else{
+    $sampleCodeKey = 'sample_code_key';
+    $sampleCode = 'sample_code';
+    $pdQuery="SELECT * from province_details";
+  }
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
@@ -69,13 +79,7 @@ if($arr['sample_code']=='MMYY'){
 }
 $start_date = date('Y-01-01');
 $end_date = date('Y-12-31');
-if(USERTYPE=='remoteuser'){
-    $sampleCodeKey = 'remote_sample_code_key';
-    $sampleCode = 'remote_sample_code';
-  }else{
-    $sampleCodeKey = 'sample_code_key';
-    $sampleCode = 'sample_code';
-  }
+
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
@@ -761,25 +765,20 @@ $sFormat = '';
 	  }
       });
       }
-      <?php
-      if($arr['sample_code']=='auto'){
-        ?>
+      <?php if($arr['sample_code']=='auto'){ ?>
         pNameVal = pName.split("##");
         sCode = '<?php echo date('ymd');?>';
         sCodeKey = '<?php echo $maxId;?>';
-        $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+        $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
+        $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
         checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
-        <?php
-      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
+        <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        $("#sampleCode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
+        $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
         checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
-        <?php
-      }
-      ?>
+        <?php } ?>
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;

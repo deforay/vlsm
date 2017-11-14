@@ -43,7 +43,19 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
 $rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
-$pdQuery="SELECT * from province_details";
+//check remote user
+$rKey = '';
+  if(USERTYPE=='remoteuser'){
+    $sampleCodeKey = 'remote_sample_code_key';
+    $sampleCode = 'remote_sample_code';
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+    $rKey = 'R';
+  }else{
+    $sampleCodeKey = 'sample_code_key';
+    $sampleCode = 'sample_code';
+    $pdQuery="SELECT * from province_details";
+    $rKey = '';
+  }
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
@@ -72,14 +84,6 @@ $start_date = date('Y-01-01');
     $mnthYr = date('y');
     $end_date = date('Y-12-31');
     $start_date = date('Y-01-01');
-  }
-  //check remote user
-  if(USERTYPE=='remoteuser'){
-    $sampleCodeKey = 'remote_sample_code_key';
-    $sampleCode = 'remote_sample_code';
-  }else{
-    $sampleCodeKey = 'sample_code_key';
-    $sampleCode = 'sample_code';
   }
 
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="1" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
@@ -760,31 +764,29 @@ $sFormat = '';
       $.post("../includes/getFacilityForClinic.php", { pName : pName},
       function(data){
 	  if(data != ""){
-            details = data.split("###");
-            $("#district").html(details[1]);
-            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-            $("#fCode").val('');
-            $(".facilityDetails").hide();
-            $(".facilityEmails").html('');
-            $(".facilityMobileNumbers").html('');
-            $(".facilityContactPerson").html('');
+        details = data.split("###");
+        $("#district").html(details[1]);
+        $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+        $("#fCode").val('');
+        $(".facilityDetails").hide();
+        $(".facilityEmails").html('');
+        $(".facilityMobileNumbers").html('');
+        $(".facilityContactPerson").html('');
 	  }
       });
       }
-      <?php
-      if($arr['sample_code']=='auto'){
-        ?>
+      <?php if($arr['sample_code']=='auto'){ ?>
         pNameVal = pName.split("##");
         sCode = '<?php echo date('ymd');?>';
         sCodeKey = '<?php echo $maxId;?>';
-        $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+        $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
+        $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
         checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
         <?php
       }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
+        $("#sampleCode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
+        $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
         checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
         <?php

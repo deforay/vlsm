@@ -1,6 +1,6 @@
 <?php
 define('VERSION', '2.7');
-//define('USERTYPE', 'vluser');
-define('USERTYPE', 'remoteuser');
+define('USERTYPE', 'vluser');
+//define('USERTYPE', 'remoteuser');
 define('UPLOAD_PATH',realpath(__DIR__.DIRECTORY_SEPARATOR.'/../uploads'));
 define('TEMP_PATH',realpath(__DIR__.DIRECTORY_SEPARATOR.'/../temporary'));
