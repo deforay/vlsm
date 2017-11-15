@@ -38,49 +38,57 @@ foreach($vlRemoteResult as $key=>$remoteData){
         unset($lab[$keys]);
     }
     //check wheather sample code empty or not
-    if($lab['remote_sample_code']!=''){
-        $sQuery = "Select vl_sample_id from vl_request_form where remote_sample_code='".$lab['remote_sample_code']."'";
+    if($lab['remote_sample_code']!='' || $lab['sample_code']!=''){
+		if($lab['remote_sample_code']!=''){
+			$sQuery = "Select vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key from vl_request_form where remote_sample_code='".$lab['remote_sample_code']."'";
+		}else{
+			$sQuery = "Select vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key from vl_request_form where sample_code='".$lab['sample_code']."'";
+		}
         $sResult = $db->rawQuery($sQuery);
-        $lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.
-        $lab['last_modified_datetime'] = $general->getDateTime();
-        unset($lab['request_created_by']);unset($lab['last_modified_by']);unset($lab['request_created_datetime']);
-        $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
-        $id = $db->update('vl_request_form',$lab);
-        //update in lab database
-        $db = $syncdb->where('sample_code',$lab['sample_code']);
-        $id = $syncdb->update('vl_request_form',array('data_sync'=>1));
-    }else{
-        $svlQuery='SELECT remote_sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
-        $svlResult=$db->query($svlQuery);
-        $prefix = $arr['sample_code_prefix'];
-        if(isset($svlResult[0]['remote_sample_code_key']) && $svlResult[0]['remote_sample_code_key']!='' && $svlResult[0]['remote_sample_code_key']!=NULL){
-         $maxId = $svlResult[0]['remote_sample_code_key']+1;
-         $strparam = strlen($maxId);
-         $zeros = substr("000", $strparam);
-         $maxId = $zeros.$maxId;
-        }else{
-         $maxId = '001';
-        }
-        if($arr['sample_code']=='auto'){
-            $lab['remote_sample_code'] = "R".date('ymd').$maxId;
-            $lab['remote_sample_code_key'] = $maxId;
-        }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
-            $lab['remote_sample_code'] = "R".$prefix.$mnthYr.$maxId;
-            $lab['remote_sample_code_key'] =  $maxId;
-        }
-        //$lab['result_status'] = 6;
-        $lab['request_created_by'] = 0;
-        $lab['last_modified_by'] = 0;
-        $lab['request_created_datetime'] = $general->getDateTime();
-        $lab['last_modified_datetime'] = $general->getDateTime();
-        
-        $lab['data_sync'] = 1;//column data_sync value is 1 equal to data_sync done.value 0 is not done.
-        $id = $db->insert('vl_request_form',$lab);
-        //update in lab database
-        if($id){
-        $syncdb = $syncdb->where('sample_code',$lab['sample_code']);
-        $id = $syncdb->update('vl_request_form',array('data_sync'=>1));
-        }
+        if($sResult){
+			$lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.
+			$lab['last_modified_datetime'] = $general->getDateTime();
+			$lab['remote_sample_code'] = $sResult[0]['remote_sample_code'];
+			$lab['remote_sample_code_key'] = $sResult[0]['remote_sample_code_key'];
+			unset($lab['request_created_by']);unset($lab['last_modified_by']);unset($lab['request_created_datetime']);
+			$db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
+			$id = $db->update('vl_request_form',$lab);
+			//update in lab database
+			$db = $syncdb->where('sample_code',$lab['sample_code']);
+			$id = $syncdb->update('vl_request_form',array('data_sync'=>1,'remote_sample_code'=>$sResult[0]['remote_sample_code'],'remote_sample_code_key'=>$sResult[0]['remote_sample_code_key']));
+		}else{
+			$svlQuery='SELECT remote_sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
+			$svlResult=$db->query($svlQuery);
+			$prefix = $arr['sample_code_prefix'];
+			if(isset($svlResult[0]['remote_sample_code_key']) && $svlResult[0]['remote_sample_code_key']!='' && $svlResult[0]['remote_sample_code_key']!=NULL){
+			 $maxId = $svlResult[0]['remote_sample_code_key']+1;
+			 $strparam = strlen($maxId);
+			 $zeros = substr("000", $strparam);
+			 $maxId = $zeros.$maxId;
+			}else{
+			 $maxId = '001';
+			}
+			if($arr['sample_code']=='auto'){
+				$lab['remote_sample_code'] = "R".date('ymd').$maxId;
+				$lab['remote_sample_code_key'] = $maxId;
+			}else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+				$lab['remote_sample_code'] = "R".$prefix.$mnthYr.$maxId;
+				$lab['remote_sample_code_key'] =  $maxId;
+			}
+			//$lab['result_status'] = 6;
+			$lab['request_created_by'] = 0;
+			$lab['last_modified_by'] = 0;
+			$lab['request_created_datetime'] = $general->getDateTime();
+			$lab['last_modified_datetime'] = $general->getDateTime();
+			
+			$lab['data_sync'] = 1;//column data_sync value is 1 equal to data_sync done.value 0 is not done.
+			$id = $db->insert('vl_request_form',$lab);
+			//update in lab database
+			if($id){
+			$syncdb = $syncdb->where('sample_code',$lab['sample_code']);
+			$id = $syncdb->update('vl_request_form',array('data_sync'=>1,'remote_sample_code'=>$lab['remote_sample_code'],'remote_sample_code_key'=>$lab['remote_sample_code_key']));
+			}
+		}
     }
 }
 }

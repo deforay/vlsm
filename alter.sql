@@ -1251,3 +1251,38 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Data Sync
 
 --saravanna 13-nov-2017
 ALTER TABLE `vl_request_form` ADD `data_sync` VARCHAR(10) NOT NULL DEFAULT '0' AFTER `vl_service_sector`;
+
+--saravanna 15-nov-2017
+ALTER TABLE `user_details` ADD `user_alpnum_id` VARCHAR(255) NOT NULL AFTER `user_id`;
+UPDATE vl_request_form
+SET last_vl_date_routine = NULL
+WHERE last_vl_date_routine = 0000-00-00;
+UPDATE vl_request_form SET last_vl_date_failure_ac = NULL WHERE last_vl_date_failure_ac = 0000-00-00
+UPDATE vl_request_form SET last_vl_date_failure = NULL WHERE last_vl_date_failure = 0000-00-00
+UPDATE vl_request_form SET sample_testing_date = NULL WHERE sample_testing_date = 0000-00-00
+UPDATE vl_request_form SET treatment_initiated_date = NULL WHERE treatment_initiated_date = 0000-00-00
+UPDATE vl_request_form SET last_viral_load_date = NULL WHERE last_viral_load_date = 0000-00-00
+UPDATE vl_request_form SET regimen_change_date = NULL WHERE regimen_change_date = 0000-00-00
+UPDATE vl_request_form SET date_test_ordered_by_physician = NULL WHERE date_test_ordered_by_physician = 0000-00-00
+UPDATE vl_request_form SET result_sms_sent_datetime = NULL WHERE result_sms_sent_datetime=0000-00-00
+UPDATE vl_request_form SET art_cd_date = NULL WHERE art_cd_date=0000-00-00
+UPDATE vl_request_form SET failed_test_date = NULL WHERE failed_test_date=0000-00-00
+UPDATE vl_request_form SET clinic_date = NULL WHERE clinic_date=0000-00-00
+UPDATE vl_request_form SET report_date = NULL WHERE report_date=0000-00-00
+UPDATE vl_request_form SET request_created_datetime = NULL WHERE request_created_datetime=0000-00-00
+UPDATE vl_request_form SET last_modified_datetime = NULL WHERE last_modified_datetime=0000-00-00
+UPDATE vl_request_form SET lot_expiration_date = NULL WHERE lot_expiration_date=0000-00-00
+UPDATE vl_request_form SET result_approved_datetime = NULL WHERE result_approved_datetime=0000-00-00
+UPDATE vl_request_form SET result_reviewed_datetime = NULL WHERE result_reviewed_datetime=0000-00-00
+UPDATE vl_request_form SET test_requested_on = NULL WHERE test_requested_on=0000-00-00
+UPDATE vl_request_form SET sample_received_at_vl_lab_datetime = NULL WHERE sample_received_at_vl_lab_datetime=0000-00-00
+UPDATE vl_request_form SET result_dispatched_datetime = NULL WHERE result_dispatched_datetime=0000-00-00
+UPDATE vl_request_form SET sample_tested_datetime = NULL WHERE sample_tested_datetime=0000-00-00
+UPDATE vl_request_form SET result_printed_datetime = NULL WHERE result_printed_datetime=0000-00-00
+UPDATE vl_request_form SET patient_dob = NULL WHERE patient_dob=0000-00-00
+UPDATE vl_request_form SET date_dispatched_from_clinic_to_lab = NULL WHERE date_dispatched_from_clinic_to_lab=0000-00-00
+ALTER TABLE `vl_request_form` CHANGE `last_modified_by` `last_modified_by` VARCHAR(255) NULL DEFAULT NULL;
+alter table vl_user_facility_map drop foreign key vl_user_facility_map_ibfk_1
+ALTER TABLE `vl_request_form` CHANGE `request_created_by` `request_created_by` VARCHAR(255) NOT NULL;
+ALTER TABLE `vl_user_facility_map` CHANGE `user_id` `user_id` VARCHAR(255) NOT NULL;
+ALTER TABLE `user_details` CHANGE `user_id` `user_id` VARCHAR(255) NOT NULL;

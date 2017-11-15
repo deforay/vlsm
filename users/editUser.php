@@ -2,7 +2,7 @@
 ob_start();
 include('../header.php');
 $id=base64_decode($_GET['id']);
-$userQuery="SELECT * from user_details where user_id=$id";
+$userQuery="SELECT * from user_details where user_id='".$id."'";
 $userInfo=$db->query($userQuery);
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
