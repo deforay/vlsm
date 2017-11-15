@@ -31,9 +31,6 @@ try {
                 $data=array('vlsm_instance_id'=>$id);
                 $db->update('facility_details',$data);
                 
-                //$data=array('vlsm_instance_id'=>$id);
-                $db->update('vl_request_form',$data);                
-                
             }
             //Add event log
             $eventType = 'login';
