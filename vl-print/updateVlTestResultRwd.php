@@ -1,32 +1,5 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2' AND status ='active'";
-$lResult = $db->rawQuery($lQuery);
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status = 'active'";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-//rejection type
-$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
-//sample status
-$statusQuery="SELECT * FROM r_sample_status where status = 'active'";
-$statusResult = $db->rawQuery($statusQuery);
-
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
   foreach($pdResult as $provinceName){
@@ -39,15 +12,11 @@ foreach($fResult as $fDetails){
   $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
 $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='rwd'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='rwd' AND art_status = 'active'";
 $aResult=$db->query($aQuery);
 
-$vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
-$vlQueryInfo=$db->query($vlQuery);
 //facility details
 if(isset($vlQueryInfo[0]['facility_id']) && $vlQueryInfo[0]['facility_id'] >0){
   $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."' AND status='active'";
@@ -85,57 +54,7 @@ if(trim($stateName)!= ''){
   $districtQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
   $districtResult = $db->query($districtQuery);
 }
-if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
- $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
-}else{
- $vlQueryInfo[0]['patient_dob']='';
-}
 
-if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
- $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_collection_date']='';
-}
-
-if(isset($vlQueryInfo[0]['treatment_initiated_date']) && trim($vlQueryInfo[0]['treatment_initiated_date'])!='' && $vlQueryInfo[0]['treatment_initiated_date']!='0000-00-00'){
- $vlQueryInfo[0]['treatment_initiated_date']=$general->humanDateFormat($vlQueryInfo[0]['treatment_initiated_date']);
-}else{
- $vlQueryInfo[0]['treatment_initiated_date']='';
-}
-
-if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo[0]['date_of_initiation_of_current_regimen'])!='' && $vlQueryInfo[0]['date_of_initiation_of_current_regimen']!='0000-00-00'){
- $vlQueryInfo[0]['date_of_initiation_of_current_regimen']=$general->humanDateFormat($vlQueryInfo[0]['date_of_initiation_of_current_regimen']);
-}else{
- $vlQueryInfo[0]['date_of_initiation_of_current_regimen']='';
-}
-
-if(isset($vlQueryInfo[0]['test_requested_on']) && trim($vlQueryInfo[0]['test_requested_on'])!='' && $vlQueryInfo[0]['test_requested_on']!='0000-00-00'){
- $vlQueryInfo[0]['test_requested_on']=$general->humanDateFormat($vlQueryInfo[0]['test_requested_on']);
-}else{
- $vlQueryInfo[0]['test_requested_on']='';
-}
-
-if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
- $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
-}
-
-if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && $vlQueryInfo[0]['sample_tested_datetime']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
- $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_tested_datetime']='';
-}
-
-if(isset($vlQueryInfo[0]['result_dispatched_datetime']) && trim($vlQueryInfo[0]['result_dispatched_datetime'])!='' && $vlQueryInfo[0]['result_dispatched_datetime']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['result_dispatched_datetime']);
- $vlQueryInfo[0]['result_dispatched_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['result_dispatched_datetime']='';
-}
 //set reason for changes history
 $rch = '';
 if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){

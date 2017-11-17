@@ -1,21 +1,11 @@
   <?php
     ob_start();
-    include('../General.php');
-    $general=new Deforay_Commons_General();
-    //Get VL info
-    $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
-    $vlQueryInfo=$db->query($vlQuery);
-    //get province list
-    $pdQuery="SELECT * from province_details";
-    $pdResult=$db->query($pdQuery);
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
       $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
     }
-    //get lab facility list
-    $fQuery="SELECT * FROM facility_details where status='active'";
-    $fResult = $db->rawQuery($fQuery);
+    
     $facility = "";
     $facility.="<option value=''> -- Sélectionner -- </option>";
     foreach($fResult as $fDetails){
@@ -36,125 +26,19 @@
     if(!isset($provinceResult[0]['province_code'])){
       $provinceResult[0]['province_code'] = '';
     }
-     //get lab facility details
-    $lQuery="SELECT * FROM facility_details where facility_type='2'";
-    $lResult = $db->rawQuery($lQuery);
+    
     //get ART list
     $aQuery="SELECT * from r_art_code_details where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
-    $sQuery="SELECT * from r_sample_type where status='active'";
-    $sResult=$db->query($sQuery);
-    //Set DOB
-    if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
-      $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
-    }else{
-      $vlQueryInfo[0]['patient_dob']='';
-    }
-     //Set Date of demand
-    if(isset($vlQueryInfo[0]['date_test_ordered_by_physician']) && trim($vlQueryInfo[0]['date_test_ordered_by_physician'])!='' && $vlQueryInfo[0]['date_test_ordered_by_physician']!='0000-00-00'){
-      $vlQueryInfo[0]['date_test_ordered_by_physician']=$general->humanDateFormat($vlQueryInfo[0]['date_test_ordered_by_physician']);
-    }else{
-      $vlQueryInfo[0]['date_test_ordered_by_physician']='';
-    }
-    //Set ARV initiation date
-    if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo[0]['date_of_initiation_of_current_regimen'])!='' && $vlQueryInfo[0]['date_of_initiation_of_current_regimen']!='0000-00-00'){
-      $vlQueryInfo[0]['date_of_initiation_of_current_regimen']=$general->humanDateFormat($vlQueryInfo[0]['date_of_initiation_of_current_regimen']);
-    }else{
-      $vlQueryInfo[0]['date_of_initiation_of_current_regimen']='';
-    }
-    //Has patient changed regimen section
-    if(trim($vlQueryInfo[0]['has_patient_changed_regimen']) == "yes"){
-      if(isset($vlQueryInfo[0]['regimen_change_date']) && trim($vlQueryInfo[0]['regimen_change_date'])!='' && $vlQueryInfo[0]['regimen_change_date']!='0000-00-00'){
-        $vlQueryInfo[0]['regimen_change_date']=$general->humanDateFormat($vlQueryInfo[0]['regimen_change_date']);
-      }else{
-        $vlQueryInfo[0]['regimen_change_date']='';
-      }
-    }else{
-      $vlQueryInfo[0]['reason_for_regimen_change'] = '';
-      $vlQueryInfo[0]['regimen_change_date'] = '';
-    }
-    //Set last VL result
-    if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_viral_load_date'])!='' && $vlQueryInfo[0]['last_viral_load_date']!='0000-00-00'){
-      $vlQueryInfo[0]['last_viral_load_date']=$general->humanDateFormat($vlQueryInfo[0]['last_viral_load_date']);
-    }else{
-      $vlQueryInfo[0]['last_viral_load_date']='';
-    }
-    //Set Sample Collection Date
-     if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
-      $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['sample_collection_date']='';
-    }
+    
     //Set plasma storage temp.
     if(isset($vlQueryInfo[0]['sample_type']) && $vlQueryInfo[0]['sample_type']!= 2){
       $vlQueryInfo[0]['plasma_storage_temperature'] = '';
     }
-    //Set sample received date
-    if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
-      $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
-    }
-    //Set sample test date
-    if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && $vlQueryInfo[0]['sample_tested_datetime']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
-      $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['sample_tested_datetime']='';
-    }
-    //Set Dispatched From Clinic To Lab Date
-     if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
-      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
-    }
-    //Set Date of Completion of Viral Load
-    if(isset($vlQueryInfo[0]['result_approved_datetime']) && trim($vlQueryInfo[0]['result_approved_datetime'])!="" && $vlQueryInfo[0]['result_approved_datetime']!='0000-00-00'){
-        $vlQueryInfo[0]['result_approved_datetime']=$general->humanDateFormat($vlQueryInfo[0]['result_approved_datetime']);  
-    }else{
-        $vlQueryInfo[0]['result_approved_datetime'] = '';
-    }
-    //get reason for rejection list
-    $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
-    $rjctReasonResult=$db->query($rjctReasonQuery);
-    //get vl test reason list
-    $vlTestReasonQuery="SELECT * from r_vl_test_reasons where test_reason_status = 'active'";
-    $vlTestReasonResult=$db->query($vlTestReasonQuery);
-    //global config
-    $cQuery="SELECT * FROM global_config";
-    $cResult=$db->query($cQuery);
-    $arr = array();
-    for ($i = 0; $i < sizeof($cResult); $i++) {
-      $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
-    }
+    
     $disable = "disabled = 'disabled'";
     ?>
     <style>
-       :disabled {background:white;}
-       .form-control{background: #fff !important;}
-      .ui_tpicker_second_label {
-       display: none !important;
-      }
-      .ui_tpicker_second_slider {
-       display: none !important;
-      }.ui_tpicker_millisec_label {
-       display: none !important;
-      }.ui_tpicker_millisec_slider {
-       display: none !important;
-      }.ui_tpicker_microsec_label {
-       display: none !important;
-      }.ui_tpicker_microsec_slider {
-       display: none !important;
-      }.ui_tpicker_timezone_label {
-       display: none !important;
-      }.ui_tpicker_timezone {
-       display: none !important;
-      }.ui_tpicker_time_input{
-       width:100%;
-      }
       .translate-content{
         color:#0000FF;
         font-size:12.5px;
@@ -517,7 +401,7 @@
                                     <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
-                                      foreach($rjctReasonResult as $rjctReason){
+                                      foreach($rejectionResult as $rjctReason){
                                       ?>
                                        <option value="<?php echo $rjctReason['rejection_reason_id']; ?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $rjctReason['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
                                       <?php } ?>

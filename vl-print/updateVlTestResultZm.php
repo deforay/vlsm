@@ -1,38 +1,7 @@
 <?php
 ob_start();
-//include('../header.php');
-//include('../includes/MysqliDb.php');
-include('../General.php');
-$general=new Deforay_Commons_General();
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-$vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
-$vlQueryInfo=$db->query($vlQuery);
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
-$lResult = $db->rawQuery($lQuery);
-
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
-
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-
-//global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-}
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $numeric = '';
@@ -66,45 +35,8 @@ $province.="<option value=''> -- Select -- </option>";
             foreach($fResult as $fDetails){
               $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
             }
-            
-            
-if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
- $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_collection_date']='';
-}
-if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
- $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
-}else{
- $vlQueryInfo[0]['patient_dob']='';
-}
-if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo[0]['date_of_initiation_of_current_regimen'])!='' && $vlQueryInfo[0]['date_of_initiation_of_current_regimen']!='0000-00-00'){
- $vlQueryInfo[0]['date_of_initiation_of_current_regimen']=$general->humanDateFormat($vlQueryInfo[0]['date_of_initiation_of_current_regimen']);
-}else{
- $vlQueryInfo[0]['date_of_initiation_of_current_regimen']='';
-}
-if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_viral_load_date'])!='' && $vlQueryInfo[0]['last_viral_load_date']!='0000-00-00'){
- $vlQueryInfo[0]['last_viral_load_date']=$general->humanDateFormat($vlQueryInfo[0]['last_viral_load_date']);
-}else{
- $vlQueryInfo[0]['last_viral_load_date']='';
-}
-if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && trim($vlQueryInfo[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
- $sampleTestingDateLab = explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
- $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
-}else{
- $vlQueryInfo[0]['sample_tested_datetime']='';
-}
-if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
- $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
-}
+
 $disable = "disabled = 'disabled'";
-//get test status values
-$tsQuery="SELECT * FROM r_sample_status";
-$tsResult = $db->rawQuery($tsQuery);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
