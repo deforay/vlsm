@@ -1,35 +1,6 @@
   <?php
     ob_start();
-    include('../General.php');
-    $general=new Deforay_Commons_General();
-    //Get VL info
-    $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
-    $vlQueryInfo=$db->query($vlQuery);
-    //get province list
-    $pdQuery="SELECT * from province_details";
-    $pdResult=$db->query($pdQuery);
-    //get lab facility list
-    $fQuery="SELECT * FROM facility_details where status='active'";
-    $fResult = $db->rawQuery($fQuery);
-    //get lab facility details
-    $lQuery="SELECT * FROM facility_details where facility_type='2'";
-    $lResult = $db->rawQuery($lQuery);
-    //sample status
-      $statusQuery="SELECT * FROM r_sample_status where status = 'active'";
-      $statusResult = $db->rawQuery($statusQuery);
-    //get import config
-      $importQuery="SELECT * FROM import_config WHERE status = 'active'";
-      $importResult=$db->query($importQuery);
-      
-      $userQuery="SELECT * FROM user_details where status='active'";
-      $userResult = $db->rawQuery($userQuery);
-      //rejection type
-      $rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-      $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
-      //sample rejection reason
-      $rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-      $rejectionResult = $db->rawQuery($rejectionQuery);
-
+    
     $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='ang'";
     $artRegimenResult = $db->rawQuery($artRegimenQuery);
     $province = "";
@@ -43,7 +14,7 @@
       $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
     }
     //Get selected state
-    $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
+    $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['requesting_facility_id']."'";
     $stateResult=$db->query($stateQuery);
     if(!isset($stateResult[0]['facility_state']) || $stateResult[0]['facility_state']==''){
       $stateResult[0]['facility_state'] = 0;
@@ -60,16 +31,7 @@
     //get ART list
     $aQuery="SELECT * from r_art_code_details";// where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
-    //get Sample type
-    $sQuery="SELECT * from r_sample_type where status='active'";
-    $sResult=$db->query($sQuery);
-    //global config
-    $cSampleQuery="SELECT * FROM global_config";
-    $cSampleResult=$db->query($cSampleQuery);
-    $arr = array();
-    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-    }
+    
     $start_date = date('Y-m-01');
     $end_date = date('Y-m-31');
   if($arr['sample_code']=='MMYY'){
@@ -82,66 +44,17 @@
     $end_date = date('Y-12-31');
   }  
   
-  //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-  $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
-  $svlResult=$db->query($svlQuery);
-  
-  $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
-   $maxId = $svlResult[0]['sample_code_key']+1;
-   $strparam = strlen($maxId);
-   $zeros = substr("000", $strparam);
-   $maxId = $zeros.$maxId;
-  }else{
-   $maxId = '001';
-  }
-  $sKey = '';
-  $sFormat = '';
-  //Set DOB
-    if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
-      $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
-    }else{
-      $vlQueryInfo[0]['patient_dob']='';
-    }
-  //Set last VL result
-    if(isset($vlQueryInfo[0]['test_requested_on']) && trim($vlQueryInfo[0]['test_requested_on'])!='' && $vlQueryInfo[0]['test_requested_on']!='0000-00-00'){
-      $vlQueryInfo[0]['test_requested_on']=$general->humanDateFormat($vlQueryInfo[0]['test_requested_on']);
-    }else{
-      $vlQueryInfo[0]['test_requested_on']='';
-    }
-//Set last VL result
-    if(isset($vlQueryInfo[0]['treatment_initiated_date']) && trim($vlQueryInfo[0]['treatment_initiated_date'])!='' && $vlQueryInfo[0]['treatment_initiated_date']!='0000-00-00'){
-      $vlQueryInfo[0]['treatment_initiated_date']=$general->humanDateFormat($vlQueryInfo[0]['treatment_initiated_date']);
-    }else{
-      $vlQueryInfo[0]['treatment_initiated_date']='';
-    }
-    //Set Sample Collection Date
-     if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
-      $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['sample_collection_date']='';
-    }
-    //Set sample received date
-    if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
-      $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
-    }
-    //Set sample test date
-    if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && $vlQueryInfo[0]['sample_tested_datetime']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
-      $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['sample_tested_datetime']='';
-    }
-    //Set Dispatched From Clinic To Lab Date
+      //Set Dispatched From Clinic To Lab Date
      if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00 00:00:00'){
       $expStr=explode(" ",$vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
       $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
     }else{
       $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
+    }
+    if(isset($vlQueryInfo[0]['requesting_date']) && trim($vlQueryInfo[0]['requesting_date'])!='' && $vlQueryInfo[0]['requesting_date']!='0000-00-00'){
+      $vlQueryInfo[0]['requesting_date']=$general->humanDateFormat($vlQueryInfo[0]['requesting_date']);
+    }else{
+      $vlQueryInfo[0]['requesting_date']='';
     }
     //set reason for changes history
 $rch = '';
@@ -202,26 +115,6 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
 }
     ?>
     <style>
-      .ui_tpicker_second_label {
-       display: none !important;
-      }
-      .ui_tpicker_second_slider {
-       display: none !important;
-      }.ui_tpicker_millisec_label {
-       display: none !important;
-      }.ui_tpicker_millisec_slider {
-       display: none !important;
-      }.ui_tpicker_microsec_label {
-       display: none !important;
-      }.ui_tpicker_microsec_slider {
-       display: none !important;
-      }.ui_tpicker_timezone_label {
-       display: none !important;
-      }.ui_tpicker_timezone {
-       display: none !important;
-      }.ui_tpicker_time_input{
-       width:100%;
-      }
       .translate-content{
         color:#0000FF;
         font-size:12.5px;
@@ -263,7 +156,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 <tr>
                                     <td><label for="province">Província </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="province" id="province" title="Please choose província" onchange="getfacilityDetails(this);" style="width:100%;">
+                                        <select class="form-control isRequired" name="province" id="province" title="Please choose província" style="width:100%;">
                                             <?php
                                             foreach($pdResult as $provinceName){ ?>
                                               <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['facility_state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
@@ -272,7 +165,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                     </td>
                                     <td><label for="district">Município </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="district" id="district" title="Please choose município" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                        <select class="form-control isRequired" name="district" id="district" title="Please choose município" style="width:100%;">
                                           <option value=""> -- Selecione -- </option>
                                           <?php
                                             foreach($districtResult as $districtName){
@@ -285,7 +178,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                     </td>
                                     <td><label for="clinicName">Nome da Unidade </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                                        <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;">
                                           <?php
                                           foreach($fResult as $fDetails){ ?>
                                             <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
@@ -296,33 +189,33 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 <tr>
                                     <td><label for="sector">Serviço/Sector </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <input type="text" class="form-control" name="sector" id="sector" placeholder="Serviço/Sector" title="Please enter Serviço/Sector" value="<?php echo $vlQueryInfo[0]['vl_service_sector']; ?>"/>
+                                        <input type="text" class="form-control" name="sector" id="sector" placeholder="Serviço/Sector" title="Please enter Serviço/Sector" value="<?php echo $vlQueryInfo[0]['requesting_vl_service_sector']; ?>"/>
                                     </td>
-                                    <td><label for="reqClinician">Nome do solicitante </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingPerson">Nome do solicitante </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <input type="text" class="form-control" name="reqClinician" id="reqClinician" placeholder="Nome do solicitante" title="Please enter Nome do solicitante" value="<?php echo $vlQueryInfo[0]['request_clinician_name']; ?>"/>
+                                        <input type="text" class="form-control" name="requestingPerson" id="requestingPerson" placeholder="Nome do solicitante" title="Please enter Nome do solicitante" value="<?php echo $vlQueryInfo[0]['requesting_person']; ?>"/>
                                     </td>
                                     <td><label for="category">Categoria </label><span class="mandatory">*</span></td>
                                     <td>
                                         <select class="form-control" name="category" id="category" title="Please choose Categoria" style="width:100%;">
                                           <option value="">-- Selecione --</option>
-                                          <option value="nurse" <?php echo ($vlQueryInfo[0]['category']=='nurse')?"selected='selected'":""?>>Enfermeiro/a</option>
-                                          <option value="clinician" <?php echo ($vlQueryInfo[0]['category']=='clinician')?"selected='selected'":""?>>Médico/a</option>
+                                          <option value="nurse" <?php echo ($vlQueryInfo[0]['requesting_category']=='nurse')?"selected='selected'":""?>>Enfermeiro/a</option>
+                                          <option value="clinician" <?php echo ($vlQueryInfo[0]['requesting_category']=='clinician')?"selected='selected'":""?>>Médico/a</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td><label for="profNumber">Nº da Ordem </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <input type="text" class="form-control" name="profNumber" id="profNumber" placeholder="Nº da Ordem" title="Please enter Nº da Ordem" value="<?php echo $vlQueryInfo[0]['professional_number']; ?>"/>
+                                        <input type="text" class="form-control" name="profNumber" id="profNumber" placeholder="Nº da Ordem" title="Please enter Nº da Ordem" value="<?php echo $vlQueryInfo[0]['requesting_professional_number']; ?>"/>
                                     </td>
-                                    <td><label for="contactNo">Contacto </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingContactNo">Contacto </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="Contacto" title="Please enter Contacto" value="<?php echo $vlQueryInfo[0]['request_clinician_phone_number']; ?>"/>
+                                        <input type="text" class="form-control" name="requestingContactNo" id="requestingContactNo" placeholder="Contacto" title="Please enter Contacto" value="<?php echo $vlQueryInfo[0]['requesting_phone']; ?>"/>
                                     </td>
-                                    <td><label for="requestDate">Data da solicitação </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingDate">Data da solicitação </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <input type="text" class="form-control date" name="requestDate" id="requestDate" placeholder="Data da solicitação" title="Please choose Data da solicitação" value="<?php echo $vlQueryInfo[0]['test_requested_on']; ?>"/>
+                                        <input type="text" class="form-control date" name="requestingDate" id="requestingDate" placeholder="Data da solicitação" title="Please choose Data da solicitação" value="<?php echo $vlQueryInfo[0]['requesting_date']; ?>"/>
                                     </td>
                                 </tr>
                             </table>
@@ -612,28 +505,16 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                         </table>
                         </div>
                         <div class="box box-primary">
-                        <table class="table" style="width:100%">
-                            <tr>
-                                <td style="width:14%;"><label for="">Data da recepção da amostra </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="e.g 09-Jan-1992" title="Please select Data da recepção da amostra" style="width:100%;"/>
-                                </td>
-                                <td style="width:14%;"><label for="ageInYears"> Responsável da recepção </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
-                                </td>
-                                <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;"/>
-                                </td>
-                            </tr>
-                        </table>
-                        </div>
-                        <div class="box box-primary">
                     <div class="box-header with-border">
                       <h3 class="box-title">Informações laboratoriais</h3>
                     </div>
                     <table class="table" style="width:100%">
+                      <tr>
+                        <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
+                        <td style="width:14%;">
+                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                        </td>
+                      </tr>
                       <tr>
                           <td style="width:14%;"><label for="">Nome do laboratório</label></td>
                           <td style="width:14%;">
@@ -659,12 +540,16 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 ?>
                               </select>
                           </td>
-                          <td style="width:14%;"><label for="sampleReceivedOn"> Amostra de Data Recebida no Laboratório de Teste </label></td>
+                          <td style="width:14%;"><label for="vlFocalPerson"> Responsável da recepção </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Amostra de data recebida" title="Please select Amostra de data recebida" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>"/>
+                              <input type="text" class="form-control " id="vlFocalPerson" name="vlFocalPerson" placeholder="Responsável da recepção" title="Please enter responsável da recepção" style="width:100%;" value="<?php echo $vlQueryInfo[0]['vl_focal_person'];?>"/>
                           </td>
                       </tr>
                       <tr>
+                        <td style="width:14%;"><label for="sampleReceivedOn"> Amostra de Data Recebida no Laboratório de Teste </label></td>
+                          <td style="width:14%;">
+                              <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Amostra de data recebida" title="Please select Amostra de data recebida" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>"/>
+                          </td>
                           <td style="width:14%;"><label for="">Data de Teste de Amostras</label></td>
                           <td style="width:14%;">
                               <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Data de Teste de Amostras" title="Please select Data de Teste de Amostras" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>"/>
@@ -673,7 +558,10 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                           <td style="width:14%;">
                               <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Data de Resultados Despachados" title="Please select Data de Resultados Despachados" value="<?php echo $vlQueryInfo[0]['result_dispatched_datetime'];?>"/>
                           </td>
-                          <td style="width:14%;"><label for="noResult"> Rejeição da amostra</label></td>
+                          
+                      </tr>
+                      <tr>
+                        <td style="width:14%;"><label for="noResult"> Rejeição da amostra</label></td>
                           <td style="width:14%;">
                               <label class="radio-inline">
                                <input class="" id="noResultYes" name="noResult" value="yes" title="Rejeição da amostra" type="radio" <?php echo (trim($vlQueryInfo[0]['is_sample_rejected']) == "yes")?'checked="checked"':''; ?>> Yes
@@ -682,8 +570,6 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                <input class="" id="noResultNo" name="noResult" value="no" title="Rejeição da amostra" type="radio"<?php echo (trim($vlQueryInfo[0]['is_sample_rejected']) == "no")?'checked="checked"':''; ?>> No
                               </label>
                           </td>
-                      </tr>
-                      <tr>
                         <td class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
                             <label for="rejectionReason">Razão de rejeição </label>
                         </td>
@@ -767,15 +653,13 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                         </td>
                       </tr>
                     </table>
+                    <?php if(trim($rch)!= ''){ ?>
                       <div class="box-body">
-                        <?php
-                        if(trim($rch)!= ''){
-                        ?>
                           <div class="row">
                             <div class="col-md-12"><?php echo $rch; ?></div>
                           </div>
-                        <?php } ?>
                       </div>
+                    <?php } ?>
                     </div>
                 </div>
               </div>
