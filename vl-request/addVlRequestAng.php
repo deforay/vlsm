@@ -160,9 +160,9 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                     <td>
                                         <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="Contacto" title="Please enter Contacto"/>
                                     </td>
-                                    <td><label for="requestDate">Data da solicitação </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingDate">Data da solicitação </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <input type="text" class="form-control date" name="requestDate" id="requestDate" placeholder="Data da solicitação" title="Please choose Data da solicitação"/>
+                                        <input type="text" class="form-control date" name="requestingDate" id="requestingDate" placeholder="Data da solicitação" title="Please choose Data da solicitação"/>
                                     </td>
                                 </tr>
                             </table>
@@ -424,13 +424,13 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width:14%;"><label for="reqClinician">Responsável pela colheita </label></td>
+                                <td style="width:14%;"><label for="requestingPerson">Responsável pela colheita </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control" id="reqClinician" name="reqClinician" placeholder="Responsável pela colheita" title="Please select Responsável pela colheita" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="requestingPerson" name="requestingPerson" placeholder="Responsável pela colheita" title="Please select Responsável pela colheita" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="reqClinicianPhoneNumber"> Contacto </label></td>
+                                <td style="width:14%;"><label for="requestingContactNo"> Contacto </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" placeholder="Contacto" title="Please enter Contacto" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="requestingContactNo" name="requestingContactNo" placeholder="Contacto" title="Please enter Contacto" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="sampleType"> Tipo de amostra </label></td>
                                 <td style="width:14%;">
@@ -449,28 +449,16 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                         </table>
                         </div>
                         <div class="box box-primary">
-                        <table class="table" style="width:100%">
-                            <tr>
-                                <td style="width:14%;"><label for="">Data da recepção da amostra </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="e.g 09-Jan-1992" title="Please select Data da recepção da amostra" style="width:100%;"/>
-                                </td>
-                                <td style="width:14%;"><label for="ageInYears"> Responsável da recepção </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
-                                </td>
-                                <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;"/>
-                                </td>
-                            </tr>
-                        </table>
-                        </div>
-                        <div class="box box-primary">
                     <div class="box-header with-border">
                       <h3 class="box-title">Informações laboratoriais</h3>
                     </div>
                     <table class="table" style="width:100%">
+                      <tr>
+                        <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
+                        <td style="width:14%;">
+                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;"/>
+                        </td>
+                      </tr>
                       <tr>
                           <td style="width:14%;"><label for="">Nome do laboratório</label></td>
                           <td style="width:14%;">
@@ -496,12 +484,16 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                 ?>
                               </select>
                           </td>
-                          <td style="width:14%;"><label for="sampleReceivedOn">  Amostra de Data Recebida no Laboratório de Teste </label></td>
+                          <td style="width:14%;"><label for="ageInYears"> Responsável da recepção </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Amostra de data recebida" title="Please select Amostra de data recebida"/>
+                              <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
                           </td>
                       </tr>
                       <tr>
+                        <td style="width:14%;"><label for="sampleReceivedOn">  Amostra de Data Recebida no Laboratório de Teste </label></td>
+                          <td style="width:14%;">
+                              <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Amostra de data recebida" title="Please select Amostra de data recebida"/>
+                          </td>
                           <td style="width:14%;"><label for="">Data de Teste de Amostras</label></td>
                           <td style="width:14%;">
                               <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Data de Teste de Amostras" title="Please select Data de Teste de Amostras"/>
@@ -510,7 +502,9 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                           <td style="width:14%;">
                               <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Data de Resultados Despachados" title="Please select Data de Resultados Despachados"/>
                           </td>
-                          <td style="width:14%;"><label for="noResult"> Rejeição da amostra</label></td>
+                      </tr>
+                      <tr>
+                        <td style="width:14%;"><label for="noResult"> Rejeição da amostra</label></td>
                           <td style="width:14%;">
                               <label class="radio-inline">
                                <input class="" id="noResultYes" name="noResult" value="yes" title="Rejeição da amostra" type="radio"> Yes
@@ -519,8 +513,6 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                <input class="" id="noResultNo" name="noResult" value="no" title="Rejeição da amostra" type="radio"> No
                               </label>
                           </td>
-                      </tr>
-                      <tr>
                           <td class=" rejectionReason" style="display:none;">
                             <label for="rejectionReason">Razão de rejeição </label>
                           </td>
@@ -544,21 +536,22 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                             </select>
                             <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Razão de rejeição" title="Please enter Razão de rejeição" style="width:100%;display:none;margin-top:2px;">
                           </td>
-                        <td>
+                        <td class="vlResult">
                           <label for="vlResult">Resultado da carga viral (cópias / ml) </label>
                         </td>
-                        <td>
+                        <td class="vlResult">
                               <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="resultado da carga viral" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/>
                               <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target não detectado<br>
                               <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Abaixo do nível de detecção
                         </td>
-                        <td>
+                        <td class="vlResult">
                           <label for="vlLog">Registro de carga viral </label>
                         </td>
-                            <td>
+                            <td class="vlResult">
                               <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Registro de carga viral" title="Please enter Registro de carga viral" style="width:100%;" onchange="calculateLogValue(this);"/>
                             </td>
                       </tr>
+                      
                       <tr>
                         <td>
                           <label for="approvedBy">Aprovado por </label>

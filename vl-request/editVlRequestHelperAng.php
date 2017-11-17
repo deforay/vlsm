@@ -36,6 +36,11 @@ try {
     }else{
        $_POST['dateOfArtInitiation'] = NULL;
     }
+    if(isset($_POST['requestingDate']) && trim($_POST['requestingDate'])!=""){
+       $_POST['requestingDate']=$general->dateFormat($_POST['requestingDate']);  
+    }else{
+       $_POST['requestingDate'] = NULL;
+    }
     
     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
          $artQuery ="SELECT art_id,art_code FROM r_art_code_details where (art_code='".$_POST['newArtRegimen']."' OR art_code='".strtolower($_POST['newArtRegimen'])."' OR art_code='".ucfirst(strtolower($_POST['newArtRegimen']))."') AND nation_identifier='rwd'";
@@ -163,14 +168,18 @@ try {
           'line_of_treatment_ref_type'=>(isset($_POST['lineTreatmentRefType']) && $_POST['lineTreatmentRefType']!='') ? $_POST['lineTreatmentRefType'] :  NULL,
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='') ? $_POST['reqClinician'] :  NULL,
           'request_clinician_phone_number'=>(isset($_POST['reqClinicianPhoneNumber']) && $_POST['reqClinicianPhoneNumber']!='') ? $_POST['reqClinicianPhoneNumber'] :  NULL,
-          'test_requested_on'=>(isset($_POST['requestDate']) && $_POST['requestDate']!='') ? $general->dateFormat($_POST['requestDate']) :  NULL,
-          //'vl_focal_person'=>(isset($_POST['vlFocalPerson']) && $_POST['vlFocalPerson']!='') ? $_POST['vlFocalPerson'] :  NULL,
+          //'test_requested_on'=>(isset($_POST['requestDate']) && $_POST['requestDate']!='') ? $general->dateFormat($_POST['requestDate']) :  NULL,
+          'vl_focal_person'=>(isset($_POST['vlFocalPerson']) && $_POST['vlFocalPerson']!='') ? $_POST['vlFocalPerson'] :  NULL,
           //'vl_focal_person_phone_number'=>(isset($_POST['vlFocalPersonPhoneNumber']) && $_POST['vlFocalPersonPhoneNumber']!='') ? $_POST['vlFocalPersonPhoneNumber'] :  NULL,
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'consent_to_receive_sms'=>(isset($_POST['consentReceiveSms']) && $_POST['consentReceiveSms']!='') ? $_POST['consentReceiveSms'] :  NULL,
-          'vl_service_sector'=>(isset($_POST['sector']) && $_POST['sector']!='') ? $_POST['sector'] :  NULL,
-          'category'=>(isset($_POST['category']) && $_POST['category']!='') ? $_POST['category'] :  NULL,
-          'professional_number'=>(isset($_POST['profNumber']) && $_POST['profNumber']!='') ? $_POST['profNumber'] :  NULL,
+          'requesting_vl_service_sector'=>(isset($_POST['sector']) && $_POST['sector']!='') ? $_POST['sector'] :  NULL,
+          'requesting_category'=>(isset($_POST['category']) && $_POST['category']!='') ? $_POST['category'] :  NULL,
+          'requesting_professional_number'=>(isset($_POST['profNumber']) && $_POST['profNumber']!='') ? $_POST['profNumber'] :  NULL,
+          'requesting_facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='') ? $_POST['clinicName'] :  NULL,
+          'requesting_person'=>(isset($_POST['requestingPerson']) && $_POST['requestingPerson']!='') ? $_POST['requestingPerson'] :  NULL,
+          'requesting_phone'=>(isset($_POST['requestingContactNo']) && $_POST['requestingContactNo']!='') ? $_POST['requestingContactNo'] :  NULL,
+          'requesting_date'=>(isset($_POST['requestingDate']) && $_POST['requestingDate']!='') ? $_POST['requestingDate'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
           'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],

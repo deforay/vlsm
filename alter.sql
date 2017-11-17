@@ -1286,3 +1286,8 @@ alter table vl_user_facility_map drop foreign key vl_user_facility_map_ibfk_1
 ALTER TABLE `vl_request_form` CHANGE `request_created_by` `request_created_by` VARCHAR(255) NOT NULL;
 ALTER TABLE `vl_user_facility_map` CHANGE `user_id` `user_id` VARCHAR(255) NOT NULL;
 ALTER TABLE `user_details` CHANGE `user_id` `user_id` VARCHAR(255) NOT NULL;
+
+--saravanna 17-nov-2017
+ALTER TABLE `vl_request_form` CHANGE `professional_number` `requesting_professional_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `category` `requesting_category` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `vl_service_sector` `requesting_vl_service_sector` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+ALTER TABLE `vl_request_form` ADD `requesting_facility_id` INT NULL DEFAULT NULL AFTER `requesting_vl_service_sector`, ADD `requesting_person` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_facility_id`, ADD `requesting_phone` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_person`, ADD `requesting_date` DATE NULL DEFAULT NULL AFTER `requesting_phone`;
