@@ -1,10 +1,5 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
-//set province
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
   foreach($pdResult as $provinceName){
@@ -16,35 +11,13 @@ $district.="<option value=''> -- Select -- </option>";
 
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
-//set lab facilities
-$lQuery="SELECT * FROM facility_details where facility_type='2' AND status='active'";
-$lResult = $db->rawQuery($lQuery);
-//get active sample types
-$sampleTypeQuery="SELECT * from r_sample_type where status='active'";
-$sampleTypeResult=$db->query($sampleTypeQuery);
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-//rejection type
-$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
-//get active users
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-//get suspected treatment failure at
-$suspectedTreatmentFailureAtQuery="SELECT DISTINCT vl_sample_suspected_treatment_failure_at FROM vl_request_form where vlsm_country_id='4'";
-$suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
+
 //get art regimen
 $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='zam'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $artQuery="SELECT * from r_art_code_details where nation_identifier='zam' AND art_status ='active'";
 $artResult=$db->query($artQuery);
-//get vl test reasons
-$testReasonQuery="SELECT * FROM r_vl_test_reasons";
-$testReasonResult = $db->rawQuery($testReasonQuery);
-//edit section
-$vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
-$vlQueryInfo=$db->query($vlQuery);
+
 //facility details
 $efacilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $efacilityResult=$db->query($efacilityQuery);
@@ -74,55 +47,7 @@ if(trim($efacilityResult[0]['facility_state'])!= ''){
 //facility lists
 $efQuery="SELECT * FROM facility_details where facility_district = '".$efacilityResult[0]['facility_district']."' AND status='active'";
 $efResult = $db->rawQuery($efQuery);
-//dob
-if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!= null && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
- $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
-}else{
- $vlQueryInfo[0]['patient_dob']='';
-}
-//art initiation date
-if(isset($vlQueryInfo[0]['treatment_initiated_date']) && trim($vlQueryInfo[0]['treatment_initiated_date'])!='' && $vlQueryInfo[0]['treatment_initiated_date']!= null && $vlQueryInfo[0]['treatment_initiated_date']!='0000-00-00'){
- $vlQueryInfo[0]['treatment_initiated_date']=$general->humanDateFormat($vlQueryInfo[0]['treatment_initiated_date']);
-}else{
- $vlQueryInfo[0]['treatment_initiated_date']='';
-}
-//last viral load test date
-if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_viral_load_date'])!='' && $vlQueryInfo[0]['last_viral_load_date']!= null && $vlQueryInfo[0]['last_viral_load_date']!='0000-00-00'){
- $vlQueryInfo[0]['last_viral_load_date']=$general->humanDateFormat($vlQueryInfo[0]['last_viral_load_date']);
-}else{
- $vlQueryInfo[0]['last_viral_load_date']='';
-}
-//sample collected date
-if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!= null && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
- $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_collection_date']='';
-}
-//sample received date
-if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!= null && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
- $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']='';
-}
-//sample tested datetime
-if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && $vlQueryInfo[0]['sample_tested_datetime']!= null && $vlQueryInfo[0]['sample_tested_datetime']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
- $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_tested_datetime']='';
-}
-//reviewed datetime
-if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['result_reviewed_datetime'])!='' && $vlQueryInfo[0]['result_reviewed_datetime']!= null && $vlQueryInfo[0]['result_reviewed_datetime']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['result_reviewed_datetime']);
- $vlQueryInfo[0]['result_reviewed_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['result_reviewed_datetime']='';
-}
-//get active sample test status
-$statusQuery="SELECT * FROM r_sample_status where status = 'active'";
-$statusResult = $db->rawQuery($statusQuery);
+
 if(USERTYPE=='remoteuser'){
   $sampleCode = 'remote_sample_code';
 }else{
@@ -130,35 +55,9 @@ if(USERTYPE=='remoteuser'){
 }
 ?>
 <style>
-  .ui_tpicker_second_label {
-       display: none !important;
-      }
-      .ui_tpicker_second_slider {
-       display: none !important;
-      }.ui_tpicker_millisec_label {
-       display: none !important;
-      }.ui_tpicker_millisec_slider {
-       display: none !important;
-      }.ui_tpicker_microsec_label {
-       display: none !important;
-      }.ui_tpicker_microsec_slider {
-       display: none !important;
-      }.ui_tpicker_timezone_label {
-       display: none !important;
-      }.ui_tpicker_timezone {
-       display: none !important;
-      }.ui_tpicker_time_input{
-       width:100%;
-      }
-      .table > tbody > tr > td{
-        border-top:none;
-      }
-      .form-control,.form-group{
-        width:100% !important;
-      }
-      .row{
-        margin-top:6px;
-      }
+      .table > tbody > tr > td{border-top:none;}
+      .form-control,.form-group{width:100% !important;}
+      .row{margin-top:6px;}
       #sampleCode{background-color: #fff;}
 </style>
 <!-- Content Wrapper. Contains page content -->
@@ -396,7 +295,7 @@ if(USERTYPE=='remoteuser'){
                             <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" onchange="checkTestReason();">
                               <option value=""> -- Select -- </option>
                               <?php
-                              foreach($testReasonResult as $testReason){
+                              foreach($vlTestReasonResult as $testReason){
                                 ?>
                                 <option value="<?php echo $testReason['test_reason_name'];?>" <?php echo ($vlQueryInfo[0]['reason_for_vl_testing']==$testReason['test_reason_name'])?"selected='selected'":""?>><?php echo ucwords($testReason['test_reason_name']);?></option>
                                 <?php
@@ -448,7 +347,7 @@ if(USERTYPE=='remoteuser'){
                             <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%;">
                               <option value=""> -- Select -- </option>
                               <?php
-                              foreach($sampleTypeResult as $sampleType){
+                              foreach($sResult as $sampleType){
                                ?>
                                <option value="<?php echo $sampleType['sample_id'];?>" <?php echo ($vlQueryInfo[0]['sample_type']== $sampleType['sample_id'])?"selected='selected'":""?>><?php echo ucwords($sampleType['sample_name']);?></option>
                                <?php
