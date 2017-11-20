@@ -6,7 +6,7 @@ include('../includes/General.php');
 include ('../includes/tcpdf/tcpdf.php');
 include ('../includes/fpdi/fpdi.php');
 include ('../includes/fpdf/fpdf.php');
-define('UPLOAD_PATH','../uploads');
+//define('UPLOAD_PATH','../uploads');
 $tableName1="activity_log";
 $tableName2="vl_request_form";
 $general=new Deforay_Commons_General();
@@ -177,5 +177,7 @@ if($arr['vl_form']==1){
    include('resultPdfZam.php');
  }else if($arr['vl_form']==7){
    include('resultPdfRwd.php');
+ }else if($arr['vl_form']==8){
+   include('resultPdfAng.php');
  }
 ?>

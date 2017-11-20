@@ -205,6 +205,7 @@ try {
           'requesting_person'=>(isset($_POST['requestingPerson']) && $_POST['requestingPerson']!='') ? $_POST['requestingPerson'] :  NULL,
           'requesting_phone'=>(isset($_POST['requestingContactNo']) && $_POST['requestingContactNo']!='') ? $_POST['requestingContactNo'] :  NULL,
           'requesting_date'=>(isset($_POST['requestingDate']) && $_POST['requestingDate']!='') ? $_POST['requestingDate'] :  NULL,
+          'collection_site'=>(isset($_POST['collectionSite']) && $_POST['collectionSite']!='') ? $_POST['collectionSite'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
           'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],

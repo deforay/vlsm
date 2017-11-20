@@ -179,7 +179,8 @@ try {
           'requesting_facility_id'=>(isset($_POST['clinicName']) && $_POST['clinicName']!='') ? $_POST['clinicName'] :  NULL,
           'requesting_person'=>(isset($_POST['requestingPerson']) && $_POST['requestingPerson']!='') ? $_POST['requestingPerson'] :  NULL,
           'requesting_phone'=>(isset($_POST['requestingContactNo']) && $_POST['requestingContactNo']!='') ? $_POST['requestingContactNo'] :  NULL,
-          'requesting_date'=>(isset($_POST['requestingDate']) && $_POST['requestingDate']!='') ? $_POST['requestingDate'] :  NULL,
+          'requesting_date'=>$_POST['requestingDate'],
+          'collection_site'=>(isset($_POST['collectionSite']) && $_POST['collectionSite']!='') ? $_POST['collectionSite'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
           'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
@@ -197,6 +198,7 @@ try {
           'reason_for_vl_result_changes'=>$allChange,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
+          'data_sync'=>0
         );
         if(isset($_POST['indicateVlTesing']) && $_POST['indicateVlTesing']!='')
         {
@@ -223,7 +225,6 @@ try {
                 $vldata['last_vl_result_if'] = $lastVlResult;
             }
         }
-        //echo "<pre>";var_dump($vldata);die;
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $id=$db->update($tableName,$vldata);
         if($id>0){
