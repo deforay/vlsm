@@ -18,7 +18,12 @@ $vlfmResult = $db->rawQuery($vlfmQuery);
 $uQuery="SELECT * FROM user_details";
 if(isset($vlfmResult[0]['userId']))
 {
-  $uQuery = $uQuery." where user_id NOT IN(".$vlfmResult[0]['userId'].")";
+  $exp = explode(",",$vlfmResult[0]['userId']);
+  foreach($exp as $ex){
+    $noUserId[] = "'".$ex."'";
+  }
+  $imp = implode(",",$noUserId);
+  $uQuery = $uQuery." where user_id NOT IN(".$imp.")";
 }
 $uResult = $db->rawQuery($uQuery);
 $selectedQuery="SELECT * FROM vl_user_facility_map as vlfm join user_details as ud ON ud.user_id=vlfm.user_id join facility_details as fd ON fd.facility_id=vlfm.facility_id where vlfm.facility_id = ".$id;
@@ -82,10 +87,12 @@ $selectedResult = $db->rawQuery($selectedQuery);
                         <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange = "getFacilityUser()">
                         <option value=""> -- Select -- </option>
                           <?php
+                          $k = 10;
                           foreach($fResult as $type){
                            ?>
-                           <option value="<?php echo $type['facility_type_id'];?>"<?php echo ($facilityInfo[0]['facility_type']==$type['facility_type_id'])?"selected='selected'":""?>><?php echo ucwords($type['facility_type_name']);?></option>
+                           <option data-disable = "<?php echo $k;?>" value="<?php echo $type['facility_type_id'];?>"<?php echo ($facilityInfo[0]['facility_type']==$type['facility_type_id'])?"selected='selected'":""?>><?php echo ucwords($type['facility_type_name']);?></option>
                            <?php
+                           $k = $k+10;
                           }
                           ?>
                         </select>
@@ -338,14 +345,14 @@ $selectedResult = $db->rawQuery($selectedQuery);
   <?php
   if(count($chkvlLabResult)>0){
     ?>
-    $("select option[value*='1']").prop('disabled',true);
-    $("select option[value*='3']").prop('disabled',true);
-    $("select option[value*='4']").prop('disabled',true);
+    $("select option[data-disable*='10']").prop('disabled',true);
+    $("select option[data-disable*='30']").prop('disabled',true);
+    $("select option[data-disable*='40']").prop('disabled',true);
     <?php
   }
   if(count($chkHcResult)>0){
     ?>
-    $("select option[value*='2']").prop('disabled',true);
+    $("select option[data-disable*='20']").prop('disabled',true);
     <?php
   }
   ?>
