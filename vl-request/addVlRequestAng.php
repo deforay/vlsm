@@ -1,6 +1,16 @@
   <?php
     ob_start();
-    
+    $rKey = '';
+    if(USERTYPE=='remoteuser'){
+      $sampleCodeKey = 'remote_sample_code_key';
+      $sampleCode = 'remote_sample_code';
+      $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+      $rKey = 'R';
+    }else{
+      $sampleCodeKey = 'sample_code_key';
+      $sampleCode = 'sample_code';
+      $pdQuery="SELECT * from province_details";
+    }
     $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='ang'";
     $artRegimenResult = $db->rawQuery($artRegimenQuery);
     $province = "";
@@ -31,12 +41,11 @@
   }
   
   //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-  $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
+  $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
   $svlResult=$db->query($svlQuery);
-  
   $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
-   $maxId = $svlResult[0]['sample_code_key']+1;
+  if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+   $maxId = $svlResult[0][$sampleCodeKey]+1;
    $strparam = strlen($maxId);
    $zeros = substr("000", $strparam);
    $maxId = $zeros.$maxId;
@@ -45,10 +54,10 @@
   }
   $sKey = '';
   $sFormat = '';
-    ?>
-    <style>
-     .translate-content{ color:#0000FF; font-size:12.5px; }
-   </style>
+  ?>
+  <style>
+   .translate-content{ color:#0000FF; font-size:12.5px; }
+  </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -425,7 +434,7 @@
                       <tr>
                         <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
                         <td style="width:14%;">
-                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;"/>
+                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
                         </td>
                       </tr>
                       <tr>
@@ -615,20 +624,20 @@
                 }
             });
         }
-        <?php
-      if($arr['sample_code']=='auto'){
-        ?>
+        <?php if($arr['sample_code']=='auto'){ ?>
         pNameVal = pName.split("##");
         sCode = '<?php echo date('ymd');?>';
         sCodeKey = '<?php echo $maxId;?>';
-        $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+        $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
+        $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
+        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
         <?php
       }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
+        $("#sampleCode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
+        $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
+        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
         <?php
       }
       ?>
@@ -751,6 +760,25 @@
                 showModal('patientModal.php?artNo='+obj.value,900,520);
             }
         });
+      }
+    }
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if(USERTYPE=='remoteuser'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                   data = data.split("##");
+                  document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
+                <?php } ?>
+            }
+        });
+        $.unblockUI();
       }
     }
   function getAge(){

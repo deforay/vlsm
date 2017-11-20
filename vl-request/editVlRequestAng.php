@@ -113,6 +113,11 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
     $lastVlResult = $vlQueryInfo[0]['last_vl_result_if'];
   }
 }
+if(USERTYPE=='remoteuser'){
+    $sampleCode = 'remote_sample_code';
+  }else{
+    $sampleCode = 'sample_code';
+  }
     ?>
     <style>
       .translate-content{
@@ -512,7 +517,8 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                       <tr>
                         <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
                         <td style="width:14%;">
-                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                          <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </td>
                       </tr>
                       <tr>
@@ -827,6 +833,26 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
         $("#ageInMonths").val("");
       }
       $("#ageInYears").val((diff.getUTCFullYear() - 1970 > 0)? (diff.getUTCFullYear() - 1970) : ''); // Gives difference as year
+    }
+    
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+      if($.trim($("#"+id).val())!=''){
+        $.blockUI();
+        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+        function(data){
+            if(data!=0){
+              <?php if(USERTYPE=='remoteuser'){ ?>
+                  alert(alrt);
+                  $("#"+id).val('');
+                <?php } else { ?>
+                  data = data.split("##");
+                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
+                <?php } ?>
+            }
+        });
+        $.unblockUI();
+      }
     }
     
     function validateNow(){

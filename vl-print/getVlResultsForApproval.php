@@ -183,7 +183,7 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}
 	if(USERTYPE=='remoteuser'){
-			$sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
+			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
 		}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;

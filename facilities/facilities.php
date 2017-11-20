@@ -37,7 +37,7 @@ include('../header.php');
 		  </div>
 	      </span>
             <div class="box-header with-border">
-	      <?php if(isset($_SESSION['privileges']) && in_array("addFacility.php", $_SESSION['privileges'])){ ?>
+	      <?php if(isset($_SESSION['privileges']) && in_array("addFacility.php", $_SESSION['privileges']) && (USERTYPE=='remoteuser')){ ?>
               <a href="addFacility.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility</a>
 	      <?php } ?>
 	      <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
@@ -51,7 +51,7 @@ include('../header.php');
                   <th>Facility Name</th>
                   <th>Facility Type</th>
                   <th>Status</th>
-		  <?php if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ ?>
+		  <?php if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges']) && (USERTYPE=='remoteuser')){ ?>
                   <th>Action</th>
 		  <?php } ?>
                 </tr>
@@ -96,7 +96,7 @@ include('../header.php');
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-		<?php if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ ?>
+		<?php if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges']) && (USERTYPE=='remoteuser')){ ?>
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
