@@ -496,7 +496,7 @@ if(USERTYPE=='remoteuser'){
                     </div>
                   </div>
                 </div>
-                <div class="box box-primary">
+                <div class="box box-primary" style="<?php if(USERTYPE=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                   <div class="box-header with-border">
                     <h3 class="box-title">Section 5: Results</h3>
                   </div>

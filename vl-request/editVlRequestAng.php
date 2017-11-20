@@ -509,7 +509,7 @@ if(USERTYPE=='remoteuser'){
                             </tr>
                         </table>
                         </div>
-                        <div class="box box-primary">
+                        <div class="box box-primary" style="<?php if(USERTYPE=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                     <div class="box-header with-border">
                       <h3 class="box-title">Informações laboratoriais</h3>
                     </div>
