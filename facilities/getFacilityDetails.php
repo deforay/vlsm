@@ -126,15 +126,13 @@ $primaryKey="facility_id";
             "aaData" => array()
         );
 	
-	
-        
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = $aRow['facility_code'];
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['facility_type_name']);
             $row[] = ucwords($aRow['status']);
-	    if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges'])){ 
+	    if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges']) && (USERTYPE=='remoteuser')){ 
             $row[] = '<a href="editFacility.php?id=' . base64_encode($aRow['facility_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
            }
             $output['aaData'][] = $row;

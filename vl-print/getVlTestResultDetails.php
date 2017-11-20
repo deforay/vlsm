@@ -279,8 +279,8 @@ $primaryKey="vl_sample_id";
 		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
 		}
 		if(USERTYPE=='remoteuser'){
-			$sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
-			$dWhere = $dWhere." AND request_created_by=".$_SESSION['userId'];
+			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
+			$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
 		}
 		if(!isset($_POST['from'])){
 		  $sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";

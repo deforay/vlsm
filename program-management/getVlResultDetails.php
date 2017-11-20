@@ -335,8 +335,8 @@ $primaryKey="vl_sample_id";
 	}
 	$cWhere = '';
 	if(USERTYPE=='remoteuser'){
-	 $sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
-	 $cWhere = " AND request_created_by=".$_SESSION['userId'];
+	 $sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
+	 $cWhere = " AND request_created_by='".$_SESSION['userId']."'";
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
