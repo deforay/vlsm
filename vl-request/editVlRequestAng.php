@@ -490,7 +490,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 </td>
                                 <td style="width:14%;"><label for="sampleType"> Tipo de amostra </label></td>
                                 <td style="width:14%;">
-                                    <select name="specimenType" id="specimenType" class="form-control" title="Please choose Tipo de amostra">
+                                    <select name="specimenType" id="specimenType" class="form-control" title="Please choose Tipo de amostra" style="width: 100%";>
                                       <option value="">-- Selecione --</option>
                                       <?php
                                         foreach($sResult as $name){
@@ -518,7 +518,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                       <tr>
                           <td style="width:14%;"><label for="">Nome do laboratório</label></td>
                           <td style="width:14%;">
-                              <select name="labId" id="labId" class="form-control" title="Please choose Nome do laboratório">
+                              <select name="labId" id="labId" class="form-control" title="Please choose Nome do laboratório" style="width: 100%";>
                                 <option value="">-- Select --</option>
                                 <?php
                                 foreach($lResult as $labName){
@@ -531,7 +531,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                           </td>
                           <td style="width:14%;"><label for="testingPlatform"> Plataforma de teste VL </label></td>
                           <td style="width:14%;">
-                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose Plataforma de teste VL">
+                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose Plataforma de teste VL" style="width: 100%">
                                 <option value="">-- Select --</option>
                                 <?php foreach($importResult as $mName) { ?>
                                   <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
@@ -613,7 +613,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                             <label for="approvedBy">Aprovado por </label>
                         </td>
                         <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -636,7 +636,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                             <label for="status">Status <span class="mandatory">*</span></label>
                         </td>
                         <td>
-                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
+                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status" style="width: 100%;">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($statusResult as $status){

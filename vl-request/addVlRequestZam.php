@@ -1,7 +1,5 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
 //set sample code max length
 $sampleClass = '';
 $maxLength = '';
@@ -50,46 +48,22 @@ $svlResult=$db->query($svlQuery);
   }else{
    $maxId = '001';
   }
-//set province
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
+
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
   foreach($pdResult as $provinceName){
     $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
   }
-  
 $district = '';
 $district.="<option value=''> -- Select -- </option>";
-
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
-//set lab facilities
-$lQuery="SELECT * FROM facility_details where facility_type='2' AND status='active'";
-$lResult = $db->rawQuery($lQuery);
-//get active sample types
-$sampleTypeQuery="SELECT * from r_sample_type where status='active'";
-$sampleTypeResult=$db->query($sampleTypeQuery);
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-//rejection type
-$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
-//get active users
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-//get suspected treatment failure at
-$suspectedTreatmentFailureAtQuery="SELECT DISTINCT vl_sample_suspected_treatment_failure_at FROM vl_request_form where vlsm_country_id='4'";
-$suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
+
 //get art regimen
 $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='zam'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $artQuery="SELECT * from r_art_code_details where nation_identifier='zam' AND art_status ='active'";
 $artResult=$db->query($artQuery);
-//get vl test reasons
-$testReasonQuery="SELECT * FROM r_vl_test_reasons";
-$testReasonResult = $db->rawQuery($testReasonQuery);
 ?>
 <style>
   .table > tbody > tr > td{ border-top:none; }
@@ -333,7 +307,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                             <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" onchange="checkTestReason();">
                               <option value=""> -- Select -- </option>
                               <?php
-                              foreach($testReasonResult as $testReason){
+                              foreach($testReason as $testReason){
                                 ?>
                                 <option value="<?php echo $testReason['test_reason_name'];?>"><?php echo ucwords($testReason['test_reason_name']);?></option>
                                 <?php
@@ -385,7 +359,7 @@ $testReasonResult = $db->rawQuery($testReasonQuery);
                             <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%;">
                               <option value=""> -- Select -- </option>
                               <?php
-                              foreach($sampleTypeResult as $sampleType){
+                              foreach($sResult as $sampleType){
                                ?>
                                <option value="<?php echo $sampleType['sample_id'];?>"><?php echo ucwords($sampleType['sample_name']);?></option>
                                <?php

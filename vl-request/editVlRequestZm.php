@@ -252,7 +252,7 @@ if(USERTYPE=='remoteuser'){
                         </td>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
-                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();">
+                            <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%">
                          <option value=""> -- Select -- </option>
                          <?php
                          foreach($aResult as $parentRow){
@@ -331,7 +331,7 @@ if(USERTYPE=='remoteuser'){
                         </td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
-                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width: 100%">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -348,7 +348,7 @@ if(USERTYPE=='remoteuser'){
                         <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_code'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:100%">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
@@ -360,7 +360,7 @@ if(USERTYPE=='remoteuser'){
                         <td><?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
                         <td>
                           <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
-                            <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
+                            <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type" style="width:100%">
                                 <option value=""> -- Select -- </option>
                                 <?php
                                 foreach($sResult as $name){
@@ -411,7 +411,7 @@ if(USERTYPE=='remoteuser'){
                         <td><label>Reviewed By</label></td>
                         <!--<td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" value="< ?php echo $vlQueryInfo[0]['result_reviewed_by'];?>" /></td>-->
                         <td>
-                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" >
+                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -427,7 +427,7 @@ if(USERTYPE=='remoteuser'){
                           <td><label>Approved By</label></td>
                           <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;"  value="< ?php echo $vlQueryInfo[0]['result_approved_by'];?>" /></td>-->
                           <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
