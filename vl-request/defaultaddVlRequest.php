@@ -1,15 +1,5 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
-//global config
-$cQuery="SELECT * FROM global_config";
-$cResult=$db->query($cQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cResult); $i++) {
-  $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
-}
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
   $sampleClass = '';
@@ -26,22 +16,6 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['s
     $maxLength = "maxlength=".$maxLength;
   }
 }
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2' AND status='active'";
-$lResult = $db->rawQuery($lQuery);
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-//rejection type
-$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
 //check remote user
 $rKey = '';
@@ -66,9 +40,6 @@ $province.="<option value=''> -- Select -- </option>";
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 
-//get active sample types
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
 //regimen heading
 $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='sudan'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);

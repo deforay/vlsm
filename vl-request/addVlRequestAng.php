@@ -1,28 +1,6 @@
   <?php
     ob_start();
-    include('../General.php');
-    //get province list
-    $pdQuery="SELECT * from province_details";
-    $pdResult=$db->query($pdQuery);
-    //get lab facility list
-    $fQuery="SELECT * FROM facility_details where status='active'";
-    $fResult = $db->rawQuery($fQuery);
-    //get lab facility details
-    $lQuery="SELECT * FROM facility_details where facility_type='2'";
-    $lResult = $db->rawQuery($lQuery);
-    //get import config
-      $importQuery="SELECT * FROM import_config WHERE status = 'active'";
-      $importResult=$db->query($importQuery);
-      
-      $userQuery="SELECT * FROM user_details where status='active'";
-      $userResult = $db->rawQuery($userQuery);
-//rejection type
-$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-
+    
     $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='ang'";
     $artRegimenResult = $db->rawQuery($artRegimenQuery);
     $province = "";
@@ -39,16 +17,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
     //get ART list
     $aQuery="SELECT * from r_art_code_details";// where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
-    //get Sample type
-    $sQuery="SELECT * from r_sample_type where status='active'";
-    $sResult=$db->query($sQuery);
-    //global config
-    $cSampleQuery="SELECT * FROM global_config";
-    $cSampleResult=$db->query($cSampleQuery);
-    $arr = array();
-    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-    }
+    
     $start_date = date('Y-01-01');
     $end_date = date('Y-12-31');
   if($arr['sample_code']=='MMYY'){
@@ -434,7 +403,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                 </td>
                                 <td style="width:14%;"><label for="sampleType"> Tipo de amostra </label></td>
                                 <td style="width:14%;">
-                                    <select name="specimenType" id="specimenType" class="form-control" title="Please choose Tipo de amostra">
+                                    <select name="specimenType" id="specimenType" class="form-control" title="Please choose Tipo de amostra" style="width:100%">
                                       <option value="">-- Selecione --</option>
                                       <?php
                                         foreach($sResult as $name){
@@ -462,7 +431,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                       <tr>
                           <td style="width:14%;"><label for="">Nome do laboratório</label></td>
                           <td style="width:14%;">
-                              <select name="labId" id="labId" class="form-control" title="Please choose Nome do laboratório">
+                              <select name="labId" id="labId" class="form-control" title="Please choose Nome do laboratório" style="width: 100%;">
                                 <option value="">-- Select --</option>
                                 <?php
                                 foreach($lResult as $labName){
@@ -475,7 +444,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                           </td>
                           <td style="width:14%;"><label for="testingPlatform"> Plataforma de teste VL </label></td>
                           <td style="width:14%;">
-                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose Plataforma de teste VL">
+                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose Plataforma de teste VL" style="width: 100%;">
                                 <option value="">-- Select --</option>
                                 <?php foreach($importResult as $mName) { ?>
                                   <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -557,7 +526,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                           <label for="approvedBy">Aprovado por </label>
                         </td>
                         <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por" style="width:100%;">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){

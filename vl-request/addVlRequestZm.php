@@ -1,29 +1,9 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
-$autoApprovalFieldStatus = 'show';
-if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE"){
-  $configQuery="SELECT value FROM global_config WHERE name = 'auto_approval'";
-  $configResult=$db->query($configQuery);
-  if(isset($configResult) && count($configResult)> 0 && $configResult[0]['value'] == 'no'){
-    $autoApprovalFieldStatus = 'hide';
-  }
-}
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
-$lResult = $db->rawQuery($lQuery);
 
-//global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
+$autoApprovalFieldStatus = 'show';
+if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE" && $arr['auto_approval']=='no'){
+    $autoApprovalFieldStatus = 'hide';
 }
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
@@ -31,29 +11,10 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
 }else{
   $numeric = 'checkNum';
 }
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-$query="SELECT * FROM roles where status='active'";
-$result = $db->rawQuery($query);
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-//get vltest reason details
-$testRQuery="SELECT * FROM r_vl_test_reasons";
-$testReason = $db->rawQuery($testRQuery);
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
-$lResult = $db->rawQuery($lQuery);
 
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
+
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
@@ -378,7 +339,7 @@ if($urgency==''){
                         </td>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
-                          <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();">
+                          <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%">
                          <option value=""> -- Select -- </option>
                          <?php
                          foreach($aResult as $parentRow){
@@ -456,7 +417,7 @@ if($urgency==''){
                         </td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
-                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:100%">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -473,7 +434,7 @@ if($urgency==''){
                         <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $maxLabId;?>"/></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -485,7 +446,7 @@ if($urgency==''){
                         <td><?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
                         <td>
                           <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
-                            <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
+                            <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type" style="width: 100%">
                                 <option value=""> -- Select -- </option>
                                 <?php
                                 foreach($sResult as $name){
@@ -517,7 +478,7 @@ if($urgency==''){
                           </label>
                         </td>
                         <td><label class="noResult">Rejection Reason</label></td>
-                        <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width:200px;">
+                        <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width:100%;">
                         <option value="">-- Select --</option>
                           <?php
                           foreach($rejectionResult as $reject){
@@ -533,7 +494,7 @@ if($urgency==''){
                         <td><label>Reviewed By</label></td>
                         <!--<td><input type="text" class="form-control" id="reviewedBy" name="reviewedBy" placeholder="Enter Reviewed By" title="Please enter reviewed by" style="width:100%;" /></td>-->
                         <td>
-                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" >
+                          <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -549,7 +510,7 @@ if($urgency==''){
                          <td><label>Approved By</label></td>
                          <!--<td><input type="text" class="form-control" id="approvedBy" name="approvedBy" placeholder="Enter Approved By" title="Please enter approved by" style="width:100%;" /></td>-->
                          <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){

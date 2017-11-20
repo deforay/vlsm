@@ -1,15 +1,6 @@
   <?php
     ob_start();
-    include('../General.php');
-    //get province list
-    $pdQuery="SELECT * from province_details";
-    $pdResult=$db->query($pdQuery);
-    //get lab facility list
-    $fQuery="SELECT * FROM facility_details where status='active'";
-    $fResult = $db->rawQuery($fQuery);
-    //get lab facility details
-    $lQuery="SELECT * FROM facility_details where facility_type='2'";
-    $lResult = $db->rawQuery($lQuery);
+    
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
@@ -21,29 +12,10 @@
       $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
     }
     
-    //get import config
-    $importQuery="SELECT * FROM import_config WHERE status = 'active'";
-    $importResult=$db->query($importQuery);
-    
     //get ART list
     $aQuery="SELECT * from r_art_code_details";// where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
-    //get Sample type
-    $sQuery="SELECT * from r_sample_type where status='active'";
-    $sResult=$db->query($sQuery);
-    //get reason for rejection list
-    $rjctReasonQuery="SELECT * from r_sample_rejection_reasons where rejection_reason_status = 'active'";
-    $rjctReasonResult=$db->query($rjctReasonQuery);
-    //get vl test reason list
-    $vlTestReasonQuery="SELECT * from r_vl_test_reasons where test_reason_status = 'active'";
-    $vlTestReasonResult=$db->query($vlTestReasonQuery);
-    //global config
-    $cSampleQuery="SELECT * FROM global_config";
-    $cSampleResult=$db->query($cSampleQuery);
-    $arr = array();
-    for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-      $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-    }
+
     $start_date = date('Y-01-01');
     $end_date = date('Y-12-31');
   if($arr['sample_code']=='MMYY'){
@@ -257,7 +229,7 @@
                                    <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
-                                      foreach($vlTestReasonResult as $tReason){
+                                      foreach($testReason as $tReason){
                                       ?>
                                        <option value="<?php echo $tReason['test_reason_id']; ?>"><?php echo ucwords($tReason['test_reason_name']); ?></option>
                                       <?php } ?>
@@ -413,7 +385,7 @@
                                     <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
-                                      foreach($rjctReasonResult as $rjctReason){
+                                      foreach($rejectionResult as $rjctReason){
                                       ?>
                                        <option value="<?php echo $rjctReason['rejection_reason_id']; ?>"><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
                                       <?php } ?>
