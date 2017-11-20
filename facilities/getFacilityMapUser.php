@@ -6,7 +6,12 @@ $vlfmResult = $db->rawQuery($vlfmQuery);
 $uQuery="SELECT * FROM user_details";
 if(isset($vlfmResult[0]['userId']))
 {
-  $uQuery = $uQuery." where user_id NOT IN(".$vlfmResult[0]['userId'].")";
+  $exp = explode(",",$vlfmResult[0]['userId']);
+  foreach($exp as $ex){
+    $noUserId[] = "'".$ex."'";
+  }
+  $imp = implode(",",$noUserId);
+  $uQuery = $uQuery." where user_id NOT IN(".$imp.")";
 }
 $uResult = $db->rawQuery($uQuery);
 ?>
