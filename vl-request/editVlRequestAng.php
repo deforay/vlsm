@@ -181,7 +181,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                         <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;">
                                           <?php
                                           foreach($fResult as $fDetails){ ?>
-                                            <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
+                                            <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['requesting_facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
                                           <?php } ?>
                                         </select>
                                     </td>
@@ -470,9 +470,9 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                           <?php } ?>
                                     </select>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears"> Local de colheita </label></td>
+                                <td style="width:14%;"><label for="collectionSite"> Local de colheita </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
+                                    <input type="text" class="form-control " id="collectionSite" name="collectionSite" placeholder="Local de colheita" title="Please enter Local de colheita" style="width:100%;" value="<?php echo $vlQueryInfo[0]['collection_site'];?>"/>
                                 </td>
                                 <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita </label></td>
                                 <td style="width:14%;">
@@ -727,23 +727,6 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                 }
             });
         }
-        <?php
-      if($arr['sample_code']=='auto'){
-        ?>
-        pNameVal = pName.split("##");
-        sCode = '<?php echo date('ymd');?>';
-        sCodeKey = '<?php echo $maxId;?>';
-        $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
-        $("#sampleCodeKey").val(sCodeKey);
-        <?php
-      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
-        $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        <?php
-      }
-      ?>
       }else if(pName=='' && cName==''){
         provinceName = true;
         facilityName = true;

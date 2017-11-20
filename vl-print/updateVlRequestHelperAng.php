@@ -89,6 +89,7 @@ try {
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
+          'vl_focal_person'=>(isset($_POST['vlFocalPerson']) && $_POST['vlFocalPerson']!='') ? $_POST['vlFocalPerson'] :  NULL,
           'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='') ? $_POST['noResult'] :  NULL,
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='') ? $_POST['rejectionReason'] :  NULL,
           'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? $_POST['vlResult'] :  NULL,
@@ -101,6 +102,7 @@ try {
           'reason_for_vl_result_changes'=>$allChange,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
+          'data_sync'=>0
         );
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $id=$db->update($tableName,$vldata);

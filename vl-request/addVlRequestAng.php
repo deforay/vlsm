@@ -247,7 +247,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                 <td style="width:14%;">
                                     <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please select Data de início de TARV"  style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears"> Esquema de TARV actual </label></td>
+                                <td style="width:14%;"><label for="artRegimen"> Esquema de TARV actual </label></td>
                                 <td style="width:14%;">
                                     <select class="form-control " id="artRegimen" name="artRegimen" placeholder="Esquema de TARV actual" title="Please enter Esquema de TARV actual" style="width:100%;"  onchange="checkARTValue();">
                                         <option value="">-- Select --</option>
@@ -414,9 +414,9 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                           <?php echo $facility;  ?>
                                     </select>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears"> Local de colheita </label></td>
+                                <td style="width:14%;"><label for="collectionSite"> Local de colheita </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
+                                    <input type="text" class="form-control " id="collectionSite" name="collectionSite" placeholder="Local de colheita" title="Please enter Local de colheita" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita </label></td>
                                 <td style="width:14%;">
@@ -484,9 +484,9 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
                                 ?>
                               </select>
                           </td>
-                          <td style="width:14%;"><label for="ageInYears"> Responsável da recepção </label></td>
+                          <td style="width:14%;"><label for="vlFocalPerson"> Responsável da recepção </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
+                              <input type="text" class="form-control checkNum" id="vlFocalPerson" name="vlFocalPerson" placeholder="Responsável da recepção" title="Please enter Responsável da recepção" style="width:100%;"/>
                           </td>
                       </tr>
                       <tr>
