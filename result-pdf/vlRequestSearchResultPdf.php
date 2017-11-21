@@ -175,6 +175,10 @@ if($arr['vl_form']==1){
   include('resultPdfDrc.php');
  }else if($arr['vl_form']==4){
    include('resultPdfZam.php');
+ }else if($arr['vl_form']==5){
+   include('resultPdfWho.php');
+ }else if($arr['vl_form']==6){
+   include('resultPdfWho.php');
  }else if($arr['vl_form']==7){
    include('resultPdfRwd.php');
  }else if($arr['vl_form']==8){

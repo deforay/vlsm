@@ -138,38 +138,40 @@ $batResult = $db->rawQuery($batQuery);
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="sample_code" class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
 				    </div>
+						<?php $i = 0; if(USERTYPE=='remoteuser'){  $i = 1; ?>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol1">Remote Sample Code</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Remote Sample Code</label>
+				    </div>
+						<?php } ?>
+				    <div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_collection_date" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Sample Collection Date</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="2" id="iCol2" data-showhide="sample_collection_date" class="showhideCheckBox"  /> <label for="iCol2">Sample Collection Date</label> <br>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="batch_code" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Batch Code</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="3" id="iCol3" data-showhide="batch_code" class="showhideCheckBox"  /> <label for="iCol3">Batch Code</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_art_no" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Art No</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="4" id="iCol4" data-showhide="patient_art_no" class="showhideCheckBox" /> <label for="iCol4">Art No</label> <br>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_first_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Patient's Name</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="5" id="iCol5" data-showhide="patient_first_name"  class="showhideCheckBox" /> <label for="iCol5">Patient's Name</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Facility Name</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="6" id="iCol6" data-showhide="facility_name"  class="showhideCheckBox" /> <label for="iCol6">Facility Name</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="state"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Province/State</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="7" id="iCol7" data-showhide="state"  class="showhideCheckBox" /> <label for="iCol7">Province/State</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="district"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">District/County</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="8" id="iCol8" data-showhide="district"  class="showhideCheckBox" /> <label for="iCol8">District/County</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Sample Type</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="9" id="iCol9" data-showhide="sample_name"  class="showhideCheckBox" /> <label for="iCol9">Sample Type</label>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="10" id="iCol10" data-showhide="result" class="showhideCheckBox" /> <label for="iCol10">Result</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="result" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Result</label>
 				    </div>
 						<div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="11" id="iCol11" data-showhide="status_name" class="showhideCheckBox" /> <label for="iCol11">Status</label>
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="status_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Status</label>
 				    </div>
 				</div>
 			    </div>
@@ -181,7 +183,9 @@ $batResult = $db->rawQuery($batQuery);
                 <tr>
 		  <!--<th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
 		  <th>Sample Code</th>
+			<?php if(USERTYPE=='remoteuser'){ ?>
 		  <th>Remote Sample <br/>Code</th>
+			<?php } ?>
                   <th>Sample Collection<br/> Date</th>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
@@ -307,7 +311,8 @@ $batResult = $db->rawQuery($batQuery);
         });
         
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
-        for(colNo=0;colNo <=11;colNo++){
+				var i = '<?php echo $i;?>';
+        for(colNo=0;colNo <=i;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(oTable.fnSettings().aoColumns[colNo].bVisible){
                 $("#iCol"+colNo+"-sort").show();    
@@ -337,7 +342,9 @@ $batResult = $db->rawQuery($batQuery);
             "aoColumns": [
 		//{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
+								<?php if(USERTYPE=='remoteuser'){ ?>
                 {"sClass":"center"},
+								<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
