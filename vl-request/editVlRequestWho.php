@@ -1,15 +1,6 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
-//global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-}
+
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $numeric = '';
   $maxLength = '';
@@ -26,26 +17,6 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   }
 }
 
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
-
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
-$lResult = $db->rawQuery($lQuery);
-
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
-$rejectionResult = $db->rawQuery($rejectionQuery);
-
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
@@ -62,8 +33,6 @@ $sResult=$db->query($sQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='who'";
 $aResult=$db->query($aQuery);
 
-$vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
-$vlQueryInfo=$db->query($vlQuery);
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
@@ -86,51 +55,7 @@ if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] 
 $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
 
-if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
- $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
- $vlQueryInfo[0]['sample_collection_date']='';
-}
-if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
- $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
-}else{
- $vlQueryInfo[0]['patient_dob']='';
-}
-if(isset($vlQueryInfo[0]['date_of_initiation_of_current_regimen']) && trim($vlQueryInfo[0]['date_of_initiation_of_current_regimen'])!='' && $vlQueryInfo[0]['date_of_initiation_of_current_regimen']!='0000-00-00'){
- $vlQueryInfo[0]['date_of_initiation_of_current_regimen']=$general->humanDateFormat($vlQueryInfo[0]['date_of_initiation_of_current_regimen']);
-}else{
- $vlQueryInfo[0]['date_of_initiation_of_current_regimen']='';
-}
-if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && trim($vlQueryInfo[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
-  $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
-  $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-}else{
-  $vlQueryInfo[0]['sample_tested_datetime']='';
-}
 ?>
-<style>
-  .ui_tpicker_second_label {
-       display: none !important;
-      }
-      .ui_tpicker_second_slider {
-       display: none !important;
-      }.ui_tpicker_millisec_label {
-       display: none !important;
-      }.ui_tpicker_millisec_slider {
-       display: none !important;
-      }.ui_tpicker_microsec_label {
-       display: none !important;
-      }.ui_tpicker_microsec_slider {
-       display: none !important;
-      }.ui_tpicker_timezone_label {
-       display: none !important;
-      }.ui_tpicker_timezone {
-       display: none !important;
-      }.ui_tpicker_time_input{
-       width:100%;
-      }
-</style>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -222,7 +147,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                         <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="">Specimen Type</label>
-                          <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
+                          <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type" style="width: 100%;">
                                 <option value=""> -- Select -- </option>
                                 <?php
                                 foreach($sResult as $name){
@@ -364,7 +289,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                 </td>
                                 <td colspan=""><label for="patientPhoneNumber">Patient's telephone number</td>
                                 <td colspan="2">
-                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:50%;" value="<?php echo $vlQueryInfo[0]['patient_mobile_number'];?>" >
+                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_mobile_number'];?>" >
                                 </td>
                             </tr>
                             <tr>
@@ -378,7 +303,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                                 </td>
                                 <td colspan=""><label for="arvAdherence">ARV adherence</td>
                                 <td colspan="2">
-                                  <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
+                                  <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence" style="width:100%;">
                                     <option value=""> -- Select -- </option>
                                     <option value="good" <?php echo ($vlQueryInfo[0]['arv_adherance_percentage']=='good')?"selected='selected'":""?>>Good >= 95%</option>
                                     <option value="fair" <?php echo ($vlQueryInfo[0]['arv_adherance_percentage']=='fair')?"selected='selected'":""?>>Fair (85-94%)</option>
@@ -541,7 +466,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       <tr>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control labSection" title="Please choose VL Testing Platform">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control labSection" title="Please choose VL Testing Platform" style="width:100%;">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
@@ -561,7 +486,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                         </td>
                         <td><label for="rejectionReason">Reason For Failure </label></td>
                         <td>
-                            <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason">
+                            <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" style="width:100%;">
                                 <option value="">-- Select --</option>
                                <?php
                                foreach($rejectionResult as $reject){
@@ -580,7 +505,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                         <td><input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" style="width:100%;" /></td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
-                          <select name="labId" id="labId" class="form-control labSection" title="Please choose lab name">
+                          <select name="labId" id="labId" class="form-control labSection" title="Please choose lab name" style="width:100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -595,7 +520,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       <tr>
                         <td><label>Approved By</label></td>
                         <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control labSection" title="Please choose approved by">
+                          <select name="approvedBy" id="approvedBy" class="form-control labSection" title="Please choose approved by" style="width:100%;">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -612,7 +537,7 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
                       <tr>
                         <td><label for="status">Status <span class="mandatory">*</span></label></td>
                         <td>
-                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
+                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status" style="width:100%;">
                             <option value="">-- Select --</option>
                             <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
  			    <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
@@ -671,28 +596,26 @@ if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sam
     result = ($("#vlResult").length)?$("#vlResult").val():'';
   });
   
-    function validateNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
-        return false;
-      }
-    
+  function validateNow(){
+    var format = '<?php echo $arr['sample_code'];?>';
+    var sCodeLentgh = $("#sampleCode").val();
+    var minLength = '<?php echo $arr['min_length'];?>';
+    if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+      alert("Sample code length atleast "+minLength+" characters");
+      return false;
+    }
     flag = deforayValidator.init({
-        formId: 'vlRequestForm'
+      formId: 'vlRequestForm'
     });
-    
     $('.isRequired').each(function () {
-          ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
     $("#saveNext").val('save');
     if(flag){
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }
-    }
+  }
     
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){

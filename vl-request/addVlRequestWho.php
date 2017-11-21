@@ -1,15 +1,5 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
-//global config
-$cSampleQuery="SELECT * FROM global_config";
-$cSampleResult=$db->query($cSampleQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cSampleResult); $i++) {
-  $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
-}
 
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $numeric = '';
@@ -26,19 +16,6 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $maxLength = "maxlength=".$maxLength;
   }
 }
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
-
-//get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
-$lResult = $db->rawQuery($lQuery);
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
-$rejectionResult = $db->rawQuery($rejectionQuery);
 
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
@@ -156,7 +133,7 @@ $sFormat = '';
                         <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="specimenType">Specimen Type</label>
-                          <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
+                          <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type" style="width:100%;">
                                 <option value=""> -- Select -- </option>
                                 <?php
                                 foreach($sResult as $name){
@@ -298,7 +275,7 @@ $sFormat = '';
                                 </td>
                                 <td colspan=""><label for="patientPhoneNumber">Patient's telephone number</td>
                                 <td colspan="2">
-                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:50%;" >
+                                  <input type="text" class="form-control " name="patientPhoneNumber" id="patientPhoneNumber" placeholder="Phone Number" title="Enter telephone number" style="width:100%;" >
                                 </td>
                             </tr>
                             <tr>
@@ -312,7 +289,7 @@ $sFormat = '';
                                 </td>
                                 <td colspan=""><label for="arvAdherence">ARV adherence</td>
                                 <td colspan="2">
-                                  <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence">
+                                  <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose Adherence" style="width: 100%">
                                     <option value=""> -- Select -- </option>
                                     <option value="good">Good >= 95%</option>
                                     <option value="fair">Fair (85-94%)</option>
@@ -441,7 +418,7 @@ $sFormat = '';
                       <tr>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -452,7 +429,7 @@ $sFormat = '';
                         </td>
                         <td><label for="testMethods">Test Methods</label></td>
                         <td>
-                          <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods">
+                          <select name="testMethods" id="testMethods" class="form-control " title="Please choose test methods" style="width: 100%">
                           <option value=""> -- Select -- </option>
                           <option value="individual">Individual</option>
                           <option value="minipool">Minipool</option>
@@ -461,7 +438,7 @@ $sFormat = '';
                         </td>
                         <td><label for="rejectionReason">Reason For Failure </label></td>
                         <td>
-                            <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+                            <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width: 100%">
                                 <option value="">-- Select --</option>
                                <?php
                                foreach($rejectionResult as $reject){
@@ -480,7 +457,7 @@ $sFormat = '';
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
-                          <select name="labId" id="labId" class="form-control" title="Please choose lab name">
+                          <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width: 100%">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -495,7 +472,7 @@ $sFormat = '';
                       <tr>
                         <td><label>Approved By</label></td>
                         <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" style="width: 100%">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
