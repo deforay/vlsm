@@ -21,7 +21,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $styleArray = array(
      'font' => array(
          'bold' => true,
-         'size' => '13',
+         'size'=>12,
      ),
      'alignment' => array(
          'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
