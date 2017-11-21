@@ -335,7 +335,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 			    <input type="text" class="form-control date" name="regStartDate" id="regStartDate" placeholder="Start Date" title="Enter Start Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen'];?>" >
 			  </label>
 			</td>
-                        <td colspan="2" class="clinicalStage"><label for="breastfeeding">WHO Clinical Stage</label>&nbsp;&nbsp;
+                        <td class="clinicalStage"><label for="breastfeeding">WHO Clinical Stage</label>&nbsp;&nbsp;
                           <label class="radio-inline">
                              <input type="radio" id="clinicalOne" name="clinicalStage" value="one" title="WHO Clinical Statge" <?php echo ($vlQueryInfo[0]['who_clinical_stage']=='one')?"checked='checked'":""?>>I
                           </label>
