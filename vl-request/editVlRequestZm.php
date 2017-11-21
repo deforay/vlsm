@@ -754,7 +754,7 @@ $("#vlLog").bind("keyup change", function(e) {
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("."+className).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if(USERTYPE=='remoteuser'){ ?>
+              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
                   alert(alrt);
                   $("."+className).val('');
                 <?php } else { ?>
