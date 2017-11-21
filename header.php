@@ -228,7 +228,7 @@ $formConfigResult=$db->query($formConfigQuery);
             <li class="allMenu facilityMenu">
               <a href="../facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a>
             </li>
-          <?php } if(isset($_SESSION['privileges']) && in_array("facilityMap.php", $_SESSION['privileges'])){ ?>
+          <?php } if(isset($_SESSION['privileges']) && in_array("facilityMap.php", $_SESSION['privileges']) && USERTYPE=='remoteuser'){ ?>
             <li class="allMenu facilityMapMenu">
               <a href="../facilities/facilityMap.php"><i class="fa fa-circle-o"></i>Facility Map</a>
             </li>

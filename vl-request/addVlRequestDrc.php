@@ -886,7 +886,7 @@
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){ ?>
+              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>

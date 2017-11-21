@@ -947,7 +947,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if(USERTYPE=='remoteuser'){ ?>
+              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>
