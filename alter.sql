@@ -1293,3 +1293,5 @@ ALTER TABLE `vl_request_form` CHANGE `professional_number` `requesting_professio
 ALTER TABLE `vl_request_form` ADD `requesting_facility_id` INT NULL DEFAULT NULL AFTER `requesting_vl_service_sector`, ADD `requesting_person` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_facility_id`, ADD `requesting_phone` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_person`, ADD `requesting_date` DATE NULL DEFAULT NULL AFTER `requesting_phone`;
 --saravanan 20-nov-2017
 ALTER TABLE `vl_request_form` ADD `collection_site` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_date`;
+--saravanan 21-nov-2017
+ALTER TABLE `vl_request_form` ADD `remote_sample` VARCHAR(255) NOT NULL DEFAULT 'no' AFTER `data_sync`;

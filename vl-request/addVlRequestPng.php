@@ -1,25 +1,11 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
 
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
 $bQuery="SELECT * FROM batch_details";
 $bResult = $db->rawQuery($bQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='png'";
 $aResult=$db->query($aQuery);
-//get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-//sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
-$rejectionResult = $db->rawQuery($rejectionQuery);
 
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
-$lQuery="SELECT * FROM facility_details where facility_type='2'";
-$lResult = $db->rawQuery($lQuery);
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
@@ -33,28 +19,7 @@ foreach($fResult as $fDetails){
   $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 ?>
-<style>
-  .ui_tpicker_second_label {
-       display: none !important;
-      }
-      .ui_tpicker_second_slider {
-       display: none !important;
-      }.ui_tpicker_millisec_label {
-       display: none !important;
-      }.ui_tpicker_millisec_slider {
-       display: none !important;
-      }.ui_tpicker_microsec_label {
-       display: none !important;
-      }.ui_tpicker_microsec_slider {
-       display: none !important;
-      }.ui_tpicker_timezone_label {
-       display: none !important;
-      }.ui_tpicker_timezone {
-       display: none !important;
-      }.ui_tpicker_time_input{
-       width:100%;
-      }
-</style>
+
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -190,8 +155,7 @@ foreach($fResult as $fDetails){
 			   <input type="radio" class=" " id="secondLine" name="artLine" value="second_line" title="Please check ART Line"> Second Line
 			 </label><br/>
 			 <label for="currentRegimen">Current Regimen </label>
-			 <label class="radio-inline">
-			    <select class="form-control" id="currentRegimen" name="currentRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();">
+			    <select class="form-control" id="currentRegimen" name="currentRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%;">
 			    <option value=""> -- Select -- </option>
 			    <?php
 			    foreach($aResult as $parentRow){
@@ -202,7 +166,6 @@ foreach($fResult as $fDetails){
 			    ?>
 			    <option value="other">Other</option>
 			   </select>
-			 </label>
                         </td>
                         <td style="width:8%">
                         <label for="cdCells">CD4(cells/ul)  </label>
@@ -226,9 +189,7 @@ foreach($fResult as $fDetails){
 			  <label for="regStartDate">Current Regimen Start Date</label>
 			</td>
 			<td>
-			  <label class="radio-inline">
 			    <input type="text" class="form-control date" name="regStartDate" id="regStartDate" placeholder="Start Date" title="Enter Start Date" style="width:100%;" >
-			  </label>
 			</td>
                         <td colspan="2" class="clinicalStage"><label for="breastfeeding">WHO Clinical Stage</label>&nbsp;&nbsp;
                           <label class="radio-inline">
@@ -314,11 +275,11 @@ foreach($fResult as $fDetails){
 			</td>
 			<td>
 			  <label class="radio-inline">
-			  <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By"  style="width:100%;" >
+					<input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By"  style="width:100%;" >
 			  </label>
 			</td>
-			<td colspan="4" class="processTime"><label for="processTime">For onsite plasma processing only</label>
-			 <label class="radio-inline" style="width: 20%;">
+			<td colspan="4" class="processTime"><label for="processTime">For onsite plasma <br/> processing only</label>
+			 <label class="radio-inline" style="width: 15%;">
 			    <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" title="Processing Time"/>
 			 </label>&nbsp;
 			 <label for="processTech">Processing tech</label>
@@ -337,9 +298,9 @@ foreach($fResult as $fDetails){
 			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="reject" title="Check Sample Quality">Reject
 			 </label>
 			</td>
-			<td colspan="2" class="reason"><label for="reason">Reason</label>
-			 <label class="radio-inline">
-			    <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason">
+			<td class="reason"><label for="reason">Reason</label></td>
+			<td>
+			    <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width: 100%">
 			      <option value="">-- Select --</option>
 				<?php
 				foreach($rejectionResult as $reject){
@@ -353,8 +314,7 @@ foreach($fResult as $fDetails){
 			</td>
 			<td class="laboratoryId"><label for="laboratoryId">Laboratory ID</label></td>
 			<td>
-			 <label class="radio-inline">
-			    <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 85%;">
+			    <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -364,14 +324,12 @@ foreach($fResult as $fDetails){
                             }
                             ?>
                           </select>
-			 </label>
 			</td>
                       </tr>
                       <tr>
 			<td class="sampleType"><label for="sampleType">Sample Type Received</label></td>
 			<td>
-			 <label class="radio-inline">
-			    <select name="sampleType" id="sampleType" class="form-control" title="Please choose Specimen type">
+			    <select name="sampleType" id="sampleType" class="form-control" title="Please choose Specimen type" style="width: 100%">
                                 <option value=""> -- Select -- </option>
                                 <?php
                                 foreach($sResult as $name){
@@ -381,32 +339,24 @@ foreach($fResult as $fDetails){
                                 }
                                 ?>
                             </select>
-			 </label>
 			</td>
 			<td class="receivedDate"><label for="receivedDate">Date Received</label></td>
 			<td>
-			 <label class="radio-inline">
 			    <input type="text" class="form-control " name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date"  style="width:100%;" >
-			 </label>
 			</td>
 			<td class="techName"><label for="techName">Tech Name</label></td>
 			<td>
-			 <label class="radio-inline">
 			    <input type="text" class="form-control " name="techName" id="techName" placeholder="Tech Name" title="Enter Tech Name"  style="width:100%;" >
-			 </label>
 			</td>
                       </tr>
 		      <tr>
 			<td class=""><label for="testDate">Test date</label></td>
 			<td>
-			  <label class="radio-inline">
 			    <input type="text" class="form-control " name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" >
-			 </label>
 			</td>
 			<td class=""><label for="testingTech">Testing tech</label></td>
 			<td>
-			  <label class="radio-inline">
-			    <select name="testingTech" id="testingTech" class="form-control" title="Please choose VL Testing Platform">
+			    <select name="testingTech" id="testingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
 			      <option value="">-- Select --</option>
 			      <?php foreach($importResult as $mName) { ?>
 				<option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -414,13 +364,10 @@ foreach($fResult as $fDetails){
 			      }
 			      ?>
 			    </select>
-			 </label>
 			</td>
 			<td class=""><label for="vlResult">VL result</label></td>
 			<td>
-			  <label class="radio-inline">
 			    <input type="text" class="form-control " name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" >
-			 </label>
 			</td>
 		      </tr>
 		      <tr>
@@ -444,8 +391,7 @@ foreach($fResult as $fDetails){
 			</td>
 			<td class=""><label for="vlResult">Batch</label></td>
 			<td>
-			  <label class="radio-inline">
-			    <select name="batchNo" id="batchNo" class="form-control" title="Please choose batch number">
+			    <select name="batchNo" id="batchNo" class="form-control" title="Please choose batch number" style="width:100%">
 			      <option value="">-- Select --</option>
 			      <?php foreach($bResult as $bName) { ?>
 				<option value="<?php echo $bName['batch_id'];?>"><?php echo $bName['batch_code'];?></option>
@@ -453,7 +399,6 @@ foreach($fResult as $fDetails){
 			      }
 			      ?>
 			    </select>
-			 </label>
 			</td>
 		      </tr>
 		      <tr>
@@ -462,14 +407,11 @@ foreach($fResult as $fDetails){
 		      <tr>
 			<td class=""><label for="failedTestDate">Repeat Test date</label></td>
 			<td>
-			  <label class="radio-inline">
 			    <input type="text" class="form-control " name="failedTestDate" id="failedTestDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" >
-			 </label>
 			</td>
 			<td class=""><label for="failedTestingTech">Testing tech</label></td>
 			<td>
-			  <label class="radio-inline">
-			    <select name="failedTestingTech" id="failedTestingTech" class="form-control" title="Please choose VL Testing Platform">
+			    <select name="failedTestingTech" id="failedTestingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
 			      <option value="">-- Select --</option>
 			      <?php foreach($importResult as $mName) { ?>
 				<option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -477,13 +419,10 @@ foreach($fResult as $fDetails){
 			      }
 			      ?>
 			    </select>
-			 </label>
 			</td>
 			<td class=""><label for="failedvlResult">VL result</label></td>
 			<td>
-			  <label class="radio-inline">
 			    <input type="text" class="form-control " name="failedvlResult" id="failedvlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" >
-			 </label>
 			</td>
 		      </tr>
 		      <tr>
@@ -507,8 +446,7 @@ foreach($fResult as $fDetails){
 			</td>
 			<td class=""><label for="failedbatchNo">Batch</label></td>
 			<td>
-			  <label class="radio-inline">
-			    <select name="failedbatchNo" id="failedbatchNo" class="form-control" title="Please choose batch number">
+			    <select name="failedbatchNo" id="failedbatchNo" class="form-control" title="Please choose batch number" style="width: 100%">
 			      <option value="">-- Select --</option>
 			      <?php foreach($bResult as $bName) { ?>
 				<option value="<?php echo $bName['batch_id'];?>"><?php echo $bName['batch_code'];?></option>
@@ -516,41 +454,30 @@ foreach($fResult as $fDetails){
 			      }
 			      ?>
 			    </select>
-			 </label>
 			</td>
 		      </tr>
 		      <tr>
 			<td class=""><label for="finalViralResult">Final Viral Load Result</label></td>
 			<td colspan="2">
-			  <label class="radio-inline">
-                            <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result"  style="width:100%;" >copies/ml
-                          </label>
+          <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result"  style="width:100%;" >copies/ml
 			</td>
 			<td class=""><label for="testQuality">QC Tech Name</label></td>
 			<td colspan="2">
-			  <label class="radio-inline">
-                             <input type="text" class="form-control" name="qcTechName" id="qcTechName" placeholder="QC Tech Name" title="Enter QC Tech Name"  style="width:100%;" >
-                          </label>
+				<input type="text" class="form-control" name="qcTechName" id="qcTechName" placeholder="QC Tech Name" title="Enter QC Tech Name"  style="width:100%;" >
 			</td>
 		      </tr>
 		      <tr>
 			<td class=""><label for="finalViralResult">Report Date</label></td>
 			<td>
-			  <label class="radio-inline">
                             <input type="text" class="form-control date" name="reportDate" id="reportDate" placeholder="Report Date" title="Enter Report Date"  style="width:100%;" >
-                          </label>
 			</td>
 			<td class=""><label for="finalViralResult">QC Tech Signature</label></td>
 			<td>
-			  <label class="radio-inline">
                             <input type="text" class="form-control" name="qcTechSign" id="qcTechSign" placeholder="QC Tech Signature" title="Enter QC Tech Signature"  style="width:100%;" >
-                          </label>
 			</td>
 			<td class=""><label for="testQuality">QC Date</label></td>
 			<td colspan="">
-			  <label class="radio-inline">
                              <input type="text" class="form-control date" name="qcDate" id="qcDate" placeholder="QC Date" title="Enter QC Date"  style="width:100%;" >
-                          </label>
 			</td>
 		      </tr>
                     </table>

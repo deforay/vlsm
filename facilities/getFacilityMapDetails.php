@@ -132,7 +132,7 @@ $primaryKey="facility_map_id";
             $row = array();
 			$row[] = ucwords($aRow['facility_name']);
 			$row[] = ucwords($aRow['healthCenterName']);
-			if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && (USERTYPE=='remoteuser')){ 
+			if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && ((USERTYPE=='remoteuser') || (USERTYPE=='standalone'))){ 
             $row[] = '<a href="editVlFacilityMap.php?id=' . base64_encode($aRow['vl_lab_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
            }
             $output['aaData'][] = $row;
