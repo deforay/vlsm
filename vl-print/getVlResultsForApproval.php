@@ -16,13 +16,15 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        if(USERTYPE=='remoteuser'){
+				$sampleCode = 'sample_code';
+				$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
+				$orderColumns = array('vl.sample_code','vl.remote_sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
+				if(USERTYPE=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
-				}else{
-					$sampleCode = 'sample_code';
+				}else if(USERTYPE=='standalone') {
+					$aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
+					$orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
 				}
-        $aColumns = array('vl.'.$sampleCode,"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
-        $orderColumns = array('vl.'.$sampleCode,'vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -242,7 +244,10 @@ $primaryKey="vl_sample_id";
 			
 			$row = array();
 			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
-			$row[] = $aRow[$sampleCode];
+			$row[] = $aRow['sample_code'];
+			if(USERTYPE!='standalone'){
+	    $row[] = $aRow['remote_sample_code'];
+			}
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['batch_code'];
 			$row[] = $aRow['patient_art_no'];
