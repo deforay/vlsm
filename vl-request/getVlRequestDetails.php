@@ -18,15 +18,16 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
+				$sampleCode = 'sample_code';
+				$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+        $orderColumns = array('vl.sample_code','vl.remote_sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
 				if(USERTYPE=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
-					$sampleCodes = "'vl.sample_code','vl.remote_sample_code'";
-				}else{
-					$sampleCode = 'sample_code';
-					$sampleCodes = 'vl.sample_code';
+				}else if(USERTYPE=='standalone') {
+					$aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+					$orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
 				}
-        $aColumns = array($sampleCodes,"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array($sampleCodes,'vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+        
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -273,7 +274,7 @@ $primaryKey="vl_sample_id";
       $row = array();
 	    //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
 	    $row[] = $aRow['sample_code'];
-			if(USERTYPE=='remoteuser'){
+			if(USERTYPE!='standalone'){
 	    $row[] = $aRow['remote_sample_code'];
 			}
 	    $row[] = $aRow['sample_collection_date'];
@@ -311,17 +312,14 @@ $primaryKey="vl_sample_id";
 			}
 			
 		}
-		
-					
-						if($vlView){
-							$row[] = $edit.'&nbsp;'.$barcode;//.$pdf.$view;
-						}else if($vlRequest || $editVlRequestZm){
-							$row[] = $edit;//.$pdf;
-						}else if($vlView){
-							$row[] = "";//$pdf.$view;
-						}
-            $output['aaData'][] = $row;
-        }
-        
+			if($vlView){
+				$row[] = $edit.'&nbsp;'.$barcode;//.$pdf.$view;
+			}else if($vlRequest || $editVlRequestZm){
+				$row[] = $edit;//.$pdf;
+			}else if($vlView){
+				$row[] = "";//$pdf.$view;
+			}
+			$output['aaData'][] = $row;
+	}
         echo json_encode($output);
 ?>

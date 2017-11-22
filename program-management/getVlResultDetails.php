@@ -15,18 +15,17 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
+				$aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+        $orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+				$sampleCode = 'sample_code';
 				if(USERTYPE=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
-				}else{
-					$sampleCode = 'sample_code';
+				}else if(USERTYPE=='standalone') {
+					$aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+					$orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
 				}
-        
-        $aColumns = array('vl.'.$sampleCode,'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.'.$sampleCode,'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-        
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
-        
         $sTable = $tableName;
         /*
          * Paging
@@ -374,7 +373,10 @@ $primaryKey="vl_sample_id";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = $aRow[$sampleCode];
+	    $row[] = $aRow['sample_code'];
+			if(USERTYPE!='standalone'){
+	    $row[] = $aRow['remote_sample_code'];
+			}
 	    $row[] = $aRow['batch_code'];
 	    $row[] = $aRow['patient_art_no'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
