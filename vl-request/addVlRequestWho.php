@@ -1,6 +1,5 @@
 <?php
 ob_start();
-
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $numeric = '';
   $maxLength = '';
@@ -16,21 +15,15 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $maxLength = "maxlength=".$maxLength;
   }
 }
-
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-            }
-            
+            } 
 $facility = '';
 $facility.="<option data-code='' value=''> -- Select -- </option>";
-
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
-
 $aQuery="SELECT * from r_art_code_details where nation_identifier='who'";
 $aResult=$db->query($aQuery);
 $start_date = date('Y-m-01');
@@ -52,8 +45,7 @@ if($arr['sample_code']=='MMYY'){
 }else{
  $maxId = '001';
 }
-$sKey = '';
-$sFormat = '';
+$sKey = '';$sFormat = '';
 ?>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -65,7 +57,6 @@ $sFormat = '';
         <li class="active">Add Vl Request</li>
       </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -82,7 +73,6 @@ $sFormat = '';
                         <h3 class="box-title">Specimen identification information: To be completed by laboratory staff</h3>
                     </div>
                   <div class="box-body">
-                    
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
@@ -127,7 +117,7 @@ $sFormat = '';
                         <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="sampleCollectionDate">Date Specimen Collected <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
+                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
                           </div>
                         </div>
                         <div class="col-xs-3 col-md-3">
@@ -135,13 +125,9 @@ $sFormat = '';
                           <label for="specimenType">Specimen Type</label>
                           <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type" style="width:100%;">
                                 <option value=""> -- Select -- </option>
-                                <?php
-                                foreach($sResult as $name){
-                                 ?>
+                                <?php foreach($sResult as $name){ ?>
                                  <option value="<?php echo $name['sample_id'];?>"><?php echo ucwords($name['sample_name']);?></option>
-                                 <?php
-                                }
-                                ?>
+                                 <?php } ?>
                             </select>
                           </div>
                         </div>
@@ -177,7 +163,7 @@ $sFormat = '';
                               </td>
                               <td><label for="dob">Date Of Birth</label></td>
                               <td>
-                                <input type="text" name="dob" id="dob" class="date form-control" placeholder="Enter DOB" title="Enter dob" onchange="getDateOfBirth();checkARTInitiationDate();" />
+                                <input type="text" name="dob" id="dob" class="date form-control" placeholder="Enter DOB" title="Enter dob" onchange="getAge();checkARTInitiationDate();" />
                               </td>
                               <td><label for="artNo">Art Number</label></td>
                               <td>
@@ -209,16 +195,13 @@ $sFormat = '';
                             <tr>
                                 <td><label for="artRegimen">Current Regimen</label></td>
                                 <td>
-                                    <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" style="width:100%;" onchange="ARTValue();">
+                                    <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                  <option value=""> -- Select -- </option>
-                                 <?php
-                                 foreach($aResult as $parentRow){
-                                 ?>
+                                 <?php foreach($aResult as $parentRow){ ?>
                                   <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
-                                 <?php
-                                 }
-                                 ?>
+                                 <?php } if(USERTYPE!='vluser'){  ?>
                                  <option value="other">Other</option>
+                                 <?php } ?>
                                 </select>
                                 <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art regimen" style="width:100%;display:none;margin-top:2px;" >
                                 </td>
@@ -297,11 +280,9 @@ $sFormat = '';
                                    </select>
                                 </td>
                             </tr>
-                            
                         </table>
                     </div>
                 </div>
-                
                 <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Indication for viral load testing</h3>
@@ -404,15 +385,12 @@ $sFormat = '';
                         </div>
                     </div>
                 </div><br/>
-                
                 </div>
-                  
               </div>
               <div class="box box-primary">
                   <div class="box-body">
                     <div class="box-header with-border">
                     <h3 class="box-title">Laboratory Information</h3>
-                    
                     </div>
                     <table class="table">
                       <tr>
@@ -422,9 +400,7 @@ $sFormat = '';
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
-                              <?php
-                            }
-                            ?>
+                            <?php } ?>
                           </select>
                         </td>
                         <td><label for="testMethods">Test Methods</label></td>
@@ -440,32 +416,24 @@ $sFormat = '';
                         <td>
                             <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width: 100%">
                                 <option value="">-- Select --</option>
-                               <?php
-                               foreach($rejectionResult as $reject){
-                                 ?>
+                               <?php foreach($rejectionResult as $reject){ ?>
                                  <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                 <?php
-                               }
-                               ?>
+                                <?php } ?>
                             </select>
                         </td>
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;"/></td>
+                        <td><input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" onchange="checkSampleTestingDate();" style="width:100%;"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" /></td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
                           <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width: 100%">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($lResult as $labName){
-                              ?>
+                            <?php foreach($lResult as $labName){ ?>
                               <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                            <?php } ?>
                           </select>
                         </td>
                       </tr>
@@ -474,13 +442,9 @@ $sFormat = '';
                         <td>
                           <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" style="width: 100%">
                             <option value="">-- Select --</option>
-                            <?php
-                            foreach($userResult as $uName){
-                              ?>
+                            <?php foreach($userResult as $uName){  ?>
                               <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                            <?php } ?>
                           </select>
                          </td>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
@@ -506,40 +470,8 @@ $sFormat = '';
     </section>
   </div>
 <script>
-    provinceName = true;
-    facilityName = true;
-    
-  $(document).ready(function() {
-  $('.date').datepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "hh:mm TT",
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-   });
-   
-   $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
-   
-   $('#sampleCollectionDate,#sampleTestingDateAtLab').datetimepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "HH:mm",
-     onChangeMonthYear: function(year, month, widget) {
-           setTimeout(function() {
-              $('.ui-datepicker-calendar').show();
-           });
-     },
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-     });
-  });
-  
-    
+  provinceName = true;
+  facilityName = true;
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
       $('.femaleSection').hide();
@@ -549,7 +481,6 @@ $sFormat = '';
       $('.femaleSection').show();
     }
   });
-  
   $("input:radio[name=patientTB]").click(function() {
     if($(this).val() == 'no'){
       $('input[name="patientTBActive"]').prop('checked', false);
@@ -558,19 +489,17 @@ $sFormat = '';
       $('input[name="patientTBActive"]').prop('disabled', false);
     }
   });
-    function validateNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
-        return false;
-      }
-    
+  function validateNow(){
+    var format = '<?php echo $arr['sample_code'];?>';
+    var sCodeLentgh = $("#sampleCode").val();
+    var minLength = '<?php echo $arr['min_length'];?>';
+    if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+      alert("Sample code length atleast "+minLength+" characters");
+      return false;
+    }
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
     });
-    
     $('.isRequired').each(function () {
           ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
@@ -579,70 +508,61 @@ $sFormat = '';
       $.blockUI();
       document.getElementById('vlRequestForm').submit();
     }
+  }
+  function validateSaveNow(){
+    var format = '<?php echo $arr['sample_code'];?>';
+    var sCodeLentgh = $("#sampleCode").val();
+    var minLength = '<?php echo $arr['min_length'];?>';
+    if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+      alert("Sample code length atleast "+minLength+" characters");
+      return false;
     }
-    function validateSaveNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample code length atleast "+minLength+" characters");
-        return false;
-      }
-      flag = deforayValidator.init({
-          formId: 'vlRequestForm'
-      });
-      
+    flag = deforayValidator.init({
+        formId: 'vlRequestForm'
+    });
     $('.isRequired').each(function () {
-        ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     $("#saveNext").val('next');
     if(flag){
-        $.blockUI();
-        document.getElementById('vlRequestForm').submit();
-      }
+      $.blockUI();
+      document.getElementById('vlRequestForm').submit();
     }
-    function showTesting(chosenClass){
-     $(".viralTestData").val('');
-     $(".hideTestData").hide();
-     $("."+chosenClass).show();
-    }
-    
+  }
+  function showTesting(chosenClass){
+   $(".viralTestData").val('');
+   $(".hideTestData").hide();
+   $("."+chosenClass).show();
+  }
   function getfacilityDetails(obj)
   {
     $.blockUI();
-      var cName = $("#fName").val();
-      var pName = $("#province").val();
-      if(pName!='' && provinceName && facilityName){
-        facilityName = false;
-      }
+    var cName = $("#fName").val();
+    var pName = $("#province").val();
+    if(pName!='' && provinceName && facilityName){ facilityName = false; }
     if(pName!=''){
       if(provinceName){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
-      function(data){
-	  if(data != ""){
+        $.post("../includes/getFacilityForClinic.php", { pName : pName},
+        function(data){
+          if(data != ""){
             details = data.split("###");
             $("#district").html(details[1]);
             $("#fName").html("<option data-code='' value=''> -- Select -- </option>");
-	  }
-      });
+          }
+        });
       }
-      <?php
-      if($arr['sample_code']=='auto'){
-        ?>
-        pNameVal = pName.split("##");
-        sCode = '<?php echo date('ymd');?>';
-        sCodeKey = '<?php echo $maxId;?>';
-        $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
-        $("#sampleCodeKey").val(sCodeKey);
-        <?php
-      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
-        $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        <?php
-      }
-      ?>
+    <?php if($arr['sample_code']=='auto'){ ?>
+      pNameVal = pName.split("##");
+      sCode = '<?php echo date('ymd');?>';
+      sCodeKey = '<?php echo $maxId;?>';
+      $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
+      $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+      $("#sampleCodeKey").val(sCodeKey);
+      <?php }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+      $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
+      $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
+      $("#sampleCodeKey").val('<?php echo $maxId;?>');
+      <?php } ?>
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -651,7 +571,6 @@ $sFormat = '';
     }
     $.unblockUI();
   }
-  
   function getfacilityDistrictwise(obj){
     $.blockUI();
     var dName = $("#district").val();
@@ -659,98 +578,15 @@ $sFormat = '';
     if(dName!=''){
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
-	  if(data != ""){
-            $("#fName").html(data);
-	  }
+        if(data != ""){ $("#fName").html(data); }
       });
     }
     $.unblockUI();
   }
-  
   function autoFillFacilityCode(){
     $("#fCode").val($('#fName').find(':selected').data('code'));
   }
-  
-  function ARTValue(){
-    var artRegimen = $("#artRegimen").val();
-    if(artRegimen=='other'){
-      $("#newArtRegimen").show();
-      $("#newArtRegimen").addClass("isRequired");
-    }else{
-      $("#newArtRegimen").hide();
-      $("#newArtRegimen").removeClass("isRequired");
-    }
-  }
-  
   function checkRejectedReason(){
     $("#rejectionReason").addClass("isRequired");
   }
-  
-  function getDateOfBirth(){
-      var today = new Date();
-      var dob = $("#dob").val();
-      if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
-      }
-      
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      }
-      if(mm<10) {
-       mm='0'+mm
-      }
-      
-      splitDob = dob.split("-");
-      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-      var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
-      }else{
-        $("#ageInMonths").val("");
-      }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
-      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
-  }
-  function checkARTInitiationDate(){
-      var dob = $("#dob").val();
-      var artInitiationDate = $("#dateOfArtInitiation").val();
-      if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
-        //Set DOB date
-        splitDob = dob.split("-");
-        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-        var monthDigit = dobDate.getMonth();
-        var dobYear = splitDob[2];
-        var dobMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-        var dobDate = splitDob[0];
-        dobDate = dobYear+"-"+dobMonth+"-"+dobDate;
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Check diff
-        if(moment(dobDate).isAfter(artIniDate)) {
-          alert("ART Initiation Date could not be earlier than DOB!");
-          $("#dateOfArtInitiation").val("");
-        }
-      }
-    }
 </script>

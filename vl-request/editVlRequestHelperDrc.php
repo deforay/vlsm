@@ -210,6 +210,12 @@ try {
                   'last_modified_by'=>$_SESSION['userId'],
                   'last_modified_datetime'=>$general->getDateTime()
                 );
+    if(USERTYPE=='remoteuser'){
+        $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+    }else if($_POST['sampleCodeCol']!=''){
+        $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+        $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+    }
     if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
         $vldata['sample_type'] = $_POST['specimenType'];
         $vldata['plasma_conservation_temperature'] = $_POST['conservationTemperature'];

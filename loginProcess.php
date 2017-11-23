@@ -4,7 +4,6 @@ ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
 $general=new Deforay_Commons_General();
-
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
         $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';

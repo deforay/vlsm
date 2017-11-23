@@ -1,23 +1,33 @@
 <?php
 ob_start();
+//check remote user
+$pdQuery="SELECT * from province_details";
+if(USERTYPE=='remoteuser'){
+  $sampleCode = 'remote_sample_code';
+  //check user exist in user_facility_map table
+    $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+    $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+    if($chkUserFcMapResult){
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+    }
+}else{
+  $sampleCode = 'sample_code';
+}
+$pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
   foreach($pdResult as $provinceName){
     $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
   }
-  
 $district = '';
 $district.="<option value=''> -- Select -- </option>";
-
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
-
 //get art regimen
 $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='zam'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
 $artQuery="SELECT * from r_art_code_details where nation_identifier='zam' AND art_status ='active'";
 $artResult=$db->query($artQuery);
-
 //facility details
 $efacilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $efacilityResult=$db->query($efacilityQuery);
@@ -47,12 +57,6 @@ if(trim($efacilityResult[0]['facility_state'])!= ''){
 //facility lists
 $efQuery="SELECT * FROM facility_details where facility_district = '".$efacilityResult[0]['facility_district']."' AND status='active'";
 $efResult = $db->rawQuery($efQuery);
-
-if(USERTYPE=='remoteuser'){
-  $sampleCode = 'remote_sample_code';
-}else{
-  $sampleCode = 'remote_sample_code_key';
-}
 ?>
 <style>
       .table > tbody > tr > td{border-top:none;}
@@ -112,13 +116,9 @@ if(USERTYPE=='remoteuser'){
                           <label for="district">District  <span class="mandatory">*</span></label>
                             <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
                               <option value=""> -- Select -- </option>
-                                <?php
-                                foreach($edistrictResult as $districtName){
-                                  ?>
+                                <?php foreach($edistrictResult as $districtName){ ?>
                                   <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($efacilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
-                                  <?php
-                                }
-                                ?>
+                                  <?php } ?>
                             </select>
                           </div>
                         </div>
@@ -160,13 +160,9 @@ if(USERTYPE=='remoteuser'){
                            <label for="labId">Referral Laboratory for Sample </label>
                             <select class="form-control" name="labId" id="labId" title="Please choose laboratory" style="width:100%;">
                               <option value=""> -- Select -- </option>
-                                <?php
-                                foreach($lResult as $lab){
-                                  ?>
+                                <?php foreach($lResult as $lab){ ?>
                                   <option value="<?php echo $lab['facility_id'];?>" <?php echo(trim($vlQueryInfo[0]['lab_id']) >0 && $vlQueryInfo[0]['lab_id'] == $lab['facility_id'])?'selected="selected"':''; ?>><?php echo ucwords($lab['facility_name']);?></option>
-                                  <?php
-                                }
-                                ?>
+                                  <?php } ?>
                               <option value="other"> Other </option>
                             </select>
                             <input class="form-control newLab" name="newLab" id="newLab" placeholder="Lab Name" title="Please enter lab name" style="width:100%;margin-top: 2px;display:none;" type="text">
@@ -210,7 +206,7 @@ if(USERTYPE=='remoteuser'){
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                           <label for="">DOB </label>
-                            <input type="text" class="form-control date" style="width:100%;" name="dob" id="dob" placeholder="DOB" title="Please enter patient date of birth" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" onchange="getAgeInWeeks();">
+                            <input type="text" class="form-control date" style="width:100%;" name="dob" id="dob" placeholder="DOB" title="Please enter patient date of birth" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" onchange="getAgeInWeeks();checkARTInitiationDate();">
                           </div>
                         </div>
                         <div class="col-xs-4 col-md-4">
@@ -264,25 +260,21 @@ if(USERTYPE=='remoteuser'){
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="">Date of ART Initiation </label><br>
-                             <input type="text" class="form-control date" style="width:100%;" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiated" title="Please enter date of art initiated" value="<?php echo $vlQueryInfo[0]['treatment_initiated_date']; ?>">
+                             <input type="text" class="form-control date" style="width:100%;" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of ART Initiated" title="Please enter date of art initiated" value="<?php echo $vlQueryInfo[0]['treatment_initiated_date']; ?>" onchange="checkARTInitiationDate();">
                           </div>
                         </div>
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="">ART Regimen </label><br>
-                             <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTValue();">
+                             <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                  <option value=""> -- Select -- </option>
                                  <?php foreach($artRegimenResult as $heading) { ?>
                                   <optgroup label="<?php echo ucwords($heading['headings']); ?>">
                                     <?php
                                     foreach($artResult as $regimen){
-                                      if($heading['headings'] == $regimen['headings']){
-                                      ?>
+                                      if($heading['headings'] == $regimen['headings']){ ?>
                                       <option value="<?php echo $regimen['art_code']; ?>" <?php echo ($vlQueryInfo[0]['current_regimen']==$regimen['art_code'])?"selected='selected'":""?>><?php echo $regimen['art_code']; ?></option>
-                                      <?php
-                                      }
-                                    }
-                                    ?>
+                                      <?php } } ?>
                                   </optgroup>
                                   <?php } ?>
                             </select>
@@ -294,13 +286,9 @@ if(USERTYPE=='remoteuser'){
                            <label for="">Reason VL Requested </label><br>
                             <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:100%;" onchange="checkTestReason();">
                               <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($vlTestReasonResult as $testReason){
-                                ?>
+                              <?php foreach($vlTestReasonResult as $testReason){ ?>
                                 <option value="<?php echo $testReason['test_reason_name'];?>" <?php echo ($vlQueryInfo[0]['reason_for_vl_testing']==$testReason['test_reason_name'])?"selected='selected'":""?>><?php echo ucwords($testReason['test_reason_name']);?></option>
-                                <?php
-                              }
-                              ?>
+                                <?php } ?>
                               <option value="other">Other</option>
                             </select>
                            <input type="text" class="form-control newVlTestReason" name="newVlTestReason" id="newVlTestReason" placeholder="VL Test Reason" title="Please enter VL Test Reason" style="width:100%;display:none;margin-top:2px;">
@@ -346,13 +334,9 @@ if(USERTYPE=='remoteuser'){
                           <label for="specimenType">Sample Type <span class="mandatory">*</span></label>
                             <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose specimen type" style="width:100%;">
                               <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($sResult as $sampleType){
-                               ?>
+                              <?php foreach($sResult as $sampleType){ ?>
                                <option value="<?php echo $sampleType['sample_id'];?>" <?php echo ($vlQueryInfo[0]['sample_type']== $sampleType['sample_id'])?"selected='selected'":""?>><?php echo ucwords($sampleType['sample_name']);?></option>
-                               <?php
-                              }
-                              ?>
+                               <?php } ?>
                             </select>
                           </div>
                       </div>
@@ -370,7 +354,7 @@ if(USERTYPE=='remoteuser'){
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="">Date Sample Collected <span class="mandatory">*</span></label><br>
-                             <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collected Date" title="Please enter sample collected date" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>">
+                             <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collected Date" title="Please enter sample collected date" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
                           </div>
                       </div>
                     </div>
@@ -407,13 +391,9 @@ if(USERTYPE=='remoteuser'){
                           <label for="collectedBy">Collected By </label>
                             <select name="collectedBy" id="collectedBy" class="form-control" title="Please choose collected by" style="width:100%;">
                               <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($userResult as $user){
-                                ?>
+                              <?php foreach($userResult as $user){ ?>
                                 <option value="<?php echo $user['user_id'];?>" <?php echo ($vlQueryInfo[0]['sample_collected_by']== $user['user_id'])?"selected='selected'":""?>><?php echo ucwords($user['user_name']);?></option>
-                                <?php
-                              }
-                              ?>
+                                <?php } ?>
                             </select>
                           </div>
                       </div>
@@ -437,13 +417,13 @@ if(USERTYPE=='remoteuser'){
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="">Date Sample Received at the Lab </label><br>
-                             <input type="text" class="form-control" style="width:100%;" name="sampleReceivedOn" id="sampleReceivedOn" placeholder="Sample Received Date" title="Please enter sample received date at lab" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>">
+                             <input type="text" class="form-control dateTime" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" title="Please enter sample received date at lab" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>" onchange="checkSampleReceviedDate();">
                           </div>
                       </div>
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="">Date Test Performed </label><br>
-                             <input type="text" class="form-control" style="width:100%;" name="sampleTestingDateAtLab" id="sampleTestingDateAtLab" placeholder="Test Performed Date" title="Please enter test performed date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>">
+                             <input type="text" class="form-control dateTime" style="width:100%;" name="sampleTestingDateAtLab" id="sampleTestingDateAtLab" placeholder="Test Performed Date" title="Please enter test performed date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>" onchange="checkSampleTestingDate();">
                           </div>
                       </div>
                       <div class="col-xs-4 col-md-4">
@@ -479,13 +459,9 @@ if(USERTYPE=='remoteuser'){
                             <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
                               <?php
                               foreach($rejectionResult as $reject){
-                                if($type['rejection_type'] == $reject['rejection_type']){
-                                ?>
+                                if($type['rejection_type'] == $reject['rejection_type']){ ?>
                                 <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo ($vlQueryInfo[0]['reason_for_sample_rejection']== $reject['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                <?php
-                                }
-                              }
-                              ?>
+                                <?php } } ?>
                             </optgroup>
                             <?php } ?>
                             <option value="other">Other (Please Specify) </option>
@@ -520,20 +496,16 @@ if(USERTYPE=='remoteuser'){
                           <label for="reviewedBy">Reviewed By </label>
                             <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" style="width:100%;">
                               <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($userResult as $user){
-                                ?>
+                              <?php foreach($userResult as $user){ ?>
                                 <option value="<?php echo $user['user_id'];?>" <?php echo ($vlQueryInfo[0]['result_reviewed_by']== $user['user_id'])?"selected='selected'":""?>><?php echo ucwords($user['user_name']);?></option>
-                                <?php
-                              }
-                              ?>
+                                <?php } ?>
                             </select>
                           </div>
                       </div>
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="">Reviewed By Datetime </label><br>
-                             <input type="text" class="form-control" style="width:100%;" name="reviewedByDatetime" id="reviewedByDatetime" placeholder="Reviewed by Date" title="Please enter reviewed by date" value="<?php echo $vlQueryInfo[0]['result_reviewed_datetime']; ?>">
+                             <input type="text" class="form-control dateTime" style="width:100%;" name="reviewedByDatetime" id="reviewedByDatetime" placeholder="Reviewed by Date" title="Please enter reviewed by date" value="<?php echo $vlQueryInfo[0]['result_reviewed_datetime']; ?>">
                           </div>
                       </div>
                     </div>
@@ -555,11 +527,9 @@ if(USERTYPE=='remoteuser'){
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="status">Status <span class="mandatory">*</span></label><br>
-                              <select class="form-control isRequired" id="status" name="status" title="Please select test status">
+                              <select class="form-control <?php echo (USERTYPE=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status">
                                 <option value="">-- Select --</option>
-                                <?php
-                                foreach($statusResult as $status){
-                                ?>
+                                <?php foreach($statusResult as $status){ ?>
                                   <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>
                                 <?php } ?>
                               </select>
@@ -582,36 +552,8 @@ if(USERTYPE=='remoteuser'){
   </div>
   <script>
     $(document).ready(function() {
-        $('.date').datepicker({
-           changeMonth: true,
-           changeYear: true,
-           dateFormat: 'dd-M-yy',
-           timeFormat: "hh:mm TT",
-           maxDate: "Today",
-           yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-          }).click(function(){
-              $('.ui-datepicker-calendar').show();
-         });
-        $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#reviewedByDatetime').datetimepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'dd-M-yy',
-            timeFormat: "HH:mm",
-            maxDate: "Today",
-            onChangeMonthYear: function(year, month, widget) {
-                  setTimeout(function() {
-                     $('.ui-datepicker-calendar').show();
-                  });
-            },
-            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-            }).click(function(){
-               $('.ui-datepicker-calendar').show();
-            });
-        $('.date').mask('99-aaa-9999');
-        $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#reviewedByDatetime').mask('99-aaa-9999 99:99');
         getAgeInWeeks();
     });
-    
     function getProvinceDistricts(){
       $.blockUI();
       var pName = $("#province").val();
@@ -633,7 +575,6 @@ if(USERTYPE=='remoteuser'){
         $("#fCode").val("");
       }
     }
-    
     function getFacilities(obj){
       $.blockUI();
       var dName = $("#district").val();
@@ -652,11 +593,9 @@ if(USERTYPE=='remoteuser'){
         $("#fCode").val("");
       }
     }
-    
     function fillFacilityDetails(){
       $("#fCode").val($('#fName').find(':selected').data('code'));
     }
-    
     $('#labId').on('change',function(){
       if(this.value == 'other'){
         $("#newLab").show();
@@ -668,7 +607,6 @@ if(USERTYPE=='remoteuser'){
         $('#newLab').val("");
       }
     });
-    
     function getAgeInWeeks(){
       var dob = $("#dob").val();
       if($.trim(dob) == ""){
@@ -691,7 +629,6 @@ if(USERTYPE=='remoteuser'){
       $("#ageInMonths").val(months); // Gives difference as months
       $("#ageInWeeks").val(weeks); // Gives difference as weeks
     }
-    
     $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
         $('input[name="patientPregnant"]').prop('checked', false);
@@ -701,7 +638,6 @@ if(USERTYPE=='remoteuser'){
         $('#pregYes,#pregNo,#lineOfTreatment').prop('disabled',false);
       }
     });
-    
     $('#rejectionReason').on('change',function(){
       if(this.value == "other"){
         $("#newRejectionReason").show();
@@ -713,8 +649,6 @@ if(USERTYPE=='remoteuser'){
         $('#newRejectionReason').val("");
       }
     });
-    
-    
     $("input:radio[name=sampleValidity]").click(function() {
       if($(this).val() == 'passed'){
         $('input[name="repeatSampleCollection"]').prop('checked', false);
@@ -726,7 +660,6 @@ if(USERTYPE=='remoteuser'){
         $('.rejectionSection').show();
       }
     });
-    
     $('#suspectedTreatmentFailureAt').on('change',function(){
       if(this.value == "other"){
         $("#newSuspectedTreatmentFailureAt").show();
@@ -738,7 +671,6 @@ if(USERTYPE=='remoteuser'){
         $('#newSuspectedTreatmentFailureAt').val("");
       }
     });
-    
     $('#result').on('change',function(){
       if(this.value == "actual_copies"){
         $(".vlResult").show();
@@ -750,20 +682,6 @@ if(USERTYPE=='remoteuser'){
         $('#vlResult').val("");
       }
     });
-    
-    function checkARTValue(){
-      var artRegimen = $("#artRegimen").val();
-      if(artRegimen=='other'){
-        $("#newArtRegimen").show();
-        $("#newArtRegimen").addClass("isRequired");
-        $("#newArtRegimen").focus();
-      }else{
-        $("#newArtRegimen").hide();
-        $("#newArtRegimen").removeClass("isRequired");
-        $('#newArtRegimen').val("");
-      }
-    }
-  
     function checkTestReason(){
       var reason = $("#vlTestReason").val();
       if(reason=='other'){
@@ -775,7 +693,6 @@ if(USERTYPE=='remoteuser'){
         $("#newVlTestReason").removeClass("isRequired");
       } 
     }
-    
     function validateNow(){
       flag = deforayValidator.init({
           formId: 'vlRequestFormZam'
@@ -787,25 +704,6 @@ if(USERTYPE=='remoteuser'){
       if(flag){
         $.blockUI();
         document.getElementById('vlRequestFormZam').submit();
-      }
-    }
-    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
-    {
-      if($.trim($("#"+id).val())!=''){
-        $.blockUI();
-        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
-        function(data){
-            if(data!=0){
-              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
-                  alert(alrt);
-                  $("#"+id).val('');
-                <?php } else { ?>
-                  data = data.split("##");
-                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
-                <?php } ?>
-            }
-        });
-        $.unblockUI();
       }
     }
   </script>

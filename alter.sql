@@ -1295,3 +1295,10 @@ ALTER TABLE `vl_request_form` ADD `requesting_facility_id` INT NULL DEFAULT NULL
 ALTER TABLE `vl_request_form` ADD `collection_site` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_date`;
 --saravanan 21-nov-2017
 ALTER TABLE `vl_request_form` ADD `remote_sample` VARCHAR(255) NOT NULL DEFAULT 'no' AFTER `data_sync`;
+
+--saravanan 23-nov-2017
+ALTER TABLE `r_sample_type` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `r_art_code_details` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `art_status`;
+ALTER TABLE `r_sample_rejection_reasons` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `rejection_reason_code`;
+ALTER TABLE `province_details` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `province_code`;
+ALTER TABLE `facility_details` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `status`;

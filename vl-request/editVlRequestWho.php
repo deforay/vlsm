@@ -1,6 +1,5 @@
 <?php
 ob_start();
-
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $numeric = '';
   $maxLength = '';
@@ -16,7 +15,6 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $maxLength = "maxlength=".$maxLength;
   }
 }
-
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
@@ -29,10 +27,8 @@ foreach($fResult as $fDetails){
 }
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
-
 $aQuery="SELECT * from r_art_code_details where nation_identifier='who'";
 $aResult=$db->query($aQuery);
-
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
@@ -54,7 +50,6 @@ if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] 
 //district details
 $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
-
 ?>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -66,7 +61,6 @@ $districtResult=$db->query($districtQuery);
         <li class="active">Edit Vl Request</li>
       </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -108,13 +102,9 @@ $districtResult=$db->query($districtQuery);
                         <label for="District">District  <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($districtResult as $districtName){
-                              ?>
+                            <?php foreach($districtResult as $districtName){ ?>
                               <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </div>
                       </div>
@@ -141,7 +131,7 @@ $districtResult=$db->query($districtQuery);
                         <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="sampleCollectionDate">Date Specimen Collected <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date"  value="<?php echo $vlQueryInfo[0]['sample_collection_date'];?>">
+                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date"  value="<?php echo $vlQueryInfo[0]['sample_collection_date'];?>"  onchange="checkSampleReceviedDate();checkSampleTestingDate();">
                           </div>
                         </div>
                         <div class="col-xs-3 col-md-3">
@@ -149,13 +139,9 @@ $districtResult=$db->query($districtQuery);
                           <label for="">Specimen Type</label>
                           <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type" style="width: 100%;">
                                 <option value=""> -- Select -- </option>
-                                <?php
-                                foreach($sResult as $name){
-                                 ?>
+                                <?php foreach($sResult as $name){ ?>
                                  <option value="<?php echo $name['sample_id'];?>"<?php echo ($vlQueryInfo[0]['sample_type']==$name['sample_id'])?"selected='selected'":""?>><?php echo ucwords($name['sample_name']);?></option>
-                                 <?php
-                                }
-                                ?>
+                                 <?php } ?>
                             </select>
                           </div>
                         </div>
@@ -191,7 +177,7 @@ $districtResult=$db->query($districtQuery);
                               </td>
                               <td><label for="dob">Date Of Birth</label></td>
                               <td>
-                                <input type="text" name="dob" id="dob" class="date form-control" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>" onchange="getDateOfBirth();checkARTInitiationDate();" />
+                                <input type="text" name="dob" id="dob" class="date form-control" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>" onchange="getAge();checkARTInitiationDate();" />
                               </td>
                               <td><label for="artNo">Art Number</label></td>
                               <td>
@@ -223,16 +209,13 @@ $districtResult=$db->query($districtQuery);
                             <tr>
                                 <td><label for="artRegimen">Current Regimen</label></td>
                                 <td>
-                                    <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" style="width:100%;" onchange="ARTValue();">
+                                    <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                  <option value=""> -- Select -- </option>
-                                 <?php
-                                 foreach($aResult as $parentRow){
-                                 ?>
+                                 <?php foreach($aResult as $parentRow){ ?>
                                   <option value="<?php echo $parentRow['art_code']; ?>"<?php echo ($vlQueryInfo[0]['current_regimen']==$parentRow['art_code'])?"selected='selected'":""?>><?php echo $parentRow['art_code']; ?></option>
-                                 <?php
-                                 }
-                                 ?>
+                                 <?php } if(USERTYPE!='vluser'){  ?>
                                  <option value="other">Other</option>
+                                 <?php } ?>
                                 </select>
                                 <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New ART Regimen" title="Please enter new art regimen" style="width:100%;display:none;margin-top:2px;" >
                                 </td>
@@ -311,11 +294,9 @@ $districtResult=$db->query($districtQuery);
                                    </select>
                                 </td>
                             </tr>
-                            
                         </table>
                     </div>
                 </div>
-                
                 <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Indication for viral load testing</h3>
@@ -460,7 +441,6 @@ $districtResult=$db->query($districtQuery);
                   <div class="box-body">
                     <div class="box-header with-border">
                     <h3 class="box-title">Laboratory Information</h3>
-                    
                     </div>
                     <table class="table">
                       <tr>
@@ -470,9 +450,7 @@ $districtResult=$db->query($districtQuery);
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </td>
                         <td><label for="testMethods">Test Methods</label></td>
@@ -488,32 +466,24 @@ $districtResult=$db->query($districtQuery);
                         <td>
                             <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" style="width:100%;">
                                 <option value="">-- Select --</option>
-                               <?php
-                               foreach($rejectionResult as $reject){
-                                 ?>
+                               <?php foreach($rejectionResult as $reject){ ?>
                                  <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo ($vlQueryInfo[0]['reason_for_sample_rejection']==$reject['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                 <?php
-                               }
-                               ?>
+                                 <?php } ?>
                             </select>
                         </td>
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control labSection" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" style="width:100%;"/></td>
+                        <td><input type="text" class="form-control labSection dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" onchange="checkSampleTestingDate();" style="width:100%;"/></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" style="width:100%;" /></td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
                           <select name="labId" id="labId" class="form-control labSection" title="Please choose lab name" style="width:100%;">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($lResult as $labName){
-                              ?>
+                            <?php foreach($lResult as $labName){ ?>
                               <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </td>
                       </tr>
@@ -522,13 +492,9 @@ $districtResult=$db->query($districtQuery);
                         <td>
                           <select name="approvedBy" id="approvedBy" class="form-control labSection" title="Please choose approved by" style="width:100%;">
                             <option value="">-- Select --</option>
-                            <?php
-                            foreach($userResult as $uName){
-                              ?>
+                            <?php foreach($userResult as $uName){ ?>
                               <option value="<?php echo $uName['user_id'];?>" <?php echo ($vlQueryInfo[0]['result_approved_by'] == $uName['user_id'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                          </td>
                         <td><label for="labComments">Laboratory <br/>Scientist Comments</label></td>
@@ -540,8 +506,8 @@ $districtResult=$db->query($districtQuery);
                           <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status" style="width:100%;">
                             <option value="">-- Select --</option>
                             <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
- 			    <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
-			  </select>
+                            <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
+                          </select>
                         </td>
                         <td><label for="reasonForResultChanges" class="reasonForResultChanges" style="visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;">Reason For Changes in Result</label></td>
                         <td colspan="3"><textarea class="form-control reasonForResultChanges" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;"><?php echo trim($vlQueryInfo[0]['reason_for_vl_result_changes']);?></textarea></td>
@@ -559,43 +525,14 @@ $districtResult=$db->query($districtQuery);
     </section>
   </div>
 <script>
-    provinceName = true;
-    facilityName = true;
-    
+  provinceName = true;
+  facilityName = true;
   $(document).ready(function() {
-  $('.date').datepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "hh:mm TT",
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-   });
-   
-   $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
-   
-   $('#sampleCollectionDate,#sampleTestingDateAtLab').datetimepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "HH:mm",
-     onChangeMonthYear: function(year, month, widget) {
-           setTimeout(function() {
-              $('.ui-datepicker-calendar').show();
-           });
-     },
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-     });
-    getDateOfBirth();
+    getAge();
     __clone = $("#vlRequestForm .labSection").clone();
     reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
     result = ($("#vlResult").length)?$("#vlResult").val():'';
   });
-  
   function validateNow(){
     var format = '<?php echo $arr['sample_code'];?>';
     var sCodeLentgh = $("#sampleCode").val();
@@ -616,7 +553,6 @@ $districtResult=$db->query($districtQuery);
       document.getElementById('vlRequestForm').submit();
     }
   }
-    
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
       $('.femaleSection').hide();
@@ -626,7 +562,6 @@ $districtResult=$db->query($districtQuery);
       $('.femaleSection').show();
     }
   });
-  
   $("input:radio[name=patientTB]").click(function() {
     if($(this).val() == 'no'){
       $('input[name="patientTBActive"]').prop('checked', false);
@@ -640,7 +575,6 @@ $districtResult=$db->query($districtQuery);
      $(".hideTestData").hide();
      $("."+chosenClass).show();
     }
-    
   function getfacilityDetails(obj)
   {
     $.blockUI();
@@ -660,7 +594,6 @@ $districtResult=$db->query($districtQuery);
 	  }
       });
       }
-      
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -669,7 +602,6 @@ $districtResult=$db->query($districtQuery);
     }
     $.unblockUI();
   }
-  
   function getfacilityDistrictwise(obj){
     $.blockUI();
     var dName = $("#district").val();
@@ -684,89 +616,9 @@ $districtResult=$db->query($districtQuery);
     }
     $.unblockUI();
   }
-  
   function autoFillFacilityCode(){
     $("#fCode").val($('#fName').find(':selected').data('code'));
   }
-  
-  function ARTValue(){
-    var artRegimen = $("#artRegimen").val();
-    if(artRegimen=='other'){
-      $("#newArtRegimen").show();
-      $("#newArtRegimen").addClass("isRequired");
-    }else{
-      $("#newArtRegimen").hide();
-      $("#newArtRegimen").removeClass("isRequired");
-    }
-  }
-  function getDateOfBirth(){
-      var today = new Date();
-      var dob = $("#dob").val();
-      if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
-      }
-      
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      }
-      if(mm<10) {
-       mm='0'+mm
-      }
-      
-      splitDob = dob.split("-");
-      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-      var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
-      }else{
-        $("#ageInMonths").val("");
-      }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
-      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
-  }
-  function checkARTInitiationDate(){
-      var dob = $("#dob").val();
-      var artInitiationDate = $("#dateOfArtInitiation").val();
-      if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
-        //Set DOB date
-        splitDob = dob.split("-");
-        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-        var monthDigit = dobDate.getMonth();
-        var dobYear = splitDob[2];
-        var dobMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-        var dobDate = splitDob[0];
-        dobDate = dobYear+"-"+dobMonth+"-"+dobDate;
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Check diff
-        if(moment(dobDate).isAfter(artIniDate)) {
-          alert("ART Initiation Date could not be earlier than DOB!");
-          $("#dateOfArtInitiation").val("");
-        }
-      }
-    }
-    
     $("#vlRequestForm .labSection").on("change", function() {
       if($.trim(result)!= ''){
         if($("#vlRequestForm .labSection").serialize() == $(__clone).serialize()){

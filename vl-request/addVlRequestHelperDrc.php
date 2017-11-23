@@ -199,9 +199,9 @@ try {
     $vldata=array(
                   'vlsm_instance_id'=>$instanceId,
                   'vlsm_country_id'=>3,
-                  'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='' ? $_POST['sampleCodeTitle'] :  'auto'),
-                  'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='' ? $_POST['sampleCodeFormat'] :  NULL),
-                   'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
+                  //'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='' ? $_POST['sampleCodeTitle'] :  'auto'),
+                  //'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='' ? $_POST['sampleCodeFormat'] :  NULL),
+                  // 'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
                   'facility_id'=>$_POST['clinicName'],
                   'request_clinician_name'=>$_POST['clinicianName'],
                   'request_clinician_phone_number'=>$_POST['clinicanTelephone'],
@@ -229,7 +229,7 @@ try {
                   'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
                   'result_status'=>$_POST['status'],
                   'reason_for_sample_rejection'=>$_POST['rejectionReason'],
-                  'sample_code'=>$_POST['sampleCode'],
+                  //'sample_code'=>$_POST['sampleCode'],
                   //'lab_code'=>$_POST['labNo'],
                   'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
                   'serial_no'=>$_POST['sampleCode'],
@@ -247,7 +247,14 @@ try {
                   'last_modified_by'=>$_SESSION['userId'],
                   'last_modified_datetime'=>$general->getDateTime()
                 );
-    //print_r($vldata);die;
+    if(USERTYPE=='remoteuser'){
+        $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+    }else{
+        $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+    }
     $id=$db->insert($tableName,$vldata);
     if($id>0){
         $_SESSION['alertMsg']="VL request added successfully";

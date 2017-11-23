@@ -12,6 +12,8 @@ try {
         $status = 9;
     }else if($_POST['oldStatus']==9){
         $status = 6;
+    }else{
+     $status = $_POST['oldStatus'];
     }
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);

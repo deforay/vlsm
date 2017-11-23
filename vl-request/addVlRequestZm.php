@@ -1,20 +1,10 @@
 <?php
 ob_start();
-
 $autoApprovalFieldStatus = 'show';
-if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE" && $arr['auto_approval']=='no'){
-    $autoApprovalFieldStatus = 'hide';
-}
-
-if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
-  $numeric = '';
-}else{
-  $numeric = 'checkNum';
-}
-
+if(isset($_SESSION['roleCode']) && $_SESSION['roleCode'] == "DE" && $arr['auto_approval']=='no'){ $autoApprovalFieldStatus = 'hide'; }
+if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){ $numeric = ''; } else{ $numeric = 'checkNum'; }
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
-
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
@@ -31,27 +21,37 @@ $end_date = date('Y-12-31');
 if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
     $start_date = date('Y-m-01');
-$end_date = date('Y-m-31');
-  }else if($arr['sample_code']=='YY'){
+    $end_date = date('Y-m-31');
+}else if($arr['sample_code']=='YY'){
     $mnthYr = date('y');
     $start_date = date('Y-01-01');
     $end_date = date('Y-12-31');
 }
 //check remote user
+$rKey = '';
+$pdQuery="SELECT * from province_details";
   if(USERTYPE=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
+    //check user exist in user_facility_map table
+    $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+    $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+    if($chkUserFcMapResult){
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+    }
+    $rKey = 'R';
   }else{
     $sampleCodeKey = 'sample_code_key';
     $sampleCode = 'sample_code';
+    $rKey = '';
   }
-
+$pdResult=$db->query($pdQuery);
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND vl.sample_code_title="'.$arr['sample_code'].'"  AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 
-  $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+$prefix = $arr['sample_code_prefix'];
+if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
  $maxId = $svlResult[0][$sampleCodeKey]+1;
  $strparam = strlen($maxId);
  $zeros = substr("000", $strparam);
@@ -59,7 +59,6 @@ $svlResult=$db->query($svlQuery);
 }else{
  $maxId = '001';
 }
-
 //lab no increament
 $labvlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $labvlResult=$db->query($labvlQuery);
@@ -68,7 +67,6 @@ $labvlResult=$db->query($labvlQuery);
 }else{
  $maxLabId = '1';
 }
-
 $facilityResult='';
 $stateResult='';
 $districtResult = '';
@@ -107,7 +105,6 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  $sKey = $zeros.$sKey;
  $sFormat = $vlResult[0]['sample_code_format'];
  $sCodeValue = $vlResult[0]['sample_code_format'].$sKey;
- 
  if($arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
  if($arr['sample_code']=='MMYY'){
     $mnthYr = date('my');
@@ -118,7 +115,6 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
   $sFormat = $prefix.$mnthYr;
   $sCodeValue = $sFormat.$sKey;
  }
- 
  if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_collection_date'])!='' && $vlResult[0]['sample_collection_date']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$vlResult[0]['sample_collection_date']);
   $vlResult[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -126,7 +122,6 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
   $vlResult[0]['sample_collection_date']='';
  }
  $sDate = $vlResult[0]['sample_collection_date'];
- 
  if(isset($vlResult[0]['sample_received_at_vl_lab_datetime']) && trim($vlResult[0]['sample_received_at_vl_lab_datetime'])!='' && $vlResult[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$vlResult[0]['sample_received_at_vl_lab_datetime']);
   $vlResult[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -135,9 +130,7 @@ if(isset($_SESSION['treamentId']) && $_SESSION['treamentId']!=''){
  }
  $sampleReceivedDate = $vlResult[0]['sample_received_at_vl_lab_datetime'];
 }
-if($urgency==''){
-  $urgency= 'normal';
-}
+if($urgency==''){ $urgency= 'normal';}
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -149,7 +142,6 @@ if($urgency==''){
         <li class="active">Add Vl Request</li>
       </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -202,15 +194,11 @@ if($urgency==''){
                         <label for="District">District  <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            if($districtResult!=''){
-                            foreach($districtResult as $districtName){
-                              ?>
-                              <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
-                              <?php
-                            }
-                            }
+                            <?php if($districtResult!=''){
+                                    foreach($districtResult as $districtName){
                             ?>
+                              <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
+                              <?php  } } ?>
                           </select>
                         </div>
                       </div>
@@ -220,13 +208,13 @@ if($urgency==''){
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
-                      <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                    <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
                       <?php if($facilityResult!=''){ ?>
-		      <option value=""> -- Select -- </option>
-			<?php foreach($fResult as $fDetails){ ?>
-                        <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_SESSION['facilityId']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
-                        <?php } } else { echo $facility; } ?>
-		      </select>
+                            <option value=""> -- Select -- </option>
+                            <?php foreach($fResult as $fDetails){ ?>
+                                <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($_SESSION['facilityId']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                            <?php } } else { echo $facility; } ?>
+                    </select>
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
@@ -238,13 +226,13 @@ if($urgency==''){
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="sampleCollectionDate">Sample Collection Date <span class="mandatory">*</span></label>
-                    <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
+                    <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="">Sample Received Date</label>
-                    <input type="text" class="form-control" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" value="<?php echo $sampleReceivedDate; ?>" onchange="checkSampleReceviedDate();">
+                    <input type="text" class="form-control dateTime" style="width:100%;" name="sampleReceivedDate" id="sampleReceivedDate" placeholder="Sample Received Date" value="<?php echo $sampleReceivedDate; ?>" onchange="checkSampleReceviedDate();">
                     </div>
                   </div>
                 </div>
@@ -295,7 +283,7 @@ if($urgency==''){
                         </td>
                         <td><label>Date Of Birth</label></td>
                         <td>
-                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" onchange="getDateOfBirth();checkARTInitiationDate();">
+                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" onchange="getAge();checkARTInitiationDate();">
                         </td>
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
@@ -327,7 +315,6 @@ if($urgency==''){
                           </label>
                         </td>
                       </tr>
-                      
                       <tr>
                         <td><label for="patientArtNo">Patient OI/ART Number</label></td>
                         <td>
@@ -339,16 +326,13 @@ if($urgency==''){
                         </td>
                         <td><label for="artRegimen">ART Regimen</label></td>
                         <td>
-                          <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%">
+                          <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkARTRegimenValue();" style="width: 100%">
                          <option value=""> -- Select -- </option>
-                         <?php
-                         foreach($aResult as $parentRow){
-                         ?>
+                         <?php foreach($aResult as $parentRow){ ?>
                           <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
-                         <?php
-                         }
-                         ?>
-                         <option value="other">Other</option>
+                         <?php } if(USERTYPE!='vluser'){  ?>
+                          <option value="other">Other</option>
+                          <?php } ?>
                         </select>
                         </td>
                       </tr>
@@ -369,7 +353,6 @@ if($urgency==''){
                         <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
                         <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" /></td>
                       </tr>
-                      
                       <tr>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
                         <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" onchange="checkLastVLTestDate();" style="width:100%;" /></td>
@@ -383,19 +366,12 @@ if($urgency==''){
                         <td>
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($testReason as $reason){
-                              ?>
+                            <?php foreach($testReason as $reason){ ?>
                               <option value="<?php echo $reason['test_reason_name'];?>"><?php echo ucwords($reason['test_reason_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                            </select>
                         </td>
-                        <td></td>
-                        <td>
-                          
-                        </td>
+                        <td></td> <td> </td>
                       </tr>
                     </table>
                   </div>
@@ -419,13 +395,9 @@ if($urgency==''){
                         <td>
                           <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:100%">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($lResult as $labName){
-                              ?>
+                            <?php foreach($lResult as $labName){ ?>
                               <option value="<?php echo $labName['facility_id'];?>" <?php echo ($labNameId==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </td>
                       </tr>
@@ -438,9 +410,7 @@ if($urgency==''){
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </td>
                         <td><?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
@@ -448,20 +418,16 @@ if($urgency==''){
                           <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
                             <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type" style="width: 100%">
                                 <option value=""> -- Select -- </option>
-                                <?php
-                                foreach($sResult as $name){
-                                 ?>
+                                <?php foreach($sResult as $name){ ?>
                                  <option value="<?php echo $name['sample_id'];?>"><?php echo ucwords($name['sample_name']);?></option>
-                                 <?php
-                                }
-                                ?>
+                                 <?php } ?>
                             </select>
                           <?php } ?>
                         </td>
                       </tr>
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" onchange="checkSampleTestingDate();" style="width:100%;" /></td>
+                        <td><input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" onchange="checkSampleTestingDate();" style="width:100%;" /></td>
                         <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
                         <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/></td>
                         <td><label for="vlLog">Viral Load Log</label></td>
@@ -480,15 +446,10 @@ if($urgency==''){
                         <td><label class="noResult">Rejection Reason</label></td>
                         <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width:100%;">
                         <option value="">-- Select --</option>
-                          <?php
-                          foreach($rejectionResult as $reject){
-                            ?>
+                          <?php foreach($rejectionResult as $reject){ ?>
                             <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                            <?php
-                          }
-                          ?>
+                            <?php } ?>
                         </select></td>
-                        
                       </tr>
                       <tr>
                         <td><label>Reviewed By</label></td>
@@ -496,13 +457,9 @@ if($urgency==''){
                         <td>
                           <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by" style="width: 100%">
                             <option value="">-- Select --</option>
-                            <?php
-                            foreach($userResult as $uName){
-                              ?>
+                            <?php foreach($userResult as $uName){ ?>
                               <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                            <?php } ?>
                           </select>
                          </td>
                         <?php
@@ -512,16 +469,11 @@ if($urgency==''){
                          <td>
                           <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" style="width: 100%">
                             <option value="">-- Select --</option>
-                            <?php
-                            foreach($userResult as $uName){
-                              ?>
+                            <?php foreach($userResult as $uName){ ?>
                               <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                          </td>
-                         
                         <?php } else { ?>
                          <td colspan="2"></td>
                         <?php } ?>
@@ -532,7 +484,6 @@ if($urgency==''){
                         <!--<td><label for="dateOfReceivedStamp">Date Of Result</label></td>
                         <td><input type="text" class="form-control date" id="dateOfReceivedStamp" name="dateOfReceivedStamp" placeholder="Enter Date Received Stamp." title="Please enter date received stamp" style="width:100%;" /></td>-->
                       </tr>
-                      
                     </table>
                   </div>
                 </div>
@@ -554,15 +505,11 @@ if($urgency==''){
             </form>
           <!-- /.row -->
         </div>
-       
       </div>
       <!-- /.box -->
-
     </section>
     <!-- /.content -->
   </div>
-  
-  
   <script type="text/javascript">
   provinceName = true;
   facilityName = true;
@@ -645,25 +592,20 @@ if($urgency==''){
 	  }
       });
       }
-      <?php
-      if($arr['sample_code']=='auto'){
-        ?>
+      <?php if($arr['sample_code']=='auto'){ ?>
         pNameVal = pName.split("##");
         sCode = '<?php echo date('ymd');?>';
         sCodeKey = '<?php echo $maxId;?>';
-        $(".serialNo1,.serialNo,.reqBarcode").val(pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val(pNameVal[1]+sCode);
+        $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
+        $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
         $("#sampleCodeKey").val(sCodeKey);
         checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null);
-        <?php
-      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
+        <?php }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
+        $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
         $("#sampleCodeKey").val('<?php echo $maxId;?>');
         checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo1',null,'This sample number already exists.Try another number',null);
-        <?php
-      }
-      ?>
+        <?php } ?>
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -715,9 +657,7 @@ if($urgency==''){
     $.unblockUI();
   }
   $(document).ready(function() {
-    
-  
-  $("#vlResult").bind("keyup change", function(e) {
+    $("#vlResult").bind("keyup change", function(e) {
       if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
         $(".noResult").show();
       }else{
@@ -739,35 +679,6 @@ if($urgency==''){
         $(".noResult").hide();
       }
   });
-    
-  $('.date').datepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "hh:mm TT",
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-   });
-   
-   $('.date').mask('99-aaa-9999');
-   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
-   
-   $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').datetimepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'dd-M-yy',
-     timeFormat: "HH:mm",
-     onChangeMonthYear: function(year, month, widget) {
-           setTimeout(function() {
-              $('.ui-datepicker-calendar').show();
-           });
-     },
-     yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     }).click(function(){
-   	$('.ui-datepicker-calendar').show();
-     });
-  
   });
   
   function checkRejectedReason(){
@@ -791,17 +702,7 @@ if($urgency==''){
         $("#patientPhoneNumber").removeAttr("disabled");
       }
   });
-  function checkValue()
-  {
-    var artRegimen = $("#artRegimen").val();
-    if(artRegimen=='other'){
-      $(".newArtRegimen").show();
-      $("#newArtRegimen").addClass("isRequired");
-    }else{
-      $(".newArtRegimen").hide();
-      $("#newArtRegimen").removeClass("isRequired");
-    }
-  }
+ 
   function checkPatientReceivesms(val){
    if(val=='yes'){
     $('#patientPhoneNumber').addClass('isRequired');
@@ -821,216 +722,33 @@ if($urgency==''){
     $(".serialNo").val($(".reqBarcode").val());
     $(".serialNo1").val($(".reqBarcode").val());
   });
-  
-  function getDateOfBirth(){
-      var today = new Date();
-      var dob = $("#dob").val();
-      if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
-      }
-      
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      }
-      if(mm<10) {
-       mm='0'+mm
-      }
-      
-      splitDob = dob.split("-");
-      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-      var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val(diff.getUTCMonth()); // Gives month count of difference
-      }else{
-        $("#ageInMonths").val("");
-      }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970)); // Gives difference as year
-      //console.log(diff.getUTCDate() - 1); // Gives day count of difference
-  }
-  function setFacilityLabDetails(fDetails){
+    function setFacilityLabDetails(fDetails){
       $("#labId").val("");
       facilityArray = fDetails.split("##");
       $("#labId").val(facilityArray[0]);
     }
-  function checkSampleNameValidation(tableName,fieldName,className,fnct,alrt)
-    {
-      if($.trim($("."+className).val())!=''){
-        $.blockUI();
-        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("."+className).val(),fnct : fnct, format: "html"},
-        function(data){
-            if(data!=0){
-              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
-                  alert(alrt);
-                  $("."+className).val('');
-                <?php } else { ?>
-                    data = data.split("##");
-                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
-                <?php } ?>
-            }
-        });
-        $.unblockUI();
-      }
+  
+function checkPatientIsPregnant(value){
+  if(value=='yes'){
+    $("select option[value*='pregnant_mother']").prop('disabled',false);
+  }else{
+    if($("#vlTestReason").val()=='pregnant_mother'){
+      $("#vlTestReason").val('');
     }
-    
-    function checkPatientIsPregnant(value){
-      if(value=='yes'){
-        $("select option[value*='pregnant_mother']").prop('disabled',false);
-      }else{
-        if($("#vlTestReason").val()=='pregnant_mother'){
-          $("#vlTestReason").val('');
-        }
-        $("select option[value*='pregnant_mother']").prop('disabled',true);
-      }
-    }
-    
-    function checkSampleReceviedDate(){
-      var sampleCollectionDate = $("#sampleCollectionDate").val();
-      var sampleReceivedDate = $("#sampleReceivedDate").val();
-      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= '') {
-        //Set sample coll. datetime
-        splitSampleCollDateTime = sampleCollectionDate.split(" ");
-        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
-        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
-        var monthDigit = sampleCollOn.getMonth();
-        var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = splitSampleCollDate[0];
-        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
-        //Set sample rece. datetime
-        splitSampleReceivedDateTime = sampleReceivedDate.split(" ");
-        splitSampleReceivedDate = splitSampleReceivedDateTime[0].split("-");
-        var sampleReceivedOn = new Date(splitSampleReceivedDate[1] + splitSampleReceivedDate[2]+", "+splitSampleReceivedDate[0]);
-        var monthDigit = sampleReceivedOn.getMonth();
-        var smplReceivedYear = splitSampleReceivedDate[2];
-        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplReceivedMonth = (smplReceivedMonth<10) ? '0'+smplReceivedMonth: smplReceivedMonth;
-        var smplReceivedDate = splitSampleReceivedDate[0];
-        sampleReceivedDateTime = smplReceivedYear+"-"+smplReceivedMonth+"-"+smplReceivedDate+" "+splitSampleReceivedDateTime[1]+":00";
-        //Check diff
-        if(moment(sampleCollDateTime).diff(moment(sampleReceivedDateTime)) > 0) {
-          alert("Sample Received Date could not be earlier than Sample Collection Date!");
-          $("#sampleReceivedDate").val("");
-        }
-      }
-    }
-    
-    function checkSampleTestingDate(){
-      var sampleCollectionDate = $("#sampleCollectionDate").val();
-      var sampleTestingDate = $("#sampleTestingDateAtLab").val();
-      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= '') {
-        //Set sample coll. date
-        splitSampleCollDateTime = sampleCollectionDate.split(" ");
-        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
-        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
-        var monthDigit = sampleCollOn.getMonth();
-        var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = splitSampleCollDate[0];
-        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
-        //Set sample testing date
-        splitSampleTestedDateTime = sampleTestingDate.split(" ");
-        splitSampleTestedDate = splitSampleTestedDateTime[0].split("-");
-        var sampleTestingOn = new Date(splitSampleTestedDate[1] + splitSampleTestedDate[2]+", "+splitSampleTestedDate[0]);
-        var monthDigit = sampleTestingOn.getMonth();
-        var smplTestingYear = splitSampleTestedDate[2];
-        var smplTestingMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
-        var smplTestingDate = splitSampleTestedDate[0];
-        sampleTestingAtLabDateTime = smplTestingYear+"-"+smplTestingMonth+"-"+smplTestingDate+" "+splitSampleTestedDateTime[1]+":00";
-        //Check diff
-        if(moment(sampleCollDateTime).diff(moment(sampleTestingAtLabDateTime)) > 0) {
-          alert("Sample Testing Date could not be earlier than Sample Collection Date!");
-          $("#sampleTestingDateAtLab").val("");
-        }
-      }
-    }
-    
-    function checkARTInitiationDate(){
-      var dob = $("#dob").val();
-      var artInitiationDate = $("#dateOfArtInitiation").val();
-      if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
-        //Set DOB date
-        splitDob = dob.split("-");
-        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-        var monthDigit = dobDate.getMonth();
-        var dobYear = splitDob[2];
-        var dobMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-        var dobDate = splitDob[0];
-        dobDate = dobYear+"-"+dobMonth+"-"+dobDate;
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Check diff
-        if(moment(dobDate).isAfter(artIniDate)) {
-          alert("ART Initiation Date could not be earlier than DOB!");
-          $("#dateOfArtInitiation").val("");
-        }
-      }
-    }
-    
+    $("select option[value*='pregnant_mother']").prop('disabled',true);
+  }
+}
     function checkLastVLTestDate(){
       var artInitiationDate = $("#dateOfArtInitiation").val();
       var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
       if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Set Last VL Test date
-        splitLastVLTestDate = dateOfLastVLTest.split("-");
-        var lastVLTestOn = new Date(splitLastVLTestDate[1] + splitLastVLTestDate[2]+", "+splitLastVLTestDate[0]);
-        var monthDigit = lastVLTestOn.getMonth();
-        var lastVLTestYear = splitLastVLTestDate[2];
-        var lastVLTestMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
-        var lastVLTestDate = splitLastVLTestDate[0];
-        lastVLTestDate = lastVLTestYear+"-"+lastVLTestMonth+"-"+lastVLTestDate;
-        console.log(artIniDate);
-        console.log(lastVLTestDate);
         //Check diff
-        if(moment(artIniDate).isAfter(lastVLTestDate)) {
+        if(moment(artInitiationDate).isAfter(dateOfLastVLTest)) {
           alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
           $("#lastViralLoadTestDate").val("");
         }
       }
     }
-    
-    //function checkReviewedApprovedBy(){
-    //  var reviewedBy = $("#reviewedBy").val();
-    //  var approvedBy = $("#approvedBy").val();
-    //  if($.trim(reviewedBy)!= '' && $.trim(approvedBy)!= ''){
-    //    if($.trim(reviewedBy) == $.trim(approvedBy)!= ''){
-    //      alert("Same person is reviewing and approving result!");
-    //    }
-    //  }
-    //}
     //check machine name and limit
     function getMachineName(){
       machineName = true;
@@ -1080,7 +798,6 @@ if($urgency==''){
         }
       }
     }
-    
     function calculateLogValue(obj){
       if(obj.id=="vlResult") {
         absValue = $("#vlResult").val();
@@ -1098,18 +815,6 @@ if($urgency==''){
             $("#vlResult").val('');
           }
         }
-      }
-    }
-    
-    function checkPatientDetails(tableName,fieldName,obj,fnct)
-    {
-      if($.trim(obj.value)!=''){
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
-        function(data){
-            if(data==='1'){
-                showModal('patientModal.php?artNo='+obj.value,900,520);
-            }
-        });
       }
     }
   function setPatientDetails(pDetails){
@@ -1167,42 +872,4 @@ if($urgency==''){
       $("#patientArtNo").val($.trim(patientArray[15]));
       }
   }
-  function getAge(){
-    var dob = $("#dob").val();
-    if($.trim(dob) == ""){
-      $("#ageInMonths").val("");
-      $("#ageInYears").val("");
-      return false;
-    }
-    //calculate age
-    splitDob = dob.split("-");
-    var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-    var monthDigit = dobDate.getMonth();
-    var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
-    dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-    dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
-    var years = moment().diff(dob, 'years',false);
-    var months = (years == 0)?moment().diff(dob, 'months',false):'';
-    $("#ageInYears").val(years); // Gives difference as years
-    $("#ageInMonths").val(months); // Gives difference as months
-  }
-  function showPatientList()
-  {
-    $("#showEmptyResult").hide();
-      if($.trim($("#artPatientNo").val())!=''){
-        $.post("checkPatientExist.php", { artPatientNo : $("#artPatientNo").val()},
-        function(data){
-            if(data >= '1'){
-                showModal('patientModal.php?artNo='+$.trim($("#artPatientNo").val()),900,520);
-            }else{
-              $("#showEmptyResult").show();
-            }
-        });
-      }
-  }
-  
 </script>
-  
- <?php
- //include('../footer.php');
- ?>
