@@ -1,11 +1,24 @@
   <?php
     ob_start();
+    //check remote user
+    $pdQuery="SELECT * from province_details";
+    if(USERTYPE=='remoteuser'){
+      $sampleCode = 'remote_sample_code';
+      //check user exist in user_facility_map table
+        $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+        $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+        if($chkUserFcMapResult){
+        $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+        }
+    }else{
+      $sampleCode = 'sample_code';
+    }
+    $pdResult=$db->query($pdQuery);
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
       $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
     }
-    
     $facility = "";
     $facility.="<option value=''> -- Sélectionner -- </option>";
     foreach($fResult as $fDetails){
@@ -28,12 +41,6 @@
     //get ART list
     $aQuery="SELECT * from r_art_code_details"; // where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
-    
-    if(USERTYPE=='remoteuser'){
-    $sampleCode = 'remote_sample_code';
-    }else{
-      $sampleCode = 'sample_code';
-    }
     ?>
     <style>
       .translate-content{
@@ -63,7 +70,6 @@
         <li class="active">Edit Vl Request</li>
       </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -90,8 +96,7 @@
                                 <td>
                                     <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
-                                      <?php
-                                      foreach($pdResult as $provinceName){ ?>
+                                      <?php foreach($pdResult as $provinceName){ ?>
                                         <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['facility_state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
                                       <?php } ?>
                                     </select>
@@ -100,21 +105,16 @@
                                 <td>
                                   <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                     <option value=""> -- Sélectionner -- </option>
-                                    <?php
-                                    foreach($districtResult as $districtName){
-                                      ?>
+                                    <?php foreach($districtResult as $districtName){ ?>
                                       <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($stateResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
-                                      <?php
-                                    }
-                                    ?>
+                                      <?php } ?>
                                   </select>
                                 </td>
                                 <td><label for="clinicName">Structure/Service </label><span class="mandatory">*</span></td>
                                 <td>
                                     <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose service provider" <!--onchange="getfacilityProvinceDetails(this);"--> style="width:100%;">
                                         <option value=""> -- Sélectionner -- </option>
-                                        <?php
-                                        foreach($fResult as $fDetails){ ?>
+                                        <?php foreach($fResult as $fDetails){ ?>
                                           <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
                                         <?php } ?>
                                     </select>
@@ -148,7 +148,7 @@
                             <tr>
                                 <td style="width:14%;"><label for="">Date de naissance </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="setDobMonthYear();checkARTInitiationDate();" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" style="width:100%;"/>
+                                    <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="getAge();checkARTInitiationDate();" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:14%;">
@@ -193,16 +193,13 @@
                             <tr>
                                 <td><label>Régime ARV en cours </label></td>
                                 <td colspan="7">
-                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkCurrentRegimen();" style="width:30%;">
+                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkARTRegimenValue();" style="width:30%;">
                                     <option value=""> -- Sélectionner -- </option>
-                                      <?php
-                                      foreach($aResult as $arv){
-                                      ?>
+                                      <?php foreach($aResult as $arv){ ?>
                                        <option value="<?php echo $arv['art_code']; ?>" <?php echo($arv['art_code'] == $vlQueryInfo[0]['current_regimen'])?'selected="selected"':''; ?>><?php echo $arv['art_code']; ?></option>
-                                      <?php
-                                      }
-                                      ?>
+                                      <?php } if(USERTYPE!='vluser'){  ?>
                                       <option value="other">Autre</option>
+                                      <?php } ?>
                                   </select>
                                 </td>
                             </tr>
@@ -240,12 +237,11 @@
                                 <td colspan="2">
                                    <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose motif de la demande" onchange="checkVLTestReason();">
                                       <option value=""> -- Sélectionner -- </option>
-                                      <?php
-                                      foreach($vlTestReasonResult as $tReason){
-                                      ?>
+                                      <?php foreach($vlTestReasonResult as $tReason){ ?>
                                        <option value="<?php echo $tReason['test_reason_id']; ?>" <?php echo($vlQueryInfo[0]['reason_for_vl_testing'] == $tReason['test_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($tReason['test_reason_name']); ?></option>
-                                      <?php } ?>
+                                      <?php } if(USERTYPE!='vluser'){  ?>
                                       <option value="other">Autre</option>
+                                      <?php } ?>
                                     </select>
                                 </td>
                                 <td><label for="viralLoadNo">Charge virale N </label></td>
@@ -325,21 +321,15 @@
                                     <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:30%;"/>
                                 </td>
                             </tr>
-                            <?php
-                            if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){
-                            ?>
+                            <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
                               <tr>
                                 <td><label for="specimenType">Type d'échantillon </label></td>
                                 <td colspan="3">
                                   <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d'échantillon" onchange="checkSpecimenType();" style="width:30%;">
                                     <option value=""> -- Sélectionner -- </option>
-                                    <?php
-                                    foreach($sResult as $type){
-                                     ?>
+                                    <?php foreach($sResult as $type){ ?>
                                      <option value="<?php echo $type['sample_id'];?>" <?php echo($vlQueryInfo[0]['sample_type'] == $type['sample_id'])?'selected="selected"':''; ?>><?php echo ucwords($type['sample_name']);?></option>
-                                     <?php
-                                    }
-                                    ?>
+                                     <?php } ?>
                                   </select>
                                 </td>
                               </tr>
@@ -378,9 +368,7 @@
                                     <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>" style="width:30%;"/>
                                 </td>
                             </tr>
-                            <?php
-                            if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){
-                            ?>
+                            <?php if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled"){ ?>
                               <tr style="<?php echo (($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
@@ -397,9 +385,7 @@
                                 <td>
                                     <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
                                       <option value=""> -- Sélectionner -- </option>
-                                      <?php
-                                      foreach($rejectionResult as $rjctReason){
-                                      ?>
+                                      <?php foreach($rejectionResult as $rjctReason){ ?>
                                        <option value="<?php echo $rjctReason['rejection_reason_id']; ?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $rjctReason['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
                                       <?php } ?>
                                        <option value="other">Autre</option>
@@ -412,6 +398,7 @@
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
                                     <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                                    <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                                 </td>
                             </tr>
                             <tr>
@@ -419,13 +406,9 @@
                                 <td colspan="3">
                                     <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:30%;">
                                     <option value=""> -- Select -- </option>
-                                    <?php
-                                    foreach($lResult as $labName){
-                                      ?>
+                                    <?php foreach($lResult as $labName){ ?>
                                       <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
-                                      <?php
-                                    }
-                                    ?>
+                                      <?php } ?>
                                   </select>
                                 </td>
                             </tr>
@@ -443,9 +426,7 @@
                                     <option value="">-- Select --</option>
                                     <?php foreach($importResult as $mName) { ?>
                                       <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
-                                      <?php
-                                    }
-                                    ?>
+                                      <?php } ?>
                                   </select>
                                       </td>
                                 </tr>
@@ -495,30 +476,6 @@
   <script type="text/javascript">
      changeProvince = true;
      changeFacility = true;
-     $(document).ready(function() {
-        $('.date').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        dateFormat: 'dd-M-yy',
-        yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-       }).click(function(){
-           $('.ui-datepicker-calendar').show();
-        });
-        
-        $('.dateTime').datetimepicker({
-          changeMonth: true,
-          changeYear: true,
-          dateFormat: 'dd-M-yy',
-          timeFormat: "HH:mm",
-          yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-          }).click(function(){
-   	    $('.ui-datepicker-calendar').show();
-          });
-        
-        $('.date').mask('99-aaa-9999');
-        $('.dateTime').mask('99-aaa-9999 99:99');
-     });
-     
     function getfacilityDetails(obj){
       $.blockUI();
       var pName = $("#province").val();
@@ -535,7 +492,6 @@
       }
        $.unblockUI();
     }
-    
     function getfacilityDistrictwise(obj){
       $.blockUI();
       var dName = $("#district").val();
@@ -552,16 +508,6 @@
       }
       $.unblockUI();
     }
-    
-    function checkCurrentRegimen(){
-      var currentRegimen = $("#artRegimen").val();
-      if(currentRegimen == "other"){
-        $(".newArtRegimen").show();
-      }else{
-        $(".newArtRegimen").hide();
-      }
-    }
-    
     $("input:radio[name=hasChangedRegimen]").click(function() {
       if($(this).val() == 'yes'){
          $(".arvChangedElement").show();
@@ -569,7 +515,6 @@
         $(".arvChangedElement").hide();
       }
     });
-    
     $("input:radio[name=isPatientNew]").click(function() {
       if($(this).val() == 'yes'){
         $(".du").css("visibility","visible");
@@ -577,7 +522,6 @@
         $(".du").css("visibility","hidden");
       }
     });
-     
     $("input:radio[name=gender]").click(function() {
       if($(this).val() == 'female'){
          $("#femaleElements").show();
@@ -585,7 +529,6 @@
         $("#femaleElements").hide();
       }
     });
-    
     function checkVLTestReason(){
       var vlTestReason = $("#vlTestReason").val();
       if(vlTestReason == "other"){
@@ -594,7 +537,6 @@
         $(".newVlTestReason").hide();
       }
     }
-    
     function checkSpecimenType(){
       var specimenType = $("#specimenType").val();
       if(specimenType == 2){
@@ -603,7 +545,6 @@
         $(".plasmaElement").hide();
       }
     }
-    
     function checkTestStatus(){
       var status = $("#status").val();
       if(status == 4){
@@ -612,7 +553,6 @@
         $(".rejectionReason").hide();
       }
     }
-    
     function checkRejectionReason(){
       var rejectionReason = $("#rejectionReason").val();
       if(rejectionReason == "other"){
@@ -621,171 +561,16 @@
         $(".newRejectionReason").hide();
       }
     }
-    
-    function setDobMonthYear(){
-      var today = new Date();
-      var dob = $("#dob").val();
-      if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
-      }
-      var dd = today.getDate();
-      var mm = today.getMonth();
-      var yyyy = today.getFullYear();
-      if(dd<10) {
-        dd='0'+dd
-      } 
-      
-      if(mm<10) {
-        mm='0'+mm
-      }
-      
-      splitDob = dob.split("-");
-      var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-      var monthDigit = dobDate.getMonth();
-      var dobYear = splitDob[2];
-      var dobMonth = isNaN(monthDigit) ? 0 : (monthDigit);
-      dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-      var dobDate = (splitDob[0]<10) ? '0'+splitDob[0]: splitDob[0];
-      
-      var date1 = new Date(yyyy,mm,dd);
-      var date2 = new Date(dobYear,dobMonth,dobDate);
-      var diff = new Date(date1.getTime() - date2.getTime());
-      if((diff.getUTCFullYear() - 1970) == 0){
-        $("#ageInMonths").val((diff.getUTCMonth() > 0)? diff.getUTCMonth(): ''); // Gives month count of difference
-      }else{
-        $("#ageInMonths").val("");
-      }
-      $("#ageInYears").val((diff.getUTCFullYear() - 1970 > 0)? (diff.getUTCFullYear() - 1970) : ''); // Gives difference as year
-    }
-    
-    function checkSampleReceviedDate(){
-      var sampleCollectionDate = $("#sampleCollectionDate").val();
-      var sampleReceivedDate = $("#sampleReceivedDate").val();
-      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= '') {
-        //Set sample coll. datetime
-        splitSampleCollDateTime = sampleCollectionDate.split(" ");
-        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
-        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
-        var monthDigit = sampleCollOn.getMonth();
-        var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = splitSampleCollDate[0];
-        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
-        //Set sample rece. datetime
-        splitSampleReceivedDateTime = sampleReceivedDate.split(" ");
-        splitSampleReceivedDate = splitSampleReceivedDateTime[0].split("-");
-        var sampleReceivedOn = new Date(splitSampleReceivedDate[1] + splitSampleReceivedDate[2]+", "+splitSampleReceivedDate[0]);
-        var monthDigit = sampleReceivedOn.getMonth();
-        var smplReceivedYear = splitSampleReceivedDate[2];
-        var smplReceivedMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplReceivedMonth = (smplReceivedMonth<10) ? '0'+smplReceivedMonth: smplReceivedMonth;
-        var smplReceivedDate = splitSampleReceivedDate[0];
-        sampleReceivedDateTime = smplReceivedYear+"-"+smplReceivedMonth+"-"+smplReceivedDate+" "+splitSampleReceivedDateTime[1]+":00";
-        //Check diff
-        if(moment(sampleCollDateTime).diff(moment(sampleReceivedDateTime)) > 0) {
-          alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
-          $("#sampleReceivedDate").val("");
-        }
-      }
-    }
-    
-    function checkSampleTestingDate(){
-      var sampleCollectionDate = $("#sampleCollectionDate").val();
-      var sampleTestingDate = $("#sampleTestingDateAtLab").val();
-      if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= '') {
-        //Set sample coll. date
-        splitSampleCollDateTime = sampleCollectionDate.split(" ");
-        splitSampleCollDate = splitSampleCollDateTime[0].split("-");
-        var sampleCollOn = new Date(splitSampleCollDate[1] + splitSampleCollDate[2]+", "+splitSampleCollDate[0]);
-        var monthDigit = sampleCollOn.getMonth();
-        var smplCollYear = splitSampleCollDate[2];
-        var smplCollMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplCollMonth = (smplCollMonth<10) ? '0'+smplCollMonth: smplCollMonth;
-        var smplCollDate = splitSampleCollDate[0];
-        sampleCollDateTime = smplCollYear+"-"+smplCollMonth+"-"+smplCollDate+" "+splitSampleCollDateTime[1]+":00";
-        //Set sample testing date
-        splitSampleTestedDateTime = sampleTestingDate.split(" ");
-        splitSampleTestedDate = splitSampleTestedDateTime[0].split("-");
-        var sampleTestingOn = new Date(splitSampleTestedDate[1] + splitSampleTestedDate[2]+", "+splitSampleTestedDate[0]);
-        var monthDigit = sampleTestingOn.getMonth();
-        var smplTestingYear = splitSampleTestedDate[2];
-        var smplTestingMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        smplTestingMonth = (smplTestingMonth<10) ? '0'+smplTestingMonth: smplTestingMonth;
-        var smplTestingDate = splitSampleTestedDate[0];
-        sampleTestingAtLabDateTime = smplTestingYear+"-"+smplTestingMonth+"-"+smplTestingDate+" "+splitSampleTestedDateTime[1]+":00";
-        //Check diff
-        if(moment(sampleCollDateTime).diff(moment(sampleTestingAtLabDateTime)) > 0) {
-          alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
-          $("#sampleTestingDateAtLab").val("");
-        }
-      }
-    }
-    
-    function checkARTInitiationDate(){
-      var dob = $("#dob").val();
-      var artInitiationDate = $("#dateOfArtInitiation").val();
-      if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
-        //Set DOB date
-        splitDob = dob.split("-");
-        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-        var monthDigit = dobDate.getMonth();
-        var dobYear = splitDob[2];
-        var dobMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-        var dobDate = splitDob[0];
-        dobDate = dobYear+"-"+dobMonth+"-"+dobDate;
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Check diff
-        if(moment(dobDate).isAfter(artIniDate)) {
-          alert("La date d'ouverture de l'ART ne peut pas être antérieure à!");
-          $("#dateOfArtInitiation").val("");
-        }
-      }
-    }
-    
     function checkLastVLTestDate(){
       var artInitiationDate = $("#dateOfArtInitiation").val();
       var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
       if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
-        //Set ART initiation date
-        splitArtIniDate = artInitiationDate.split("-");
-        var artInigOn = new Date(splitArtIniDate[1] + splitArtIniDate[2]+", "+splitArtIniDate[0]);
-        var monthDigit = artInigOn.getMonth();
-        var artIniYear = splitArtIniDate[2];
-        var artIniMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        artIniMonth = (artIniMonth<10) ? '0'+artIniMonth: artIniMonth;
-        var artIniDate = splitArtIniDate[0];
-        artIniDate = artIniYear+"-"+artIniMonth+"-"+artIniDate;
-        //Set Last VL Test date
-        splitLastVLTestDate = dateOfLastVLTest.split("-");
-        var lastVLTestOn = new Date(splitLastVLTestDate[1] + splitLastVLTestDate[2]+", "+splitLastVLTestDate[0]);
-        var monthDigit = lastVLTestOn.getMonth();
-        var lastVLTestYear = splitLastVLTestDate[2];
-        var lastVLTestMonth = isNaN(monthDigit) ? 0 : (parseInt(monthDigit)+parseInt(1));
-        lastVLTestMonth = (lastVLTestMonth<10) ? '0'+lastVLTestMonth: lastVLTestMonth;
-        var lastVLTestDate = splitLastVLTestDate[0];
-        lastVLTestDate = lastVLTestYear+"-"+lastVLTestMonth+"-"+lastVLTestDate;
-        //console.log(artIniDate);
-        //console.log(lastVLTestDate);
-        //Check diff
-        if(moment(artIniDate).isAfter(lastVLTestDate)) {
+        if(moment(artInitiationDate).isAfter(dateOfLastVLTest)) {
           alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
           $("#lastViralLoadTestDate").val("");
         }
       }
     }
-    
     function calculateLogValue(obj){
       if(obj.id=="vlResult") {
         absValue = $("#vlResult").val();
@@ -805,25 +590,6 @@
         }
       }
     }
-    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
-    {
-      if($.trim($("#"+id).val())!=''){
-        $.blockUI();
-        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
-        function(data){
-            if(data!=0){
-              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
-                  alert(alrt);
-                  $("#"+id).val('');
-                <?php } else { ?>
-                  data = data.split("##");
-                  document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
-                <?php } ?>
-            }
-        });
-        $.unblockUI();
-      }
-    }
     function validateNow(){
       flag = deforayValidator.init({
         formId: 'editVlRequestForm'
@@ -834,8 +600,3 @@
       }
     }
   </script>
-  
- <?php
- //include('../footer.php');
- ?>
-

@@ -129,29 +129,23 @@ $formConfigResult=$db->query($formConfigQuery);
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 <style>
   .dataTables_wrapper{
-  position: relative;
+    position: relative;
     clear: both;
     overflow-x: scroll !important;
     overflow-y: visible !important;
     padding: 15px 0 !important;
   }
-  
-  .select2-selection__choice__remove{
-    color: red !important;
-  }
+  .select2-selection__choice__remove{ color: red !important; }
   .select2-container--default .select2-selection--multiple .select2-selection__choice{
     background-color: #00c0ef;
     border-color: #00acd6;
     color: #fff !important;
     font-family:helvetica, arial, sans-serif;
   }
-  
 </style>
 </head>
-
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
   <header class="main-header">
     <!-- Logo -->
     <a href="<?php echo($dashBoardMenuAccess == true)?'../dashboard/index.php':'#'; ?>" class="logo">
@@ -166,7 +160,6 @@ $formConfigResult=$db->query($formConfigQuery);
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
@@ -185,7 +178,6 @@ $formConfigResult=$db->query($formConfigQuery);
       </div>
     </nav>
   </header>
-  
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->

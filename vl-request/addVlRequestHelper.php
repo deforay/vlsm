@@ -92,11 +92,11 @@ try {
         $platForm = explode("##",$_POST['testingPlatform']);
         $testingPlatform = $platForm[0];
     }
-    if(isset($_POST['sampleReceivedOn']) && trim($_POST['sampleReceivedOn'])!=""){
-        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedOn']);
-        $_POST['sampleReceivedOn']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
+    if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
+        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
+        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
     }else{
-        $_POST['sampleReceivedOn'] = NULL;
+        $_POST['sampleReceivedDate'] = NULL;
     }
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
         $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
@@ -187,7 +187,7 @@ try {
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
           //'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
-          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
+          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
           'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='') ? $_POST['noResult'] :  NULL,

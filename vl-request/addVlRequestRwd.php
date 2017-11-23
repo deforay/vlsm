@@ -1,6 +1,5 @@
 <?php
 ob_start();
-
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
   $sampleClass = '';
   $maxLength = '';
@@ -16,17 +15,23 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['s
     $maxLength = "maxlength=".$maxLength;
   }
 }
-
+//check remote user
 $rKey = '';
-if(USERTYPE=='remoteuser'){
+$pdQuery="SELECT * from province_details";
+  if(USERTYPE=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
+    //check user exist in user_facility_map table
+    $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+    $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+    if($chkUserFcMapResult){
     $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+    }
     $rKey = 'R';
   }else{
     $sampleCodeKey = 'sample_code_key';
     $sampleCode = 'sample_code';
-    $pdQuery="SELECT * from province_details";
+    $rKey = '';
   }
 $pdResult=$db->query($pdQuery);
 $province = '';
@@ -34,10 +39,8 @@ $province.="<option value=''> -- Select -- </option>";
   foreach($pdResult as $provinceName){
     $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
   }
-
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
-
 //regimen heading
 $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='rwd'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
@@ -50,7 +53,6 @@ if($arr['sample_code']=='MMYY'){
 }
 $start_date = date('Y-01-01');
 $end_date = date('Y-12-31');
-
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
@@ -63,8 +65,7 @@ if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
 }else{
  $maxId = '001';
 }
-$sKey = '';
-$sFormat = '';
+$sKey = ''; $sFormat = '';
 ?>
 <style>
   .table > tbody > tr > td{ border-top:none;}
@@ -81,7 +82,6 @@ $sFormat = '';
         <li class="active">Add Vl Request</li>
       </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -113,18 +113,14 @@ $sFormat = '';
                         </div>
                       </div>
                        <!-- BARCODESTUFF START -->
-                      <?php
-                        if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
-                      ?>
+                      <?php if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){ ?>
                         <div class="col-xs-3 col-md-3 pull-right">
                           <div class="form-group">
                             <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
                             <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
                           </div>
                         </div>
-                      <?php
-                        }
-                      ?>
+                      <?php } ?>
                       <!-- BARCODESTUFF END -->
                     </div>
                     <div class="row">
@@ -180,13 +176,13 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="artNo">ART (TRACNET) No. <span class="mandatory">*</span></label>
-                          <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number" onchange="checkNameValidation('vl_request_form','patient_art_no',this,null)"/>
+                          <input type="text" name="artNo" id="artNo" class="form-control isRequired" placeholder="Enter ART Number" title="Enter art number" onchange="checkPatientDetails('vl_request_form','patient_art_no',this,null)"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="dob">Date of Birth </label>
-                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" onchange="getAge();"/>
+                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" onchange="getAge();checkARTInitiationDate();"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -240,7 +236,7 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="">Date of Sample Collection <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
+                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -248,13 +244,9 @@ $sFormat = '';
                           <label for="specimenType">Sample Type <span class="mandatory">*</span></label>
                           <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose sample type">
                                 <option value=""> -- Select -- </option>
-                                <?php
-                                foreach($sResult as $name){
-                                 ?>
+                                <?php foreach($sResult as $name){ ?>
                                  <option value="<?php echo $name['sample_id'];?>"><?php echo ucwords($name['sample_name']);?></option>
-                                 <?php
-                                }
-                                ?>
+                                 <?php } ?>
                             </select>
                           </div>
                         </div>
@@ -269,25 +261,21 @@ $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="">Date of Treatment Initiation</label>
-                          <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of Treatment Initiated" title="Date Of treatment initiated" style="width:100%;">
+                          <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of Treatment Initiated" title="Date Of treatment initiated" style="width:100%;" onchange="checkARTInitiationDate();">
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="artRegimen">Current Regimen</label>
-                            <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTValue();">
+                            <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                  <option value="">-- Select --</option>
                                   <?php foreach($artRegimenResult as $heading) { ?>
                                   <optgroup label="<?php echo ucwords($heading['headings']); ?>">
                                     <?php
                                     foreach($aResult as $regimen){
-                                      if($heading['headings'] == $regimen['headings']){
-                                      ?>
+                                      if($heading['headings'] == $regimen['headings']){ ?>
                                       <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
-                                      <?php
-                                      }
-                                    }
-                                    ?>
+                                      <?php } } ?>
                                   </optgroup>
                                   <?php } ?>
                             </select>
@@ -476,13 +464,9 @@ $sFormat = '';
                             <div class="col-lg-7">
                               <select name="labId" id="labId" class="form-control" title="Please choose lab">
                                 <option value="">-- Select --</option>
-                                <?php
-                                foreach($lResult as $labName){
-                                  ?>
+                                <?php foreach($lResult as $labName){ ?>
                                   <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
-                                  <?php
-                                }
-                                ?>
+                                  <?php } ?>
                               </select>
                             </div>
                         </div>
@@ -493,41 +477,28 @@ $sFormat = '';
                                 <option value="">-- Select --</option>
                                 <?php foreach($importResult as $mName) { ?>
                                   <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
-                                  <?php
-                                }
-                                ?>
+                                  <?php } ?>
                               </select>
                             </div>
                         </div>
-                        <!--<div class="col-md-4">
-                            <label for="testMethods" class="col-lg-5 control-label">Test Methods</label>
-                            <div class="col-lg-7">
-                              <select name="testMethods" id="testMethods" class="form-control" title="Please choose test methods">
-                                <option value=""> -- Select -- </option>
-                                <option value="individual">Individual</option>
-                                <option value="minipool">Minipool</option>
-                                <option value="other pooling algorithm">Other Pooling Algorithm</option>
-                               </select>
-                            </div>
-                        </div>-->
                       </div>
                       <div class="row">
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="sampleReceivedOn">Date Sample Received at Testing Lab </label>
+                            <label class="col-lg-5 control-label" for="sampleReceivedDate">Date Sample Received at Testing Lab </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received Date" title="Please select sample received date"/>
+                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received Date" title="Please select sample received date" onchange="checkSampleReceviedDate()"/>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date"/>
+                                <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" onchange="checkSampleTestingDate();"/>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatched Date" title="Please select result dispatched date"/>
+                                <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatched Date" title="Please select result dispatched date"/>
                             </div>
                         </div>
                       </div>
@@ -550,18 +521,15 @@ $sFormat = '';
                                 <option value="">-- Select --</option>
                                 <?php foreach($rejectionTypeResult as $type) { ?>
                                 <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
-                                  <?php
-                                  foreach($rejectionResult as $reject){
+                                  <?php foreach($rejectionResult as $reject){
                                     if($type['rejection_type'] == $reject['rejection_type']){
                                     ?>
                                     <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
-                                    <?php
-                                    }
-                                  }
-                                  ?>
+                                    <?php } } ?>
                                 </optgroup>
-                                <?php } ?>
+                                <?php } if(USERTYPE!='vluser'){  ?>
                                 <option value="other">Other (Please Specify) </option>
+                                <?php } ?>
                               </select>
                               <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                             </div>
@@ -587,13 +555,9 @@ $sFormat = '';
                             <div class="col-lg-7">
                               <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
                                 <option value="">-- Select --</option>
-                                <?php
-                                foreach($userResult as $uName){
-                                  ?>
+                                <?php foreach($userResult as $uName){ ?>
                                   <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                                  <?php
-                                }
-                                ?>
+                                  <?php } ?>
                               </select>
                             </div>
                         </div>
@@ -609,10 +573,7 @@ $sFormat = '';
                </div>
               <div class="box-footer">
                 <!-- BARCODESTUFF START -->                    
-        <?php
-					if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){
-					?>
-							
+        <?php if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){ ?>
 							<div id="printer_data_loading" style="display:none"><span id="loading_message">Loading Printer Details...</span><br/>
 								<div class="progress" style="width:100%">
 									<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -627,10 +588,7 @@ $sFormat = '';
 								Zebra Printer Options<br />
 								Printer: <select id="printers"></select>
 							</div> <!-- /printer_select -->
-						
-						<?php
-						}
-						?>                    
+						<?php } ?>                    
              <!-- BARCODESTUFF END -->
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
@@ -664,77 +622,44 @@ $sFormat = '';
 			}
 		}
 	?>
-
   <!-- BARCODESTUFF END -->
   <script>
-    provinceName = true;
-    facilityName = true;
-    $(document).ready(function() {
+  provinceName = true;
+  facilityName = true;
+  $(document).ready(function() {
       $('#fName').select2({placeholder:"Select Clinic/Health Center"});
       // BARCODESTUFF START
-			
 	<?php
           if(isset($_GET['barcode']) && $_GET['barcode'] == 'true'){
             echo "printBarcodeLabel('".$_GET['s']."','".$_GET['f']."');";
           }
 	?>
       // BARCODESTUFF END
-        $('.date').datepicker({
-           changeMonth: true,
-           changeYear: true,
-           dateFormat: 'dd-M-yy',
-           timeFormat: "hh:mm TT",
-           maxDate: "Today",
-           yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-          }).click(function(){
-              $('.ui-datepicker-calendar').show();
-         });
-        $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#resultDispatchedOn').datetimepicker({
-            changeMonth: true,
-            changeYear: true,
-            dateFormat: 'dd-M-yy',
-            timeFormat: "HH:mm",
-            maxDate: "Today",
-            onChangeMonthYear: function(year, month, widget) {
-                  setTimeout(function() {
-                     $('.ui-datepicker-calendar').show();
-                  });
-            },
-            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-            }).click(function(){
-               $('.ui-datepicker-calendar').show();
-            });
-        $('.date').mask('99-aaa-9999');
-        $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#resultDispatchedOn').mask('99-aaa-9999 99:99');
-    });
-    
-    function showTesting(chosenClass){
-      $(".viralTestData").val('');
-      $(".hideTestData").hide();
-      $("."+chosenClass).show();
-    }
-    
-    function getProvinceDistricts(obj){
-      $.blockUI();
-      var cName = $("#fName").val();
-      var pName = $("#province").val();
-      if(pName!='' && provinceName && facilityName){
-        facilityName = false;
-      }
+  });
+  function showTesting(chosenClass){
+    $(".viralTestData").val('');
+    $(".hideTestData").hide();
+    $("."+chosenClass).show();
+  }
+  function getProvinceDistricts(obj){
+    $.blockUI();
+    var cName = $("#fName").val();
+    var pName = $("#province").val();
+    if(pName!='' && provinceName && facilityName){ facilityName = false; }
     if(pName!=''){
       if(provinceName){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#district").html(details[1]);
-            $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-            $(".facilityDetails").hide();
-            $(".facilityEmails").html('');
-            $(".facilityMobileNumbers").html('');
-            $(".facilityContactPerson").html('');
-	  }
-      });
+        $.post("../includes/getFacilityForClinic.php", { pName : pName},
+        function(data){
+          if(data != ""){
+              details = data.split("###");
+              $("#district").html(details[1]);
+              $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+              $(".facilityDetails").hide();
+              $(".facilityEmails").html('');
+              $(".facilityMobileNumbers").html('');
+              $(".facilityContactPerson").html('');
+          }
+        });
       }
       <?php if($arr['sample_code']=='auto'){ ?>
         pNameVal = pName.split("##");
@@ -758,7 +683,6 @@ $sFormat = '';
     }
     $.unblockUI();
   }
-  
   function getFacilities(obj){
     $.blockUI();
     var dName = $("#district").val();
@@ -766,18 +690,17 @@ $sFormat = '';
     if(dName!=''){
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
-	  if(data != ""){
-            $("#fName").html(data);
-            $(".facilityDetails").hide();
-            $(".facilityEmails").html('');
-            $(".facilityMobileNumbers").html('');
-            $(".facilityContactPerson").html('');
-	  }
+        if(data != ""){
+          $("#fName").html(data);
+          $(".facilityDetails").hide();
+          $(".facilityEmails").html('');
+          $(".facilityMobileNumbers").html('');
+          $(".facilityContactPerson").html('');
+        }
       });
     }
     $.unblockUI();
   }
-  
   function fillFacilityDetails(){
     $("#fCode").val($('#fName').find(':selected').data('code'));
     var femails = $('#fName').find(':selected').data('emails');
@@ -795,7 +718,6 @@ $sFormat = '';
     ($.trim(fContactPerson) !='')?$(".fContactPerson").show():$(".fContactPerson").hide();
     ($.trim(fContactPerson) !='')?$(".facilityContactPerson").html(fContactPerson):$(".facilityContactPerson").html('');
   }
-  
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
       $('.femaleSection').hide();
@@ -805,7 +727,6 @@ $sFormat = '';
       $('.femaleSection').show();
     }
   });
-  
   $("input:radio[name=noResult]").click(function() {
     if($(this).val() == 'yes'){
       $('.rejectionReason').show();
@@ -818,7 +739,6 @@ $sFormat = '';
       $('#rejectionReason').val('');
     }
   });
-  
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);
@@ -837,7 +757,6 @@ $sFormat = '';
       $('#tnd').attr('disabled',false);
     }
   });
-  
   $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
       $('#tnd').attr('disabled',true);
@@ -847,39 +766,6 @@ $sFormat = '';
       $('#bdl').attr('disabled',false);
     }
   });
-  
-  function checkARTValue(){
-    var artRegimen = $("#artRegimen").val();
-    if(artRegimen=='other'){
-      $("#newArtRegimen").show();
-      $("#newArtRegimen").addClass("isRequired");
-    }else{
-      $("#newArtRegimen").hide();
-      $("#newArtRegimen").removeClass("isRequired");
-      $('#newArtRegimen').val("");
-    }
-  }
-  
-  function getAge(){
-    var dob = $("#dob").val();
-    if($.trim(dob) == ""){
-      $("#ageInMonths").val("");
-      $("#ageInYears").val("");
-      return false;
-    }
-    //calculate age
-    splitDob = dob.split("-");
-    var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-    var monthDigit = dobDate.getMonth();
-    var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
-    dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-    dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
-    var years = moment().diff(dob, 'years',false);
-    var months = (years == 0)?moment().diff(dob, 'months',false):'';
-    $("#ageInYears").val(years); // Gives difference as years
-    $("#ageInMonths").val(months); // Gives difference as months
-  }
-  
   function checkRejectionReason(){
     var rejectionReason = $("#rejectionReason").val();
     if(rejectionReason == "other"){
@@ -891,20 +777,17 @@ $sFormat = '';
       $('#newRejectionReason').val("");
     }
   }
-  
   function validateNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample id length must be a minimum length of "+minLength+" characters");
-        return false;
-      }
-    
+    var format = '<?php echo $arr['sample_code'];?>';
+    var sCodeLentgh = $("#sampleCode").val();
+    var minLength = '<?php echo $arr['min_length'];?>';
+    if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+      alert("Sample id length must be a minimum length of "+minLength+" characters");
+      return false;
+    }
     flag = deforayValidator.init({
         formId: 'vlRequestFormRwd'
     });
-    
     $('.isRequired').each(function () {
       ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
@@ -914,58 +797,26 @@ $sFormat = '';
       document.getElementById('vlRequestFormRwd').submit();
     }
   }
-  
   function validateSaveNow(){
-      var format = '<?php echo $arr['sample_code'];?>';
-      var sCodeLentgh = $("#sampleCode").val();
-      var minLength = '<?php echo $arr['min_length'];?>';
-      if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
-        alert("Sample id length must be a minimum length of "+minLength+" characters");
-        return false;
-      }
-      flag = deforayValidator.init({
-          formId: 'vlRequestFormRwd'
-      });
-      
+    var format = '<?php echo $arr['sample_code'];?>';
+    var sCodeLentgh = $("#sampleCode").val();
+    var minLength = '<?php echo $arr['min_length'];?>';
+    if((format == 'alphanumeric' || format =='numeric') && sCodeLentgh.length < minLength && sCodeLentgh!=''){
+      alert("Sample id length must be a minimum length of "+minLength+" characters");
+      return false;
+    }
+    flag = deforayValidator.init({
+        formId: 'vlRequestFormRwd'
+    });
     $('.isRequired').each(function () {
-        ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     $("#saveNext").val('next');
     if(flag){
-        $.blockUI();
-        document.getElementById('vlRequestFormRwd').submit();
-      }
+      $.blockUI();
+      document.getElementById('vlRequestFormRwd').submit();
+    }
   }
-  function checkNameValidation(tableName,fieldName,obj,fnct)
-    {
-      if($.trim(obj.value)!=''){
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : obj.value,fnct : fnct, format: "html"},
-        function(data){
-            if(data==='1'){
-                showModal('patientModal.php?artNo='+obj.value,900,520);
-            }
-        });
-      }
-    }
-    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
-    {
-      if($.trim($("#"+id).val())!=''){
-        $.blockUI();
-        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
-        function(data){
-            if(data!=0){
-              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
-                  alert(alrt);
-                  $("#"+id).val('');
-                <?php } else { ?>
-                   data = data.split("##");
-                  document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
-                <?php } ?>
-            }
-        });
-        $.unblockUI();
-      }
-    }
   function setPatientDetails(pDetails){
     patientArray = pDetails.split("##");
     $("#patientFirstName").val(patientArray[0]+" "+patientArray[1]);
@@ -1019,21 +870,6 @@ $sFormat = '';
       $("#artNo").val($.trim(patientArray[15]));
     }
   }
-  
-  function showPatientList(){
-    $("#showEmptyResult").hide();
-      if($.trim($("#artPatientNo").val())!=''){
-        $.post("checkPatientExist.php", { artPatientNo : $("#artPatientNo").val()},
-        function(data){
-            if(data >= '1'){
-                showModal('patientModal.php?artNo='+$.trim($("#artPatientNo").val()),900,520);
-            }else{
-              $("#showEmptyResult").show();
-            }
-        });
-      }
-  }
-  
   function calculateLogValue(obj){
     if(obj.id=="vlResult") {
       absValue = $("#vlResult").val();

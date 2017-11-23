@@ -71,11 +71,11 @@ try {
          $_POST['suspectedTreatmentFailureAt'] = NULL; 
      }
      //sample received date
-     if(isset($_POST['sampleReceivedOn']) && trim($_POST['sampleReceivedOn'])!=""){
-        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedOn']);
-        $_POST['sampleReceivedOn']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
+     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
+        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
+        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
      }else{
-        $_POST['sampleReceivedOn'] = NULL;
+        $_POST['sampleReceivedDate'] = NULL;
      }
      //sample testing date at lab
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
@@ -156,8 +156,8 @@ try {
         $_POST['lastViralLoadTestDate'] = NULL;
      }
      $vldata=array(
-          'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-          'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
+          //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
+          //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='') ? $_POST['reqClinician'] :  NULL,
           'request_clinician_phone_number'=>(isset($_POST['reqClinicianPhoneNumber']) && $_POST['reqClinicianPhoneNumber']!='') ? $_POST['reqClinicianPhoneNumber'] :  NULL,
@@ -185,7 +185,7 @@ try {
           'vl_sample_suspected_treatment_failure_at'=>$_POST['suspectedTreatmentFailureAt'],
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='') ? $_POST['collectedBy'] :  NULL,
           'facility_comments'=>(isset($_POST['facilityComments']) && $_POST['facilityComments']!='') ? $_POST['facilityComments'] :  NULL,
-          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
+          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'sample_test_quality'=>(isset($_POST['sampleValidity']) && $_POST['sampleValidity']!='') ? $_POST['sampleValidity'] :  NULL,
           'repeat_sample_collection'=>$repeatSampleCollection,

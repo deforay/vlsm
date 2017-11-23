@@ -69,11 +69,11 @@ try {
          $_POST['suspectedTreatmentFailureAt'] = $_POST['newSuspectedTreatmentFailureAt'];
      }
      //sample received date
-     if(isset($_POST['sampleReceivedOn']) && trim($_POST['sampleReceivedOn'])!=""){
-        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedOn']);
-        $_POST['sampleReceivedOn']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
+     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
+        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
+        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
      }else{
-        $_POST['sampleReceivedOn'] = NULL;
+        $_POST['sampleReceivedDate'] = NULL;
      }
      //sample testing date at lab
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
@@ -188,7 +188,7 @@ try {
           'vl_sample_suspected_treatment_failure_at'=>(isset($_POST['suspectedTreatmentFailureAt']))?$_POST['suspectedTreatmentFailureAt']:NULL,
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='') ? $_POST['collectedBy'] :  NULL,
           'facility_comments'=>(isset($_POST['facilityComments']) && $_POST['facilityComments']!='') ? $_POST['facilityComments'] :  NULL,
-          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
+          'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'sample_test_quality'=>(isset($_POST['sampleValidity']) && $_POST['sampleValidity']!='') ? $_POST['sampleValidity'] :  NULL,
           'repeat_sample_collection'=>$repeatSampleCollection,
