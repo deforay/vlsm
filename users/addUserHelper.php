@@ -18,7 +18,7 @@ try {
     $idFive = $general->generateRandomString(12);
     $data=array(
     'user_id'=>$idOne."-".$idTwo."-".$idThree."-".$idFour."-".$idFive,
-    'user_alpnum_id'=>$idOne."-".$idTwo."-".$idThree."-".$idFour."-".$idFive,
+    //'user_alpnum_id'=>$idOne."-".$idTwo."-".$idThree."-".$idFour."-".$idFive,
     'user_name'=>$_POST['userName'],
     'email'=>$_POST['email'],
     'login_id'=>$_POST['loginId'],
