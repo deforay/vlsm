@@ -55,7 +55,8 @@ try {
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
-            'nation_identifier'=>'zmb'
+            'nation_identifier'=>'zmb',
+            'updated_datetime'=>$general->getDateTime(),
           );
           
           $result=$db->insert('r_art_code_details',$data);

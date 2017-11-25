@@ -4,7 +4,6 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
-
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
@@ -44,7 +43,8 @@ try {
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
-            'nation_identifier'=>'zmb'
+            'nation_identifier'=>'zmb',
+            'updated_datetime'=>$general->getDateTime(),
           );
           
           $result=$db->insert('r_art_code_details',$data);

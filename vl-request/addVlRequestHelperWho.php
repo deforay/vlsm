@@ -39,7 +39,8 @@ try {
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
             'nation_identifier'=>'who',
-            'parent_art'=>'6'
+            'parent_art'=>'6',
+            'updated_datetime'=>$general->getDateTime(),
           );
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];

@@ -28,7 +28,8 @@ try {
              'vlsm_instance_id'=>$instanceId,
              'facility_type'=>2,
              'country'=>4,
-             'status'=>'active'
+             'status'=>'active',
+             'updated_datetime'=>$general->getDateTime(),
              );
              $id=$db->insert('facility_details',$data);
              $_POST['labId'] = $id;
@@ -98,7 +99,8 @@ try {
                   $data=array(
                   'rejection_reason_name'=>$_POST['newRejectionReason'],
                   'rejection_type'=>'general',
-                  'rejection_reason_status'=>'active'
+                  'rejection_reason_status'=>'active',
+                  'updated_datetime'=>$general->getDateTime(),
                   );
                   $id=$db->insert('r_sample_rejection_reasons',$data);
                   $rejectionReason = $id;
@@ -131,7 +133,8 @@ try {
                $data=array(
                'art_code'=>$_POST['newArtRegimen'],
                'nation_identifier'=>'zam',
-               'parent_art'=>'4'
+               'parent_art'=>'4',
+               'updated_datetime'=>$general->getDateTime(),
              );
              $db->insert('r_art_code_details',$data);
           }

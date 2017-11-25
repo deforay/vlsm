@@ -22,10 +22,10 @@ $start_date = date('Y-01-01');
     $start_date = date('Y-01-01');
   }
 //get remote data
-$vlQuery="SELECT * FROM vl_request_form WHERE data_sync = 0 AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
-$vlRemoteResult = $syncdb->rawQuery($vlQuery);
+$vlQuery="SELECT * FROM vl_request_form WHERE last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+$vlRemoteResult = $remotedb->rawQuery($vlQuery);
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
-$allColResult = $syncdb->rawQuery($allColumns);
+$allColResult = $remotedb->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 if(count($vlRemoteResult)>0){
 foreach($vlRemoteResult as $key=>$remoteData){
@@ -47,8 +47,8 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
         $id = $db->update('vl_request_form',$lab);
         //update in lab database        
-        $db = $syncdb->where('sample_code',$lab['sample_code']);
-        $id = $syncdb->update('vl_request_form',array('data_sync'=>1));
+        //$db = $remotedb->where('sample_code',$lab['sample_code']);
+        //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
     }else{
         $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
         $svlResult=$db->query($svlQuery);
@@ -80,8 +80,8 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $id = $db->insert('vl_request_form',$lab);
         //update in lab database
         if($id){
-        $syncdb = $syncdb->where('remote_sample_code',$lab['remote_sample_code']);
-        $id = $syncdb->update('vl_request_form',array('data_sync'=>1));
+        //$remotedb = $remotedb->where('remote_sample_code',$lab['remote_sample_code']);
+        //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
         }
     }
 }

@@ -2,7 +2,8 @@
 ob_start();
 session_start();
 include('../includes/MysqliDb.php');
-//include('../header.php');
+include('../General.php');
+$general = new Deforay_Commons_General();
 $tableName="facility_details";
 $facilityId=base64_decode($_POST['facilityId']);
 $tableName1="province_details";
@@ -17,7 +18,8 @@ try {
 		$_POST['state'] = $facilityInfo[0]['province_name'];
 	    }else{
 		$data=array(
-		  'province_name'=>$_POST['provinceNew']
+		  'province_name'=>$_POST['provinceNew'],
+		  'updated_datetime'=>$general->getDateTime(),
 		);
 		$db->insert($tableName1,$data);
 		$_POST['state'] = $_POST['provinceNew'];
@@ -53,6 +55,7 @@ try {
 	    'report_email'=>$email,
 	    'contact_person'=>$_POST['contactPerson'],
 	    'facility_type'=>$_POST['facilityType'],
+		'updated_datetime'=>$general->getDateTime(),
 	    'status'=>$_POST['status']
         );
         $db=$db->where('facility_id',$facilityId);
