@@ -50,7 +50,8 @@ try {
             $data=array(
             'art_code'=>$_POST['newArtRegimen'],
             'nation_identifier'=>'ang',
-            'parent_art'=>'8'
+            'parent_art'=>'8',
+            'updated_datetime'=>$general->getDateTime(),
           );
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
@@ -92,7 +93,8 @@ try {
             $data=array(
             'rejection_reason_name'=>$_POST['newRejectionReason'],
             'rejection_type'=>'general',
-            'rejection_reason_status'=>'active'
+            'rejection_reason_status'=>'active',
+            'updated_datetime'=>$general->getDateTime(),
             );
             $id=$db->insert('r_sample_rejection_reasons',$data);
             $_POST['rejectionReason'] = $id;

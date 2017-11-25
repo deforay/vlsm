@@ -73,7 +73,8 @@ try {
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
             'parent_art'=>3,
-            'nation_identifier'=>'drc'
+            'nation_identifier'=>'drc',
+            'updated_datetime'=>$general->getDateTime(),
           );
           
           $result=$db->insert('r_art_code_details',$data);
@@ -151,7 +152,8 @@ try {
             if(trim($_POST['rejectionReason']) == "other" && trim($_POST['newRejectionReason']!= '')){
                 $data=array(
                 'rejection_reason_name'=>$_POST['newRejectionReason'],
-                'rejection_reason_status'=>'active'
+                'rejection_reason_status'=>'active',
+                'updated_datetime'=>$general->getDateTime(),
                 );
                 $id=$db->insert('r_sample_rejection_reasons',$data);
                 $_POST['rejectionReason'] = $id;

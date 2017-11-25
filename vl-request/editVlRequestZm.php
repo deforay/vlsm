@@ -108,7 +108,8 @@ foreach($fResult as $fDetails){
                         <label for="province">Province<span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
                             <option value=""> -- Select -- </option>
-                            <?php foreach($pdResult as $provinceName){ ?>
+                            <?php foreach($pdResult as $provinceName){
+                              ?>
                             <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } ?>
                           </select>
