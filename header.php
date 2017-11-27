@@ -64,7 +64,7 @@ if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], ar
 }else{
   $requestMenuAccess = false;  
 }
-if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php', 'vlPrintResult.php','vlTestResult.php','vlResultApproval.php','vlResultMail.php','vlWeeklyReport.php','sampleRejectionReport.php','vlMonitoringReport.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('addImportResult.php','vlTestResult.php','vlResultApproval.php','vlResultMail.php','vlWeeklyReport.php','sampleRejectionReport.php','vlMonitoringReport.php'))) {
   $testResultMenuAccess = true;
 }else{
   $testResultMenuAccess = false;  
