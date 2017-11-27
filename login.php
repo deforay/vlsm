@@ -6,7 +6,11 @@ if(isset($_SESSION['userId'])){
 include('./includes/MysqliDb.php');
 $globalConfigQuery ="SELECT * from global_config where name='logo'";
 $configResult=$db->query($globalConfigQuery);
-
+if(USERTYPE=='remoteuser'){
+    $path = 'assets/img/remote-bg.jpg';
+}else{
+    $path = 'assets/img/bg.jpg';
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -29,7 +33,7 @@ $configResult=$db->query($globalConfigQuery);
             background: #F6F6F6;       
             background: #000;       
             
-            background : url("assets/img/bg.jpg") center;
+            background : url("<?php echo $path;?>") center;
             background-size: cover;            
             background-repeat:no-repeat;
         }
