@@ -4,6 +4,20 @@ include('../includes/MysqliDb.php');
 $gQuery = "SELECT * FROM global_config";
 $gResult=$db->query($gQuery);
 $global = array();
+
+$skin = "skin-blue";
+
+$logoName = "<img src='../assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
+$smallLogoName = "<img src='../assets/img/flask.png'>";
+$systemType = "Viral Load Sample Management";
+if(USERTYPE=='remoteuser'){
+  $skin = "skin-red";
+  $systemType = "Viral Load Sample Order Management";
+  $logoName = "<i class='fa fa-medkit'></i> VLSM";
+  $smallLogoName = "<i class='fa fa-medkit'></i>";
+}
+
+
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($gResult); $i++) {
   $global[$gResult[$i]['name']] = $gResult[$i]['value'];
@@ -144,15 +158,15 @@ $formConfigResult=$db->query($formConfigQuery);
   }
 </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition <?php echo $skin; ?> sidebar-mini">
 <div class="wrapper">
   <header class="main-header">
     <!-- Logo -->
     <a href="<?php echo($dashBoardMenuAccess == true)?'../dashboard/index.php':'#'; ?>" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>VLSM</b></span>
+      <span class="logo-mini"><b><?php echo $smallLogoName; ?></b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">VLSM</span>
+      <span class="logo-lg" style="font-weight:bold;"><?php echo $logoName; ?></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -160,6 +174,11 @@ $formConfigResult=$db->query($formConfigQuery);
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="javascript:void(0);return false;"><span style="text-transform: uppercase;font-weight:600;"><?php echo $systemType; ?></span></a>
+          </li>
+        </ul>
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">

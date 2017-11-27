@@ -1122,6 +1122,7 @@ ALTER TABLE `vl_request_form` ADD `repeat_sample_collection` VARCHAR(45) NULL DE
 ALTER TABLE  `vl_request_form` ADD  `sample_code_title` VARCHAR( 45 ) NOT NULL DEFAULT  'auto' AFTER  `sample_code_format`;
 
 
+
 --saravanan 11-July-2017
 ALTER TABLE `vl_request_form` ADD `request_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `is_request_mail_sent`;
 ALTER TABLE `vl_request_form` ADD `result_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `is_result_mail_sent`;
@@ -1244,7 +1245,7 @@ ALTER TABLE `vl_user_facility_map`
   ADD CONSTRAINT `vl_user_facility_map_ibfk_2` FOREIGN KEY (`facility_id`) REFERENCES `facility_details` (`facility_id`);
   
   --saravanan 06-nov-2017
-  ALTER TABLE `vl_request_form` ADD `remote_sample_code` VARCHAR(255) NULL DEFAULT NULL AFTER `vlsm_country_id`;
+ALTER TABLE `vl_request_form` ADD `remote_sample_code` VARCHAR(255) NULL DEFAULT NULL AFTER `vlsm_country_id`;
 ALTER TABLE `vl_request_form` ADD `remote_sample_code_key` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_reordered`;
 --saravanan 09-nov-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Data Sync Interval', 'data_sync_interval', '3');
