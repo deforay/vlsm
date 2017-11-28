@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-include('../includes/MysqliDb.php');
+include('../../includes/MysqliDb.php');
 $tableName="system_config";
 try {
     foreach ($_POST as $fieldName => $fieldValue) {
