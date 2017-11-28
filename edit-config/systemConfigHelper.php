@@ -10,7 +10,7 @@ try {
         $db->update($tableName,$data);
     }
     $_SESSION['alertMsg']="System Config values updated successfully";
-    header("location:systemConfig.php");
+    header("location:index.php");
 }catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

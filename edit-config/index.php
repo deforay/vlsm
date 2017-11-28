@@ -43,7 +43,7 @@ $fResult=$db->query($fDetails);
                         <div class="row">
                             <div class="col-md-7">
                               <div class="form-group">
-                                <label for="fCode" class="col-lg-4 control-label">User Type <span class="mandatory">*</span></label>
+                                <label for="user_type" class="col-lg-4 control-label">Instance Type <span class="mandatory">*</span></label>
                                 <div class="col-lg-8">
                                   <select type="text" class="form-control" id="user_type" name="user_type" placeholder="User Type" title="Please choose user type" onchange="enableLab();">
                                     <option value="standalone" <?php echo ('standalone'==$arr['user_type'])?"selected='selected'":""?>>Stand Alone</option>
@@ -53,7 +53,7 @@ $fResult=$db->query($fDetails);
                                 </div>
                               </div>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-7 labName" style="<?php echo ($arr['user_type']=='vluser')?'display:show':'display:none';?>">
                               <div class="form-group">
                                 <label for="lab_name" class="col-lg-4 control-label">Lab Name</label>
                                 <div class="col-lg-8">
@@ -72,7 +72,7 @@ $fResult=$db->query($fDetails);
               </div>
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                <a href="systemConfig.php" class="btn btn-default"> Reload</a>
+                <a href="index.php" class="btn btn-default"> Reload</a>
               </div>
             </form>
         </div>
@@ -86,10 +86,11 @@ $fResult=$db->query($fDetails);
     function enableLab()
     {
         if($("#user_type").val()=='vluser'){
+            $(".labName").show();
             $("#lab_name").addClass("isRequired").css('pointer-events','');
         }else{
-            $("#lab_name").val('');
-            $("#lab_name").removeClass("isRequired").css('pointer-events','none');
+            $(".labName").hide();
+            $("#lab_name").removeClass("isRequired").css('pointer-events','none').val('');
         }
     }
     function validateNow(){

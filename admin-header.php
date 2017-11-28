@@ -134,7 +134,7 @@ if(!isset($_SESSION['adminUserId'])){
 	      </a>
 	      <ul class="treeview-menu">
             <li class="allMenu systemConfigmenu">
-              <a href="../system-config/systemConfig.php"><i class="fa fa-circle-o"></i> System Configuration</a>
+              <a href="../edit-config/index.php"><i class="fa fa-circle-o"></i> System Configuration</a>
             </li>
 	      </ul>
 	    </li>

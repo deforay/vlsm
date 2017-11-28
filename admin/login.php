@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION['adminUserId'])){
-    header("location:../system-config/systemConfig.php");
+    header("location:../edit-config/index.php");
 }
 include('../includes/MysqliDb.php');
 $path = '../assets/img/remote-bg.jpg';

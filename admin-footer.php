@@ -40,7 +40,7 @@
   });
   str=$(location).attr('pathname');
   splitsUrl=str.substr(str.lastIndexOf('/') + 1);
-  if (splitsUrl=='systemConfig.php' ) {
+  if (splitsUrl=='index.php' ) {
     $(".manage").addClass('active');
     $(".allMenu").removeClass('active');
     $(".systemConfigmenu").addClass('active');
