@@ -1,12 +1,12 @@
 <?php
 session_start();
-include('../includes/MysqliDb.php');
-$logoName = "<img src='../assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
-$smallLogoName = "<img src='../assets/img/flask.png'>";
+include('../../includes/MysqliDb.php');
+$logoName = "<img src='../../assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
+$smallLogoName = "<img src='../../assets/img/flask.png'>";
 $systemType = "Viral Load Sample Management";
 $skin = "skin-blue";
 if(!isset($_SESSION['adminUserId'])){
-    header("location:../admin/login.php");
+    header("location:../system-admin/login.php");
 }
 ?>
 <!DOCTYPE html>
@@ -17,33 +17,33 @@ if(!isset($_SESSION['adminUserId'])){
   <title><?php echo (isset($title) && $title != null && $title != "") ? $title : "VLSM | Viral Load LIS" ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" media="all" type="text/css" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="../../assets/css/fonts.css" />
 
-  <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui.1.11.0.css" />
-  <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui-timepicker-addon.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="../../assets/css/jquery-ui.1.11.0.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="../../assets/css/jquery-ui-timepicker-addon.css" />
 
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../assets/css/font-awesome.min.4.5.0.css">
+  <link rel="stylesheet" href="../../assets/css/font-awesome.min.4.5.0.css">
   
   <!-- Ionicons -->
   <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">-->
   <!-- DataTables -->
-  <link rel="stylesheet" href=".././assets/plugins/datatables/dataTables.bootstrap.css">
+  <link rel="stylesheet" href="../../assets/plugins/datatables/dataTables.bootstrap.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
   <!-- iCheck -->
   
-  <link href="../assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+  <link href="../../assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
   
-  <link href="../assets/css/select2.min.css" rel="stylesheet" />
-  <link href="../assets/css/style.css" rel="stylesheet" />
-  <link href="../assets/css/deforayModal.css" rel="stylesheet" />
-  <link href="../assets/css/jquery.fastconfirm.css" rel="stylesheet" />
+  <link href="../../assets/css/select2.min.css" rel="stylesheet" />
+  <link href="../../assets/css/style.css" rel="stylesheet" />
+  <link href="../../assets/css/deforayModal.css" rel="stylesheet" />
+  <link href="../../assets/css/jquery.fastconfirm.css" rel="stylesheet" />
  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -53,13 +53,13 @@ if(!isset($_SESSION['adminUserId'])){
   <![endif]-->
   <!-- jQuery 2.2.3 -->
 
-<script type="text/javascript" src="../assets/js/jquery.min.2.0.2.js"></script>
+<script type="text/javascript" src="../../assets/js/jquery.min.2.0.2.js"></script>
 
  <!-- Latest compiled and minified JavaScript -->
     
-<script type="text/javascript" src="../assets/js/jquery-ui.1.11.0.js"></script>
-<script src="../assets/js/deforayModal.js"></script>
-<script src="../assets/js/jquery.fastconfirm.js"></script>
+<script type="text/javascript" src="../../assets/js/jquery-ui.1.11.0.js"></script>
+<script src="../../assets/js/deforayModal.js"></script>
+<script src="../../assets/js/jquery.fastconfirm.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 <style>
   .dataTables_wrapper{
@@ -103,13 +103,13 @@ if(!isset($_SESSION['adminUserId'])){
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="../assets/img/default-user.png" class="user-image" alt="User Image">
+              <img src="../../assets/img/default-user.png" class="user-image" alt="User Image">
               <span class="hidden-xs"><?php if(isset($_SESSION['adminUserName'])){ echo $_SESSION['adminUserName']; } ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- Menu Footer-->
               <li class="user-footer">
-                  <a href="../admin/logout.php" class="">Sign out</a>
+                  <a href="../login/logout.php" class="">Sign out</a>
               </li>
             </ul>
           </li>
