@@ -2,7 +2,15 @@
 ob_start();
 session_start();
 include('MysqliDb.php');
-if(USERTYPE=='remoteuser'){
+//system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
+if($sarr['user_type']=='remoteuser'){
     $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='".$_SESSION['userId']."'";
     $vlfmResult = $db->rawQuery($vlfmQuery);
 }

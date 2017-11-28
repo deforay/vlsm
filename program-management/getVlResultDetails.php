@@ -9,6 +9,14 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
@@ -18,9 +26,9 @@ $primaryKey="vl_sample_id";
 				$aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
         $orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
 				$sampleCode = 'sample_code';
-				if(USERTYPE=='remoteuser'){
+				if($sarr['user_type']=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
-				}else if(USERTYPE=='standalone') {
+				}else if($sarr['user_type']=='standalone') {
 					$aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
 					$orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
 				}
@@ -333,7 +341,7 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}
 	$cWhere = '';
-	if(USERTYPE=='remoteuser'){
+	if($sarr['user_type']=='remoteuser'){
 	 $sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
 	 $cWhere = " AND request_created_by='".$_SESSION['userId']."'";
 	}
@@ -374,7 +382,7 @@ $primaryKey="vl_sample_id";
         foreach ($rResult as $aRow) {
             $row = array();
 	    $row[] = $aRow['sample_code'];
-			if(USERTYPE!='standalone'){
+			if($sarr['user_type']!='standalone'){
 	    $row[] = $aRow['remote_sample_code'];
 			}
 	    $row[] = $aRow['batch_code'];

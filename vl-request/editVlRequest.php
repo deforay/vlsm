@@ -15,6 +15,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
 $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+
 //get import config
 $importQuery="SELECT * FROM import_config WHERE status = 'active'";
 $importResult=$db->query($importQuery);
@@ -264,7 +265,7 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
         $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
         function(data){
             if(data!=0){
-              <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
+              <?php if($sarr['user_type']=='remoteuser' || $sarr['user_type']=='standalone'){ ?>
                   alert(alrt);
                   $("#"+id).val('');
                 <?php } else { ?>

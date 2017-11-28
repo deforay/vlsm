@@ -107,7 +107,7 @@ $batResult = $db->rawQuery($batQuery);
                 <tr>
 		  <th><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>
 		  <th>Sample Code</th>
-			<?php if(USERTYPE!='standalone'){ ?>
+			<?php if($sarr['user_type']!='standalone'){ ?>
 		  <th>Remote Sample <br/>Code</th>
 			<?php } ?>
                   <th>Sample Collection Date</th>
@@ -191,7 +191,7 @@ $batResult = $db->rawQuery($batQuery);
             "aoColumns": [
 		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
-								<?php if(USERTYPE!='standalone'){ ?>
+								<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
 								<?php } ?>
                 {"sClass":"center"},

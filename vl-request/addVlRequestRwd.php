@@ -18,7 +18,7 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['s
 //check remote user
 $rKey = '';
 $pdQuery="SELECT * from province_details";
-  if(USERTYPE=='remoteuser'){
+  if($sarr['user_type']=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -527,7 +527,7 @@ $sKey = ''; $sFormat = '';
                                     <option value="<?php echo $reject['rejection_reason_id'];?>"><?php echo ucwords($reject['rejection_reason_name']);?></option>
                                     <?php } } ?>
                                 </optgroup>
-                                <?php } if(USERTYPE!='vluser'){  ?>
+                                <?php } if($sarr['user_type']!='vluser'){  ?>
                                 <option value="other">Other (Please Specify) </option>
                                 <?php } ?>
                               </select>

@@ -2,6 +2,14 @@
 ob_start();
 session_start();
 include('MysqliDb.php');
+//system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
     $tableName = $_POST['tableName'];
     $fieldName = $_POST['fieldName'];
     $value = trim($_POST['value']);
@@ -15,7 +23,7 @@ include('MysqliDb.php');
             if($result){
             $data = base64_encode($result[0]['vl_sample_id'])."##".$result[0][$fieldName];
             }else{
-                if(USERTYPE=='vluser'){
+                if($sarr['user_type']=='vluser'){
                     $sQuery="SELECT * from $tableName where remote_sample_code= ?";
                     $parameters=array($value);
                     $result=$db->rawQuery($sQuery,$parameters);
@@ -37,7 +45,7 @@ include('MysqliDb.php');
                 if($result){
                     $data = base64_encode($result[0]['vl_sample_id'])."##".$result[0][$fieldName];
                 }else{
-                    if(USERTYPE=='vluser'){
+                    if($sarr['user_type']=='vluser'){
                         $sQuery="SELECT * from $tableName where remote_sample_code= ? and $table[0]!= ?";
                         $parameters=array($value,$table[1]);
                         $result=$db->rawQuery($sQuery,$parameters);

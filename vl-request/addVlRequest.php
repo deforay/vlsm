@@ -4,6 +4,8 @@ $title = "VLSM | Add New Request";
 include('../header.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
+
+//global config
   $configQuery="SELECT * from global_config";
   $configResult=$db->query($configQuery);
   $arr = array();
@@ -189,7 +191,7 @@ $general=new Deforay_Commons_General();
           $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
           function(data){
               if(data!=0){
-                <?php if(USERTYPE=='remoteuser' || USERTYPE=='standalone'){ ?>
+                <?php if($sarr['user_type']=='remoteuser' || $sarr['user_type']=='standalone'){ ?>
                     alert(alrt);
                     $("#"+id).val('');
                   <?php } else { ?>

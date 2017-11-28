@@ -6,7 +6,15 @@ if(isset($_SESSION['userId'])){
 include('./includes/MysqliDb.php');
 $globalConfigQuery ="SELECT * from global_config where name='logo'";
 $configResult=$db->query($globalConfigQuery);
-if(USERTYPE=='remoteuser'){
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+if($sarr['user_type']=='remoteuser'){
     $path = 'assets/img/remote-bg.jpg';
 }else{
     $path = 'assets/img/bg.jpg';

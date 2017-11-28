@@ -4,7 +4,7 @@
     $artRegimenResult = $db->rawQuery($artRegimenQuery);
     //check remote user
   $pdQuery="SELECT * from province_details";
-  if(USERTYPE=='remoteuser'){
+  if($sarr['user_type']=='remoteuser'){
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
       $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
@@ -317,7 +317,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                             <option value="<?php echo $regimen['art_code']; ?>" <?php echo($regimen['art_code'] == $vlQueryInfo[0]['current_regimen'])?'selected="selected"':''; ?>><?php echo $regimen['art_code']; ?></option>
                                             <?php } } ?>
                                         </optgroup>
-                                        <?php } if(USERTYPE!='vluser'){  ?>
+                                        <?php } if($sarr['user_type']!='vluser'){  ?>
                                         <option value="other">outros</option>
                                         <?php } ?>
                                   </select>
@@ -501,7 +501,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                             </tr>
                         </table>
                         </div>
-                        <div class="box box-primary" style="<?php if(USERTYPE=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
+                        <div class="box box-primary" style="<?php if($sarr['user_type']=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                     <div class="box-header with-border">
                       <h3 class="box-title">Informações laboratoriais</h3>
                     </div>
@@ -575,7 +575,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $reject['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
                                 <?php } } ?>
                             </optgroup>
-                            <?php } if(USERTYPE!='vluser'){  ?>
+                            <?php } if($sarr['user_type']!='vluser'){  ?>
                             <option value="other">Outro (por favor, especifique) </option>
                             <?php } ?>
                           </select>
@@ -620,7 +620,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                             <label for="status">Status <span class="mandatory">*</span></label>
                         </td>
                         <td>
-                          <select class="form-control labSection <?php echo (USERTYPE=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status" style="width: 100%;">
+                          <select class="form-control labSection <?php echo ($sarr['user_type']=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status" style="width: 100%;">
                             <option value="">-- Select --</option>
                             <?php foreach($statusResult as $status){ ?>
                               <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>

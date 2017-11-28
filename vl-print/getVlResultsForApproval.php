@@ -9,6 +9,14 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+//system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
@@ -19,9 +27,9 @@ $primaryKey="vl_sample_id";
 				$sampleCode = 'sample_code';
 				$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
 				$orderColumns = array('vl.sample_code','vl.remote_sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
-				if(USERTYPE=='remoteuser'){
+				if($sarr['user_type']=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
-				}else if(USERTYPE=='standalone') {
+				}else if($sarr['user_type']=='standalone') {
 					$aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
 					$orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_code','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
 				}
@@ -184,7 +192,7 @@ $primaryKey="vl_sample_id";
 	}else{
 	    $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}
-	if(USERTYPE=='remoteuser'){
+	if($sarr['user_type']=='remoteuser'){
 			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
 		}
 	$sQuery = $sQuery.' '.$sWhere;
@@ -245,7 +253,7 @@ $primaryKey="vl_sample_id";
 			$row = array();
 			$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
 			$row[] = $aRow['sample_code'];
-			if(USERTYPE!='standalone'){
+			if($sarr['user_type']!='standalone'){
 	    $row[] = $aRow['remote_sample_code'];
 			}
 			$row[] = $aRow['sample_collection_date'];

@@ -2,6 +2,14 @@
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 //global config
 $cQuery="SELECT * FROM global_config";
 $cResult=$db->query($cQuery);
@@ -22,7 +30,7 @@ $start_date = date('Y-01-01');
     $start_date = date('Y-01-01');
   }
 //get remote data
-$vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+$vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND lab_id =".$sarr['user_type']." AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $db->rawQuery($vlQuery);
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$sDBNAME' AND table_name='vl_request_form'";
 $allColResult = $db->rawQuery($allColumns);

@@ -6,11 +6,19 @@ $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
+//system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
 $general=new Deforay_Commons_General();
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        if(USERTYPE=='remoteuser'){
+        if($sarr['user_type']=='remoteuser'){
 			$sampleCode = 'remote_sample_code';
 		}else{
 			$sampleCode = 'sample_code';
@@ -103,7 +111,7 @@ $general=new Deforay_Commons_General();
             $sWhere=' where vl.vlsm_country_id ="'.$configResult[0]['value'].'" AND vl.result_status!=9';
         }
 		$cWhere = '';
-		if(USERTYPE=='remoteuser'){
+		if($sarr['user_type']=='remoteuser'){
 		$sWhere = $sWhere." AND request_created_by=".$_SESSION['userId'];
 		$cWhere = " AND request_created_by=".$_SESSION['userId'];
 	   }

@@ -30,7 +30,7 @@ if($arr['sample_code']=='MMYY'){
 //check remote user
 $rKey = '';
 $pdQuery="SELECT * from province_details";
-  if(USERTYPE=='remoteuser'){
+  if($sarr['user_type']=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -330,7 +330,7 @@ if($urgency==''){ $urgency= 'normal';}
                          <option value=""> -- Select -- </option>
                          <?php foreach($aResult as $parentRow){ ?>
                           <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
-                         <?php } if(USERTYPE!='vluser'){  ?>
+                         <?php } if($sarr['user_type']!='vluser'){  ?>
                           <option value="other">Other</option>
                           <?php } ?>
                         </select>

@@ -187,7 +187,7 @@ $batResult = $db->rawQuery($batQuery);
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="sample_code"  class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
 				    </div>
-						<?php $i = 0; if(USERTYPE!='standalone'){  $i = 1; ?>
+						<?php $i = 0; if($sarr['user_type']!='standalone'){  $i = 1; ?>
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Remote Sample Code</label>
 				    </div>
@@ -224,7 +224,7 @@ $batResult = $db->rawQuery($batQuery);
                 <thead>
                 <tr>
 		  <th>Sample Code</th>
-			<?php if(USERTYPE!='standalone'){ ?>
+			<?php if($sarr['user_type']!='standalone'){ ?>
 		  <th>Remote Sample <br/>Code</th>
 			<?php } ?>
                   <th>Batch Code</th>
@@ -333,7 +333,7 @@ $batResult = $db->rawQuery($batQuery);
             "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
-								<?php if(USERTYPE!='standalone'){ ?>
+								<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
 								<?php } ?>
                 {"sClass":"center"},

@@ -2,7 +2,14 @@
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
-if(USERTYPE=='vluser'){
+$globalConfigQuery ="SELECT * from system_config";
+$configResult=$db->query($globalConfigQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($configResult); $i++) {
+    $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+}
+if($arr['user_type']=='vluser'){
 //sample type sync
 $sTypeQuery = "select * from r_sample_type where data_sync=0";
 $sTypeResult = $remotedb->query($sTypeQuery);

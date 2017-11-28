@@ -7,7 +7,15 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
-     if(USERTYPE=='remoteuser' && $_POST['oldStatus']==9){
+     //system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
+     if($sarr['user_type']=='remoteuser' && $_POST['oldStatus']==9){
         $status = 9;
     }else if($_POST['oldStatus']==9){
         $status = 6;
@@ -121,7 +129,7 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'data_sync'=>0
         );
-          if(USERTYPE=='remoteuser'){
+          if($sarr['user_type']=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
         }else if($_POST['sampleCodeCol']!=''){
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;

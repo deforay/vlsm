@@ -5,7 +5,14 @@ include('../includes/MysqliDb.php');
 include('../General.php');
 include ('../includes/PHPExcel.php');
 $general=new Deforay_Commons_General();
-
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  
  $rResult = $db->rawQuery($_SESSION['vlResultQuery']);
@@ -133,7 +140,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }else if($aRow['result_value_absolute']!= NULL && trim($aRow['result_value_absolute'])!= ''){
    $logVal = round(log10($aRow['result_value_absolute']),1);
   }
-  if(USERTYPE=='remoteuser'){
+  if($sarr['user_type']=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
 				}else{
 					$sampleCode = 'sample_code';

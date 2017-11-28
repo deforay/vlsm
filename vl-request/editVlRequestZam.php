@@ -2,7 +2,7 @@
 ob_start();
 //check remote user
 $pdQuery="SELECT * from province_details";
-if(USERTYPE=='remoteuser'){
+if($sarr['user_type']=='remoteuser'){
   $sampleCode = 'remote_sample_code';
   //check user exist in user_facility_map table
     $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
@@ -472,7 +472,7 @@ $efResult = $db->rawQuery($efQuery);
                     </div>
                   </div>
                 </div>
-                <div class="box box-primary" style="<?php if(USERTYPE=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
+                <div class="box box-primary" style="<?php if($sarr['user_type']=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                   <div class="box-header with-border">
                     <h3 class="box-title">Section 5: Results</h3>
                   </div>
@@ -523,11 +523,11 @@ $efResult = $db->rawQuery($efQuery);
                           </div>
                       </div>
                     </div>
-                    <div class="row" style="<?php echo (USERTYPE=='remoteuser' && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
+                    <div class="row" style="<?php echo ($sarr['user_type']=='remoteuser' && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="status">Status <span class="mandatory">*</span></label><br>
-                              <select class="form-control <?php echo (USERTYPE=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status">
+                              <select class="form-control <?php echo ($sarr['user_type']=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status">
                                 <option value="">-- Select --</option>
                                 <?php foreach($statusResult as $status){ ?>
                                   <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>
