@@ -11,7 +11,7 @@ try {
         if(count($admin)>0){
             $_SESSION['adminUserId']=$admin[0]['user_admin_id'];
             $_SESSION['adminUserName']=ucwords($admin[0]['user_admin_name']);
-            header("location:../system-config/systemConfig.php");
+            header("location:../edit-config/index.php");
         }else{
             header("location:login.php");
             $_SESSION['alertMsg']="Please check login credential";
