@@ -1309,3 +1309,41 @@ ALTER TABLE `r_art_code_details` ADD `updated_datetime` DATETIME NULL DEFAULT NU
 ALTER TABLE `r_sample_rejection_reasons` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `rejection_reason_code`;
 ALTER TABLE `facility_details` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `status`;
 ALTER TABLE `province_details` ADD `updated_datetime` DATETIME NULL DEFAULT NULL AFTER `province_code`;
+
+-- saravanana 28-nov-2017
+CREATE TABLE `system_config` (
+  `display_name` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `value` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `system_config`
+--
+
+INSERT INTO `system_config` (`display_name`, `name`, `value`) VALUES
+('Lab Name', 'lab_name', ''),
+('User Type', 'user_type', 'standalone');
+
+ALTER TABLE `system_config`
+  ADD PRIMARY KEY (`name`);
+  CREATE TABLE `user_admin_details` (
+  `user_admin_id` int(11) NOT NULL,
+  `user_admin_name` varchar(255) DEFAULT NULL,
+  `user_admin_login` varchar(255) DEFAULT NULL,
+  `user_admin_password` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user_admin_details`
+--
+
+INSERT INTO `user_admin_details` (`user_admin_id`, `user_admin_name`, `user_admin_login`, `user_admin_password`) VALUES
+(1, 'ilahir', 'ilahir', '123');
+
+ALTER TABLE `user_admin_details`
+  ADD UNIQUE KEY `user_admin_id` (`user_admin_id`);
+
+--
+ALTER TABLE `user_admin_details`
+  MODIFY `user_admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
