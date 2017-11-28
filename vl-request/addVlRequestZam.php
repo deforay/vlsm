@@ -27,7 +27,7 @@ if($global['sample_code']=='MMYY'){
     $end_date = date('Y-12-31');
   }
 //check remote user
-  if(USERTYPE=='remoteuser'){
+  if($sarr['user_type']=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
   }else{

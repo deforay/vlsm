@@ -3,7 +3,7 @@
   //check remote user
 $rKey = '';
 $pdQuery="SELECT * from province_details";
-  if(USERTYPE=='remoteuser'){
+  if($sarr['user_type']=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
@@ -188,7 +188,7 @@ $pdResult=$db->query($pdQuery);
                                     <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($aResult as $arv){ ?>
                                        <option value="<?php echo $arv['art_code']; ?>"><?php echo $arv['art_code']; ?></option>
-                                      <?php } if(USERTYPE!='vluser'){  ?>
+                                      <?php } if($sarr['user_type']!='vluser'){  ?>
                                       <option value="other">Autre</option>
                                       <?php } ?>
                                   </select>
@@ -378,7 +378,7 @@ $pdResult=$db->query($pdQuery);
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($rejectionResult as $rjctReason){ ?>
                                        <option value="<?php echo $rjctReason['rejection_reason_id']; ?>"><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
-                                      <?php } if(USERTYPE!='vluser'){  ?>
+                                      <?php } if($sarr['user_type']!='vluser'){  ?>
                                        <option value="other">Autre</option>
                                        <?php } ?>
                                     </select>

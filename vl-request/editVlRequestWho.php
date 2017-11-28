@@ -213,7 +213,7 @@ $districtResult=$db->query($districtQuery);
                                  <option value=""> -- Select -- </option>
                                  <?php foreach($aResult as $parentRow){ ?>
                                   <option value="<?php echo $parentRow['art_code']; ?>"<?php echo ($vlQueryInfo[0]['current_regimen']==$parentRow['art_code'])?"selected='selected'":""?>><?php echo $parentRow['art_code']; ?></option>
-                                 <?php } if(USERTYPE!='vluser'){  ?>
+                                 <?php } if($sarr['user_type']!='vluser'){  ?>
                                  <option value="other">Other</option>
                                  <?php } ?>
                                 </select>

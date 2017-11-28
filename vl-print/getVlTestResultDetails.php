@@ -9,6 +9,14 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+//system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
@@ -19,9 +27,9 @@ $primaryKey="vl_sample_id";
 				$sampleCode = 'sample_code';
 				$aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
 				$orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
-				if(USERTYPE=='remoteuser'){
+				if($sarr['user_type']=='remoteuser'){
 					$sampleCode = 'remote_sample_code';	
-				}else if(USERTYPE=='standalone') {
+				}else if($sarr['user_type']=='standalone') {
 					$aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
 					$orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
 				}
@@ -279,7 +287,7 @@ $primaryKey="vl_sample_id";
 		    }
 		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
 		}
-		if(USERTYPE=='remoteuser'){
+		if($sarr['user_type']=='remoteuser'){
 			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
 			$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
 		}
@@ -335,7 +343,7 @@ $primaryKey="vl_sample_id";
 						 $print = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
 						}
             $row[] = $aRow['sample_code'];
-						if(USERTYPE!='standalone'){
+						if($sarr['user_type']!='standalone'){
 						$row[] = $aRow['remote_sample_code'];
 						}
             $row[] = $aRow['batch_code'];

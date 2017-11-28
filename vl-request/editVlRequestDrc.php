@@ -2,7 +2,7 @@
     ob_start();
     //check remote user
     $pdQuery="SELECT * from province_details";
-    if(USERTYPE=='remoteuser'){
+    if($sarr['user_type']=='remoteuser'){
       $sampleCode = 'remote_sample_code';
       //check user exist in user_facility_map table
         $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
@@ -197,7 +197,7 @@
                                     <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($aResult as $arv){ ?>
                                        <option value="<?php echo $arv['art_code']; ?>" <?php echo($arv['art_code'] == $vlQueryInfo[0]['current_regimen'])?'selected="selected"':''; ?>><?php echo $arv['art_code']; ?></option>
-                                      <?php } if(USERTYPE!='vluser'){  ?>
+                                      <?php } if($sarr['user_type']!='vluser'){  ?>
                                       <option value="other">Autre</option>
                                       <?php } ?>
                                   </select>
@@ -239,7 +239,7 @@
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($vlTestReasonResult as $tReason){ ?>
                                        <option value="<?php echo $tReason['test_reason_id']; ?>" <?php echo($vlQueryInfo[0]['reason_for_vl_testing'] == $tReason['test_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($tReason['test_reason_name']); ?></option>
-                                      <?php } if(USERTYPE!='vluser'){  ?>
+                                      <?php } if($sarr['user_type']!='vluser'){  ?>
                                       <option value="other">Autre</option>
                                       <?php } ?>
                                     </select>

@@ -9,6 +9,14 @@ $gconfig = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $gconfig[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
@@ -16,7 +24,7 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-				if(USERTYPE=='remoteuser'){
+				if($sarr['user_type']=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
 				}else{
 					$sampleCode = 'sample_code';
@@ -104,7 +112,7 @@ $primaryKey="vl_sample_id";
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
                         AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' AND vl.result_status!=9";
-	if(USERTYPE=='remoteuser'){
+	if($sarr['user_type']=='remoteuser'){
 			$sQuery = $sQuery." AND request_created_by='".$_SESSION['userId']."'";
 	}
 	$start_date = '';
@@ -156,7 +164,7 @@ $primaryKey="vl_sample_id";
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
 				$rUser = '';
-				if(USERTYPE=='remoteuser'){
+				if($sarr['user_type']=='remoteuser'){
 					$rUser = $rUser." AND request_created_by='".$_SESSION['userId']."'";
 				}
         $aResultFilterTotal =$db->rawQuery("select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')

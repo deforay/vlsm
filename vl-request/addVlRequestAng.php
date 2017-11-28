@@ -1,7 +1,7 @@
   <?php
     ob_start();
     $rKey = '';
-    if(USERTYPE=='remoteuser'){
+    if($sarr['user_type']=='remoteuser'){
       $sampleCodeKey = 'remote_sample_code_key';
       $sampleCode = 'remote_sample_code';
       $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
@@ -230,7 +230,7 @@
                                             <option value="<?php echo $regimen['art_code']; ?>"><?php echo $regimen['art_code']; ?></option>
                                             <?php } } ?>
                                         </optgroup>
-                                        <?php } if(USERTYPE!='vluser'){  ?>
+                                        <?php } if($sarr['user_type']!='vluser'){  ?>
                                         <option value="other">Outro</option>
                                         <?php } ?>
                                     </select>
@@ -486,7 +486,7 @@
                                   <?php
                                   } } ?>
                               </optgroup>
-                              <?php } if(USERTYPE!='vluser'){  ?>
+                              <?php } if($sarr['user_type']!='vluser'){  ?>
                               <option value="other">Outro (por favor, especifique) </option>
                               <?php } ?>
                             </select>

@@ -84,7 +84,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
                     <div class="form-group">
                         <label for="facilityType" class="col-lg-4 control-label">Facility Type <span class="mandatory">*</span> </label>
                         <div class="col-lg-7">
-                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange = "<?php echo (USERTYPE=='remoteuser') ? 'getFacilityUser()':'';?>">
+                        <select class="form-control isRequired" id="facilityType" name="facilityType" title="Please select facility type" onchange = "<?php echo ($sarr['user_type']=='remoteuser') ? 'getFacilityUser()':'';?>">
                         <option value=""> -- Select -- </option>
                           <?php
                           $k = 10;
@@ -230,7 +230,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
                </div>
                
                <div class="row" id="userDetails">
-                <?php if(($facilityInfo[0]['facility_type']==1 || $facilityInfo[0]['facility_type']==4) && (USERTYPE=='remoteuser')){ ?>
+                <?php if(($facilityInfo[0]['facility_type']==1 || $facilityInfo[0]['facility_type']==4) && ($sarr['user_type']=='remoteuser')){ ?>
                 <h4>User Facility Map Details</h4>
                   <div class="col-xs-5">
                       <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">

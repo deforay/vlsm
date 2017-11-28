@@ -3,7 +3,14 @@ session_start();
 include('../includes/MysqliDb.php');
 $tableName="vl_facility_map";
 $primaryKey="facility_map_id";
-
+//system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
@@ -132,7 +139,7 @@ $primaryKey="facility_map_id";
             $row = array();
 			$row[] = ucwords($aRow['facility_name']);
 			$row[] = ucwords($aRow['healthCenterName']);
-			if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && ((USERTYPE=='remoteuser') || (USERTYPE=='standalone'))){ 
+			if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && (($sarr['user_type']=='remoteuser') || ($sarr['user_type']=='standalone'))){ 
             $row[] = '<a href="editVlFacilityMap.php?id=' . base64_encode($aRow['vl_lab_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
            }
             $output['aaData'][] = $row;

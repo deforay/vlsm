@@ -9,7 +9,15 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-    if((USERTYPE=='remoteuser') && $_POST['oldStatus']==9){
+     //system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
+    if(($sarr['user_type']=='remoteuser') && $_POST['oldStatus']==9){
         $_POST['status'] = 9;
     }else if($_POST['oldStatus']==9){
         $_POST['status'] = 6;
@@ -215,7 +223,7 @@ try {
           'manual_result_entry'=>'yes',
           'data_sync'=>0
         );
-        if(USERTYPE=='remoteuser'){
+        if($sarr['user_type']=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
         }else if($_POST['sampleCodeCol']!=''){
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;

@@ -19,7 +19,7 @@ include('../header.php');
         <div class="col-xs-12">
           <div class="box">
             <div class="box-header with-border">
-	      <?php if(isset($_SESSION['privileges']) && in_array("addVlFacilityMap.php", $_SESSION['privileges']) && ((USERTYPE=='remoteuser') || (USERTYPE=='standalone'))){ ?>
+	      <?php if(isset($_SESSION['privileges']) && in_array("addVlFacilityMap.php", $_SESSION['privileges']) && (($sarr['user_type']=='remoteuser') || ($sarr['user_type']=='standalone'))){ ?>
               <a href="addVlFacilityMap.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Facility Map</a>
 	      <?php } ?>
 	      <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
@@ -31,7 +31,7 @@ include('../header.php');
                 <tr>
 									<th>Viral Load Lab</th>
                   <th>Health Centre Name</th>
-									<?php if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && ((USERTYPE=='remoteuser') || (USERTYPE=='standalone'))){ ?>
+									<?php if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && (($sarr['user_type']=='remoteuser') || ($sarr['user_type']=='standalone'))){ ?>
                   <th>Action</th>
 									<?php } ?>
                 </tr>
@@ -73,7 +73,7 @@ include('../header.php');
             "aoColumns": [
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
-								<?php if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && ((USERTYPE=='remoteuser') || (USERTYPE=='standalone'))){ ?>
+								<?php if(isset($_SESSION['privileges']) && in_array("editVlFacilityMap.php", $_SESSION['privileges']) && (($sarr['user_type']=='remoteuser') || ($sarr['user_type']=='standalone'))){ ?>
                 {"sClass":"center","bSortable":false},
 								<?php } ?>
             ],

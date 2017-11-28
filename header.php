@@ -4,19 +4,25 @@ include('../includes/MysqliDb.php');
 $gQuery = "SELECT * FROM global_config";
 $gResult=$db->query($gQuery);
 $global = array();
-
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 $skin = "skin-blue";
 
 $logoName = "<img src='../assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
 $smallLogoName = "<img src='../assets/img/flask.png'>";
 $systemType = "Viral Load Sample Management";
-if(USERTYPE=='remoteuser'){
+if($sarr['user_type']=='remoteuser'){
   $skin = "skin-red";
   $systemType = "Viral Load Sample Order Management";
   $logoName = "<i class='fa fa-medkit'></i> VLSM";
   $smallLogoName = "<i class='fa fa-medkit'></i>";
 }
-
 
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($gResult); $i++) {
@@ -239,7 +245,7 @@ $formConfigResult=$db->query($formConfigQuery);
             <li class="allMenu facilityMenu">
               <a href="../facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a>
             </li>
-          <?php } if(isset($_SESSION['privileges']) && in_array("facilityMap.php", $_SESSION['privileges']) && (USERTYPE=='remoteuser')){ ?>
+          <?php } if(isset($_SESSION['privileges']) && in_array("facilityMap.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
             <li class="allMenu facilityMapMenu">
               <a href="../facilities/facilityMap.php"><i class="fa fa-circle-o"></i>Facility Map</a>
             </li>

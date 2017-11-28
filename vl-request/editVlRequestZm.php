@@ -32,7 +32,7 @@ $districtQuery="SELECT DISTINCT facility_district from facility_details where fa
 $districtResult=$db->query($districtQuery);
 //check remote user
 $pdQuery="SELECT * from province_details";
-if(USERTYPE=='remoteuser'){
+if($sarr['user_type']=='remoteuser'){
   $sampleCode = 'remote_sample_code';
   //check user exist in user_facility_map table
     $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
@@ -242,7 +242,7 @@ foreach($fResult as $fDetails){
                          <option value=""> -- Select -- </option>
                          <?php foreach($aResult as $parentRow){ ?>
                           <option value="<?php echo $parentRow['art_code']; ?>"<?php echo ($vlQueryInfo[0]['current_regimen']==$parentRow['art_code'])?"selected='selected'":""?>><?php echo $parentRow['art_code']; ?></option>
-                         <?php } if(USERTYPE!='vluser'){  ?>
+                         <?php } if($sarr['user_type']!='vluser'){  ?>
                           <option value="other">Other</option>
                           <?php } ?>
                         </select>
@@ -291,7 +291,7 @@ foreach($fResult as $fDetails){
                     </table>
                   </div>
                 </div>
-                <div class="box box-primary" style="<?php if(USERTYPE=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
+                <div class="box box-primary" style="<?php if($sarr['user_type']=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                   <div class="box-body">
                     <div class="box-header with-border">
                     <h3 class="box-title">FOR LABORATORY USE ONLY</h3>
