@@ -492,7 +492,7 @@ $disable = "disabled = 'disabled'";
                             </tr>
                         </table>
                         </div>
-                        <div class="box box-primary">
+                        <div class="box box-primary" style="<?php if($sarr['user_type']=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                     <div class="box-header with-border">
                       <h3 class="box-title">Informações laboratoriais</h3>
                     </div>
@@ -624,7 +624,7 @@ $disable = "disabled = 'disabled'";
                             <label for="status">Status <span class="mandatory">*</span></label>
                         </td>
                         <td>
-                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status">
+                          <select class="form-control labSection  style="<?php echo (($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>"" id="status" name="status" title="Please select test status">
                             <option value="">-- Select --</option>
                             <?php
                             foreach($statusResult as $status){

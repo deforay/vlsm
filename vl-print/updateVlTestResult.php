@@ -12,6 +12,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+
 //get import config
 $importQuery="SELECT * FROM import_config WHERE status = 'active'";
 $importResult=$db->query($importQuery);

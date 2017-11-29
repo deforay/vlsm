@@ -2,13 +2,11 @@
 ob_start();
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
-
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $numeric = '';
 }else{
   $numeric = 'checkNum';
 }
-
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
@@ -24,7 +22,6 @@ if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] 
 //district details
 $districtQuery="SELECT * from facility_details where facility_state='".$stateName."'";
 $districtResult=$db->query($districtQuery);
-
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
@@ -35,7 +32,6 @@ $province.="<option value=''> -- Select -- </option>";
             foreach($fResult as $fDetails){
               $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
             }
-
 $disable = "disabled = 'disabled'";
 ?>
   <!-- Content Wrapper. Contains page content -->
@@ -48,7 +44,6 @@ $disable = "disabled = 'disabled'";
         <li class="active">Edit Vl Request</li>
       </ol>
     </section>
-
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -64,11 +59,10 @@ $disable = "disabled = 'disabled'";
                 <div class="box box-default">
                   <div class="box-body">
                     <div class="row">
-                      
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo checkNum removeValue" id="" <?php echo $disable; ?> name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>" onblur="checkNameValidation('vl_request_form','serial_no',this,'<?php echo "vl_sample_id##".$id;?>','This serial number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control serialNo checkNum removeValue" id="" <?php echo $disable; ?> name="serialNo" placeholder="Enter Form Serial No." title="Please enter serial No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['serial_no'];?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -82,13 +76,12 @@ $disable = "disabled = 'disabled'";
                         </label>
                         </div>
                       </div>
-
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="province">Province</label>
-                          <select class="form-control" name="province" id="province" title="Please choose province" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityDetails(this);">
+                          <select class="form-control" name="province" id="province" title="Please choose province" <?php echo $disable; ?> style="width:100%;" >
                             <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
                             <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
@@ -101,28 +94,23 @@ $disable = "disabled = 'disabled'";
                         <label for="District">District  </label>
                           <select class="form-control" name="district" id="district" title="Please choose district" <?php echo $disable; ?> style="width:100%;">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($districtResult as $districtName){
-                              ?>
+                            <?php foreach($districtResult as $districtName){ ?>
                               <option value="<?php echo $districtName['facility_district'];?>" <?php echo ($facilityResult[0]['facility_district']==$districtName['facility_district'])?"selected='selected'":""?>><?php echo ucwords($districtName['facility_district']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </div>
                       </div>
                     </div>
-                
                 <div class="row">
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="clinicName">Clinic Name <span class="mandatory">*</span> </label>
-                      <select class="form-control " id="clinicName" name="clinicName" title="Please select clinic name" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                      <select class="form-control " id="clinicName" name="clinicName" title="Please select clinic name" <?php echo $disable; ?> style="width:100%;">
                         <option value=''> -- Select -- </option>
-			<?php foreach($fResult as $fDetails){ ?>
+                        <?php foreach($fResult as $fDetails){ ?>
                         <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                         <?php } ?>
-		      </select>
+                      </select>
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
@@ -155,12 +143,6 @@ $disable = "disabled = 'disabled'";
                 <br/>
                     <table class="table" style="width:100%">
                       <tr>
-                        <!--<td style="width:18%">
-                        <label for="sampleCode">Sample Code  </label>
-                        </td>
-                        <td style="width:20%">
-                          <input type="text" class="form-control  " name="sampleCode" id="sampleCode" placeholder="Sample Code" title="Enter Sample Code"  style="width:100%;" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>">
-                        </td>-->
                         <td style="width:16%">
                         <label for="patientFname">Patient First Name  </label>
                         </td>
@@ -194,7 +176,6 @@ $disable = "disabled = 'disabled'";
                         <td><label for="ageInYears">Age in years</label></td>
                         <td>
                           <input type="text" class="form-control" name="ageInYears" id="ageInYears" placeholder="If DOB Unkown" title="Enter age in years" <?php echo $disable; ?> style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_age_in_years'];?>">
-                          
                         </td>
                       </tr>
                       <tr>
@@ -211,9 +192,7 @@ $disable = "disabled = 'disabled'";
                            <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" <?php echo $disable; ?> title="Please check Is Patient Pregnant" <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='no')?"checked='checked'":""?> > No
                           </label>
                         </td>
-                        
                         <td colspan="2"  class="femaleElements" <?php echo($vlQueryInfo[0]['patient_gender'] == 'male')?'style="display:none;"':''; ?>><label for="breastfeeding">Is Patient Breastfeeding?</label>
-                        
                           <label class="radio-inline">
                              <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" <?php echo $disable; ?> title="Is Patient Breastfeeding" <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?> > Yes
                        </label>
@@ -222,7 +201,6 @@ $disable = "disabled = 'disabled'";
                        </label>
                         </td>
                       </tr>
-                      
                       <tr>
                         <td><label for="patientArtNo">Patient OI/ART Number</label></td>
                         <td>
@@ -236,13 +214,9 @@ $disable = "disabled = 'disabled'";
                         <td>
                             <select class="form-control" id="artRegimen" name="artRegimen" placeholder="Enter ART Regimen" <?php echo $disable; ?> title="Please choose ART Regimen" onchange="checkValue();">
                          <option value=""> -- Select -- </option>
-                         <?php
-                         foreach($aResult as $parentRow){
-                         ?>
+                         <?php foreach($aResult as $parentRow){ ?>
                           <option value="<?php echo $parentRow['art_code']; ?>"<?php echo ($vlQueryInfo[0]['current_regimen']==$parentRow['art_code'])?"selected='selected'":""?>><?php echo $parentRow['art_code']; ?></option>
-                         <?php
-                         }
-                         ?>
+                         <?php } ?>
                          <option value="other">Other</option>
                         </select>
                         </td>
@@ -264,9 +238,7 @@ $disable = "disabled = 'disabled'";
                         <td><label for="patientPhoneNumber" class="">Mobile Number</label></td>
                         <td><input type="text" class="form-control" id="patientPhoneNumber" name="patientPhoneNumber" readonly="readonly" placeholder="Enter Mobile Number." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_mobile_number'];?>" /></td>
                       </tr>
-                      <tr class="newArtRegimen" style="display: none;">
-                        
-                      </tr>
+                      <tr class="newArtRegimen" style="display: none;"></tr>
                       <tr>
                         <td><label for="lastViralLoadTestDate">Date Of Last Viral Load Test</label></td>
                         <td><input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" <?php echo $disable; ?> placeholder="Enter Date Of Last Viral Load Test" title="Enter Date Of Last Viral Load Test" style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_date'];?>" /></td>
@@ -297,7 +269,7 @@ $disable = "disabled = 'disabled'";
                     </table>
                   </div>
                 </div>
-                <div class="box box-primary">
+                <div class="box box-primary" style="<?php if($sarr['user_type']=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                   <div class="box-body">
                     <div class="box-header with-border">
                     <h3 class="box-title">FOR LABORATORY USE ONLY</h3>
@@ -316,13 +288,9 @@ $disable = "disabled = 'disabled'";
                         <td>
                           <select name="labId" id="labId" class="form-control" title="Please choose lab name">
                             <option value=""> -- Select -- </option>
-                            <?php
-                            foreach($lResult as $labName){
-                              ?>
+                            <?php foreach($lResult as $labName){ ?>
                               <option value="<?php echo $labName['facility_id'];?>"<?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </td>
                       </tr>
@@ -335,9 +303,7 @@ $disable = "disabled = 'disabled'";
                               <option value=""> -- Select -- </option>
                               <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                         </td>
                         <td><?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?><label for="specimenType">Specimen type</label><?php } ?></td>
@@ -345,13 +311,9 @@ $disable = "disabled = 'disabled'";
                           <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
                             <select name="specimenType" id="specimenType" class="form-control" title="Please choose Specimen type">
                               <option value=""> -- Select -- </option>
-                              <?php
-                              foreach($sResult as $name){
-                               ?>
+                              <?php foreach($sResult as $name){ ?>
                                <option value="<?php echo $name['sample_id'];?>" <?php echo ($vlQueryInfo[0]['sample_type']==$name['sample_id'])?"selected='selected'":""?>><?php echo ucwords($name['sample_name']);?></option>
-                               <?php
-                              }
-                              ?>
+                               <?php  } ?>
                             </select>
                           <?php } ?>
                         </td>
@@ -379,13 +341,9 @@ $disable = "disabled = 'disabled'";
                         <td>
                           <select name="reviewedBy" id="reviewedBy" class="form-control" title="Please choose reviewed by">
                             <option value="">-- Select --</option>
-                            <?php
-                            foreach($userResult as $uName){
-                              ?>
+                            <?php foreach($userResult as $uName){ ?>
                               <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$vlQueryInfo[0]['result_reviewed_by'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                          </td>
                         <td><label>Approved By</label></td>
@@ -393,13 +351,9 @@ $disable = "disabled = 'disabled'";
                         <td>
                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
                             <option value="">-- Select --</option>
-                            <?php
-                            foreach($userResult as $uName){
-                              ?>
+                            <?php foreach($userResult as $uName){ ?>
                               <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$vlQueryInfo[0]['result_approved_by'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
-                              <?php
-                            }
-                            ?>
+                              <?php } ?>
                           </select>
                          </td>
                       </tr>
@@ -412,10 +366,10 @@ $disable = "disabled = 'disabled'";
                         <td><label for="status">Status</label></td>
                         <td colspan="5">
                          <select class="form-control" id="status" name="status" title="Please select test status">
-                         <option value="">-- Select --</option>
-                         <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
- 			 <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
-			</select>
+                          <option value="">-- Select --</option>
+                          <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
+                          <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
+                         </select>
                         </td>
                        </tr>
                       <?php } ?>
@@ -433,15 +387,11 @@ $disable = "disabled = 'disabled'";
             </form>
           <!-- /.row -->
         </div>
-       
       </div>
       <!-- /.box -->
-
     </section>
     <!-- /.content -->
   </div>
-  
-  
   <script type="text/javascript">
 provinceName = true;
 facilityName = true;
@@ -484,70 +434,14 @@ machineName = true;
         if($(this).val() == 'sample_rejected'){
           $("#status").val(4);
         }
-  });
-  function getfacilityDetails(obj)
-  {
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(pName!='' && provinceName && facilityName){
-        facilityName = false;
-      }
-    if(pName!=''){
-      if(provinceName){
-      $.post("../includes/getFacilityForClinic.php", { pName : pName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#clinicName").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
-      }
-      //$("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-      //$("#sampleCodeFormat").val(pNameVal[1]+sCode);
-      //$("#sampleCodeKey").val(sCodeKey);
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
-  }
-  function getfacilityProvinceDetails(obj)
-  {
-     //check facility name
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
-  }
+  });  
   $(document).ready(function() {
-
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();
     }else{
       $(".noResult").hide();
-    }    
-    
-$("#vlResult").bind("keyup change", function(e) {
+    }
+    $("#vlResult").bind("keyup change", function(e) {
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();
     }else{
@@ -555,7 +449,7 @@ $("#vlResult").bind("keyup change", function(e) {
       $( "#noResultError" ).prop( "checked", false );
       $(".noResult").hide();
     }
-});
+    });
 $("#vlLog").bind("keyup change", function(e) {
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();
@@ -564,9 +458,7 @@ $("#vlLog").bind("keyup change", function(e) {
       $( "#noResultError" ).prop( "checked", false );
       $(".noResult").hide();
     }
-});    
-    
-    
+});
   $('.date').datepicker({
      changeMonth: true,
      changeYear: true,
@@ -576,10 +468,8 @@ $("#vlLog").bind("keyup change", function(e) {
     }).click(function(){
    	$('.ui-datepicker-calendar').show();
    });
-   
    $('.date').mask('99-aaa-9999');
    $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').mask('99-aaa-9999 99:99');
-   
    $('#sampleCollectionDate,#sampleReceivedDate,#sampleTestingDateAtLab').datetimepicker({
      changeMonth: true,
      changeYear: true,
@@ -612,12 +502,6 @@ $("#vlLog").bind("keyup change", function(e) {
     $(".serialNo").val($(".reqBarcode").val());
     $(".serialNo1").val($(".reqBarcode").val());
   });
-  
-    function setFacilityLabDetails(fDetails){
-      $("#labId").val("");
-      facilityArray = fDetails.split("##");
-      $("#labId").val(facilityArray[0]);
-    }
     function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
     {
       console.log(obj);
@@ -688,7 +572,6 @@ $("#vlLog").bind("keyup change", function(e) {
         }
       }
     }
-    
     function calculateLogValue(obj)
     {
       if(obj.id=="vlResult") {
@@ -710,7 +593,3 @@ $("#vlLog").bind("keyup change", function(e) {
       }
     }
 </script>
-  
- <?php
- //include('../footer.php');
- ?>
