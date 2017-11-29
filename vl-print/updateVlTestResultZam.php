@@ -421,7 +421,7 @@ $disabled = "disabled = 'disabled'";
                     </div>
                   </div>
                 </div>
-                <div class="box box-primary">
+                <div class="box box-primary" style="<?php if($sarr['user_type']=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                   <div class="box-header with-border">
                     <h3 class="box-title">Section 4: For Laboratory Use Only</h3>
                   </div>
@@ -489,7 +489,7 @@ $disabled = "disabled = 'disabled'";
                     </div>
                   </div>
                 </div>
-                <div class="box box-primary">
+                <div class="box box-primary" style="<?php if($sarr['user_type']=='remoteuser'){ ?> pointer-events:none;<?php } ?>">
                   <div class="box-header with-border">
                     <h3 class="box-title">Section 5: Results</h3>
                   </div>
@@ -548,7 +548,7 @@ $disabled = "disabled = 'disabled'";
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="status">Status <span class="mandatory">*</span></label><br>
-                              <select class="form-control isRequired" id="status" name="status" title="Please select test status">
+                              <select class="form-control  style="<?php echo (($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>"" id="status" name="status" title="Please select test status">
                                 <option value="">-- Select --</option>
                                 <?php
                                 foreach($statusResult as $status){

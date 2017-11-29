@@ -106,7 +106,7 @@ try {
         'updated_on'=>$general->getDateTime()
         );
         $db->insert($tableName2,$data);
-        header("location:vlResultApproval.php");
+        header("location:vlTestResult.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

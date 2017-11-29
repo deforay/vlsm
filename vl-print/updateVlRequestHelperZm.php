@@ -33,17 +33,17 @@ try {
        $vldata=array(
           'serial_no'=>$_POST['serialNo'],
           'sample_code'=>$_POST['serialNo'],
-          'lab_code'=>$_POST['labNo'],
-          'lab_id'=>$_POST['labId'],
-          'vl_test_platform'=>$_POST['testingPlatform'],
-          'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
-          'result_value_absolute'=>$_POST['vlResult'],
-          'result'=>$_POST['result'],
-          'result_value_log'=>$_POST['vlLog'],
-          'approver_comments'=>$_POST['labComments'],
-          'result_approved_by'=>$_POST['approvedBy'],
-          'result_reviewed_by'=>$_POST['reviewedBy'],
-          'is_sample_rejected'=>$_POST['noResult'],
+          'lab_code'=>(isset($_POST['labNo']) && $_POST['labNo']!='' ? $_POST['labNo'] :  NULL),
+          'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
+          'vl_test_platform'=>(isset($_POST['testingPlatform']) && $_POST['testingPlatform']!='' ? $_POST['testingPlatform'] :  NULL),
+          'sample_tested_datetime'=>(isset($_POST['sampleTestingDateAtLab']) && $_POST['sampleTestingDateAtLab']!='' ? $_POST['sampleTestingDateAtLab'] :  NULL),
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
+          'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
+          'result_value_log'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='' ? $_POST['vlLog'] :  NULL),
+          'approver_comments'=>(isset($_POST['labComments']) && $_POST['labComments']!='' ? $_POST['labComments'] :  NULL),
+          'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='' ? $_POST['approvedBy'] :  NULL),
+          'result_reviewed_by'=>(isset($_POST['reviewedBy']) && $_POST['reviewedBy']!='' ? $_POST['reviewedBy'] :  NULL),
+          'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='' ? $_POST['noResult'] :  NULL),
           'last_modified_datetime'=>$general->getDateTime(),
           'data_sync'=>0
         );
@@ -70,7 +70,7 @@ try {
           'updated_on'=>$general->getDateTime()
           );
           $db->insert($tableName2,$data);
-          header("location:vlResultApproval.php");
+          header("location:vlTestResult.php");
     
 } catch (Exception $exc) {
     error_log($exc->getMessage());

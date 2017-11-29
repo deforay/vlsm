@@ -81,7 +81,6 @@ try {
     }else if(trim($reasonForChanges)!= ''){
        $allChange =  $reasonForChanges;
     }
-    
     $vldata=array(
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
