@@ -301,7 +301,12 @@ if($lastUrl1!='' || $lastUrl2!=''){
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 7, "desc" ]],
+						<?php if($sarr['user_type']!='standalone'){ ?>
+                "aaSorting": [[ 8, "desc" ]],
+						<?php }else { ?>
+								"aaSorting": [[ 7, "desc" ]],
+						<?php } ?>
+            
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
