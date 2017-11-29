@@ -205,7 +205,11 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 //{"sClass":"center","bSortable":false},
             ],
-            "aaSorting": [[ 9, "desc" ]],
+						<?php if($sarr['user_type']!='standalone'){ ?>
+								"aaSorting": [[ 10, "desc" ]],
+						<?php }else { ?>
+								"aaSorting": [[ 9, "desc" ]],
+						<?php } ?>
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;
