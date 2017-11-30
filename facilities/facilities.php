@@ -1,6 +1,10 @@
 <?php
 $title = "VLSM | Facilities";
 include('../header.php');
+include('../General.php');
+if($sarr['user_type']=='vluser'){
+  include('../remote/pullDataFromRemote.php');
+}
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

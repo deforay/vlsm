@@ -1,6 +1,9 @@
 <?php
-include('../includes/MysqliDb.php');
-include('../General.php');
+$included_files = get_included_files();
+if(count($included_files)==1){
+    include('../includes/MysqliDb.php');
+    include('../General.php');
+}
 $general=new Deforay_Commons_General();
 $globalConfigQuery ="SELECT * from system_config";
 $configResult=$db->query($globalConfigQuery);
@@ -36,8 +39,12 @@ if($sTypeResult){
 //first get last updated time in local database
 $artCodeLQuery = "select * from r_art_code_details order by updated_datetime DESC limit 1";
 $artCodeLResult = $db->query($artCodeLQuery);
-if($artCodeLResult){
-    $artCodeQuery = "select * from r_art_code_details where updated_datetime >='".$artCodeLResult[0]['updated_datetime']."'";
+if($artCodeLResult || (isset($argv[1]) && $argv[1] == 'force')){
+    $artCodeQuery = "select * from r_art_code_details";
+    if((isset($argv[1]) && $argv[1] == 'force')){
+    }else{
+        $artCodeQuery .= " where updated_datetime >='".$artCodeLResult[0]['updated_datetime']."'";
+    }
     $artCodeResult = $remotedb->query($artCodeQuery);
     if($artCodeResult){
         foreach($artCodeResult as $artCode){
@@ -60,8 +67,12 @@ if($artCodeLResult){
 //rejection reason sync
 $rejectLQuery = "select * from r_sample_rejection_reasons order by updated_datetime DESC limit 1";
 $rejectLResult = $db->query($rejectLQuery);
-if($rejectLResult){
-    $rejectQuery = "select * from r_sample_rejection_reasons where updated_datetime >='".$rejectLResult[0]['updated_datetime']."'";
+if($rejectLResult || (isset($argv[1]) && $argv[1] == 'force')){
+    $rejectQuery = "select * from r_sample_rejection_reasons";
+    if((isset($argv[1]) && $argv[1] == 'force')){
+    }else{
+        $rejectQuery .= " where updated_datetime >='".$rejectLResult[0]['updated_datetime']."'";
+    }
     $rejectResult = $remotedb->query($rejectQuery);
     if($rejectResult){
         foreach($rejectResult as $reason){
@@ -84,8 +95,12 @@ if($rejectLResult){
 //prvince data sync
 $provinceLQuery = "select * from province_details order by updated_datetime DESC limit 1";
 $provinceLResult = $db->query($provinceLQuery);
-if($provinceLResult){
-    $provinceQuery = "select * from province_details where updated_datetime >='".$provinceLResult[0]['updated_datetime']."'";
+if($provinceLResult || (isset($argv[1]) && $argv[1] == 'force')){
+    $provinceQuery = "select * from province_details";
+    if((isset($argv[1]) && $argv[1] == 'force')){
+    }else{
+        $provinceQuery .= " where updated_datetime >='".$provinceLResult[0]['updated_datetime']."'";
+    }
     $provinceResult = $remotedb->query($provinceQuery);
     if($provinceResult){
         foreach($provinceResult as $province){
@@ -106,8 +121,12 @@ if($provinceLResult){
 //facility data sync
 $facilityLQuery = "select * from facility_details order by updated_datetime DESC limit 1";
 $facilityLResult = $db->query($facilityLQuery);
-if($facilityLResult){
-    $facilityQuery = "select * from facility_details where updated_datetime >='".$facilityLResult[0]['updated_datetime']."'";
+if($facilityLResult || (isset($argv[1]) && $argv[1] == 'force')){
+    $facilityQuery = "select * from facility_details";
+    if((isset($argv[1]) && $argv[1] == 'force')){
+    }else{
+        $facilityQuery .= " where updated_datetime >='".$facilityLResult[0]['updated_datetime']."'";
+    }
     $facilityResult = $remotedb->query($facilityQuery);
     //vlsm instance id
     $instanceQuery = "select vlsm_instance_id from s_vlsm_instance";
