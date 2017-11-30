@@ -17,11 +17,13 @@ $skin = "skin-blue";
 $logoName = "<img src='../assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
 $smallLogoName = "<img src='../assets/img/flask.png'>";
 $systemType = "Viral Load Sample Management";
+$shortName = "VLSM";
 if($sarr['user_type']=='remoteuser'){
   $skin = "skin-red";
-  $systemType = "Viral Load Sample Order Management";
-  $logoName = "<i class='fa fa-medkit'></i> VLSM";
+  $systemType = "VL Sample Tracking System";
+  $logoName = "<i class='fa fa-medkit'></i> VLSTS";
   $smallLogoName = "<i class='fa fa-medkit'></i>";
+  $shortName = "VLSTS";
 }
 
 // now we create an associative array so that we can easily create view variables
@@ -100,7 +102,7 @@ $formConfigResult=$db->query($formConfigQuery);
 <head>
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <title><?php echo (isset($title) && $title != null && $title != "") ? $title : "VLSM | Viral Load LIS" ?></title>
+  <title><?php echo (isset($title) && $title != null && $title != "") ? $title : "$shortName | Viral Load LIS" ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <link rel="stylesheet" media="all" type="text/css" href="../assets/css/fonts.css" />
