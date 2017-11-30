@@ -1347,3 +1347,6 @@ ALTER TABLE `user_admin_details`
 --
 ALTER TABLE `user_admin_details`
   MODIFY `user_admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  -- saravanan 30-nov-2017
+  ALTER TABLE vl_user_facility_map
+DROP FOREIGN KEY vl_user_facility_map_ibfk_2;

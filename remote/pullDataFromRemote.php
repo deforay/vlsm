@@ -14,18 +14,24 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 }
 if($arr['user_type']=='vluser'){
 //sample type sync
-$sTypeQuery = "select * from r_sample_type where data_sync=0";
+$sTypeQuery = "select * from r_sample_type";
+if((isset($argv[1]) && $argv[1] == 'force')){
+    $id = $db->rawQuery('Delete from r_sample_type');        
+}else{
+$sTypeQuery .= " where data_sync=0";
+}
 $sTypeResult = $remotedb->query($sTypeQuery);
 if($sTypeResult){
     foreach($sTypeResult as $type){
         $sTypeQuery = "select * from r_sample_type where sample_id=".$type['sample_id'];
         $sTypeLocalResult = $db->query($sTypeQuery);
-        $sTypeData = array('sample_name'=>$type['sample_name'],'data_sync'=>1);
+        $sTypeData = array('sample_name'=>$type['sample_name'],'status'=>$type['status'],'data_sync'=>1);
         $lastId = 0;
         if($sTypeLocalResult){
             $db = $db->where('sample_id',$type['sample_id']);
             $lastId = $db->update('r_sample_type',$sTypeData);
         }else{
+            $sTypeData['sample_id'] = $type['sample_id'];
             $db->insert('r_sample_type',$sTypeData);
             $lastId = $db->getInsertId();
         }
@@ -42,6 +48,7 @@ $artCodeLResult = $db->query($artCodeLQuery);
 if($artCodeLResult || (isset($argv[1]) && $argv[1] == 'force')){
     $artCodeQuery = "select * from r_art_code_details";
     if((isset($argv[1]) && $argv[1] == 'force')){
+        $k = $db->rawQuery('Delete from r_art_code_details');
     }else{
         $artCodeQuery .= " where updated_datetime >='".$artCodeLResult[0]['updated_datetime']."'";
     }
@@ -58,6 +65,7 @@ if($artCodeLResult || (isset($argv[1]) && $argv[1] == 'force')){
                 $db = $db->where('art_id',$artCode['art_id']);
                 $lastId = $db->update('r_art_code_details',$artCodeData);
             }else{
+                $artCodeData['art_id'] = $artCode['art_id'];
                 $db->insert('r_art_code_details',$artCodeData);
                 $lastId = $db->getInsertId();
             }
@@ -70,6 +78,7 @@ $rejectLResult = $db->query($rejectLQuery);
 if($rejectLResult || (isset($argv[1]) && $argv[1] == 'force')){
     $rejectQuery = "select * from r_sample_rejection_reasons";
     if((isset($argv[1]) && $argv[1] == 'force')){
+        $db->rawQuery('Delete from r_sample_rejection_reasons');
     }else{
         $rejectQuery .= " where updated_datetime >='".$rejectLResult[0]['updated_datetime']."'";
     }
@@ -86,6 +95,7 @@ if($rejectLResult || (isset($argv[1]) && $argv[1] == 'force')){
                 $db = $db->where('rejection_reason_id',$reason['rejection_reason_id']);
                 $lastId = $db->update('r_sample_rejection_reasons',$rejectResultData);
             }else{
+                $rejectResultData['rejection_reason_id'] = $reason['rejection_reason_id'];
                 $db->insert('r_sample_rejection_reasons',$rejectResultData);
                 $lastId = $db->getInsertId();
             }
@@ -98,6 +108,7 @@ $provinceLResult = $db->query($provinceLQuery);
 if($provinceLResult || (isset($argv[1]) && $argv[1] == 'force')){
     $provinceQuery = "select * from province_details";
     if((isset($argv[1]) && $argv[1] == 'force')){
+        $db->rawQuery('Delete from province_details');
     }else{
         $provinceQuery .= " where updated_datetime >='".$provinceLResult[0]['updated_datetime']."'";
     }
@@ -112,6 +123,7 @@ if($provinceLResult || (isset($argv[1]) && $argv[1] == 'force')){
                 $db = $db->where('province_id',$province['province_id']);
                 $lastId = $db->update('province_details',$provinceData);
             }else{
+                $provinceData['province_id'] = $province['province_id'];
                 $db->insert('province_details',$provinceData);
                 $lastId = $db->getInsertId();
             }
@@ -124,13 +136,14 @@ $facilityLResult = $db->query($facilityLQuery);
 if($facilityLResult || (isset($argv[1]) && $argv[1] == 'force')){
     $facilityQuery = "select * from facility_details";
     if((isset($argv[1]) && $argv[1] == 'force')){
+        $db->rawQuery('Delete from facility_details');
     }else{
         $facilityQuery .= " where updated_datetime >='".$facilityLResult[0]['updated_datetime']."'";
     }
     $facilityResult = $remotedb->query($facilityQuery);
     //vlsm instance id
     $instanceQuery = "select vlsm_instance_id from s_vlsm_instance";
-    $instanceResult = $remotedb->query($instanceQuery);
+    $instanceResult = $db->query($instanceQuery);
     if($facilityResult){
         foreach($facilityResult as $facility){
             $facilityQuery = "select * from facility_details where facility_id=".$facility['facility_id'];
@@ -148,6 +161,7 @@ if($facilityLResult || (isset($argv[1]) && $argv[1] == 'force')){
                 $db = $db->where('facility_id',$facility['facility_id']);
                 $lastId = $db->update('facility_details',$facilityData);
             }else{
+                $facilityData['facility_id'] = $facility['facility_id'];
                 $db->insert('facility_details',$facilityData);
                 $lastId = $db->getInsertId();
             }
