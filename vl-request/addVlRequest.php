@@ -3,6 +3,9 @@ ob_start();
 $title = "VLSM | Add New Request";
 include('../header.php');
 include('../General.php');
+if($sarr['user_type']=='vluser'){
+  include('../remote/pullDataFromRemote.php');
+}
 $general=new Deforay_Commons_General();
 
 //global config

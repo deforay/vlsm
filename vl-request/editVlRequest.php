@@ -2,6 +2,9 @@
 ob_start();
 include('../header.php');
 include('../General.php');
+if($sarr['user_type']=='vluser'){
+  include('../remote/pullDataFromRemote.php');
+}
 $general=new Deforay_Commons_General();
 $id = base64_decode($_GET['id']);
 $sCode = '';
