@@ -53,6 +53,8 @@ $districtResult = array();
 if(trim($stateName)!= ''){
   $districtQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
   $districtResult = $db->query($districtQuery);
+  $facilityQuery="SELECT * from facility_details where facility_district='".$facilityResult[0]['facility_district']."' AND status='active' AND facility_type='2'";
+  $lResult=$db->query($facilityQuery);
 }
 
 //set reason for changes history
@@ -652,10 +654,10 @@ $disable = "disabled = 'disabled'";
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4" style="<?php echo (($sarr['user_type']=='remoteuser')) ? 'display:none;':''; ?>">
                             <label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                              <select class="form-control labSection  style="<?php echo (($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>"" id="status" name="status" title="Please select test status">
+                              <select class="form-control labSection  <?php echo (($sarr['user_type']!='remoteuser')) ? 'isRequired':''; ?>" id="status" name="status" title="Please select test status">
                                 <option value="">-- Select --</option>
                                 <?php
                                 foreach($statusResult as $status){
