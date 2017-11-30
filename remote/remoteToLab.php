@@ -53,7 +53,8 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $lab[$result] = $remoteData[$result];
     }
     //remove result value
-    $removeKeys = array('vl_sample_id','result_value_log','result_value_absolute','result_value_absolute_decimal','result_value_text','result_value_result');
+    $removeKeys = array('vl_sample_id','result_value_log','result_value_absolute','result_value_absolute_decimal','result_value_text','result_value',
+'sample_tested_datetime','sample_received_at_vl_lab_datetime','result_dispatched_datetime','is_sample_rejected','reason_for_sample_rejection','result_approved_by');
     foreach($removeKeys as $keys){
         unset($lab[$keys]);
     }
@@ -70,6 +71,11 @@ foreach($vlRemoteResult as $key=>$remoteData){
         //$db = $remotedb->where('sample_code',$lab['sample_code']);
         //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
     }else{
+        //check exist remote
+        $exsvlQuery="SELECT vl_sample_id,sample_code FROM vl_request_form as vl WHERE remote_sample_code='".$lab['remote_sample_code']."'";
+        $exsvlResult=$db->query($exsvlQuery);
+        if($exsvlResult){
+        }else{
         $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
         $svlResult=$db->query($svlQuery);
         $prefix = $arr['sample_code_prefix'];
@@ -102,6 +108,7 @@ foreach($vlRemoteResult as $key=>$remoteData){
         if($id){
         //$remotedb = $remotedb->where('remote_sample_code',$lab['remote_sample_code']);
         //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
+        }
         }
     }
 }

@@ -656,11 +656,20 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                       </div>
-                      <div class="row" style="<?php echo ((($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) || ($sCode!='')) ? 'display:none;':''; ?>">
-                        <div class="col-md-4">
+                      <div class="row">
+                      <?php
+                      $styleStatus = '';
+                      if((($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) || ($sCode!='')){
+                        $styleStatus= "display:none";
+                        ?>
+                        <input type="hidden" name="status" value="<?php echo $vlQueryInfo[0]['result_status'];?>"/>
+                        <?php
+                      }
+                      ?>
+                        <div class="col-md-4" style="<?php echo $styleStatus;?>">
                             <label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                              <select class="form-control labSection <?php echo ($sarr['user_type']=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status">
+                              <select class="form-control labSection <?php echo ($sarr['user_type']!='remoteuser' && $sCode=='') ? 'isRequired':''; ?>" id="status" name="status" title="Please select test status">
                                 <option value="">-- Select --</option>
                                 <?php foreach($statusResult as $status){ ?>
                                   <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>
