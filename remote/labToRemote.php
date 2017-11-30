@@ -18,6 +18,15 @@ $arr = array();
 for ($i = 0; $i < sizeof($cResult); $i++) {
   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
+//get facility map id
+$facilityMapQuery = "SELECT facility_id FROM vl_facility_map";
+$fMapResult=$remotedb->query($facilityMapQuery);
+if(count($fMapResult)>0){
+  $fMapResult = array_map('current', $fMapResult);
+  $fMapResult = implode(",",$fMapResult);
+}else{
+  $fMapResult = "''";
+}
 $end_date = date('Y-12-31');
 $start_date = date('Y-01-01');
   if($arr['sample_code']=='MMYY'){
@@ -30,7 +39,10 @@ $start_date = date('Y-01-01');
     $start_date = date('Y-01-01');
   }
 //get remote data
-$vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND lab_id =".$sarr['user_type']." AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+if(trim($sarr['lab_name'])==''){
+  $sarr['lab_name'] = "''"; 
+}
+$vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND (lab_id =".$sarr['lab_name']." OR facility_id IN(".$fMapResult.")) AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $db->rawQuery($vlQuery);
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$sDBNAME' AND table_name='vl_request_form'";
 $allColResult = $db->rawQuery($allColumns);
