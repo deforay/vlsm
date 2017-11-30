@@ -6,7 +6,7 @@ require_once(__DIR__.'/../system/system.php');
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vl_lab_request';
+$DBNAME = 'vl_lab_request_ss';
 //$DBNAME = 'vl_lab_request_rwanda';
 $PORT = 3306;
 
