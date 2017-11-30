@@ -632,7 +632,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-4" style="<?php echo (($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>">
+                        <div class="col-md-4"  style="<?php echo ((($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) || ($sCode!='')) ? 'display:none;':''; ?>">
                             <label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
                               <select class="form-control labSection <?php echo ($sarr['user_type']=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status">
