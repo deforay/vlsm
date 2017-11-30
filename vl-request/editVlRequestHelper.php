@@ -22,6 +22,9 @@ try {
     }else if($_POST['oldStatus']==9){
         $_POST['status'] = 6;
     }
+    if($_POST['status']==''){
+        $_POST['status']  = $_POST['oldStatus'];
+    }
     //add province
     $splitProvince = explode("##",$_POST['province']);
     if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){

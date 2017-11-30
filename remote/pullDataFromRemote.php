@@ -136,7 +136,7 @@ $facilityLResult = $db->query($facilityLQuery);
 if($facilityLResult || (isset($argv[1]) && $argv[1] == 'force')){
     $facilityQuery = "select * from facility_details";
     if((isset($argv[1]) && $argv[1] == 'force')){
-        $db->rawQuery('Delete from facility_details');
+        $id = $db->rawQuery('Delete from facility_details');
     }else{
         $facilityQuery .= " where updated_datetime >='".$facilityLResult[0]['updated_datetime']."'";
     }
