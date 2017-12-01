@@ -10,7 +10,7 @@ $country = $configResult[0]['value'];
 $rpQuery="SELECT GROUP_CONCAT(DISTINCT rp.sample_id SEPARATOR ',') as sampleId FROM r_package_details_map as rp";
 $rpResult = $db->rawQuery($rpQuery);
 
-$query="SELECT vl.sample_code,vl.vl_sample_id FROM vl_request_form as vl where vl.vlsm_country_id = $country";
+$query="SELECT vl.sample_code,vl.vl_sample_id FROM vl_request_form as vl where (vl.lab_id='' OR vl.lab_id is null) AND vl.vlsm_country_id = $country";
 if(isset($rpResult[0]['sampleId'])){
     $query = $query." AND vl_sample_id NOT IN(".$rpResult[0]['sampleId'].")";
 }
