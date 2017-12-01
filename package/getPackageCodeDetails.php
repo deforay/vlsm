@@ -91,9 +91,12 @@ $general=new Deforay_Commons_General();
          * Get data to display
         */
         
-	$sQuery="select p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id";
+	$sQuery="select vl.vlsm_country_id,p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id join vl_request_form vl on vl.vl_sample_id=rp.sample_id";
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
+            $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
+        }else{
+            $sWhere=' where vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
         }
 	    $sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by p.package_id';
@@ -104,13 +107,14 @@ $general=new Deforay_Commons_General();
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
+        //error_log($sQuery);die;
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
-        $aResultFilterTotal =$db->rawQuery("select p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id $sWhere group by p.package_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("select p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id join vl_request_form  vl on vl.vl_sample_id=rp.sample_id $sWhere group by p.package_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id group by p.package_id");
+        $aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id join vl_request_form  vl on vl.vl_sample_id=rp.sample_id where vl.vlsm_country_id ='".$configResult[0]['value']."' group by p.package_id");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
