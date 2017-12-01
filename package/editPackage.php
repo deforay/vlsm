@@ -12,7 +12,7 @@ $packResult = array_map('current',$packageMapResult);
 $rpQuery="SELECT GROUP_CONCAT(DISTINCT rp.sample_id SEPARATOR ',') as sampleId FROM r_package_details_map as rp where rp.package_id!=".$id;
 $rpResult = $db->rawQuery($rpQuery);
 
-$query="SELECT vl.sample_code,vl.vl_sample_id FROM vl_request_form as vl where vl.vlsm_country_id = ".$global['vl_form'];
+$query="SELECT vl.sample_code,vl.vl_sample_id FROM vl_request_form as vl where (vl.lab_id='' OR vl.lab_id is null) AND vl.vlsm_country_id = ".$global['vl_form'];
 if(isset($rpResult[0]['sampleId'])){
     $query = $query." AND vl_sample_id NOT IN(".$rpResult[0]['sampleId'].")";
 }
