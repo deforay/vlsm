@@ -283,9 +283,9 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
     function getAge(){
       var dob = $("#dob").val();
       if($.trim(dob) == ""){
-        $("#ageInMonths").val("");
-        $("#ageInYears").val("");
-        return false;
+        //$("#ageInMonths").val("");
+        //$("#ageInYears").val("");
+        //return false;
       }
       //calculate age
       splitDob = dob.split("-");
