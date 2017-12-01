@@ -1350,3 +1350,32 @@ ALTER TABLE `user_admin_details`
   -- saravanan 30-nov-2017
   ALTER TABLE vl_user_facility_map
 DROP FOREIGN KEY vl_user_facility_map_ibfk_2;
+
+-- saravanan 01-dec-2017
+INSERT INTO `resources` (`resource_id`, `resource_name`, `display_name`) VALUES (NULL, 'package-details', 'Manage Package Details');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '23', 'addPackage.php', 'Add'), (NULL, '23', 'editPackage.php', 'Edit');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '23', 'packageList.php', 'Access');
+
+-- saravanan 01-dec-2017
+CREATE TABLE `package_details` (
+  `package_id` int(11) NOT NULL,
+  `package_code` varchar(255) NOT NULL,
+  `added_by` varchar(255) NOT NULL,
+  `request_created_datetime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE `package_details`
+  ADD PRIMARY KEY (`package_id`);
+ALTER TABLE `package_details`
+  MODIFY `package_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+  CREATE TABLE `r_package_details_map` (
+  `package_map_id` int(11) NOT NULL,
+  `package_id` int(11) NOT NULL,
+  `sample_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `r_package_details_map`
+  ADD PRIMARY KEY (`package_map_id`);
+
+ALTER TABLE `r_package_details_map`
+  MODIFY `package_map_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;

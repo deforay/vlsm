@@ -102,6 +102,10 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlRequestMailMenu").addClass('active');
+  }else if (splitsUrl=='packageList.php' || splitsUrl=='addPackage.php' || splitsUrl=='editPackage.php') {
+    $(".request").addClass('active');
+    $(".allMenu").removeClass('active');
+    $(".packageListMenu").addClass('active');
   }else if (splitsUrl=='vlResultMail.php' || splitsUrl=='vlResultMailConfirm.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');

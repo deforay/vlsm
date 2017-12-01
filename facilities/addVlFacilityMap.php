@@ -5,8 +5,7 @@ include('../header.php');
 $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.vl_lab_id SEPARATOR ',') as vlLabId FROM vl_facility_map as vlfm";
 $vlfmResult = $db->rawQuery($vlfmQuery);
 $fQuery="SELECT * FROM facility_details where facility_type=2";
-if(isset($vlfmResult[0]['vlLabId']))
-{
+if(isset($vlfmResult[0]['vlLabId'])){
   $fQuery = $fQuery." AND facility_id NOT IN(".$vlfmResult[0]['vlLabId'].")";
 }
 $fResult = $db->rawQuery($fQuery);
