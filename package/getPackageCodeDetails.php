@@ -134,6 +134,7 @@ $general=new Deforay_Commons_General();
 	
         foreach ($rResult as $aRow) {
         $humanDate="";
+        $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\''.base64_encode($aRow['package_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
         if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
         $date = $aRow['request_created_datetime'];
         $humanDate =  date("d-M-Y H:i:s",strtotime($date));
@@ -143,7 +144,7 @@ $general=new Deforay_Commons_General();
         $row[] = $aRow['sample_code'];
         $row[] = $humanDate;
         if($package){
-            $row[] = '<a href="editPackage.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;';
+            $row[] = '<a href="editPackage.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;&nbsp;'.$printBarcode;
         }
         $output['aaData'][] = $row;
         }
