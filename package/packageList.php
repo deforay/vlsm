@@ -12,7 +12,6 @@ include('../header.php');
         <li class="active">Package</li>
       </ol>
     </section>
-
      <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -21,7 +20,7 @@ include('../header.php');
             <div class="box-header with-border">
               <?php if(isset($_SESSION['privileges']) && in_array("addPackage.php", $_SESSION['privileges'])){ ?>
               <a href="addPackage.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Package</a>
-	      <?php } ?>
+	            <?php } ?>
 	      <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
             </div>
             <!-- /.box-header -->
@@ -32,9 +31,9 @@ include('../header.php');
                   <th>Package Code</th>
                   <th>No.Of Sample</th>
                   <th>Added On</th>
-		  <?php if(isset($_SESSION['privileges']) && in_array("editPackage.php", $_SESSION['privileges'])){ ?>
+		              <?php if(isset($_SESSION['privileges']) && in_array("editPackage.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>
-		  <?php } ?>
+		              <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,9 +56,7 @@ include('../header.php');
   <script>
   var oTable = null;
   $(function () {
-   
   });
-   
   $(document).ready(function() {
 	$.blockUI();
         oTable = $('#packageDataTable').dataTable({	
@@ -96,7 +93,17 @@ include('../header.php');
         });
        $.unblockUI();
 	} );
-  
+  function generateBarcode(pId){
+    $.post("generateBarcode.php",{id:pId},
+      function(data){
+	  if(data == "" || data == null || data == undefined){
+	      alert('Unable to generate barcode');
+	  }else{
+	      window.open('.././uploads/package_barcode/'+data,'_blank');
+	  }
+	  
+      });
+  }
 </script>
  <?php
  include('../footer.php');

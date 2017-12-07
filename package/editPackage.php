@@ -106,7 +106,7 @@ $result = $db->rawQuery($query);
   <script src="../assets/js/jquery.multi-select.js"></script>
   <script src="../assets/js/jquery.quicksearch.js"></script>
   <script type="text/javascript">
-   noOfSamples = 2;
+   noOfSamples = 20;
   $(document).ready(function() {
     //getSampleCodeDetails();
   } );
