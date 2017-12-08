@@ -140,11 +140,15 @@ if(sizeof($requestResult)> 0){
         $messageTextSize = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
           $resultType = is_numeric($result['result']);
-          if(in_array(strtolower(trim($result['result'])),array("tnd","target not detected"))){
-            $vlResult = 'TND*';
+          if(in_array(strtolower(trim($result['result'])),array("tnd","target not detected",'ldl','LDL'))){
+            if(trim($result['result'])=='ldl' || trim($result['result'])=='LDL'){
+              $vlResult = 'LDL';
+            }else{
+              $vlResult = 'TND*';
+              $tndMessage = 'TND* - Target not Detected';
+            }
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = ucfirst($arr['l_vl_msg']);
-            $tndMessage = 'TND* - Target not Detected';
           }else if(in_array(strtolower(trim($result['result'])),array("failed","fail","no_sample"))){
             $vlResult = $result['result'];
             $smileyContent = '';
@@ -339,7 +343,10 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="3"></td>';
                     $html .='<td rowspan="3" style="text-align:left;">'.$smileyContent.'</td>';
                    $html .='</tr>';
-                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;VIRAL LOAD RESULT (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].'</td></tr>';
+                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;VIRAL LOAD RESULT (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:13px;">'.$result['result'].'</span></td></tr>';
+                   if($result['reason_for_sample_rejection']!=''){
+                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">&nbsp;&nbsp;Rejection Reason&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['rejection_reason_name'].'</td></tr>';
+                   }
                    $html .='<tr><td colspan="3"></td></tr>';
                  $html .='</table>';
                 $html .='</td>';

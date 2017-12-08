@@ -272,9 +272,9 @@ $primaryKey="vl_sample_id";
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
 		  if(!isset($_POST['status']) || trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		      $sWhere = $sWhere." AND (vl.result_status =7)";
+		      $sWhere = $sWhere." AND (vl.result_status = 7 OR vl.result_status = 4)";
 		    }else{
-		      $sWhere = "WHERE (vl.result_status =7)";
+		      $sWhere = "WHERE (vl.result_status =7 OR vl.result_status = 4)";
 		    }
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
