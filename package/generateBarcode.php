@@ -20,7 +20,7 @@ if($id >0){
     }
     $bQuery="SELECT * from package_details as pd where package_id=$id";
     $bResult=$db->query($bQuery);
-    $dateQuery="SELECT sample_tested_datetime,result_reviewed_datetime,pd.package_code,pd.package_id from package_details as pd Join r_package_details_map as rpd ON rpd.package_id=pd.package_id Join vl_request_form as vl ON vl.vl_sample_id=rpd.sample_id where pd.package_id='".$id."' AND (sample_tested_datetime IS NOT NULL AND sample_tested_datetime!= '' AND sample_tested_datetime!= '00000-00-00 00:00:00') LIMIT 1";
+    $dateQuery="SELECT sample_tested_datetime,result_reviewed_datetime,pd.package_code,pd.package_id from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id where pd.package_id='".$id."' AND (sample_tested_datetime IS NOT NULL AND sample_tested_datetime!= '' AND sample_tested_datetime!= '00000-00-00 00:00:00') LIMIT 1";
     $dateResult=$db->query($dateQuery);
     $resulted = '';
     $reviewed = '';
@@ -133,7 +133,7 @@ if($id >0){
             </thead>';
     $tbl.='</table>';
     $sampleCounter = 1;
-        $sQuery="SELECT sample_code,lot_number,lot_expiration_date,result from package_details as pd Join r_package_details_map as rpd ON rpd.package_id=pd.package_id Join vl_request_form as vl ON vl.vl_sample_id=rpd.sample_id where pd.package_id=$id";
+        $sQuery="SELECT sample_code,lot_number,lot_expiration_date,result from package_details as pd  Join vl_request_form as vl ON vl.sample_package_id=pd.package_id where pd.package_id=$id";
         $result=$db->query($sQuery);
         foreach($result as $sample){
             $params = $pdf->serializeTCPDFtagParameters(array($sample['sample_code'], 'C39', '', '','' ,7, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
