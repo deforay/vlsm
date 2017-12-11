@@ -1377,3 +1377,12 @@ ALTER TABLE `r_package_details_map`
 
 ALTER TABLE `r_package_details_map`
   MODIFY `package_map_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+-- saravanan 11-dec-2017
+ALTER TABLE `package_details` ADD `package_status` VARCHAR(255) NULL DEFAULT NULL AFTER `added_by`;
+
+ALTER TABLE `vl_request_form` ADD `sample_package_id` VARCHAR(11) NULL DEFAULT NULL AFTER `sample_batch_id`;
+
+DROP TABLE r_package_details_map;
+
+ALTER TABLE `vl_request_form` DROP `professional_number`, DROP `category`;

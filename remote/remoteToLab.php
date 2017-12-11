@@ -58,6 +58,7 @@ foreach($vlRemoteResult as $key=>$remoteData){
     foreach($removeKeys as $keys){
         unset($lab[$keys]);
     }
+    $samplePackageId = '';
     //check wheather sample code empty or not
     if($lab['sample_code']!='' && $lab['sample_code']!=0 && $lab['sample_code']!=NULL){
         $sQuery = "Select vl_sample_id from vl_request_form where sample_code='".$lab['sample_code']."'";
@@ -67,6 +68,7 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $lab['last_modified_datetime'] = $general->getDateTime();
         $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
         $id = $db->update('vl_request_form',$lab);
+        $samplePackageId = $lab['sample_package_id'];
         //update in lab database        
         //$db = $remotedb->where('sample_code',$lab['sample_code']);
         //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
@@ -104,11 +106,30 @@ foreach($vlRemoteResult as $key=>$remoteData){
         //$lab['result_status'] = 6;
         $lab['data_sync'] = 1;//column data_sync value is 1 equal to data_sync done.value 0 is not done.
         $id = $db->insert('vl_request_form',$lab);
+        $samplePackageId = $lab['sample_package_id'];
         //update in lab database
         if($id){
         //$remotedb = $remotedb->where('remote_sample_code',$lab['remote_sample_code']);
         //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
         }
+        }
+    }
+    if($samplePackageId!=''){
+        $pkgQuery="SELECT * from package_details where package_id=".$samplePackageId;
+        $pkgResult=$remotedb->query($pkgQuery);
+        if($pkgResult){
+            $lpkgQuery="SELECT * from package_details where package_id=".$samplePackageId;
+            $lpkgResult=$db->query($lpkgQuery);
+            if(!$lpkgResult){
+            $data=array(
+                'package_id'=>$pkgResult[0]['package_id'],
+                'package_code'=>$pkgResult[0]['package_code'],
+                'added_by'=>$pkgResult[0]['added_by'],
+                'package_status'=>$pkgResult[0]['package_status'],
+                'request_created_datetime'=>$general->getDateTime()
+                );
+                $id = $db->insert('package_details',$data);
+            }
         }
     }
 }
