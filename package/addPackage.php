@@ -8,19 +8,12 @@ $packageNo = $general->generateRandomString(8);
 ?>
 <link href="../assets/css/multi-select.css" rel="stylesheet" />
 <style>
-  .select2-selection__choice{
-    color:#000000 !important;
-  }
+  .select2-selection__choice{ color:#000000 !important; }
   #ms-sampleCode{width: 110%;}
   .showFemaleSection{display: none;}
   #sortableRow { list-style-type: none; margin: 30px 0px 30px 0px; padding: 0; width: 100%;text-align:center; }
-  #sortableRow li{
-    color:#333 !important;
-    font-size:16px;
-  }
-  #alertText{
-    text-shadow: 1px 1px #eee;
-  }
+  #sortableRow li{ color:#333 !important; font-size:16px; }
+  #alertText{  text-shadow: 1px 1px #eee; }
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -45,7 +38,7 @@ $packageNo = $general->generateRandomString(8);
           <!-- form start -->
             <form class="form-horizontal" method="post" name="addPackageForm" id="addPackageForm" autocomplete="off" action="addPackageCodeHelper.php">
               <div class="box-body">
-	        <div class="row">
+	              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="packageCode" class="col-lg-4 control-label">Package Code <span class="mandatory">*</span></label>
@@ -55,21 +48,21 @@ $packageNo = $general->generateRandomString(8);
                     </div>
                   </div>
                 </div>
-		<div class="row" id="sampleDetails">
-		   <div class="col-md-8">
-			    <div class="form-group">
-			       <div class="col-md-12">
-				   <div class="col-md-12">
-					    <div style="width:60%;margin:0 auto;clear:both;">
-						   <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
-					     </div><br/><br/>
-					   <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search"></select>
-				   </div>
-			       </div>
-			    </div>
-		    </div>
-		</div>
-		<div class="row" id="alertText" style="font-size:18px;"></div>
+                <div class="row" id="sampleDetails">
+                  <div class="col-md-8">
+                      <div class="form-group">
+                        <div class="col-md-12">
+                      <div class="col-md-12">
+                          <div style="width:60%;margin:0 auto;clear:both;">
+                          <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+                          </div><br/><br/>
+                        <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search"></select>
+                      </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+		            <div class="row" id="alertText" style="font-size:18px;"></div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -92,20 +85,16 @@ $packageNo = $general->generateRandomString(8);
    sortedTitle = [];
   $(document).ready(function() {
     getSampleCodeDetails();
-  } );
-	
+  });
   function validateNow(){
     flag = deforayValidator.init({
         formId: 'addPackageForm'
     });
-    
     if(flag){
       $.blockUI();
       document.getElementById('addPackageForm').submit();
     }
   }
-   
-  //$("#auditRndNo").multiselect({height: 100,minWidth: 150});
    $(document).ready(function() {
       $('.search').multiSelect({
        selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
