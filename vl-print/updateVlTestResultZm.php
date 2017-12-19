@@ -11,13 +11,13 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']== ''){
-  $facilityResult[0]['facility_state'] = 0;
+  $facilityResult[0]['facility_state'] = '';
 }
 $stateName = $facilityResult[0]['facility_state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
 if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] == ''){
-  $stateResult[0]['province_code'] = 0;
+  $stateResult[0]['province_code'] = '';
 }
 //district details
 $districtQuery="SELECT * from facility_details where facility_state='".$stateName."'";

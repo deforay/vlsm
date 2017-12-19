@@ -35,10 +35,10 @@ if(!isset($facilityResult[0]['facility_emails'])){
   $facilityResult[0]['facility_emails'] = '';
 }
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
-  $facilityResult[0]['facility_state'] = 0;
+  $facilityResult[0]['facility_state'] = '';
 }
 if(!isset($facilityResult[0]['facility_district']) || $facilityResult[0]['facility_district']==''){
-  $facilityResult[0]['facility_district'] = 0;
+  $facilityResult[0]['facility_district'] = '';
 }
 $stateName = $facilityResult[0]['facility_state'];
 if(trim($stateName)!= ''){
@@ -46,7 +46,7 @@ if(trim($stateName)!= ''){
   $stateResult=$db->query($stateQuery);
 }
 if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] == ''){
-  $stateResult[0]['province_code'] = 0;
+  $stateResult[0]['province_code'] = '';
 }
 //district details
 $districtResult = array();
