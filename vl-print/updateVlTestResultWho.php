@@ -24,16 +24,16 @@ if(!isset($facilityResult[0]['facility_code'])){
   $facilityResult[0]['facility_code'] = '';
 }
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
-  $facilityResult[0]['facility_state'] = 0;
+  $facilityResult[0]['facility_state'] = '';
 }
 if(!isset($facilityResult[0]['facility_district']) || $facilityResult[0]['facility_district']==''){
-  $facilityResult[0]['facility_district'] = 0;
+  $facilityResult[0]['facility_district'] = '';
 }
 $stateName = $facilityResult[0]['facility_state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
 if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] == ''){
-  $stateResult[0]['province_code'] = 0;
+  $stateResult[0]['province_code'] = '';
 }
 //district details
 $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
