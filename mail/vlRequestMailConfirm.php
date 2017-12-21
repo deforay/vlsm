@@ -197,8 +197,10 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
               $sheet->getColumnDimension($cellName)->setVisible(($value == 'hide')?FALSE:TRUE);
               $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
               $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
-              $sheet->getDefaultRowDimension()->setRowHeight(15);
+              $sheet->getDefaultRowDimension()->setRowHeight(20);
+              $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
               $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode(($value == 'hide')?'':$value), PHPExcel_Cell_DataType::TYPE_STRING);
+              $sheet->getStyleByColumnAndRow($colNo, $rowNo + 2)->getAlignment()->setWrapText(true);
              $colNo++;
             }
          }

@@ -131,19 +131,21 @@ try {
     }
     //set patient group
     $patientGroup = array();
-    if($_POST['patientGroup']=='general_population'){
-        $patientGroup['patient_group'] = 'general_population';
-    }else if($_POST['patientGroup']=='key_population'){
-        $patientGroup['patient_group'] = 'key_population';
-        //$patientGroup['patient_group_option'] = $_POST['patientGroupKeyOption'];
-        if($_POST['patientGroupKeyOption']=='other'){
-            $patientGroup['patient_group_option_other'] = $_POST['patientGroupKeyOtherText'];
+    if(isset($_POST['patientGroup'])){
+        if($_POST['patientGroup']=='general_population'){
+            $patientGroup['patient_group'] = 'general_population';
+        }else if($_POST['patientGroup']=='key_population'){
+            $patientGroup['patient_group'] = 'key_population';
+            //$patientGroup['patient_group_option'] = $_POST['patientGroupKeyOption'];
+            if($_POST['patientGroupKeyOption']=='other'){
+                $patientGroup['patient_group_option_other'] = $_POST['patientGroupKeyOtherText'];
+            }
+        }else if($_POST['patientGroup']=='pregnant'){
+            $patientGroup['patient_group'] = 'pregnant';
+            $patientGroup['patient_group_option_date'] = $_POST['patientPregnantWomanDate'];
+        }else if($_POST['patientGroup']=='breast_feeding'){
+            $patientGroup['patient_group'] = 'breast_feeding';
         }
-    }else if($_POST['patientGroup']=='pregnant'){
-        $patientGroup['patient_group'] = 'pregnant';
-        $patientGroup['patient_group_option_date'] = $_POST['patientPregnantWomanDate'];
-    }else if($_POST['patientGroup']=='breast_feeding'){
-        $patientGroup['patient_group'] = 'breast_feeding';
     }
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,

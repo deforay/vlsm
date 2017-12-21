@@ -192,15 +192,15 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label for="sector">Serviço/Sector </label><span class="mandatory">*</span></td>
+                                    <td><label for="sector">Serviço/Sector </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="sector" id="sector" placeholder="Serviço/Sector" title="Please enter Serviço/Sector" value="<?php echo $vlQueryInfo[0]['requesting_vl_service_sector']; ?>"/>
                                     </td>
-                                    <td><label for="requestingPerson">Nome do solicitante </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingPerson">Nome do solicitante </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="requestingPerson" id="requestingPerson" placeholder="Nome do solicitante" title="Please enter Nome do solicitante" value="<?php echo $vlQueryInfo[0]['requesting_person']; ?>"/>
                                     </td>
-                                    <td><label for="category">Categoria </label><span class="mandatory">*</span></td>
+                                    <td><label for="category">Categoria </label></td>
                                     <td>
                                         <select class="form-control" name="category" id="category" title="Please choose Categoria" style="width:100%;">
                                           <option value="">-- Selecione --</option>
@@ -210,15 +210,15 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label for="profNumber">Nº da Ordem </label><span class="mandatory">*</span></td>
+                                    <td><label for="profNumber">Nº da Ordem </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="profNumber" id="profNumber" placeholder="Nº da Ordem" title="Please enter Nº da Ordem" value="<?php echo $vlQueryInfo[0]['requesting_professional_number']; ?>"/>
                                     </td>
-                                    <td><label for="requestingContactNo">Contacto </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingContactNo">Contacto </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="requestingContactNo" id="requestingContactNo" placeholder="Contacto" title="Please enter Contacto" value="<?php echo $vlQueryInfo[0]['requesting_phone']; ?>"/>
                                     </td>
-                                    <td><label for="requestingDate">Data da solicitação </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingDate">Data da solicitação </label></td>
                                     <td>
                                         <input type="text" class="form-control date" name="requestingDate" id="requestingDate" placeholder="Data da solicitação" title="Please choose Data da solicitação" value="<?php echo $vlQueryInfo[0]['requesting_date']; ?>"/>
                                     </td>
@@ -612,7 +612,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                           <label for="labComments">Comentários do cientista de laboratório </label>
                         </td>
                         <td colspan="3">
-                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"></textarea>
+                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea>
                         </td>
                       </tr>
                       <tr>
@@ -620,7 +620,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                             <label for="status">Status <span class="mandatory">*</span></label>
                         </td>
                         <td>
-                          <select class="form-control labSection <?php echo ($sarr['user_type']=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Please select test status" style="width: 100%;">
+                          <select class="form-control labSection <?php echo ($sarr['user_type']=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Selecione o estado do teste" style="width: 100%;">
                             <option value="">-- Select --</option>
                             <?php foreach($statusResult as $status){ ?>
                               <option value="<?php echo $status['status_id']; ?>"<?php echo ($vlQueryInfo[0]['result_status'] == $status['status_id']) ? 'selected="selected"':'';?>><?php echo ucwords($status['status_name']); ?></option>
@@ -628,10 +628,10 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                           </select>
                         </td>
                         <td class=" reasonForResultChanges" style="visibility:hidden;">
-                            <label for="reasonForResultChanges">Reason For Changes in Result </label>
+                            <label for="reasonForResultChanges">Razão para as mudanças nos resultados </label>
                         </td>
-                        <td class=" reasonForResultChanges" style="visibility:hidden;">
-                          <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
+                        <td colspan="3" class=" reasonForResultChanges" style="visibility:hidden;">
+                          <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Razão para as mudanças nos resultados" style="width:100%;"></textarea>
                         </td>
                       </tr>
                     </table>
