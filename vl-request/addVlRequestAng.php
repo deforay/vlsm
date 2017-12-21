@@ -105,15 +105,15 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label for="sector">Serviço/Sector </label><span class="mandatory">*</span></td>
+                                    <td><label for="sector">Serviço/Sector </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="sector" id="sector" placeholder="Serviço/Sector" title="Please enter Serviço/Sector"/>
                                     </td>
-                                    <td><label for="reqClinician">Nome do solicitante </label><span class="mandatory">*</span></td>
+                                    <td><label for="reqClinician">Nome do solicitante </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="reqClinician" id="reqClinician" placeholder="Nome do solicitante" title="Please enter Nome do solicitante"/>
                                     </td>
-                                    <td><label for="category">Categoria </label><span class="mandatory">*</span></td>
+                                    <td><label for="category">Categoria </label></td>
                                     <td>
                                         <select class="form-control" name="category" id="category" title="Please choose Categoria" style="width:100%;">
                                           <option value="">-- Selecione --</option>
@@ -123,15 +123,15 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label for="profNumber">Nº da Ordem </label><span class="mandatory">*</span></td>
+                                    <td><label for="profNumber">Nº da Ordem </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="profNumber" id="profNumber" placeholder="Nº da Ordem" title="Please enter Nº da Ordem"/>
                                     </td>
-                                    <td><label for="contactNo">Contacto </label><span class="mandatory">*</span></td>
+                                    <td><label for="contactNo">Contacto </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="Contacto" title="Please enter Contacto"/>
                                     </td>
-                                    <td><label for="requestingDate">Data da solicitação </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestingDate">Data da solicitação </label></td>
                                     <td>
                                         <input type="text" class="form-control date" name="requestingDate" id="requestingDate" placeholder="Data da solicitação" title="Please choose Data da solicitação"/>
                                     </td>
@@ -376,7 +376,7 @@
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:14%;"><label for="fName">Nome da Unidade de colheita (se diferente da Unidade de solicitação) </label></td>
+                                <td style="width:14%;"><label for="fName">Nome da Unidade de colheita (se diferente da Unidade de solicitação) </label><span class="mandatory">*</span></td>
                                 <td style="width:14%;">
                                     <select class="form-control isRequired" name="fName" id="fName" title="Please choose Nome de colheita" style="width:100%;" >
                                           <?php echo $facility;  ?>

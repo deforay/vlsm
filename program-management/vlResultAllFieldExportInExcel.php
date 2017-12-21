@@ -142,8 +142,10 @@ include ('../includes/PHPExcel.php');
     $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
     $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
     $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
-    $sheet->getDefaultRowDimension()->setRowHeight(15);
+    $sheet->getDefaultRowDimension()->setRowHeight(18);
+    $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
     $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 2)->getAlignment()->setWrapText(true);
     $colNo++;
   }
  }

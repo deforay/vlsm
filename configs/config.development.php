@@ -3,7 +3,7 @@ require_once(__DIR__.'/config.production.php');
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vl_lab_request_png';
+$DBNAME = 'vl_lab_request';
 //$DBNAME = 'vl_lab_request_rwanda';
 $PORT = 3306;
 

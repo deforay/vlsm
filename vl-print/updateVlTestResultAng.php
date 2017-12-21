@@ -506,7 +506,7 @@ $disable = "disabled = 'disabled'";
                       <tr>
                           <td style="width:14%;"><label for="">Nome do laboratório</label></td>
                           <td style="width:14%;">
-                              <select name="labId" id="labId" class="form-control" title="Please choose Nome do laboratório">
+                              <select name="labId" id="labId" class="form-control" title="Please choose Nome do laboratório" style="width: 100%";>
                                 <option value="">-- Select --</option>
                                 <?php
                                 foreach($lResult as $labName){
@@ -519,7 +519,7 @@ $disable = "disabled = 'disabled'";
                           </td>
                           <td style="width:14%;"><label for="testingPlatform"> Plataforma de teste VL </label></td>
                           <td style="width:14%;">
-                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose Plataforma de teste VL">
+                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose Plataforma de teste VL" style="width: 100%";>
                                 <option value="">-- Select --</option>
                                 <?php foreach($importResult as $mName) { ?>
                                   <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
@@ -601,7 +601,7 @@ $disable = "disabled = 'disabled'";
                             <label for="approvedBy">Aprovado por </label>
                         </td>
                         <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por" style="width: 100%";>
                             <option value="">-- Select --</option>
                             <?php
                             foreach($userResult as $uName){
@@ -616,7 +616,7 @@ $disable = "disabled = 'disabled'";
                           <label for="labComments">Comentários do cientista de laboratório </label>
                         </td>
                         <td colspan="3">
-                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"></textarea>
+                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea>
                         </td>
                       </tr>
                       <tr>
@@ -624,7 +624,7 @@ $disable = "disabled = 'disabled'";
                             <label for="status">Status <span class="mandatory">*</span></label>
                         </td>
                         <td>
-                          <select class="form-control labSection  style="<?php echo (($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) ? 'display:none;':''; ?>"" id="status" name="status" title="Please select test status">
+                          <select class="form-control labSection  <?php echo ($sarr['user_type']=='remoteuser') ? '':'isRequired'; ?>" id="status" name="status" title="Selecione o estado do teste" style="width: 100%";>
                             <option value="">-- Select --</option>
                             <?php
                             foreach($statusResult as $status){
@@ -634,10 +634,10 @@ $disable = "disabled = 'disabled'";
                           </select>
                         </td>
                         <td class=" reasonForResultChanges" style="visibility:hidden;">
-                            <label for="reasonForResultChanges">Reason For Changes in Result </label>
+                            <label for="reasonForResultChanges">Razão para as mudanças nos resultados </label>
                         </td>
-                        <td class=" reasonForResultChanges" style="visibility:hidden;">
-                          <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
+                        <td colspan="3" class="reasonForResultChanges" style="visibility:hidden;">
+                          <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Razão para as mudanças nos resultados" style="width:100%;"></textarea>
                         </td>
                       </tr>
                     </table>

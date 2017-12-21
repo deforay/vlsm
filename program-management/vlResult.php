@@ -399,7 +399,7 @@ $batResult = $db->rawQuery($batQuery);
   function exportInexcel() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("vlResultAllFieldExportInExcel.php",{Sample_Collection_Date:$("#sampleCollectionDate").val(),Batch_Code:$("#batchCode  option:selected").text(),Sample_Type:$("#sampleType  option:selected").text(),Facility_Name:$("#facilityName  option:selected").text(),sample_Test_Date:$("#sampleTestDate").val(),Viral_Load:$("#vLoad  option:selected").text(),Print_Date:$("#printDate").val(),Gender:$("#gender  option:selected").text(),Status:$("#status  option:selected").text(),Show_Reorder_Sample:$("#showReordSample option:selected").text()},
+    $.post("vlResultExportInExcel.php",{Sample_Collection_Date:$("#sampleCollectionDate").val(),Batch_Code:$("#batchCode  option:selected").text(),Sample_Type:$("#sampleType  option:selected").text(),Facility_Name:$("#facilityName  option:selected").text(),sample_Test_Date:$("#sampleTestDate").val(),Viral_Load:$("#vLoad  option:selected").text(),Print_Date:$("#printDate").val(),Gender:$("#gender  option:selected").text(),Status:$("#status  option:selected").text(),Show_Reorder_Sample:$("#showReordSample option:selected").text()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
