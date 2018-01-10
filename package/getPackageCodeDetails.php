@@ -14,7 +14,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 }
 if($sarr['user_type']=='remoteuser'){
     $sCode = 'remote_sample_code';
-  }else if($sarr['user_type']=='vluser'){
+  }else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
     $sCode = 'sample_code';
   }
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";

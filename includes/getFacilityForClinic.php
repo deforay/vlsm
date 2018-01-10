@@ -54,12 +54,12 @@ if(isset($_POST['pName'])){
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
-        $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
+        $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Selecione -- </option>";
         foreach($facilityInfo as $fDetails){
             $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
         }
     }else{
-        $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
+        $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Selecione -- </option>";
     }
     $district = '';
     $facilityDistQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$provinceName[0]."' AND status='active'";
@@ -90,20 +90,20 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
-        $facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
+        $facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Selecione -- </option>";
         foreach($facilityInfo as $fDetails){
             $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
         }
     }else{
-        $facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
+        //$facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Selecione -- </option>";
     }
     $facilityQuery .= " AND facility_type='2'";
     $facilityLabInfo=$db->query($facilityQuery);
     $facilityLab = '';
     if($facilityLabInfo){
-        $facilityLab .= "<option value=''> -- Selecione -- </option>";
+        //$facilityLab .= "<option value=''> -- Selecione -- </option>";
         foreach($facilityLabInfo as $fDetails){
-            $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+            //$facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
         }
     }else{
         //$facilityLab .= "<option value=''> -- Selecione -- </option>";
