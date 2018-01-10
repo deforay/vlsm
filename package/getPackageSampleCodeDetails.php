@@ -25,7 +25,7 @@ $query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id FROM vl_requ
 $query = $query." ORDER BY vl.request_created_datetime ASC";
 $result = $db->rawQuery($query);
 if($sarr['user_type']=='remoteuser'){
-  $sCode = 'remote_sample_code';
+  $sCode = 'sample_code';
 }else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
   $sCode = 'sample_code';
 }
