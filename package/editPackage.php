@@ -81,9 +81,11 @@ if($sarr['user_type']=='remoteuser'){
 						              <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a>  <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
 					              </div><br/><br/>
                         <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
-                          <?php foreach($result as $sample){ ?>
+                          <?php foreach($result as $sample){ 
+                            if($sample[$sCode]!=''){
+                              ?>
                                 <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo ($sample['sample_package_id']==$id) ? 'selected="selected"':''; ?>><?php  echo $sample[$sCode];?></option>
-                          <?php } ?>
+                          <?php } } ?>
                         </select>
 				              </div>
 			              </div>

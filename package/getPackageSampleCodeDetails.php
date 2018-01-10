@@ -25,7 +25,7 @@ $query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id FROM vl_requ
 $query = $query." ORDER BY vl.request_created_datetime ASC";
 $result = $db->rawQuery($query);
 if($sarr['user_type']=='remoteuser'){
-  $sCode = 'sample_code';
+  $sCode = 'remote_sample_code';
 }else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
   $sCode = 'sample_code';
 }
@@ -40,9 +40,11 @@ if($sarr['user_type']=='remoteuser'){
          <select id="sampleCode" name="sampleCode[]" multiple="multiple" class="search">
             <?php
             foreach($result as $sample){
+              if($sample[$sCode]!=''){
               ?>
               <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample[$sCode]);?></option>
               <?php
+              }
              }
             ?>
          </select>
