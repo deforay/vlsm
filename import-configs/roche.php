@@ -1,5 +1,4 @@
 <?php
-
 try {
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
