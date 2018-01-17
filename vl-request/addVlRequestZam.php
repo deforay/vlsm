@@ -30,9 +30,11 @@ if($global['sample_code']=='MMYY'){
   if($sarr['user_type']=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
+    $rKey = 'R';
   }else{
     $sampleCodeKey = 'sample_code_key';
     $sampleCode = 'sample_code';
+    $rKey = '';
   }
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="4" AND vl.sample_code_title="'.$global['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
@@ -360,7 +362,7 @@ $artResult=$db->query($artQuery);
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                            <label for="">Date Sample Collected <span class="mandatory">*</span></label><br>
-                             <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collected Date" title="Please enter sample collected date" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
+                             <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collected Date" title="Please enter sample collected date" onchange="checkSampleReceviedDate();checkSampleTestingDate();sampleCodeGeneration();">
                           </div>
                       </div>
                     </div>
@@ -614,21 +616,31 @@ $artResult=$db->query($artQuery);
       $("#fName").html("<?php echo $facility;?>");
       $("#fCode").val("");
     }
-    <?php
-    if($global['sample_code']=='auto'){ ?>
-      var pNameVal = pName.split("##");
-      var sCode = '<?php echo date('Ymd');?>';
-      var sCodeKey = '<?php echo $maxId;?>';
-      $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-      $("#sampleCodeFormat").val(pNameVal[1]+sCode);
-      $("#sampleCodeKey").val(sCodeKey);
-      checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
-    <?php } else if($global['sample_code']=='YY' || $global['sample_code']=='MMYY'){ ?>
-      $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-      $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
-      $("#sampleCodeKey").val('<?php echo $maxId;?>');
-      checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
-    <?php } ?>
+    sampleCodeGeneration()
+  }
+  function sampleCodeGeneration()
+  {
+    var pName = $("#province").val();
+    var sDate = $("#sampleCollectionDate").val();
+    if(pName!='' && sDate!=''){
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate},
+      function(data){
+        var sCodeKey = JSON.parse(data);
+        <?php if($arr['sample_code']=='auto'){ ?>
+          pNameVal = pName.split("##");
+          sCode = sCodeKey.auto;
+          $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
+          <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+          $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>+sCodeKey.mnthYr');
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
+        <?php } ?>
+      });
+    }
   }
   function getFacilities(obj){
     $.blockUI();
