@@ -95,18 +95,18 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
             $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
         }
     }else{
-        //$facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Selecione -- </option>";
+        $facility .= "<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
     }
     $facilityQuery .= " AND facility_type='2'";
     $facilityLabInfo=$db->query($facilityQuery);
     $facilityLab = '';
     if($facilityLabInfo){
-        //$facilityLab .= "<option value=''> -- Selecione -- </option>";
+        $facilityLab .= "<option value=''> -- Select -- </option>";
         foreach($facilityLabInfo as $fDetails){
-            //$facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+            $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
         }
     }else{
-        //$facilityLab .= "<option value=''> -- Selecione -- </option>";
+        $facilityLab .= "<option value=''> -- Select -- </option>";
     }
     echo $facility."###".$facilityLab."###";
 }
