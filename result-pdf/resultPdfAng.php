@@ -476,7 +476,7 @@ if(sizeof($requestResult)> 0){
               $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data de recepção da amostra</td>';
               $html .='<td style="line-height:11px;font-size:10px;text-align:left;"></td>';
               $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data da quantificação de CV</td>';
-              $html .='<td style="line-height:10px;font-size:10px;text-align:left;"></td>';
+              $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
              $html .='</tr>';
             $html.='</table>';
             $html .='<b style="font-size:12px;">D. RESULTADOS DA QUANTIFICAÇÃO DA CARGA VIRAL</b><br/>';
@@ -533,7 +533,7 @@ if(sizeof($requestResult)> 0){
            }
             $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$lastDate.'</td>';
             $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$lastResult.'</td>';
-            $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+            $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result["facility_name"].'</td>';
            $html .='</tr>';
           $html.='</table>';
           $html.='<table style="padding:10px;">';
@@ -545,7 +545,7 @@ if(sizeof($requestResult)> 0){
           $html .='</tr>';
           $html .='<tr>';
           $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Técnico responsável</td>';
-          $html .='<td style="line-height:11px;font-size:10px;text-align:left;"></td>';
+          $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$result['labName'].'</td>';
           $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data do relatório</td>';
           $html .='<td style="line-height:11px;font-size:10px;text-align:left;"></td>';
          $html .='</tr>';

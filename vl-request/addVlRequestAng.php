@@ -386,9 +386,9 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control " id="collectionSite" name="collectionSite" placeholder="Local de colheita" title="Please enter Local de colheita" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita </label></td>
+                                <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita </label><span class="mandatory">*</span></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control dateTime" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Data Hora de colheita" title="Please enter Data Hora de colheita" style="width:100%;"/>
+                                    <input type="text" class="form-control dateTime isRequired" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Data Hora de colheita" title="Please enter Data Hora de colheita" style="width:100%;" onchange="sampleCodeGeneration();"/>
                                 </td>
                             </tr>
                             <tr>
@@ -572,20 +572,7 @@
               }
           });
       }
-      <?php if($arr['sample_code']=='auto'){ ?>
-      pNameVal = pName.split("##");
-      sCode = '<?php echo date('ymd');?>';
-      sCodeKey = '<?php echo $maxId;?>';
-      $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
-      $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
-      $("#sampleCodeKey").val(sCodeKey);
-      checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
-      <?php }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-      $("#sampleCode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
-      $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
-      $("#sampleCodeKey").val('<?php echo $maxId;?>');
-      checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
-      <?php } ?>
+      sampleCodeGeneration();
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -595,6 +582,30 @@
       $("#district").html("<option value=''> -- Selecione -- </option>");
     }
      $.unblockUI();
+  }
+  function sampleCodeGeneration()
+  {
+    var pName = $("#province").val();
+    var sDate = $("#sampleCollectionDate").val();
+    if(pName!='' && sDate!=''){
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate},
+      function(data){
+        var sCodeKey = JSON.parse(data);
+        <?php if($arr['sample_code']=='auto'){ ?>
+          pNameVal = pName.split("##");
+          sCode = sCodeKey.auto;
+          $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
+          <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+          $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>+sCodeKey.mnthYr');
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
+        <?php } ?>
+      });
+    }
   }
   function getfacilityDistrictwise(obj){
     $.blockUI();
