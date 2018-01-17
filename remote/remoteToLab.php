@@ -27,17 +27,6 @@ if(count($fMapResult)>0){
 }else{
     $fMapResult = "''";
 }
-$end_date = date('Y-12-31');
-$start_date = date('Y-01-01');
-  if($arr['sample_code']=='MMYY'){
-    $mnthYr = date('my');
-    $end_date = date('Y-m-31');
-    $start_date = date('Y-m-01');
-  }else if($arr['sample_code']=='YY'){
-    $mnthYr = date('y');
-    $end_date = date('Y-12-31');
-    $start_date = date('Y-01-01');
-  }
 //get remote data
 if(trim($sarr['lab_name'])==''){
     $sarr['lab_name'] = "''"; 
@@ -78,40 +67,50 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $exsvlResult=$db->query($exsvlQuery);
         if($exsvlResult){
         }else{
-        $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
-        $svlResult=$db->query($svlQuery);
-        $prefix = $arr['sample_code_prefix'];
-        if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
-         $maxId = $svlResult[0]['sample_code_key']+1;
-         $strparam = strlen($maxId);
-         $zeros = substr("000", $strparam);
-         $maxId = $zeros.$maxId;
-        }else{
-         $maxId = '001';
-        }
-        if($arr['sample_code']=='auto'){
-            $lab['serial_no'] = date('ymd').$maxId;
-            $lab['sample_code'] = date('ymd').$maxId;
-            $lab['sample_code_key'] = $maxId;
-        }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
-            $lab['serial_no'] = $prefix.$mnthYr.$maxId;
-            $lab['sample_code'] = $prefix.$mnthYr.$maxId;
-            $lab['sample_code_format'] = $prefix.$mnthYr;
-            $lab['sample_code_key'] =  $maxId;
-        }
-        $lab['request_created_by'] = 0;
-        $lab['last_modified_by'] = 0;
-        $lab['request_created_datetime'] = $general->getDateTime();
-        $lab['last_modified_datetime'] = $general->getDateTime();
-        //$lab['result_status'] = 6;
-        $lab['data_sync'] = 1;//column data_sync value is 1 equal to data_sync done.value 0 is not done.
-        $id = $db->insert('vl_request_form',$lab);
-        $samplePackageId = $lab['sample_package_id'];
-        //update in lab database
-        if($id){
-        //$remotedb = $remotedb->where('remote_sample_code',$lab['remote_sample_code']);
-        //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
-        }
+            if($lab['sample_collection_date']!='' && $lab['sample_collection_date']!=null && $lab['sample_collection_date']!='0000-00-00 00:00:00')
+            {
+                $sExpDT = explode(" ",$lab['sample_collection_date']);
+                $sExpDate = explode("-",$sExpDT[0]);
+                $sExpDate[0] = substr($sExpDate[0], -2);
+                $start_date = date($sExpDate[0].'-01-01');
+                $end_date = date($sExpDate[0].'-12-31');
+                $mnthYr = date($sExpDate[0]);
+                if($arr['sample_code']=='MMYY'){
+                    $mnthYr = date($sExpDate[1].$sExpDate[0]);
+                }else if($arr['sample_code']=='YY'){
+                    $mnthYr = date($sExpDate[0]);
+                }
+                $auto = date($sExpDate[0].$sExpDate[1].$sExpDate[2]);
+                $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
+                $svlResult=$db->query($svlQuery);
+                $prefix = $arr['sample_code_prefix'];
+                if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
+                $maxId = $svlResult[0]['sample_code_key']+1;
+                $strparam = strlen($maxId);
+                $zeros = substr("000", $strparam);
+                $maxId = $zeros.$maxId;
+                }else{
+                $maxId = '001';
+                }
+                if($arr['sample_code']=='auto'){
+                    $lab['serial_no'] = $auto.$maxId;
+                    $lab['sample_code'] = $auto.$maxId;
+                    $lab['sample_code_key'] = $maxId;
+                }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+                    $lab['serial_no'] = $prefix.$mnthYr.$maxId;
+                    $lab['sample_code'] = $prefix.$mnthYr.$maxId;
+                    $lab['sample_code_format'] = $prefix.$mnthYr;
+                    $lab['sample_code_key'] =  $maxId;
+                }
+                $lab['request_created_by'] = 0;
+                $lab['last_modified_by'] = 0;
+                $lab['request_created_datetime'] = $general->getDateTime();
+                $lab['last_modified_datetime'] = $general->getDateTime();
+                //$lab['result_status'] = 6;
+                $lab['data_sync'] = 1;//column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                $id = $db->insert('vl_request_form',$lab);
+                $samplePackageId = $lab['sample_package_id'];
+            }
         }
     }
     if($samplePackageId!=''){
