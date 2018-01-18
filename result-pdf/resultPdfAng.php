@@ -394,6 +394,15 @@ if(sizeof($requestResult)> 0){
         if($result['result_status']=='4'){
           $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/cross.png" alt="rejected"/>';
         }
+        //limits
+        $limit = '';
+        if($result['vl_test_platform']!=''){
+        $lQuery = "Select lower_limit,higher_limit from import_config where machine_name='".$result['vl_test_platform']."'";
+        $lResult = $db->query($lQuery);
+          if(isset($lResult[0]['lower_limit']) && $lResult[0]['lower_limit']!='' && $lResult[0]['lower_limit']!=NULL){
+            $limit = "Lower Limit:&nbsp;&nbsp;".$lResult[0]['lower_limit']."<br/>"."Higher Limit:&nbsp;".$lResult[0]['higher_limit'];
+          }
+        }
         $html = '';
         $html .='<b style="font-size:12px;">A. UNIDADE DE SOLICITAÇÃO</b><br/>';
             $html.='<table style="border-spacing: 3px;border:1px solid #000;">';
@@ -474,7 +483,7 @@ if(sizeof($requestResult)> 0){
               $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data de envio da amostra</td>';
               $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$result['result_dispatched_datetime'].'</td>';
               $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data de recepção da amostra</td>';
-              $html .='<td style="line-height:11px;font-size:10px;text-align:left;"></td>';
+              $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$sampleReceivedDate.'</td>';
               $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data da quantificação de CV</td>';
               $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
              $html .='</tr>';
@@ -485,7 +494,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Plataforma usada</td>';
                $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
                $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Limites de Detecção</td>';
-               $html .='<td style="line-height:10px;font-size:10px;text-align:left;"></td>';
+               $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.$limit.'</td>';
                $html .='<td rowspan="2">'.$smileyContent.'</td>';
               $html .='</tr><br/>';
               $html .='<tr>';
@@ -539,15 +548,15 @@ if(sizeof($requestResult)> 0){
           $html.='<table style="padding:10px;">';
           $html .='<tr>';
            $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Laboratório executor</td>';
-           $html .='<td style="line-height:10px;font-size:10px;text-align:left;"></td>';
+           $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.ucwords($result['labName']).'</td>';
            $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Técnico executor</td>';
-           $html .='<td style="line-height:10px;font-size:10px;text-align:left;"></td>';
+           $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.ucwords($result['lab_contact_person']).'</td>';
           $html .='</tr>';
           $html .='<tr>';
           $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Técnico responsável</td>';
-          $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$result['labName'].'</td>';
+          $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.ucwords($result['vl_focal_person']).'</td>';
           $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data do relatório</td>';
-          $html .='<td style="line-height:11px;font-size:10px;text-align:left;"></td>';
+          $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.date('d-M-Y').'</td>';
          $html .='</tr>';
         $html.='</table>';
         if($result['result']!=''){
