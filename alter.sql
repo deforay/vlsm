@@ -1386,3 +1386,6 @@ ALTER TABLE `vl_request_form` ADD `sample_package_id` VARCHAR(11) NULL DEFAULT N
 DROP TABLE r_package_details_map;
 
 ALTER TABLE `vl_request_form` DROP `professional_number`, DROP `category`;
+
+-- saravanan 22-jan-2017
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '12', 'vlResultAllFieldExportInExcel.php', 'Export Data');
