@@ -1,6 +1,6 @@
 <?php
-include('../includes/MysqliDb.php');
-include('../General.php');
+include(dirname(__FILE__) . "/../includes/MysqliDb.php");
+include(dirname(__FILE__) . "/../General.php");
 $general=new Deforay_Commons_General();
 //system config
 $systemConfigQuery ="SELECT * from system_config";
