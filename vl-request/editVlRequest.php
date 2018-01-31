@@ -282,11 +282,9 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
     }
     function getAge(){
       var dob = $("#dob").val();
-      if($.trim(dob) == ""){
-        //$("#ageInMonths").val("");
-        //$("#ageInYears").val("");
-        //return false;
-      }
+      var agYrs = $("#ageInYears").val();
+      var agMnths = $("#ageInMonths").val();
+      if(agYrs=='' && agMnths=='' && $.trim(dob)!=''){
       //calculate age
       splitDob = dob.split("-");
       var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
@@ -298,6 +296,7 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
       var months = (years == 0)?moment().diff(dob, 'months',false):'';
       $("#ageInYears").val(years); // Gives difference as years
       $("#ageInMonths").val(months); // Gives difference as months
+      }
     }
     function checkARTRegimenValue(){
       var artRegimen = $("#artRegimen").val();

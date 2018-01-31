@@ -274,7 +274,7 @@ $primaryKey="vl_sample_id";
 		    if(trim($sWhere)!= ''){
 		      $sWhere = $sWhere." AND (vl.result_status = 7 OR vl.result_status = 4)";
 		    }else{
-		      $sWhere = "WHERE (vl.result_status =7 OR vl.result_status = 4)";
+		      $sWhere = "WHERE (vl.result_status =7 OR vl.result_status = 4) AND result_printed_datetime is NULL";
 		    }
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";

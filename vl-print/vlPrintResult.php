@@ -25,168 +25,324 @@ $batResult = $db->rawQuery($batQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-edit"></i> Print VL Result</h1>
-      <ol class="breadcrumb">
-        <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Print VL Result</li>
-      </ol>
-    </section>
-
+		<h1><i class="fa fa-edit"></i> Print VL Result</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li class="active">Print VL Result</li>
+		</ol>
+	</section>
      <!-- Main content -->
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
-          <div class="box">
-	    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
-		<tr>
-		    <td><b>Sample Collection Date&nbsp;:</b></td>
-		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
-		    </td>
-		    <td><b>Batch Code&nbsp;:</b></td>
-		    <td>
-		      <select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
-		        <option value=""> -- Select -- </option>
-			 <?php
-			 foreach($batResult as $code){
-			  ?>
-			  <option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
-			  <?php
-			 }
-			 ?>
-		      </select>
-		    </td>
-		
-		    <td><b>Sample Type&nbsp;:</b></td>
-		    <td>
-		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-		      <option value=""> -- Select -- </option>
-			<?php
-			foreach($sResult as $type){
-			 ?>
-			 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
-			 <?php
-			}
-			?>
-		      </select>
-		    </td>
-		</tr>
-		<tr>
-		    <td><b>Facility Name :</b></td>
-		    <td>
-		      <select class="form-control" id="facility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
-		      <option value=""> -- Select -- </option>
-			<?php
-			foreach($fResult as $name){
-			 ?>
-			 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
-			 <?php
-			}
-			?>
-		      </select>
-		    </td>
-		  <td><b>Gender&nbsp;:</b></td>
-		  <td>
-		    <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
-		      <option value=""> -- Select -- </option>
-		      <option value="male">Male</option>
-		      <option value="female">Female</option>
-		      <option value="not_recorded">Not Recorded</option>
-		    </select>
-		  </td>
-		  <td><b>ART Number&nbsp;:</b></td>
-		  <td>
-		    <input type="text" id="artNo" name="artNo" class="form-control" placeholder="ART Number" style="width:220px;" onkeyup="searchVlRequestData()"/>
-		  </td>
-		</tr>
-		<tr>
-		    <td><b>Sample Test Date&nbsp;:</b></td>
-		    <td>
-		      <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
-		    </td>
-		    <td colspan="4"></td>
-		</tr>
-		<tr>
-		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
-		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
-		    &nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf('');"><span>Result PDF</span></button>
-		    &nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
-		    </td>
-		</tr>
-		
-	    </table>
-	    <span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="showhide" class="">
-			<div class="row" style="background:#e0e0e0;float: right !important;padding: 15px;margin-top: -30px;">
-			    <div class="col-md-12" >
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="sample_code"  class="showhideCheckBox" /> <label for="iCol1">Sample Code</label>
-				    </div>
-						<?php $i = 1; if($sarr['user_type']!='standalone'){  $i = 2; ?>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Remote Sample Code</label>
-				    </div>
-						<?php } ?>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Batch Code</label>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Art No</label>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Patient's Name</label> <br>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Sample Type</label> <br>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Result</label>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="last_modified_datetime"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Last Modified On</label>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Status</label>
-				    </div>
-				    
-				</div>
-			    </div>
-			</span>
-           
+          <div class="box">	    
             <!-- /.box-header -->
-            <div class="box-body" style="margin-top:-30px;">
-              <table id="vlRequestDataTable" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-									<th><input type="checkbox" id="checkRowsData" onclick="toggleAllVisible()"/></th>
-		  <th>Sample Code</th>
-			<?php if($sarr['user_type']!='standalone'){ ?>
-		  <th>Remote Sample <br/>Code</th>
-			<?php } ?>
-                  <th>Batch Code</th>
-                  <th>Unique ART No.</th>
-                  <th>Patient's Name</th>
-		  <th>Facility Name</th>
-                  <th>Sample Type</th>
-                  <th>Result</th>
-                  <th>Last Modified On</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colspan="10" class="dataTables_empty">Loading data from server</td>
-                </tr>
-                </tbody>
-              </table>
-							<input type="hidden" name="checkedRows" id="checkedRows"/>
-							<input type="hidden" name="totalSamplesList" id="totalSamplesList"/>
-            </div>
-            <!-- /.box-body -->
-          </div>
+            <div class="box-body">
+						<div class="widget">
+							<div class="widget-content">
+									<div class="bs-example bs-example-tabs">
+											<ul id="myTab" class="nav nav-tabs">
+												<li class="active"><a href="#notPrintedData" data-toggle="tab">Not Printed </a></li>
+												<li><a href="#printedData" data-toggle="tab">Printed </a></li>
+											</ul>
+											<div id="myTabContent" class="tab-content" >
+												<div class="tab-pane fade in active" id="notPrintedData">
+												<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
+												<tr>
+														<td><b>Sample Collection Date&nbsp;:</b></td>
+														<td>
+															<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
+														</td>
+														<td><b>Batch Code&nbsp;:</b></td>
+														<td>
+															<select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
+																<option value=""> -- Select -- </option>
+													 <?php
+													 foreach($batResult as $code){
+														?>
+														<option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
+														<?php
+													 }
+													 ?>
+															</select>
+														</td>
+												
+														<td><b>Sample Type&nbsp;:</b></td>
+														<td>
+															<select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
+															<option value=""> -- Select -- </option>
+													<?php
+													foreach($sResult as $type){
+													 ?>
+													 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
+													 <?php
+													}
+													?>
+															</select>
+														</td>
+												</tr>
+												<tr>
+														<td><b>Facility Name :</b></td>
+														<td>
+															<select class="form-control" id="facility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
+															<option value=""> -- Select -- </option>
+													<?php
+													foreach($fResult as $name){
+													 ?>
+													 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+													 <?php
+													}
+													?>
+															</select>
+														</td>
+													<td><b>Gender&nbsp;:</b></td>
+													<td>
+														<select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
+															<option value=""> -- Select -- </option>
+															<option value="male">Male</option>
+															<option value="female">Female</option>
+															<option value="not_recorded">Not Recorded</option>
+														</select>
+													</td>
+													<td><b>ART Number&nbsp;:</b></td>
+													<td>
+														<input type="text" id="artNo" name="artNo" class="form-control" placeholder="ART Number" style="width:220px;" onkeyup="searchVlRequestData()"/>
+													</td>
+												</tr>
+												<tr>
+														<td><b>Sample Test Date&nbsp;:</b></td>
+														<td>
+															<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+														</td>
+														<td colspan="4"></td>
+												</tr>
+												<tr>
+													<td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
+														&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+														&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf('');"><span>Result PDF</span></button>
+														&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+														</td>
+												</tr>
+												
+													</table>
+													<span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="showhide" class="">
+													<div class="row" style="background:#e0e0e0;float: right !important;padding: 15px;margin-top: -30px;">
+															<div class="col-md-12" >
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="1" id="iCol1" data-showhide="sample_code"  class="showhideCheckBox" /> <label for="iCol1">Sample Code</label>
+																</div>
+																<?php $i = 1; if($sarr['user_type']!='standalone'){  $i = 2; ?>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Remote Sample Code</label>
+																</div>
+																<?php } ?>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Batch Code</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Art No</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Patient's Name</label> <br>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Sample Type</label> <br>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Result</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="last_modified_datetime"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Last Modified On</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Status</label>
+																</div>
+																
+														</div>
+															</div>
+													</span>
+													 
+													<table id="vlRequestDataTable" class="table table-bordered table-striped">
+													<thead>
+													<tr>
+														<th><input type="checkbox" id="checkRowsData" onclick="toggleAllVisible()"/></th>
+								<th>Sample Code</th>
+								<?php if($sarr['user_type']!='standalone'){ ?>
+								<th>Remote Sample <br/>Code</th>
+								<?php } ?>
+														<th>Batch Code</th>
+														<th>Unique ART No.</th>
+														<th>Patient's Name</th>
+								<th>Facility Name</th>
+														<th>Sample Type</th>
+														<th>Result</th>
+														<th>Last Modified On</th>
+														<th>Status</th>
+														<th>Action</th>
+													</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td colspan="10" class="dataTables_empty">Loading data from server</td>
+													</tr>
+													</tbody>
+												</table>
+												<input type="hidden" name="checkedRows" id="checkedRows"/>
+												<input type="hidden" name="totalSamplesList" id="totalSamplesList"/>
+												</div>
+												<div class="tab-pane fade" id="printedData">
+												<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
+												<tr>
+														<td><b>Sample Collection Date&nbsp;:</b></td>
+														<td>
+															<input type="text" id="printSampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
+														</td>
+														<td><b>Batch Code&nbsp;:</b></td>
+														<td>
+															<select class="form-control" id="printBatchCode" name="batchCode" title="Please select batch code" style="width:220px;">
+																<option value=""> -- Select -- </option>
+													 <?php
+													 foreach($batResult as $code){
+														?>
+														<option value="<?php echo $code['batch_code'];?>"><?php echo $code['batch_code'];?></option>
+														<?php
+													 }
+													 ?>
+															</select>
+														</td>
+												
+														<td><b>Sample Type&nbsp;:</b></td>
+														<td>
+															<select style="width:220px;" class="form-control" id="printSampleType" name="sampleType" title="Please select sample type">
+															<option value=""> -- Select -- </option>
+													<?php
+													foreach($sResult as $type){
+													 ?>
+													 <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
+													 <?php
+													}
+													?>
+															</select>
+														</td>
+												</tr>
+												<tr>
+														<td><b>Facility Name :</b></td>
+														<td>
+															<select class="form-control" id="printFacility" name="facility" title="Please select facility name" multiple="multiple" style="width:220px;">
+															<option value=""> -- Select -- </option>
+													<?php
+													foreach($fResult as $name){
+													 ?>
+													 <option value="<?php echo $name['facility_id'];?>"><?php echo ucwords($name['facility_name']."-".$name['facility_code']);?></option>
+													 <?php
+													}
+													?>
+															</select>
+														</td>
+													<td><b>Gender&nbsp;:</b></td>
+													<td>
+														<select name="gender" id="printGender" class="form-control" title="Please choose gender" style="width:220px;">
+															<option value=""> -- Select -- </option>
+															<option value="male">Male</option>
+															<option value="female">Female</option>
+															<option value="not_recorded">Not Recorded</option>
+														</select>
+													</td>
+													<td><b>ART Number&nbsp;:</b></td>
+													<td>
+														<input type="text" id="printArtNo" name="artNo" class="form-control" placeholder="ART Number" style="width:220px;" onkeyup="searchPrintedVlRequestData()"/>
+													</td>
+												</tr>
+												<tr>
+														<td><b>Sample Test Date&nbsp;:</b></td>
+														<td>
+															<input type="text" id="printSampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+														</td>
+														<td colspan="4"></td>
+												</tr>
+												<tr>
+													<td colspan="6">&nbsp;<input type="button" onclick="searchPrintedVlRequestData();" value="Search" class="btn btn-success btn-sm">
+														&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+														&nbsp;<button class="btn btn-default btn-sm" onclick="convertSearchResultToPdf('','printData');"><span>Result PDF</span></button>
+														&nbsp;<button class="btn btn-primary btn-sm" onclick="$('#printShowhide').fadeToggle();return false;"><span>Manage Columns</span></button>
+														</td>
+												</tr>
+												
+													</table>
+													<span style="display: none;position:absolute;z-index: 9999 !important;color:#000;padding:5px;" id="printShowhide" class="">
+													<div class="row" style="background:#e0e0e0;float: right !important;padding: 15px;margin-top: -30px;">
+															<div class="col-md-12" >
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="1" id="printiCol1" data-showhide="sample_code"  class="printShowhideCheckBox" /> <label for="printiCol1">Sample Code</label>
+																</div>
+																<?php $i = 1; if($sarr['user_type']!='standalone'){  $i = 2; ?>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i;?>" id="printiCol<?php echo $i;?>" data-showhide="remote_sample_code" class="printShowhideCheckBox"  /> <label for="printiCol<?php echo $i;?>">Remote Sample Code</label>
+																</div>
+																<?php } ?>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="batch_code" class="printShowhideCheckBox" /> <label for="printiCol<?php echo $i;?>">Batch Code</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="patient_art_no" class="printShowhideCheckBox"  /> <label for="printiCol<?php echo $i;?>">Art No</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="patient_first_name" class="printShowhideCheckBox"  /> <label for="printiCol<?php echo $i;?>">Patient's Name</label> <br>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="facility_name" class="printShowhideCheckBox"  /> <label for="printiCol<?php echo $i;?>">Facility Name</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="sample_name" class="printShowhideCheckBox" /> <label for="printiCol<?php echo $i;?>">Sample Type</label> <br>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="result"  class="printShowhideCheckBox" /> <label for="printiCol<?php echo $i;?>">Result</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="last_modified_datetime"  class="printShowhideCheckBox" /> <label for="printiCol<?php echo $i;?>">Last Modified On</label>
+																</div>
+																<div class="col-md-3">
+																	<input type="checkbox" onclick="javascript:printfnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="printiCol<?php echo $i;?>" data-showhide="status_name"  class="printShowhideCheckBox" /> <label for="printiCol<?php echo $i;?>">Status</label>
+																</div>
+																
+														</div>
+															</div>
+													</span>
+													<table id="printedVlRequestDataTable" class="table table-bordered table-striped">
+													<thead>
+													<tr>
+														<th><input type="checkbox" id="checkPrintedRowsData" onclick="toggleAllPrintedVisible()"/></th>
+								<th>Sample Code</th>
+								<?php if($sarr['user_type']!='standalone'){ ?>
+								<th>Remote Sample <br/>Code</th>
+								<?php } ?>
+														<th>Batch Code</th>
+														<th>Unique ART No.</th>
+														<th>Patient's Name</th>
+								<th>Facility Name</th>
+														<th>Sample Type</th>
+														<th>Result</th>
+														<th>Last Modified On</th>
+														<th>Status</th>
+														<th>Action</th>
+													</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td colspan="10" class="dataTables_empty">Loading data from server</td>
+													</tr>
+													</tbody>
+												</table>
+												<input type="hidden" name="checkedPrintedRows" id="checkedPrintedRows"/>
+												<input type="hidden" name="totalSamplesPrintedList" id="totalSamplesPrintedList"/>
+												</div>
+											</div>
+									</div>
+							</div>
+				</div><!-- /.box-body -->
           <!-- /.box -->
         </div>
         <!-- /.col -->
@@ -202,10 +358,13 @@ $batResult = $db->rawQuery($batQuery);
    var endDate = "";
    var selectedRows=[];
    var selectedRowsId=[];
+	 var selectedPrintedRows=[];
+   var selectedPrintedRowsId=[];
    var oTable = null;
+   var opTable = null;
   $(document).ready(function() {
-     $("#facility").select2({placeholder:"Select Facilities"});
-     $('#sampleCollectionDate,#sampleTestDate').daterangepicker({
+     $("#facility,#printFacility").select2({placeholder:"Select Facilities"});
+     $('#sampleCollectionDate,#sampleTestDate,#printSampleCollectionDate,#printSampleTestDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
             startDate: moment().subtract('days', 29),
@@ -224,9 +383,19 @@ $batResult = $db->rawQuery($batQuery);
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
-     $('#sampleCollectionDate,#sampleTestDate').val("");
+     $('#sampleCollectionDate,#sampleTestDate,#printSampleCollectionDate,#printSampleTestDate').val("");
      loadVlRequestData();
+     loadPrintedVlRequestData();
      $(".showhideCheckBox").change(function(){
+            if($(this).attr('checked')){
+                idpart = $(this).attr('data-showhide');
+                $("#"+idpart+"-sort").show();
+            }else{
+                idpart = $(this).attr('data-showhide');
+                $("#"+idpart+"-sort").hide();
+            }
+        });
+				$(".printShowhideCheckBox").change(function(){
             if($(this).attr('checked')){
                 idpart = $(this).attr('data-showhide');
                 $("#"+idpart+"-sort").show();
@@ -237,6 +406,7 @@ $batResult = $db->rawQuery($batQuery);
         });
         
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
+        $("#printShowhide").hover(function(){}, function(){$(this).fadeOut('slow')});
         var i = '<?php echo $i;?>';
         for(colNo=0;colNo <=i;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
@@ -246,11 +416,23 @@ $batResult = $db->rawQuery($batQuery);
                 $("#iCol"+colNo+"-sort").hide();    
             }
         }
+				for(colNo=0;colNo <=i;colNo++){
+            $("#printiCol"+colNo).attr("checked",opTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
+            if(opTable.fnSettings().aoColumns[colNo].bVisible){
+                $("#printiCol"+colNo+"-sort").show();    
+            }else{
+                $("#printiCol"+colNo+"-sort").hide();    
+            }
+        }
   } );
   
   function fnShowHide(iCol){
     var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
     oTable.fnSetColumnVis( iCol, bVis ? false : true );
+  }
+	function printfnShowHide(iCol){
+    var bVis = opTable.fnSettings().aoColumns[iCol].bVisible;
+    opTable.fnSetColumnVis( iCol, bVis ? false : true );
   }
   
   function loadVlRequestData(){
@@ -322,20 +504,95 @@ $batResult = $db->rawQuery($batQuery);
         });
      $.unblockUI();
   }
+	function loadPrintedVlRequestData(){
+    $.blockUI();
+     opTable = $('#printedVlRequestDataTable').dataTable({
+            "oLanguage": {
+                "sLengthMenu": "_MENU_ records per page"
+            },
+            "bJQueryUI": false,
+            "bAutoWidth": false,
+            "bInfo": true,
+            "bScrollCollapse": true,
+            "bStateSave" : true,
+            "iDisplayLength": 100,
+            "bRetrieve": true,                        
+            "aoColumns": [
+								{"sClass":"center","bSortable":false},
+                {"sClass":"center"},
+								<?php if($sarr['user_type']!='standalone'){ ?>
+                {"sClass":"center"},
+								<?php } ?>
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center","bSortable":false},
+            ],
+						<?php if($sarr['user_type']!='standalone'){ ?>
+            "aaSorting": [[ 9, "desc" ]],
+						<?php } else { ?>
+						"aaSorting": [[ 8, "desc" ]],
+						<?php } ?>
+						"fnDrawCallback": function() {
+							var checkBoxes=document.getElementsByName("chkPrinted[]");
+              len = checkBoxes.length;
+              for(c=0;c<len;c++){
+                if (jQuery.inArray(checkBoxes[c].id, selectedPrintedRowsId) != -1 ){
+									checkBoxes[c].setAttribute("checked",true);
+                  }
+                }
+							},
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "getPrintedVltestResultDetails.php",
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+			      aoData.push({"name": "sampleCollectionDate", "value": $("#printSampleCollectionDate").val()});
+			      aoData.push({"name": "facilityName", "value": $("#prinFacility").val()});
+			      aoData.push({"name": "sampleType", "value": $("#printSampleType").val()});
+			      aoData.push({"name": "vlPrint", "value": 'print'});
+			      aoData.push({"name": "vlPrintDate", "value": 'print'});
+			      aoData.push({"name": "gender", "value": $("#printGender").val()});
+			      aoData.push({"name": "artNo", "value": $("#printArtNo").val()});
+			      aoData.push({"name": "sampleTestDate", "value": $("#printSampleTestDate").val()});
+              $.ajax({
+                  "dataType": 'json',
+                  "type": "POST",
+                  "url": sSource,
+                  "data": aoData,
+                  "success": function(json){
+                      $("#totalSamplesPrintedList").val(json.iTotalDisplayRecords);
+											fnCallback(json);
+                     }
+              });
+            }
+        });
+     $.unblockUI();
+  }
   
   function searchVlRequestData(){
     $.blockUI();
     oTable.fnDraw();
     $.unblockUI();
   }
+	function searchPrintedVlRequestData(){
+    $.blockUI();
+    opTable.fnDraw();
+    $.unblockUI();
+  }
   
-  function convertResultToPdf(id){
+  function convertResultToPdf(id,newData=null){
       $.blockUI();
       <?php
       $path = '';
 			$path = '../result-pdf/vlRequestSearchResultPdf.php';
       ?>
-      $.post("<?php echo $path; ?>", { source:'print', id : id},
+      $.post("<?php echo $path; ?>", { source:'print', id : id,newData:newData},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      $.unblockUI();
@@ -347,33 +604,51 @@ $batResult = $db->rawQuery($batQuery);
       });
   }
   
-  function convertSearchResultToPdf(id){
+  function convertSearchResultToPdf(id,newData=null){
     $.blockUI();
     <?php
     $path = '';
     $path = '../result-pdf/vlRequestSearchResultPdf.php';
     ?>
-		if(selectedRows.length!=0 && selectedRows.length > 20 ){
+		if(newData==null)
+		{
+			var rowsLength = selectedRows.length;
+			var totalCount = $("#totalSamplesList").val();
+			var checkedRow = $("#checkedRows").val();
+		}else{
+			var rowsLength = selectedPrintedRows.length;
+			var totalCount = $("#totalSamplesPrintedList").val();
+			var checkedRow = $("#checkedPrintedRows").val();
+		}
+		if(rowsLength!=0 && rowsLength > 20 ){
 			$.unblockUI();
-			alert("You have selected "+ selectedRows.length +" Sample out of the maximum allowed 20 samples");
+			alert("You have selected "+ rowsLength +" Sample out of the maximum allowed 20 samples");
 			return false;
-		}else if($("#totalSamplesList").val()!=0 && $("#totalSamplesList").val() > 20 && selectedRows.length==0){
+		}else if(totalCount!=0 && totalCount > 20 && rowsLength==0){
 				$.unblockUI();
 				alert("Maximum allowed 20 samples to print.");
 				return false;
 		}else{
-			id = $("#checkedRows").val();
+			id = checkedRow;
 		}
-    $.post("<?php echo $path; ?>", { source:'print',id : id},
+    $.post("<?php echo $path; ?>", { source:'print',id : id,newData:newData},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      $.unblockUI();
 	      alert('Unable to generate download');
 	  }else{
 	      $.unblockUI();
-				selectedRows = [];
-				$(".checkRows").prop('checked', false);
-				$("#checkRowsData").prop('checked', false);
+				if(newData==null)
+				{
+					selectedRows = [];
+					$(".checkRows").prop('checked', false);
+					$("#checkRowsData").prop('checked', false);
+				}else{
+					selectedPrintedRows = [];
+					$(".checkPrintedRows").prop('checked', false);
+					$("#checkPrintedRowsData").prop('checked', false);
+				}
+				
 	      window.open('../uploads/'+data,'_blank');
 	  }
       });
@@ -390,6 +665,19 @@ $batResult = $db->rawQuery($batQuery);
 	     $("#checkRowsData").attr("checked",false);
 			}
 			$("#checkedRows").val(selectedRows.join());
+  }
+	function checkedPrintedRow(obj){
+			if ($(obj).is(':checked')) {
+	     if($.inArray(obj.value, selectedRows) == -1){
+				selectedPrintedRows.push(obj.value);
+				selectedPrintedRowsId.push(obj.id);
+	     }
+			} else {
+				selectedPrintedRows.splice( $.inArray(obj.value, selectedPrintedRows), 1 );
+				selectedPrintedRowsId.splice( $.inArray(obj.id, selectedPrintedRowsId), 1 );
+	     $("#checkPrintedRowsData").attr("checked",false);
+			}
+			$("#checkedPrintedRows").val(selectedPrintedRows.join());
   }
       
     function toggleAllVisible(){
@@ -414,6 +702,29 @@ $batResult = $db->rawQuery($batQuery);
 			});
      }
      $("#checkedRows").val(selectedRows.join());
+   }
+	 function toggleAllPrintedVisible(){
+        //alert(tabStatus);
+			$(".checkPrintedRows").each(function(){
+	     $(this).prop('checked', false);
+	     selectedPrintedRows.splice( $.inArray(this.value, selectedPrintedRows), 1 );
+	     selectedPrintedRowsId.splice( $.inArray(this.id, selectedPrintedRowsId), 1 );
+			});
+			if ($("#checkPrintedRowsData").is(':checked')) {
+			$(".checkPrintedRows").each(function(){
+					$(this).prop('checked', true);
+					selectedPrintedRows.push(this.value);
+				selectedPrintedRowsId.push(this.id);
+			});
+			} else{
+			$(".checkPrintedRows").each(function(){
+	     $(this).prop('checked', false);
+	     selectedPrintedRows.splice( $.inArray(this.value, selectedPrintedRows), 1 );
+	     selectedPrintedRowsId.splice( $.inArray(this.id, selectedPrintedRowsId), 1 );
+	     $("#status").prop('disabled', true);
+			});
+     }
+     $("#checkedPrintedRows").val(selectedPrintedRows.join());
    }
 </script>
  <?php
