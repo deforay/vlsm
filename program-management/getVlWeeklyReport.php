@@ -150,7 +150,9 @@ $country = $configResult[0]['value'];
              ELSE 0
            END) AS totalGreaterThan1000,
 		COUNT(result) as total
-		FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id";
+        FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id";
+        
+        
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
@@ -205,6 +207,7 @@ $country = $configResult[0]['value'];
         }
 	    //echo $sQuery;die;
         $sResult = $db->rawQuery($sQuery);
+        
         /* Data set length after filtering */
         
         $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $sWhere GROUP BY vl.facility_id");
