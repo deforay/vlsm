@@ -184,6 +184,22 @@ $country = $configResult[0]['value'];
 			  $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
 			  $tWhere = $tWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
 			}
+        }
+        if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+            $s_t_date = explode("to", $_POST['sampleCollectionDate']);
+            if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+              $start_date = $general->dateFormat(trim($s_t_date[0]));
+            }
+            if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+              $end_date = $general->dateFormat(trim($s_t_date[1]));
+            }
+			if (trim($start_date) == trim($end_date)) {
+			  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+			  $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+			}else{
+			  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			  $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			}
 		}
 		if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
 			$sWhere = $sWhere." AND vl.lab_id IN (".$_POST['lab'].")";

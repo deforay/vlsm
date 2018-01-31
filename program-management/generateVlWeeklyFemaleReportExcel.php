@@ -44,7 +44,7 @@ if(isset($_SESSION['vlStatisticsFemaleQuery']) && trim($_SESSION['vlStatisticsFe
      )
  );
 
- $sheet->mergeCells('A1:D1');
+ $sheet->mergeCells('A1:I1');
  $nameValue = '';
  foreach($_POST as $key=>$value){
    if(trim($value)!='' && trim($value)!='-- Select --'){

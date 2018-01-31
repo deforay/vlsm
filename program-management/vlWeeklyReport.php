@@ -48,8 +48,12 @@
 											<td style="width:20% !important;">
 											  <input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Sample Test Date Range" readonly style="background:#eee;font-size:0.9em"/>
 											</td>
+                      <td style=""><b>Sample Collection<br>Date Range&nbsp;:</b></td>
+											<td style="width:20% !important;">
+											  <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Sample Collection Date Range" readonly style="background:#eee;font-size:0.9em"/>
+											</td>
 											<td><b>VL Lab(s)&nbsp;:</b></td>
-											<td style="width:32%;">
+											<td style="width:28%;">
 												<select id="lab" name="lab" class="form-control" title="Please select lab" multiple>
 												 <option value=""> -- Select -- </option>
 													<?php
@@ -61,13 +65,15 @@
 													?>
 											  </select>
 											</td>
-											<td style="width:28%;">
+										</tr>
+                    <tr>
+                    <td colspan="6">
 												&nbsp;<input type="button" onclick="searchData();" value="Search" class="btn btn-success btn-sm">
 												&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 												&nbsp;<button class="btn btn-info btn-sm" type="button" onclick="exportVLWeeklyReport()">Excel Export</button>
 												&nbsp;<button class="btn btn-default btn-sm" type="button" onclick="exportVLWeeklyReportPdf()"><i class="fa fa-file-text"></i> PDF </button>
 											</td>
-										</tr>
+                    </tr>
 									</table>
 									<table id="vlWeeklyReportDataTable" class="table table-bordered table-striped">
 										<thead>
@@ -109,12 +115,16 @@
 								<div class="tab-pane fade" id="femaleReport">
 									<table class="table valign-mid" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width:98%;">
 										<tr>
-											<td style="width:10%;"><b>Sample Test<br>Date Range&nbsp;:</b></td>
+											<td ><b>Sample Test<br>Date Range&nbsp;:</b></td>
 											<td style="width:20% !important;">
 											  <input type="text" id="femaleSampleTestDate" name="femaleSampleTestDate" class="form-control" placeholder="Sample Test Date Range" readonly style="background:#eee;font-size:0.9em"/>
 											</td>
-											<td style="width: 10%;"><b>VL Lab(s)&nbsp;:</b></td>
-											<td>
+                      <td><b>Sample Collection<br>Date Range&nbsp;:</b></td>
+											<td style="width:20% !important;">
+											  <input type="text" id="femaleSampleCollectionDate" name="femaleSampleCollectionDate" class="form-control" placeholder="Sample Collection Date Range" readonly style="background:#eee;font-size:0.9em"/>
+											</td>
+											<td><b>VL Lab(s)&nbsp;:</b></td>
+											<td style="width:28%;">
 												<select id="femaleLab" name="femaleLab" class="form-control" title="Please select lab" multiple>
 												 <option value=""> -- Select -- </option>
 													<?php
@@ -126,12 +136,14 @@
 													?>
 											  </select>
 											</td>
-											<td style="width:40%;">
+										</tr>
+                    <tr>
+                      <td colspan="6">
 												&nbsp;<input type="button" onclick="searchData();" value="Search" class="btn btn-success btn-sm">
 												&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 												&nbsp;<button class="btn btn-info btn-sm" type="button" onclick="exportFemaleVLWeeklyReport()">Excel Export</button>
 											</td>
-										</tr>
+                    </tr>
 									</table>
 									<table id="vlWeeklyFemaleReportDataTable" class="table table-bordered table-striped">
 										<thead>
@@ -184,8 +196,8 @@
     var oTableFemale = null;
     $(document).ready(function() {
         $('#lab').select2({placeholder:"All Labs"});
-        $('#femaleLab').select2({width:'190px',placeholder:"All Labs"});
-        $('#sampleTestDate,#femaleSampleTestDate').daterangepicker({
+        $('#femaleLab').select2({width:'250px',placeholder:"All Labs"});
+        $('#sampleTestDate,#sampleCollectionDate,#femaleSampleTestDate,#femaleSampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
             startDate: moment().subtract('days', 6),
@@ -245,6 +257,7 @@
             "sAjaxSource": "getVlWeeklyReport.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
                 aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
+                aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
                 aoData.push({"name": "lab", "value": $("#lab").val()});
               $.ajax({
                   "dataType": 'json',
@@ -289,6 +302,7 @@
             "sAjaxSource": "getVlWeeklyFemaleReport.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
                 aoData.push({"name": "sampleTestDate", "value": $("#femaleSampleTestDate").val()});
+                aoData.push({"name": "sampleCollectionDate", "value": $("#femaleSampleCollectionDate").val()});
                 aoData.push({"name": "lab", "value": $("#femaleLab").val()});
               $.ajax({
                   "dataType": 'json',
@@ -310,7 +324,7 @@
     
     function exportVLWeeklyReport(){
        $.blockUI();
-       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleTestDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
+       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleTestDate").val(),collectionDate:$("#sampleCollectionDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){
@@ -323,7 +337,7 @@
     }
 	function exportFemaleVLWeeklyReport(){
        $.blockUI();
-       $.post("generateVlWeeklyFemaleReportExcel.php",{sample_test_date:$("#femaleSampleTestDate").val(),lab:$("#femaleLab").val(),searchData:$('.dataTables_filter input').val()},
+       $.post("generateVlWeeklyFemaleReportExcel.php",{sample_test_date:$("#femaleSampleTestDate").val(),sample_collection_date:$("#femaleSampleCollectionDate").val(),lab:$("#femaleLab").val(),searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){
