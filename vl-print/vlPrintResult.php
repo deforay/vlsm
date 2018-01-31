@@ -556,7 +556,6 @@ $batResult = $db->rawQuery($batQuery);
 			      aoData.push({"name": "facilityName", "value": $("#prinFacility").val()});
 			      aoData.push({"name": "sampleType", "value": $("#printSampleType").val()});
 			      aoData.push({"name": "vlPrint", "value": 'print'});
-			      aoData.push({"name": "vlPrintDate", "value": 'print'});
 			      aoData.push({"name": "gender", "value": $("#printGender").val()});
 			      aoData.push({"name": "artNo", "value": $("#printArtNo").val()});
 			      aoData.push({"name": "sampleTestDate", "value": $("#printSampleTestDate").val()});

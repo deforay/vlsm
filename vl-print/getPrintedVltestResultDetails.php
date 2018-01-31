@@ -163,9 +163,6 @@ $primaryKey="vl_sample_id";
 			if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
 			  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 			}
-			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-			    $sWhere = $sWhere.' AND vl.result_status  IN ('.$_POST['status'].')';
-			}
 			if(isset($_POST['artNo']) && trim($_POST['artNo'])!= ''){
 			    $sWhere = $sWhere." AND vl.patient_art_no LIKE '%" . $_POST['artNo'] . "%' ";
 			}
@@ -241,15 +238,6 @@ $primaryKey="vl_sample_id";
 					//$sWhere = $sWhere.' vl.patient_art_no = "'.$_POST['artNo'].'"';
 				}
 			}
-			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-			    if(isset($setWhr)){
-				$sWhere = $sWhere.' AND vl.result_status IN ('.$_POST['status'].')';
-			    }else{
-			      $setWhr = 'where';
-			      $sWhere=' where '.$sWhere;
-			      $sWhere = $sWhere.' vl.result_status IN ('.$_POST['status'].')';
-			    }
-		        }
 			if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
 			    if(isset($setWhr)){
 				if(trim($_POST['gender']) == "not_recorded"){
@@ -272,23 +260,13 @@ $primaryKey="vl_sample_id";
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
 		  if(!isset($_POST['status']) || trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		      $sWhere = $sWhere." AND (vl.result_status = 7 OR vl.result_status = 4)";
+		      $sWhere = $sWhere." AND (vl.result_status = 7 OR vl.result_status = 4) AND result_printed_datetime is NOT NULL";
 		    }else{
-		      $sWhere = "WHERE (vl.result_status =7 OR vl.result_status = 4)";
-			}
-			if(isset($_POST['vlPrintDate'])){
-				$sWhere = $sWhere." AND result_printed_datetime is NOT NULL";
+		      $sWhere = "WHERE (vl.result_status =7 OR vl.result_status = 4) AND result_printed_datetime is NOT NULL";
 			}
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
-		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."'";
-		}else{
-		    if(trim($sWhere)!= ''){
-		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
-		    }else{
-		      $sWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
-		    }
-		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
+		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."' AND result_printed_datetime is NOT NULL";
 		}
 		if($sarr['user_type']=='remoteuser'){
 			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";

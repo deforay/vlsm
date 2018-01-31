@@ -164,7 +164,14 @@ $primaryKey="vl_sample_id";
 			  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-			    $sWhere = $sWhere.' AND vl.result_status  IN ('.$_POST['status'].')';
+				if($_POST['status']=='no_result'){
+					$statusCondition = ' AND vl.result is NULL';
+				}else if($_POST['status']=='result'){
+				  $statusCondition = ' AND vl.result is NOT NULL';
+				}else{
+				  $statusCondition = ' AND vl.result_status=4';
+				}
+			    $sWhere = $sWhere.$statusCondition;
 			}
 			if(isset($_POST['artNo']) && trim($_POST['artNo'])!= ''){
 			    $sWhere = $sWhere." AND vl.patient_art_no LIKE '%" . $_POST['artNo'] . "%' ";
@@ -243,11 +250,25 @@ $primaryKey="vl_sample_id";
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 			    if(isset($setWhr)){
-				$sWhere = $sWhere.' AND vl.result_status IN ('.$_POST['status'].')';
+					if($_POST['status']=='no_result'){
+						$statusCondition = ' AND vl.result is NULL';
+					}else if($_POST['status']=='result'){
+					  $statusCondition = ' AND vl.result is NOT NULL';
+					}else{
+					  $statusCondition = ' AND vl.result_status=4';
+					}
+				$sWhere = $sWhere.$statusCondition;
 			    }else{
 			      $setWhr = 'where';
-			      $sWhere=' where '.$sWhere;
-			      $sWhere = $sWhere.' vl.result_status IN ('.$_POST['status'].')';
+				  $sWhere=' where '.$sWhere;
+				  if($_POST['status']=='no_result'){
+					  $statusCondition = ' vl.result is NULL';
+				  }else if($_POST['status']=='result'){
+					$statusCondition = ' vl.result is NOT NULL';
+				  }else{
+					$statusCondition = ' vl.result_status=4';
+				  }
+			      $sWhere = $sWhere.$statusCondition;
 			    }
 		        }
 			if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
@@ -278,7 +299,7 @@ $primaryKey="vl_sample_id";
 		    }
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
-		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."'";
+		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."' AND result_printed_datetime is NULL";
 		}else{
 		    if(trim($sWhere)!= ''){
 		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
