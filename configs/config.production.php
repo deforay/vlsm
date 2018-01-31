@@ -6,16 +6,16 @@ require_once(__DIR__.'/../system/system.php');
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vl_lab_request_ss';
+$DBNAME = 'vl_lab_request';
 //$DBNAME = 'vl_lab_request_rwanda';
-$PORT = 3306;
+$PORT = 3436;
 
 $sHOST = 'localhost';
 $sUSER = 'root';
 $sPASSWORD = 'zaq12345';
-$sDBNAME = 'vl_lab_request_rwanda';
+$sDBNAME = 'vl_lab_request';
 //$sDBNAME = 'vl_lab_request';
-$sPORT = 3306;
+$sPORT = 3436;
 
 // If using WAMP default settings, then uncomment the following 2 lines
 //$PASSWORD = '';
