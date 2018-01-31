@@ -17,7 +17,7 @@ $batchCode = '';
 $sampleType = '';
 $facilityName = array();
 $gender = '';
-$status ='';
+$status ='no_result';
 $lastUrl1 = '';
 $lastUrl2 = '';
 if(isset($_SERVER['HTTP_REFERER'])){
@@ -112,14 +112,14 @@ if($lastUrl1!='' || $lastUrl2!=''){
 		      <option value="not_recorded"<?php echo ($gender=='not_recorded')?"selected='selected'":""?>>Not Recorded</option>
 		    </select>
 		  </td>
-		  <td><b>Status&nbsp;:</b></td>
+		  <!-- <td><b>Status&nbsp;:</b></td>
 		  <td>
 		      <select style="width: 220px;" name="status" id="status" class="form-control" title="Please choose status">
 			<option value="">-- Select --</option>
-			<option value="7"<?php echo ($status=='7')?"selected='selected'":""?>>Accepted</option>
-			<option value="4"<?php echo ($status=='4')?"selected='selected'":""?>>Rejected</option>
+			<option value="7"< ?php echo ($status=='7')?"selected='selected'":""?>>Accepted</option>
+			<option value="4"< ?php echo ($status=='4')?"selected='selected'":""?>>Rejected</option>
 		      </select>
-		    </td>
+		    </td> -->
 		</tr>
 		<tr>
 		  <td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
@@ -171,6 +171,14 @@ if($lastUrl1!='' || $lastUrl2!=''){
 			</span>
             <!-- /.box-header -->
             <div class="box-body">
+              <div class="col-md-offset-4">
+                <select name="status" id="status" class="form-control" title="Please choose result status" style="width:220px;" onchange="searchVlRequestData();">
+                  <option value=""> -- Select -- </option>
+                  <option value="no_result"<?php echo ($status=='no_result')?"selected='selected'":""?>>Result Not Recorded</option>
+                  <option value="result"<?php echo ($status=='result')?"selected='selected'":""?>>Result Recorded</option>
+                  <option value="reject"<?php echo ($status=='reject')?"selected='selected'":""?>>Rejected</option>
+                </select>
+              </div>
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
