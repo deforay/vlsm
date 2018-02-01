@@ -9,12 +9,17 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-     $configQuery ="SELECT value FROM global_config where name='auto_approval'";
-     $configResult = $db->rawQuery($configQuery);
-     $status = 6;
-     if(isset($configResult[0]['value']) && trim($configResult[0]['value']) == 'yes'){
-          $status = 7;
-     }
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
+    $status = 6;
+    if($sarr['user_type']=='remoteuser'){
+        $status = 9;
+    }
      //var_dump($_POST);die;
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
@@ -74,15 +79,38 @@ try {
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
           $_POST['result'] = $_POST['vlResult'];
      }
+    if($sarr['user_type']=='remoteuser'){
+        $sampleCode = 'remote_sample_code';
+        $sampleCodeKey = 'remote_sample_code_key';
+    }else{
+        $sampleCode = 'sample_code';
+        $sampleCodeKey = 'sample_code_key';
+    }
+    //check existing sample code
+    $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
+    $existResult = $db->rawQuery($existSampleQuery);
+    if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+        if($existResult[0][$sampleCodeKey]!=''){
+            $sCode = $existResult[0][$sampleCodeKey] + 1;
+            $strparam = strlen($sCode);
+            $zeros = substr("000", $strparam);
+            $maxId = $zeros.$sCode;
+            $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+            $_POST['sampleCodeKey'] = $maxId;
+        }else{
+            $_SESSION['alertMsg']="Please check your sample ID";
+            header("location:addVlRequest.php");
+        }
+    }
      $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>'6',
           'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='' ? $_POST['sampleCodeTitle'] :  'auto'),
-          'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL) ,
-          'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
+          //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL) ,
+          //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
           'patient_other_id'=>(isset($_POST['uniqueId']) && $_POST['uniqueId']!='' ? $_POST['uniqueId'] :  NULL),
           'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='' ? $_POST['sampleCodeFormat'] :  NULL),
-          'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
+          //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='' ? $_POST['fName'] :  NULL),
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
           'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='' ? $_POST['patientFirstName'] :  NULL),
@@ -131,7 +159,15 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
-     //echo "<pre>";var_dump($vldata);die;
+        if($sarr['user_type']=='remoteuser'){
+            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+            $vldata['remote_sample'] = 'yes';
+        }else{
+            $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+        }
           $id=$db->insert($tableName,$vldata);
           if($id>0){
                $_SESSION['alertMsg']="VL request added successfully";

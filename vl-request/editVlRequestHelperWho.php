@@ -10,6 +10,14 @@ $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
      //var_dump($_POST);die;
+      //system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
           $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
@@ -72,8 +80,8 @@ try {
      $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>'6',
-          'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL) ,
-          'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
+          //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL) ,
+          //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
           'patient_other_id'=>(isset($_POST['uniqueId']) && $_POST['uniqueId']!='' ? $_POST['uniqueId'] :  NULL),
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='' ? $_POST['fName'] :  NULL),
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
@@ -122,6 +130,12 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
+        if($sarr['user_type']=='remoteuser'){
+            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        }else if($_POST['sampleCodeCol']!=''){
+            $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+        }
      //echo "<pre>";var_dump($vldata);die;
           $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
           $id=$db->update($tableName,$vldata);
