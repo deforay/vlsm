@@ -106,7 +106,7 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
             $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
         }
     }else{
-        $facilityLab .= "<option value=''> -- Select -- </option>";
+        //$facilityLab .= "<option value=''> -- Select -- </option>";
     }
     echo $facility."###".$facilityLab."###";
 }

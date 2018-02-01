@@ -642,6 +642,7 @@ $batResult = $db->rawQuery($batQuery);
 					selectedRows = [];
 					$(".checkRows").prop('checked', false);
 					$("#checkRowsData").prop('checked', false);
+					oTable.fnDraw();
 				}else{
 					selectedPrintedRows = [];
 					$(".checkPrintedRows").prop('checked', false);
