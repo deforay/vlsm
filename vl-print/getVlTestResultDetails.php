@@ -293,13 +293,13 @@ $primaryKey="vl_sample_id";
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
 		  if(!isset($_POST['status']) || trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		      $sWhere = $sWhere." AND (vl.result_status = 7 OR vl.result_status = 4)";
+		      $sWhere = $sWhere." AND (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result is NULL) OR vl.result!='') AND result_printed_datetime is NULL";
 		    }else{
-		      $sWhere = "WHERE (vl.result_status =7 OR vl.result_status = 4) AND result_printed_datetime is NULL";
+		      $sWhere = "WHERE (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result is NULL) OR vl.result!='') AND result_printed_datetime is NULL";
 		    }
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
-		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."' AND result_printed_datetime is NULL";
+		  $dWhere = "WHERE (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result='') OR vl.result!='') AND vl.vlsm_country_id='".$arr['vl_form']."' AND result_printed_datetime is NULL";
 		}else{
 		    if(trim($sWhere)!= ''){
 		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
@@ -312,13 +312,7 @@ $primaryKey="vl_sample_id";
 			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
 			$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
 		}
-		if(!isset($_POST['from'])){
-		  $sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";
-		  $sWhere = $sWhere." AND vl.result!=''";
-		  $dWhere = $dWhere. " AND vl.result!=''";
-		}else{
-		  $sQuery = $sQuery.' '.$sWhere;
-		}
+		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
 		//echo $_SESSION['vlResultQuery'];die;
 		

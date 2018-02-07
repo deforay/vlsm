@@ -677,7 +677,6 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                       <div class="row">
-                      
                        <br/> <div class="col-md-6">
                             <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
                             <div class="col-lg-10">
@@ -806,6 +805,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     if($(this).val() == 'yes'){
       $('.rejectionReason').show();
       $('.vlResult').css('display','none');
+      $("#status").val(4);
       $('#rejectionReason').addClass('isRequired');
     }else{
       $('.vlResult').css('display','block');
