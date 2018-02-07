@@ -254,7 +254,6 @@ if($lastUrl1!='' || $lastUrl2!=''){
      
      loadVlRequestData();
      $(".showhideCheckBox").change(function(){
-            
             if($(this).attr('checked')){
                 idpart = $(this).attr('data-showhide');
                 $("#"+idpart+"-sort").show();

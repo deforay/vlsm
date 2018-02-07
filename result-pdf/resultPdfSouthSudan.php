@@ -427,7 +427,7 @@ if(sizeof($requestResult)> 0){
                 $html .='</td>';
               $html .='</tr>';
             $html.='</table>';
-        if($result['result']!=''){
+        if($result['result']!='' || ($result['result']=='' && $result['result_status']=='4')){
           $pdf->writeHTML($html);
           $pdf->lastPage();
           $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';

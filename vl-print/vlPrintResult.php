@@ -598,6 +598,8 @@ $batResult = $db->rawQuery($batQuery);
 	      alert('Unable to generate download');
 	  }else{
 	      $.unblockUI();
+		  oTable.fnDraw();
+		  opTable.fnDraw();
 	      window.open('../uploads/'+data,'_blank');
 	  }
       });
