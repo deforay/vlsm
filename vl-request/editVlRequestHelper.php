@@ -141,18 +141,23 @@ try {
     if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
         $isRejection = true;
         $_POST['vlResult'] = '';
+        $_POST['vlLog'] = '';
     }
     
     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
         $_POST['vlResult'] = 'Target Not Detected';
+        $_POST['vlLog'] = '';
     }
     if(isset($_POST['bdl']) && $_POST['bdl'] =='yes' && $isRejection == false){
         $_POST['vlResult'] = 'Below Detection Level';
+        $_POST['vlLog'] = '';
     }
     
     $_POST['result'] = '';
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
         $_POST['result'] = $_POST['vlResult'];
+    }else if($_POST['vlLog']!=''){
+        $_POST['result'] = $_POST['vlLog'];
     }
     $reasonForChanges = '';
     $allChange = array();
@@ -217,6 +222,7 @@ try {
           'result_value_text'=>NULL,
           'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
+          'result_value_log'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='')? $_POST['vlLog'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
