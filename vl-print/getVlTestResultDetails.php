@@ -165,9 +165,9 @@ $primaryKey="vl_sample_id";
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 				if($_POST['status']=='no_result'){
-					$statusCondition = ' AND vl.result is NULL';
+					$statusCondition = ' AND (vl.result is NULL OR vl.result ="")';
 				}else if($_POST['status']=='result'){
-				  $statusCondition = ' AND vl.result is NOT NULL';
+				  $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
 				}else{
 				  $statusCondition = ' AND vl.result_status=4';
 				}
@@ -251,9 +251,9 @@ $primaryKey="vl_sample_id";
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 			    if(isset($setWhr)){
 					if($_POST['status']=='no_result'){
-						$statusCondition = ' AND vl.result is NULL';
+						$statusCondition = ' AND  (vl.result is NULL OR vl.result ="")';
 					}else if($_POST['status']=='result'){
-					  $statusCondition = ' AND vl.result is NOT NULL';
+					  $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
 					}else{
 					  $statusCondition = ' AND vl.result_status=4';
 					}
@@ -262,9 +262,9 @@ $primaryKey="vl_sample_id";
 			      $setWhr = 'where';
 				  $sWhere=' where '.$sWhere;
 				  if($_POST['status']=='no_result'){
-					  $statusCondition = ' vl.result is NULL';
+					  $statusCondition = '  (vl.result is NULL OR vl.result ="")';
 				  }else if($_POST['status']=='result'){
-					$statusCondition = ' vl.result is NOT NULL';
+					$statusCondition = ' (vl.result is NOT NULL AND vl.result !="")';
 				  }else{
 					$statusCondition = ' vl.result_status=4';
 				  }

@@ -24,8 +24,8 @@ $pdResult=$db->query($pdQuery);
   foreach($pdResult as $provinceName){
     $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
   }
-  $facility = "";
-  $facility.="<option value=''> -- Sélectionner -- </option>";
+  //$facility = "";
+  $facility ="<option value=''> -- Sélectionner -- </option>";
   foreach($fResult as $fDetails){
     $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
   }
@@ -104,7 +104,7 @@ $pdResult=$db->query($pdQuery);
                                 </td>
                                 <td><label for="clinicName">Structure/Service </label><span class="mandatory">*</span></td>
                                 <td>
-                                    <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                                    <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                       <?php echo $facility;  ?>
                                     </select>
                                 </td>
@@ -307,16 +307,16 @@ $pdResult=$db->query($pdQuery);
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:20%;"><label for="">Date du prélèvement </label></td>
+                                <td style="width:20%;"><label for="">Date du prélèvement <span class="mandatory">*</span></label></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" onchange="checkSampleReceviedDate();checkSampleTestingDate();sampleCodeGeneration();" style="width:30%;"/>
+                                    <input type="text" class="form-control dateTime isRequired" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" onchange="checkSampleReceviedDate();checkSampleTestingDate();sampleCodeGeneration();" style="width:30%;"/>
                                 </td>
                             </tr>
                             <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
                               <tr>
-                                <td><label for="specimenType">Type d'échantillon </label></td>
+                                <td><label for="specimenType">Type d'échantillon <span class="mandatory">*</span> </label></td>
                                 <td colspan="3">
-                                  <select name="specimenType" id="specimenType" class="form-control" title="Please choose type d'échantillon" onchange="checkSpecimenType();" style="width:30%;">
+                                  <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose type d'échantillon" onchange="checkSpecimenType();" style="width:30%;">
                                     <option value=""> -- Sélectionner -- </option>
                                     <?php foreach($sResult as $type){ ?>
                                      <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
@@ -364,6 +364,7 @@ $pdResult=$db->query($pdQuery);
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
+                                    <option value=""> -- Sélectionner -- </option>
                                       <option value="6"> En attente d'approbation Clinique </option>
                                       <option value="7">Echantillon accepté</option>
                                       <option value="4">Echantillon rejeté</option>
@@ -386,17 +387,17 @@ $pdResult=$db->query($pdQuery);
                                 <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser </label></td>
                                 <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:90%;display:none;"/></td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
                                     <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
                                 </td>
-                            </tr>
+                            </tr> -->
                             <tr>
                                 <td><label for="labId">Nom du laboratoire </label> </td>
                                 <td colspan="3">
                                     <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:30%;">
-                                    <option value=""> -- Select -- </option>
+                                    <option value=""> -- Sélectionner -- </option>
                                     <?php foreach($lResult as $labName){ ?>
                                       <option value="<?php echo $labName['facility_id'];?>" ><?php echo ucwords($labName['facility_name']);?></option>
                                       <?php } ?>
@@ -414,7 +415,7 @@ $pdResult=$db->query($pdQuery);
                                 <td><label for="testingPlatform">Technique utilisée </label></td>
                                 <td colspan="3">
                                     <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:230px;">
-                                      <option value="">-- Select --</option>
+                                      <option value="">-- Sélectionner --</option>
                                       <?php foreach($importResult as $mName) { ?>
                                         <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
                                         <?php } ?>
@@ -450,6 +451,7 @@ $pdResult=$db->query($pdQuery);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+                <input type="hidden" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter code labo" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
                 <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
                   <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                   <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
@@ -504,8 +506,8 @@ $pdResult=$db->query($pdQuery);
     }
     $.unblockUI();
   }
-  function sampleCodeGeneration()
-  {
+
+  function sampleCodeGeneration() {
     var pName = $("#province").val();
     var sDate = $("#sampleCollectionDate").val();
     if(pName!='' && sDate!=''){

@@ -1105,7 +1105,8 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Enable QR Code Mechanism', 'enable_qr_mechanism', 'yes');
 
---Pal 14-Jun-2017
+-- Pal 14-Jun-2017 
+
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'vlRequestRwdForm.php', 'Manage QR Code Rwd Form');
 
 ALTER TABLE  `r_art_code_details` ADD  `headings` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `parent_art` ;
