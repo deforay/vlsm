@@ -108,6 +108,6 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     }else{
         //$facilityLab .= "<option value=''> -- Select -- </option>";
     }
-    echo $facility."###".$facilityLab."###";
+    echo $facility; //."###".$facilityLab."###";
 }
 ?>
