@@ -171,12 +171,12 @@ if($lastUrl1!='' || $lastUrl2!=''){
 			</span>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="col-md-offset-4">
-                <select name="status" id="status" class="form-control" title="Please choose result status" style="width:220px;" onchange="searchVlRequestData();">
+              <div class="">
+                <select name="status" id="status" class="form-control" title="Please choose result status" style="width:220px;margin-top:30px;" onchange="searchVlRequestData();">
                   <option value=""> -- Select -- </option>
-                  <option value="no_result"<?php echo ($status=='no_result')?"selected='selected'":""?>>Result Not Recorded</option>
-                  <option value="result"<?php echo ($status=='result')?"selected='selected'":""?>>Result Recorded</option>
-                  <option value="reject"<?php echo ($status=='reject')?"selected='selected'":""?>>Rejected</option>
+                  <option value="no_result"<?php echo ($status=='no_result')?"selected='selected'":""?>>Results Not Recorded</option>
+                  <option value="result"<?php echo ($status=='result')?"selected='selected'":""?>>Results Recorded</option>
+                  <option value="reject"<?php echo ($status=='reject')?"selected='selected'":""?>>Rejected Samples</option>
                 </select>
               </div>
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
