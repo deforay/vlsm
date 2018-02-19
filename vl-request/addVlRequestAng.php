@@ -615,7 +615,10 @@
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
           if(data != ""){
-            $("#clinicName").html(data);
+            //$("#clinicName").html(data);
+            details = data.split("###");
+            $("#clinicName").html(details[0]);
+            $("#labId").html(details[1]);
           }
       });
     }else{

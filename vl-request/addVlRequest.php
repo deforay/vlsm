@@ -197,6 +197,9 @@ $general=new Deforay_Commons_General();
                 <?php if($sarr['user_type']=='remoteuser' || $sarr['user_type']=='standalone'){ ?>
                     alert(alrt);
                     $("#"+id).val('');
+                    <?php if($arr['vl_form']=='3'){ ?>
+                    $("#sampleCodeValue").html('').hide();
+                    <?php } ?>
                   <?php } else { ?>
                       data = data.split("##");
                       document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
