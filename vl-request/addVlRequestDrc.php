@@ -87,7 +87,10 @@ $pdResult=$db->query($pdQuery);
                         </div>
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
+                            
                         </div>
+                        <!-- <h4>exemple de code</h4> -->
+                        <h4 style="display:none;" id="sampleCodeValue"></h4>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -518,11 +521,13 @@ $pdResult=$db->query($pdQuery);
           pNameVal = pName.split("##");
           sCode = sCodeKey.auto;
           $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
           $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
           $("#sampleCodeKey").val(sCodeKey.maxId);
           checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
           <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
           $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
           $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
           $("#sampleCodeKey").val(sCodeKey.maxId);
           checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
@@ -538,7 +543,8 @@ $pdResult=$db->query($pdQuery);
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
           if(data != ""){
-            $("#clinicName").html(data);
+            details = data.split("###");
+            $("#clinicName").html(details[0]);
           }
       });
     }else{
@@ -614,8 +620,14 @@ $pdResult=$db->query($pdQuery);
     var status = $("#status").val();
     if(status == 4){
       $(".rejectionReason").show();
+      $("#rejectionReason").addClass('isRequired');
+      $("#vlResult").val('').css('pointer-events','none');
+      $("#vlLog").val('').css('pointer-events','none');
     }else{
       $(".rejectionReason").hide();
+      $("#rejectionReason").removeClass('isRequired');
+      $("#vlResult").css('pointer-events','auto');
+      $("#vlLog").css('pointer-events','auto');
     }
   }
   function checkRejectionReason(){

@@ -90,6 +90,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
+                        <h4 id="sampleCodeValue">exemple de code:<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -398,8 +399,8 @@
                             <!-- <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
-                                    <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,'< ?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                                    <input type="hidden" name="sampleCodeCol" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                                 </td>
                             </tr> -->
                             <tr>
@@ -461,6 +462,7 @@
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                 <input type="hidden" id="vlSampleId" name="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id']; ?>"/>
                 <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
@@ -478,6 +480,9 @@
   <script type="text/javascript">
      changeProvince = true;
      changeFacility = true;
+     $(document).ready(function() {
+        checkTestStatus();
+     });
     function getfacilityDetails(obj){
       $.blockUI();
       var pName = $("#province").val();
@@ -502,7 +507,8 @@
         $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
         function(data){
             if(data != ""){
-              $("#clinicName").html(data);
+                details = data.split("###");
+                $("#clinicName").html(details[0]);
             }
         });
       }else{
@@ -551,8 +557,14 @@
       var status = $("#status").val();
       if(status == 4){
         $(".rejectionReason").show();
+        $("#rejectionReason").addClass('isRequired');
+        $("#vlResult").val('').css('pointer-events','none');
+        $("#vlLog").val('').css('pointer-events','none');
       }else{
         $(".rejectionReason").hide();
+        $("#rejectionReason").removeClass('isRequired');
+        $("#vlResult").css('pointer-events','auto');
+        $("#vlLog").css('pointer-events','auto');
       }
     }
     function checkRejectionReason(){
