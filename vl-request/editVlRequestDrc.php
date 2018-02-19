@@ -480,6 +480,9 @@
   <script type="text/javascript">
      changeProvince = true;
      changeFacility = true;
+     $(document).ready(function() {
+        checkTestStatus();
+     });
     function getfacilityDetails(obj){
       $.blockUI();
       var pName = $("#province").val();
@@ -555,9 +558,13 @@
       if(status == 4){
         $(".rejectionReason").show();
         $("#rejectionReason").addClass('isRequired');
+        $("#vlResult").val('').css('pointer-events','none');
+        $("#vlLog").val('').css('pointer-events','none');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
+        $("#vlResult").css('pointer-events','auto');
+        $("#vlLog").css('pointer-events','auto');
       }
     }
     function checkRejectionReason(){
