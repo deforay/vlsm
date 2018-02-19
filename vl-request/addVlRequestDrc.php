@@ -620,8 +620,14 @@ $pdResult=$db->query($pdQuery);
     var status = $("#status").val();
     if(status == 4){
       $(".rejectionReason").show();
+      $("#rejectionReason").addClass('isRequired');
+      $("#vlResult").val('').css('pointer-events','none');
+      $("#vlLog").val('').css('pointer-events','none');
     }else{
       $(".rejectionReason").hide();
+      $("#rejectionReason").removeClass('isRequired');
+      $("#vlResult").css('pointer-events','auto');
+      $("#vlLog").css('pointer-events','auto');
     }
   }
   function checkRejectionReason(){
