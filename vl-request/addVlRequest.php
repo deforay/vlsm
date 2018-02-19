@@ -119,15 +119,21 @@ $general=new Deforay_Commons_General();
         var sampleCollectionDate = $("#sampleCollectionDate").val();
         var sampleReceivedDate = $("#sampleReceivedDate").val();
         if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= ''){
-            if(moment(sampleCollectionDate).isAfter(sampleReceivedDate)) {
+          var scdf = $("#sampleCollectionDate").val().split(' ');
+          var srdf = $("#sampleReceivedDate").val().split(' ');
+          var scd = changeFormat(scdf[0]);
+          var srd = changeFormat(srdf[0]);
+            if(moment(scd+' '+scdf[1]).isAfter(srd+' '+srdf[1])) {
               <?php if($arr['vl_form']=='3'){ ?>
               //french
                 alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
-                $("#sampleReceivedDate").val("");
+              <?php }else if($arr['vl_form']=='8'){ ?>
+              //portugese
+                alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
               <?php }else { ?>
                 alert("Sample Received Date could not be earlier than Sample Collection Date!");
-                $('#sampleReceivedDate').val('');
               <?php } ?>
+              $('#sampleReceivedDate').val('');
             }
         }
       }
@@ -135,29 +141,39 @@ $general=new Deforay_Commons_General();
         var sampleCollectionDate = $("#sampleCollectionDate").val();
         var sampleTestingDate = $("#sampleTestingDateAtLab").val();
         if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= ''){
-          if(moment(sampleCollectionDate).isAfter(sampleTestingDate)) {
+          var scdf = $("#sampleCollectionDate").val().split(' ');
+          var stdl = $("#sampleTestingDateAtLab").val().split(' ');
+          var scd = changeFormat(scdf[0]);
+          var std = changeFormat(stdl[0]);
+          if(moment(scd+' '+scdf[1]).isAfter(std+' '+stdl[1])) {
             <?php if($arr['vl_form']=='3'){ ?>
               //french
               alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
-              $("#sampleTestingDateAtLab").val("");
+            <?php }else if($arr['vl_form']=='8'){ ?>
+              //french
+              alert("Data de Teste de Amostras não pode ser anterior ao Data Hora de colheita!");
             <?php } else { ?>
               alert("Sample Testing Date could not be earlier than Sample Collection Date!");
-              $("#sampleTestingDateAtLab").val("");
             <?php } ?>
+            $("#sampleTestingDateAtLab").val("");
           }
         }
       }
       function checkARTInitiationDate(){
-        var dob = $("#dob").val();
+        var dob = changeFormat($("#dob").val());
         var artInitiationDate = $("#dateOfArtInitiation").val();
         if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
+          var artInitiationDate = changeFormat($("#dateOfArtInitiation").val());
           if(moment(dob).isAfter(artInitiationDate)) {
             <?php if($arr['vl_form']=='3'){ ?>
             //french
             alert("La date d'ouverture de l'ART ne peut pas être antérieure à!");
-            $("#dateOfArtInitiation").val("");
-            <?php } ?>
+            <?php }else if($arr['vl_form']=='8'){ ?>
+            //portugese
+            alert("Data de início de TARV não pode ser anterior ao Data de nascimento!");
+            <?php } else { ?>
             alert("ART Initiation Date could not be earlier than DOB!");
+            <?php } ?>
             $("#dateOfArtInitiation").val("");
           }
         }
@@ -197,6 +213,9 @@ $general=new Deforay_Commons_General();
                 <?php if($sarr['user_type']=='remoteuser' || $sarr['user_type']=='standalone'){ ?>
                     alert(alrt);
                     $("#"+id).val('');
+                    <?php if($arr['vl_form']=='3'){ ?>
+                    $("#sampleCodeValue").html('').hide();
+                    <?php } ?>
                   <?php } else { ?>
                       data = data.split("##");
                       document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
@@ -219,23 +238,26 @@ $general=new Deforay_Commons_General();
         }
       }
       function getAge(){
-        var dob = $("#dob").val();
-        if($.trim(dob) == ""){
-          $("#ageInMonths").val("");
-          $("#ageInYears").val("");
-          return false;
-        }
+        var dob = changeFormat($("#dob").val());
+        var agYrs = $("#ageInYears").val();
+        var agMnths = $("#ageInMonths").val();
+        if(agYrs=='' && agMnths=='' && $.trim(dob)!=''){
         //calculate age
-        splitDob = dob.split("-");
-        var dobDate = new Date(splitDob[1] + splitDob[2]+", "+splitDob[0]);
-        var monthDigit = dobDate.getMonth();
-        var dobMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
-        dobMonth = (dobMonth<10) ? '0'+dobMonth: dobMonth;
-        dob = splitDob[2]+'-'+dobMonth+'-'+splitDob[0];
-        var years = moment().diff(dob, 'years',false);
-        var months = (years == 0)?moment().diff(dob, 'months',false):'';
-        $("#ageInYears").val(years); // Gives difference as years
-        $("#ageInMonths").val(months); // Gives difference as months
+          var years = moment().diff(dob, 'years',false);
+          var months = (years == 0)?moment().diff(dob, 'months',false):'';
+          $("#ageInYears").val(years); // Gives difference as years
+          $("#ageInMonths").val(months); // Gives difference as months
+        }
+      }
+      function changeFormat(date)
+      {
+        splitDate = date.split("-");
+        var fDate = new Date(splitDate[1] + splitDate[2]+", "+splitDate[0]);
+        var monthDigit = fDate.getMonth();
+        var fMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
+        fMonth = (fMonth<10) ? '0'+fMonth: fMonth;
+        format = splitDate[2]+'-'+fMonth+'-'+splitDate[0];
+        return format; 
       }
     </script>
 <?php include('../footer.php');?>

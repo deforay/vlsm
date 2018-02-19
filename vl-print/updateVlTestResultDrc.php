@@ -87,6 +87,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
+                        <h4 id="sampleCodeValue">exemple de code:<?php echo $vlQueryInfo[0]['sample_code']; ?></h4>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label></td>
@@ -444,10 +445,12 @@
                                 <td><label for="testingPlatform">Technique utilisée </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisée" style="width:30%;">
-                                        <option value=""> -- Sélectionner -- </option>
-                                        <option value="plasma_protocole_600" <?php echo($vlQueryInfo[0]['vl_test_platform'] == "plasma_protocole_600")?'selected="selected"':''; ?>>Plasma protocole 600µl</option>
-                                        <option value="dbs_protocole_1000" <?php echo($vlQueryInfo[0]['vl_test_platform'] == "dbs_protocole_1000")?'selected="selected"':''; ?>>DBS protocole 1000 µl</option>
+                                    <option value=""> -- Sélectionner -- </option>
+                                    <?php foreach($importResult as $mName) { ?>
+                                        <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
+                                        <?php } ?>
                                     </select>
+                                    
                                 </td>
                             </tr>
                             <tr>

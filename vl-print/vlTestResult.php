@@ -349,12 +349,12 @@ if($lastUrl1!='' || $lastUrl2!=''){
     $.unblockUI();
   }
   
-  function convertResultToPdf(id){
+  function convertResultToPdf(id,newData=null){
     <?php
     $path = '';
     $path = '../result-pdf/vlRequestSearchResultPdf.php';
     ?>
-      $.post("<?php echo $path; ?>", { source:'print', id : id},
+      $.post("<?php echo $path; ?>", { source:'print', id : id,newData:newData},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
@@ -364,13 +364,13 @@ if($lastUrl1!='' || $lastUrl2!=''){
       });
   }
   
-  function convertSearchResultToPdf(id){
+  function convertSearchResultToPdf(id,newData=null){
     $.blockUI();
     <?php
     $path = '';
     $path = '../result-pdf/vlRequestSearchResultPdf.php'; 
     ?>
-    $.post("<?php echo $path;?>", { source:'print',id:id},
+    $.post("<?php echo $path;?>", { source:'print',id:id,newData:newData},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
