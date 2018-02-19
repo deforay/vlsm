@@ -166,7 +166,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 <tr>
                                     <td><label for="province">Província </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="province" id="province" title="Please choose província" style="width:100%;">
+                                        <select class="form-control isRequired" name="province" id="province" title="Please choose província" style="width:100%;" onchange="getfacilityDetails(this)">
                                             <?php foreach($pdResult as $provinceName){ ?>
                                               <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['facility_state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
                                             <?php } ?>
@@ -174,7 +174,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                     </td>
                                     <td><label for="district">Município </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="district" id="district" title="Please choose município" style="width:100%;">
+                                        <select class="form-control isRequired" name="district" id="district" title="Please choose município" style="width:100%;" onchange="getfacilityDistrictwise(this);">
                                           <option value=""> -- Selecione -- </option>
                                           <?php foreach($districtResult as $districtName){
                                               ?>
@@ -184,7 +184,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                     </td>
                                     <td><label for="clinicName">Nome da Unidade </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;">
+                                        <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
                                           <?php foreach($fResult as $fDetails){ ?>
                                             <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['requesting_facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
                                           <?php } ?>
@@ -684,7 +684,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                   details = data.split("###");
                   $("#clinicName").html(details[0]);
                   $("#district").html(details[1]);
-                  //$("#clinicianName").val(details[2]);
+                  $("#clinicianName").val(details[2]);
                 }
             });
         }
@@ -707,7 +707,10 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
         $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
         function(data){
             if(data != ""){
-              $("#clinicName").html(data);
+              //$("#clinicName").html(data);
+              details = data.split("###");
+            $("#clinicName").html(details[0]);
+            $("#labId").html(details[1]);
             }
         });
       }else{

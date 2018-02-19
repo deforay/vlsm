@@ -208,7 +208,7 @@ if(sizeof($requestResult)> 0){
             $html.='<table style="padding:0px 2px 2px 2px;">';
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code Labo</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date du prélèvement</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date du prï¿½lï¿½vement</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code du patient</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -220,7 +220,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
               //$html .='<tr>';
-              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Prénom du patient</td>';
+              // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Prï¿½nom du patient</td>';
               // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de famille du patient</td>';
               // $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Mobile No.</td>';
               //$html .='</tr>';
@@ -233,7 +233,7 @@ if(sizeof($requestResult)> 0){
                //$html .='<td colspan="3" style="line-height:10px;"></td>';
               //$html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Âge</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ï¿½ge</td>';
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sexe</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -252,7 +252,7 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code Clinique</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Province</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Zone de santé</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Zone de santï¿½</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['facility_code'].'</td>';
@@ -263,7 +263,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de l’installation</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de lï¿½installation</td>';
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom clinicien</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -283,10 +283,10 @@ if(sizeof($requestResult)> 0){
                 $html .='<td colspan="3">';
                  $html .='<table style="padding:2px;">';
                    $html .='<tr>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de réception de léchantillon</td>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de remise du résultat</td>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Type d’échantillon</td>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Technique utilisée</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de rï¿½ception de lï¿½chantillon</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de remise du rï¿½sultat</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Type dï¿½ï¿½chantillon</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Technique utilisï¿½e</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$sampleReceivedDate." ".$sampleReceivedTime.'</td>';
@@ -301,7 +301,11 @@ if(sizeof($requestResult)> 0){
                     $html .='<td colspan="3"></td>';
                     $html .='<td rowspan="3" style="text-align:left;">'.$smileyContent.'</td>';
                    $html .='</tr>';
-                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Résultat(copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].'</td></tr>';
+                   $logValue = '';
+                   if($result['result_value_log']!=''){
+                   $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result_value_log'];
+                   }
+                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Rï¿½sultat(copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].$logValue.'</td></tr>';
                    $html .='<tr><td colspan="3"></td></tr>';
                  $html .='</table>';
                 $html .='</td>';
@@ -323,7 +327,7 @@ if(sizeof($requestResult)> 0){
                $html .='</tr>';
              }
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$resultApprovedBy.'</span></td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvï¿½ par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$resultApprovedBy.'</span></td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -343,16 +347,16 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="3" style="line-height:14px;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Résultats précédents</td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Rï¿½sultats prï¿½cï¿½dents</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:8px;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Date dernière charge virale (demande)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_date'].'</span></td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Date derniï¿½re charge virale (demande)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_date'].'</span></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Résultat dernière charge virale(copies/ml)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_result'].'</span></td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Rï¿½sultat derniï¿½re charge virale(copies/ml)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_result'].'</span></td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:110px;border-bottom:2px solid #d3d3d3;"></td>';
