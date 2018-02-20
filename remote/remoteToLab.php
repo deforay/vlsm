@@ -29,8 +29,8 @@ if(count($fMapResult)>0){
 }
 //get remote data
 if(trim($sarr['lab_name'])==''){
-    $sarr['lab_name'] = "''"; 
-  }
+    $sarr['lab_name'] = "''";
+}
 $vlQuery="SELECT * FROM vl_request_form WHERE (lab_id =".$sarr['lab_name']." OR facility_id IN (".$fMapResult.")) AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $remotedb->rawQuery($vlQuery);
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
@@ -58,7 +58,7 @@ foreach($vlRemoteResult as $key=>$remoteData){
         $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
         $id = $db->update('vl_request_form',$lab);
         $samplePackageId = $lab['sample_package_id'];
-        //update in lab database        
+        //update in lab database
         //$db = $remotedb->where('sample_code',$lab['sample_code']);
         //$id = $remotedb->update('vl_request_form',array('data_sync'=>1));
     }else{
