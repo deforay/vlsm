@@ -1390,3 +1390,6 @@ ALTER TABLE `vl_request_form` DROP `professional_number`, DROP `category`;
 
 -- saravanan 22-jan-2017
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '12', 'vlResultAllFieldExportInExcel.php', 'Export Data');
+
+--ilahir 19-Feb-2018
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Vldashboard Url', 'vldashboard_url', NULL);
