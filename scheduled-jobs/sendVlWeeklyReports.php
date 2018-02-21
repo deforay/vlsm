@@ -15,6 +15,11 @@ $start_date = date('Y-m-d', strtotime('-7 days'));
 if(!isset($postdata['reportedDate'])){
    $_POST['reportedDate'] = $general->humanDateFormat($start_date).' to '.$general->humanDateFormat($end_date);
 }
+
+$query ="SELECT * from s_vlsm_instance";
+$qResult=$db->query($query);
+$facilityName = ucwords($qResult[0]['instance_facility_name']);
+
  //excel code start
  $excel = new PHPExcel();
  $sheet = $excel->getActiveSheet();
@@ -448,7 +453,14 @@ if(!isset($postdata['reportedDate'])){
     $mail->Password = 'mko)(*&^12345';
     //Set who the message is to be sent from
     $mail->setFrom('zfmailexample@gmail.com');
-    $subject="VLSM - Weekly Report - ".$_POST['reportedDate'];
+   
+   if(trim($facilityName)!=""){
+		$facilityName=" - ".$facilityName;
+	}
+   if(trim($dateRange)!=""){
+			$_POST['reportedDate']=" - ".$_POST['reportedDate'];
+	}
+    $subject="Viral Load LIS - Weekly Report ".$facilityName.$_POST['reportedDate'];
     $mail->Subject = $subject;
     //Set to emailid(s)
     $configQuery ="SELECT * from global_config where name='manager_email'";

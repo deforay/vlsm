@@ -7,6 +7,10 @@ include('../General.php');
 include ('../includes/PHPExcel.php');
 $general=new Deforay_Commons_General();
 
+$query ="SELECT * from s_vlsm_instance";
+$qResult=$db->query($query);
+$facilityName = ucwords($qResult[0]['instance_facility_name']);
+
 $configQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($configQuery);
 $country = $configResult[0]['value'];
@@ -179,7 +183,13 @@ $sQuery="SELECT
 		$mail->Password = 'mko)(*&^12345';
 		//Set who the message is to be sent from
 		$mail->setFrom('zfmailexample@gmail.com');
-		$subject="VLSM - Female Weekly Report - ".$dateRange;
+		if(trim($facilityName)!=""){
+			$facilityName=" - ".$facilityName;
+		}
+		if(trim($dateRange)!=""){
+			$dateRange=" - ".$dateRange;
+		}
+		$subject="Viral Load LIS - Female Weekly Report ".$facilityName.$dateRange;
 		$mail->Subject = $subject;
 		//Set to emailid(s)
 		$configQuery ="SELECT * from global_config where name='manager_email'";
