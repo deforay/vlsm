@@ -27,20 +27,9 @@ if(count($fMapResult)>0){
 }else{
   $fMapResult = "''";
 }
-$end_date = date('Y-12-31');
-$start_date = date('Y-01-01');
-  if($arr['sample_code']=='MMYY'){
-    $mnthYr = date('my');
-    $end_date = date('Y-m-31');
-    $start_date = date('Y-m-01');
-  }else if($arr['sample_code']=='YY'){
-    $mnthYr = date('y');
-    $end_date = date('Y-12-31');
-    $start_date = date('Y-01-01');
-  }
 //get remote data
 if(trim($sarr['lab_name'])==''){
-  $sarr['lab_name'] = "''"; 
+  $sarr['lab_name'] = "''";
 }
 $vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND (lab_id =".$sarr['lab_name']." OR facility_id IN(".$fMapResult.")) AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $db->rawQuery($vlQuery);
@@ -50,7 +39,7 @@ $oneDimensionalArray = array_map('current', $allColResult);
 if(count($vlRemoteResult)>0){
 foreach($vlRemoteResult as $key=>$remoteData){
     foreach($oneDimensionalArray as $result){
-        $lab[$result] = $remoteData[$result];
+      $lab[$result] = $remoteData[$result];
     }
     //remove result value
     $removeKeys = array('vl_sample_id');
