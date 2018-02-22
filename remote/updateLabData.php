@@ -3,6 +3,11 @@
 include(dirname(__FILE__) . "/../includes/MysqliDb.php");
 include(dirname(__FILE__) . "/../General.php");
 $general=new Deforay_Commons_General();
+if(!isset($REMOTEURL) || $REMOTEURL=='')
+{
+    echo "Please check your remote url";
+    die;
+}
 //system config
 $systemConfigQuery ="SELECT * from system_config";
 $systemConfigResult=$db->query($systemConfigQuery);
@@ -23,7 +28,7 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 if(trim($sarr['lab_name'])==''){
     $sarr['lab_name'] = "''";
 }
-$url = 'http://vlsm-rwanda.deforay.in/remote/fetchDataFromRemote.php';
+$url = $REMOTEURL.'/remote/fetchDataFromRemote.php';
 $data = array(
     'labName'=>$sarr['lab_name'],
     "Key"=>"vlsm-lab-Data--",

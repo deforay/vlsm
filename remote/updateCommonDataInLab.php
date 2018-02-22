@@ -2,7 +2,11 @@
 //update common table from remote to lab db
 include(dirname(__FILE__) . "/../includes/MysqliDb.php");
 include(dirname(__FILE__) . "/../General.php");
-
+if(!isset($REMOTEURL) || $REMOTEURL=='')
+{
+    echo "Please check your remote url";
+    die;
+}
 $general=new Deforay_Commons_General();
 $globalConfigQuery ="SELECT * from system_config";
 $configResult=$db->query($globalConfigQuery);
@@ -36,7 +40,7 @@ $facilityLResult = $db->query($facilityLQuery);
 if(isset($facilityLResult[0]['updated_datetime']) && $facilityLResult[0]['updated_datetime']!='' && $facilityLResult[0]['updated_datetime']!=NULL && $facilityLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $fDateTime = $facilityLResult[0]['updated_datetime'];
 }
-$url = 'http://vlsm-rwanda.deforay.in/remote/getCommonDataFromRemote.php';
+$url = $REMOTEURL.'/remote/getCommonDataFromRemote.php';
 $data = array(
     'artCodeUpdateTime'=>$artCodeTime,
     'rjtUpdateTime'=>$rjtDateTime,
