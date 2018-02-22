@@ -625,7 +625,9 @@ $districtResult=$db->query($districtQuery);
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
 	  if(data != ""){
-            $("#fName").html(data);
+      details = data.split("###");
+          $("#fName").html(details[0]);
+          $("#labId").html(details[1]);
 	  }
       });
     }
