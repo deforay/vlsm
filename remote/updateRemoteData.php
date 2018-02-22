@@ -1,7 +1,12 @@
 <?php
 //this fille is get the data from lab db and update in remote db
 include(dirname(__FILE__) . "/../includes/MysqliDb.php");
-$url = 'http://vlsm-rwanda.deforay.in/remote/getFacilityData.php';
+if(!isset($REMOTEURL) || $REMOTEURL=='')
+{
+    echo "Please check your remote url";
+    die;
+}
+$url = $REMOTEURL.'/remote/getFacilityData.php';
 $data = array(
     "Key"=>"vlsm-lab-Data--",
 );
@@ -48,7 +53,7 @@ if(trim($sarr['lab_name'])==''){
 }
 $vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND (lab_id =".$sarr['lab_name']." OR facility_id IN(".$fMapResult.")) AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlLabResult = $db->rawQuery($vlQuery);
-$url = 'http://vlsm-rwanda.deforay.in/remote/updateRemoteDetails.php';
+$url = $REMOTEURL.'/remote/updateRemoteDetails.php';
 $data = array(
     "result"=>$vlLabResult,
     "Key"=>"vlsm-lab-Data--",

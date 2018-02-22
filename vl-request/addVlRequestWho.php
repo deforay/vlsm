@@ -605,7 +605,11 @@ $sKey = '';$sFormat = '';
     if(dName!=''){
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
-        if(data != ""){ $("#fName").html(data); }
+        if(data != ""){ 
+          details = data.split("###");
+          $("#fName").html(details[0]);
+          $("#labId").html(details[1]);
+        }
       });
     }
     $.unblockUI();
