@@ -33,7 +33,9 @@ $primaryKey="vl_sample_id";
 					$aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
 					$orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
 				}
-        
+        if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print') {
+					array_unshift($orderColumns,"vl.vl_sample_id");
+				}
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
         

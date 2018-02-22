@@ -29,19 +29,21 @@ if($sarr['user_type']=='remoteuser'){
     $sampleCode = 'sample_code';
     $rKey = '';
 }
-$sExpDT = explode(" ",$_POST['sDate']);
-$dtFormat = $general->dateFormat($sExpDT[0]);
-$sExpDate = explode("-",$dtFormat);
-$sExpDate[0] = substr($sExpDate[0], -2);
-$start_date = date($sExpDate[0].'-01-01');
-$end_date = date($sExpDate[0].'-12-31');
-$mnthYr = date($sExpDate[0]);
+$sampleColDateTimeArray = explode(" ",$_POST['sDate']);
+$sampleCollectionDate = $general->dateFormat($sampleColDateTimeArray[0]);
+$sampleColDateArray = explode("-",$sampleCollectionDate);
+$samColDate = substr($sampleColDateArray[0], -2);
+$start_date = $sampleColDateArray[0].'-01-01';
+$end_date = $sampleColDateArray[0].'-12-31';
+$mnthYr = $samColDate[0];
+
 if($arr['sample_code']=='MMYY'){
-    $mnthYr = date($sExpDate[1].$sExpDate[0]);
+    $mnthYr = $sampleColDateArray[1].$samColDate;
 }else if($arr['sample_code']=='YY'){
-    $mnthYr = date($sExpDate[0]);
+    $mnthYr = $samColDate;
 }
-$auto = date($sExpDate[0].$sExpDate[1].$sExpDate[2]);
+
+$auto = $samColDate.$sampleColDateArray[1].$sampleColDateArray[2];
 $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
