@@ -527,7 +527,7 @@ $pdResult=$db->query($pdQuery);
           checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
           <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
           $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
-          $("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
+          $("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
           $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
           $("#sampleCodeKey").val(sCodeKey.maxId);
           checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
