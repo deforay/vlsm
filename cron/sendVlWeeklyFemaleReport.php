@@ -178,11 +178,11 @@ $sQuery="SELECT
 		$mail->SMTPAuth = true;
 		$mail->SMTPKeepAlive = true; 
 		//Username to use for SMTP authentication - use full email address for gmail
-		$mail->Username = 'zfmailexample@gmail.com';
+		$mail->Username = $emailUserName;
 		//Password to use for SMTP authentication
-		$mail->Password = 'mko)(*&^12345';
+		$mail->Password = $emailPassword;
 		//Set who the message is to be sent from
-		$mail->setFrom('zfmailexample@gmail.com');
+		$mail->setFrom($emailUserName);
 		if(trim($facilityName)!=""){
 			$facilityName=" - ".$facilityName;
 		}
