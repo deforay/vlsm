@@ -28,7 +28,10 @@ foreach($data['result'] as $key=>$remoteData){
             $lab['last_modified_datetime'] = $general->getDateTime();
             $lab['remote_sample_code'] = $sResult[0]['remote_sample_code'];
             $lab['remote_sample_code_key'] = $sResult[0]['remote_sample_code_key'];
-            unset($lab['request_created_by']);unset($lab['last_modified_by']);unset($lab['request_created_datetime']);unset($lab['sample_package_id']);
+            unset($lab['request_created_by']);
+            unset($lab['last_modified_by']);
+            unset($lab['request_created_datetime']);
+            unset($lab['sample_package_id']);
             $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
             $id = $db->update('vl_request_form',$lab);
             $sampleCode[] = $lab['sample_code'];
