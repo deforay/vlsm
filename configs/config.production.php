@@ -17,6 +17,9 @@ $sDBNAME = 'vl_lab_request';
 //$sDBNAME = 'vl_lab_request';
 $sPORT = 3436;
 
+$emailUserName='zfmailexample@gmail.com';
+$emailPassword='mko)(*&^09876';
+
 // If using WAMP default settings, then uncomment the following 2 lines
 //$PASSWORD = '';
 //$PORT = 3306;
