@@ -10,7 +10,7 @@ $PORT = 3306;
 $sHOST = 'localhost';
 $sUSER = 'root';
 $sPASSWORD = 'zaq12345';
-$sDBNAME = 'vl_lab_request_rwanda';
+$sDBNAME = 'vl_lab_request';
 //$sDBNAME = 'vl_lab_request';
 $sPORT = 3306;
 
