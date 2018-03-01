@@ -226,7 +226,7 @@ if($urgency==''){ $urgency= 'normal';}
                   <div class="col-xs-3 col-md-3">
                     <div class="form-group">
                     <label for="sampleCollectionDate">Sample Collection Date <span class="mandatory">*</span></label>
-                    <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
+                    <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" value="<?php echo $sDate;?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();sampleCodeGeneration();">
                     </div>
                   </div>
                   <div class="col-xs-3 col-md-3">
@@ -589,23 +589,10 @@ if($urgency==''){ $urgency= 'normal';}
             $("#clinicName").html(details[0]);
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
-	  }
+	    }
       });
       }
-      <?php if($arr['sample_code']=='auto'){ ?>
-        pNameVal = pName.split("##");
-        sCode = '<?php echo date('ymd');?>';
-        sCodeKey = '<?php echo $maxId;?>';
-        $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
-        $("#sampleCodeKey").val(sCodeKey);
-        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null);
-        <?php }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
-        $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo1',null,'This sample number already exists.Try another number',null);
-        <?php } ?>
+      sampleCodeGeneration();
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -613,6 +600,30 @@ if($urgency==''){ $urgency= 'normal';}
       $("#clinicName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
+  }
+  function sampleCodeGeneration()
+  {
+    var pName = $("#province").val();
+    var sDate = $("#sampleCollectionDate").val();
+    if(pName!='' && sDate!=''){
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate},
+      function(data){
+        var sCodeKey = JSON.parse(data);
+        <?php if($arr['sample_code']=='auto'){ ?>
+          pNameVal = pName.split("##");
+          sCode = sCodeKey.auto;
+          $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null);
+          <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+            $(".serialNo1,.serialNo,.reqBarcode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null);
+        <?php } ?>
+      });
+    }
   }
   function getfacilityDistrictwise(obj)
   {

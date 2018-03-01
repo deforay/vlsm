@@ -1105,7 +1105,8 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Enable QR Code Mechanism', 'enable_qr_mechanism', 'yes');
 
---Pal 14-Jun-2017
+-- Pal 14-Jun-2017 
+
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '20', 'vlRequestRwdForm.php', 'Manage QR Code Rwd Form');
 
 ALTER TABLE  `r_art_code_details` ADD  `headings` VARCHAR( 255 ) NULL DEFAULT NULL AFTER  `parent_art` ;
@@ -1132,8 +1133,6 @@ ALTER TABLE `vl_request_form` ADD `request_exported_datetime` DATETIME NULL DEFA
 
 ALTER TABLE `temp_sample_report` ADD `request_exported_datetime` DATETIME NULL DEFAULT NULL AFTER `import_machine_name`, ADD `request_imported_datetime` DATETIME NULL DEFAULT NULL AFTER `request_exported_datetime`, ADD `result_exported_datetime` DATETIME NULL DEFAULT NULL AFTER `request_imported_datetime`, ADD `result_imported_datetime` DATETIME NULL DEFAULT NULL AFTER `result_exported_datetime`;
 
---Pal 17-Aug-2017
-ALTER TABLE `vl_request_form` ADD `request_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `date_dispatched_from_clinic_to_lab`, ADD `result_mail_datetime` DATETIME NULL DEFAULT NULL AFTER `request_mail_datetime`;
 
 --saravanna 30-aug-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Patient Name in Result PDF', 'patient_name_pdf', 'flname');
@@ -1379,3 +1378,18 @@ ALTER TABLE `r_package_details_map`
 
 ALTER TABLE `r_package_details_map`
   MODIFY `package_map_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+-- saravanan 11-dec-2017
+ALTER TABLE `package_details` ADD `package_status` VARCHAR(255) NULL DEFAULT NULL AFTER `added_by`;
+
+ALTER TABLE `vl_request_form` ADD `sample_package_id` VARCHAR(11) NULL DEFAULT NULL AFTER `sample_batch_id`;
+
+DROP TABLE r_package_details_map;
+
+ALTER TABLE `vl_request_form` DROP `professional_number`, DROP `category`;
+
+-- saravanan 22-jan-2017
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '12', 'vlResultAllFieldExportInExcel.php', 'Export Data');
+
+--ilahir 19-Feb-2018
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Vldashboard Url', 'vldashboard_url', NULL);

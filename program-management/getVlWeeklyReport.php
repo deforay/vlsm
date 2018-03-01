@@ -150,7 +150,9 @@ $country = $configResult[0]['value'];
              ELSE 0
            END) AS totalGreaterThan1000,
 		COUNT(result) as total
-		FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id";
+        FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id";
+        
+        
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
@@ -182,6 +184,22 @@ $country = $configResult[0]['value'];
 			  $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
 			  $tWhere = $tWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
 			}
+        }
+        if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
+            $s_t_date = explode("to", $_POST['sampleCollectionDate']);
+            if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+              $start_date = $general->dateFormat(trim($s_t_date[0]));
+            }
+            if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+              $end_date = $general->dateFormat(trim($s_t_date[1]));
+            }
+			if (trim($start_date) == trim($end_date)) {
+			  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+			  $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+			}else{
+			  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			  $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+			}
 		}
 		if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
 			$sWhere = $sWhere." AND vl.lab_id IN (".$_POST['lab'].")";
@@ -205,6 +223,7 @@ $country = $configResult[0]['value'];
         }
 	    //echo $sQuery;die;
         $sResult = $db->rawQuery($sQuery);
+        
         /* Data set length after filtering */
         
         $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $sWhere GROUP BY vl.facility_id");

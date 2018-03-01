@@ -25,7 +25,7 @@ $pdQuery="SELECT * from province_details";
     $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
     $chkUserFcMapResult = $db->query($chkUserFcMapQry);
     if($chkUserFcMapResult){
-    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."' group by province_name";
     }
     $rKey = 'R';
   }else{
@@ -54,10 +54,10 @@ if($arr['sample_code']=='MMYY'){
 $start_date = date('Y-01-01');
 $end_date = date('Y-12-31');
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="7" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
+$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 $prefix = $arr['sample_code_prefix'];
-if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
  $maxId = $svlResult[0][$sampleCodeKey]+1;
  $strparam = strlen($maxId);
  $zeros = substr("000", $strparam);
@@ -236,7 +236,7 @@ $sKey = ''; $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="">Date of Sample Collection <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
+                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" onchange="sampleCodeGeneration()">
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -661,20 +661,7 @@ $sKey = ''; $sFormat = '';
           }
         });
       }
-      <?php if($arr['sample_code']=='auto'){ ?>
-        pNameVal = pName.split("##");
-        sCode = '<?php echo date('ymd');?>';
-        sCodeKey = '<?php echo $maxId;?>';
-        $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
-        $("#sampleCodeKey").val(sCodeKey);
-        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
-        <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $("#sampleCode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
-        $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
-        <?php } ?>
+      sampleCodeGeneration();
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -682,6 +669,30 @@ $sKey = ''; $sFormat = '';
       $("#fName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
+  }
+  function sampleCodeGeneration()
+  {
+    var pName = $("#province").val();
+    var sDate = $("#sampleCollectionDate").val();
+    if(pName!='' && sDate!=''){
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate},
+      function(data){
+        var sCodeKey = JSON.parse(data);
+        <?php if($arr['sample_code']=='auto'){ ?>
+          pNameVal = pName.split("##");
+          sCode = sCodeKey.auto;
+          $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
+          <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+          $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
+        <?php } ?>
+      });
+    }
   }
   function getFacilities(obj){
     $.blockUI();

@@ -1,21 +1,38 @@
 <?php
 ob_start();
-if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
+if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
   $numeric = '';
   $maxLength = '';
   if($arr['max_length']!='' && $arr['sample_code']=='alphanumeric'){
-  $maxLength = $arr['max_length'];
-  $maxLength = "maxlength=".$maxLength;
+    $maxLength = $arr['max_length'];
+    $maxLength = "maxlength=".$maxLength;
   }
 }else{
   $numeric = 'checkNum';
   $maxLength = '';
   if($arr['max_length']!=''){
-  $maxLength = $arr['max_length'];
-  $maxLength = "maxlength=".$maxLength;
+    $maxLength = $arr['max_length'];
+    $maxLength = "maxlength=".$maxLength;
   }
 }
+//check remote user
+$rKey = '';
 $pdQuery="SELECT * from province_details";
+if($sarr['user_type']=='remoteuser'){
+  $sampleCodeKey = 'remote_sample_code_key';
+  $sampleCode = 'remote_sample_code';
+  //check user exist in user_facility_map table
+  $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+  $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+  if($chkUserFcMapResult){
+  $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+  }
+  $rKey = 'R';
+}else{
+  $sampleCodeKey = 'sample_code_key';
+  $sampleCode = 'sample_code';
+  $rKey = '';
+}
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
@@ -26,25 +43,22 @@ $facility = '';
 $facility.="<option data-code='' value=''> -- Select -- </option>";
 $aQuery="SELECT * from r_art_code_details where nation_identifier='who'";
 $aResult=$db->query($aQuery);
-$start_date = date('Y-m-01');
-$end_date = date('Y-m-31');
-//$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="6" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
+
+  $end_date = date('Y-12-31');
+  $start_date = date('Y-01-01');  
+//$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="1" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
+
 $svlResult=$db->query($svlQuery);
-if($arr['sample_code']=='MMYY'){
-    $mnthYr = date('my');
-  }else if($arr['sample_code']=='YY'){
-    $mnthYr = date('y');
-  }
   $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
- $maxId = $svlResult[0]['sample_code_key']+1;
- $strparam = strlen($maxId);
- $zeros = substr("000", $strparam);
- $maxId = $zeros.$maxId;
-}else{
- $maxId = '001';
-}
+  if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+   $maxId = $svlResult[0][$sampleCodeKey]+1;
+   $strparam = strlen($maxId);
+   $zeros = substr("000", $strparam);
+   $maxId = $zeros.$maxId;
+  }else{
+   $maxId = '001';
+  }
 $sKey = '';$sFormat = '';
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -77,7 +91,7 @@ $sKey = '';$sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;"/>
+                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
                         </div>
                       </div>
                     </div>
@@ -117,7 +131,7 @@ $sKey = '';$sFormat = '';
                         <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="sampleCollectionDate">Date Specimen Collected <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" >
+                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" onchange="sampleCodeGeneration();">
                           </div>
                         </div>
                         <div class="col-xs-3 col-md-3">
@@ -551,18 +565,7 @@ $sKey = '';$sFormat = '';
           }
         });
       }
-    <?php if($arr['sample_code']=='auto'){ ?>
-      pNameVal = pName.split("##");
-      sCode = '<?php echo date('ymd');?>';
-      sCodeKey = '<?php echo $maxId;?>';
-      $("#sampleCode").val(pNameVal[1]+sCode+sCodeKey);
-      $("#sampleCodeFormat").val(pNameVal[1]+sCode);
-      $("#sampleCodeKey").val(sCodeKey);
-      <?php }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-      $("#sampleCode").val('<?php echo $prefix.$mnthYr.$maxId;?>');
-      $("#sampleCodeFormat").val('<?php echo $prefix.$mnthYr;?>');
-      $("#sampleCodeKey").val('<?php echo $maxId;?>');
-      <?php } ?>
+      sampleCodeGeneration();
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -571,6 +574,30 @@ $sKey = '';$sFormat = '';
     }
     $.unblockUI();
   }
+  function sampleCodeGeneration()
+  {
+    var pName = $("#province").val();
+    var sDate = $("#sampleCollectionDate").val();
+    if(pName!='' && sDate!=''){
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate},
+      function(data){
+        var sCodeKey = JSON.parse(data);
+        <?php if($arr['sample_code']=='auto'){ ?>
+          pNameVal = pName.split("##");
+          sCode = sCodeKey.auto;
+          $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
+          <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+          $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
+        <?php } ?>
+      });
+    }
+  }
   function getfacilityDistrictwise(obj){
     $.blockUI();
     var dName = $("#district").val();
@@ -578,7 +605,11 @@ $sKey = '';$sFormat = '';
     if(dName!=''){
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
-        if(data != ""){ $("#fName").html(data); }
+        if(data != ""){ 
+          details = data.split("###");
+          $("#fName").html(details[0]);
+          $("#labId").html(details[1]);
+        }
       });
     }
     $.unblockUI();

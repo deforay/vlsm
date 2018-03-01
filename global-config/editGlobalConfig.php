@@ -3,7 +3,7 @@ ob_start();
 $title = "VLSM | Edit Configuration";
 include('../header.php');
 //include('../includes/MysqliDb.php');
-define('UPLOAD_PATH','../uploads');
+//define('UPLOAD_PATH','../uploads');
 $instanceQuery ="SELECT * from s_vlsm_instance where vlsm_instance_id='".$_SESSION['instanceId']."'";
 $instanceResult=$db->query($instanceQuery);
 $fType="SELECT * FROM facility_type";
@@ -405,7 +405,16 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                   </div>
                 </div>    
-    
+                <div class="row">
+                  <div class="col-md-7" style="height:38px;">
+                    <div class="form-group" style="height:38px;">
+                      <label for="sync_path" class="col-lg-4 control-label">Vldashboard Url</label>
+                      <div class="col-lg-8">
+                        <input type="text" class="form-control" id="vldashboard_url" name="vldashboard_url" placeholder="Vldashboard Url" title="Please enter vldashboard url" value="<?php echo $arr['vldashboard_url']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>
   </div>
 </div>
                 

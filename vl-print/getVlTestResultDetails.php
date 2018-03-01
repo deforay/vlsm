@@ -33,7 +33,9 @@ $primaryKey="vl_sample_id";
 					$aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y')",'ts.status_name');
 					$orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
 				}
-        
+        if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print') {
+					array_unshift($orderColumns,"vl.vl_sample_id");
+				}
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
         
@@ -164,7 +166,14 @@ $primaryKey="vl_sample_id";
 			  $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-			    $sWhere = $sWhere.' AND vl.result_status  IN ('.$_POST['status'].')';
+				if($_POST['status']=='no_result'){
+					$statusCondition = ' AND (vl.result is NULL OR vl.result ="")';
+				}else if($_POST['status']=='result'){
+				  $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
+				}else{
+				  $statusCondition = ' AND vl.result_status=4';
+				}
+			    $sWhere = $sWhere.$statusCondition;
 			}
 			if(isset($_POST['artNo']) && trim($_POST['artNo'])!= ''){
 			    $sWhere = $sWhere." AND vl.patient_art_no LIKE '%" . $_POST['artNo'] . "%' ";
@@ -243,11 +252,25 @@ $primaryKey="vl_sample_id";
 			}
 			if(isset($_POST['status']) && trim($_POST['status'])!= ''){
 			    if(isset($setWhr)){
-				$sWhere = $sWhere.' AND vl.result_status IN ('.$_POST['status'].')';
+					if($_POST['status']=='no_result'){
+						$statusCondition = ' AND  (vl.result is NULL OR vl.result ="")';
+					}else if($_POST['status']=='result'){
+					  $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
+					}else{
+					  $statusCondition = ' AND vl.result_status=4';
+					}
+				$sWhere = $sWhere.$statusCondition;
 			    }else{
 			      $setWhr = 'where';
-			      $sWhere=' where '.$sWhere;
-			      $sWhere = $sWhere.' vl.result_status IN ('.$_POST['status'].')';
+				  $sWhere=' where '.$sWhere;
+				  if($_POST['status']=='no_result'){
+					  $statusCondition = '  (vl.result is NULL OR vl.result ="")';
+				  }else if($_POST['status']=='result'){
+					$statusCondition = ' (vl.result is NOT NULL AND vl.result !="")';
+				  }else{
+					$statusCondition = ' vl.result_status=4';
+				  }
+			      $sWhere = $sWhere.$statusCondition;
 			    }
 		        }
 			if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
@@ -272,13 +295,13 @@ $primaryKey="vl_sample_id";
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
 		  if(!isset($_POST['status']) || trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		      $sWhere = $sWhere." AND (vl.result_status =7)";
+		      $sWhere = $sWhere." AND (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result is NULL) OR vl.result!='') AND result_printed_datetime is NULL";
 		    }else{
-		      $sWhere = "WHERE (vl.result_status =7)";
+		      $sWhere = "WHERE (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result is NULL) OR vl.result!='') AND result_printed_datetime is NULL";
 		    }
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
-		  $dWhere = "WHERE (vl.result_status =7) AND vl.vlsm_country_id='".$arr['vl_form']."'";
+		  $dWhere = "WHERE (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result='') OR vl.result!='') AND vl.vlsm_country_id='".$arr['vl_form']."' AND result_printed_datetime is NULL";
 		}else{
 		    if(trim($sWhere)!= ''){
 		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
@@ -291,13 +314,7 @@ $primaryKey="vl_sample_id";
 			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
 			$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
 		}
-		if(!isset($_POST['from'])){
-		  $sQuery = $sQuery.' '.$sWhere." AND vl.result!=''";
-		  $sWhere = $sWhere." AND vl.result!=''";
-		  $dWhere = $dWhere. " AND vl.result!=''";
-		}else{
-		  $sQuery = $sQuery.' '.$sWhere;
-		}
+		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
 		//echo $_SESSION['vlResultQuery'];die;
 		

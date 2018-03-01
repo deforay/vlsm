@@ -9,6 +9,7 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
+    //print_r($_POST);die;
     //system config
     $systemConfigQuery ="SELECT * from system_config";
     $systemConfigResult=$db->query($systemConfigQuery);
@@ -141,20 +142,47 @@ try {
     if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
         $isRejection = true;
         $_POST['vlResult'] = '';
+        $_POST['vlLog'] = '';
     }
     
     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
         $_POST['vlResult'] = 'Target Not Detected';
+        $_POST['vlLog'] = '';
     }
     if(isset($_POST['bdl']) && $_POST['bdl'] =='bdl' && $isRejection == false){
         $_POST['vlResult'] = 'Below Detection Level';
+        $_POST['vlLog'] = '';
     }
     
     $_POST['result'] = '';
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
         $_POST['result'] = $_POST['vlResult'];
+    }else if($_POST['vlLog']!=''){
+        $_POST['result'] = $_POST['vlLog'];
     }
-    
+    if($sarr['user_type']=='remoteuser'){
+        $sampleCode = 'remote_sample_code';
+        $sampleCodeKey = 'remote_sample_code_key';
+    }else{
+        $sampleCode = 'sample_code';
+        $sampleCodeKey = 'sample_code_key';
+    }
+    //check existing sample code
+    $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
+    $existResult = $db->rawQuery($existSampleQuery);
+    if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+        if($existResult[0][$sampleCodeKey]!=''){
+            $sCode = $existResult[0][$sampleCodeKey] + 1;
+            $strparam = strlen($sCode);
+            $zeros = substr("000", $strparam);
+            $maxId = $zeros.$sCode;
+            $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+            $_POST['sampleCodeKey'] = $maxId;
+        }else{
+            $_SESSION['alertMsg']="Please check your sample ID";
+            header("location:addVlRequest.php");
+        }
+    }
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>1,
@@ -162,7 +190,7 @@ try {
           //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
           'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-          //'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL,
+          'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL,
           //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL,
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
@@ -205,6 +233,7 @@ try {
           'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? $_POST['vlResult'] :  NULL,
           'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
+          'result_value_log'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='')? $_POST['vlLog'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'result_status'=>$status,
@@ -217,6 +246,7 @@ try {
         if($sarr['user_type']=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+            $vldata['remote_sample'] = 'yes';
         }else{
             $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;

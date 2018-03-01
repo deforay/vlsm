@@ -46,12 +46,17 @@ try {
     if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
         $_POST['sampleCode'] = NULL;
     }
+    $testingPlatform = '';
+    if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
+        $platForm = explode("##",$_POST['testingPlatform']);
+        $testingPlatform = $platForm[0];
+    }
         $vldata=array(
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'sample_code'=>$_POST['sampleCode'],
           'serial_no'=>$_POST['sampleCode'],
           'result_approved_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
-          'vl_test_platform'=>$_POST['testingPlatform'],
+          'vl_test_platform'=>$testingPlatform,
           'result_value_log'=>$_POST['vlLog'],
           'result'=>$_POST['vlResult'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
@@ -60,9 +65,9 @@ try {
         );
         if(isset($_POST['status']) && trim($_POST['status'])!= ''){
             $vldata['result_status'] = $_POST['status'];
-            if(isset($_POST['rejectionReason'])){
-                $vldata['sample_rejection_reason'] = $_POST['rejectionReason'];
-            }
+            //if(isset($_POST['rejectionReason'])){
+                $vldata['reason_for_sample_rejection'] = $_POST['rejectionReason'];
+            //}
         }
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $db->update($tableName,$vldata);

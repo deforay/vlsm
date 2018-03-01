@@ -15,6 +15,20 @@ if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric'){
   $maxLength = "maxlength=".$maxLength;
   }
 }
+//check remote user
+$pdQuery="SELECT * from province_details";
+if($sarr['user_type']=='remoteuser'){
+  $sampleCode = 'remote_sample_code';
+  //check user exist in user_facility_map table
+    $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+    $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+    if($chkUserFcMapResult){
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+    }
+}else{
+  $sampleCode = 'sample_code';
+}
+$pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
@@ -36,16 +50,16 @@ if(!isset($facilityResult[0]['facility_code'])){
   $facilityResult[0]['facility_code'] = '';
 }
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
-  $facilityResult[0]['facility_state'] = 0;
+  $facilityResult[0]['facility_state'] = '';
 }
 if(!isset($facilityResult[0]['facility_district']) || $facilityResult[0]['facility_district']==''){
-  $facilityResult[0]['facility_district'] = 0;
+  $facilityResult[0]['facility_district'] = '';
 }
 $stateName = $facilityResult[0]['facility_state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
 if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] == ''){
-  $stateResult[0]['province_code'] = 0;
+  $stateResult[0]['province_code'] = '';
 }
 //district details
 $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
@@ -81,7 +95,8 @@ $districtResult=$db->query($districtQuery);
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                          <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                          <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </div>
                       </div>
                     </div>
@@ -610,7 +625,9 @@ $districtResult=$db->query($districtQuery);
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
 	  if(data != ""){
-            $("#fName").html(data);
+      details = data.split("###");
+          $("#fName").html(details[0]);
+          $("#labId").html(details[1]);
 	  }
       });
     }
