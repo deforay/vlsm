@@ -95,7 +95,7 @@
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
                                       foreach($pdResult as $provinceName){ ?>
-                                        <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['facility_state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
+                                        <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo (strtolower($stateResult[0]['facility_state'])."##".strtolower($provinceResult[0]['province_code'])==strtolower($provinceName['province_name'])."##".strtolower($provinceName['province_code']))?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
                                       <?php } ?>
                                     </select>
                                 </td>
