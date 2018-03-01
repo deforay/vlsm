@@ -3,7 +3,6 @@ ob_start();
 include('../header.php');
 include ('../includes/tcpdf/tcpdf.php');
 include('../General.php');
-define('UPLOAD_PATH','../uploads');
 $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 //get other config values

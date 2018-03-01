@@ -34,14 +34,21 @@ $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
 //set query
+if($_POST['newData']!=''){
+  $query = $_SESSION['vlPrintResultQuery'];
+  $allQuery = $_SESSION['vlPrintRequestSearchResultQuery'];
+}else{
+  $query = $_SESSION['vlResultQuery'];
+  $allQuery = $_SESSION['vlRequestSearchResultQuery'];
+}
 if(isset($_POST['id']) && trim($_POST['id'])!=''){
   if(isset($_POST['resultMail'])){
-    $searchQuery="SELECT vl.*,f.*,rst.*,l.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id where vl.vl_sample_id IN(".$_POST['id'].")";
+    $searchQuery="SELECT vl.*,f.*,rst.*,l.facility_name as labName,rsrr.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.vl_sample_id IN(".$_POST['id'].")";
   }else{
-    $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
+    $searchQuery = $query." and vl.vl_sample_id IN(".$_POST['id'].")";
   }
 }else{
-  $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
+  $searchQuery = $allQuery;
 }
 //error_log($searchQuery);
 $requestResult=$db->query($searchQuery);

@@ -631,13 +631,19 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         <div class="col-md-4 vlResult" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'none':'block'; ?>;">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" />
+                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);" />
                               <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
                       </div>
                       <div class="row">
+                      <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                            <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
+                            <div class="col-lg-7">
+                              <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
                             <div class="col-lg-7">
@@ -649,15 +655,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                               </select>
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
-                            <div class="col-lg-10">
-                              <textarea class="form-control labSection" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                      <?php
+                        <?php
                       $styleStatus = '';
                       if((($sarr['user_type']=='remoteuser') && $vlQueryInfo[0]['result_status']==9) || ($sCode!='')){
                         $styleStatus= "display:none";
@@ -677,7 +675,15 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                               </select>
                             </div>
                         </div>
-                        <div class="col-md-8 reasonForResultChanges" style="visibility:hidden;">
+                      </div>
+                      <div class="row">
+                       <br/> <div class="col-md-6">
+                            <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
+                            <div class="col-lg-10">
+                              <textarea class="form-control labSection" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 reasonForResultChanges" style="visibility:hidden;">
                             <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result </label>
                             <div class="col-lg-10">
                               <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
@@ -799,6 +805,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     if($(this).val() == 'yes'){
       $('.rejectionReason').show();
       $('.vlResult').css('display','none');
+      $("#status").val(4);
       $('#rejectionReason').addClass('isRequired');
     }else{
       $('.vlResult').css('display','block');
@@ -809,23 +816,23 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
   });
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
-      $('#vlResult').attr('readonly',true);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#bdl').prop('checked', false).attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#bdl').attr('disabled',false);
     }
   });
   $('#bdl').change(function() {
     if($('#bdl').is(':checked')){
-      $('#vlResult').attr('readonly',true);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#tnd').prop('checked', false).attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#tnd').attr('disabled',false);
     }
   });
-  $('#vlResult').on('input',function(e){
+  $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
       $('#tnd,#bdl').attr('disabled',true);
     }else{
@@ -880,6 +887,27 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     if ($.trim(labId)!='') {
         $("#vlFocalPerson").val($('#labId option:selected').attr('data-focalperson'));
         $("#vlFocalPersonPhoneNumber").val($('#labId option:selected').attr('data-focalphone'));
+    }
+  }
+  function calculateLogValue(obj){
+    if(obj.id=="vlResult") {
+      absValue = $("#vlResult").val();
+      if(absValue!='' && absValue!=0 && !isNaN(absValue)){
+        $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+      }else{
+        $("#vlLog").val('');
+      }
+    }
+    if(obj.id=="vlLog") {
+      logValue = $("#vlLog").val();
+      if(logValue!='' && logValue!=0 && !isNaN(logValue)){
+        var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+        if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+        }
+      }else{
+        $("#vlResult").val('');
+      }
     }
   }
   </script>

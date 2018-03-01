@@ -256,7 +256,7 @@ $sKey = ''; $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="">Date of Sample Collection <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" onchange="checkSampleReceviedDate();checkSampleTestingDate();">
+                          <input type="text" class="form-control isRequired dateTime" style="width:100%;" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" title="Please select sample collection date" onchange="checkSampleReceviedDate();checkSampleTestingDate();sampleCodeGeneration();">
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -573,13 +573,19 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-4 vlResult">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" />
+                              <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;"  onchange="calculateLogValue(this)"/>
                               <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
                       </div>
                       <div class="row">
+                      <div class="col-md-4">
+                          <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
+                          <div class="col-lg-7">
+                            <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);"/>
+                          </div>
+                        </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
                             <div class="col-lg-7">
@@ -591,7 +597,9 @@ $sKey = ''; $sFormat = '';
                               </select>
                             </div>
                         </div>
-                        <div class="col-md-8">
+                      </div><br/>
+                      <div class="row">
+                      <div class="col-md-8">
                             <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
                             <div class="col-lg-10">
                               <textarea class="form-control" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"></textarea>
@@ -694,23 +702,7 @@ $sKey = ''; $sFormat = '';
         }
       });
       }
-      <?php if($arr['sample_code']=='auto'){ ?>
-        pNameVal = pName.split("##");
-        sCode = '<?php echo date('ymd');?>';
-        sCodeKey = '<?php echo $maxId;?>';
-        $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey);
-        $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
-        $("#sampleCodeKey").val(sCodeKey);
-        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
-        <?php
-      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-        $("#sampleCode").val('<?php echo $rKey.$prefix.$mnthYr.$maxId;?>');
-        $("#sampleCodeFormat").val('<?php echo $rKey.$prefix.$mnthYr;?>');
-        $("#sampleCodeKey").val('<?php echo $maxId;?>');
-        checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
-        <?php
-      }
-      ?>
+      sampleCodeGeneration();
     }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
@@ -718,6 +710,30 @@ $sKey = ''; $sFormat = '';
       $("#fName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
+  }
+  function sampleCodeGeneration()
+  {
+    var pName = $("#province").val();
+    var sDate = $("#sampleCollectionDate").val();
+    if(pName!='' && sDate!=''){
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate},
+      function(data){
+        var sCodeKey = JSON.parse(data);
+        <?php if($arr['sample_code']=='auto'){ ?>
+          pNameVal = pName.split("##");
+          sCode = sCodeKey.auto;
+          $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
+          <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+          $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
+          $("#sampleCodeKey").val(sCodeKey.maxId);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
+        <?php } ?>
+      });
+    }
   }
   function getFacilities(obj){
     $.blockUI();
@@ -779,23 +795,23 @@ $sKey = ''; $sFormat = '';
   });
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
-      $('#vlResult').attr('readonly',true);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#bdl').attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#bdl').attr('disabled',false);
     }
   });
   $('#bdl').change(function() {
     if($('#bdl').is(':checked')){
-      $('#vlResult').attr('readonly',true);
+      $('#vlResult,#vlLog').attr('readonly',true);
       $('#tnd').attr('disabled',true);
     }else{
-      $('#vlResult').attr('readonly',false);
+      $('#vlResult,#vlLog').attr('readonly',false);
       $('#tnd').attr('disabled',false);
     }
   });
-  $('#vlResult').on('input',function(e){
+  $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
       $('#tnd,#bdl').attr('disabled',true);
     }else{
@@ -918,6 +934,27 @@ $sKey = ''; $sFormat = '';
     }
     if($.trim(patientArray[15])!=''){
     $("#artNo").val($.trim(patientArray[15]));
+    }
+  }
+  function calculateLogValue(obj){
+    if(obj.id=="vlResult") {
+      absValue = $("#vlResult").val();
+      if(absValue!='' && absValue!=0 && !isNaN(absValue)){
+        $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+      }else{
+        $("#vlLog").val('');
+      }
+    }
+    if(obj.id=="vlLog") {
+      logValue = $("#vlLog").val();
+      if(logValue!='' && logValue!=0 && !isNaN(logValue)){
+        var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+        if(absVal!='Infinity'){
+          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+        }
+      }else{
+        $("#vlResult").val('');
+      }
     }
   }
   </script>

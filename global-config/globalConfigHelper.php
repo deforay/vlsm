@@ -4,7 +4,7 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 include('../includes/ImageResize.php');
-define('UPLOAD_PATH','../uploads');
+//define('UPLOAD_PATH','../uploads');
 $general = new Deforay_Commons_General();
 $tableName="global_config";
 $instanceTableName="s_vlsm_instance";

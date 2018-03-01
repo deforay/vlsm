@@ -4,19 +4,29 @@ include('../includes/MysqliDb.php');
 include('../General.php');
 $tableName="package_details";
 $primaryKey="package_id";
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+if($sarr['user_type']=='remoteuser'){
+    $sCode = 'remote_sample_code';
+  }else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
+    $sCode = 'sample_code';
+  }
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
 $general=new Deforay_Commons_General();
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        
         $aColumns = array('p.package_code',"DATE_FORMAT(p.request_created_datetime,'%d-%b-%Y %H:%i:%s')");
         $orderColumns = array('p.package_code','','p.request_created_datetime');
-		
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
-        
         $sTable = $tableName;
         /*
          * Paging
@@ -26,11 +36,9 @@ $general=new Deforay_Commons_General();
             $sOffset = $_POST['iDisplayStart'];
             $sLimit = $_POST['iDisplayLength'];
         }
-        
         /*
          * Ordering
         */
-        
         $sOrder = "";
         if (isset($_POST['iSortCol_0'])) {
             $sOrder = "";
@@ -43,14 +51,12 @@ $general=new Deforay_Commons_General();
             }
             $sOrder = substr_replace($sOrder, "", -2);
         }
-        
         /*
          * Filtering
          * NOTE this does not match the built-in DataTables filtering which does it
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
         */
-        
         $sWhere = "";
         if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
             $searchArray = explode(" ", $_POST['sSearch']);
@@ -74,7 +80,6 @@ $general=new Deforay_Commons_General();
             }
             $sWhere .= $sWhereSub;
         }
-        
         /* Individual column filtering */
         for ($i = 0; $i < count($aColumns); $i++) {
             if (isset($_POST['bSearchable_' . $i]) && $_POST['bSearchable_' . $i] == "true" && $_POST['sSearch_' . $i] != '') {
@@ -85,13 +90,11 @@ $general=new Deforay_Commons_General();
                 }
             }
         }
-        
         /*
          * SQL queries
          * Get data to display
         */
-        
-	$sQuery="select vl.vlsm_country_id,p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id join vl_request_form vl on vl.vl_sample_id=rp.sample_id";
+        $sQuery="select p.request_created_datetime ,p.package_code,p.package_status,p.package_id,count(vl.".$sCode.") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id";
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
             $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
@@ -110,11 +113,11 @@ $general=new Deforay_Commons_General();
         //error_log($sQuery);die;
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
-        $aResultFilterTotal =$db->rawQuery("select p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id join vl_request_form  vl on vl.vl_sample_id=rp.sample_id $sWhere group by p.package_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl.".$sCode.") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id $sWhere group by p.package_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code, p.package_id,count(rp.sample_id) as sample_code from package_details p join r_package_details_map rp on rp.package_id = p.package_id join vl_request_form  vl on vl.vl_sample_id=rp.sample_id where vl.vlsm_country_id ='".$configResult[0]['value']."' group by p.package_id");
+        $aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl.".$sCode.") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id where vl.vlsm_country_id ='".$configResult[0]['value']."' group by p.package_id");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);
@@ -134,16 +137,22 @@ $general=new Deforay_Commons_General();
 	
         foreach ($rResult as $aRow) {
         $humanDate="";
+        $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\''.base64_encode($aRow['package_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
         if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
         $date = $aRow['request_created_datetime'];
         $humanDate =  date("d-M-Y H:i:s",strtotime($date));
+        }
+        $disable = '';$pointerEvent = '';
+        if($aRow['package_status']=='dispatch'){
+            $pointerEvent = "pointer-events:none;";
+            $disable = "disabled";
         }
         $row = array();
         $row[] = $aRow['package_code'];
         $row[] = $aRow['sample_code'];
         $row[] = $humanDate;
         if($package){
-            $row[] = '<a href="editPackage.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;';
+            $row[] = '<a href="editPackage.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" '.$disable.' style="margin-right: 2px;'.$pointerEvent.'" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;&nbsp;'.$printBarcode;
         }
         $output['aaData'][] = $row;
         }

@@ -188,7 +188,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 			  var oSettings = this.fnSettings();
               var iTotalRecords = oSettings.fnRecordsTotal();
 			  if(iTotalRecords==0){
-				  window.location.href="importedStatistics.php";
+				  //window.location.href="importedStatistics.php";
 			  }
 	    },
             "bProcessing": true,

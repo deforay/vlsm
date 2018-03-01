@@ -2,20 +2,33 @@
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new Deforay_Commons_General();
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 //global config
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
 $country = $configResult[0]['value'];
 
-$rpQuery="SELECT GROUP_CONCAT(DISTINCT rp.sample_id SEPARATOR ',') as sampleId FROM r_package_details_map as rp";
-$rpResult = $db->rawQuery($rpQuery);
+// $rpQuery="SELECT GROUP_CONCAT(DISTINCT rp.sample_id SEPARATOR ',') as sampleId FROM r_package_details_map as rp";
+// $rpResult = $db->rawQuery($rpQuery);
 
-$query="SELECT vl.sample_code,vl.vl_sample_id FROM vl_request_form as vl where (vl.lab_id='' OR vl.lab_id is null) AND vl.vlsm_country_id = $country";
-if(isset($rpResult[0]['sampleId'])){
-    $query = $query." AND vl_sample_id NOT IN(".$rpResult[0]['sampleId'].")";
-}
+$query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND vl.vlsm_country_id = $country";
+// if(isset($rpResult[0]['sampleId'])){
+//     $query = $query." AND vl_sample_id NOT IN(".$rpResult[0]['sampleId'].")";
+// }
 $query = $query." ORDER BY vl.request_created_datetime ASC";
 $result = $db->rawQuery($query);
+if($sarr['user_type']=='remoteuser'){
+  $sCode = 'remote_sample_code';
+}else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
+  $sCode = 'sample_code';
+}
 ?>
 <div class="col-md-8">
 <div class="form-group">
@@ -27,9 +40,11 @@ $result = $db->rawQuery($query);
          <select id="sampleCode" name="sampleCode[]" multiple="multiple" class="search">
             <?php
             foreach($result as $sample){
+              if($sample[$sCode]!=''){
               ?>
-              <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample['sample_code']);?></option>
+              <option value="<?php echo $sample['vl_sample_id'];?>"><?php  echo ucwords($sample[$sCode]);?></option>
               <?php
+              }
              }
             ?>
          </select>

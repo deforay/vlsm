@@ -92,6 +92,29 @@ try {
           $platForm = explode("##",$_POST['testingPlatform']);
           $_POST['testingPlatform'] = $platForm[0];
      }
+     if($sarr['user_type']=='remoteuser'){
+        $sampleCode = 'remote_sample_code';
+        $sampleCodeKey = 'remote_sample_code_key';
+    }else{
+        $sampleCode = 'sample_code';
+        $sampleCodeKey = 'sample_code_key';
+    }
+    //check existing sample code
+    $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['serialNo'])."'";
+    $existResult = $db->rawQuery($existSampleQuery);
+    if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+        if($existResult[0][$sampleCodeKey]!=''){
+            $sCode = $existResult[0][$sampleCodeKey] + 1;
+            $strparam = strlen($sCode);
+            $zeros = substr("000", $strparam);
+            $maxId = $zeros.$sCode;
+            $_POST['serialNo'] = $_POST['sampleCodeFormat'].$maxId;
+            $_POST['sampleCodeKey'] = $maxId;
+        }else{
+            $_SESSION['alertMsg']="Please check your sample ID";
+            header("location:addVlRequest.php");
+        }
+    }
      $vldata=array(
           'test_urgency'=>(isset($_POST['urgency']) && $_POST['urgency']!='' ? $_POST['urgency'] :  NULL),
           'vlsm_instance_id'=>$instanceId,

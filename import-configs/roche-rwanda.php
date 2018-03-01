@@ -195,7 +195,7 @@ try {
                 'result_value_absolute' => $d['absVal'],
                 'result_value_text' => $d['txtVal'],
                 'result_value_absolute_decimal' => $d['absDecimalVal'],
-                'sample_tested_datetime' => $testingDate,
+                'sample_tested_datetime' => $d['testingDate'],
                 'result_status' => '6',
                 'import_machine_file_name' => $fileName,
                 'approver_comments' => $d['resultFlag'],

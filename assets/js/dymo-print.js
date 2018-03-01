@@ -18,7 +18,7 @@ function printBarcodeLabel(barcode,facility){
                         label.setObjectText('BARCODE', barcode);
                       }
                       if(dymoLabelXml.indexOf("<Name>TEXT</Name>") !== -1){
-                        label.setObjectText('TEXT', barcode);
+                        label.setObjectText('TEXT', facility);
                       }
                       
                       

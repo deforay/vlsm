@@ -132,7 +132,6 @@ $lastResult = $db->rawQuery($lastQuery);
     <!-- /.content -->
   </div>
   
-  
   <script type="text/javascript">
 
   function validateNow(){
