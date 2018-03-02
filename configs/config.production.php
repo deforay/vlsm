@@ -31,5 +31,5 @@ $MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
 // $MYSQLDUMP = 'C:\wamp\mysql\bin\mysqldump.exe';
 
 // Linux : default for Ubuntu 16.04, may be different for your distribution
-//$MYSQLDUMP = '/usr/bin/mysqldump'; 
-$REMOTEURL = 'http://vlsm-rwanda.deforay.in';
+//$MYSQLDUMP = '/usr/bin/mysqldump';
+$REMOTEURL = '';

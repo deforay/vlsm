@@ -55,7 +55,7 @@ if(count($result)>0)
     $oneDimensionalArray = array_map('current', $allColResult);
     foreach($result as $key=>$remoteData){
         foreach($oneDimensionalArray as $result){
-            $lab[$result] = $remoteData[$result];
+          $lab[$result] = $remoteData[$result];
         }
         $removeKeys = array('vl_sample_id','result_value_log','result_value_absolute','result_value_absolute_decimal','result_value_text','result_value',
         'sample_tested_datetime','sample_received_at_vl_lab_datetime','result_dispatched_datetime','is_sample_rejected','reason_for_sample_rejection','result_approved_by');
