@@ -55,7 +55,7 @@ try {
       
         $sampleIdCol='B';
         $sampleIdRow='19';
-        $logValCol='';
+        $logValCol='I';
         $logValRow='';
         $absValCol='G';
         $absValRow='19';
@@ -94,10 +94,11 @@ try {
             if(trim($row[$absValCol]) == "<"){
                 $absDecimalVal=$absVal="";
                 $logVal="";                    
-                $txtVal="< 100";
+                $txtVal="< 20";
             }else if((int)$row[$absValCol] > 0){
                 $absDecimalVal=$absVal=(int)$row[$absValCol];
-                $logVal=round(log10($absVal),4);
+                $logVal=(float)$row[$logValCol];
+                //$logVal=round(log10($absVal),4);
                 $txtVal="";
             }else{
                 $absDecimalVal=$absVal="";
@@ -110,7 +111,9 @@ try {
           $batchCode = $row[$batchCodeCol];
           
           // Date time in the provided Biomerieux Sample file is in this format : 05-23-16 12:52:33
-          $testingDate = $sheetData[6]['C']." ".$sheetData[7]['C'];
+          $testingDate = $sheetData[5]['C']." ".$sheetData[6]['C'];
+
+          //var_dump($testingDate);die;
           $testingDate = DateTime::createFromFormat('m-d-y H:i:s', $testingDate)->format('Y-m-d H:i:s');
           
           if ($sampleCode == "")
