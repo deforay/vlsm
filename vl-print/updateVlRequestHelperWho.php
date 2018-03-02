@@ -23,6 +23,11 @@ try {
      }else{
         $_POST['result'] = NULL;  
     }
+    if((isset($_POST['vlResult']) && trim($_POST['vlResult']) != '') && isset($_POST['vlLog']) && trim($_POST['vlLog']) != ''){
+        $_POST['result_value_log'] = $_POST['vlLog'];
+     }else{
+        $_POST['result_value_log'] = NULL;  
+    }
      $vldata=array(
           'result'=>(isset($_POST['result']) && $_POST['result']!='' ? $_POST['result'] :  NULL),
           'last_vl_date_routine'=>(isset($_POST['rmTestingLastVLDate']) && $_POST['rmTestingLastVLDate']!='' ? $general->dateFormat($_POST['rmTestingLastVLDate']) :  NULL),
@@ -38,6 +43,7 @@ try {
           'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='') ? $_POST['vlResult'] :  NULL,
+          'result_value_log'=>$_POST['result_value_log'],
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,

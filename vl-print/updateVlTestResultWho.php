@@ -448,9 +448,9 @@ $disable = "disabled = 'disabled'";
                     <div class="box-body">
                     <table class="table">
                       <tr>
-                        <td><label for="testingPlatform">VL Testing Platform</label></td>
+                        <td><label for="testingPlatform">VL Testing Platform<span class="mandatory">*</span></label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control labSection" title="Please choose VL Testing Platform" style="width: 100%;">
+                          <select name="testingPlatform" id="testingPlatform" class="form-control labSection isRequired" title="Please choose VL Testing Platform" style="width: 100%;">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
@@ -459,18 +459,18 @@ $disable = "disabled = 'disabled'";
                             ?>
                           </select>
                         </td>
-                        <td><label for="testMethods">Test Methods</label></td>
+                        <td><label for="testMethods">Test Methods<span class="mandatory">*</span></label></td>
                         <td>
-                          <select name="testMethods" id="testMethods" class="form-control labSection" title="Please choose test methods" style="width: 100%;">
+                          <select name="testMethods" id="testMethods" class="form-control labSection isRequired" title="Please choose test methods" style="width: 100%;">
                           <option value=""> -- Select -- </option>
                           <option value="individual"<?php echo ($vlQueryInfo[0]['test_methods']=='individual')?"selected='selected'":""?>>Individual</option>
                           <option value="minipool"<?php echo ($vlQueryInfo[0]['test_methods']=='minipool')?"selected='selected'":""?>>Minipool</option>
                           <option value="other pooling algorithm"<?php echo ($vlQueryInfo[0]['test_methods']=='other pooling algorithm')?"selected='selected'":""?>>Other Pooling Algorithm</option>
                          </select>
                         </td>
-                        <td><label for="rejectionReason">Reason For Failure </label></td>
+                        <td class="failureReason" style="display:none;"><label for="rejectionReason">Reason For Failure </label></td>
                         <td>
-                            <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" style="width: 100%;">
+                            <select name="rejectionReason" id="rejectionReason" class="form-control labSection failureReason" title="Please choose reason" style="width: 100%;display:none;">
                                 <option value="">-- Select --</option>
                                <?php
                                foreach($rejectionResult as $reject){
@@ -483,11 +483,15 @@ $disable = "disabled = 'disabled'";
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control labSection" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>"/></td>
-                        <td><label for="vlResult">Viral Load Result<br/> (copies/ml)</label></td>
-                        <td><input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" /></td>
-                        <td><label for="labId">Lab Name</label></td>
+                        <td><label for="sampleTestingDateAtLab">Sample Testing Date<span class="mandatory">*</span></label></td>
+                        <td><input type="text" class="form-control labSection isRequired" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>"/></td>
+                        <td class="vlResult"><label for="vlResult">Viral Load Result<br/> (copies/ml)<span class="mandatory">*</span></label></td>
+                        <td><input type="text" class="form-control labSection isRequired vlResult" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" onchange="calculateLogValue(this);"/></td>
+                        <td class="vlResult"><label for="vlResult">Viral Load Log </label></td>
+                        <td><input type="text" class="form-control labSection vlResult" id="vlLog" name="vlLog" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" /></td>
+                      </tr>
+                      <tr>
+                      <td><label for="labId">Lab Name</label></td>
                         <td>
                           <select name="labId" id="labId" class="form-control labSection" title="Please choose lab name" style="width: 100%;">
                             <option value=""> -- Select -- </option>
@@ -500,8 +504,6 @@ $disable = "disabled = 'disabled'";
                             ?>
                           </select>
                         </td>
-                      </tr>
-                      <tr>
                         <td><label>Approved By</label></td>
                         <td>
                           <select name="approvedBy" id="approvedBy" class="form-control labSection" title="Please choose approved by" style="width: 100%;">
@@ -521,7 +523,7 @@ $disable = "disabled = 'disabled'";
                       <tr>
                         <td><label for="status">Status <span class="mandatory">*</span></label></td>
                         <td>
-                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status" style="width: 100%;">
+                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status" style="width: 100%;" onchange="hideReasonfield()">
                             <option value="">-- Select --</option>
                             <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
  			    <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
@@ -577,6 +579,7 @@ $disable = "disabled = 'disabled'";
      __clone = $("#vlRequestForm .labSection").clone();
      reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
      result = ($("#vlResult").length)?$("#vlResult").val():'';
+     hideReasonfield();
   });
   
     function validateNow(){
@@ -611,4 +614,42 @@ $disable = "disabled = 'disabled'";
         }
       }
     });
+    function hideReasonfield()
+    {
+      var status = $("#status").val();
+      console.log(status);
+      if(status=='4'){
+        $("#vlResult").removeClass("isRequired").val('');
+        $(".vlResult").hide();
+        $("#rejectionReason").addClass("isRequired");
+        $(".failureReason").show();
+      }else{
+        $("#vlResult").addClass("isRequired");
+        $(".vlResult").show();
+        $("#rejectionReason").removeClass("isRequired");
+        $("#rejectionReason").val('');
+        $(".failureReason").hide();
+      }
+    }
+    function calculateLogValue(obj){
+      if(obj.id=="vlResult") {
+        absValue = $("#vlResult").val();
+        if(absValue!='' && absValue!=0 && !isNaN(absValue)){
+          $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+        }else{
+          $("#vlLog").val('');
+        }
+      }
+      if(obj.id=="vlLog") {
+        logValue = $("#vlLog").val();
+        if(logValue!='' && logValue!=0 && !isNaN(logValue)){
+          var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
+          if(absVal!='Infinity'){
+            $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+          }
+        }else{
+          $("#vlResult").val('');
+        }
+      }
+    }
 </script>
