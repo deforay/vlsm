@@ -12,7 +12,6 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
-
 ?>
   <style>
     .select2-selection__choice{
@@ -342,9 +341,9 @@ $batResult = $db->rawQuery($batQuery);
             "aoColumns": [
 		//{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
-								<?php if($sarr['user_type']!='standalone'){ ?>
+		<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
-								<?php } ?>
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -359,6 +358,7 @@ $batResult = $db->rawQuery($batQuery);
 		{"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
+	    "aaSorting": [[ 0, "asc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;
