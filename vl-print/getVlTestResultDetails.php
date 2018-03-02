@@ -295,13 +295,13 @@ $primaryKey="vl_sample_id";
 		if(isset($_POST['vlPrint']) && $_POST['vlPrint']=='print'){
 		  if(!isset($_POST['status']) || trim($_POST['status'])== ''){
 		    if(trim($sWhere)!= ''){
-		      $sWhere = $sWhere." AND (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result is NULL) OR vl.result!='') AND result_printed_datetime is NULL";
+		      $sWhere = $sWhere." AND ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND (result_printed_datetime is NULL OR result_printed_datetime = '')";
 		    }else{
-		      $sWhere = "WHERE (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result is NULL) OR vl.result!='') AND result_printed_datetime is NULL";
+		      $sWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND (result_printed_datetime is NULL OR result_printed_datetime = '')";
 		    }
 		  }
 		  $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."'";
-		  $dWhere = "WHERE (vl.result_status = 7 OR (vl.result_status = 4 AND vl.result='') OR vl.result!='') AND vl.vlsm_country_id='".$arr['vl_form']."' AND result_printed_datetime is NULL";
+		  $dWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND vl.vlsm_country_id='".$arr['vl_form']."' AND (result_printed_datetime is NULL OR result_printed_datetime = '')";
 		}else{
 		    if(trim($sWhere)!= ''){
 		      $sWhere = $sWhere." AND vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
