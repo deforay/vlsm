@@ -47,7 +47,7 @@ $pdResult=$db->query($pdQuery);
   $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
   $svlResult=$db->query($svlQuery);
   $prefix = $arr['sample_code_prefix'];
-  if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+  if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
    $maxId = $svlResult[0][$sampleCodeKey]+1;
    $strparam = strlen($maxId);
    $zeros = substr("000", $strparam);

@@ -27,8 +27,8 @@
     //Get selected state
     $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
     $stateResult=$db->query($stateQuery);
-    if(!isset($stateResult[0]['facility_state']) || $stateResult[0]['facility_state']==''){
-      $stateResult[0]['facility_state'] = '';
+    if(!isset($stateResult[0]['facility_state']) || $stateResult[0]['facility_state']== ''){
+      $stateResult[0]['facility_state'] = 0;
     }
     //district details
     $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateResult[0]['facility_state']."'";
@@ -36,7 +36,7 @@
     $provinceQuery="SELECT * from province_details where province_name='".$stateResult[0]['facility_state']."'";
     $provinceResult=$db->query($provinceQuery);
     if(!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_code']==''){
-      $provinceResult[0]['province_code'] = '';
+      $provinceResult[0]['province_code'] = 0;
     }
     //get ART list
     $aQuery="SELECT * from r_art_code_details"; // where nation_identifier='drc'";
@@ -98,7 +98,7 @@
                                     <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($pdResult as $provinceName){ ?>
-                                        <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['facility_state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
+                                        <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo (strtolower($stateResult[0]['facility_state'])."##".strtolower($provinceResult[0]['province_code'])==strtolower($provinceName['province_name'])."##".strtolower($provinceName['province_code']))?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
                                       <?php } ?>
                                     </select>
                                 </td>
