@@ -652,4 +652,5 @@ $districtResult=$db->query($districtQuery);
         }
       }
     });
+    
 </script>
