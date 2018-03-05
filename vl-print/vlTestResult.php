@@ -349,7 +349,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
     $.unblockUI();
   }
   
-  function convertResultToPdf(id,newData=null){
+  function convertResultToPdf(id,newData){
     <?php
     $path = '';
     $path = '../result-pdf/vlRequestSearchResultPdf.php';
@@ -364,7 +364,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
       });
   }
   
-  function convertSearchResultToPdf(id,newData=null){
+  function convertSearchResultToPdf(id,newData){
     $.blockUI();
     <?php
     $path = '';

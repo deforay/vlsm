@@ -443,7 +443,7 @@ if($urgency==''){ $urgency= 'normal';}
                                   <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result" onclick="checkRejectedReason();"> Lab testing Technical Error
                           </label>
                         </td>
-                        <td><label class="noResult">Rejection Reason</label></td>
+                        <td><label class="noResult">Rejection Reason<span class="mandatory">*</span></label></td>
                         <td colspan="2"><select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width:100%;">
                         <option value="">-- Select --</option>
                           <?php foreach($rejectionResult as $reject){ ?>

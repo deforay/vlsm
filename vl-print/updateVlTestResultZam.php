@@ -151,8 +151,8 @@ $disabled = "disabled = 'disabled'";
                       <div class="row">
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
-                           <label for="labId">Referral Laboratory for Sample </label>
-                            <select class="form-control" name="labId" id="labId" title="Please choose laboratory" style="width:100%;">
+                           <label for="labId">Referral Laboratory for Sample <span class="mandatory">*</span></label>
+                            <select class="isRequired form-control" name="labId" id="labId" title="Please choose laboratory" style="width:100%;">
                               <option value=""> -- Select -- </option>
                                 <?php
                                 foreach($lResult as $lab){
@@ -435,8 +435,8 @@ $disabled = "disabled = 'disabled'";
                       </div>
                       <div class="col-xs-4 col-md-4">
                           <div class="form-group">
-                           <label for="">Date Test Performed </label><br>
-                             <input type="text" class="form-control" style="width:100%;" name="sampleTestingDateAtLab" id="sampleTestingDateAtLab" placeholder="Test Performed Date" title="Please enter test performed date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>">
+                           <label for="">Date Test Performed <span class="mandatory">*</span></label><br>
+                             <input type="text" class="isRequired form-control" style="width:100%;" name="sampleTestingDateAtLab" id="sampleTestingDateAtLab" placeholder="Test Performed Date" title="Please enter test performed date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>">
                           </div>
                       </div>
                       <div class="col-xs-4 col-md-4">
@@ -463,7 +463,7 @@ $disabled = "disabled = 'disabled'";
                          </label>
                         </div>
                       </div>
-                      <div class="col-xs-4 col-md-4">
+                      <div class="rejectionReason col-xs-4 col-md-4">
                         <div class="form-group">
                           <label for="rejectionReason">Reason For Rejection </label>
                           <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please choose rejection reason">
@@ -495,7 +495,7 @@ $disabled = "disabled = 'disabled'";
                   </div>
                   <div class="box-body">
                     <div class="row">
-                      <div class="col-xs-4 col-md-4">
+                      <div class="result col-xs-4 col-md-4">
                           <div class="form-group">
                           <label for="result">Results </label>
                             <select name="result" id="result" class="form-control" title="Please choose test result" style="width:100%;">
@@ -602,6 +602,20 @@ $disabled = "disabled = 'disabled'";
         $('.date').mask('99-aaa-9999');
         $('#sampleCollectionDate,#sampleReceivedOn,#sampleTestingDateAtLab,#reviewedByDatetime').mask('99-aaa-9999 99:99');
         getAgeInWeeks();
+        
+        
+        if($('#repeatSampleCollectionYes'). prop("checked") == true){
+        $(".rejectionReason").show();
+          $("#rejectionReason").addClass("isRequired");
+          $("#result").removeClass("isRequired");
+         $(".result").hide();
+    }else{
+       $(".rejectionReason").hide();
+           $("#rejectionReason").removeClass("isRequired");
+          $("#result").addClass("isRequired");
+         $(".result").show();
+    }
+        
     });
     
     $('#labId').on('change',function(){
@@ -691,4 +705,19 @@ $disabled = "disabled = 'disabled'";
         document.getElementById('vlRequestFormZam').submit();
       }
     }
+    
+    $("input:radio[name=repeatSampleCollection]").click(function() {
+      if($(this).val() == 'yes'){
+          $(".rejectionReason").show();
+          $("#rejectionReason").addClass("isRequired");
+          $("#result").removeClass("isRequired");
+         $(".result").hide();
+      }else {
+         $(".rejectionReason").hide();
+           $("#rejectionReason").removeClass("isRequired");
+          $("#result").addClass("isRequired");
+         $(".result").show();
+      }
+    });
+   
   </script>

@@ -526,9 +526,9 @@ $disable = "disabled = 'disabled'";
                     <div class="box-body">
                       <div class="row">
                         <div class="col-md-4">
-                            <label for="labId" class="col-lg-5 control-label">Lab Name </label>
+                            <label for="labId" class="col-lg-5 control-label">Lab Name<span class="mandatory">*</span> </label>
                             <div class="col-lg-7">
-                              <select name="labId" id="labId" class="form-control labSection" title="Please choose lab" onchange="autoFillFocalDetails();">
+                              <select name="labId" id="labId" class="isRequired form-control labSection" title="Please choose lab" onchange="autoFillFocalDetails();">
                                 <option value="">-- Select --</option>
                                 <?php
                                 foreach($lResult as $labName){
@@ -561,9 +561,9 @@ $disable = "disabled = 'disabled'";
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date </label>
+                            <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date<span class="mandatory">*</span> </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control labSection" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>"/>
+                                <input type="text" class="isRequired form-control labSection" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>"/>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -575,9 +575,9 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="row">
                         <div class="col-md-4">
-                            <label for="testingPlatform" class="col-lg-5 control-label">VL Testing Platform </label>
+                            <label for="testingPlatform" class="col-lg-5 control-label">VL Testing Platform<span class="mandatory">*</span> </label>
                             <div class="col-lg-7">
-                              <select name="testingPlatform" id="testingPlatform" class="form-control labSection" title="Please choose VL Testing Platform">
+                              <select name="testingPlatform" id="testingPlatform" class="isRequired form-control labSection" title="Please choose VL Testing Platform">
                                 <option value="">-- Select --</option>
                                 <?php foreach($importResult as $mName) { ?>
                                   <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
@@ -599,9 +599,9 @@ $disable = "disabled = 'disabled'";
                             </div>
                         </div>
                         <div class="col-md-4 rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
-                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
+                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason<span class="mandatory">*</span> </label>
                             <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" onchange="checkRejectionReason();">
+                              <select name="rejectionReason" id="rejectionReason" class="isRequired form-control labSection" title="Please choose reason" onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
                                 <?php foreach($rejectionTypeResult as $type) { ?>
                                 <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
@@ -622,9 +622,9 @@ $disable = "disabled = 'disabled'";
                             </div>
                         </div>
                         <div class="col-md-4 vlResult" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'none':'block'; ?>;">
-                            <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
+                            <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;"  onchange="calculateLogValue(this);"/>
+                              <input type="text" class="isRequired form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;"  onchange="calculateLogValue(this);"/>
                               <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Lev
                             </div>
@@ -741,11 +741,14 @@ $disable = "disabled = 'disabled'";
         $('.rejectionReason').show();
         $('.vlResult').css('display','none');
         $('#rejectionReason').addClass('isRequired');
+          $('#vlResult').removeClass('isRequired');
+        
       }else{
         $('.vlResult').css('display','block');
         $('.rejectionReason').hide();
         $('#rejectionReason').removeClass('isRequired');
         $('#rejectionReason').val('');
+        $('#vlResult').addClass('isRequired');
       }
     });
   

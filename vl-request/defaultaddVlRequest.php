@@ -551,9 +551,9 @@ $sKey = ''; $sFormat = '';
                             </div>
                         </div>
                         <div class="col-md-4 rejectionReason" style="display:none;">
-                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
+                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="checkRejectionReason();">
+                              <select name="rejectionReason" id="rejectionReason" class="isRequired form-control" title="Please choose reason" onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
                                 <?php foreach($rejectionTypeResult as $type) { ?>
                                 <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
@@ -580,10 +580,10 @@ $sKey = ''; $sFormat = '';
                         </div>
                       </div>
                       <div class="row">
-                      <div class="col-md-4">
+                      <div class=" vlLog col-md-4">
                           <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
                           <div class="col-lg-7">
-                            <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);"/>
+                            <input type="text" class="form-control " id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);"/>
                           </div>
                         </div>
                         <div class="col-md-4">
@@ -785,9 +785,12 @@ $sKey = ''; $sFormat = '';
     if($(this).val() == 'yes'){
       $('.rejectionReason').show();
       $('.vlResult').css('display','none');
+      $('.vlLog').css('display','none');
+      
       $('#rejectionReason').addClass('isRequired');
     }else{
       $('.vlResult').css('display','block');
+      $('.vlLog').css('display','block');
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#rejectionReason').val('');

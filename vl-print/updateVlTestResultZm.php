@@ -295,11 +295,11 @@ $disable = "disabled = 'disabled'";
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="labNo">LAB No</label></td>
-                        <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_code'];?>" /></td>
-                        <td><label for="testingPlatform">VL Testing Platform</label></td>
+                        <td><label for="labNo">LAB No<span class="mandatory">*</span></label></td>
+                        <td><input type="text" class="isRequired form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_code'];?>" /></td>
+                        <td><label for="testingPlatform">VL Testing Platform<span class="mandatory">*</span></label></td>
                         <td>
-                          <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                          <select name="testingPlatform" id="testingPlatform" class="isRequired form-control" title="Please choose VL Testing Platform">
                               <option value=""> -- Select -- </option>
                               <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
@@ -319,21 +319,22 @@ $disable = "disabled = 'disabled'";
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
-                        <td><input type="text" class="form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" /></td>
-                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td><input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" onchange="calculateLogValue(this)" /></td>
-                        <td><label for="vlLog">Viral Load Log</label></td>
-                        <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" onchange="calculateLogValue(this)" /></td>
+                        <td><label for="sampleTestingDateAtLab">Sample Testing Date<span class="mandatory">*</span></label></td>
+                        <td><input type="text" class="isRequires form-control " id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" /></td>
+                      
+                          <td class="vlResult"><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
+                        <td><input type="text" class="vlResult form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" onchange="calculateLogValue(this)" /></td>
+                         <td class="vlLog"><label for="vlLog">Viral Load Log</label></td>
+                        <td><input type="text" class="vlLog form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" onchange="calculateLogValue(this)" /></td>
                       </tr>
                       <tr class="">
                         <td><label class="noResult">If no result</label></td>
                         <td>
                           <label class="radio-inline noResult">
-                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='sample_rejected')?"checked='checked'":""?>> Sample Rejected
+                             <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='sample_rejected')?"checked='checked'":""?> onclick='checkVlResult()'> Sample Rejected
                           </label>
                           <label class="radio-inline noResult" style="margin-left: 0px;">
-                              <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='technical_error')?"checked='checked'":""?>> Lab testing Technical Error
+                              <input type="radio" class="" id="noResultError" name="noResult" value="technical_error" title="Choose result"<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='technical_error')?"checked='checked'":""?> onclick='checkVlResult()'> Lab testing Technical Error
                           </label>
                         </td>
                         <td><label>Reviewed By</label></td>
@@ -459,6 +460,20 @@ $("#vlLog").bind("keyup change", function(e) {
       $(".noResult").hide();
     }
 });
+    if($('#noResultRejected'). prop("checked") == true){
+    //$(".vlResult").hide();
+    //  $(".vlLog").hide();
+       $('.vlResult').css('display','none');
+      $('.vlLog').css('display','none');
+    }
+ if($('#noResultError'). prop("checked") == true){
+    //$(".vlResult").hide();
+    //  $(".vlLog").hide();
+       $('.vlResult').css('display','none');
+      $('.vlLog').css('display','none');
+    }
+   
+
   $('.date').datepicker({
      changeMonth: true,
      changeYear: true,
@@ -591,5 +606,9 @@ $("#vlLog").bind("keyup change", function(e) {
           }
         }
       }
+    }
+    function checkVlResult() {
+      $('.vlResult').css('display','none');
+      $('.vlLog').css('display','none');
     }
 </script>

@@ -609,9 +609,9 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                         <div class="col-md-4 rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
-                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
+                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason<span class="mandatory">*</span> </label>
                             <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" onchange="checkRejectionReason();">
+                              <select name="rejectionReason" id="rejectionReason" class="isRequired form-control labSection" title="Please choose reason" onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
                                 <?php foreach($rejectionTypeResult as $type) { ?>
                                 <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
@@ -637,7 +637,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                       </div>
-                      <div class="row">
+                      <div class="vlLog row">
                       <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
                             <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
                             <div class="col-lg-7">
@@ -684,7 +684,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                         <div class="col-md-6 reasonForResultChanges" style="visibility:hidden;">
-                            <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result </label>
+                            <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result<span class="mandatory">*</span</label>
                             <div class="col-lg-10">
                               <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
                             </div>
@@ -807,11 +807,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       $('.vlResult').css('display','none');
       $("#status").val(4);
       $('#rejectionReason').addClass('isRequired');
+       $('.vlLog').css('display','none');
     }else{
       $('.vlResult').css('display','block');
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#rejectionReason').val('');
+      $('.vlLog').css('display','block');
     }
   });
   $('#tnd').change(function() {
