@@ -383,7 +383,7 @@
                               </tr>
                             <?php } ?>
                             <tr class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['result_status'] == 4)?'':'none'; ?>;">
-                                <td><label for="rejectionReason">Motifs de rejet </label></td>
+                                <td><label for="rejectionReason">Motifs de rejet <span class="mandatory">*</span></label></td>
                                 <td>
                                     <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
                                       <option value=""> -- Sélectionner -- </option>
@@ -433,12 +433,12 @@
                                       </td>
                                 </tr>
                               <tr>
-                                <td><label for="vlResult">Résultat </label></td>
-                                <td>
-                                    <input type="text" class="form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                <td class="vlResult"><label for="vlResult">Résultat<span class="mandatory">*</span></label></td>
+                                <td class="vlResult">
+                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
-                                <td><label for="vlLog">Log </label></td>
-                                <td>
+                                <td class="vlLog"><label for="vlLog">Log <span class="mandatory">*</span></label></td>
+                                <td class="vlLog">
                                     <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" value="<?php echo $vlQueryInfo[0]['result_value_log']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
                             </tr>
@@ -560,11 +560,15 @@
         $("#rejectionReason").addClass('isRequired');
         $("#vlResult").val('').css('pointer-events','none');
         $("#vlLog").val('').css('pointer-events','none');
+          $(".vlResult, .vlLog").hide();
+       $("#vlResult, #vlLog").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
         $("#vlResult").css('pointer-events','auto');
         $("#vlLog").css('pointer-events','auto');
+        $(".vlResult, .vlLog").show();
+        $("#vlResult, #vlLog").addClass('isRequired');
       }
     }
     function checkRejectionReason(){
@@ -613,4 +617,6 @@
         document.getElementById('editVlRequestForm').submit();
       }
     }
+   
+     
   </script>

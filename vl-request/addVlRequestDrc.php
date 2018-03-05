@@ -426,13 +426,13 @@ $pdResult=$db->query($pdQuery);
                                         </td>
                                   </tr>
                                 <tr>
-                                <td><label for="vlResult">Résultat </label></td>
+                                <td class="vlResult"><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
                                 <td><label for="vlLog">Log </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
                             </tr>
                             <tr>
@@ -628,6 +628,7 @@ $pdResult=$db->query($pdQuery);
       $("#rejectionReason").removeClass('isRequired');
       $("#vlResult").css('pointer-events','auto');
       $("#vlLog").css('pointer-events','auto');
+       
     }
   }
   function checkRejectionReason(){

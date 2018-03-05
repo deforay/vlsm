@@ -442,9 +442,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="testingPlatform">Technique utilisée </label></td>
+                                <td><label for="testingPlatform">Technique utilisée <span class="mandatory">*</span></label></td>
                                 <td colspan="3">
-                                    <select class="form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisée" style="width:30%;">
+                                    <select class="isRequired form-control" id="testingPlatform" name="testingPlatform" title="Please select technique utilisée" style="width:30%;">
                                     <option value=""> -- Sélectionner -- </option>
                                     <?php foreach($importResult as $mName) { ?>
                                         <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo($vlQueryInfo[0]['vl_test_platform'] == $mName['machine_name'])? 'selected="selected"':''; ?>><?php echo $mName['machine_name'];?></option>
@@ -454,13 +454,13 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="vlResult">Résultat <span class="mandatory">*</span></label></td>
-                                <td>
-                                    <input type="text" class="form-control isRequired" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                <td class="vlResult"><label for="vlResult">Résultat <span class="mandatory">*</span></label></td>
+                                <td class="vlResult">
+                                    <input type="text" class="vlResult form-control isRequired" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
-                                <td><label for="vlLog">Log </label></td>
-                                <td>
-                                    <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" value="<?php echo $vlQueryInfo[0]['result_value_log']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                <td class="vlLog"><label for="vlLog">Log </label></td>
+                                <td class="vlLog">
+                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" value="<?php echo $vlQueryInfo[0]['result_value_log']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
                             </tr>
                             <tr>
@@ -521,6 +521,21 @@
         
         $('.date').mask('99-aaa-9999');
         $('.dateTime').mask('99-aaa-9999 99:99');
+        
+        
+         var status = $("#status").val();
+      if(status == 4){
+       $(".rejectionReason").show();
+        $("#rejectionReason").addClass('isRequired');
+          $(".vlResult, .vlLog").hide();
+       $("#vlResult, #vlLog").removeClass('isRequired');
+      }else{
+         $(".rejectionReason").hide();
+        $("#rejectionReason").removeClass('isRequired');
+         $(".vlResult, .vlLog").show();
+        $("#vlResult, #vlLog").addClass('isRequired');
+      }
+        
      });
     
     function checkTestStatus(){
@@ -528,9 +543,13 @@
       if(status == 4){
         $(".rejectionReason").show();
         $("#rejectionReason").addClass('isRequired');
+          $(".vlResult, .vlLog").hide();
+       $("#vlResult, #vlLog").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
+         $(".vlResult, .vlLog").show();
+        $("#vlResult, #vlLog").addClass('isRequired');
       }
     }
     

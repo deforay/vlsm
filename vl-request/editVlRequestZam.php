@@ -443,16 +443,16 @@ $efResult = $db->rawQuery($efQuery);
                         <div class="form-group">
                          <label for="">If Rejected, Repeat Sample Collection </label><br>
                          <label class="radio-inline">
-                           <input class="" id="repeatSampleCollectionYes" name="repeatSampleCollection" value="yes" title="Please check one" type="radio" <?php echo ($vlQueryInfo[0]['repeat_sample_collection']=='yes')?"checked='checked'":""?>> Yes
+                           <input class="" id="repeatSampleCollectionYes" name="repeatSampleCollection" value="yes" onchange="ifRrejectedValue(this.value)" title="Please check one" type="radio" <?php echo ($vlQueryInfo[0]['repeat_sample_collection']=='yes')?"checked='checked'":""?>> Yes
                            </label>
                          <label class="radio-inline">
-                           <input class="" id="repeatSampleCollectionNo" name="repeatSampleCollection" value="no" type="radio" <?php echo ($vlQueryInfo[0]['repeat_sample_collection']=='no')?"checked='checked'":""?>> No
+                           <input class="" id="repeatSampleCollectionNo" name="repeatSampleCollection" value="no" onchange="ifRrejectedValue(this.value)" type="radio" <?php echo ($vlQueryInfo[0]['repeat_sample_collection']=='no')?"checked='checked'":""?>> No
                          </label>
                         </div>
                       </div>
-                      <div class="col-xs-4 col-md-4">
+                      <div class="rejectionReason col-xs-4 col-md-4">
                         <div class="form-group">
-                          <label for="rejectionReason">Reason For Rejection </label>
+                          <label for="rejectionReason">Reason For Rejection <span class="mandatory">*</span></label>
                           <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please choose rejection reason">
                             <option value="">-- Select --</option>
                             <?php foreach($rejectionTypeResult as $type) { ?>
@@ -478,9 +478,9 @@ $efResult = $db->rawQuery($efQuery);
                   </div>
                   <div class="box-body">
                     <div class="row">
-                      <div class="col-xs-4 col-md-4">
+                      <div class="result col-xs-4 col-md-4">
                           <div class="form-group">
-                          <label for="result">Results </label>
+                          <label for="result">Results<span class="mandatory">*</span> </label>
                             <select name="result" id="result" class="form-control" title="Please choose test result" style="width:100%;">
                               <option value=""> -- Select -- </option>
                               <option value="tnd" <?php echo ($vlQueryInfo[0]['result']== 'tnd')?"selected='selected'":""?>>Target Not Detected</option>
@@ -553,6 +553,19 @@ $efResult = $db->rawQuery($efQuery);
   <script>
     $(document).ready(function() {
         getAgeInWeeks();
+        
+       if($('#repeatSampleCollectionYes'). prop("checked") == true){
+        $(".rejectionReason").show();
+          $("#rejectionReason").addClass("isRequired");
+          $("#result").removeClass("isRequired");
+         $(".result").hide();
+    }else{
+       $(".rejectionReason").hide();
+           $("#rejectionReason").removeClass("isRequired");
+          $("#result").addClass("isRequired");
+         $(".result").show();
+    }
+    
     });
     function getProvinceDistricts(){
       $.blockUI();
@@ -706,4 +719,18 @@ $efResult = $db->rawQuery($efQuery);
         document.getElementById('vlRequestFormZam').submit();
       }
     }
+    $("input:radio[name=repeatSampleCollection]").click(function() {
+      if($(this).val() == 'yes'){
+          $(".rejectionReason").show();
+          $("#rejectionReason").addClass("isRequired");
+          $("#result").removeClass("isRequired");
+         $(".result").hide();
+      }else {
+         $(".rejectionReason").hide();
+           $("#rejectionReason").removeClass("isRequired");
+          $("#result").addClass("isRequired");
+         $(".result").show();
+      }
+    });
+   
   </script>
