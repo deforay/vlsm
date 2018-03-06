@@ -343,13 +343,13 @@ foreach($fResult as $fDetails){
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
                         <td><input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" onchange="checkSampleTestingDate();"/></td>
-                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td>
+                        <td class="vlResult"><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
+                        <td class="vlResult">
                           <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" onchange="calculateLogValue(this)"/>
                           <input type="hidden" name="textValue" value="<?php echo $vlQueryInfo[0]['result_value_text'];?>" />
                         </td>
-                        <td><label for="vlLog">Viral Load Log</label></td>
-                        <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" onchange="calculateLogValue(this)"/></td>
+                        <td class="vlLog"><label for="vlLog">Viral Load Log</label></td>
+                        <td><input type="text" class="vlLog form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" onchange="calculateLogValue(this)"/></td>
                       </tr>
                       <tr class="noResult">
                         <td><label class="noResult">If no result</label></td>
@@ -520,7 +520,12 @@ machineName = true;
       $(".noResult").show();
     }else{
       $(".noResult").hide();
-    }    
+    }
+    //if($('#noResultRejected'). prop("checked") == true){
+    //    $(".vlResult").hide();
+    //     $(".vlLog").hide();
+    //}
+    
 $("#vlResult").bind("keyup change", function(e) {
     if($("#vlResult").val() == "" && $("#vlLog").val() == "" ){
       $(".noResult").show();

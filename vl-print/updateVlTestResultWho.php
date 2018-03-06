@@ -468,9 +468,9 @@ $disable = "disabled = 'disabled'";
                           <option value="other pooling algorithm"<?php echo ($vlQueryInfo[0]['test_methods']=='other pooling algorithm')?"selected='selected'":""?>>Other Pooling Algorithm</option>
                          </select>
                         </td>
-                        <td class="failureReason" style="display:none;"><label for="rejectionReason">Reason For Failure </label></td>
+                        <td class="failureReason" style="display:none;"><label for="rejectionReason">Reason For Failure <span class="mandatory">*</span></label></td>
                         <td>
-                            <select name="rejectionReason" id="rejectionReason" class="form-control labSection failureReason" title="Please choose reason" style="width: 100%;display:none;">
+                            <select name="rejectionReason" id="rejectionReason" class="isRequired form-control labSection failureReason" title="Please choose reason" style="width: 100%;display:none;">
                                 <option value="">-- Select --</option>
                                <?php
                                foreach($rejectionResult as $reject){
@@ -491,9 +491,9 @@ $disable = "disabled = 'disabled'";
                         <td><input type="text" class="form-control labSection vlResult" id="vlLog" name="vlLog" placeholder="Enter Viral Load Result" title="Please enter viral load result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" /></td>
                       </tr>
                       <tr>
-                      <td><label for="labId">Lab Name</label></td>
+                      <td><label for="labId">Lab Name<span class="mandatory">*</span></label></td>
                         <td>
-                          <select name="labId" id="labId" class="form-control labSection" title="Please choose lab name" style="width: 100%;">
+                          <select name="labId" id="labId" class="isRequired form-control labSection" title="Please choose lab name" style="width: 100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -530,7 +530,7 @@ $disable = "disabled = 'disabled'";
 			  </select>
                          </td>
                         <td><label for="reasonForResultChanges" class="reasonForResultChanges" style="visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;">Reason For Changes in Result</label></td>
-                        <td colspan="3"><textarea class="form-control reasonForResultChanges" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;"><?php echo trim($vlQueryInfo[0]['reason_for_vl_result_changes']);?></textarea></td>
+                        <td colspan="3"><textarea class="isRrequired form-control reasonForResultChanges" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;visibility:<?php echo ($vlQueryInfo[0]['reason_for_vl_result_changes'] == '')?'hidden':'visible' ?>;"><?php echo trim($vlQueryInfo[0]['reason_for_vl_result_changes']);?></textarea></td>
                       </tr>
                     </table>
                   </div>

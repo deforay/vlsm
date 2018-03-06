@@ -580,7 +580,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                         <div class="col-md-4 rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
-                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
+                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
                               <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
@@ -600,7 +600,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                         <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                            <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
+                            <label class="col-lg-5 control-label" for="vlResult">Viral Load Result<span class="mandatory">*</span> (copiesl/ml) </label>
                             <div class="col-lg-7">
                               <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
                               <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
@@ -646,7 +646,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                             </div>
                         </div>
                         <div class="col-md-8 reasonForResultChanges" style="visibility:hidden;">
-                            <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result </label>
+                            <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result<span class="mandatory">*</span> </label>
                             <div class="col-lg-10">
                               <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
                             </div>
@@ -769,10 +769,12 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       $('.rejectionReason').show();
       $('.vlResult').css('visibility','hidden');
       $('#rejectionReason').addClass('isRequired');
+      $('#vlResult').removeClass('isRequired');
     }else{
       $('.vlResult').css('visibility','visible');
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
+      $('#vlResult').addClass('isRequired');
       $('#rejectionReason').val('');
     }
   });
