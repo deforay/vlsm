@@ -551,9 +551,9 @@ $sKey = ''; $sFormat = '';
                             </div>
                         </div>
                         <div class="col-md-4 rejectionReason" style="display:none;">
-                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason <span class="mandatory">*</span></label>
+                            <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
                             <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="isRequired form-control" title="Please choose reason" onchange="checkRejectionReason();">
+                              <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
                                 <?php foreach($rejectionTypeResult as $type) { ?>
                                 <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">

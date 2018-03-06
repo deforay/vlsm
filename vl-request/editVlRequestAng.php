@@ -562,7 +562,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                               </label>
                           </td>
                         <td class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
-                            <label for="rejectionReason">Razão de rejeição </label>
+                            <label for="rejectionReason">Razão de rejeição <span class="mandatory">*</span></label>
                         </td>
                         <td class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
                           <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose Razão de rejeição" onchange="checkRejectionReason();" style="width: 193px;">
@@ -582,10 +582,10 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                           <input type="text" class="form-control newRejectionReason" name="newRejectionReason" id="newRejectionReason" placeholder="Rejection Reason" title="Please enter rejection reason" style="width:100%;display:none;margin-top:2px;">
                         </td>
                         <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                            <label for="vlResult">Resultado da carga viral (cópias / ml) </label>
+                            <label for="vlResult">Resultado da carga viral<span class="mandatory">*</span> (cópias / ml) </label>
                         </td>
                         <td  class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                          <input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter resultado da carga viral" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+                          <input type="text" class="isRequired form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter resultado da carga viral" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
                           <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target não detectado<br>
                           <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Abaixo do nível de detecção
                         </td>
@@ -628,7 +628,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                           </select>
                         </td>
                         <td class=" reasonForResultChanges" style="visibility:hidden;">
-                            <label for="reasonForResultChanges">Razão para as mudanças nos resultados </label>
+                            <label for="reasonForResultChanges">Razão para as mudanças nos resultados <span class="mandatory">*</span></label>
                         </td>
                         <td colspan="3" class=" reasonForResultChanges" style="visibility:hidden;">
                           <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Razão para as mudanças nos resultados" style="width:100%;"></textarea>
@@ -789,10 +789,12 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
       $('.rejectionReason').show();
       $('.vlResult').css('visibility','hidden');
       $('#rejectionReason').addClass('isRequired');
+       $('#vlResult').removeClass('isRequired');
     }else{
       $('.vlResult').css('visibility','visible');
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
+       $('#vlResult').addClass('isRequired');
       $('#rejectionReason').val('');
     }
   });
@@ -843,4 +845,5 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
         }
       }
   });
+  
   </script>

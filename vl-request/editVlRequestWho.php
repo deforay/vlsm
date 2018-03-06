@@ -477,9 +477,9 @@ $districtResult=$db->query($districtQuery);
                           <option value="other pooling algorithm" <?php echo($vlQueryInfo[0]['test_methods'] == 'other pooling algorithm')? 'selected="selected"':''; ?>>Other Pooling Algorithm</option>
                          </select>
                         </td>
-                        <td><label for="rejectionReason">Reason For Failure </label></td>
-                        <td>
-                            <select name="rejectionReason" id="rejectionReason" class="form-control labSection" title="Please choose reason" style="width:100%;">
+                        <td class="rejectionReason"><label for="rejectionReason">Reason For Failure<span class="mandatory">*</span> </label></td>
+                        <td class="rejectionReason">
+                            <select name="rejectionReason" id="rejectionReason" class="isRequired rejectionReason form-control labSection" title="Please choose reason" style="width:100%;">
                                 <option value="">-- Select --</option>
                                <?php foreach($rejectionResult as $reject){ ?>
                                  <option value="<?php echo $reject['rejection_reason_id'];?>" <?php echo ($vlQueryInfo[0]['reason_for_sample_rejection']==$reject['rejection_reason_id'])?"selected='selected'":""?>><?php echo ucwords($reject['rejection_reason_name']);?></option>
@@ -490,8 +490,8 @@ $districtResult=$db->query($districtQuery);
                       <tr>
                         <td><label for="sampleTestingDateAtLab">Sample Testing Date</label></td>
                         <td><input type="text" class="form-control labSection dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Enter Sample Testing Date." title="Please enter Sample Testing Date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" onchange="checkSampleTestingDate();" style="width:100%;"/></td>
-                        <td><label for="vlResult">Viral Load Result<br/> (copiesl/ml)</label></td>
-                        <td><input type="text" class="form-control labSection" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" style="width:100%;" /></td>
+                        <td class="vlResult"><label for="vlResult">Viral Load Result<span class="mandatory">*</span><br/> (copiesl/ml)</label></td>
+                        <td><input type="text" class="vlResult form-control labSection" id="vlResult" name="vlResult" placeholder="Enter Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" style="width:100%;" /></td>
                         <td><label for="labId">Lab Name</label></td>
                         <td>
                           <select name="labId" id="labId" class="form-control labSection" title="Please choose lab name" style="width:100%;">
@@ -518,7 +518,7 @@ $districtResult=$db->query($districtQuery);
                       <tr>
                         <td><label for="status">Status <span class="mandatory">*</span></label></td>
                         <td>
-                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status" style="width:100%;">
+                          <select class="form-control labSection isRequired" id="status" name="status" title="Please select test status" style="width:100%;" onchange="hideReasonfield()">
                             <option value="">-- Select --</option>
                             <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
                             <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
@@ -547,6 +547,10 @@ $districtResult=$db->query($districtQuery);
     __clone = $("#vlRequestForm .labSection").clone();
     reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
     result = ($("#vlResult").length)?$("#vlResult").val():'';
+    
+    
+    hideReasonfield();
+    
   });
   function validateNow(){
     var format = '<?php echo $arr['sample_code'];?>';
@@ -652,5 +656,24 @@ $districtResult=$db->query($districtQuery);
         }
       }
     });
+    function hideReasonfield()
+    {
+      var status = $("#status").val();
+      //console.log(status);
+      if(status=='4'){
+        $("#vlResult").removeClass("isRequired").val('');
+        $(".vlResult").hide();
+        $(".rejectionReason").show();
+        $("#rejectionReason").addClass("isRequired");
+        $(".failureReason").show();
+      }else{
+        $("#vlResult").addClass("isRequired");
+        $(".vlResult").show();
+          $(".rejectionReason").hide();
+        $("#rejectionReason").removeClass("isRequired");
+        $("#rejectionReason").val('');
+        $(".failureReason").hide();
+      }
+    }
   
 </script>

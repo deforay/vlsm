@@ -437,7 +437,7 @@
                                 <td class="vlResult">
                                     <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
-                                <td class="vlLog"><label for="vlLog">Log <span class="mandatory">*</span></label></td>
+                                <td class="vlLog"><label for="vlLog">Log </label></td>
                                 <td class="vlLog">
                                     <input type="text" class="form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" value="<?php echo $vlQueryInfo[0]['result_value_log']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
@@ -561,14 +561,14 @@
         $("#vlResult").val('').css('pointer-events','none');
         $("#vlLog").val('').css('pointer-events','none');
           $(".vlResult, .vlLog").hide();
-       $("#vlResult, #vlLog").removeClass('isRequired');
+       $("#vlResult").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
         $("#vlResult").css('pointer-events','auto');
         $("#vlLog").css('pointer-events','auto');
         $(".vlResult, .vlLog").show();
-        $("#vlResult, #vlLog").addClass('isRequired');
+        $("#vlResult").addClass('isRequired');
       }
     }
     function checkRejectionReason(){

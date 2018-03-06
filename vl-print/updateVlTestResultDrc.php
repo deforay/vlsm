@@ -528,12 +528,12 @@
        $(".rejectionReason").show();
         $("#rejectionReason").addClass('isRequired');
           $(".vlResult, .vlLog").hide();
-       $("#vlResult, #vlLog").removeClass('isRequired');
+       $("#vlResult").removeClass('isRequired');
       }else{
          $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
          $(".vlResult, .vlLog").show();
-        $("#vlResult, #vlLog").addClass('isRequired');
+        $("#vlResult").addClass('isRequired');
       }
         
      });
@@ -544,12 +544,12 @@
         $(".rejectionReason").show();
         $("#rejectionReason").addClass('isRequired');
           $(".vlResult, .vlLog").hide();
-       $("#vlResult, #vlLog").removeClass('isRequired');
+       $("#vlResult").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
          $(".vlResult, .vlLog").show();
-        $("#vlResult, #vlLog").addClass('isRequired');
+        $("#vlResult").addClass('isRequired');
       }
     }
     
