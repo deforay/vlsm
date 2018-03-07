@@ -525,30 +525,43 @@
         
          var status = $("#status").val();
       if(status == 4){
-       $(".rejectionReason").show();
-        $("#rejectionReason").addClass('isRequired');
-          $(".vlResult, .vlLog").hide();
-       $("#vlResult").removeClass('isRequired');
-      }else{
-         $(".rejectionReason").hide();
-        $("#rejectionReason").removeClass('isRequired');
-         $(".vlResult, .vlLog").show();
-        $("#vlResult").addClass('isRequired');
-      }
-        
-     });
-    
-    function checkTestStatus(){
-      var status = $("#status").val();
-      if(status == 4){
         $(".rejectionReason").show();
         $("#rejectionReason").addClass('isRequired');
+        $("#vlResult").val('').css('pointer-events','none');
+        $("#vlLog").val('').css('pointer-events','none');
           $(".vlResult, .vlLog").hide();
        $("#vlResult").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
-         $(".vlResult, .vlLog").show();
+        $("#vlResult").css('pointer-events','auto');
+        $("#vlLog").css('pointer-events','auto');
+       
+        $(".vlResult, .vlLog").show();
+        $("#vlResult").addClass('isRequired');
+      }
+        
+     });
+    
+   
+     function checkTestStatus(){
+      var status = $("#status").val();
+      if(status == 4){
+        $(".rejectionReason").show();
+        $("#rejectionReason").addClass('isRequired');
+        $("#vlResult").val('').css('pointer-events','none');
+        $("#vlLog").val('').css('pointer-events','none');
+         $("#rejectionReason").val('').css('pointer-events','auto');
+          $(".vlResult, .vlLog").hide();
+       $("#vlResult").removeClass('isRequired');
+      }else{
+        $(".rejectionReason").hide();
+        $("#rejectionReason").removeClass('isRequired');
+        $("#vlResult").css('pointer-events','auto');
+        $("#vlLog").css('pointer-events','auto');
+        $("#vlResult").val('').css('pointer-events','auto');
+        $("#vlLog").val('').css('pointer-events','auto');
+        $(".vlResult, .vlLog").show();
         $("#vlResult").addClass('isRequired');
       }
     }
