@@ -481,7 +481,24 @@
      changeProvince = true;
      changeFacility = true;
      $(document).ready(function() {
-        checkTestStatus();
+        //checkTestStatus();
+         var status = $("#status").val();
+      if(status == 4){
+        $(".rejectionReason").show();
+        $("#rejectionReason").addClass('isRequired');
+        $("#vlResult").val('').css('pointer-events','none');
+        $("#vlLog").val('').css('pointer-events','none');
+          $(".vlResult, .vlLog").hide();
+       $("#vlResult").removeClass('isRequired');
+      }else{
+        $(".rejectionReason").hide();
+        $("#rejectionReason").removeClass('isRequired');
+        $("#vlResult").css('pointer-events','auto');
+        $("#vlLog").css('pointer-events','auto');
+       
+        $(".vlResult, .vlLog").show();
+        $("#vlResult").addClass('isRequired');
+      }
      });
     function getfacilityDetails(obj){
       $.blockUI();
@@ -560,6 +577,7 @@
         $("#rejectionReason").addClass('isRequired');
         $("#vlResult").val('').css('pointer-events','none');
         $("#vlLog").val('').css('pointer-events','none');
+         $("#rejectionReason").val('').css('pointer-events','auto');
           $(".vlResult, .vlLog").hide();
        $("#vlResult").removeClass('isRequired');
       }else{
@@ -567,6 +585,8 @@
         $("#rejectionReason").removeClass('isRequired');
         $("#vlResult").css('pointer-events','auto');
         $("#vlLog").css('pointer-events','auto');
+        $("#vlResult").val('').css('pointer-events','auto');
+        $("#vlLog").val('').css('pointer-events','auto');
         $(".vlResult, .vlLog").show();
         $("#vlResult").addClass('isRequired');
       }
