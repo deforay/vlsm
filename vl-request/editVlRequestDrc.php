@@ -433,7 +433,7 @@
                                       </td>
                                 </tr>
                               <tr>
-                                <td class="vlResult"><label for="vlResult">Résultat<span class="mandatory">*</span></label></td>
+                                <td class="vlResult"><label for="vlResult">Résultat</label></td>
                                 <td class="vlResult">
                                     <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
                                 </td>
@@ -489,7 +489,7 @@
         $("#vlResult").val('').css('pointer-events','none');
         $("#vlLog").val('').css('pointer-events','none');
           $(".vlResult, .vlLog").hide();
-       $("#vlResult").removeClass('isRequired');
+       //$("#vlResult").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
@@ -497,7 +497,7 @@
         $("#vlLog").css('pointer-events','auto');
        
         $(".vlResult, .vlLog").show();
-        $("#vlResult").addClass('isRequired');
+        //$("#vlResult").addClass('isRequired');
       }
      });
     function getfacilityDetails(obj){
@@ -579,7 +579,7 @@
         $("#vlLog").val('').css('pointer-events','none');
          $("#rejectionReason").val('').css('pointer-events','auto');
           $(".vlResult, .vlLog").hide();
-       $("#vlResult").removeClass('isRequired');
+       //$("#vlResult").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
         $("#rejectionReason").removeClass('isRequired');
@@ -588,7 +588,7 @@
         $("#vlResult").val('').css('pointer-events','auto');
         $("#vlLog").val('').css('pointer-events','auto');
         $(".vlResult, .vlLog").show();
-        $("#vlResult").addClass('isRequired');
+        //$("#vlResult").addClass('isRequired');
       }
     }
     function checkRejectionReason(){
