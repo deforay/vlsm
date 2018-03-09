@@ -269,6 +269,8 @@ try {
                   'result_value_log'=>$_POST['vlLog'],
                   'result'=>$_POST['vlResult'],
                   'date_test_ordered_by_physician'=>$_POST['dateOfDemand'],
+                  'funding_source'=>$_POST['fundingSource'],
+                  'implementing_partner'=>$_POST['implementingPartner'],
                   'vl_test_number'=>$_POST['viralLoadNo'],
                   'sample_collection_date'=>$_POST['sampleCollectionDate'],
                   'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],

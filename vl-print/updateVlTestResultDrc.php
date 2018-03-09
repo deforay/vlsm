@@ -1,5 +1,10 @@
   <?php
     ob_start();
+    if($sarr['user_type']=='remoteuser'){
+      $sampleCode = 'remote_sample_code';
+    }else{
+      $sampleCode = 'sample_code';
+    }
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
@@ -87,7 +92,8 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
-                        <h4 id="sampleCodeValue">exemple de code:<?php echo $vlQueryInfo[0]['sample_code']; ?></h4>
+                       <!-- <h4 id="sampleCodeValue">exemple de code:< ?php echo $vlQueryInfo[0]['sample_code']; ?></h4>-->
+                        <span style="margin-left:3%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:17%;"/></span>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label></td>
@@ -140,8 +146,16 @@
                             </tr>
                             <tr>
                                 <td><label for="">Date de la demande </label></td>
-                                <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['date_test_ordered_by_physician']; ?>" style="width:21%;"/>
+                                <td>
+                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['date_test_ordered_by_physician']; ?>" style="width:100%;"/>
+                                </td>
+                                <td><label for="">Funding Source </label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="fundingSource" name="fundingSource" placeholder="Funding Source Name" title="Please enter funding source name" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['funding_source']; ?>" style="width:100%;"/>
+                                </td>
+                                <td><label for="">Implementing Partner </label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="implementingPartner" name="implementingPartner" placeholder="Implementing Partner Name" title="Please enter implementing partner name" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['implementing_partner']; ?>" style="width:100%;"/>
                                 </td>
                             </tr>
                         </table>
@@ -416,7 +430,7 @@
                             <!-- <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="< ?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;"/>
                                 </td>
                             </tr> -->
                             <tr>
@@ -482,7 +496,6 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-              <input type="hidden" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:30%;"/>                    
                 <input type="hidden" id="rSrc" name="rSrc" value="er"/>
                 <input type="hidden" id="dubPatientArtNo" name="dubPatientArtNo" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>"/>
                 <input type="hidden" id="vlSampleId" name="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id']; ?>"/>
@@ -529,7 +542,7 @@
         $("#rejectionReason").addClass('isRequired');
         $("#vlResult").val('').css('pointer-events','none');
         $("#vlLog").val('').css('pointer-events','none');
-          $(".vlResult, .vlLog").hide();
+        $(".vlResult, .vlLog").hide();
        $("#vlResult").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
@@ -669,7 +682,6 @@
       }
     }
   </script>
-  
  <?php
  //include('../footer.php');
  ?>

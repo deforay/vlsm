@@ -1393,3 +1393,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 --ilahir 19-Feb-2018
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Vldashboard Url', 'vldashboard_url', NULL);
+
+-- Pal 09-Mar-2017
+ALTER TABLE `vl_request_form` ADD `funding_source` VARCHAR(500) NULL DEFAULT NULL AFTER `test_urgency`, ADD `implementing_partner` VARCHAR(500) NULL DEFAULT NULL AFTER `funding_source`;
