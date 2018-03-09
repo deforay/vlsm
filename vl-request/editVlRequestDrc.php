@@ -8,7 +8,7 @@
         $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
         $chkUserFcMapResult = $db->query($chkUserFcMapQry);
         if($chkUserFcMapResult){
-        $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+          $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
         }
     }else{
       $sampleCode = 'sample_code';
@@ -90,7 +90,8 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
-                        <h4 id="sampleCodeValue">exemple de code:<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>
+                        <!--<h4 id="sampleCodeValue">exemple de code:< ?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>-->
+                        <span style="margin-left:3%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:17%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The sample number that you entered already exists. Please try another number',null)"/></span>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -137,8 +138,16 @@
                             </tr>
                             <tr>
                                 <td><label for="">Date de la demande </label></td>
-                                <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" value="<?php echo $vlQueryInfo[0]['date_test_ordered_by_physician']; ?>" style="width:21%;"/>
+                                <td>
+                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" value="<?php echo $vlQueryInfo[0]['date_test_ordered_by_physician']; ?>" style="width:100%;"/>
+                                </td>
+                                <td><label for="">Funding Source </label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="fundingSource" name="fundingSource" placeholder="Funding Source Name" title="Please enter funding source name" value="<?php echo $vlQueryInfo[0]['funding_source']; ?>" style="width:100%;"/>
+                                </td>
+                                <td><label for="">Implementing Partner </label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="implementingPartner" name="implementingPartner" placeholder="Implementing Partner Name" title="Please enter implementing partner name" value="<?php echo $vlQueryInfo[0]['implementing_partner']; ?>" style="width:100%;"/>
                                 </td>
                             </tr>
                         </table>
@@ -399,7 +408,7 @@
                             <!-- <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,'< ?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="< ?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,'< ?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The sample number that you entered already exists. Please try another number',null)"/>
                                     <input type="hidden" name="sampleCodeCol" value="< ?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                                 </td>
                             </tr> -->
@@ -461,7 +470,6 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <input type="hidden" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
                 <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                 <input type="hidden" id="vlSampleId" name="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id']; ?>"/>
                 <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>"/>

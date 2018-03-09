@@ -90,7 +90,8 @@ $pdResult=$db->query($pdQuery);
                             
                         </div>
                         <!-- <h4>exemple de code</h4> -->
-                        <h4 style="display:none;" id="sampleCodeValue"></h4>
+                        <!--<h4 style="display:none;" id="sampleCodeValue"></h4>-->
+                        <span style="margin-left:3%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:17%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/></span>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -128,8 +129,16 @@ $pdResult=$db->query($pdQuery);
                             </tr>
                             <tr>
                                 <td><label for="">Date de la demande </label></td>
-                                <td colspan="5">
-                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" style="width:21%;"/>
+                                <td>
+                                    <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" style="width:100%;"/>
+                                </td>
+                                <td><label for="">Funding Source </label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="fundingSource" name="fundingSource" placeholder="Funding Source Name" title="Please enter funding source name" style="width:100%;"/>
+                                </td>
+                                <td><label for="">Implementing Partner </label></td>
+                                <td>
+                                    <input type="text" class="form-control" id="implementingPartner" name="implementingPartner" placeholder="Implementing Partner Name" title="Please enter implementing partner name" style="width:100%;"/>
                                 </td>
                             </tr>
                         </table>
@@ -393,7 +402,7 @@ $pdResult=$db->query($pdQuery);
                             <!-- <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
                                 <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
                                 </td>
                             </tr> -->
                             <tr>
@@ -454,7 +463,6 @@ $pdResult=$db->query($pdQuery);
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <input type="hidden" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample Code" title="Please enter code labo" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
                 <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
                   <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                   <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
@@ -521,20 +529,21 @@ $pdResult=$db->query($pdQuery);
           pNameVal = pName.split("##");
           sCode = sCodeKey.auto;
           $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
-          $("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
+          //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
           $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
           $("#sampleCodeKey").val(sCodeKey.maxId);
-          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null);
           <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
           $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
-          $("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
+          //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
           $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
           $("#sampleCodeKey").val(sCodeKey.maxId);
-          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null)
         <?php } ?>
       });
     }
   }
+  
   function getfacilityDistrictwise(obj){
     $.blockUI();
     var dName = $("#district").val();
