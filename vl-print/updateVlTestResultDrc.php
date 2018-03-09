@@ -1,10 +1,12 @@
   <?php
     ob_start();
-    if($sarr['user_type']=='remoteuser'){
-      $sampleCode = 'remote_sample_code';
-    }else{
-      $sampleCode = 'sample_code';
-    }
+    //Funding source list
+    $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+    $fundingSourceList = $db->query($fundingSourceQry);
+    //Implementing partner list
+    $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+    $implementingPartnerList = $db->query($implementingPartnerQry);
+    
     $province = "";
     $province.="<option value=''> -- Sélectionner -- </option>";
     foreach($pdResult as $provinceName){
@@ -93,8 +95,13 @@
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
                        <!-- <h4 id="sampleCodeValue">exemple de code:< ?php echo $vlQueryInfo[0]['sample_code']; ?></h4>-->
-                        <span style="margin-left:6.5%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:17%;"/></span>
                         <table class="table" style="width:100%">
+                            <tr>
+                                <td><label for="sampleCode">échantillon id </label></td>
+                                <td colspan="5">
+                                   <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="échantillon id" title="Please enter échantillon id" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:20%;"/>
+                                </td>
+                            </tr>
                             <tr>
                                 <td><label for="province">Province </label></td>
                                 <td>
@@ -149,13 +156,27 @@
                                 <td>
                                     <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['date_test_ordered_by_physician']; ?>" style="width:100%;"/>
                                 </td>
-                                <td><label for="">Funding Source </label></td>
+                                <td><label for="fundingSource">Funding Source </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="fundingSource" name="fundingSource" placeholder="Funding Source Name" title="Please enter funding source name" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['funding_source']; ?>" style="width:100%;"/>
+                                    <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source" <?php echo $disable; ?> style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($fundingSourceList as $fundingSource){
+                                      ?>
+                                        <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>" <?php echo ($fundingSource['funding_source_id'] == $vlQueryInfo[0]['funding_source'])?'selected="selected"':''; ?>><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+                                      <?php } ?>
+                                    </select>
                                 </td>
-                                <td><label for="">Implementing Partner </label></td>
+                                <td><label for="implementingPartner">Implementing Partner </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="implementingPartner" name="implementingPartner" placeholder="Implementing Partner Name" title="Please enter implementing partner name" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['implementing_partner']; ?>" style="width:100%;"/>
+                                    <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" <?php echo $disable; ?> style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($implementingPartnerList as $implementingPartner){
+                                      ?>
+                                        <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>" <?php echo ($implementingPartner['i_partner_id'] == $vlQueryInfo[0]['implementing_partner'])?'selected="selected"':''; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+                                      <?php } ?>
+                                    </select>
                                 </td>
                             </tr>
                         </table>
