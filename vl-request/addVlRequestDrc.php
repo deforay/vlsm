@@ -91,7 +91,7 @@ $pdResult=$db->query($pdQuery);
                         </div>
                         <!-- <h4>exemple de code</h4> -->
                         <!--<h4 style="display:none;" id="sampleCodeValue"></h4>-->
-                        <span style="margin-left:3%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:17%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/></span>
+                        <span style="margin-left:6.5%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:17%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/></span>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>

@@ -93,7 +93,7 @@
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
                        <!-- <h4 id="sampleCodeValue">exemple de code:< ?php echo $vlQueryInfo[0]['sample_code']; ?></h4>-->
-                        <span style="margin-left:3%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:17%;"/></span>
+                        <span style="margin-left:6.5%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:17%;"/></span>
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="province">Province </label></td>
