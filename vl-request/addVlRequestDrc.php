@@ -1,8 +1,14 @@
   <?php
   ob_start();
+  //Funding source list
+  $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+  $fundingSourceList = $db->query($fundingSourceQry);
+  //Implementing partner list
+  $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+  $implementingPartnerList = $db->query($implementingPartnerQry);
   //check remote user
-$rKey = '';
-$pdQuery="SELECT * from province_details";
+  $rKey = '';
+  $pdQuery="SELECT * from province_details";
   if($sarr['user_type']=='remoteuser'){
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
@@ -10,7 +16,7 @@ $pdQuery="SELECT * from province_details";
     $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
     $chkUserFcMapResult = $db->query($chkUserFcMapQry);
     if($chkUserFcMapResult){
-    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+      $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
     }
     $rKey = 'R';
   }else{
@@ -18,7 +24,7 @@ $pdQuery="SELECT * from province_details";
     $sampleCode = 'sample_code';
     $rKey = '';
   }
-$pdResult=$db->query($pdQuery);
+  $pdResult=$db->query($pdQuery);
   $province = "";
   $province.="<option value=''> -- Sélectionner -- </option>";
   foreach($pdResult as $provinceName){
@@ -91,8 +97,13 @@ $pdResult=$db->query($pdQuery);
                         </div>
                         <!-- <h4>exemple de code</h4> -->
                         <!--<h4 style="display:none;" id="sampleCodeValue"></h4>-->
-                        <span style="margin-left:6.5%;">Code Labo : <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:17%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/></span>
                         <table class="table" style="width:100%">
+                            <tr>
+                                <td><label for="sampleCode">échantillon id </label><span class="mandatory">*</span></td>
+                                <td colspan="5">
+                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="échantillon id" title="Please enter échantillon id" style="width:20%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
+                                </td>
+                            </tr>
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
                                 <td>
@@ -132,13 +143,27 @@ $pdResult=$db->query($pdQuery);
                                 <td>
                                     <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" style="width:100%;"/>
                                 </td>
-                                <td><label for="">Funding Source </label></td>
+                                <td><label for="fundingSource">Funding Source </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="fundingSource" name="fundingSource" placeholder="Funding Source Name" title="Please enter funding source name" style="width:100%;"/>
+                                    <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source" style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($fundingSourceList as $fundingSource){
+                                      ?>
+                                        <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+                                      <?php } ?>
+                                    </select>
                                 </td>
-                                <td><label for="">Implementing Partner </label></td>
+                                <td><label for="implementingPartner">Implementing Partner </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="implementingPartner" name="implementingPartner" placeholder="Implementing Partner Name" title="Please enter implementing partner name" style="width:100%;"/>
+                                    <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($implementingPartnerList as $implementingPartner){
+                                      ?>
+                                        <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+                                      <?php } ?>
+                                    </select>
                                 </td>
                             </tr>
                         </table>

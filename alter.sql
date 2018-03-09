@@ -1396,3 +1396,39 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Vldashboa
 
 -- Pal 09-Mar-2017
 ALTER TABLE `vl_request_form` ADD `funding_source` VARCHAR(500) NULL DEFAULT NULL AFTER `test_urgency`, ADD `implementing_partner` VARCHAR(500) NULL DEFAULT NULL AFTER `funding_source`;
+
+ALTER TABLE `vl_request_form` CHANGE `funding_source` `funding_source` INT(11) NULL DEFAULT NULL, CHANGE `implementing_partner` `implementing_partner` INT(11) NULL DEFAULT NULL;
+
+CREATE TABLE `r_funding_sources` (
+  `funding_source_id` int(11) NOT NULL,
+  `funding_source_name` varchar(500) NOT NULL,
+  `funding_source_status` varchar(45) NOT NULL DEFAULT 'active'
+)
+
+INSERT INTO `r_funding_sources` (`funding_source_id`, `funding_source_name`, `funding_source_status`) VALUES
+(1, 'USA Govt', 'active');
+
+ALTER TABLE `r_funding_sources`
+  ADD PRIMARY KEY (`funding_source_id`);
+  
+  ALTER TABLE `r_funding_sources`
+  MODIFY `funding_source_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  
+CREATE TABLE `r_implementation_partners` (
+  `i_partner_id` int(11) NOT NULL,
+  `i_partner_name` varchar(500) NOT NULL,
+  `i_partner_status` varchar(45) NOT NULL DEFAULT 'active'
+)
+
+INSERT INTO `r_implementation_partners` (`i_partner_id`, `i_partner_name`, `i_partner_status`) VALUES
+(1, 'USA Govt', 'active');
+
+ALTER TABLE `r_implementation_partners`
+  ADD PRIMARY KEY (`i_partner_id`);
+  
+  ALTER TABLE `r_implementation_partners`
+  MODIFY `i_partner_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+alter table vl_request_form add FOREIGN key(implementing_partner) REFERENCES r_implementing_partners(i_partner_id)
+
+alter table vl_request_form add FOREIGN key(funding_source) REFERENCES r_funding_sources(funding_source_id)
