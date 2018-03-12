@@ -408,7 +408,7 @@
                                 <td><label for="">Décision prise </label></td>
                                 <td colspan="3">
                                     <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
-                                        <option value=""> -- Sélectionner -- </option>
+                                      <option value=""> -- Sélectionner -- </option>
                                       <option value="6" <?php echo($vlQueryInfo[0]['result_status'] == 6)?'selected="selected"':''; ?>> En attente d'approbation Clinique </option>
                                       <option value="7" <?php echo($vlQueryInfo[0]['result_status'] == 7)?'selected="selected"':''; ?>>Echantillon accepté</option>
                                       <option value="4" <?php echo($vlQueryInfo[0]['result_status'] == 4)?'selected="selected"':''; ?>>Echantillon rejeté</option>
