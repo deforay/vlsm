@@ -128,10 +128,9 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['patient_gender']) || trim($result['patient_gender'])== ''){
           $result['patient_gender'] = 'not reported';
         }
+        $resultApprovedBy  = '';
         if(isset($result['approvedBy']) && trim($result['approvedBy'])!=''){
           $resultApprovedBy = ucwords($result['approvedBy']);
-        }else{
-          $resultApprovedBy  = '';
         }
         $vlResult = '';
         $smileyContent = '';
@@ -208,7 +207,7 @@ if(sizeof($requestResult)> 0){
             $html.='<table style="padding:0px 2px 2px 2px;">';
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code Labo</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date du pr�l�vement</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date du prélèvement</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code du patient</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -233,7 +232,7 @@ if(sizeof($requestResult)> 0){
                //$html .='<td colspan="3" style="line-height:10px;"></td>';
               //$html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">�ge</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Âge</td>';
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sexe</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -252,7 +251,7 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code Clinique</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Province</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Zone de sant�</td>';
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Zone de santé</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['facility_code'].'</td>';
@@ -283,10 +282,10 @@ if(sizeof($requestResult)> 0){
                 $html .='<td colspan="3">';
                  $html .='<table style="padding:2px;">';
                    $html .='<tr>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de r�ception de l�chantillon</td>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de remise du r�sultat</td>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Type d��chantillon</td>';
-                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Technique utilis�e</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de réception de léchantillon</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de remise du résultat</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Type déchantillon</td>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Technique utilisée</td>';
                    $html .='</tr>';
                    $html .='<tr>';
                      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$sampleReceivedDate." ".$sampleReceivedTime.'</td>';
@@ -305,7 +304,7 @@ if(sizeof($requestResult)> 0){
                    if($result['result_value_log']!=''){
                    $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result_value_log'];
                    }
-                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;R�sultat(copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].$logValue.'</td></tr>';
+                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Résultat(copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].$logValue.'</td></tr>';
                    $html .='<tr><td colspan="3"></td></tr>';
                  $html .='</table>';
                 $html .='</td>';
@@ -379,7 +378,7 @@ if(sizeof($requestResult)> 0){
               $html .='</tr>';
             $html.='</table>';
         if($result['result']!=''){
-          $pdf->writeHTML(utf8_encode($html));
+          $pdf->writeHTML($html);
           $pdf->lastPage();
           $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
           $pdf->Output($filename,"F");

@@ -504,8 +504,9 @@ $batResult = $db->rawQuery($batQuery);
         });
      $.unblockUI();
   }
-	function loadPrintedVlRequestData(){
-    $.blockUI();
+  
+  function loadPrintedVlRequestData(){
+     $.blockUI();
      opTable = $('#printedVlRequestDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
