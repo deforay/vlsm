@@ -31,7 +31,11 @@ if(isset($_POST['id']) && trim($_POST['id'])!=''){
   if(isset($_POST['resultMail'])){
     $searchQuery="SELECT vl.*,f.*,rst.*,l.facility_name as labName,rsrr.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.vl_sample_id IN(".$_POST['id'].")";
   }else{
-    $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
+    if(isset($_POST['source']) && $_POST['source'] == 'print' && trim($_POST['newData'])!= ''){
+      $searchQuery = $_SESSION['vlPrintResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
+    }else{
+      $searchQuery = $_SESSION['vlResultQuery']." and vl.vl_sample_id IN(".$_POST['id'].")";
+    }
   }
 }else{
   $searchQuery = $_SESSION['vlRequestSearchResultQuery'];
@@ -243,7 +247,18 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['labName']) || trim($result['labName']) == ''){
            $result['labName'] = '';
         }
-        //Set Age
+        //set patient gender
+        $gender = '';
+        $genderTxt = strtolower(str_replace("_"," ",$result['patient_gender']));
+        if($genderTxt == 'male'){
+          $gender = 'Masculino';
+        }else if($genderTxt == 'female'){
+          $gender = 'Femenino';
+        }else{
+          $gender = ucwords($genderTxt);
+        }
+        //Set DOB/Age
+        $dob = '';
         $age = 'Unknown';
         if(isset($result['patient_dob']) && trim($result['patient_dob'])!='' && $result['patient_dob']!='0000-00-00'){
           $dob = $general->humanDateFormat($result['patient_dob']);
@@ -264,14 +279,13 @@ if(sizeof($requestResult)> 0){
           $result['sample_collection_date']='';
           $sampleCollectionTime = '';
         }
-        $sampleReceivedDate='';
-        $sampleReceivedTime='';
+        $sampleReceivedDate = '';
+        $sampleReceivedTime = '';
         if(isset($result['sample_received_at_vl_lab_datetime']) && trim($result['sample_received_at_vl_lab_datetime'])!='' && $result['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
           $expStr=explode(" ",$result['sample_received_at_vl_lab_datetime']);
-          $sampleReceivedDate=$general->humanDateFormat($expStr[0]);
+          $sampleReceivedDate = $general->humanDateFormat($expStr[0]);
           $sampleReceivedTime =$expStr[1];
         }
-
         if(isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime'])!='' && $result['sample_tested_datetime']!='0000-00-00 00:00:00'){
           $expStr=explode(" ",$result['sample_tested_datetime']);
           $result['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -293,12 +307,12 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['patient_gender']) || trim($result['patient_gender'])== ''){
           $result['patient_gender'] = 'not reported';
         }
+        $resultApprovedBy  = '';
         if(isset($result['approvedBy']) && trim($result['approvedBy'])!=''){
           $resultApprovedBy = ucwords($result['approvedBy']);
-        }else{
-          $resultApprovedBy  = '';
         }
-        $lastVlDate = '';$lastVlResult='';
+        $lastVlDate = '';
+        $lastVlResult='';
         if($result['reason_for_vl_testing']=='routine'){
             $lastVlDate = (isset($result['last_vl_date_routine']) && $result['last_vl_date_routine']!='') ? $general->humanDateFormat($result['last_vl_date_routine']) :  '';
             $lastVlResult = (isset($result['last_vl_result_routine']) && $result['last_vl_result_routine']!='') ? $result['last_vl_result_routine'] :  '';
@@ -321,16 +335,22 @@ if(sizeof($requestResult)> 0){
         $vlResult = '';
         $smileyContent = '';
         $showMessage = '';
-        $tndMessage = '';
         $color  = '';
         $messageTextSize = '12px';
         if($result['result']!= NULL && trim($result['result'])!= '') {
           $resultType = is_numeric($result['result']);
           if(in_array(strtolower(trim($result['result'])),array("tnd","target not detected"))){
-            $vlResult = 'TND*';
+            $vlResult = 'Alvo não detectado*';
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = ucfirst($arr['l_vl_msg']);
-            $tndMessage = 'TND* - Target not Detected';
+          }else if(in_array(strtolower(trim($result['result'])),array("bdl","ldl","below detection level","low detection level"))){
+            $vlResult = 'Abaixo do limite inferior de detecção*';
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
+            $showMessage = ucfirst($arr['l_vl_msg']);
+          }else if(in_array(strtolower(trim($result['result'])),array("hdl","high detection level"))){
+            $vlResult = 'Acima do limite superior de detecção*';
+            $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
+            $showMessage = ucfirst($arr['h_vl_msg']);
           }else if(in_array(strtolower(trim($result['result'])),array("failed","fail","no_sample"))){
             $vlResult = $result['result'];
             $smileyContent = '';
@@ -434,7 +454,7 @@ if(sizeof($requestResult)> 0){
                $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Nº Processo Clínico</td>';
                $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.$result['patient_art_no'].'</td>';
                $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Género</td>';
-               $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
+               $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$gender.'</td>';
               $html .='</tr>';
               $html .='<tr>';
               $html .='<td colspan="6" style="line-height:10px;"></td>';
@@ -480,11 +500,11 @@ if(sizeof($requestResult)> 0){
               $html .='<td colspan="6" style="line-height:10px;"></td>';
              $html .='</tr>';
               $html .='<tr>';
-              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data de envio da amostra</td>';
+              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data de Emissão de Resultados</td>';
               $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$result['result_dispatched_datetime'].'</td>';
-              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data de recepção da amostra</td>';
+              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data de Recepção de Amostras</td>';
               $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$sampleReceivedDate.'</td>';
-              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data da quantificação de CV</td>';
+              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data da Quantificação</td>';
               $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
              $html .='</tr>';
             $html.='</table>';
@@ -498,19 +518,19 @@ if(sizeof($requestResult)> 0){
                $html .='<td rowspan="2">'.$smileyContent.'</td>';
               $html .='</tr><br/>';
               $html .='<tr>';
-              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Resultado de Carga Viral (cópias/mL)</td>';
+              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Resultado da carga viral (cópias / ml)</td>';
               $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$result['result'].'</td>';
-              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Resultado de Carga Viral (Log10)</td>';
+              $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Resultado da Carga Viral (Log10)</td>';
               $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.$result['result_value_log'].'</td>';
               $html .='</tr>';
             $html.='</table>';
             if($showMessage!=''){
-            $html .='<b style="font-size:12px;">E. RECOMENDAÇÕES</b><br/>';
-            $html.='<table style="border-spacing: 5px;border:1px solid #000;">';
-              $html .='<tr>';
-               $html .='<td colspan="6" style="line-height:10px;font-size:10px;text-align:left;color:'.$color.'">'.$showMessage.'</td>';
-              $html .='</tr>';
-            $html.='</table>';
+              $html .='<b style="font-size:12px;">E. RECOMENDAÇÕES</b><br/>';
+              $html.='<table style="border-spacing: 5px;border:1px solid #000;">';
+                $html .='<tr>';
+                 $html .='<td colspan="6" style="line-height:10px;font-size:10px;text-align:left;color:'.$color.'">'.$showMessage.'</td>';
+                $html .='</tr>';
+              $html.='</table>';
             }
             $html .='<b style="font-size:12px;">F. HISTÓRICO DE CARGA VIRAL</b><br/>';
             $html.='<table style="border-spacing: 3px;border:1px solid #000;">';
@@ -550,13 +570,13 @@ if(sizeof($requestResult)> 0){
            $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Laboratório executor</td>';
            $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.ucwords($result['labName']).'</td>';
            $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Técnico executor</td>';
-           $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.ucwords($result['lab_contact_person']).'</td>';
+           $html .='<td style="line-height:10px;font-size:10px;text-align:left;">'.ucwords($result['lab_technician']).'</td>';
           $html .='</tr>';
           $html .='<tr>';
-          $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Técnico responsável</td>';
-          $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.ucwords($result['vl_focal_person']).'</td>';
           $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Data do relatório</td>';
           $html .='<td style="line-height:11px;font-size:10px;text-align:left;">'.date('d-M-Y').'</td>';
+          $html .='<td style="line-height:11px;font-size:10px;font-weight:bold;text-align:left;">Técnico Responsável</td>';
+          $html .='<td style="line-height:11px;font-size:10px;text-align:left;"></td>';
          $html .='</tr>';
         $html.='</table>';
         if($result['result']!=''){

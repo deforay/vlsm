@@ -1,4 +1,4 @@
-  <?php
+    <?php
     ob_start();
     $rKey = '';
     if($sarr['user_type']=='remoteuser'){
@@ -21,7 +21,7 @@
     $facility = "";
     $facility.="<option value=''> -- Selecione -- </option>";
     foreach($fResult as $fDetails){
-      $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+      $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
     }
     //get ART list
     $aQuery="SELECT * from r_art_code_details";// where nation_identifier='drc'";
@@ -81,7 +81,7 @@
                         </div>
                         <div class="box box-primary">
                             <div class="box-header with-border">
-                                <h3 class="box-title">A.UNIDADE DE</h3>
+                                <h3 class="box-title">A. UNIDADE DE SOLICITAÇÃO</h3>
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
@@ -99,7 +99,7 @@
                                     </td>
                                     <td><label for="clinicName">Nome da Unidade </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                                        <select name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
                                           <?php echo $facility;  ?>
                                         </select>
                                     </td>
@@ -133,7 +133,7 @@
                                     </td>
                                     <td><label for="requestingDate">Data da solicitação </label></td>
                                     <td>
-                                        <input type="text" class="form-control date" name="requestingDate" id="requestingDate" placeholder="Data da solicitação" title="Please choose Data da solicitação"/>
+                                        <input type="text" class="form-control date" name="requestingDate" id="requestingDate" placeholder="Data da solicitação" title="Please choose Data da solicitação" style="width:100%;"/>
                                     </td>
                                 </tr>
                             </table>
@@ -444,21 +444,21 @@
                           </td>
                           <td style="width:14%;"><label for="vlFocalPerson"> Responsável da recepção </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control checkNum" id="vlFocalPerson" name="vlFocalPerson" placeholder="Responsável da recepção" title="Please enter Responsável da recepção" style="width:100%;"/>
+                            <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="Responsável da recepção" title="Please enter Responsável da recepção" style="width:100%;"/>
                           </td>
                       </tr>
                       <tr>
-                        <td style="width:14%;"><label for="sampleReceivedDate">  Amostra de Data Recebida no Laboratório de Teste </label></td>
+                        <td style="width:14%;"><label for="sampleReceivedDate"> Data de Recepção de Amostras </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Amostra de data recebida" title="Please select Amostra de data recebida" onchange="checkSampleReceviedDate()"/>
+                              <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Data de Recepção de Amostras" title="Please select Data de Recepção de Amostras" onchange="checkSampleReceviedDate()"/>
                           </td>
-                          <td style="width:14%;"><label for="">Data de Teste de Amostras</label></td>
+                          <td style="width:14%;"><label for="">Data da Quantificação</label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Data de Teste de Amostras" title="Please select Data de Teste de Amostras" onchange="checkSampleTestingDate();"/>
+                              <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Data da Quantificação" title="Please select Data da Quantificação" onchange="checkSampleTestingDate();"/>
                           </td>
-                          <td style="width:14%;"><label for="resultDispatchedOn"> Data de Resultados Despachados </label></td>
+                          <td style="width:14%;"><label for="resultDispatchedOn"> Data de Emissão de Resultados </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Data de Resultados Despachados" title="Please select Data de Resultados Despachados"/>
+                              <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Data de Emissão de Resultados" title="Please select Data de Emissão de Resultados"/>
                           </td>
                       </tr>
                       <tr>
@@ -496,35 +496,44 @@
                           <label for="vlResult">Resultado da carga viral (cópias / ml) </label>
                         </td>
                         <td class="vlResult">
-                              <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="resultado da carga viral" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/>
-                              <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target não detectado<br>
-                              <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Abaixo do nível de detecção
+                            <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="resultado da carga viral" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/>
+                            <input type="checkbox" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target não detectado<br>
+                            <input type="checkbox" id="ldl" name="ldl" value="yes" title="Please check ldl"> Abaixo do nível de detecção<br>
+                            <input type="checkbox" id="hdl" name="hdl" value="yes" title="Please check hdl"> Acima do limite superior de detecção
                         </td>
                         <td class="vlResult">
-                          <label for="vlLog">Registro de carga viral </label>
+                          <label for="vlLog">Resultado da Carga Viral (Log) </label>
                         </td>
-                            <td class="vlResult">
-                              <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Registro de carga viral" title="Please enter Registro de carga viral" style="width:100%;" onchange="calculateLogValue(this);"/>
-                            </td>
+                        <td class="vlResult">
+                          <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Resultado da Carga Viral (Log)" title="Please enter Resultado da Carga Viral (Log)" style="width:100%;" onchange="calculateLogValue(this);"/>
+                        </td>
                       </tr>
                       <tr>
                         <td>
-                          <label for="approvedBy">Aprovado por </label>
+                          <label for="labTechnician">Técnico Executor </label>
                         </td>
                         <td>
-                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por" style="width:100%;">
+                          <input type="text" class="form-control" id="labTechnician" name="labTechnician" placeholder="Técnico Executor" title="Please enter Técnico Executor" style="width:100%;"/>
+                        </td>
+                        <td>
+                          <label for="approvedBy">Aprovado por </label>
+                        </td>
+                        <td colspan="5">
+                          <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose Aprovado por" style="width:38%;">
                             <option value="">-- Select --</option>
                             <?php foreach($userResult as $uName){ ?>
                               <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
                               <?php } ?>
                           </select>
                         </td>
+                      </tr>
+                      <tr>
                         <td>
                           <label for="labComments">Comentários do cientista de laboratório </label>
                         </td>
-                            <td colspan="3">
-                              <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"></textarea>
-                            </td>
+                        <td colspan="5">
+                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"></textarea>
+                        </td>
                       </tr>
                     </table>
                   </div>
@@ -554,6 +563,10 @@
   <script type="text/javascript">
   provinceName = true;
   facilityName = true;
+  $(document).ready(function() {
+    $("#clinicName").select2({placeholder:"Nome da Unidade"});
+  });
+  
   function getfacilityDetails(obj){
     $.blockUI();
     var cName = $("#clinicName").val();
@@ -626,8 +639,8 @@
     }
     $.unblockUI();
   }
-  function getfacilityProvinceDetails(obj)
-  {
+  
+  function getfacilityProvinceDetails(obj){
     $.blockUI();
      //check facility name
       var cName = $("#clinicName").val();
@@ -652,6 +665,7 @@
     }
     $.unblockUI();
   }
+  
   function checkRejectionReason(){
     var rejectionReason = $("#rejectionReason").val();
     if(rejectionReason == "other"){
@@ -665,6 +679,10 @@
       formId: 'addVlRequestForm'
     });
     if(flag){
+      if($("#clinicName").val() == null || $("#clinicName").val() == ''){
+        alert('Please choose Nome da Unidade');
+        return false;
+      }
       $.blockUI();
       document.getElementById('addVlRequestForm').submit();
     }
@@ -712,28 +730,35 @@
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);
-      $('#bdl').attr('disabled',true);
+      $('#ldl,#hdl').attr('disabled',true);
     }else{
       $('#vlResult,#vlLog').attr('readonly',false);
-      $('#bdl').attr('disabled',false);
+      $('#ldl,#hdl').attr('disabled',false);
     }
   });
-  $('#bdl').change(function() {
-    if($('#bdl').is(':checked')){
+  $('#ldl').change(function() {
+    if($('#ldl').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);
-      $('#tnd').attr('disabled',true);
+      $('#tnd,#hdl').attr('disabled',true);
     }else{
       $('#vlResult,#vlLog').attr('readonly',false);
-      $('#tnd').attr('disabled',false);
+      $('#tnd,#hdl').attr('disabled',false);
+    }
+  });
+  $('#hdl').change(function() {
+    if($('#hdl').is(':checked')){
+      $('#vlResult,#vlLog').attr('readonly',true);
+      $('#tnd,#ldl').attr('disabled',true);
+    }else{
+      $('#vlResult,#vlLog').attr('readonly',false);
+      $('#tnd,#ldl').attr('disabled',false);
     }
   });
   $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
-      $('#tnd').attr('disabled',true);
-      $('#bdl').attr('disabled',true);
+      $('#tnd,#ldl,#hdl').attr('disabled',true);
     }else{
-      $('#tnd').attr('disabled',false);
-      $('#bdl').attr('disabled',false);
+      $('#tnd,#ldl,#hdl').attr('disabled',false);
     }
   });
   </script>

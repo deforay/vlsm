@@ -1,8 +1,6 @@
 <?php
 ob_start();
-
 $title = "VLSM | Add New Batch";
-
 include('../header.php');
 //global config
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
@@ -226,8 +224,8 @@ foreach($importConfigResult as $machine) {
   <script type="text/javascript">
   var startDate = "";
   var endDate = "";
-   noOfSamples = 0;
-   sortedTitle = [];
+  noOfSamples = 0;
+  sortedTitle = [];
   $(document).ready(function() {
      $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate').daterangepicker({

@@ -1432,3 +1432,8 @@ ALTER TABLE `r_implementation_partners`
 alter table vl_request_form add FOREIGN key(implementing_partner) REFERENCES r_implementing_partners(i_partner_id)
 
 alter table vl_request_form add FOREIGN key(funding_source) REFERENCES r_funding_sources(funding_source_id)
+
+-- Pal 12-Mar-2017
+ALTER TABLE `vl_request_form` ADD `lab_technician` VARCHAR(500) NULL DEFAULT NULL AFTER `lab_code`;
+
+UPDATE `facility_details` SET `facility_name` = 'LABORATÓRIO DE BIOLOGIA MOLECULAR' WHERE `facility_details`.`facility_id` = 2618;
