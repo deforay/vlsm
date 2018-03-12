@@ -449,11 +449,11 @@ $batResult = $db->rawQuery($batQuery);
             "iDisplayLength": 100,
             "bRetrieve": true,                        
             "aoColumns": [
-								{"sClass":"center","bSortable":false},
+		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
-								<?php if($sarr['user_type']!='standalone'){ ?>
+		<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
-								<?php } ?>
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -464,20 +464,20 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
-						<?php if($sarr['user_type']!='standalone'){ ?>
+	    <?php if($sarr['user_type']!='standalone'){ ?>
             "aaSorting": [[ 9, "desc" ]],
-						<?php } else { ?>
-						"aaSorting": [[ 8, "desc" ]],
-						<?php } ?>
-						"fnDrawCallback": function() {
-							var checkBoxes=document.getElementsByName("chk[]");
+	    <?php } else { ?>
+	    "aaSorting": [[ 8, "desc" ]],
+	    <?php } ?>
+	    "fnDrawCallback": function() {
+	      var checkBoxes=document.getElementsByName("chk[]");
               len = checkBoxes.length;
               for(c=0;c<len;c++){
                 if (jQuery.inArray(checkBoxes[c].id, selectedRowsId) != -1 ){
-									checkBoxes[c].setAttribute("checked",true);
-                  }
+		  checkBoxes[c].setAttribute("checked",true);
                 }
-							},
+              }
+	    },
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
@@ -496,9 +496,9 @@ $batResult = $db->rawQuery($batQuery);
                   "url": sSource,
                   "data": aoData,
                   "success": function(json){
-                      $("#totalSamplesList").val(json.iTotalDisplayRecords);
-											fnCallback(json);
-                     }
+                    $("#totalSamplesList").val(json.iTotalDisplayRecords);
+		    fnCallback(json);
+                  }
               });
             }
         });
@@ -518,11 +518,11 @@ $batResult = $db->rawQuery($batQuery);
             "iDisplayLength": 100,
             "bRetrieve": true,                        
             "aoColumns": [
-								{"sClass":"center","bSortable":false},
+		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
-								<?php if($sarr['user_type']!='standalone'){ ?>
+		  <?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
-								<?php } ?>
+		  <?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -533,20 +533,20 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
-						<?php if($sarr['user_type']!='standalone'){ ?>
+	    <?php if($sarr['user_type']!='standalone'){ ?>
             "aaSorting": [[ 9, "desc" ]],
-						<?php } else { ?>
-						"aaSorting": [[ 8, "desc" ]],
-						<?php } ?>
-						"fnDrawCallback": function() {
-							var checkBoxes=document.getElementsByName("chkPrinted[]");
+	    <?php } else { ?>
+	    "aaSorting": [[ 8, "desc" ]],
+	    <?php } ?>
+	    "fnDrawCallback": function() {
+	      var checkBoxes=document.getElementsByName("chkPrinted[]");
               len = checkBoxes.length;
               for(c=0;c<len;c++){
                 if (jQuery.inArray(checkBoxes[c].id, selectedPrintedRowsId) != -1 ){
-									checkBoxes[c].setAttribute("checked",true);
+		    checkBoxes[c].setAttribute("checked",true);
                   }
                 }
-							},
+	    },
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getPrintedVltestResultDetails.php",
@@ -566,8 +566,8 @@ $batResult = $db->rawQuery($batQuery);
                   "data": aoData,
                   "success": function(json){
                       $("#totalSamplesPrintedList").val(json.iTotalDisplayRecords);
-											fnCallback(json);
-                     }
+		      fnCallback(json);
+                  }
               });
             }
         });
@@ -579,13 +579,13 @@ $batResult = $db->rawQuery($batQuery);
     oTable.fnDraw();
     $.unblockUI();
   }
-	function searchPrintedVlRequestData(){
+  function searchPrintedVlRequestData(){
     $.blockUI();
     opTable.fnDraw();
     $.unblockUI();
   }
   
-  function convertResultToPdf(id,newData=null){
+  function convertResultToPdf(id,newData){
       $.blockUI();
       <?php
       $path = '';
@@ -598,8 +598,8 @@ $batResult = $db->rawQuery($batQuery);
 	      alert('Unable to generate download');
 	  }else{
 	      $.unblockUI();
-		  oTable.fnDraw();
-		  opTable.fnDraw();
+	      oTable.fnDraw();
+	      opTable.fnDraw();
 	      window.open('../uploads/'+data,'_blank');
 	  }
       });
@@ -655,7 +655,7 @@ $batResult = $db->rawQuery($batQuery);
 	  }
       });
   }
-	function checkedRow(obj){
+  function checkedRow(obj){
 			if ($(obj).is(':checked')) {
 	     if($.inArray(obj.value, selectedRows) == -1){
 				selectedRows.push(obj.value);
@@ -668,7 +668,7 @@ $batResult = $db->rawQuery($batQuery);
 			}
 			$("#checkedRows").val(selectedRows.join());
   }
-	function checkedPrintedRow(obj){
+  function checkedPrintedRow(obj){
 			if ($(obj).is(':checked')) {
 	     if($.inArray(obj.value, selectedRows) == -1){
 				selectedPrintedRows.push(obj.value);
@@ -682,7 +682,7 @@ $batResult = $db->rawQuery($batQuery);
 			$("#checkedPrintedRows").val(selectedPrintedRows.join());
   }
       
-    function toggleAllVisible(){
+  function toggleAllVisible(){
         //alert(tabStatus);
 			$(".checkRows").each(function(){
 	     $(this).prop('checked', false);

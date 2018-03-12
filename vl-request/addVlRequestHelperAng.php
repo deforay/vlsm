@@ -120,8 +120,12 @@ try {
         $_POST['vlResult'] = 'Target Not Detected';
         $_POST['vlLog'] = '';
     }
-    if(isset($_POST['bdl']) && $_POST['bdl'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'Below Detection Level';
+    if(isset($_POST['ldl']) && $_POST['ldl'] =='yes' && $isRejection == false){
+        $_POST['vlResult'] = 'Low Detection Level';
+        $_POST['vlLog'] = '';
+    }
+    if(isset($_POST['hdl']) && $_POST['hdl'] =='yes' && $isRejection == false){
+        $_POST['vlResult'] = 'High Detection Level';
         $_POST['vlLog'] = '';
     }
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
@@ -201,6 +205,7 @@ try {
           'vl_focal_person'=>(isset($_POST['vlFocalPerson']) && $_POST['vlFocalPerson']!='') ? $_POST['vlFocalPerson'] :  NULL,
           //'vl_focal_person_phone_number'=>(isset($_POST['vlFocalPersonPhoneNumber']) && $_POST['vlFocalPersonPhoneNumber']!='') ? $_POST['vlFocalPersonPhoneNumber'] :  NULL,
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
+          'lab_technician'=>(isset($_POST['labTechnician']) && $_POST['labTechnician']!='')? $_POST['labTechnician'] :  NULL,
           'consent_to_receive_sms'=>(isset($_POST['consentReceiveSms']) && $_POST['consentReceiveSms']!='') ? $_POST['consentReceiveSms'] :  NULL,
           'requesting_vl_service_sector'=>(isset($_POST['sector']) && $_POST['sector']!='') ? $_POST['sector'] :  NULL,
           'requesting_category'=>(isset($_POST['category']) && $_POST['category']!='') ? $_POST['category'] :  NULL,
@@ -217,8 +222,8 @@ try {
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
           'is_sample_rejected'=>(isset($_POST['noResult']) && $_POST['noResult']!='') ? $_POST['noResult'] :  NULL,
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='') ? $_POST['rejectionReason'] :  NULL,
-          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? $_POST['vlResult'] :  NULL,
-          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
+          'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Low Detection Level' && $_POST['vlResult']!='High Detection Level')) ? $_POST['vlResult'] :  NULL,
+          'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Low Detection Level' && $_POST['vlResult']!='High Detection Level')) ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'result_value_log'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='')? $_POST['vlLog'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,

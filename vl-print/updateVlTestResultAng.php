@@ -1,4 +1,4 @@
-  <?php
+    <?php
     ob_start();
     $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='ang'";
     $artRegimenResult = $db->rawQuery($artRegimenQuery);
@@ -10,7 +10,7 @@
     $facility = "";
     $facility.="<option value=''> -- Selecione -- </option>";
     foreach($fResult as $fDetails){
-      $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+      $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
     }
     //Get selected state
     $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['requesting_facility_id']."'";
@@ -138,7 +138,7 @@ $disable = "disabled = 'disabled'";
                         </div>
                         <div class="box box-primary">
                             <div class="box-header with-border">
-                                <h3 class="box-title">A.UNIDADE DE</h3>
+                                <h3 class="box-title">A. UNIDADE DE SOLICITAÇÃO</h3>
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
@@ -166,10 +166,10 @@ $disable = "disabled = 'disabled'";
                                     </td>
                                     <td><label for="clinicName">Nome da Unidade </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;" <?php echo $disable;?> onchange="getfacilityProvinceDetails(this)">
+                                        <select name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;" <?php echo $disable;?> onchange="getfacilityProvinceDetails(this)">
                                           <?php
                                           foreach($fResult as $fDetails){ ?>
-                                            <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['requesting_facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
+                                            <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['requesting_facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']; ?></option>
                                           <?php } ?>
                                         </select>
                                     </td>
@@ -203,7 +203,7 @@ $disable = "disabled = 'disabled'";
                                     </td>
                                     <td><label for="requestDate">Data da solicitação </label><span class="mandatory">*</span></td>
                                     <td>
-                                        <input type="text" class="form-control date" name="requestDate" id="requestDate" placeholder="Data da solicitação" title="Please choose Data da solicitação" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['test_requested_on']; ?>"/>
+                                        <input type="text" class="form-control date" name="requestDate" id="requestDate" placeholder="Data da solicitação" title="Please choose Data da solicitação" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['requesting_date']; ?>" style="width:100%;"/>
                                     </td>
                                 </tr>
                             </table>
@@ -530,21 +530,21 @@ $disable = "disabled = 'disabled'";
                           </td>
                           <td style="width:14%;"><label for="vlFocalPerson"> Responsável da recepção </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control " id="vlFocalPerson" name="vlFocalPerson" placeholder="Responsável da recepção" title="Please enter responsável da recepção" style="width:100%;" value="<?php echo $vlQueryInfo[0]['vl_focal_person'];?>"/>
+                              <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="Responsável da recepção" title="Please enter responsável da recepção" style="width:100%;" value="<?php echo $vlQueryInfo[0]['vl_focal_person'];?>"/>
                           </td>
                       </tr>
                       <tr>
-                        <td style="width:14%;"><label for="sampleReceivedOn"> Amostra de Data Recebida no Laboratório de Teste </label></td>
+                        <td style="width:14%;"><label for="sampleReceivedOn"> Data de Recepção de Amostras </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Amostra de data recebida" title="Please select Amostra de data recebida" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>"/>
+                              <input type="text" class="form-control dateTime" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Data de Recepção de Amostras" title="Please select Data de Recepção de Amostras" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>"/>
                           </td>
-                          <td style="width:14%;"><label for="">Data de Teste de Amostras<span class="mandatory">*</span></label></td>
+                          <td style="width:14%;"><label for="">Data da Quantificação <span class="mandatory">*</span></label></td>
                           <td style="width:14%;">
-                              <input type="text" class="isRequired form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Data de Teste de Amostras" title="Please select Data de Teste de Amostras" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>"/>
+                              <input type="text" class="isRequired form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Data da Quantificação" title="Please select Data da Quantificação" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>"/>
                           </td>
-                          <td style="width:14%;"><label for="resultDispatchedOn"> Data de Resultados Despachados </label></td>
+                          <td style="width:14%;"><label for="resultDispatchedOn"> Data de Emissão de Resultados </label></td>
                           <td style="width:14%;">
-                              <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Data de Resultados Despachados" title="Please select Data de Resultados Despachados" value="<?php echo $vlQueryInfo[0]['result_dispatched_datetime'];?>"/>
+                              <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Data de Emissão de Resultados" title="Please select Data de Emissão de Resultados" value="<?php echo $vlQueryInfo[0]['result_dispatched_datetime'];?>"/>
                           </td>
                           
                       </tr>
@@ -584,19 +584,26 @@ $disable = "disabled = 'disabled'";
                         <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
                             <label for="vlResult">Resultado da carga viral<span class="mandatory">*</span> (cópias / ml) </label>
                         </td>
-                        <td  class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                          <input type="text" class="isRequired form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter resultado da carga viral" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
-                          <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target não detectado<br>
-                          <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Abaixo do nível de detecção
+                        <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
+                          <input type="text" class="form-control labSection <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level' || $vlQueryInfo[0]['result'] == 'Low Detection Level' || $vlQueryInfo[0]['result'] == 'High Detection Level')?'':'isRequired'; ?>" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter resultado da carga viral" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level' || $vlQueryInfo[0]['result'] == 'Low Detection Level' || $vlQueryInfo[0]['result'] == 'High Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+                          <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level' || $vlQueryInfo[0]['result'] == 'Low Detection Level' || $vlQueryInfo[0]['result'] == 'High Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target não detectado<br>
+                          <input type="checkbox" class="labSection" id="ldl" name="ldl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level' || $vlQueryInfo[0]['result'] == 'Low Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'High Detection Level')?'disabled="disabled"':'' ?> title="Please check ldl"> Abaixo do nível de detecção<br>
+                          <input type="checkbox" class="labSection" id="hdl" name="hdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'High Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level' || $vlQueryInfo[0]['result'] == 'Low Detection Level')?'disabled="disabled"':'' ?> title="Please check hdl"> Acima do limite superior de detecção
                         </td>
                         <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                          <label for="vlLog">Registro de carga viral </label>
+                          <label for="vlLog">Resultado da Carga Viral (Log) </label>
                         </td>
                         <td class="vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
-                          <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Registro de carga viral" title="Please enter Registro de carga viral" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+                          <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Resultado da Carga Viral" title="Please enter Resultado da Carga Viral" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
                         </td>
                       </tr>
                       <tr>
+                        <td>
+                          <label for="labTechnician">Técnico Executor </label>
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" id="labTechnician" name="labTechnician" placeholder="Técnico Executor" title="Please enter Técnico Executor" value="<?php echo $vlQueryInfo[0]['lab_technician']; ?>" style="width:100%;"/>
+                        </td>
                         <td>
                             <label for="approvedBy">Aprovado por </label>
                         </td>
@@ -613,14 +620,6 @@ $disable = "disabled = 'disabled'";
                           </select>
                         </td>
                         <td>
-                          <label for="labComments">Comentários do cientista de laboratório </label>
-                        </td>
-                        <td colspan="3">
-                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
                             <label for="status">Status <span class="mandatory">*</span></label>
                         </td>
                         <td>
@@ -633,10 +632,20 @@ $disable = "disabled = 'disabled'";
                             <?php } ?>
                           </select>
                         </td>
-                        <td class=" reasonForResultChanges" style="visibility:hidden;">
-                            <label for="reasonForResultChanges">Razão para as mudanças nos resultados </label>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label for="labComments">Comentários do cientista de laboratório </label>
                         </td>
-                        <td colspan="3" class="reasonForResultChanges" style="visibility:hidden;">
+                        <td colspan="7">
+                          <textarea class="form-control" name="labComments" id="labComments" placeholder="Comentários do laboratório" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class=" reasonForResultChanges" style="visibility:hidden;">
+                            <label for="reasonForResultChanges">Razão para as mudanças nos resultados <span class="mandatory">*</span></label>
+                        </td>
+                        <td colspan="7" class="reasonForResultChanges" style="visibility:hidden;">
                           <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Razão para as mudanças nos resultados" style="width:100%;"></textarea>
                         </td>
                       </tr>
@@ -670,6 +679,7 @@ $disable = "disabled = 'disabled'";
   <script type="text/javascript">
       provinceName = facilityName = true;
      $(document).ready(function() {
+        $("#clinicName").select2({placeholder:"Nome da Unidade"});
         $('.date').datepicker({
         changeMonth: true,
         changeYear: true,
@@ -697,8 +707,8 @@ $disable = "disabled = 'disabled'";
      });
      
     function getfacilityDetails(obj){
-       $.blockUI();
-       var cName = $("#clinicName").val();
+      $.blockUI();
+      var cName = $("#clinicName").val();
       var pName = $("#province").val();
       if(pName!='' && provinceName && facilityName){
         facilityName = false;
@@ -898,7 +908,7 @@ $disable = "disabled = 'disabled'";
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#rejectionReason').val('');
-       $('#vlResult').addClass('isRequired');
+      $('#vlResult').addClass('isRequired');
     }
   });
   $("input:radio[name=lineTreatment]").click(function() {
@@ -911,32 +921,45 @@ $disable = "disabled = 'disabled'";
   
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
+      $('#vlResult,#vlLog').removeClass('isRequired');
       $('#vlResult,#vlLog').attr('readonly',true);
-      $('#bdl').attr('disabled',true);
+      $('#ldl,#hdl').attr('disabled',true);
     }else{
+      $('#vlResult,#vlLog').addClass('isRequired');
       $('#vlResult,#vlLog').attr('readonly',false);
-      $('#bdl').attr('disabled',false);
+      $('#ldl,#hdl').attr('disabled',false);
     }
   });
-  $('#bdl').change(function() {
-    if($('#bdl').is(':checked')){
+  $('#ldl').change(function() {
+    if($('#ldl').is(':checked')){
+      $('#vlResult,#vlLog').removeClass('isRequired');
       $('#vlResult,#vlLog').attr('readonly',true);
-      $('#tnd').attr('disabled',true);
+      $('#tnd,#hdl').attr('disabled',true);
     }else{
+      $('#vlResult,#vlLog').addClass('isRequired');
       $('#vlResult,#vlLog').attr('readonly',false);
-      $('#tnd').attr('disabled',false);
+      $('#tnd,#hdl').attr('disabled',false);
+    }
+  });
+  $('#hdl').change(function() {
+    if($('#hdl').is(':checked')){
+      $('#vlResult,#vlLog').removeClass('isRequired');
+      $('#vlResult,#vlLog').attr('readonly',true);
+      $('#tnd,#ldl').attr('disabled',true);
+    }else{
+      $('#vlResult,#vlLog').addClass('isRequired');
+      $('#vlResult,#vlLog').attr('readonly',false);
+      $('#tnd,#ldl').attr('disabled',false);
+    }
+  });
+  $('#vlResult,#vlLog').on('input',function(e){
+    if(this.value != ''){
+      $('#tnd,#ldl,#hdl').attr('disabled',true);
+    }else{
+      $('#tnd,#ldl,#hdl').attr('disabled',false);
     }
   });
   
-  $('#vlResult,#vlLog').on('input',function(e){
-    if(this.value != ''){
-      $('#tnd').attr('disabled',true);
-      $('#bdl').attr('disabled',true);
-    }else{
-      $('#tnd').attr('disabled',false);
-      $('#bdl').attr('disabled',false);
-    }
-  });
   $("#vlRequestFormAng .labSection").on("change", function() {
       if($.trim(result)!= ''){
         if($("#vlRequestFormAng .labSection").serialize() == $(__clone).serialize()){

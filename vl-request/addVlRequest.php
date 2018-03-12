@@ -137,6 +137,7 @@ $general=new Deforay_Commons_General();
             }
         }
       }
+      
       function checkSampleTestingDate(){
         var sampleCollectionDate = $("#sampleCollectionDate").val();
         var sampleTestingDate = $("#sampleTestingDateAtLab").val();
