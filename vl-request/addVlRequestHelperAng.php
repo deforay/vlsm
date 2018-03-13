@@ -31,10 +31,10 @@ try {
         }
     }
     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
-         $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
-         $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
+      $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
+      $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
     }else{
-        $_POST['sampleCollectionDate'] = NULL;
+      $_POST['sampleCollectionDate'] = NULL;
     }
     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
        $_POST['dob']=$general->dateFormat($_POST['dob']);  
@@ -69,69 +69,69 @@ try {
     }
     $instanceId = '';
     if(isset($_SESSION['instanceId'])){
-        $instanceId = $_SESSION['instanceId'];
+      $instanceId = $_SESSION['instanceId'];
     }
     $testingPlatform = '';
     if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
-        $platForm = explode("##",$_POST['testingPlatform']);
-        $testingPlatform = $platForm[0];
+      $platForm = explode("##",$_POST['testingPlatform']);
+      $testingPlatform = $platForm[0];
     }
     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
-        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
-        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
+      $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
+      $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
     }else{
-        $_POST['sampleReceivedDate'] = NULL;
+      $_POST['sampleReceivedDate'] = NULL;
     }
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
-        $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
-        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];  
+      $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+      $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];  
     }else{
-        $_POST['sampleTestingDateAtLab'] = NULL;
+      $_POST['sampleTestingDateAtLab'] = NULL;
     }
     if(isset($_POST['resultDispatchedOn']) && trim($_POST['resultDispatchedOn'])!=""){
-        $resultDispatchedOn = explode(" ",$_POST['resultDispatchedOn']);
-        $_POST['resultDispatchedOn']=$general->dateFormat($resultDispatchedOn[0])." ".$resultDispatchedOn[1];  
+      $resultDispatchedOn = explode(" ",$_POST['resultDispatchedOn']);
+      $_POST['resultDispatchedOn']=$general->dateFormat($resultDispatchedOn[0])." ".$resultDispatchedOn[1];  
     }else{
-        $_POST['resultDispatchedOn'] = NULL;
+      $_POST['resultDispatchedOn'] = NULL;
     }
     if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
-         $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
-         $rejectionResult = $db->rawQuery($rejectionReasonQuery);
-        if(!isset($rejectionResult[0]['rejection_reason_id'])){
-            $data=array(
-            'rejection_reason_name'=>$_POST['newRejectionReason'],
-            'rejection_type'=>'general',
-            'rejection_reason_status'=>'active',
-            'updated_datetime'=>$general->getDateTime(),
-            );
-            $id=$db->insert('r_sample_rejection_reasons',$data);
-            $_POST['rejectionReason'] = $id;
-        }else{
-            $_POST['rejectionReason'] = $rejectionResult[0]['rejection_reason_id'];
-        }
+        $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
+        $rejectionResult = $db->rawQuery($rejectionReasonQuery);
+       if(!isset($rejectionResult[0]['rejection_reason_id'])){
+           $data=array(
+           'rejection_reason_name'=>$_POST['newRejectionReason'],
+           'rejection_type'=>'general',
+           'rejection_reason_status'=>'active',
+           'updated_datetime'=>$general->getDateTime(),
+           );
+           $id=$db->insert('r_sample_rejection_reasons',$data);
+           $_POST['rejectionReason'] = $id;
+       }else{
+          $_POST['rejectionReason'] = $rejectionResult[0]['rejection_reason_id'];
+       }
     }
     $isRejection = false;
     if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
-        $isRejection = true;
-        $_POST['vlResult'] = '';
-        $_POST['vlLog'] = '';
+      $isRejection = true;
+      $_POST['vlResult'] = '';
+      $_POST['vlLog'] = '';
     }
     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'Target Not Detected';
-        $_POST['vlLog'] = '';
+      $_POST['vlResult'] = 'Target Not Detected';
+      $_POST['vlLog'] = '';
     }
     if(isset($_POST['ldl']) && $_POST['ldl'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'Low Detection Level';
-        $_POST['vlLog'] = '';
+      $_POST['vlResult'] = 'Low Detection Level';
+      $_POST['vlLog'] = '';
     }
     if(isset($_POST['hdl']) && $_POST['hdl'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'High Detection Level';
-        $_POST['vlLog'] = '';
+      $_POST['vlResult'] = 'High Detection Level';
+      $_POST['vlLog'] = '';
     }
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
-        $_POST['result'] = $_POST['vlResult'];
+      $_POST['result'] = $_POST['vlResult'];
     }else if($_POST['vlLog']!=''){
-        $_POST['result'] = $_POST['vlLog'];
+      $_POST['result'] = $_POST['vlLog'];
     }
     //set patient group
     $patientGroup = array();

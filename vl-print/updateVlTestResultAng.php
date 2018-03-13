@@ -142,18 +142,18 @@ $disable = "disabled = 'disabled'";
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
-                                    <td><label for="province">Província </label><span class="mandatory">*</span></td>
+                                    <td><label for="province">Província </label></td>
                                     <td>
-                                        <select class="form-control isRequired" name="province" id="province" title="Please choose província" <?php echo $disable;?> onchange="getfacilityDetails(this);" style="width:100%;">
+                                        <select class="form-control" name="province" id="province" title="Please choose província" <?php echo $disable;?> onchange="getfacilityDetails(this);" style="width:100%;">
                                             <?php
                                             foreach($pdResult as $provinceName){ ?>
                                               <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo ($stateResult[0]['facility_state']."##".$provinceResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']); ?></option>
                                             <?php } ?>
                                         </select>
                                     </td>
-                                    <td><label for="district">Município </label><span class="mandatory">*</span></td>
+                                    <td><label for="district">Município </label></td>
                                     <td>
-                                        <select class="form-control isRequired" name="district" id="district" title="Please choose município" style="width:100%;" <?php echo $disable;?> onchange="getfacilityDistrictwise(this);">
+                                        <select class="form-control" name="district" id="district" title="Please choose município" style="width:100%;" <?php echo $disable;?> onchange="getfacilityDistrictwise(this);">
                                           <option value=""> -- Selecione -- </option>
                                           <?php
                                             foreach($districtResult as $districtName){
@@ -164,7 +164,7 @@ $disable = "disabled = 'disabled'";
                                             ?>
                                         </select>
                                     </td>
-                                    <td><label for="clinicName">Nome da Unidade </label><span class="mandatory">*</span></td>
+                                    <td><label for="clinicName">Nome da Unidade </label></td>
                                     <td>
                                         <select name="clinicName" id="clinicName" title="Please choose Nome da Unidade" style="width:100%;" <?php echo $disable;?> onchange="getfacilityProvinceDetails(this)">
                                           <?php
@@ -175,15 +175,15 @@ $disable = "disabled = 'disabled'";
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label for="sector">Serviço/Sector </label><span class="mandatory">*</span></td>
+                                    <td><label for="sector">Serviço/Sector </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="sector" id="sector" placeholder="Serviço/Sector" title="Please enter Serviço/Sector" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['requesting_vl_service_sector']; ?>"/>
                                     </td>
-                                    <td><label for="reqClinician">Nome do solicitante </label><span class="mandatory">*</span></td>
+                                    <td><label for="reqClinician">Nome do solicitante </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="reqClinician" id="reqClinician" placeholder="Nome do solicitante" title="Please enter Nome do solicitante" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['requesting_person']; ?>"/>
                                     </td>
-                                    <td><label for="category">Categoria </label><span class="mandatory">*</span></td>
+                                    <td><label for="category">Categoria </label></td>
                                     <td>
                                         <select class="form-control" name="category" id="category" <?php echo $disable;?> title="Please choose Categoria" style="width:100%;">
                                           <option value="">-- Selecione --</option>
@@ -193,15 +193,15 @@ $disable = "disabled = 'disabled'";
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><label for="profNumber">Nº da Ordem </label><span class="mandatory">*</span></td>
+                                    <td><label for="profNumber">Nº da Ordem </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="profNumber" id="profNumber" placeholder="Nº da Ordem" title="Please enter Nº da Ordem" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['requesting_professional_number']; ?>"/>
                                     </td>
-                                    <td><label for="contactNo">Contacto </label><span class="mandatory">*</span></td>
+                                    <td><label for="contactNo">Contacto </label></td>
                                     <td>
                                         <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="Contacto" title="Please enter Contacto" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['requesting_phone']; ?>"/>
                                     </td>
-                                    <td><label for="requestDate">Data da solicitação </label><span class="mandatory">*</span></td>
+                                    <td><label for="requestDate">Data da solicitação </label></td>
                                     <td>
                                         <input type="text" class="form-control date" name="requestDate" id="requestDate" placeholder="Data da solicitação" title="Please choose Data da solicitação" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['requesting_date']; ?>" style="width:100%;"/>
                                     </td>
@@ -451,7 +451,7 @@ $disable = "disabled = 'disabled'";
                             <tr>
                                 <td style="width:14%;"><label for="fName">Nome da Unidade de colheita (se diferente da Unidade de solicitação) </label></td>
                                 <td style="width:14%;">
-                                    <select class="form-control isRequired" name="fName" id="fName" title="Please choose Nome de colheita" <?php echo $disable;?> style="width:100%;" >
+                                    <select class="form-control" name="fName" id="fName" title="Please choose Nome de colheita" <?php echo $disable;?> style="width:100%;" >
                                           <?php
                                           foreach($fResult as $fDetails){ ?>
                                             <option value="<?php echo $fDetails['facility_id']; ?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']); ?></option>
@@ -460,7 +460,7 @@ $disable = "disabled = 'disabled'";
                                 </td>
                                 <td style="width:14%;"><label for="colectionSite"> Local de colheita </label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control " id="colectionSite" name="colectionSite" placeholder="Local de colheita" <?php echo $disable;?> title="Please enter Local de colheita" value="<?php echo $vlQueryInfo[0]['collection_site'];?>" style="width:100%;"/>
+                                    <input type="text" class="form-control" id="colectionSite" name="colectionSite" placeholder="Local de colheita" <?php echo $disable;?> title="Please enter Local de colheita" value="<?php echo $vlQueryInfo[0]['collection_site'];?>" style="width:100%;"/>
                                 </td>
                                 <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita </label></td>
                                 <td style="width:14%;">
@@ -897,20 +897,22 @@ $disable = "disabled = 'disabled'";
       }
     }
   }
+  
   $("input:radio[name=noResult]").click(function() {
     if($(this).val() == 'yes'){
+      $('.vlResult').hide();
       $('.rejectionReason').show();
-      $('.vlResult').css('visibility','hidden');
       $('#rejectionReason').addClass('isRequired');
-       $('#vlResult').removeClass('isRequired');
+      $('#vlResult').removeClass('isRequired');
     }else{
-      $('.vlResult').css('visibility','visible');
+      $('.vlResult').show();
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#rejectionReason').val('');
       $('#vlResult').addClass('isRequired');
     }
   });
+  
   $("input:radio[name=lineTreatment]").click(function() {
     if($(this).val() == '1'){
       $('.lineTreatmentRefType').attr("disabled",true);
