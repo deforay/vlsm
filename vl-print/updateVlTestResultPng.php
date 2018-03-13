@@ -215,7 +215,7 @@ $disable = "disabled = 'disabled'";
                         <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityProvinceDetails(this)">
 			    <option value=""> -- Select -- </option>
                               <?php foreach($fResult as $fDetails){ ?>
                               <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
