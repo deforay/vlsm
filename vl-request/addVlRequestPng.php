@@ -68,11 +68,21 @@ foreach($fResult as $fDetails){
                         <label for="district">District <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;">
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" onchange="getfacilityDistrictwise(this);" style="width:100%;">
                             <option value=""> -- Select -- </option>
                           </select>
                         </td>
                         <td style="width:10%">
+                        <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
+                        </td>
+                        <td style="width:20%">
+                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+			    <?php echo $facility; ?>
+			  </select>
+                        </td>
+                      </tr>
+                      <tr>
+			<td style="width:10%">
                         <label for="facility">Clinic/Ward <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
@@ -83,8 +93,6 @@ foreach($fResult as $fDetails){
 			    <option value="anc">ANC</option>
 			  </select>
                         </td>
-                      </tr>
-                      <tr>
                         <td style="width:16%">
                         <label for="officerName">Requesting Medical Officer   <span class="mandatory">*</span></label>
                         </td>
@@ -97,13 +105,15 @@ foreach($fResult as $fDetails){
                         <td style="width:20%">
                           <input type="text" class="form-control checkNum isRequired" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" >
                         </td>
-                        <td style="width:10%">
+                      </tr>
+		      <tr>
+			<td style="width:10%">
                         <label for="clinicDate">Date  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control isRequired date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date"  style="width:100%;" >
                         </td>
-                      </tr>
+		      </tr>
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td></tr>
                       <tr>
                         <td style="width:16%">
@@ -521,9 +531,9 @@ foreach($fResult as $fDetails){
 	dateFormat: 'dd-M-yy',
 	timeFormat: "HH:mm",
 	onChangeMonthYear: function(year, month, widget) {
-	      setTimeout(function() {
-		 $('.ui-datepicker-calendar').show();
-	      });
+	  setTimeout(function() {
+	     $('.ui-datepicker-calendar').show();
+	  });
 	},
 	yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
 	}).click(function(){
@@ -538,22 +548,22 @@ foreach($fResult as $fDetails){
 	}).click(function(){
 	   $('.ui-datepicker-calendar').hide();
 	});
-      
     });
     
-    function validateNow(){
-    flag = deforayValidator.init({
-        formId: 'vlRequestForm'
-    });
-    $('.isRequired').each(function () {
-      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
-    });
-    $("#saveNext").val('save');
-    if(flag){
-      $.blockUI();
-      document.getElementById('vlRequestForm').submit();
-    }
+  function validateNow(){
+      flag = deforayValidator.init({
+	  formId: 'vlRequestForm'
+      });
+      $('.isRequired').each(function () {
+	($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
+      });
+      $("#saveNext").val('save');
+      if(flag){
+	$.blockUI();
+	document.getElementById('vlRequestForm').submit();
+      }
   }
+  
   function validateSaveNow(){
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
@@ -570,73 +580,73 @@ foreach($fResult as $fDetails){
     
   function getfacilityDetails(obj){
     $.blockUI();
-      //var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(pName!='' && provinceName && facilityName){
-        facilityName = false;
-      }
+    var cName = $("#clinicName").val();
+    var pName = $("#province").val();
+    if(pName!='' && provinceName && facilityName){
+      facilityName = false;
+    }
     if(pName!=''){
       if(provinceName){
       $.post("../includes/getFacilityForClinic.php", { pName : pName},
       function(data){
 	  if(data != ""){
             details = data.split("###");
-            //$("#clinicName").html(details[0]);
+            $("#clinicName").html(details[0]);
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
 	  }
       });
       }
-    }else if(pName==''){
+    }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
-      //$("#clinicName").html("<?php echo $facility;?>");
+      $("#clinicName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
   }
   
-//  function getfacilityDistrictwise(obj){
-//    $.blockUI();
-//    var dName = $("#district").val();
-//    var cName = $("#clinicName").val();
-//    if(dName!=''){
-//      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
-//      function(data){
-//	  if(data != ""){
-//            $("#clinicName").html(data);
-//	  }
-//      });
-//    }
-//    $.unblockUI();
-//  }
+  function getfacilityDistrictwise(obj){
+    $.blockUI();
+    var dName = $("#district").val();
+    var cName = $("#clinicName").val();
+    if(dName!=''){
+      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      function(data){
+	  if(data != ""){
+            $("#clinicName").html(data);
+	  }
+      });
+    }
+    $.unblockUI();
+  }
   
-//  function getfacilityProvinceDetails(obj){
-//      $.blockUI();
-//     //check facility name
-//      var cName = $("#clinicName").val();
-//      var pName = $("#province").val();
-//      if(cName!='' && provinceName && facilityName){
-//        provinceName = false;
-//      }
-//    if(cName!='' && facilityName){
-//      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-//      function(data){
-//	  if(data != ""){
-//            details = data.split("###");
-//            $("#province").html(details[0]);
-//            $("#district").html(details[1]);
-//            $("#clinicianName").val(details[2]);
-//	  }
-//      });
-//    }else if(pName=='' && cName==''){
-//      provinceName = true;
-//      facilityName = true;
-//      $("#province").html("< ?php echo $province;?>");
-//      $("#clinicName").html("< ?php echo $facility;?>");
-//    }
-//    $.unblockUI();
-//  }
+  function getfacilityProvinceDetails(obj){
+      $.blockUI();
+     //check facility name
+      var cName = $("#clinicName").val();
+      var pName = $("#province").val();
+      if(cName!='' && provinceName && facilityName){
+        provinceName = false;
+      }
+    if(cName!='' && facilityName){
+      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+      function(data){
+	  if(data != ""){
+            details = data.split("###");
+            $("#province").html(details[0]);
+            $("#district").html(details[1]);
+            $("#clinicianName").val(details[2]);
+	  }
+      });
+    }else if(pName=='' && cName==''){
+      provinceName = true;
+      facilityName = true;
+      $("#province").html("<?php echo $province;?>");
+      $("#clinicName").html("<?php echo $facility;?>");
+    }
+    $.unblockUI();
+  }
   
   function checkValue(){
     var artRegimen = $("#currentRegimen").val();
