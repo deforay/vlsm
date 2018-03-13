@@ -1,6 +1,5 @@
 <?php
 ob_start();
-
 $bQuery="SELECT * FROM batch_details";
 $bResult = $db->rawQuery($bQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='png'";
@@ -10,9 +9,9 @@ $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
-            foreach($pdResult as $provinceName){
-              $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-            }
+foreach($pdResult as $provinceName){
+  $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+}
 $facility = '';
 $facility.="<option value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
@@ -48,8 +47,8 @@ foreach($fResult as $fDetails){
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'This sample code already exists.Try another number',null)"/>
+                          <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'The Laboratory ID that you entered already exists. Please try another number',null)"/>
                         </div>
                       </div>
                     </div>
@@ -58,7 +57,7 @@ foreach($fResult as $fDetails){
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 1: Clinic Information</td></tr>
                       <tr>
                         <td style="width:16%">
-                        <label for="province">Province   <span class="mandatory">*</span></label>
+                        <label for="province">Province <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
                           <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
@@ -66,15 +65,15 @@ foreach($fResult as $fDetails){
                           </select>
                         </td>
                         <td style="width:10%">
-                        <label for="district">District  <span class="mandatory">*</span></label>
+                        <label for="district">District <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;">
                             <option value=""> -- Select -- </option>
                           </select>
                         </td>
                         <td style="width:10%">
-                        <label for="facility">Clinic/Ward  <span class="mandatory">*</span></label>
+                        <label for="facility">Clinic/Ward <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
                           <select class="form-control isRequired" id="wardData" name="wardData" title="Please select ward data" style="width:100%;">
@@ -96,7 +95,7 @@ foreach($fResult as $fDetails){
                         <label for="telephone">Telephone  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control isRequired" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" >
+                          <input type="text" class="form-control checkNum isRequired" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" >
                         </td>
                         <td style="width:10%">
                         <label for="clinicDate">Date  <span class="mandatory">*</span></label>
@@ -111,7 +110,7 @@ foreach($fResult as $fDetails){
                         <label for="patientFname">First Name  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" >
+                          <input type="text" class="form-control" name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" >
                         </td>
                         <td style="width:10%">
                         <label for="surName">Surname </label>
@@ -125,10 +124,10 @@ foreach($fResult as $fDetails){
 			   <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender"> Male
 			   </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderFemale" name="gender" value="female" title="Please check gender"> Female
+			   <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender"> Female
 			 </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"> Not Recorded
+			   <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender"> Not Recorded
 			 </label>
                         </td>
                       </tr>
@@ -137,11 +136,9 @@ foreach($fResult as $fDetails){
                         <td>
                           <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" />
                         </td>
-                        <td><label for="clinicName">Clinic ID <span class="mandatory">*</span></label></td>
+                        <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
                         <td>
-                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-			    <?php echo $facility; ?>
-			  </select>
+			  <input type="text" class="form-control isRequired" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" style="width:100%;" />
                         </td>
 			<td></td><td></td>
                       </tr>
@@ -152,7 +149,7 @@ foreach($fResult as $fDetails){
 			   <input type="radio" class="" id="firstLine" name="artLine" value="first_line" title="Please check ART Line"> First Line
 			   </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="secondLine" name="artLine" value="second_line" title="Please check ART Line"> Second Line
+			   <input type="radio" class="" id="secondLine" name="artLine" value="second_line" title="Please check ART Line"> Second Line
 			 </label><br/>
 			 <label for="currentRegimen">Current Regimen </label>
 			    <select class="form-control" id="currentRegimen" name="currentRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%;">
@@ -275,7 +272,7 @@ foreach($fResult as $fDetails){
 			</td>
 			<td>
 			  <label class="radio-inline">
-					<input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By"  style="width:100%;" >
+			    <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By"  style="width:100%;" >
 			  </label>
 			</td>
 			<td colspan="4" class="processTime"><label for="processTime">For onsite plasma <br/> processing only</label>
@@ -312,7 +309,7 @@ foreach($fResult as $fDetails){
 			      </select>
 			 </label>
 			</td>
-			<td class="laboratoryId"><label for="laboratoryId">Laboratory ID</label></td>
+			<td class="laboratoryId"><label for="laboratoryId">Laboratory Name</label></td>
 			<td>
 			    <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 100%;">
                             <option value=""> -- Select -- </option>
@@ -459,7 +456,7 @@ foreach($fResult as $fDetails){
 		      <tr>
 			<td class=""><label for="finalViralResult">Final Viral Load Result</label></td>
 			<td colspan="2">
-          <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result"  style="width:100%;" >copies/ml
+                          <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result"  style="width:100%;" >copies/ml
 			</td>
 			<td class=""><label for="testQuality">QC Tech Name</label></td>
 			<td colspan="2">
@@ -549,7 +546,7 @@ foreach($fResult as $fDetails){
         formId: 'vlRequestForm'
     });
     $('.isRequired').each(function () {
-            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
     $("#saveNext").val('save');
     if(flag){
@@ -562,7 +559,7 @@ foreach($fResult as $fDetails){
         formId: 'vlRequestForm'
     });
     $('.isRequired').each(function () {
-            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
     });
     $("#saveNext").val('next');
     if(flag){
@@ -571,10 +568,9 @@ foreach($fResult as $fDetails){
     }
   }
     
-    function getfacilityDetails(obj)
-  {
+  function getfacilityDetails(obj){
     $.blockUI();
-      var cName = $("#clinicName").val();
+      //var cName = $("#clinicName").val();
       var pName = $("#province").val();
       if(pName!='' && provinceName && facilityName){
         facilityName = false;
@@ -585,64 +581,64 @@ foreach($fResult as $fDetails){
       function(data){
 	  if(data != ""){
             details = data.split("###");
-            $("#clinicName").html(details[0]);
+            //$("#clinicName").html(details[0]);
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
 	  }
       });
       }
-    }else if(pName=='' && cName==''){
+    }else if(pName==''){
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
+      //$("#clinicName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
   }
-  function getfacilityDistrictwise(obj)
-  {
-    $.blockUI();
-    var dName = $("#district").val();
-    var cName = $("#clinicName").val();
-    if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
-      function(data){
-	  if(data != ""){
-            $("#clinicName").html(data);
-	  }
-      });
-    }
-    $.unblockUI();
-  }
-  function getfacilityProvinceDetails(obj)
-  {
-    $.blockUI();
-     //check facility name
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
-    $.unblockUI();
-  }
-  function checkValue()
-  {
+  
+//  function getfacilityDistrictwise(obj){
+//    $.blockUI();
+//    var dName = $("#district").val();
+//    var cName = $("#clinicName").val();
+//    if(dName!=''){
+//      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+//      function(data){
+//	  if(data != ""){
+//            $("#clinicName").html(data);
+//	  }
+//      });
+//    }
+//    $.unblockUI();
+//  }
+  
+//  function getfacilityProvinceDetails(obj){
+//      $.blockUI();
+//     //check facility name
+//      var cName = $("#clinicName").val();
+//      var pName = $("#province").val();
+//      if(cName!='' && provinceName && facilityName){
+//        provinceName = false;
+//      }
+//    if(cName!='' && facilityName){
+//      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+//      function(data){
+//	  if(data != ""){
+//            details = data.split("###");
+//            $("#province").html(details[0]);
+//            $("#district").html(details[1]);
+//            $("#clinicianName").val(details[2]);
+//	  }
+//      });
+//    }else if(pName=='' && cName==''){
+//      provinceName = true;
+//      facilityName = true;
+//      $("#province").html("< ?php echo $province;?>");
+//      $("#clinicName").html("< ?php echo $facility;?>");
+//    }
+//    $.unblockUI();
+//  }
+  
+  function checkValue(){
     var artRegimen = $("#currentRegimen").val();
     if(artRegimen=='other'){
       $(".newArtRegimen").show();
@@ -653,8 +649,7 @@ foreach($fResult as $fDetails){
     }
   }
   
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
-    {
+  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
         var removeDots=obj.value.replace(/\./g,"");
         var removeDots=removeDots.replace(/\,/g,"");
         //str=obj.value;
