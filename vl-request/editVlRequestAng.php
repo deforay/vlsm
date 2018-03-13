@@ -15,7 +15,7 @@
   }else{
     $sampleCode = 'sample_code';
   }
-  $pdResult=$db->query($pdQuery);
+   $pdResult=$db->query($pdQuery);
     $province = "";
     $province.="<option value=''> -- Selecione -- </option>";
     foreach($pdResult as $provinceName){
@@ -54,19 +54,19 @@
     $start_date = date('Y-01-01');
     $end_date = date('Y-12-31');
   }  
-      //Set Dispatched From Clinic To Lab Date
-     if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00 00:00:00'){
-      $expStr=explode(" ",$vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
-      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
-    }else{
-      $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
-    }
-    if(isset($vlQueryInfo[0]['requesting_date']) && trim($vlQueryInfo[0]['requesting_date'])!='' && $vlQueryInfo[0]['requesting_date']!='0000-00-00'){
-      $vlQueryInfo[0]['requesting_date']=$general->humanDateFormat($vlQueryInfo[0]['requesting_date']);
-    }else{
-      $vlQueryInfo[0]['requesting_date']='';
-    }
-    //set reason for changes history
+  //Set Dispatched From Clinic To Lab Date
+  if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab'])!='' && $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']!='0000-00-00 00:00:00'){
+    $expStr=explode(" ",$vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']);
+    $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  }else{
+    $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
+  }
+  if(isset($vlQueryInfo[0]['requesting_date']) && trim($vlQueryInfo[0]['requesting_date'])!='' && $vlQueryInfo[0]['requesting_date']!='0000-00-00'){
+    $vlQueryInfo[0]['requesting_date']=$general->humanDateFormat($vlQueryInfo[0]['requesting_date']);
+  }else{
+    $vlQueryInfo[0]['requesting_date']='';
+  }
+  //set reason for changes history
 $rch = '';
 if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){
   $rch.='<h4>Result Changes History</h4>';
@@ -463,7 +463,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:14%;"><label for="fName">Nome da Unidade de colheita (se diferente da Unidade de solicitação) </label></td>
+                                <td style="width:14%;"><label for="fName">Nome da Unidade de colheita (se diferente da Unidade de solicitação) <span class="mandatory">*</span></label></td>
                                 <td style="width:14%;">
                                     <select class="form-control isRequired" name="fName" id="fName" title="Please choose Nome de colheita" style="width:100%;" >
                                           <?php foreach($fResult as $fDetails){ ?>
@@ -475,9 +475,9 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 <td style="width:14%;">
                                     <input type="text" class="form-control " id="collectionSite" name="collectionSite" placeholder="Local de colheita" title="Please enter Local de colheita" style="width:100%;" value="<?php echo $vlQueryInfo[0]['collection_site'];?>"/>
                                 </td>
-                                <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita </label></td>
+                                <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita <span class="mandatory">*</span></label></td>
                                 <td style="width:14%;">
-                                    <input type="text" class="form-control dateTime" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Data Hora de colheita" title="Please enter Data Hora de colheita" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:100%;"/>
+                                    <input type="text" class="form-control isRequired dateTime" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Data Hora de colheita" title="Please enter Data Hora de colheita" value="<?php echo $vlQueryInfo[0]['sample_collection_date']; ?>" onchange="checkSampleReceviedDate();checkSampleTestingDate();" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -509,7 +509,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                       <tr>
                         <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
                         <td style="width:14%;">
-                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The sample number that you entered already exists. Please try another number',null)"/>
                           <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </td>
                       </tr>
@@ -562,7 +562,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                               </label>
                           </td>
                         <td class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
-                            <label for="rejectionReason">Razão de rejeição <span class="mandatory">*</span></label>
+                          <label for="rejectionReason">Razão de rejeição <span class="mandatory">*</span></label>
                         </td>
                         <td class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'':'none'; ?>;">
                           <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose Razão de rejeição" onchange="checkRejectionReason();" style="width: 193px;">
@@ -798,20 +798,22 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
       }
     }
   }
+  
   $("input:radio[name=noResult]").click(function() {
     if($(this).val() == 'yes'){
+      $('.vlResult').hide();
       $('.rejectionReason').show();
-      $('.vlResult').css('visibility','hidden');
       $('#rejectionReason').addClass('isRequired');
-       $('#vlResult').removeClass('isRequired');
+      $('#vlResult').removeClass('isRequired');
     }else{
-      $('.vlResult').css('visibility','visible');
+      $('.vlResult').show();
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
-       $('#vlResult').addClass('isRequired');
+      $('#vlResult').addClass('isRequired');
       $('#rejectionReason').val('');
     }
   });
+  
   $("input:radio[name=lineTreatment]").click(function() {
     if($(this).val() == '1'){
       $('.lineTreatmentRefType').attr("disabled",true);

@@ -376,7 +376,7 @@
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:14%;"><label for="fName">Nome da Unidade de colheita (se diferente da Unidade de solicitação) </label><span class="mandatory">*</span></td>
+                                <td style="width:14%;"><label for="fName">Nome da Unidade de colheita (se diferente da Unidade de solicitação) <span class="mandatory">*</span></label></td>
                                 <td style="width:14%;">
                                     <select class="form-control isRequired" name="fName" id="fName" title="Please choose Nome de colheita" style="width:100%;" >
                                           <?php echo $facility;  ?>
@@ -386,7 +386,7 @@
                                 <td style="width:14%;">
                                     <input type="text" class="form-control " id="collectionSite" name="collectionSite" placeholder="Local de colheita" title="Please enter Local de colheita" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita </label><span class="mandatory">*</span></td>
+                                <td style="width:14%;"><label for="sampleCollectionDate"> Data Hora de colheita <span class="mandatory">*</span></label></td>
                                 <td style="width:14%;">
                                     <input type="text" class="form-control dateTime isRequired" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Data Hora de colheita" title="Please enter Data Hora de colheita" style="width:100%;" onchange="sampleCodeGeneration();"/>
                                 </td>
@@ -420,7 +420,7 @@
                       <tr>
                         <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
                         <td style="width:14%;">
-                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
+                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
                         </td>
                       </tr>
                       <tr>
@@ -596,8 +596,8 @@
     }
      $.unblockUI();
   }
-  function sampleCodeGeneration()
-  {
+  
+  function sampleCodeGeneration(){
     var pName = $("#province").val();
     var sDate = $("#sampleCollectionDate").val();
     if(pName!='' && sDate!=''){
@@ -610,12 +610,12 @@
           $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
           $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
           $("#sampleCodeKey").val(sCodeKey.maxId);
-          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null);
           <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
           $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
           $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
           $("#sampleCodeKey").val(sCodeKey.maxId);
-          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
+          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null)
         <?php } ?>
       });
     }
@@ -708,18 +708,20 @@
       }
     }
   }
+  
   $("input:radio[name=noResult]").click(function() {
     if($(this).val() == 'yes'){
+      $('.vlResult').hide();
       $('.rejectionReason').show();
-      $('.vlResult').css('visibility','hidden');
       $('#rejectionReason').addClass('isRequired');
     }else{
-      $('.vlResult').css('visibility','visible');
+      $('.vlResult').show();
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#rejectionReason').val('');
     }
   });
+  
   $("input:radio[name=lineTreatment]").click(function() {
     if($(this).val() == '1'){
       $('.lineTreatmentRefType').attr("disabled",true);
@@ -727,6 +729,7 @@
       $('.lineTreatmentRefType').attr("disabled",false);
     }
   });
+  
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);

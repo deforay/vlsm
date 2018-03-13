@@ -38,9 +38,9 @@ $end_date = $sampleColDateArray[0].'-12-31';
 $mnthYr = $samColDate[0];
 
 if($arr['sample_code']=='MMYY'){
-    $mnthYr = $sampleColDateArray[1].$samColDate;
+  $mnthYr = $sampleColDateArray[1].$samColDate;
 }else if($arr['sample_code']=='YY'){
-    $mnthYr = $samColDate;
+  $mnthYr = $samColDate;
 }
 
 $auto = $samColDate.$sampleColDateArray[1].$sampleColDateArray[2];
