@@ -75,7 +75,6 @@ try {
         $_POST['failedTestingTech'] = $platForm[0];
     }
     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
-        
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
             'parent_art'=>'5',
@@ -93,6 +92,7 @@ try {
         'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
         'vlsm_instance_id'=>$instanceId,
         'vlsm_country_id'=>'5',
+        'facility_id'=>(isset($_POST['clinicName']) && trim($_POST['clinicName'])!='') ? $_POST['clinicName'] :  NULL,
         'ward'=>(isset($_POST['wardData']) && $_POST['wardData']!='' ? $_POST['wardData'] :  NULL),
         'patient_art_no'=>(isset($_POST['patientARTNo']) && trim($_POST['patientARTNo'])!='') ? $_POST['patientARTNo'] :  NULL,
         'lab_contact_person'=>(isset($_POST['officerName']) && $_POST['officerName']!='' ? $_POST['officerName'] :  NULL),

@@ -196,7 +196,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <label for="district">District  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;">
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" onchange="getfacilityDistrictwise(this);" style="width:100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($districtResult as $districtName){
@@ -208,6 +208,19 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                           </select>
                         </td>
                         <td style="width:10%">
+                        <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
+                        </td>
+                        <td style="width:20%">
+                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+			    <option value=""> -- Select -- </option>
+                              <?php foreach($fResult as $fDetails){ ?>
+                              <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                              <?php } ?>
+			  </select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="width:10%">
                         <label for="facility">Clinic/Ward  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
@@ -218,8 +231,6 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 			    <option value="anc"<?php echo ($vlQueryInfo[0]['ward']=="anc")?"selected='selected'":""?>>ANC</option>
 			  </select>
                         </td>
-                      </tr>
-                      <tr>
                         <td style="width:16%">
                         <label for="officerName">Requesting Medical Officer   <span class="mandatory">*</span></label>
                         </td>
@@ -232,6 +243,8 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <td style="width:20%">
                           <input type="text" class="form-control checkNum isRequired" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
                         </td>
+                      </tr>
+                      <tr>
                         <td style="width:10%">
                         <label for="clinicDate">Date  <span class="mandatory">*</span></label>
                         </td>
@@ -693,9 +706,9 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 	dateFormat: 'dd-M-yy',
 	timeFormat: "HH:mm",
 	onChangeMonthYear: function(year, month, widget) {
-	      setTimeout(function() {
-		 $('.ui-datepicker-calendar').show();
-	      });
+          setTimeout(function() {
+             $('.ui-datepicker-calendar').show();
+          });
 	},
 	yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
 	}).click(function(){
@@ -728,7 +741,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
     
   function getfacilityDetails(obj){
       $.blockUI();
-      //var cName = $("#clinicName").val();
+      var cName = $("#clinicName").val();
       var pName = $("#province").val();
       if(pName!='' && provinceName && facilityName){
         facilityName = false;
@@ -739,62 +752,62 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
       function(data){
 	  if(data != ""){
             details = data.split("###");
-            //$("#clinicName").html(details[0]);
+            $("#clinicName").html(details[0]);
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
 	  }
       });
       }
-    }else if(pName==''){
+    }else if(pName=='' && cName==''){
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
-      //$("#clinicName").html("<?php echo $facility;?>");
+      $("#clinicName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
   }
   
-//  function getfacilityDistrictwise(obj){
-//    $.blockUI();
-//    var dName = $("#district").val();
-//    var cName = $("#clinicName").val();
-//    if(dName!=''){
-//      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
-//      function(data){
-//	  if(data != ""){
-//            $("#clinicName").html(data);
-//	  }
-//      });
-//    }
-//    $.unblockUI();
-//  }
+  function getfacilityDistrictwise(obj){
+    $.blockUI();
+    var dName = $("#district").val();
+    var cName = $("#clinicName").val();
+    if(dName!=''){
+      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+      function(data){
+	  if(data != ""){
+            $("#clinicName").html(data);
+	  }
+      });
+    }
+    $.unblockUI();
+  }
   
-//  function getfacilityProvinceDetails(obj){
-//    $.blockUI();
-//     //check facility name
-//      var cName = $("#clinicName").val();
-//      var pName = $("#province").val();
-//      if(cName!='' && provinceName && facilityName){
-//        provinceName = false;
-//      }
-//    if(cName!='' && facilityName){
-//      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-//      function(data){
-//	  if(data != ""){
-//            details = data.split("###");
-//            $("#province").html(details[0]);
-//            $("#district").html(details[1]);
-//            $("#clinicianName").val(details[2]);
-//	  }
-//      });
-//    }else if(pName=='' && cName==''){
-//      provinceName = true;
-//      facilityName = true;
-//      $("#province").html("< ?php echo $province;?>");
-//      $("#clinicName").html("< ?php echo $facility;?>");
-//    }
-//    $.unblockUI();
-//  }
+  function getfacilityProvinceDetails(obj){
+      $.blockUI();
+     //check facility name
+      var cName = $("#clinicName").val();
+      var pName = $("#province").val();
+      if(cName!='' && provinceName && facilityName){
+        provinceName = false;
+      }
+    if(cName!='' && facilityName){
+      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+      function(data){
+	  if(data != ""){
+            details = data.split("###");
+            $("#province").html(details[0]);
+            $("#district").html(details[1]);
+            $("#clinicianName").val(details[2]);
+	  }
+      });
+    }else if(pName=='' && cName==''){
+      provinceName = true;
+      facilityName = true;
+      $("#province").html("<?php echo $province;?>");
+      $("#clinicName").html("<?php echo $facility;?>");
+    }
+    $.unblockUI();
+  }
   
   function checkValue(){
     var artRegimen = $("#currentRegimen").val();
