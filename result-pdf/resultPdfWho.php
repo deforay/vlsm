@@ -128,10 +128,9 @@ if(sizeof($requestResult)> 0){
         if(!isset($result['patient_gender']) || trim($result['patient_gender'])== ''){
           $result['patient_gender'] = 'not reported';
         }
+        $resultApprovedBy  = '';
         if(isset($result['approvedBy']) && trim($result['approvedBy'])!=''){
           $resultApprovedBy = ucwords($result['approvedBy']);
-        }else{
-          $resultApprovedBy  = '';
         }
         $vlResult = '';
         $smileyContent = '';

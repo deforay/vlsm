@@ -1,7 +1,5 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
 //global config
 $cSampleQuery="SELECT * FROM global_config";
 $cSampleResult=$db->query($cSampleQuery);
@@ -39,15 +37,15 @@ $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
 //facility details
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
-$facilityResult=$db->query($facilityQuery);
+$facilityResult = $db->query($facilityQuery);
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
-  $facilityResult[0]['facility_state'] = 0;
+  $facilityResult[0]['facility_state'] = "";
 }
 $stateName = $facilityResult[0]['facility_state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
 if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code'] ==''){
-  $stateResult[0]['province_code'] = 0;
+  $stateResult[0]['province_code'] = "";
 }
 //district details
 $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
@@ -55,15 +53,14 @@ $districtResult=$db->query($districtQuery);
 
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
-            foreach($pdResult as $provinceName){
-              $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-            }
+  foreach($pdResult as $provinceName){
+    $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  }
 $facility = '';
 $facility.="<option value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
   $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
-
 
 if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
@@ -175,8 +172,8 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','This sample code already exists.Try another number',null)"/>
+                          <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
+                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','The Laboratory ID that you entered already exists. Please try another number',null)"/>
                         </div>
                       </div>
                     </div>
@@ -191,7 +188,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                           <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
 			    <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
-                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
+                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code']; ?>" <?php echo (strtolower($facilityResult[0]['facility_state'])."##".$stateResult[0]['province_code']==strtolower($provinceName['province_name'])."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } ?>
                           </select>
                         </td>
@@ -199,7 +196,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <label for="district">District  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                          <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($districtResult as $districtName){
@@ -233,7 +230,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <label for="telephone">Telephone  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control isRequired" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
+                          <input type="text" class="form-control checkNum isRequired" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
                         </td>
                         <td style="width:10%">
                         <label for="clinicDate">Date  <span class="mandatory">*</span></label>
@@ -262,10 +259,10 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 			   <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
 			   </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
+			   <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
 			 </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>> Not Recorded
+			   <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>> Not Recorded
 			 </label>
                         </td>
                       </tr>
@@ -274,14 +271,9 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <td>
                           <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>"/>
                         </td>
-                        <td><label for="clinicName">Clinic ID <span class="mandatory">*</span></label></td>
+                        <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
                         <td>
-                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-			    <option value=''> -- Select -- </option>
-			    <?php foreach($fResult as $fDetails){ ?>
-			    <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
-			    <?php } ?>
-			  </select>
+                         <input type="text" class="form-control isRequired" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;" />
                         </td>
 			<td></td><td></td>
                       </tr>
@@ -456,7 +448,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 			      </select>
 			 </label>
 			</td>
-			<td class="laboratoryId"><label for="laboratoryId">Laboratory ID</label></td>
+			<td class="laboratoryId"><label for="laboratoryId">Laboratory Name</label></td>
 			<td>
 			 <label class="radio-inline">
 			    <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 85%;">
@@ -680,9 +672,9 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
     <!-- /.content -->
   </div>
   <script>
-    provinceName = true;
-    facilityName = true;
-    $(document).ready(function() {
+  provinceName = true;
+  facilityName = true;
+  $(document).ready(function() {
       $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
@@ -718,14 +710,14 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 	}).click(function(){
 	   $('.ui-datepicker-calendar').hide();
 	});
-    });
+  });
     
-    function validateNow(){
+  function validateNow(){
     flag = deforayValidator.init({
         formId: 'vlRequestForm'
     });
     $('.isRequired').each(function () {
-            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
     $("#saveNext").val('save');
     if(flag){
@@ -734,10 +726,9 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
     }
   }
     
-    function getfacilityDetails(obj)
-  {
-    $.blockUI();
-      var cName = $("#clinicName").val();
+  function getfacilityDetails(obj){
+      $.blockUI();
+      //var cName = $("#clinicName").val();
       var pName = $("#province").val();
       if(pName!='' && provinceName && facilityName){
         facilityName = false;
@@ -748,64 +739,64 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
       function(data){
 	  if(data != ""){
             details = data.split("###");
-            $("#clinicName").html(details[0]);
+            //$("#clinicName").html(details[0]);
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
 	  }
       });
       }
-    }else if(pName=='' && cName==''){
+    }else if(pName==''){
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
+      //$("#clinicName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
   }
-  function getfacilityDistrictwise(obj)
-  {
-    $.blockUI();
-    var dName = $("#district").val();
-    var cName = $("#clinicName").val();
-    if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
-      function(data){
-	  if(data != ""){
-            $("#clinicName").html(data);
-	  }
-      });
-    }
-    $.unblockUI();
-  }
-  function getfacilityProvinceDetails(obj)
-  {
-    $.blockUI();
-     //check facility name
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
-    $.unblockUI();
-  }
-  function checkValue()
-  {
+  
+//  function getfacilityDistrictwise(obj){
+//    $.blockUI();
+//    var dName = $("#district").val();
+//    var cName = $("#clinicName").val();
+//    if(dName!=''){
+//      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+//      function(data){
+//	  if(data != ""){
+//            $("#clinicName").html(data);
+//	  }
+//      });
+//    }
+//    $.unblockUI();
+//  }
+  
+//  function getfacilityProvinceDetails(obj){
+//    $.blockUI();
+//     //check facility name
+//      var cName = $("#clinicName").val();
+//      var pName = $("#province").val();
+//      if(cName!='' && provinceName && facilityName){
+//        provinceName = false;
+//      }
+//    if(cName!='' && facilityName){
+//      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+//      function(data){
+//	  if(data != ""){
+//            details = data.split("###");
+//            $("#province").html(details[0]);
+//            $("#district").html(details[1]);
+//            $("#clinicianName").val(details[2]);
+//	  }
+//      });
+//    }else if(pName=='' && cName==''){
+//      provinceName = true;
+//      facilityName = true;
+//      $("#province").html("< ?php echo $province;?>");
+//      $("#clinicName").html("< ?php echo $facility;?>");
+//    }
+//    $.unblockUI();
+//  }
+  
+  function checkValue(){
     var artRegimen = $("#currentRegimen").val();
     if(artRegimen=='other'){
       $(".newArtRegimen").show();
@@ -815,19 +806,19 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
-    {
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
+  
+  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
+    var removeDots=obj.value.replace(/\./g,"");
+    var removeDots=removeDots.replace(/\,/g,"");
+    //str=obj.value;
+    removeDots = removeDots.replace(/\s{2,}/g,' ');
 
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
-        function(data){
-            if(data==='1'){
-                alert(alrt);
-                duplicateName=false;
-            }
-        });
-    }
-  </script>
+    $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+    function(data){
+        if(data==='1'){
+            alert(alrt);
+            duplicateName=false;
+        }
+    });
+  }
+</script>

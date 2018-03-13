@@ -1,7 +1,5 @@
 <?php
 ob_start();
-include('../General.php');
-$general=new Deforay_Commons_General();
 //global config
 $cSampleQuery="SELECT * FROM global_config";
 $cSampleResult=$db->query($cSampleQuery);
@@ -178,8 +176,8 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" <?php echo $disable; ?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','This sample code already exists.Try another number',null)"/>
+                          <label for="sampleCode">Laboratory ID </label>
+                          <input type="text" class="form-control sampleCode" id="sampleCode" name="sampleCode" <?php echo $disable; ?> placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','The Laboratory ID that you entered already exists. Please try another number',null)"/>
                         </div>
                       </div>
                     </div>
@@ -188,21 +186,21 @@ $disable = "disabled = 'disabled'";
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 1: Clinic Information</td></tr>
                       <tr>
                         <td style="width:16%">
-                        <label for="province">Province   <span class="mandatory">*</span></label>
+                        <label for="province">Province </label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" name="province" id="province" <?php echo $disable; ?> title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                          <select class="form-control" name="province" id="province" <?php echo $disable; ?> title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
 			    <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
-                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
+                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo (strtolower($facilityResult[0]['facility_state'])."##".$stateResult[0]['province_code'] == strtolower($provinceName['province_name'])."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } ?>
                           </select>
                         </td>
                         <td style="width:10%">
-                        <label for="district">District  <span class="mandatory">*</span></label>
+                        <label for="district">District </label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" name="district" id="district" <?php echo $disable; ?> title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                          <select class="form-control" name="district" id="district" <?php echo $disable; ?> title="Please choose district" style="width:100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($districtResult as $districtName){
@@ -214,10 +212,10 @@ $disable = "disabled = 'disabled'";
                           </select>
                         </td>
                         <td style="width:10%">
-                        <label for="facility">Clinic/Ward  <span class="mandatory">*</span></label>
+                        <label for="facility">Clinic/Ward </label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" id="wardData" name="wardData" <?php echo $disable; ?> title="Please select ward data" style="width:100%;">
+                          <select class="form-control" id="wardData" name="wardData" <?php echo $disable; ?> title="Please select ward data" style="width:100%;">
 			    <option value="">-- Select --</option>
 			    <option value="inpatient" <?php echo ($vlQueryInfo[0]['ward']=="inpatient")?"selected='selected'":""?>>In-Patient</option>
 			    <option value="outpatient" <?php echo ($vlQueryInfo[0]['ward']=="outpatient")?"selected='selected'":""?>>Out-Patient</option>
@@ -227,19 +225,19 @@ $disable = "disabled = 'disabled'";
                       </tr>
                       <tr>
                         <td style="width:16%">
-                        <label for="officerName">Requesting Medical Officer   <span class="mandatory">*</span></label>
+                        <label for="officerName">Requesting Medical Officer </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control isRequired " name="officerName" id="officerName" <?php echo $disable; ?> placeholder="Officer Name" title="Enter Medical Officer Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_contact_person'];?>" >
+                          <input type="text" class="form-control" name="officerName" id="officerName" <?php echo $disable; ?> placeholder="Officer Name" title="Enter Medical Officer Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_contact_person'];?>" >
                         </td>
                         <td style="width:10%">
-                        <label for="telephone">Telephone  <span class="mandatory">*</span></label>
+                        <label for="telephone">Telephone </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control isRequired" name="telephone" id="telephone" <?php echo $disable; ?> placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
+                          <input type="text" class="form-control" name="telephone" id="telephone" <?php echo $disable; ?> placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
                         </td>
                         <td style="width:10%">
-                        <label for="clinicDate">Date  <span class="mandatory">*</span></label>
+                        <label for="clinicDate">Date </label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control date" name="clinicDate" id="clinicDate" <?php echo $disable; ?> placeholder="Date" title="Enter Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['clinic_date']; ?>"  >
@@ -248,7 +246,7 @@ $disable = "disabled = 'disabled'";
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td></tr>
                       <tr>
                         <td style="width:16%">
-                        <label for="patientFname">First Name  </label>
+                        <label for="patientFname">First Name </label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control " name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" >
@@ -265,10 +263,10 @@ $disable = "disabled = 'disabled'";
 			   <input type="radio" class="" id="genderMale" name="gender" value="male" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
 			   </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderFemale" name="gender" value="female" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
+			   <input type="radio" class="" id="genderFemale" name="gender" value="female" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
 			 </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="genderNotRecorded" name="gender" value="not_recorded" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>> Not Recorded
+			   <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" <?php echo $disable; ?> title="Please check gender" <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>> Not Recorded
 			 </label>
                         </td>
                       </tr>
@@ -277,14 +275,9 @@ $disable = "disabled = 'disabled'";
                         <td>
                           <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" <?php echo $disable; ?> title="Please choose DOB" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>"/>
                         </td>
-                        <td><label for="clinicName">Clinic ID <span class="mandatory">*</span></label></td>
+                        <td><label for="patientARTNo">Clinic ID </label></td>
                         <td>
-                          <select class="form-control isRequired" id="clinicName" name="clinicName" <?php echo $disable; ?> title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
-			    <option value=''> -- Select -- </option>
-			    <?php foreach($fResult as $fDetails){ ?>
-			    <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
-			    <?php } ?>
-			  </select>
+                          <input type="text" class="form-control" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;" />
                         </td>
 			<td></td><td></td>
                       </tr>
@@ -295,7 +288,7 @@ $disable = "disabled = 'disabled'";
 			   <input type="radio" class="" id="firstLine" name="artLine" value="first_line" <?php echo $disable; ?> title="Please check ART Line"> First Line
 			   </label>
 			 <label class="radio-inline">
-			   <input type="radio" class=" " id="secondLine" name="artLine" value="second_line" <?php echo $disable; ?> title="Please check ART Line"> Second Line
+			   <input type="radio" class="" id="secondLine" name="artLine" value="second_line" <?php echo $disable; ?> title="Please check ART Line"> Second Line
 			 </label><br/>
 			 <label for="currentRegimen">Current Regimen </label>
 			 <label class="radio-inline">
@@ -459,10 +452,10 @@ $disable = "disabled = 'disabled'";
 			      </select>
 			 </label>
 			</td>
-			<td class="laboratoryId"><label for="laboratoryId">Laboratory ID</label></td>
+			<td class="laboratoryId"><label for="laboratoryId">Laboratory Name</label></td>
 			<td>
 			 <label class="radio-inline">
-			    <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width: 85%;">
+			    <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width:85%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -738,7 +731,7 @@ $disable = "disabled = 'disabled'";
         formId: 'vlRequestForm'
     });
     $('.isRequired').each(function () {
-            ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
     $("#saveNext").val('save');
     if(flag){
@@ -747,10 +740,9 @@ $disable = "disabled = 'disabled'";
     }
   }
     
-    function getfacilityDetails(obj)
-  {
-    $.blockUI();
-      var cName = $("#clinicName").val();
+  function getfacilityDetails(obj){
+      $.blockUI();
+      //var cName = $("#clinicName").val();
       var pName = $("#province").val();
       if(pName!='' && provinceName && facilityName){
         facilityName = false;
@@ -761,64 +753,64 @@ $disable = "disabled = 'disabled'";
       function(data){
 	  if(data != ""){
             details = data.split("###");
-            $("#clinicName").html(details[0]);
+            //$("#clinicName").html(details[0]);
             $("#district").html(details[1]);
             $("#clinicianName").val(details[2]);
 	  }
       });
       }
-    }else if(pName=='' && cName==''){
+    }else if(pName==''){
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
+      //$("#clinicName").html("<?php echo $facility;?>");
     }
     $.unblockUI();
   }
-  function getfacilityDistrictwise(obj)
-  {
-    $.blockUI();
-    var dName = $("#district").val();
-    var cName = $("#clinicName").val();
-    if(dName!=''){
-      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
-      function(data){
-	  if(data != ""){
-            $("#clinicName").html(data);
-	  }
-      });
-    }
-    $.unblockUI();
-  }
-  function getfacilityProvinceDetails(obj)
-  {
-    $.blockUI();
-     //check facility name
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
-    $.unblockUI();
-  }
-  function checkValue()
-  {
+  
+//  function getfacilityDistrictwise(obj){
+//    $.blockUI();
+//    var dName = $("#district").val();
+//    var cName = $("#clinicName").val();
+//    if(dName!=''){
+//      $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+//      function(data){
+//	  if(data != ""){
+//            $("#clinicName").html(data);
+//	  }
+//      });
+//    }
+//    $.unblockUI();
+//  }
+  
+//  function getfacilityProvinceDetails(obj){
+//      $.blockUI();
+//     //check facility name
+//      var cName = $("#clinicName").val();
+//      var pName = $("#province").val();
+//      if(cName!='' && provinceName && facilityName){
+//        provinceName = false;
+//      }
+//    if(cName!='' && facilityName){
+//      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+//      function(data){
+//	  if(data != ""){
+//            details = data.split("###");
+//            $("#province").html(details[0]);
+//            $("#district").html(details[1]);
+//            $("#clinicianName").val(details[2]);
+//	  }
+//      });
+//    }else if(pName=='' && cName==''){
+//      provinceName = true;
+//      facilityName = true;
+//      $("#province").html("< ?php echo $province;?>");
+//      $("#clinicName").html("< ?php echo $facility;?>");
+//    }
+//    $.unblockUI();
+//  }
+  
+  function checkValue(){
     var artRegimen = $("#currentRegimen").val();
     if(artRegimen=='other'){
       $(".newArtRegimen").show();
@@ -828,8 +820,8 @@ $disable = "disabled = 'disabled'";
       $("#newArtRegimen").removeClass("isRequired");
     }
   }
-  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback)
-    {
+  
+  function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
         var removeDots=obj.value.replace(/\./g,"");
         var removeDots=removeDots.replace(/\,/g,"");
         //str=obj.value;
