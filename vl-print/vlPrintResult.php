@@ -358,7 +358,7 @@ $batResult = $db->rawQuery($batQuery);
    var endDate = "";
    var selectedRows=[];
    var selectedRowsId=[];
-	 var selectedPrintedRows=[];
+   var selectedPrintedRows=[];
    var selectedPrintedRowsId=[];
    var oTable = null;
    var opTable = null;
@@ -416,7 +416,7 @@ $batResult = $db->rawQuery($batQuery);
                 $("#iCol"+colNo+"-sort").hide();    
             }
         }
-				for(colNo=0;colNo <=i;colNo++){
+	for(colNo=0;colNo <=i;colNo++){
             $("#printiCol"+colNo).attr("checked",opTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(opTable.fnSettings().aoColumns[colNo].bVisible){
                 $("#printiCol"+colNo+"-sort").show();    
@@ -447,7 +447,7 @@ $batResult = $db->rawQuery($batQuery);
             "bScrollCollapse": true,
             "bStateSave" : true,
             "iDisplayLength": 100,
-            "bRetrieve": true,                        
+            //"bRetrieve": true,                    
             "aoColumns": [
 		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
@@ -482,14 +482,14 @@ $batResult = $db->rawQuery($batQuery);
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-			      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-			      aoData.push({"name": "facilityName", "value": $("#facility").val()});
-			      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
-			      aoData.push({"name": "vlPrint", "value": 'print'});
-			      aoData.push({"name": "gender", "value": $("#gender").val()});
-			      aoData.push({"name": "artNo", "value": $("#artNo").val()});
-			      aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
+		  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+		  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+		  aoData.push({"name": "facilityName", "value": $("#facility").val()});
+		  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+		  aoData.push({"name": "vlPrint", "value": 'print'});
+		  aoData.push({"name": "gender", "value": $("#gender").val()});
+		  aoData.push({"name": "artNo", "value": $("#artNo").val()});
+		  aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -515,7 +515,7 @@ $batResult = $db->rawQuery($batQuery);
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-            "bStateSave" : true,
+            //"bStateSave" : true,
             "iDisplayLength": 100,
             "bRetrieve": true,                        
             "aoColumns": [
@@ -552,14 +552,14 @@ $batResult = $db->rawQuery($batQuery);
             "bServerSide": true,
             "sAjaxSource": "getPrintedVltestResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-			      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-			      aoData.push({"name": "sampleCollectionDate", "value": $("#printSampleCollectionDate").val()});
-			      aoData.push({"name": "facilityName", "value": $("#prinFacility").val()});
-			      aoData.push({"name": "sampleType", "value": $("#printSampleType").val()});
-			      aoData.push({"name": "vlPrint", "value": 'print'});
-			      aoData.push({"name": "gender", "value": $("#printGender").val()});
-			      aoData.push({"name": "artNo", "value": $("#printArtNo").val()});
-			      aoData.push({"name": "sampleTestDate", "value": $("#printSampleTestDate").val()});
+		aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+		aoData.push({"name": "sampleCollectionDate", "value": $("#printSampleCollectionDate").val()});
+		aoData.push({"name": "facilityName", "value": $("#prinFacility").val()});
+		aoData.push({"name": "sampleType", "value": $("#printSampleType").val()});
+		aoData.push({"name": "vlPrint", "value": 'print'});
+		aoData.push({"name": "gender", "value": $("#printGender").val()});
+		aoData.push({"name": "artNo", "value": $("#printArtNo").val()});
+		aoData.push({"name": "sampleTestDate", "value": $("#printSampleTestDate").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",

@@ -275,13 +275,13 @@ if($lastUrl1!='' || $lastUrl2!=''){
         }
   } );
   
-  function fnShowHide(iCol)
-    {
-        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
-        oTable.fnSetColumnVis( iCol, bVis ? false : true );
-    }
+  function fnShowHide(iCol){
+    var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+    oTable.fnSetColumnVis( iCol, bVis ? false : true );
+  }
+  
   function loadVlRequestData(){
-    $.blockUI();
+     $.blockUI();
      oTable = $('#vlRequestDataTable').dataTable({
             "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
@@ -295,9 +295,9 @@ if($lastUrl1!='' || $lastUrl2!=''){
             "bRetrieve": true,                             
             "aoColumns": [
                 {"sClass":"center"},
-								<?php if($sarr['user_type']!='standalone'){ ?>
+		<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
-								<?php } ?>
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -308,12 +308,11 @@ if($lastUrl1!='' || $lastUrl2!=''){
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
             ],
-						<?php if($sarr['user_type']!='standalone'){ ?>
+	      <?php if($sarr['user_type']!='standalone'){ ?>
                 "aaSorting": [[ 8, "desc" ]],
-						<?php }else { ?>
-								"aaSorting": [[ 7, "desc" ]],
-						<?php } ?>
-            
+	      <?php }else { ?>
+		"aaSorting": [[ 7, "desc" ]],
+	      <?php } ?>
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlTestResultDetails.php",
