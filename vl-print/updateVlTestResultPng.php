@@ -290,7 +290,7 @@ $disable = "disabled = 'disabled'";
                         </td>
                         <td><label for="patientARTNo">Clinic ID </label></td>
                         <td>
-                          <input type="text" class="form-control" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;" />
+                          <input type="text" class="form-control" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" <?php echo $disable; ?> title="Please enter Clinic ID" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;" />
                         </td>
 			<td></td><td></td>
                       </tr>
