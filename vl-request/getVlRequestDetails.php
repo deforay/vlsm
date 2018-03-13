@@ -221,11 +221,11 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' where '.$whereResult.'vl.vlsm_country_id="'.$gconfig['vl_form'].'"';
 	}
 	if($sarr['user_type']=='remoteuser'){
-		$sWhere = $sWhere.' AND vl.request_created_by="'.$_SESSION['userId'].'"';
-		$sFilter = ' AND request_created_by="'.$_SESSION['userId'].'"';
+	  $sWhere = $sWhere.' AND vl.request_created_by="'.$_SESSION['userId'].'"';
+	  $sFilter = ' AND request_created_by="'.$_SESSION['userId'].'"';
 	}else{
-		$sWhere = $sWhere.' AND vl.result_status!=9';
-		$sFilter = ' AND result_status!=9';
+	  $sWhere = $sWhere.' AND vl.result_status!=9';
+	  $sFilter = ' AND result_status!=9';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 
