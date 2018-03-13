@@ -507,9 +507,9 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                     </div>
                     <table class="table" style="width:100%">
                       <tr>
-                        <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
+                        <td style="width:14%;"><label for="sampleCode"> Nº de amostra </label></td>
                         <td style="width:14%;">
-                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The sample number that you entered already exists. Please try another number',null)"/>
+                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" value="<?php echo (isset($sCode) && trim($sCode)!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The sample number that you entered already exists. Please try another number',null)"/>
                           <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </td>
                       </tr>
