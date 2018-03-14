@@ -39,13 +39,13 @@ $vlQueryInfo=$db->query($vlQuery);
 $facilityQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
 $facilityResult=$db->query($facilityQuery);
 if(!isset($facilityResult[0]['facility_state']) || $facilityResult[0]['facility_state']==''){
-  $facilityResult[0]['facility_state'] = 0;
+  $facilityResult[0]['facility_state'] = "";
 }
 $stateName = $facilityResult[0]['facility_state'];
 $stateQuery="SELECT * from province_details where province_name='".$stateName."'";
 $stateResult=$db->query($stateQuery);
 if(!isset($stateResult[0]['province_code']) || $stateResult[0]['province_code']==''){
-  $stateResult[0]['province_code'] = 0;
+  $stateResult[0]['province_code'] = "";
 }
 //district details
 $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."'";
@@ -53,16 +53,14 @@ $districtResult=$db->query($districtQuery);
 
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
-            foreach($pdResult as $provinceName){
-              $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-            }
+  foreach($pdResult as $provinceName){
+    $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  }
 $facility = '';
 $facility.="<option value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".$fDetails['contact_person']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
-
-
 if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
  $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
@@ -86,15 +84,15 @@ if(isset($vlQueryInfo[0]['last_viral_load_date']) && trim($vlQueryInfo[0]['last_
 }
 if(isset($vlQueryInfo[0]['sample_tested_datetime']) && trim($vlQueryInfo[0]['sample_tested_datetime'])!='' && trim($vlQueryInfo[0]['sample_tested_datetime'])!='0000-00-00 00:00:00'){
   $expStr=explode(" ",$vlQueryInfo[0]['sample_tested_datetime']);
- $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  $vlQueryInfo[0]['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $vlQueryInfo[0]['sample_tested_datetime']='';
+  $vlQueryInfo[0]['sample_tested_datetime']='';
 }
 if(isset($vlQueryInfo[0]['failed_test_date']) && trim($vlQueryInfo[0]['failed_test_date'])!='' && trim($vlQueryInfo[0]['failed_test_date'])!='0000-00-00 00:00:00'){
-  $failedDate=explode(" ",$vlQueryInfo[0]['failed_test_date']);
- $vlQueryInfo[0]['failed_test_date']=$general->humanDateFormat($failedDate[0])." ".$failedDate[1];
+  $failedDate = explode(" ",$vlQueryInfo[0]['failed_test_date']);
+  $vlQueryInfo[0]['failed_test_date']=$general->humanDateFormat($failedDate[0])." ".$failedDate[1];
 }else{
- $vlQueryInfo[0]['failed_test_date']='';
+  $vlQueryInfo[0]['failed_test_date']='';
 }
 if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
@@ -192,7 +190,7 @@ $disable = "disabled = 'disabled'";
                           <select class="form-control" name="province" id="province" <?php echo $disable; ?> title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
 			    <option value=""> -- Select -- </option>
                             <?php foreach($pdResult as $provinceName){ ?>
-                            <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo (strtolower($facilityResult[0]['facility_state'])."##".$stateResult[0]['province_code'] == strtolower($provinceName['province_name'])."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
+                              <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo (strtolower($facilityResult[0]['facility_state'])."##".$stateResult[0]['province_code'] == strtolower($provinceName['province_name'])."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } ?>
                           </select>
                         </td>
@@ -212,29 +210,29 @@ $disable = "disabled = 'disabled'";
                           </select>
                         </td>
                         <td style="width:10%">
-                        <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
+                        <label for="clinicName">Clinic/Ward </label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                          <select class="form-control" id="clinicName" name="clinicName" title="Please select clinic/ward" <?php echo $disable; ?> style="width:100%;" onchange="getfacilityProvinceDetails(this)">
 			    <option value=""> -- Select -- </option>
                               <?php foreach($fResult as $fDetails){ ?>
-                              <option value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
+                                <option value="<?php echo $fDetails['facility_id'];?>" data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" data-contact-person="<?php echo $fDetails['contact_person']; ?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                               <?php } ?>
 			  </select>
                         </td>
                       </tr>
                       <tr>
-                        <td style="width:10%">
+                        <!--<td style="width:10%">
                         <label for="facility">Clinic/Ward </label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control" id="wardData" name="wardData" <?php echo $disable; ?> title="Please select ward data" style="width:100%;">
+                          <select class="form-control" id="wardData" name="wardData" < ?php echo $disable; ?> title="Please select ward data" style="width:100%;">
 			    <option value="">-- Select --</option>
-			    <option value="inpatient" <?php echo ($vlQueryInfo[0]['ward']=="inpatient")?"selected='selected'":""?>>In-Patient</option>
-			    <option value="outpatient" <?php echo ($vlQueryInfo[0]['ward']=="outpatient")?"selected='selected'":""?>>Out-Patient</option>
-			    <option value="anc"<?php echo ($vlQueryInfo[0]['ward']=="anc")?"selected='selected'":""?>>ANC</option>
+			    <option value="inpatient" < ?php echo ($vlQueryInfo[0]['ward']=="inpatient")?"selected='selected'":""?>>In-Patient</option>
+			    <option value="outpatient" < ?php echo ($vlQueryInfo[0]['ward']=="outpatient")?"selected='selected'":""?>>Out-Patient</option>
+			    <option value="anc"< ?php echo ($vlQueryInfo[0]['ward']=="anc")?"selected='selected'":""?>>ANC</option>
 			  </select>
-                        </td>
+                        </td>-->
                         <td style="width:16%">
                         <label for="officerName">Requesting Medical Officer </label>
                         </td>
@@ -247,8 +245,6 @@ $disable = "disabled = 'disabled'";
                         <td style="width:20%">
                           <input type="text" class="form-control" name="telephone" id="telephone" <?php echo $disable; ?> placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
                         </td>
-                      </tr>
-                      <tr>
                         <td style="width:10%">
                         <label for="clinicDate">Date </label>
                         </td>
@@ -262,7 +258,7 @@ $disable = "disabled = 'disabled'";
                         <label for="patientFname">First Name </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control " name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" >
+                          <input type="text" class="form-control" name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" >
                         </td>
                         <td style="width:10%">
                         <label for="surName">Last Name </label>
@@ -500,13 +496,13 @@ $disable = "disabled = 'disabled'";
 			<td class="receivedDate"><label for="receivedDate">Date Received</label></td>
 			<td>
 			 <label class="radio-inline">
-			    <input type="text" class="form-control " name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>" >
+			    <input type="text" class="form-control" name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime'];?>" >
 			 </label>
 			</td>
-			<td class="techName"><label for="techName">Tech Name</label></td>
+			<td class="techName"><label for="techName">Lab Tech. Name</label></td>
 			<td>
 			 <label class="radio-inline">
-			    <input type="text" class="form-control " name="techName" id="techName" placeholder="Tech Name" title="Enter Tech Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['tech_name_png'];?>" >
+			    <input type="text" class="form-control" name="techName" id="techName" placeholder="Enter Lab Technician Name" title="Please enter lab technician name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['tech_name_png'];?>" >
 			 </label>
 			</td>
                       </tr>
@@ -514,26 +510,24 @@ $disable = "disabled = 'disabled'";
 			<td class=""><label for="testDate">Test date</label></td>
 			<td>
 			  <label class="radio-inline">
-			    <input type="text" class="form-control " name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" >
+			    <input type="text" class="form-control" name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" >
 			 </label>
 			</td>
-			<td class=""><label for="testingTech">Testing tech</label></td>
+			<td class=""><label for="testingTech">Testing Platform</label></td>
 			<td>
-			  <label class="radio-inline">
-			    <select name="testingTech" id="testingTech" class="form-control"  title="Please choose VL Testing Platform">
-			      <option value="">-- Select --</option>
-			      <?php foreach($importResult as $mName) { ?>
-				<option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
-				<?php
-			      }
-			      ?>
-			    </select>
-			 </label>
+                          <select name="testingTech" id="testingTech" class="form-control" title="Please choose VL Testing Platform" style="width:100%;">
+                            <option value="">-- Select --</option>
+                            <?php foreach($importResult as $mName) { ?>
+                              <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
+                              <?php
+                            }
+                            ?>
+                          </select>
 			</td>
 			<td class=""><label for="vlResult">VL result</label></td>
 			<td>
 			  <label class="radio-inline">
-			    <input type="text" class="form-control " name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>" >
+			    <input type="text" class="form-control" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>" >
 			 </label>
 			</td>
 		      </tr>
@@ -571,7 +565,7 @@ $disable = "disabled = 'disabled'";
 			</td>
 		      </tr>
 		      <tr>
-			<th colspan="6">For failed / invalid runs only</th>
+			<th colspan="6" style="font-size: 18px; font-weight: bold;">For failed / invalid runs only</th>
 		      </tr>
 		      <tr>
 			<td class=""><label for="testDate">Repeat Test date</label></td>
@@ -580,10 +574,9 @@ $disable = "disabled = 'disabled'";
 			    <input type="text" class="form-control " name="failedTestDate" id="failedTestDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['failed_test_date'];?>" >
 			 </label>
 			</td>
-			<td class=""><label for="testingTech">Testing tech</label></td>
+			<td class=""><label for="testingTech">Testing Platform</label></td>
 			<td>
-			  <label class="radio-inline">
-			    <select name="failedTestingTech" id="failedTestingTech" class="form-control" title="Please choose VL Testing Platform">
+			    <select name="failedTestingTech" id="failedTestingTech" class="form-control" title="Please choose VL Testing Platform" style="width:100%;">
 			      <option value="">-- Select --</option>
 			      <?php foreach($importResult as $mName) { ?>
 				<option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['failed_test_tech'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
@@ -591,7 +584,6 @@ $disable = "disabled = 'disabled'";
 			      }
 			      ?>
 			    </select>
-			 </label>
 			</td>
 			<td class=""><label for="vlResult">VL result</label></td>
 			<td>
@@ -635,25 +627,25 @@ $disable = "disabled = 'disabled'";
 		      </tr>
 		      <tr>
 			<td class=""><label for="finalViralResult">Final Viral Load Result</label></td>
-			<td colspan="2">
+			<td>
 			  <label class="radio-inline">
                             <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" >copies/ml
                           </label>
 			</td>
 			<td class=""><label for="testQuality">QC Tech Name</label></td>
-			<td colspan="2">
+			<td>
 			  <label class="radio-inline">
                              <input type="text" class="form-control" name="qcTechName" id="qcTechName" placeholder="QC Tech Name" title="Enter QC Tech Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['qc_tech_name'];?>" >
                           </label>
 			</td>
-		      </tr>
-		      <tr>
-			<td class=""><label for="finalViralResult">Report Date</label></td>
+                        <td class=""><label for="finalViralResult">Report Date</label></td>
 			<td>
 			  <label class="radio-inline">
                             <input type="text" class="form-control date" name="reportDate" id="reportDate" placeholder="Report Date" title="Enter Report Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['report_date']; ?>"  >
                           </label>
 			</td>
+		      </tr>
+		      <tr>
 			<td class=""><label for="finalViralResult">QC Tech Signature</label></td>
 			<td>
 			  <label class="radio-inline">
@@ -666,17 +658,15 @@ $disable = "disabled = 'disabled'";
                              <input type="text" class="form-control date" name="qcDate" id="qcDate" placeholder="QC Date" title="Enter QC Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['qc_date'];?>">
                           </label>
 			</td>
-		      </tr>
-                      <tr>
                         <td><label for="status">Status</label></td>
                         <td>
-                        <select class="form-control" id="status" name="status" title="Please select test status">
-                         <option value="">-- Select --</option>
-                         <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
-                          <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
-                        </select>
+                          <select class="form-control" id="status" name="status" title="Please select test status" style="width:100%;">
+                           <option value="">-- Select --</option>
+                           <option value="7"<?php echo (7==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Accepted</option>
+                            <option value="4"<?php echo (4==$vlQueryInfo[0]['result_status']) ? 'selected="selected"':'';?>>Rejected</option>
+                          </select>
                         </td>
-                       </tr>
+		      </tr>
                     </table>
                   </div>
                 </div>
@@ -754,12 +744,13 @@ $disable = "disabled = 'disabled'";
   }
     
   function getfacilityDetails(obj){
-      $.blockUI();
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(pName!='' && provinceName && facilityName){
-        facilityName = false;
-      }
+    $.blockUI();
+    var cName = $("#clinicName").val();
+    var pName = $("#province").val();
+    $('#telephone').val('');
+    if(pName!='' && provinceName && facilityName){
+      facilityName = false;
+    }
     if(pName!=''){
       if(provinceName){
       $.post("../includes/getFacilityForClinic.php", { pName : pName},
@@ -785,11 +776,13 @@ $disable = "disabled = 'disabled'";
     $.blockUI();
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
+    $('#telephone').val('');
     if(dName!=''){
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
 	  if(data != ""){
-            $("#clinicName").html(data);
+            details = data.split("###");
+            $("#clinicName").html(details[0]);
 	  }
       });
     }
@@ -798,29 +791,30 @@ $disable = "disabled = 'disabled'";
   
   function getfacilityProvinceDetails(obj){
     $.blockUI();
-   //check facility name
-    var cName = $("#clinicName").val();
-    var pName = $("#province").val();
-    if(cName!='' && provinceName && facilityName){
-      provinceName = false;
-    }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-        if(data != ""){
-          details = data.split("###");
-          $("#province").html(details[0]);
-          $("#district").html(details[1]);
-          $("#clinicianName").val(details[2]);
-        }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
+    $('#telephone').val($("#clinicName").find(":selected").attr("data-mobile-nos"));
     $.unblockUI();
+    ////check facility name
+    //var cName = $("#clinicName").val();
+    //var pName = $("#province").val();
+    //if(cName!='' && provinceName && facilityName){
+    //  provinceName = false;
+    //}
+    //if(cName!='' && facilityName){
+    //  $.post("../includes/getFacilityForClinic.php", { cName : cName},
+    //  function(data){
+    //    if(data != ""){
+    //      details = data.split("###");
+    //      $("#province").html(details[0]);
+    //      $("#district").html(details[1]);
+    //      $("#clinicianName").val(details[2]);
+    //    }
+    //  });
+    //}else if(pName=='' && cName==''){
+    //  provinceName = true;
+    //  facilityName = true;
+    //  $("#province").html("< ?php echo $province;?>");
+    //  $("#clinicName").html("< ?php echo $facility;?>");
+    //}
   }
   
   function checkValue(){

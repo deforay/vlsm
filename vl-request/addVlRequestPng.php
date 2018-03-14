@@ -15,7 +15,7 @@ foreach($pdResult as $provinceName){
 $facility = '';
 $facility.="<option value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
-  $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+  $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".$fDetails['contact_person']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
 ?>
 
@@ -73,16 +73,16 @@ foreach($fResult as $fDetails){
                           </select>
                         </td>
                         <td style="width:10%">
-                        <label for="clinicName">Clinic Name <span class="mandatory">*</span></label>
+                        <label for="clinicName">Clinic/Ward <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic name" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
+                          <select class="form-control isRequired" id="clinicName" name="clinicName" title="Please select clinic/ward" style="width:100%;" onchange="getfacilityProvinceDetails(this)">
 			    <?php echo $facility; ?>
 			  </select>
                         </td>
                       </tr>
                       <tr>
-			<td style="width:10%">
+			<!--<td style="width:10%">
                         <label for="facility">Clinic/Ward <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
@@ -92,7 +92,7 @@ foreach($fResult as $fDetails){
 			    <option value="outpatient">Out-Patient</option>
 			    <option value="anc">ANC</option>
 			  </select>
-                        </td>
+                        </td>-->
                         <td style="width:16%">
                         <label for="officerName">Requesting Medical Officer   <span class="mandatory">*</span></label>
                         </td>
@@ -100,20 +100,18 @@ foreach($fResult as $fDetails){
                           <input type="text" class="form-control isRequired " name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name"  style="width:100%;" >
                         </td>
                         <td style="width:10%">
-                        <label for="telephone">Telephone  <span class="mandatory">*</span></label>
+                        <label for="telephone">Telephone </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control checkNum isRequired" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" >
+                          <input type="text" class="form-control checkNum" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" >
                         </td>
-                      </tr>
-		      <tr>
 			<td style="width:10%">
                         <label for="clinicDate">Date  <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control isRequired date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date"  style="width:100%;" >
                         </td>
-		      </tr>
+                      </tr>
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td></tr>
                       <tr>
                         <td style="width:16%">
@@ -349,19 +347,19 @@ foreach($fResult as $fDetails){
 			</td>
 			<td class="receivedDate"><label for="receivedDate">Date Received</label></td>
 			<td>
-			    <input type="text" class="form-control " name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date"  style="width:100%;" >
+			    <input type="text" class="form-control" name="receivedDate" id="receivedDate" placeholder="Received Date" title="Enter Received Date"  style="width:100%;" >
 			</td>
-			<td class="techName"><label for="techName">Tech Name</label></td>
+			<td class="techName"><label for="techName">Lab Tech. Name</label></td>
 			<td>
-			    <input type="text" class="form-control " name="techName" id="techName" placeholder="Tech Name" title="Enter Tech Name"  style="width:100%;" >
+			    <input type="text" class="form-control" name="techName" id="techName" placeholder="Enter Lab Technician Name" title="Please enter lab technician name" style="width:100%;" >
 			</td>
                       </tr>
 		      <tr>
 			<td class=""><label for="testDate">Test date</label></td>
 			<td>
-			    <input type="text" class="form-control " name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" >
+			    <input type="text" class="form-control" name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" >
 			</td>
-			<td class=""><label for="testingTech">Testing tech</label></td>
+			<td class=""><label for="testingTech">Testing Platform</label></td>
 			<td>
 			    <select name="testingTech" id="testingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
 			      <option value="">-- Select --</option>
@@ -374,7 +372,7 @@ foreach($fResult as $fDetails){
 			</td>
 			<td class=""><label for="vlResult">VL result</label></td>
 			<td>
-			    <input type="text" class="form-control " name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" >
+			    <input type="text" class="form-control" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" >
 			</td>
 		      </tr>
 		      <tr>
@@ -409,14 +407,14 @@ foreach($fResult as $fDetails){
 			</td>
 		      </tr>
 		      <tr>
-			<th colspan="6">For failed / invalid runs only</th>
+			<th colspan="6" style="font-size: 18px; font-weight: bold;">For failed / invalid runs only</th>
 		      </tr>
 		      <tr>
 			<td class=""><label for="failedTestDate">Repeat Test date</label></td>
 			<td>
-			    <input type="text" class="form-control " name="failedTestDate" id="failedTestDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" >
+			    <input type="text" class="form-control" name="failedTestDate" id="failedTestDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" >
 			</td>
-			<td class=""><label for="failedTestingTech">Testing tech</label></td>
+			<td class=""><label for="failedTestingTech">Testing Platform</label></td>
 			<td>
 			    <select name="failedTestingTech" id="failedTestingTech" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
 			      <option value="">-- Select --</option>
@@ -429,7 +427,7 @@ foreach($fResult as $fDetails){
 			</td>
 			<td class=""><label for="failedvlResult">VL result</label></td>
 			<td>
-			    <input type="text" class="form-control " name="failedvlResult" id="failedvlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" >
+			    <input type="text" class="form-control" name="failedvlResult" id="failedvlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" >
 			</td>
 		      </tr>
 		      <tr>
@@ -464,27 +462,27 @@ foreach($fResult as $fDetails){
 			</td>
 		      </tr>
 		      <tr>
-			<td class=""><label for="finalViralResult">Final Viral Load Result</label></td>
-			<td colspan="2">
-                          <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result"  style="width:100%;" >copies/ml
+			<td class=""><label for="finalViralResult">Final Viral Load Result(copies/ml)</label></td>
+			<td>
+                          <input type="text" class="form-control" name="finalViralResult" id="finalViralResult" placeholder="Viral Load Result" title="Enter Viral Result"  style="width:100%;" >
 			</td>
 			<td class=""><label for="testQuality">QC Tech Name</label></td>
-			<td colspan="2">
-				<input type="text" class="form-control" name="qcTechName" id="qcTechName" placeholder="QC Tech Name" title="Enter QC Tech Name"  style="width:100%;" >
+			<td>
+			  <input type="text" class="form-control" name="qcTechName" id="qcTechName" placeholder="QC Tech Name" title="Enter QC Tech Name"  style="width:100%;" >
 			</td>
-		      </tr>
-		      <tr>
 			<td class=""><label for="finalViralResult">Report Date</label></td>
 			<td>
                             <input type="text" class="form-control date" name="reportDate" id="reportDate" placeholder="Report Date" title="Enter Report Date"  style="width:100%;" >
 			</td>
+		      </tr>
+		      <tr>
 			<td class=""><label for="finalViralResult">QC Tech Signature</label></td>
 			<td>
-                            <input type="text" class="form-control" name="qcTechSign" id="qcTechSign" placeholder="QC Tech Signature" title="Enter QC Tech Signature"  style="width:100%;" >
+                          <input type="text" class="form-control" name="qcTechSign" id="qcTechSign" placeholder="QC Tech Signature" title="Enter QC Tech Signature"  style="width:100%;" >
 			</td>
 			<td class=""><label for="testQuality">QC Date</label></td>
-			<td colspan="">
-                             <input type="text" class="form-control date" name="qcDate" id="qcDate" placeholder="QC Date" title="Enter QC Date"  style="width:100%;" >
+			<td colspan="5">
+                          <input type="text" class="form-control date" name="qcDate" id="qcDate" placeholder="QC Date" title="Enter QC Date"  style="width:40%;" >
 			</td>
 		      </tr>
                     </table>
@@ -510,18 +508,18 @@ foreach($fResult as $fDetails){
     <!-- /.content -->
   </div>
   <script>
-    provinceName = true;
-    facilityName = true;
-    $(document).ready(function() {
+  provinceName = true;
+  facilityName = true;
+  $(document).ready(function() {
       $('.date').datepicker({
       changeMonth: true,
       changeYear: true,
       dateFormat: 'dd-M-yy',
       timeFormat: "hh:mm TT",
       yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     }).click(function(){
-	 $('.ui-datepicker-calendar').show();
-    });
+      }).click(function(){
+	$('.ui-datepicker-calendar').show();
+      });
       $('.date').mask('99-aaa-9999');
       $('#collectionDate,#receivedDate,#testDate,#failedTestDate').mask('99-aaa-9999 99:99');
    
@@ -548,7 +546,7 @@ foreach($fResult as $fDetails){
 	}).click(function(){
 	   $('.ui-datepicker-calendar').hide();
 	});
-    });
+  });
     
   function validateNow(){
       flag = deforayValidator.init({
@@ -582,6 +580,7 @@ foreach($fResult as $fDetails){
     $.blockUI();
     var cName = $("#clinicName").val();
     var pName = $("#province").val();
+    $('#telephone').val('');
     if(pName!='' && provinceName && facilityName){
       facilityName = false;
     }
@@ -610,11 +609,13 @@ foreach($fResult as $fDetails){
     $.blockUI();
     var dName = $("#district").val();
     var cName = $("#clinicName").val();
+    $('#telephone').val('');
     if(dName!=''){
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
 	  if(data != ""){
-            $("#clinicName").html(data);
+	    details = data.split("###");
+            $("#clinicName").html(details[0]);
 	  }
       });
     }
@@ -622,30 +623,32 @@ foreach($fResult as $fDetails){
   }
   
   function getfacilityProvinceDetails(obj){
-      $.blockUI();
-     //check facility name
-      var cName = $("#clinicName").val();
-      var pName = $("#province").val();
-      if(cName!='' && provinceName && facilityName){
-        provinceName = false;
-      }
-    if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
-      function(data){
-	  if(data != ""){
-            details = data.split("###");
-            $("#province").html(details[0]);
-            $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
-	  }
-      });
-    }else if(pName=='' && cName==''){
-      provinceName = true;
-      facilityName = true;
-      $("#province").html("<?php echo $province;?>");
-      $("#clinicName").html("<?php echo $facility;?>");
-    }
+    $.blockUI();
+    $('#telephone').val($("#clinicName").find(":selected").attr("data-mobile-nos"));
     $.unblockUI();
+//check facility name
+//    var cName = $("#clinicName").val();
+//    var pName = $("#province").val();
+//    if(cName!='' && provinceName && facilityName){
+//      provinceName = false;
+//    }
+//    
+//    if(cName!='' && facilityName){
+//      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+//      function(data){
+//	  if(data != ""){
+//            details = data.split("###");
+//            $("#province").html(details[0]);
+//            $("#district").html(details[1]);
+//            $("#clinicianName").val(details[2]);
+//	  }
+//      });
+//    }else if(pName=='' && cName==''){
+//      provinceName = true;
+//      facilityName = true;
+//      $("#province").html("< ?php echo $province;?>");
+//      $("#clinicName").html("< ?php echo $facility;?>");
+//    }
   }
   
   function checkValue(){
@@ -660,17 +663,16 @@ foreach($fResult as $fDetails){
   }
   
   function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
-        var removeDots=obj.value.replace(/\./g,"");
-        var removeDots=removeDots.replace(/\,/g,"");
-        //str=obj.value;
-        removeDots = removeDots.replace(/\s{2,}/g,' ');
-
-        $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
-        function(data){
-            if(data==='1'){
-                alert(alrt);
-                duplicateName=false;
-            }
-        });
-    }
+      var removeDots=obj.value.replace(/\./g,"");
+      var removeDots=removeDots.replace(/\,/g,"");
+      //str=obj.value;
+      removeDots = removeDots.replace(/\s{2,}/g,' ');
+      $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
+      function(data){
+	  if(data==='1'){
+	      alert(alrt);
+	      duplicateName=false;
+	  }
+      });
+  }
   </script>
