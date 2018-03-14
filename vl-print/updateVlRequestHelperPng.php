@@ -78,7 +78,7 @@ try {
         'sample_test_quality'=>(isset($_POST['testQuality']) && $_POST['testQuality']!='' ? $_POST['testQuality'] :  NULL),
         'sample_batch_id'=>(isset($_POST['batchNo']) && $_POST['batchNo']!='' ? $_POST['batchNo'] :  NULL),
         'failed_test_date'=>$_POST['failedTestDate'],
-        'failed_test_tech'=>(isset($_POST['failedTestingTech']) && $_POST['failedTestingTech']!='' ? $_POST['failedTestingTech'] :  NULL),
+        'failed_test_tech'=>(isset($_POST['failedTestingTech']) && $_POST['failedTestingTech']!='')? $_POST['failedTestingTech'] :  NULL,
         'failed_vl_result'=>(isset($_POST['failedvlResult']) && $_POST['failedvlResult']!='' ? $_POST['failedvlResult'] :  NULL),
         'failed_batch_quality'=>(isset($_POST['failedbatchQuality']) && $_POST['failedbatchQuality']!='' ? $_POST['failedbatchQuality'] :  NULL),
         'failed_sample_test_quality'=>(isset($_POST['failedtestQuality']) && $_POST['failedtestQuality']!='' ? $_POST['failedtestQuality'] :  NULL),
@@ -86,10 +86,10 @@ try {
         'lab_id'=>(isset($_POST['laboratoryId']) && $_POST['laboratoryId']!='' ? $_POST['laboratoryId'] :  NULL),
         'sample_type'=>(isset($_POST['sampleType']) && $_POST['sampleType']!='' ? $_POST['sampleType'] :  NULL),
         'sample_received_at_vl_lab_datetime'=>$_POST['receivedDate'],
-        'tech_name_png'=>(isset($_POST['techName']) && $_POST['techName']!='' ? $_POST['techName'] :  NULL),
+        'tech_name_png'=>(isset($_POST['techName']) && $_POST['techName']!='') ? $_POST['techName'] :  NULL,
         'sample_tested_datetime'=>(isset($_POST['testDate']) && $_POST['testDate']!='' ? $_POST['testDate'] :  NULL),
         'last_viral_load_result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
-        'vl_test_platform'=>(isset($_POST['testingTech']) && $_POST['testingTech']!='' ? $_POST['testingTech'] :  NULL),
+        'vl_test_platform'=>(isset($_POST['testingTech']) && $_POST['testingTech']!='') ? $_POST['testingTech'] :  NULL,
         'result'=>(isset($_POST['finalViralResult']) && $_POST['finalViralResult']!='' ? $_POST['finalViralResult'] :  NULL),
         'qc_tech_name'=>(isset($_POST['qcTechName']) && $_POST['qcTechName']!='' ? $_POST['qcTechName'] :  NULL),
         'qc_tech_sign'=>(isset($_POST['qcTechSign']) && $_POST['qcTechSign']!='' ? $_POST['qcTechSign'] :  NULL),
@@ -98,9 +98,9 @@ try {
         'report_date'=>$_POST['reportDate'],
         );
     
-          if(isset($_POST['status']) && trim($_POST['status'])!= ''){
-               $vldata['result_status']=$_POST['status'];
-          }
+        if(isset($_POST['status']) && trim($_POST['status'])!= ''){
+            $vldata['result_status']=$_POST['status'];
+        }
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $id=$db->update($tableName,$vldata);
     

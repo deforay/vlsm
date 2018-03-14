@@ -94,8 +94,8 @@ if(isset($_POST['pName'])){
     echo $facility."###".$district."###".'';
 }
 if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
-    $distName=$_POST['dName'];
-    $facilityQuery="SELECT * from facility_details where facility_district='".$distName."' AND status='active'";
+    $distName = $_POST['dName'];
+    $facilityQuery = "SELECT * from facility_details where facility_type=1 AND facility_district='".$distName."' AND status='active'";
     if(isset($vlfmResult[0]['facilityId'])){
       $facilityQuery = $facilityQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
     }
@@ -104,22 +104,22 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     if($facilityInfo){
         $facility .= $option;
         foreach($facilityInfo as $fDetails){
-            $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
+          $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
-        $facility .= $option;
+      $facility .= $option;
     }
-    $facilityQuery .= " AND facility_type='2'";
-    $facilityLabInfo=$db->query($facilityQuery);
+    $facilityQuery = "SELECT * from facility_details where facility_type=2 AND facility_district='".$distName."' AND status='active'";
+    $facilityLabInfo = $db->query($facilityQuery);
     $facilityLab = '';
     if($facilityLabInfo){
         $facilityLab .= $option;
         foreach($facilityLabInfo as $fDetails){
-            $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
+          $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
-        $facilityLab .= $option;
+      $facilityLab .= $option;
     }
-    echo $facility ."###".$facilityLab."###";
+  echo $facility ."###".$facilityLab."###";
 }
 ?>
