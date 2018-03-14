@@ -183,7 +183,7 @@ if($arr['vl_form']==1){
  }else if($arr['vl_form']==4){
    include('resultPdfZam.php');
  }else if($arr['vl_form']==5){
-   include('resultPdfWho.php');
+   include('resultPdfPng.php');
  }else if($arr['vl_form']==6){
    include('resultPdfWho.php');
  }else if($arr['vl_form']==7){
