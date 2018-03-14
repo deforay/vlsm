@@ -20,14 +20,13 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
   $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
+$rKey = '';
+$sampleCodeKey = 'sample_code_key';
+$sampleCode = 'sample_code';
 if($sarr['user_type']=='remoteuser'){
-    $sampleCodeKey = 'remote_sample_code_key';
-    $sampleCode = 'remote_sample_code';
-    $rKey = 'R';
-}else{
-    $sampleCodeKey = 'sample_code_key';
-    $sampleCode = 'sample_code';
-    $rKey = '';
+  $rKey = 'R';
+  $sampleCodeKey = 'remote_sample_code_key';
+  $sampleCode = 'remote_sample_code';
 }
 $sampleColDateTimeArray = explode(" ",$_POST['sDate']);
 $sampleCollectionDate = $general->dateFormat($sampleColDateTimeArray[0]);
@@ -44,14 +43,14 @@ if($arr['sample_code']=='MMYY'){
 }
 
 $auto = $samColDate.$sampleColDateArray[1].$sampleColDateArray[2];
-$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
-$svlResult=$db->query($svlQuery);
+$svlQuery = 'SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.' IS NOT NULL AND '.$sampleCode.'!= "" ORDER BY vl_sample_id DESC LIMIT 1';
+$svlResult = $db->query($svlQuery);
 if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
- $maxId = $svlResult[0][$sampleCodeKey]+1;
- $strparam = strlen($maxId);
- $zeros = substr("000", $strparam);
- $maxId = $zeros.$maxId;
+  $maxId = $svlResult[0][$sampleCodeKey]+1;
+  $strparam = strlen($maxId);
+  $zeros = (isset($_POST['autoTyp']) && trim($_POST['autoTyp']) == 'auto2')?substr("0000", $strparam):substr("000", $strparam);
+  $maxId = $zeros.$maxId;
 }else{
- $maxId = '001';
+  $maxId = (isset($_POST['autoTyp']) && trim($_POST['autoTyp']) == 'auto2')?'0001':'001';
 }
 echo json_encode(array('maxId'=>$maxId,'mnthYr'=>$mnthYr,'auto'=>$auto));

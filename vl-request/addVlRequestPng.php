@@ -1,24 +1,39 @@
 <?php
 ob_start();
+$rKey = '';
+$sampleCodeKey = 'sample_code_key';
+$sampleCode = 'sample_code';
+$prefix = $arr['sample_code_prefix'];
+$pdQuery="SELECT * from province_details";
+if($sarr['user_type']=='remoteuser'){
+  $rKey = 'R';
+  $sampleCodeKey = 'remote_sample_code_key';
+  $sampleCode = 'remote_sample_code';
+  //check user exist in user_facility_map table
+  $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+  $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+  if($chkUserFcMapResult){
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+  }
+}
 $bQuery="SELECT * FROM batch_details";
 $bResult = $db->rawQuery($bQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='png'";
 $aResult=$db->query($aQuery);
 
-$pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 $province = '';
-$province.="<option value=''> -- Select -- </option>";
+$province.="<option data-code='' data-name='' value=''> -- Select -- </option>";
 foreach($pdResult as $provinceName){
-  $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  $province .= "<option data-code='".$provinceName['province_code']."' data-name='".substr(strtoupper($provinceName['province_name']),0,3)."' value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
 }
 $facility = '';
 $facility.="<option value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
   $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".$fDetails['contact_person']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
-?>
 
+?>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -48,7 +63,7 @@ foreach($fResult as $fDetails){
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" onblur="checkNameValidation('vl_request_form','sample_code',this,null,'The Laboratory ID that you entered already exists. Please try another number',null)"/>
+                          <input type="text" class="form-control sampleCode isRequired" id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;" onblur="checkNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this,null,'The Laboratory ID that you entered already exists. Please try another ID',null)"/>
                         </div>
                       </div>
                     </div>
@@ -60,7 +75,7 @@ foreach($fResult as $fDetails){
                         <label for="province">Province <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);">
+                          <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getfacilityDetails(this);sampleCodeGeneration();">
 			    <?php  echo $province; ?>
                           </select>
                         </td>
@@ -253,11 +268,11 @@ foreach($fResult as $fDetails){
 		      <tr><td colspan="2" style="font-size: 18px; font-weight: bold;">Section 5: Specimen information </td> <td colspan="4" style="font-size: 18px; font-weight: bold;"> Type of sample to transport</td></tr>
                       <tr>
                         <td>
-			  <label for="collectionDate">Collection date</label>
+			  <label for="collectionDate">Collection date <span class="mandatory">*</span></label>
 			</td>
 			<td>
 			  <label class="radio-inline">
-			  <input type="text" class="form-control " name="collectionDate" id="collectionDate" placeholder="Collection Date" title="Enter Collection Date"  style="width:100%;" >
+			  <input type="text" class="form-control isRequired" name="collectionDate" id="collectionDate" placeholder="Sample Collection Date" title="Please enter sample collection date" onchange="sampleCodeGeneration();" style="width:100%;" >
 			  </label>
 			</td>
                          <td colspan="4" class="typeOfSample">
@@ -491,9 +506,13 @@ foreach($fResult as $fDetails){
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                <input type="hidden" name="saveNext" id="saveNext"/>
+		<?php if($arr['sample_code']=='auto' || $arr['sample_code']=='auto2' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+                  <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat"/>
+                  <input type="hidden" name="sampleCodeKey" id="sampleCodeKey"/>
+                <?php } ?>
+		<input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="5"/>
+                <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -669,10 +688,40 @@ foreach($fResult as $fDetails){
       removeDots = removeDots.replace(/\s{2,}/g,' ');
       $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
       function(data){
-	  if(data==='1'){
-	      alert(alrt);
-	      duplicateName=false;
-	  }
+	if(data==='1'){
+	  alert(alrt);
+	  $('#'+obj.id).val('');
+	  duplicateName=false;
+	}
       });
+  }
+  
+  function sampleCodeGeneration(){
+    var pName = $("#province").val();
+    var sDate = $("#collectionDate").val();
+    if(pName!='' && sDate!=''){
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate, autoTyp : 'auto2'},
+      function(data){
+	  var sCodeKey = JSON.parse(data);
+	  <?php if($arr['sample_code']=='auto2'){ ?>
+	  var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '')?$("#province").find(":selected").attr("data-name"):$("#province").find(":selected").attr("data-code");
+	  $("#sampleCode").val('<?php echo $rKey;?>R'+(new Date().getFullYear()+'').slice(-2)+provinceCode+'VL'+sCodeKey.maxId);
+	  $("#sampleCodeFormat").val('<?php echo $rKey;?>'+provinceCode+sCodeKey.auto);
+	  $("#sampleCodeKey").val(sCodeKey.maxId);
+	  checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The laboratory ID that you entered already exists. Please try another ID',null);
+	<?php } else if($arr['sample_code']=='auto'){ ?>
+	  pNameVal = pName.split("##");
+	  $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCodeKey.auto+sCodeKey.maxId);
+	  $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCodeKey.auto);
+	  $("#sampleCodeKey").val(sCodeKey.maxId);
+	  checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The laboratory ID that you entered already exists. Please try another ID',null);
+	<?php } else { ?>
+	  $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+	  $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
+	  $("#sampleCodeKey").val(sCodeKey.maxId);
+	  checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The laboratory ID that you entered already exists. Please try another ID',null)
+	<?php } ?>
+      });
+    }
   }
   </script>

@@ -61,7 +61,8 @@
   }else{
    $maxId = '001';
   }
-  $sKey = ''; $sFormat = '';
+  $sKey = '';
+  $sFormat = '';
   ?>
   <style> .translate-content{  color:#0000FF; font-size:12.5px; }  </style>
   <!-- Content Wrapper. Contains page content -->
@@ -507,11 +508,11 @@
     <!-- /.content -->
   </div>
   <script type="text/javascript">
-    changeProvince = true;
-    changeFacility = true;
-    provinceName = true;
-    facilityName = true;
-    machineName = true;
+  changeProvince = true;
+  changeFacility = true;
+  provinceName = true;
+  facilityName = true;
+  machineName = true;
   function getfacilityDetails(obj){
     $.blockUI();
     var cName = $("#clinicName").val();
