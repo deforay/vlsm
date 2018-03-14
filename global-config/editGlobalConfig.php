@@ -54,8 +54,6 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
           <!-- form start -->
             <form class="form-horizontal" method='post' name='editGlobalConfigForm' id='editGlobalConfigForm' enctype="multipart/form-data" autocomplete="off" action="globalConfigHelper.php">
               <div class="box-body">
-                
-
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Instance Settings</h3>
@@ -263,17 +261,21 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                         YY&nbsp;&nbsp;
                         <input type="radio" class="" id="auto_generate_mmyy" name="sample_code" value="MMYY" <?php echo($arr['sample_code'] == 'MMYY')?'checked':''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay;?>  type="text" class="boxWidth prefixMMYY" id="prefixMMYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY;?>"/>
                         MMYY&nbsp;&nbsp;
-                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>>Auto&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>><span id="auto1"><?php echo ($arr['vl_form'] == 5)?'Auto 1':'Auto'; ?> </span>&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_generate2" name="sample_code" value="auto2" <?php echo($arr['sample_code'] == 'auto2')?'checked':''; ?> style="display:<?php echo ($arr['vl_form'] == 5)?'':'none'; ?>"><span id="auto2" style="display:<?php echo ($arr['vl_form'] == 5)?'':'none'; ?>">Auto 2 &nbsp;&nbsp;</span>
                         <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>Numeric&nbsp;&nbsp;
                         <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>Alpha Numeric
                       </div>
                     </div>
                    </div>
                 </div>
-                <div id="auto-sample-eg" class="row" style="display:<?php echo($arr['sample_code'] == 'auto' || 'MMYY' || 'YY')?'block':'none'; ?>;">
+                <div id="auto-sample-eg" class="row" style="display:<?php echo($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'auto2' || 'MMYY' || 'YY')?'block':'none'; ?>;">
                   <div class="col-md-7" style="text-align:center;">
                     <code id="auto-sample-code" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'auto')?'block':'none'; ?>;">
                         eg. Province Code+Year+Month+Date+Increment Counter
+                    </code>
+                    <code id="auto-sample-code2" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'auto2')?'block':'none'; ?>;">
+                        eg. R+Year+Province Code+VL+Increment Counter (R18NCDVL0001)
                     </code>
                     <code id="auto-sample-code-MMYY" class="autoSample" style="display:<?php echo($arr['sample_code'] == 'MMYY')?'block':'none'; ?>;">
                         eg. Prefix+Month+Year+Increment Counter (VL0517999)
@@ -376,8 +378,6 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
     <h3 class="panel-title">VLSM Connect</h3>
   </div>
   <div class="panel-body">
-    
-    
                 <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">
@@ -471,17 +471,12 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                    </div>
             </div>
                 
-   
             <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
                       <label for="r_mandatory_fields" class="col-lg-4 control-label">Mandatory Fields for COMPLETED Result PDF: </label>
                       <div class="col-lg-8">
-                        
                         <div class="form-group">
-                            
-                            
-
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12" style="text-align:justify;">
@@ -641,9 +636,22 @@ function getNewInstanceImage(img){
             $('#max_length').prop('readonly',true);
         }
         else if(this.value == 'auto'){
-            $('.autoSample').hide(); 
+           $('.autoSample').hide(); 
            $('#auto-sample-eg').show();
            $('#auto-sample-code').show();
+           $('#min_length').val(''); 
+           $('.minlth').hide();
+           $('#min_length').removeClass('isRequired'); 
+           $('#min_length').prop('readonly',true); 
+           $('#max_length').val('');
+           $('.maxlth').hide();
+           $('#max_length').removeClass('isRequired'); 
+           $('#max_length').prop('readonly',true);
+           $('.boxWidth').removeClass('isRequired').attr('disabled',true).val('');
+        }else if(this.value == 'auto2'){
+           $('.autoSample').hide(); 
+           $('#auto-sample-eg').show();
+           $('#auto-sample-code2').show();
            $('#min_length').val(''); 
            $('.minlth').hide();
            $('#min_length').removeClass('isRequired'); 
@@ -664,14 +672,26 @@ function getNewInstanceImage(img){
            $('.boxWidth').removeClass('isRequired').attr('disabled',true).val('');
         }
   });
+  
   function makeReadonly(id1,id2) {
     $("#"+id1).val('');
     $("#"+id1).attr("disabled",'disabled').removeClass('isRequired');
     $("#"+id2).attr("disabled",false).addClass('isRequired');
-    
   }
-</script>
   
+  $("#vl_form").on('change',function(){
+    $('input[name="sample_code"]:radio').prop('checked',false);
+    $('.autoSample').hide();
+    $('#auto-sample-eg').hide();
+    if(this.value == 5){
+        $('#auto_generate2,#auto2').show();
+        $('#auto1').html('Auto 1');
+    }else{
+       $('#auto_generate2,#auto2').hide();
+       $('#auto1').html('Auto');
+    }
+  });
+</script>
  <?php
  include('../footer.php');
  ?>

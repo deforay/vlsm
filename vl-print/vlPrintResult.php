@@ -430,7 +430,7 @@ $batResult = $db->rawQuery($batQuery);
     var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
     oTable.fnSetColumnVis( iCol, bVis ? false : true );
   }
-	function printfnShowHide(iCol){
+  function printfnShowHide(iCol){
     var bVis = opTable.fnSettings().aoColumns[iCol].bVisible;
     opTable.fnSetColumnVis( iCol, bVis ? false : true );
   }

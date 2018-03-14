@@ -204,13 +204,13 @@ $general=new Deforay_Commons_General();
           });
         }
       }
-      function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
-      {
+      
+      function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt){
         if($.trim($("#"+id).val())!=''){
           $.blockUI();
           $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
           function(data){
-              if(data!=0){
+              if(data!= 0){
                 <?php if($sarr['user_type']=='remoteuser' || $sarr['user_type']=='standalone'){ ?>
                     alert(alrt);
                     $("#"+id).val('');
@@ -226,6 +226,7 @@ $general=new Deforay_Commons_General();
           $.unblockUI();
         }
       }
+      
       function checkARTRegimenValue(){
         var artRegimen = $("#artRegimen").val();
         if(artRegimen=='other'){
@@ -238,6 +239,7 @@ $general=new Deforay_Commons_General();
           $('#newArtRegimen').val("");
         }
       }
+      
       function getAge(){
         var dob = changeFormat($("#dob").val());
         var agYrs = $("#ageInYears").val();
@@ -250,8 +252,8 @@ $general=new Deforay_Commons_General();
           $("#ageInMonths").val(months); // Gives difference as months
         }
       }
-      function changeFormat(date)
-      {
+      
+      function changeFormat(date){
         splitDate = date.split("-");
         var fDate = new Date(splitDate[1] + splitDate[2]+", "+splitDate[0]);
         var monthDigit = fDate.getMonth();

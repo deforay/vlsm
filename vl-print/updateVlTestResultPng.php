@@ -8,6 +8,22 @@ $arr = array();
 for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
+$rKey = '';
+$sampleCodeKey = 'sample_code_key';
+$sampleCode = 'sample_code';
+$prefix = $arr['sample_code_prefix'];
+$pdQuery="SELECT * from province_details";
+if($sarr['user_type']=='remoteuser'){
+  $rKey = 'R';
+  $sampleCodeKey = 'remote_sample_code_key';
+  $sampleCode = 'remote_sample_code';
+  //check user exist in user_facility_map table
+  $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+  $chkUserFcMapResult = $db->query($chkUserFcMapQry);
+  if($chkUserFcMapResult){
+    $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."'";
+  }
+}
 //sample rejection reason
 $rejectionQuery="SELECT * FROM r_sample_rejection_reasons";
 $rejectionResult = $db->rawQuery($rejectionQuery);
@@ -30,7 +46,6 @@ $aResult=$db->query($aQuery);
 $sQuery="SELECT * from r_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 
-$pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);
 
 $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
@@ -175,7 +190,7 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="sampleCode">Laboratory ID </label>
-                          <input type="text" class="form-control sampleCode" id="sampleCode" name="sampleCode" <?php echo $disable; ?> placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;"  value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onblur="checkNameValidation('vl_request_form','sample_code',this,'<?php echo "vl_sample_id##".$id;?>','The Laboratory ID that you entered already exists. Please try another number',null)"/>
+                          <input type="text" class="form-control sampleCode" id="sampleCode" name="sampleCode" <?php echo $disable; ?> placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;"  value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" onblur="checkNameValidation('vl_request_form','<?php echo $sampleCode;?>',this,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"]; ?>','The Laboratory ID that you entered already exists. Please try another ID',null)"/>
                         </div>
                       </div>
                     </div>
@@ -833,13 +848,13 @@ $disable = "disabled = 'disabled'";
         var removeDots=removeDots.replace(/\,/g,"");
         //str=obj.value;
         removeDots = removeDots.replace(/\s{2,}/g,' ');
-
         $.post("../includes/checkDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : removeDots.trim(),fnct : fnct, format: "html"},
         function(data){
-            if(data==='1'){
-                alert(alrt);
-                duplicateName=false;
-            }
+          if(data==='1'){
+            alert(alrt);
+            $('#'+obj.id).val('');
+            duplicateName=false;
+          }
         });
     }
   </script>

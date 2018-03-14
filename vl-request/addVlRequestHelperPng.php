@@ -88,8 +88,10 @@ try {
         $instanceId = $_SESSION['instanceId'];
     }
     $vldata=array(
-        'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
-        'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
+        'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
+        'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='')? $_POST['sampleCode'] :  NULL,
+        //'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='')? $_POST['sampleCodeFormat'] :  NULL,
+        'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='')? $_POST['sampleCodeKey'] :  NULL,
         'vlsm_instance_id'=>$instanceId,
         'vlsm_country_id'=>'5',
         'facility_id'=>(isset($_POST['clinicName']) && trim($_POST['clinicName'])!='') ? $_POST['clinicName'] :  NULL,
@@ -147,7 +149,6 @@ try {
         'last_modified_datetime'=>$general->getDateTime(),
         'manual_result_entry'=>'yes'
         );
-    
     $id=$db->insert($tableName,$vldata);
     //echo $id;die;
         if($id>0){
