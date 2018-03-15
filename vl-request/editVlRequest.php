@@ -295,11 +295,12 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
         $.unblockUI();
       }
     }
+    
     function getAge(){
+      var agYrs = '';
+      var agMnths = '';
       var dob = changeFormat($("#dob").val());
-      var agYrs = $("#ageInYears").val();
-      var agMnths = $("#ageInMonths").val();
-      if(agYrs=='' && agMnths=='' && $.trim(dob)!=''){
+      if(agYrs==''){
       //calculate age
       var years = moment().diff(dob, 'years',false);
       var months = (years == 0)?moment().diff(dob, 'months',false):'';
@@ -307,6 +308,7 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
       $("#ageInMonths").val(months); // Gives difference as months
       }
     }
+    
     function checkARTRegimenValue(){
       var artRegimen = $("#artRegimen").val();
       if(artRegimen=='other'){

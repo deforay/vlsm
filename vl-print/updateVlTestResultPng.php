@@ -433,7 +433,7 @@ $disable = "disabled = 'disabled'";
 		      </tr>
 		      <tr>
                         <td>
-			  <label for="collectedBy">Specimen collected by</label>
+			  <label for="collectedBy">Specimen Collected by</label>
 			</td>
 			<td>
 			  <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By" <?php echo $disable; ?>  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_collected_by'];?>" >
@@ -442,14 +442,15 @@ $disable = "disabled = 'disabled'";
                         <td>
                           <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" <?php echo $disable; ?> title="Processing Time" value="<?php echo $vlQueryInfo[0]['plasma_process_time'];?>"/>
                         </td>
-                        <td><label for="processTech">Processing tech</label></td>
+                        <td><label for="processTech">Processing Tech</label></td>
                         <td>
                           <input type="text" name="processTech" id="processTech" class="form-control" style="width: 100%;" placeholder="Processing Tech" <?php echo $disable; ?> title="Processing Tech" value="<?php echo $vlQueryInfo[0]['plasma_process_tech'];?>"/>
 			</td>
                       </tr>
                       <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">CPHL Use Only </td></tr>
                       <tr>
-			<td colspan="2" class="sampleQuality"><label for="breastfeeding">Sample Quality</label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<td><label for="sampleQuality">Sample Quality</label></td>
+                        <td>
 			 <label class="radio-inline">
 			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='accept')?"checked='checked'":""?>>Accept
 			 </label>
@@ -457,9 +458,9 @@ $disable = "disabled = 'disabled'";
 			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="reject" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"checked='checked'":""?>>Reject
 			 </label>
 			</td>
-			<td class="reason"><label for="rejectionReason">Reason</label></td>
-                        <td class="reason">
-			  <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width:100%;">
+			<td class="rejectionReason" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"none"; ?>"><label for="rejectionReason">Reason <span class="mandatory">*</span></label></td>
+                        <td class="rejectionReason" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"none"; ?>">
+			  <select name="rejectionReason" id="rejectionReason" class="form-control <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"isRequired":""; ?>" title="Please choose reason" style="width:100%;">
 			      <option value="">-- Select --</option>
 				<?php
 				foreach($rejectionResult as $reject){
@@ -470,9 +471,9 @@ $disable = "disabled = 'disabled'";
 				?>
 			      </select>
 			</td>
-			<td class="laboratoryId"><label for="laboratoryId">Laboratory Name</label></td>
+			<td class="laboratoryId"><label for="laboratoryId">Laboratory Name <span class="mandatory">*</span></label></td>
 			<td>
-			    <select name="laboratoryId" id="laboratoryId" class="form-control" title="Please choose lab name" style="width:100%;">
+			    <select name="laboratoryId" id="laboratoryId" class="form-control isRequired" title="Please choose lab name" style="width:100%;">
                             <option value=""> -- Select -- </option>
                             <?php
                             foreach($lResult as $labName){
@@ -483,6 +484,8 @@ $disable = "disabled = 'disabled'";
                             ?>
                           </select>
 			</td>
+                        <td class="reasonequ" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"none":""; ?>"></td>
+			<td class="reasonequ" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"none":""; ?>"></td>
                       </tr>
                       <tr>
 			<td class="sampleType"><label for="sampleType">Sample Type Received</label></td>
@@ -508,13 +511,13 @@ $disable = "disabled = 'disabled'";
 			</td>
                       </tr>
 		      <tr>
-			<td class=""><label for="testDate">Test date</label></td>
+			<td class=""><label for="testDate">Test date <span class="mandatory">*</span></label></td>
 			<td>
-			  <input type="text" class="form-control" name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" >
+			  <input type="text" class="form-control isRequired" name="testDate" id="testDate" placeholder="Test Date" title="Enter Testing Date" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime'];?>" >
 			</td>
-			<td class=""><label for="testingTech">Testing Platform</label></td>
+			<td class=""><label for="testingTech">Testing Platform <span class="mandatory">*</span></label></td>
 			<td>
-                          <select name="testingTech" id="testingTech" class="form-control" title="Please choose VL Testing Platform" style="width:100%;">
+                          <select name="testingTech" id="testingTech" class="form-control isRequired" title="Please choose VL Testing Platform" style="width:100%;">
                             <option value="">-- Select --</option>
                             <?php foreach($importResult as $mName) { ?>
                               <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>" <?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
@@ -523,10 +526,12 @@ $disable = "disabled = 'disabled'";
                             ?>
                           </select>
 			</td>
-			<td class=""><label for="vlResult">VL result</label></td>
-			<td>
-			  <input type="text" class="form-control" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['last_viral_load_result'];?>" >
+			<td class="vlResult" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"none":""; ?>"><label for="vlResult">VL result <span class="mandatory">*</span></label></td>
+			<td class="vlResult" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"none":""; ?>">
+			  <input type="text" class="form-control <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"isRequired"; ?>" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>" >
 			</td>
+                        <td class="vlresultequ" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"none"; ?>"></td>
+			<td class="vlresultequ" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"none"; ?>"></td>
 		      </tr>
 		      <tr>
 			<td class=""><label for="batchQuality">Batch quality</label></td>
@@ -821,4 +826,18 @@ $disable = "disabled = 'disabled'";
         }
       });
   }
+  
+  $("input:radio[name=sampleQuality]").on("change",function(){
+    if($(this).val() == 'reject'){
+      $(".rejectionReason,.vlresultequ").show();
+      $(".reasonequ,.vlResult").hide();
+      $('#rejectionReason').addClass("isRequired");
+      $('#vlResult').removeClass("isRequired");
+    }else{
+      $(".reasonequ,.vlResult").show();
+      $(".rejectionReason,.vlresultequ").hide();
+      $('#rejectionReason').removeClass("isRequired");
+      $('#vlResult').addClass("isRequired");
+    }
+  })
   </script>

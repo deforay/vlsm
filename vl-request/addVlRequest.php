@@ -241,10 +241,10 @@ $general=new Deforay_Commons_General();
       }
       
       function getAge(){
+        var agYrs = '';
+        var agMnths = '';
         var dob = changeFormat($("#dob").val());
-        var agYrs = $("#ageInYears").val();
-        var agMnths = $("#ageInMonths").val();
-        if(agYrs=='' && agMnths=='' && $.trim(dob)!=''){
+        if($.trim(dob)!=''){
         //calculate age
           var years = moment().diff(dob, 'years',false);
           var months = (years == 0)?moment().diff(dob, 'months',false):'';

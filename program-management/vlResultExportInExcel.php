@@ -21,7 +21,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant","Is Patient Breastfeeding","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Rejection","Date Sample Received at PHL","Date Sent to NHRL","Date Results Received at PHL","Value(Results)","Results in Log","Date Results Dispatched Facilities","TAT Result Dispatch(days)","Comments");
+ $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant","Is Patient Breastfeeding","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Rejection","Date Sample Received at PHL","Date Sent to NHRL","Date Results Received at PHL","Value(Results)","Results in Log","Date Results Dispatched Facilities","TAT Result Dispatch(days)","Comments","Funding Source","Implementing Partner");
  
  $colNo = 0;
  
@@ -52,7 +52,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
      )
  );
 
- $sheet->mergeCells('A1:AE1');
+ $sheet->mergeCells('A1:AG1');
  $nameValue = '';
  foreach($_POST as $key=>$value){
    if(trim($value)!='' && trim($value)!='-- Select --'){
@@ -65,7 +65,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
    $colNo++;
  }
- $sheet->getStyle('A3:AE3')->applyFromArray($styleArray);
+ $sheet->getStyle('A3:AG3')->applyFromArray($styleArray);
  
  $no =1;
  foreach ($rResult as $aRow) {
@@ -141,10 +141,10 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    $logVal = round(log10($aRow['result_value_absolute']),1);
   }
   if($sarr['user_type']=='remoteuser'){
-					$sampleCode = 'remote_sample_code';
-				}else{
-					$sampleCode = 'sample_code';
-				}
+    $sampleCode = 'remote_sample_code';
+  }else{
+    $sampleCode = 'sample_code';
+  }
   $row[] = $no;
   $row[] = $aRow[$sampleCode];
   $row[] = ucwords($aRow['facility_name']);
@@ -176,6 +176,8 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $resultDispatchedDate;
   $row[] = $tatdays;
   $row[] = ucfirst($aRow['approver_comments']);
+  $row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name'])!= '')?ucwords($aRow['funding_source_name']):'';
+  $row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
   $output[] = $row;
   $no++;
  }

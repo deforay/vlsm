@@ -109,7 +109,7 @@ foreach($fResult as $fDetails){
 			  </select>
                         </td>-->
                         <td style="width:16%">
-                        <label for="officerName">Requesting Medical Officer   <span class="mandatory">*</span></label>
+                        <label for="officerName">Requesting Medical Officer <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
                           <input type="text" class="form-control isRequired " name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name"  style="width:100%;" >
@@ -295,18 +295,18 @@ foreach($fResult as $fDetails){
 		      </tr>
 		      <tr>
                         <td>
-			  <label for="collectedBy">Specimen collected by</label>
+			  <label for="collectedBy">Specimen Collected by</label>
 			</td>
 			<td>
 			  <label class="radio-inline">
-			    <input type="text" class="form-control " name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By"  style="width:100%;" >
+			    <input type="text" class="form-control" name="collectedBy" id="collectedBy" placeholder="Collected By" title="Enter Collected By"  style="width:100%;" >
 			  </label>
 			</td>
 			<td colspan="4" class="processTime"><label for="processTime">For onsite plasma <br/> processing only</label>
 			 <label class="radio-inline" style="width: 15%;">
 			    <input type="text" name="processTime" id="processTime" class="form-control" style="width: 100%;" placeholder="Time" title="Processing Time"/>
 			 </label>&nbsp;
-			 <label for="processTech">Processing tech</label>
+			 <label for="processTech">Processing Tech</label>
 			 <label class="radio-inline">
 			    <input type="text" name="processTech" id="processTech" class="form-control" style="width: 100%;" placeholder="Processing Tech" title="Processing Tech"/>
 			 </label>
@@ -314,7 +314,8 @@ foreach($fResult as $fDetails){
                       </tr>
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">CPHL Use Only </td></tr>
                       <tr>
-			<td colspan="2" class="sampleQuality"><label for="breastfeeding">Sample Quality</label>&nbsp;
+			<td><label for="sampleQuality">Sample Quality</label></td>
+			<td>
 			 <label class="radio-inline">
 			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality">Accept
 			 </label>
@@ -322,8 +323,8 @@ foreach($fResult as $fDetails){
 			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="reject" title="Check Sample Quality">Reject
 			 </label>
 			</td>
-			<td class="reason"><label for="reason">Reason</label></td>
-			<td>
+			<td class="rejectionReason" style="display:none;"><label for="rejectionReason">Reason <span class="mandatory">*</span></label></td>
+			<td class="rejectionReason" style="display:none;">
 			    <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" style="width: 100%">
 			      <option value="">-- Select --</option>
 				<?php
@@ -349,6 +350,8 @@ foreach($fResult as $fDetails){
                             ?>
                           </select>
 			</td>
+			<td class="reasonequ"></td>
+			<td class="reasonequ"></td>
                       </tr>
                       <tr>
 			<td class="sampleType"><label for="sampleType">Sample Type Received</label></td>
@@ -389,10 +392,12 @@ foreach($fResult as $fDetails){
 			      ?>
 			    </select>
 			</td>
-			<td class=""><label for="vlResult">VL result</label></td>
-			<td>
-			    <input type="text" class="form-control" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;" >
+			<td class="vlResult"><label for="vlResult">VL result</label></td>
+			<td class="vlResult">
+			    <input type="text" class="form-control" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;">
 			</td>
+			<td class="vlresultequ" style="display:none;"></td>
+			<td class="vlresultequ" style="display:none;"></td>
 		      </tr>
 		      <tr>
 			<td class=""><label for="batchQuality">Batch quality</label></td>
@@ -413,7 +418,7 @@ foreach($fResult as $fDetails){
                             <input type="radio" id="failed" name="testQuality" value="invalid" title="Test Quality">Invalid
                           </label>
 			</td>
-			<td class=""><label for="vlResult">Batch</label></td>
+			<td class=""><label for="batchNo">Batch</label></td>
 			<td>
 			    <select name="batchNo" id="batchNo" class="form-control" title="Please choose batch number" style="width:100%">
 			      <option value="">-- Select --</option>
@@ -728,4 +733,16 @@ foreach($fResult as $fDetails){
       });
     }
   }
+  
+  $("input:radio[name=sampleQuality]").on("change",function(){
+    if($(this).val() == 'reject'){
+      $(".rejectionReason,.vlresultequ").show();
+      $(".reasonequ,.vlResult").hide();
+      $('#rejectionReason').addClass("isRequired");
+    }else{
+      $(".reasonequ,.vlResult").show();
+      $(".rejectionReason,.vlresultequ").hide();
+      $('#rejectionReason').removeClass("isRequired");
+    }
+  })
   </script>

@@ -20,6 +20,12 @@ $vlLabQuery="SELECT * FROM facility_details where status='active' and facility_t
 $vlLabResult = $db->rawQuery($vlLabQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
+//Funding source list
+$fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+$fundingSourceList = $db->query($fundingSourceQry);
+//Implementing partner list
+$implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+$implementingPartnerList = $db->query($implementingPartnerQry);
 ?>
   <style>
     .select2-selection__choice{
@@ -145,31 +151,55 @@ $batResult = $db->rawQuery($batQuery);
 		  <td><b>Show only Reordered Samples&nbsp;:</b></td>
 		    <td>
 		      <select name="showReordSample" id="showReordSample" class="form-control" title="Please choose record sample">
-						<option value=""> -- Select -- </option>
-						<option value="yes">Yes</option>
-						<option value="no" selected="selected">No</option>
+			<option value=""> -- Select -- </option>
+			<option value="yes">Yes</option>
+			<option value="no" selected="selected">No</option>
 		      </select>
-		    </td>
-				<td  colspan="2">
-					<div class="col-md-12">
-					<div class="col-md-6">
-						<b>Pregnant&nbsp;:</b>
+		  </td>
+		  <td  colspan="2">
+		    <div class="col-md-12">
+		      <div class="col-md-6">
+		      <b>Pregnant&nbsp;:</b>
 		      <select name="patientPregnant" id="patientPregnant" class="form-control" title="Please choose pregnant option">
-						<option value=""> -- Select -- </option>
-						<option value="yes">Yes</option>
-						<option value="no">No</option>
+			  <option value=""> -- Select -- </option>
+			  <option value="yes">Yes</option>
+			  <option value="no">No</option>
 		      </select>
-					</div>
-					<div class="col-md-6">
-						<b>Breastfeeding&nbsp;:</b>
-					<select name="breastFeeding" id="breastFeeding" class="form-control" title="Please choose pregnant option">
-						<option value=""> -- Select -- </option>
-						<option value="yes">Yes</option>
-						<option value="no">No</option>
+		      </div>
+		      <div class="col-md-6">
+			<b>Breastfeeding&nbsp;:</b>
+			<select name="breastFeeding" id="breastFeeding" class="form-control" title="Please choose pregnant option">
+			    <option value=""> -- Select -- </option>
+			    <option value="yes">Yes</option>
+			    <option value="no">No</option>
+			</select>
+		      </div>
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td><b>Funding Sources&nbsp;:</b></td>
+		  <td>
+		      <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
+			<option value=""> -- Select -- </option>
+			<?php
+			foreach($fundingSourceList as $fundingSource){
+			?>
+			  <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+			<?php } ?>
 		      </select>
-					</div>
-					</div>
-		    </td>
+		  </td>
+		  <td><b>Implementing Partners&nbsp;:</b></td>
+		  <td>
+		      <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
+			<option value=""> -- Select -- </option>
+			<?php
+			foreach($implementingPartnerList as $implementingPartner){
+			?>
+			  <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+			<?php } ?>
+		      </select>
+		  </td>
 		</tr>
 		<tr>
 		  <td colspan="6">
@@ -177,13 +207,13 @@ $batResult = $db->rawQuery($batQuery);
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
 		    &nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
 		    &nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('vlResultExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
-				<?php 
-				//if(isset($_SESSION['privileges']) && in_array("vlResultAllFieldExportInExcel.php", $_SESSION['privileges'])){ 
-					//echo $_SESSION['roleCode'];
-					if($_SESSION['roleCode']=='ad' || $_SESSION['roleCode']=='AD'){
-					?>
-				&nbsp;<button class="btn btn-success pull-right" type="button" onclick="exportInexcel('vlResultAllFieldExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Data</button>
-				<?php } ?>
+		    <?php 
+		    //if(isset($_SESSION['privileges']) && in_array("vlResultAllFieldExportInExcel.php", $_SESSION['privileges'])){ 
+			    //echo $_SESSION['roleCode'];
+			    if($_SESSION['roleCode']=='ad' || $_SESSION['roleCode']=='AD'){
+			    ?>
+		    &nbsp;<button class="btn btn-success pull-right" type="button" onclick="exportInexcel('vlResultAllFieldExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Data</button>
+		    <?php } ?>
 		  </td>
 		</tr>
 		
@@ -192,35 +222,40 @@ $batResult = $db->rawQuery($batQuery);
 			<div class="row" style="background:#e0e0e0;padding: 15px;margin-top: -25px;">
 			    <div class="col-md-12" >
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="sample_code"  class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="0" id="iCol0" data-showhide="sample_code"  class="showhideCheckBox" /> <label for="iCol0">Sample Code</label>
 				    </div>
-						<?php $i = 0; if($sarr['user_type']!='standalone'){  $i = 1; ?>
+				   <?php $i = 0; if($sarr['user_type']!='standalone'){  $i = 1; ?>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Remote Sample Code</label>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i;?>" id="iCol<?php echo $i;?>" data-showhide="remote_sample_code" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Remote Sample Code</label>
 				    </div>
-						<?php } ?>
+				    <?php } ?>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Batch Code</label>
-				    </div>
-				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Art No</label>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="batch_code" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Batch Code</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Patient's Name</label> <br>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_art_no" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Art No</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="patient_first_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Patient's Name</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Sample Type</label> <br>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="facility_name" class="showhideCheckBox"  /> <label for="iCol<?php echo $i;?>">Facility Name</label>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Result</label>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="sample_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Sample Type</label> <br>
 				    </div>
 				    <div class="col-md-3">
-					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Status</label>
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="result"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Result</label>
 				    </div>
-				    
+				    <div class="col-md-3">
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Status</label>
+				    </div>
+				    <div class="col-md-3">
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="funding_source"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Funding Source</label>
+				    </div>
+				    <div class="col-md-3">
+				      <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="implementing_partner"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Implementing Partner</label>
+				    </div>
 				</div>
 			    </div>
 			</span>
@@ -231,9 +266,9 @@ $batResult = $db->rawQuery($batQuery);
                 <thead>
                 <tr>
 		  <th>Sample Code</th>
-			<?php if($sarr['user_type']!='standalone'){ ?>
+		  <?php if($sarr['user_type']!='standalone'){ ?>
 		  <th>Remote Sample <br/>Code</th>
-			<?php } ?>
+		  <?php } ?>
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
@@ -241,12 +276,14 @@ $batResult = $db->rawQuery($batQuery);
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Status</th>
+		  <th>Funding Source</th>
+		  <th>Implementing Partner</th>
                   <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="10" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="12" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
               </table>
@@ -318,12 +355,10 @@ $batResult = $db->rawQuery($batQuery);
         }
   } );
   
-  function fnShowHide(iCol)
-    {
-        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
-        oTable.fnSetColumnVis( iCol, bVis ? false : true );
-    }
-  
+  function fnShowHide(iCol){
+    var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+    oTable.fnSetColumnVis( iCol, bVis ? false : true );
+  }
   
   function loadVlRequestData(){
     $.blockUI();
@@ -340,16 +375,18 @@ $batResult = $db->rawQuery($batQuery);
             "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
-								<?php if($sarr['user_type']!='standalone'){ ?>
+		<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
-								<?php } ?>
-                {"sClass":"center"},
-                {"sClass":"center"},
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+		{"sClass":"center"},
+		{"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 0, "asc" ]],
@@ -357,19 +394,21 @@ $batResult = $db->rawQuery($batQuery);
             "bServerSide": true,
             "sAjaxSource": "getVlResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-			  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-			  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-			  aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
-			  aoData.push({"name": "printDate", "value": $("#printDate").val()});
-			  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-			  aoData.push({"name": "vlLab", "value": $("#vlLab").val()});
-			  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
-			  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
-			  aoData.push({"name": "status", "value": $("#status").val()});
-			  aoData.push({"name": "gender", "value": $("#gender").val()});
-			  aoData.push({"name": "showReordSample", "value": $("#showReordSample").val()});
-			  aoData.push({"name": "patientPregnant", "value": $("#patientPregnant").val()});
-			  aoData.push({"name": "breastFeeding", "value": $("#breastFeeding").val()});
+		  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+		  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+		  aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
+		  aoData.push({"name": "printDate", "value": $("#printDate").val()});
+		  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+		  aoData.push({"name": "vlLab", "value": $("#vlLab").val()});
+		  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+		  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
+		  aoData.push({"name": "status", "value": $("#status").val()});
+		  aoData.push({"name": "gender", "value": $("#gender").val()});
+		  aoData.push({"name": "showReordSample", "value": $("#showReordSample").val()});
+		  aoData.push({"name": "patientPregnant", "value": $("#patientPregnant").val()});
+		  aoData.push({"name": "breastFeeding", "value": $("#breastFeeding").val()});
+		  aoData.push({"name": "fundingSource", "value": $("#fundingSource").val()});
+		  aoData.push({"name": "implementingPartner", "value": $("#implementingPartner").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -410,25 +449,25 @@ $batResult = $db->rawQuery($batQuery);
     function(data){
 	  if(data == "" || data == null || data == undefined){
 	  $.unblockUI();
-	      alert('Unable to generate excel..');
+	    alert('Unable to generate excel..');
 	  }else{
-		$.unblockUI();
-	     location.href = '../temporary/'+data;
+	    $.unblockUI();
+	    location.href = '../temporary/'+data;
 	  }
     });
   }
-	function hideFemaleDetails(value)
-	{
-		if(value=='female'){
-			$("#patientPregnant").attr("disabled",false);
-			$("#breastFeeding").attr("disabled",false);
-		}else{
-			$('select#patientPregnant option').removeAttr("selected");
-			$('select#breastFeeding option').removeAttr("selected");
-			$("#patientPregnant").attr("disabled",true);
-			$("#breastFeeding").attr("disabled",true);
-		}
-	}
+  
+  function hideFemaleDetails(value){
+    if(value=='female'){
+	    $("#patientPregnant").attr("disabled",false);
+	    $("#breastFeeding").attr("disabled",false);
+    }else{
+	    $('select#patientPregnant option').removeAttr("selected");
+	    $('select#breastFeeding option').removeAttr("selected");
+	    $("#patientPregnant").attr("disabled",true);
+	    $("#breastFeeding").attr("disabled",true);
+    }
+  }
 </script>
  <?php
  include('../footer.php');

@@ -34,7 +34,7 @@ $expStr=explode(" ",$printedTime);
 $printDate =$general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
 //set query
-if($_POST['newData']!=''){
+if(isset($_POST['newData']) && $_POST['newData']!=''){
   $query = $_SESSION['vlPrintResultQuery'];
   $allQuery = $_SESSION['vlPrintRequestSearchResultQuery'];
 }else{
