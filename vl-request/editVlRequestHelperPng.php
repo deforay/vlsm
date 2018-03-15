@@ -84,8 +84,8 @@ try {
           $_POST['currentRegimen'] = $_POST['newArtRegimen'];
     }
     $vldata=array(
-        'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
-        'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' ? $_POST['sampleCode'] :  NULL),
+        'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
+        'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
         'facility_id'=>(isset($_POST['clinicName']) && trim($_POST['clinicName'])!='') ? $_POST['clinicName'] :  NULL,
         //'ward'=>(isset($_POST['wardData']) && $_POST['wardData']!='' ? $_POST['wardData'] :  NULL),
         'patient_art_no'=>(isset($_POST['patientARTNo']) && trim($_POST['patientARTNo'])!='') ? $_POST['patientARTNo'] :  NULL,
@@ -95,7 +95,8 @@ try {
         'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
         'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
         'patient_dob'=>$_POST['dob'],
-        'current_regimen'=>(isset($_POST['currentRegimen']) && $_POST['currentRegimen']!='' ? $_POST['currentRegimen'] :  NULL),
+        'line_of_treatment'=>(isset($_POST['artLine']) && $_POST['artLine']!='')? $_POST['artLine'] :  NULL,
+        'current_regimen'=>(isset($_POST['currentRegimen']) && $_POST['currentRegimen']!='') ? $_POST['currentRegimen'] :  NULL,
         'date_of_initiation_of_current_regimen'=>$_POST['regStartDate'],
         'art_cd_cells'=>(isset($_POST['cdCells']) && $_POST['cdCells']!='' ? $_POST['cdCells'] :  NULL),
         'art_cd_date'=>$_POST['cdDate'],
@@ -138,24 +139,19 @@ try {
         );
     $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
     $id=$db->update($tableName,$vldata);
-    
-        if($id>0){
-          $_SESSION['alertMsg']="VL request updated successfully";
-          //Add event log
-          $eventType = 'update-vl-request-zam';
-          $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
-          $resource = 'vl-request-zam';
-          $data=array(
-          'event_type'=>$eventType,
-          'action'=>$action,
-          'resource'=>$resource,
-          'date_time'=>$general->getDateTime()
-          );
-          $db->insert($tableName1,$data);
-             header("location:vlRequest.php");
-        }else{
-            $_SESSION['alertMsg']="Please try again later";
-        }
+    $_SESSION['alertMsg']="VL request updated successfully";
+    //Add event log
+    $eventType = 'update-vl-request-zam';
+    $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
+    $resource = 'vl-request-zam';
+    $data=array(
+    'event_type'=>$eventType,
+    'action'=>$action,
+    'resource'=>$resource,
+    'date_time'=>$general->getDateTime()
+    );
+    $db->insert($tableName1,$data);
+    header("location:vlRequest.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

@@ -167,25 +167,16 @@ foreach($fResult as $fDetails){
                       </tr>
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 3: ART Information</td></tr>
                       <tr>
-                        <td colspan="2">
-                        <label class="radio-inline">
-			   <input type="radio" class="" id="firstLine" name="artLine" value="first_line" title="Please check ART Line"> First Line
+			<td style="width:8%">
+                        <label for="artLine">Line of Treatment </label>
+                        </td>
+                        <td style="width:10%">
+                          <label class="radio-inline">
+			   <input type="radio" class="" id="firstLine" name="artLine" value="1" title="Please check ART Line"> First Line
 			   </label>
-			 <label class="radio-inline">
-			   <input type="radio" class="" id="secondLine" name="artLine" value="second_line" title="Please check ART Line"> Second Line
-			 </label><br/>
-			 <label for="currentRegimen">Current Regimen </label>
-			    <select class="form-control" id="currentRegimen" name="currentRegimen" placeholder="Enter ART Regimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%;">
-			    <option value=""> -- Select -- </option>
-			    <?php
-			    foreach($aResult as $parentRow){
-			    ?>
-			     <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
-			    <?php
-			    }
-			    ?>
-			    <option value="other">Other</option>
-			   </select>
+			  <label class="radio-inline">
+			   <input type="radio" class="" id="secondLine" name="artLine" value="2" title="Please check ART Line"> Second Line
+			  </label>
                         </td>
                         <td style="width:8%">
                         <label for="cdCells">CD4(cells/ul)  </label>
@@ -201,10 +192,23 @@ foreach($fResult as $fDetails){
                         </td>
                       </tr>
                       <tr>
-			<td class="newArtRegimen" style="display: none;"><label for="newArtRegimen">New ART Regimen</label><span class="mandatory">*</span></td>
-                        <td class="newArtRegimen" style="display: none;">
-                          <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="New Art Regimen" style="width:100%;" >
+			<td style="width:8%">
+                          <label for="currentRegimen">Current Regimen </label>
                         </td>
+			<td style="width:10%">
+			   <select class="form-control" id="currentRegimen" name="currentRegimen" title="Please choose ART Regimen" onchange="checkValue();" style="width: 100%;">
+			   <option value=""> -- Select -- </option>
+			   <?php
+			   foreach($aResult as $parentRow){
+			   ?>
+			    <option value="<?php echo $parentRow['art_code']; ?>"><?php echo $parentRow['art_code']; ?></option>
+			   <?php
+			   }
+			   ?>
+			   <option value="other">Other</option>
+			  </select>
+			  <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="New Art Regimen" title="Please enter new ART regimen" style="display:none;width:100%;margin-top:1vh;">
+			</td>
                         <td>
 			  <label for="regStartDate">Current Regimen Start Date</label>
 			</td>
@@ -252,14 +256,14 @@ foreach($fResult as $fDetails){
 			  <label for="defaulter">Defaulter/ LTFU/ Poor Adherer</label><br/>
 			  <label class="radio-inline">
 			  <input type="radio" id="defaulter" name="reasonForTest" value="VL (after 3 months EAC)" title="Check Defaulter/ LTFU/ Poor Adherer">VL (after 3 months EAC)
-			  </label>&nbsp;&nbsp;&nbsp;
+			  </label>&nbsp;&nbsp;
 			</td>
 			<td colspan="3">
 			  <label for="other">Other</label><br/>
 			  <label class="radio-inline">
                              <input type="radio" id="other" name="reasonForTest" value="Re-collection requested by lab" title="Please check Other">Re-collection requested by lab
                           </label>
-			  <label for="reason">&nbsp;&nbsp;&nbsp;Reason</label>
+			  <label for="reason">&nbsp;&nbsp;&nbsp;&nbsp;Reason</label>
                           <label class="radio-inline">
                             <input type="text" class="form-control" id="reason" name="reason" placeholder="Enter Reason" title="Enter Reason" style="width:100%;" />
                           </label>
@@ -281,11 +285,11 @@ foreach($fResult as $fDetails){
 			  </label>
                           <label class="radio-inline" style="width:46%;">
                              <input type="radio" id="wholeBlood" name="typeOfSample" value="Whole blood" title="Check Whole blood" style="margin-top:10px;">Whole Blood
-			     <input type="text" name="wholeBloodOne" id="wholeBloodOne" class="form-control" style="width: 20%;"/>&nbsp; x &nbsp;<input type="text" name="wholeBloodTwo" id="wholeBloodTwo" class="form-control" style="width: 20%;"/>vial(s)
+			     <input type="text" name="wholeBloodOne" id="wholeBloodOne" class="form-control" style="width: 20%;"/>&nbsp; x &nbsp;<input type="text" name="wholeBloodTwo" id="wholeBloodTwo" class="form-control" style="width: 20%;"/>&nbsp;vial(s)
 			  </label>
-			     <label class="radio-inline" style="width:42%;">
+			  <label class="radio-inline" style="width:42%;">
                              <input type="radio" id="plasma" name="typeOfSample" value="Plasma" title="Check Plasma" style="margin-top:10px;">Plasma
-			     <input type="text" name="plasmaOne" id="plasmaOne" class="form-control" style="width: 20%;"/>&nbsp;ml x &nbsp;<input type="text" name="plasmaTwo" id="plasmaTwo" class="form-control" style="width: 20%;"/>vial(s)
+			     <input type="text" name="plasmaOne" id="plasmaOne" class="form-control" style="width: 20%;"/>&nbsp;ml x &nbsp;<input type="text" name="plasmaTwo" id="plasmaTwo" class="form-control" style="width: 20%;"/>&nbsp;vial(s)
                           </label>
                         </td>
 		      </tr>
