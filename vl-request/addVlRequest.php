@@ -253,14 +253,19 @@ $general=new Deforay_Commons_General();
         }
       }
       
+      function clearDOB(val){
+        if($.trim(val)!= ""){
+          $("#dob").val("");
+        }
+      }
+      
       function changeFormat(date){
         splitDate = date.split("-");
         var fDate = new Date(splitDate[1] + splitDate[2]+", "+splitDate[0]);
         var monthDigit = fDate.getMonth();
         var fMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
         fMonth = (fMonth<10) ? '0'+fMonth: fMonth;
-        format = splitDate[2]+'-'+fMonth+'-'+splitDate[0];
-        return format; 
+        return splitDate[2]+'-'+fMonth+'-'+splitDate[0];
       }
     </script>
 <?php include('../footer.php');?>

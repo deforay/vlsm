@@ -309,6 +309,12 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
       }
     }
     
+    function clearDOB(val){
+      if($.trim(val)!= ""){
+        $("#dob").val("");
+      }
+    }
+      
     function checkARTRegimenValue(){
       var artRegimen = $("#artRegimen").val();
       if(artRegimen=='other'){
