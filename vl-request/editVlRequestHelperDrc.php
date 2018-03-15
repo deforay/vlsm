@@ -127,7 +127,7 @@ try {
     }
     //Sample type section
     if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!=""){
-        if(trim($_POST['specimenType'])!= 1){
+        if(trim($_POST['specimenType'])!= 2){
             $_POST['conservationTemperature'] = NULL;
             $_POST['durationOfConservation'] = NULL;
         }
