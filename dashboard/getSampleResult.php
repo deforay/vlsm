@@ -209,6 +209,9 @@ foreach($stVlResult as $vlData){
         subtitle: {
             text: ''
         },
+        credits: {
+            enabled: false
+         },
         xAxis: {
             categories: [
             <?php
@@ -272,6 +275,9 @@ foreach($stVlResult as $vlData){
         subtitle: {
             text: ''
         },
+        credits: {
+            enabled: false
+         },
         xAxis: {
             categories: [<?php
             foreach($waitingResult as $total){
@@ -328,6 +334,9 @@ $('#samplesTestedChart').highcharts({
         subtitle: {
             text: ''
         },
+        credits: {
+            enabled: false
+         },
         xAxis: {
             categories: [<?php
             foreach($acceptedResult as $total){
@@ -385,6 +394,9 @@ $('#samplesRejectedChart').highcharts({
         subtitle: {
             text: ''
         },
+        credits: {
+            enabled: false
+         },
         xAxis: {
             categories: [<?php
             foreach($rejectedResult as $total){
