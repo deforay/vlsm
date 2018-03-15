@@ -23,14 +23,14 @@ $primaryKey="vl_sample_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-				$aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-        $orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+				$aColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
+        $orderColumns = array('vl.sample_code','vl.remote_sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
 				$sampleCode = 'sample_code';
 				if($sarr['user_type']=='remoteuser'){
 					$sampleCode = 'remote_sample_code';
 				}else if($sarr['user_type']=='standalone') {
-					$aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
-					$orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name');
+					$aColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
+					$orderColumns = array('vl.sample_code','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','s.sample_name','vl.result','ts.status_name','funding_source_name','i_partner_name');
 				}
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -107,8 +107,7 @@ $primaryKey="vl_sample_id";
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f_d.form_name,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name FROM vl_request_form as vl INNER JOIN form_details as f_d ON f_d.vlsm_country_id = vl.vlsm_country_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing";
-	
+	$sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f_d.form_name,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name,r_f_s.funding_source_name,r_i_p.i_partner_name FROM vl_request_form as vl INNER JOIN form_details as f_d ON f_d.vlsm_country_id = vl.vlsm_country_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
        //echo $sQuery;die;
 	$start_date = '';
 	$end_date = '';
@@ -193,14 +192,20 @@ $primaryKey="vl_sample_id";
 		    $sWhere = $sWhere.' AND vl.patient_gender ="'.$_POST['gender'].'"';
 		}
 	    }
-		if(isset($_POST['showReordSample']) && trim($_POST['showReordSample'])!= ''){
-	        $sWhere = $sWhere.' AND vl.sample_reordered ="'.$_POST['showReordSample'].'"';
+	    if(isset($_POST['showReordSample']) && trim($_POST['showReordSample'])!= ''){
+	      $sWhere = $sWhere.' AND vl.sample_reordered ="'.$_POST['showReordSample'].'"';
 	    }
-		if(isset($_POST['patientPregnant']) && trim($_POST['patientPregnant'])!= ''){
-	        $sWhere = $sWhere.' AND vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
+	    if(isset($_POST['patientPregnant']) && trim($_POST['patientPregnant'])!= ''){
+	      $sWhere = $sWhere.' AND vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
 	    }
-		if(isset($_POST['breastFeeding']) && trim($_POST['breastFeeding'])!= ''){
-	        $sWhere = $sWhere.' AND vl.is_patient_breastfeeding ="'.$_POST['breastFeeding'].'"';
+	    if(isset($_POST['breastFeeding']) && trim($_POST['breastFeeding'])!= ''){
+	      $sWhere = $sWhere.' AND vl.is_patient_breastfeeding ="'.$_POST['breastFeeding'].'"';
+	    }
+	    if(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= ''){
+	      $sWhere = $sWhere.' AND vl.funding_source ="'.base64_decode($_POST['fundingSource']).'"';
+	    }
+	    if(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= ''){
+	      $sWhere = $sWhere.' AND vl.implementing_partner ="'.base64_decode($_POST['implementingPartner']).'"';
 	    }
 	}else{
 	    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
@@ -291,7 +296,7 @@ $primaryKey="vl_sample_id";
 	        $sWhere = $sWhere.' vl.result_status ='.$_POST['status'];
 		}
 	    }
-		if(isset($_POST['showReordSample']) && trim($_POST['showReordSample'])!= ''){
+	    if(isset($_POST['showReordSample']) && trim($_POST['showReordSample'])!= ''){
 		if(isset($setWhr)){
 		    $sWhere = $sWhere.' AND vl.sample_reordered ="'.$_POST['showReordSample'].'"';
 		}else{
@@ -300,23 +305,23 @@ $primaryKey="vl_sample_id";
 	        $sWhere = $sWhere.' vl.sample_reordered ="'.$_POST['showReordSample'].'"';
 		}
 	    }
-		if(isset($_POST['patientPregnant']) && trim($_POST['patientPregnant'])!= ''){
-		if(isset($setWhr)){
-		    $sWhere = $sWhere.' AND vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
-		}else{
-		  $setWhr = 'where';
-		  $sWhere=' where '.$sWhere;
-	      $sWhere = $sWhere.' vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
-		}
+	    if(isset($_POST['patientPregnant']) && trim($_POST['patientPregnant'])!= ''){
+	      if(isset($setWhr)){
+		  $sWhere = $sWhere.' AND vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
+	      }else{
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+		$sWhere = $sWhere.' vl.is_patient_pregnant ="'.$_POST['patientPregnant'].'"';
+	      }
 	    }
-		if(isset($_POST['breastFeeding']) && trim($_POST['breastFeeding'])!= ''){
-				if(isset($setWhr)){
-						$sWhere = $sWhere.' AND vl.is_patient_breastfeeding ="'.$_POST['breastFeeding'].'"';
-				}else{
-					$setWhr = 'where';
-					$sWhere=' where '.$sWhere;
-						$sWhere = $sWhere.' vl.is_patient_breastfeeding ="'.$_POST['breastFeeding'].'"';
-				}
+	    if(isset($_POST['breastFeeding']) && trim($_POST['breastFeeding'])!= ''){
+	      if(isset($setWhr)){
+		$sWhere = $sWhere.' AND vl.is_patient_breastfeeding ="'.$_POST['breastFeeding'].'"';
+	      }else{
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+		$sWhere = $sWhere.' vl.is_patient_breastfeeding ="'.$_POST['breastFeeding'].'"';
+	      }
 	    }
 	    if(isset($_POST['gender']) && trim($_POST['gender'])!= ''){
 		if(isset($setWhr)){
@@ -333,6 +338,24 @@ $primaryKey="vl_sample_id";
 			$sWhere = $sWhere.' vl.patient_gender ="'.$_POST['gender'].'"';
 		    }
 		}
+	    }
+	    if(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= ''){
+	      if(isset($setWhr)){
+		$sWhere = $sWhere.' AND vl.funding_source ="'.base64_decode($_POST['fundingSource']).'"';
+	      }else{
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+		$sWhere = $sWhere.' vl.funding_source ="'.base64_decode($_POST['fundingSource']).'"';
+	      }
+	    }
+	    if(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= ''){
+	      if(isset($setWhr)){
+		$sWhere = $sWhere.' AND vl.implementing_partner ="'.base64_decode($_POST['implementingPartner']).'"';
+	      }else{
+		$setWhr = 'where';
+		$sWhere=' where '.$sWhere;
+		$sWhere = $sWhere.' vl.implementing_partner ="'.base64_decode($_POST['implementingPartner']).'"';
+	      }
 	    }
 	}
 	if($sWhere!=''){
@@ -361,7 +384,7 @@ $primaryKey="vl_sample_id";
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl INNER JOIN form_details as f_d ON f_d.vlsm_country_id = vl.vlsm_country_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.*,s.sample_name,b.*,ts.*,f_d.form_name,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name,r_f_s.funding_source_name,r_i_p.i_partner_name FROM vl_request_form as vl INNER JOIN form_details as f_d ON f_d.vlsm_country_id = vl.vlsm_country_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
@@ -382,9 +405,9 @@ $primaryKey="vl_sample_id";
         foreach ($rResult as $aRow) {
             $row = array();
 	    $row[] = $aRow['sample_code'];
-			if($sarr['user_type']!='standalone'){
-	    $row[] = $aRow['remote_sample_code'];
-			}
+	    if($sarr['user_type']!='standalone'){
+	      $row[] = $aRow['remote_sample_code'];
+	    }
 	    $row[] = $aRow['batch_code'];
 	    $row[] = $aRow['patient_art_no'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
@@ -392,6 +415,8 @@ $primaryKey="vl_sample_id";
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
             $row[] = ucwords($aRow['status_name']);
+	    $row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name'])!= '')?ucwords($aRow['funding_source_name']):'';
+	    $row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
             $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
            
             $output['aaData'][] = $row;

@@ -83,6 +83,12 @@ try {
           $result=$db->insert('r_art_code_details',$data);
           $_POST['currentRegimen'] = $_POST['newArtRegimen'];
     }
+    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'accept'){
+        $_POST['rejectionReason'] = NULL;
+    }
+    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'reject'){
+        $_POST['vlResult'] = NULL;
+    }
     $vldata=array(
         'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
         'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
@@ -127,9 +133,9 @@ try {
         'sample_received_at_vl_lab_datetime'=>$_POST['receivedDate'],
         'tech_name_png'=>(isset($_POST['techName']) && trim($_POST['techName'])!='')? $_POST['techName'] :  NULL,
         'sample_tested_datetime'=>(isset($_POST['testDate']) && $_POST['testDate']!='' ? $_POST['testDate'] :  NULL),
-        'last_viral_load_result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
+        //'last_viral_load_result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
         'vl_test_platform'=>(isset($_POST['testingTech']) && trim($_POST['testingTech'])!='') ? $_POST['testingTech'] :  NULL,
-        'result'=>(isset($_POST['finalViralResult']) && $_POST['finalViralResult']!='' ? $_POST['finalViralResult'] :  NULL),
+        'result'=>(isset($_POST['vlResult']) && trim($_POST['vlResult'])!='') ? $_POST['vlResult'] :  NULL,
         'qc_tech_name'=>(isset($_POST['qcTechName']) && $_POST['qcTechName']!='' ? $_POST['qcTechName'] :  NULL),
         'qc_tech_sign'=>(isset($_POST['qcTechSign']) && $_POST['qcTechSign']!='' ? $_POST['qcTechSign'] :  NULL),
         'qc_date'=>$_POST['qcDate'],

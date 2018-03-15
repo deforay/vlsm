@@ -152,9 +152,9 @@
                                 <td>
                                     <input type="text" class="form-control date" id="dateOfDemand" name="dateOfDemand" placeholder="e.g 09-Jan-1992" title="Please enter date de la demande" value="<?php echo $vlQueryInfo[0]['date_test_ordered_by_physician']; ?>" style="width:100%;"/>
                                 </td>
-                                <td><label for="fundingSource">Funding Source </label></td>
+                                <td><label for="fundingSource">Source de financement </label></td>
                                 <td>
-                                    <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source" style="width:100%;">
+                                    <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose source de financement" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
                                       foreach($fundingSourceList as $fundingSource){
@@ -163,9 +163,9 @@
                                       <?php } ?>
                                     </select>
                                 </td>
-                                <td><label for="implementingPartner">Implementing Partner </label></td>
+                                <td><label for="implementingPartner">Partenaire de mise en œuvre </label></td>
                                 <td>
-                                    <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
+                                    <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
                                       foreach($implementingPartnerList as $implementingPartner){
@@ -228,7 +228,7 @@
                             <tr>
                                 <td><label>Régime ARV en cours </label></td>
                                 <td colspan="7">
-                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkARTRegimenValue();" style="width:30%;">
+                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkARTRegimenValue();" style="width:40%;">
                                     <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($aResult as $arv){ ?>
                                        <option value="<?php echo $arv['art_code']; ?>" <?php echo($arv['art_code'] == $vlQueryInfo[0]['current_regimen'])?'selected="selected"':''; ?>><?php echo $arv['art_code']; ?></option>
@@ -241,7 +241,7 @@
                             <tr class="newArtRegimen" style="display:none;">
                                 <td><label for="newArtRegimen">Autre, à préciser </label></td>
                                 <td colspan="7">
-                                    <input type="text" class="form-control" name="newArtRegimen" id="newArtRegimen" placeholder="Régime ARV" title="Please enter régime ARV" style="width:30%;" >
+                                    <input type="text" class="form-control" name="newArtRegimen" id="newArtRegimen" placeholder="Régime ARV" title="Please enter régime ARV" style="width:40%;">
                                 </td>
                             </tr>
                             <tr>
@@ -281,7 +281,7 @@
                                 </td>
                                 <td><label for="viralLoadNo">Charge virale N </label></td>
                                 <td colspan="4">
-                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" value="<?php echo $vlQueryInfo[0]['vl_test_number']; ?>" style="width:60%;"/>
+                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" value="<?php echo $vlQueryInfo[0]['vl_test_number']; ?>" style="width:80%;"/>
                                 </td>
                             </tr>
                             <tr id="femaleElements">
@@ -369,10 +369,10 @@
                                 </td>
                               </tr>
                             <?php } ?>
-                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_type'] == 2)?'':'none'; ?>;">
+                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_type'] == 1)?'':'none'; ?>;">
                                 <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" value="<?php echo $vlQueryInfo[0]['plasma_conservation_temperature']; ?>" style="width:80%;"/>°C
+                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" value="<?php echo $vlQueryInfo[0]['plasma_conservation_temperature']; ?>" style="width:90%;"/>°C
                                 </td>
                                 <td><label for="durationOfConservation">Durée de conservation </label></td>
                                 <td>
@@ -419,7 +419,7 @@
                             <tr class="rejectionReason" style="display:<?php echo($vlQueryInfo[0]['result_status'] == 4)?'':'none'; ?>;">
                                 <td><label for="rejectionReason">Motifs de rejet <span class="mandatory">*</span></label></td>
                                 <td>
-                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:80%;">
+                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:40%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($rejectionResult as $rjctReason){ ?>
                                        <option value="<?php echo $rjctReason['rejection_reason_id']; ?>" <?php echo($vlQueryInfo[0]['reason_for_sample_rejection'] == $rjctReason['rejection_reason_id'])?'selected="selected"':''; ?>><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
@@ -458,7 +458,7 @@
                             <tr>
                                 <td><label for="testingPlatform">Technique utilisée </label></td>
                                 <td colspan="3">
-                                  <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:230px;">
+                                  <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:30%;">
                                     <option value="">-- Sélectionner --</option>
                                     <?php foreach($importResult as $mName) { ?>
                                       <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"<?php echo ($vlQueryInfo[0]['vl_test_platform'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit']==$mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'])?"selected='selected'":""?>><?php echo $mName['machine_name'];?></option>
@@ -469,7 +469,7 @@
                               <tr>
                                 <td class="vlResult"><label for="vlResult">Résultat</label></td>
                                 <td class="vlResult">
-                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:66%;"/>copies/ml
                                 </td>
                                 <td class="vlLog"><label for="vlLog">Log </label></td>
                                 <td class="vlLog">
@@ -597,7 +597,7 @@
     }
     function checkSpecimenType(){
       var specimenType = $("#specimenType").val();
-      if(specimenType == 2){
+      if(specimenType == 1){
         $(".plasmaElement").show();
       }else{
         $(".plasmaElement").hide();
@@ -661,6 +661,7 @@
         }
       }
     }
+    
     function validateNow(){
       flag = deforayValidator.init({
         formId: 'editVlRequestForm'
@@ -670,6 +671,4 @@
         document.getElementById('editVlRequestForm').submit();
       }
     }
-   
-     
   </script>
