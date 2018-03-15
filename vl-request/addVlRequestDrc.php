@@ -101,9 +101,10 @@
                         <table class="table" style="width:100%">
                             <tr>
                                 <td><label for="sampleCode">échantillon id </label><span class="mandatory">*</span></td>
-                                <td colspan="5">
-                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="échantillon id" title="Please enter échantillon id" style="width:20%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
+                                <td>
+                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
+                                <td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -169,33 +170,33 @@
                             </tr>
                         </table>
                         <div class="box-header with-border">
-                            <h3 class="box-title">Information sur le patient </h3>&nbsp;&nbsp;&nbsp;
-                        <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" class="" placeholder="Code du patient" title="Please enter code du patient"/>&nbsp;&nbsp;
-                        <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a><span id="showEmptyResult" style="display:none;color: #ff0000;font-size: 15px;"><b>&nbsp;No Patient Found</b></span>
+                          <h3 class="box-title">Information sur le patient </h3>&nbsp;&nbsp;&nbsp;
+                          <input style="width:30%;" type="text" name="artPatientNo" id="artPatientNo" placeholder="Code du patient" title="Please enter code du patient"/>&nbsp;&nbsp;
+                          <a style="margin-top:-0.35%;" href="javascript:void(0);" class="btn btn-default btn-sm" onclick="showPatientList();"><i class="fa fa-search">&nbsp;</i>Search</a><span id="showEmptyResult" style="display:none;color: #ff0000;font-size: 15px;"><b>&nbsp;No Patient Found</b></span>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:14%;"><label for="">Date de naissance </label></td>
-                                <td style="width:14%;">
+                                <td style="width:10% !important;"><label for="">Date de naissance </label></td>
+                                <td style="width:15% !important;">
                                     <input type="text" class="form-control date" id="dob" name="dob" placeholder="e.g 09-Jan-1992" title="Please select date de naissance" onchange="getAge();checkARTInitiationDate();" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInYears">Âge en années </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" style="width:100%;"/>
+                                <td style="width:6% !important;"><label for="ageInYears">Âge en années </label></td>
+                                <td style="width:19% !important;">
+                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" onblur="clearDOB(this.value);" style="width:100%;"/>
                                 </td>
-                                <td style="width:14%;"><label for="ageInMonths">Âge en mois </label></td>
-                                <td style="width:14%;">
-                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" style="width:100%;"/>
+                                <td style="width:10% !important;"><label for="ageInMonths">Âge en mois </label></td>
+                                <td style="width:15% !important;">
+                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" onblur="clearDOB(this.value);" style="width:100%;"/>
                                 </td>
-                                <td><label for="sex">Sexe </label></td>
-                                <td style="width:16%;">
+                                <td style="width:10% !important;"><label for="sex">Sexe </label></td>
+                                <td style="width:15% !important;">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">M</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check sexe">
+                                      <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check sexe">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">F</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check sexe">
+                                      <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check sexe">
                                     </label>
                                 </td>
                             </tr>
@@ -204,25 +205,26 @@
                                 <td>
                                     <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"  onchange="checkPatientDetails('vl_request_form','patient_art_no',this,null)"/>
                                 </td>
-                                <td colspan="2"><label for="isPatientNew">Si S/ ARV </label>
+                                <td colspan="2"><label for="isPatientNew">Si S/ARV </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="isPatientNewYes" name="isPatientNew" value="yes" title="Please check Si S/ ARV">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="isPatientNewNo" name="isPatientNew" value="no">
+                                        <input type="radio" id="isPatientNewNo" name="isPatientNew" value="no">
                                     </label>
                                 </td>
                                 <td class="du" style="visibility:hidden;"><label for="">Date du début des ARV </label></td>
-                                <td class="du" colspan="3" style="visibility:hidden;">
-                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;"/> (Jour/Mois/Année)
+                                <td class="du" style="visibility:hidden;">
+                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;"/> <br>(Jour/Mois/Année)
                                 </td>
+                                <td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label>Régime ARV en cours </label></td>
-                                <td colspan="7">
-                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkARTRegimenValue();" style="width:40%;">
+                                <td>
+                                  <select class="form-control" name="artRegimen" id="artRegimen" title="Please choose régime ARV en cours" onchange="checkARTRegimenValue();" style="width:100%;">
                                     <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($aResult as $arv){ ?>
                                        <option value="<?php echo $arv['art_code']; ?>"><?php echo $arv['art_code']; ?></option>
@@ -230,36 +232,33 @@
                                       <option value="other">Autre</option>
                                       <?php } ?>
                                   </select>
+                                  <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="Enter Régime ARV" title="Please enter régime ARV" style="width:100%;margin-top:1vh;display:none;">
                                 </td>
-                            </tr>
-                            <tr class="newArtRegimen" style="display:none;">
-                                <td><label for="newArtRegimen">Autre, à préciser </label></td>
-                                <td colspan="7">
-                                    <input type="text" class="form-control" name="newArtRegimen" id="newArtRegimen" placeholder="Régime ARV" title="Please enter régime ARV" style="width:40%;" >
-                                </td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
-                                <td colspan="2"><label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime de traitement? </label></td>
-                                <td colspan="2">
-                                    <label class="radio-inline">Oui </label>
-                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="changedRegimenYes" name="hasChangedRegimen" value="yes" title="Please check any of one option">
-                                    </label>
-                                    <label class="radio-inline">Non </label>
-                                    <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="changedRegimenNo" name="hasChangedRegimen" value="no" title="Please check any of one option">
-                                    </label>
-                                </td>
-                                <td><label for="reasonForArvRegimenChange" class="arvChangedElement" style="display:none;">Motif de changement de régime ARV </label></td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control arvChangedElement" id="reasonForArvRegimenChange" name="reasonForArvRegimenChange" placeholder="Motif de changement de régime ARV" title="Please enter motif de changement de régime ARV" style="width:100%;display:none;"/>
-                                </td>
+                              <td colspan="3">
+                                <label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime <br>de traitement? </label>
+                                <label class="radio-inline">&nbsp;&nbsp;&nbsp;&nbsp;Oui </label>
+                                <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                  <input type="radio" class="" id="changedRegimenYes" name="hasChangedRegimen" value="yes" title="Please check any of one option">
+                                </label>
+                                <label class="radio-inline">Non </label>
+                                <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
+                                  <input type="radio" class="" id="changedRegimenNo" name="hasChangedRegimen" value="no" title="Please check any of one option">
+                                </label>
+                              </td>
+                              <td colspan="2"><label for="reasonForArvRegimenChange" class="arvChangedElement" style="display:none;">Motif de changement de régime ARV </label></td>
+                              <td colspan="3">
+                                <input type="text" class="form-control arvChangedElement" id="reasonForArvRegimenChange" name="reasonForArvRegimenChange" placeholder="Motif de changement de régime ARV" title="Please enter motif de changement de régime ARV" style="width:100%;display:none;"/>
+                              </td>
                             </tr>
                             <tr class="arvChangedElement" style="display:none;">
-                                <td><label for="">Date du changement de régime ARV </label></td>
-                                <td colspan="7">
-                                    <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" style="width:30%;"/> (Jour/Mois/Année)
-                                </td>
+                              <td><label for="">Date du changement de régime ARV </label></td>
+                              <td>
+                                <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" style="width:100%;"/> <br>(Jour/Mois/Année)
+                              </td>
+                              <td></td><td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label for="reasonForRequest">Motif de la demande </label></td>
@@ -275,66 +274,69 @@
                                     </select>
                                 </td>
                                 <td><label for="viralLoadNo">Charge virale N </label></td>
-                                <td colspan="4">
-                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" style="width:80%;"/>
+                                <td colspan="3">
+                                    <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" style="width:100%;"/>
                                 </td>
+                                <td></td>
+                            </tr>
+                            <tr class="newVlTestReason" style="display:none;">
+                                <td><label for="newVlTestReason">Autre, à préciser <span class="mandatory">*</span></label></td>
+                                <td colspan="2">
+                                    <input type="text" class="form-control" name="newVlTestReason" id="newVlTestReason" placeholder="Virale Demande Raison" title="Please enter virale demande raison" style="width:100%;">
+                                </td>
+                                <td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr id="femaleElements" style="display:none;">
-                                <td><strong>Si Femme : </strong></td>
-                                <td colspan="2">
+                                <td colspan="2"><strong>Si Femme : </strong>
                                     <label for="breastfeeding">allaitante ?</label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check Si allaitante">
+                                      <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check Si allaitante">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no">
+                                      <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no">
                                     </label>
                                 </td>
                                 <td colspan="2"><label for="patientPregnant">Ou enceinte ? </label> 
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Si Ou enceinte ">
+                                      <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Si Ou enceinte ">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="pregNo" name="patientPregnant" value="no">
+                                      <input type="radio" class="" id="pregNo" name="patientPregnant" value="no">
                                     </label>
                                 </td>
-                                <td><label for="trimester">Si Femme  enceinte </label></td>
+                                <td colspan="2"><label for="trimester">Si Femme  enceinte </label></td>
                                 <td colspan="2">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" id="trimester1" name="trimester" value="1" title="Please check trimestre">
+                                      <input type="radio" id="trimester1" name="trimester" value="1" title="Please check trimestre">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 2</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" id="trimester2" name="trimester" value="2">
+                                      <input type="radio" id="trimester2" name="trimester" value="2">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 3</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" id="trimester3" name="trimester" value="3">
+                                      <input type="radio" id="trimester3" name="trimester" value="3">
                                     </label>
-                                </td>
-                            </tr>
-                            <tr class="newVlTestReason" style="display:none;">
-                                <td><label for="newVlTestReason">Autre, à préciser </label></td>
-                                <td colspan="7">
-                                    <input type="text" class="form-control" name="newVlTestReason" id="newVlTestReason" placeholder="Virale Demande Raison" title="Please enter virale demande raison" style="width:30%;" >
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="lastViralLoadResult">Résultat dernière charge virale </label></td>
-                                <td colspan="7">
-                                    <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Résultat dernière charge virale" title="Please enter résultat dernière charge virale" style="width:30%;"/> copies/ml
+                                <td colspan="2">
+                                    <input type="text" class="form-control" id="lastViralLoadResult" name="lastViralLoadResult" placeholder="Résultat dernière charge virale" title="Please enter résultat dernière charge virale" style="width:100%;"/>
                                 </td>
+                                <td>copies/ml</td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label for="">Date dernière charge virale (demande) </label></td>
-                                <td colspan="7">
-                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" onchange="checkLastVLTestDate();" style="width:30%;"/>
+                                <td colspan="2">
+                                    <input type="text" class="form-control date" id="lastViralLoadTestDate" name="lastViralLoadTestDate" placeholder="e.g 09-Jan-1992" title="Please enter date dernière charge virale" onchange="checkLastVLTestDate();" style="width:100%;"/>
                                 </td>
+                                <td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
                                 <td colspan="8"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le service demandeur dans la structure de soins</label></td>
@@ -345,39 +347,42 @@
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:20%;"><label for="">Date du prélèvement <span class="mandatory">*</span></label></td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control dateTime isRequired" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" onchange="checkSampleReceviedDate();checkSampleTestingDate();sampleCodeGeneration();" style="width:30%;"/>
+                                <td style="width:25%;"><label for="">Date du prélèvement <span class="mandatory">*</span></label></td>
+                                <td style="width:25%;">
+                                  <input type="text" class="form-control dateTime isRequired" id="sampleCollectionDate" name="sampleCollectionDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date du prélèvement" onchange="checkSampleReceviedDate();checkSampleTestingDate();sampleCodeGeneration();" style="width:100%;"/>
                                 </td>
+                                <td style="width:25%;"></td><td style="width:25%;"></td>
                             </tr>
                             <?php if(isset($arr['sample_type']) && trim($arr['sample_type']) == "enabled"){ ?>
                               <tr>
                                 <td><label for="specimenType">Type d'échantillon <span class="mandatory">*</span> </label></td>
-                                <td colspan="3">
-                                  <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose type d'échantillon" onchange="checkSpecimenType();" style="width:30%;">
+                                <td>
+                                  <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose type d'échantillon" onchange="checkSpecimenType();" style="width:100%;">
                                     <option value=""> -- Sélectionner -- </option>
                                     <?php foreach($sResult as $type){ ?>
                                      <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
                                      <?php } ?>
                                   </select>
                                 </td>
+                                <td></td><td></td>
                               </tr>
                             <?php } ?>
                             <tr class="plasmaElement" style="display:none;">
                                 <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:90%;"/>°C
+                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:90%;"/>&nbsp;°C
                                 </td>
-                                <td><label for="durationOfConservation">Durée de conservation </label></td>
+                                <td style="text-align:center;"><label for="durationOfConservation">Durée de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" style="width:60%;"/>Jour/Heures
+                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" style="width:100%;"/><br>Jour/Heures
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="">Date de départ au Labo biomol </label></td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" style="width:30%;"/>
+                                <td>
+                                    <input type="text" class="form-control dateTime" id="dateDispatchedFromClinicToLab" name="dateDispatchedFromClinicToLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de départ au Labo biomol" style="width:100%;"/>
                                 </td>
+                                <td></td><td></td>
                             </tr>
                             <tr>
                                 <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le préleveur </label></td>
@@ -392,28 +397,30 @@
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:20%;"><label for="">Date de réception de léchantillon </label></td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" onchange="checkSampleReceviedDate();" style="width:30%;"/>
+                                <td style="width:25%;"><label for="">Date de réception de léchantillon </label></td>
+                                <td style="width:25%;">
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" onchange="checkSampleReceviedDate();" style="width:100%;"/>
                                 </td>
+                                <td style="width:25%;"></td><td style="width:25%;"></td>
                             </tr>
                             <?php if(isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled" && $_SESSION['userType']==''){ ?>
                               <tr>
                                 <td><label for="">Décision prise </label></td>
-                                <td colspan="3">
-                                    <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:30%;">
+                                <td>
+                                    <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:100%;">
                                     <option value=""> -- Sélectionner -- </option>
                                       <option value="6"> En attente d'approbation Clinique </option>
                                       <option value="7">Echantillon accepté</option>
                                       <option value="4">Echantillon rejeté</option>
                                     </select>
                                 </td>
+                                <td></td><td></td>
                               </tr>
                             <?php } ?>
                             <tr class="rejectionReason" style="display:none;">
-                                <td><label for="rejectionReason">Motifs de rejet </label></td>
+                                <td><label for="rejectionReason">Motifs de rejet <span class="mandatory">*</span></label></td>
                                 <td>
-                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:50%;">
+                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($rejectionResult as $rjctReason){ ?>
                                        <option value="<?php echo $rjctReason['rejection_reason_id']; ?>"><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
@@ -422,52 +429,56 @@
                                        <?php } ?>
                                     </select>
                                 </td>
-                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser </label></td>
-                                <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:90%;display:none;"/></td>
+                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser <span class="mandatory">*</span></label></td>
+                                <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:100%;display:none;"/></td>
                             </tr>
                             <!-- <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:30%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
+                                <td>
+                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
                                 </td>
+                               <td></td><td></td>
                             </tr> -->
                             <tr>
                                 <td><label for="labId">Nom du laboratoire </label> </td>
-                                <td colspan="3">
-                                    <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:30%;">
+                                <td>
+                                    <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:100%;">
                                     <option value=""> -- Sélectionner -- </option>
                                     <?php foreach($lResult as $labName){ ?>
                                       <option value="<?php echo $labName['facility_id'];?>" ><?php echo ucwords($labName['facility_name']);?></option>
                                       <?php } ?>
                                   </select>
                                 </td>
+                                <td></td><td></td>
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
                                 <td><label for="">Date de réalisation de la charge virale </label></td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" style="width:30%;"/>
+                                <td>
+                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" style="width:100%;"/>
                                 </td>
+                                <td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label for="testingPlatform">Technique utilisée </label></td>
-                                <td colspan="3">
-                                    <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:30%;">
+                                <td>
+                                    <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:100%;">
                                       <option value="">-- Sélectionner --</option>
                                       <?php foreach($importResult as $mName) { ?>
                                         <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
                                         <?php } ?>
                                     </select>
-                                        </td>
-                                  </tr>
-                                <tr>
+                                </td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="resultSection">
                                 <td class="vlResult"><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:66%;"/>copies/ml
+                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:70%;"/>&nbsp;&nbsp;copies/ml
                                 </td>
-                                <td><label for="vlLog">Log </label></td>
+                                <td style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td>
-                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:70%;"/>copies/ml
+                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:70%;"/>&nbsp;&nbsp;copies/ml
                                 </td>
                             </tr>
                             <tr>
@@ -476,9 +487,10 @@
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
                                 <td><label for="">Date de remise du résultat </label></td>
-                                <td colspan="3">
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" onchange="checkSampleTestingDate();" style="width:30%;"/>
+                                <td>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" onchange="checkSampleTestingDate();" style="width:100%;"/>
                                 </td>
+                                <td></td><td></td>
                             </tr>
                         </table>
                     </div>
@@ -639,8 +651,10 @@
     var vlTestReason = $("#vlTestReason").val();
     if(vlTestReason == "other"){
       $(".newVlTestReason").show();
+      $("#newVlTestReason").addClass("isRequired");
     }else{
       $(".newVlTestReason").hide();
+      $("#newVlTestReason").removeClass("isRequired");
     }
   }
   function checkSpecimenType(){
@@ -651,14 +665,17 @@
       $(".plasmaElement").hide();
     }
   }
+  
   function checkTestStatus(){
     var status = $("#status").val();
     if(status == 4){
       $(".rejectionReason").show();
+      $(".resultSection").hide();
       $("#rejectionReason").addClass('isRequired');
       $("#vlResult").val('').css('pointer-events','none');
       $("#vlLog").val('').css('pointer-events','none');
     }else{
+      $(".resultSection").show();
       $(".rejectionReason").hide();
       $("#rejectionReason").removeClass('isRequired');
       $("#vlResult").css('pointer-events','auto');
@@ -666,14 +683,18 @@
        
     }
   }
+  
   function checkRejectionReason(){
     var rejectionReason = $("#rejectionReason").val();
     if(rejectionReason == "other"){
       $(".newRejectionReason").show();
+      $("#newRejectionReason").addClass('isRequired');
     }else{
       $(".newRejectionReason").hide();
+      $("#newRejectionReason").removeClass('isRequired');
     }
   }
+  
   function checkLastVLTestDate(){
     var artInitiationDate = $("#dateOfArtInitiation").val();
     var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
