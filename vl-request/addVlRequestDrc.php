@@ -645,7 +645,7 @@
   }
   function checkSpecimenType(){
     var specimenType = $("#specimenType").val();
-    if(specimenType == 1){
+    if(specimenType == 2){
       $(".plasmaElement").show();
     }else{
       $(".plasmaElement").hide();

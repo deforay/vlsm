@@ -369,7 +369,7 @@
                                 </td>
                               </tr>
                             <?php } ?>
-                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_type'] == 1)?'':'none'; ?>;">
+                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_type'] == 2)?'':'none'; ?>;">
                                 <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
                                     <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" value="<?php echo $vlQueryInfo[0]['plasma_conservation_temperature']; ?>" style="width:90%;"/>°C
@@ -597,7 +597,7 @@
     }
     function checkSpecimenType(){
       var specimenType = $("#specimenType").val();
-      if(specimenType == 1){
+      if(specimenType == 2){
         $(".plasmaElement").show();
       }else{
         $(".plasmaElement").hide();

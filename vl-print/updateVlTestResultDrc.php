@@ -39,7 +39,7 @@
     $aResult=$db->query($aQuery);
     
     //Set plasma storage temp.
-    if(isset($vlQueryInfo[0]['sample_type']) && $vlQueryInfo[0]['sample_type']!= 1){
+    if(isset($vlQueryInfo[0]['sample_type']) && $vlQueryInfo[0]['sample_type']!= 2){
       $vlQueryInfo[0]['plasma_storage_temperature'] = '';
     }
     
@@ -383,7 +383,7 @@
                                 </td>
                               </tr>
                             <?php } ?>
-                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_type'] == 1)?'':'none'; ?>;">
+                            <tr class="plasmaElement" style="display:<?php echo($vlQueryInfo[0]['sample_type'] == 2)?'':'none'; ?>;">
                                 <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
                                     <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['plasma_conservation_temperature']; ?>" style="width:90%;"/>°C
