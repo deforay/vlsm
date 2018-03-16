@@ -85,7 +85,7 @@
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-inline" method="post" name="addVlRequestForm" id="addVlRequestForm" autocomplete="off" action="addVlRequestHelperDrc.php">
+            <form class="form-horizontal" method="post" name="addVlRequestForm" id="addVlRequestForm" autocomplete="off" action="addVlRequestHelperDrc.php">
               <div class="box-body">
                 <div class="box box-default">
                     <div class="box-body">
@@ -188,7 +188,7 @@
                                 <td style="width:15% !important;">
                                     <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" onblur="clearDOB(this.value);" style="width:100%;"/>
                                 </td>
-                                <td style="width:10% !important;"><label for="sex">Sexe </label></td>
+                                <td style="width:10% !important;text-align:center;"><label for="sex">Sexe </label></td>
                                 <td style="width:15% !important;">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">M</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
@@ -217,7 +217,7 @@
                                 </td>
                                 <td class="du" style="visibility:hidden;"><label for="">Date du début des ARV </label></td>
                                 <td class="du" style="visibility:hidden;">
-                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;"/> <br>(Jour/Mois/Année)
+                                    <input type="text" class="form-control date" id="dateOfArtInitiation" name="dateOfArtInitiation" placeholder="e.g 09-Jan-1992" title="Please enter date du début des ARV" onchange="checkARTInitiationDate();checkLastVLTestDate();" style="width:100%;"/> &nbsp;(Jour/Mois/Année)
                                 </td>
                                 <td></td><td></td>
                             </tr>
@@ -237,8 +237,8 @@
                                 <td></td><td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
-                              <td colspan="3">
-                                <label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime <br>de traitement? </label>
+                              <td colspan="4">
+                                <label for="hasChangedRegimen">Ce patient a-t-il déjà changé de régime de traitement? </label>
                                 <label class="radio-inline">&nbsp;&nbsp;&nbsp;&nbsp;Oui </label>
                                 <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                   <input type="radio" class="" id="changedRegimenYes" name="hasChangedRegimen" value="yes" title="Please check any of one option">
@@ -249,16 +249,16 @@
                                 </label>
                               </td>
                               <td colspan="2"><label for="reasonForArvRegimenChange" class="arvChangedElement" style="display:none;">Motif de changement de régime ARV </label></td>
-                              <td colspan="3">
+                              <td colspan="2">
                                 <input type="text" class="form-control arvChangedElement" id="reasonForArvRegimenChange" name="reasonForArvRegimenChange" placeholder="Motif de changement de régime ARV" title="Please enter motif de changement de régime ARV" style="width:100%;display:none;"/>
                               </td>
                             </tr>
                             <tr class="arvChangedElement" style="display:none;">
                               <td><label for="">Date du changement de régime ARV </label></td>
-                              <td>
-                                <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" style="width:100%;"/> <br>(Jour/Mois/Année)
+                              <td colspan="2">
+                                <input type="text" class="form-control date" id="dateOfArvRegimenChange" name="dateOfArvRegimenChange" placeholder="e.g 09-Jan-1992" title="Please enter date du changement de régime ARV" style="width:100%;"/> &nbsp;(Jour/Mois/Année)
                               </td>
-                              <td></td><td></td><td></td><td></td><td></td><td></td>
+                              <td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label for="reasonForRequest">Motif de la demande </label></td>
@@ -273,11 +273,11 @@
                                       <option value="other">Autre</option>
                                     </select>
                                 </td>
-                                <td><label for="viralLoadNo">Charge virale N </label></td>
-                                <td colspan="3">
+                                <td style="text-align:center;"><label for="viralLoadNo">Charge virale N </label></td>
+                                <td colspan="2">
                                     <input type="text" class="form-control" id="viralLoadNo" name="viralLoadNo" placeholder="Charge virale N" title="Please enter charge virale N" style="width:100%;"/>
                                 </td>
-                                <td></td>
+                                <td></td><td></td>
                             </tr>
                             <tr class="newVlTestReason" style="display:none;">
                                 <td><label for="newVlTestReason">Autre, à préciser <span class="mandatory">*</span></label></td>
@@ -287,38 +287,37 @@
                                 <td></td><td></td><td></td><td></td><td></td>
                             </tr>
                             <tr id="femaleElements" style="display:none;">
-                                <td colspan="2"><strong>Si Femme : </strong>
+                                <td><strong>Si Femme : </strong></td>
+                                <td colspan="2">
                                     <label for="breastfeeding">allaitante ?</label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                       <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check Si allaitante">
                                     </label>
-                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="padding-left:0px !important;margin-left:0;">Non</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                       <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no">
                                     </label>
                                 </td>
-                                <td colspan="2"><label for="patientPregnant">Ou enceinte ? </label> 
+                                <td colspan="5"><label for="patientPregnant">Ou enceinte ? </label> 
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                       <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check Si Ou enceinte ">
                                     </label>
-                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Non</label>
+                                    <label class="radio-inline" style="padding-left:0px !important;margin-left:0;">Non</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                       <input type="radio" class="" id="pregNo" name="patientPregnant" value="no">
-                                    </label>
-                                </td>
-                                <td colspan="2"><label for="trimester">Si Femme  enceinte </label></td>
-                                <td colspan="2">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label for="trimester">Si Femme  enceinte </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 1</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                       <input type="radio" id="trimester1" name="trimester" value="1" title="Please check trimestre">
                                     </label>
-                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 2</label>
+                                    <label class="radio-inline" style="padding-left:0px !important;margin-left:0;">Trimestre 2</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                       <input type="radio" id="trimester2" name="trimester" value="2">
                                     </label>
-                                    <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Trimestre 3</label>
+                                    <label class="radio-inline" style="padding-left:0px !important;margin-left:0;">Trimestre 3</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                       <input type="radio" id="trimester3" name="trimester" value="3">
                                     </label>
@@ -370,11 +369,11 @@
                             <tr class="plasmaElement" style="display:none;">
                                 <td><label for="conservationTemperature">Si plasma,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Température de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:90%;"/>&nbsp;°C
+                                    <input type="text" class="form-control checkNum" id="conservationTemperature" name="conservationTemperature" placeholder="Température de conservation" title="Please enter température de conservation" style="width:100%;"/>&nbsp;(°C)
                                 </td>
                                 <td style="text-align:center;"><label for="durationOfConservation">Durée de conservation </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" style="width:100%;"/><br>Jour/Heures
+                                    <input type="text" class="form-control" id="durationOfConservation" name="durationOfConservation" placeholder="e.g 9/1" title="Please enter durée de conservation" style="width:100%;"/>&nbsp;(Jour/Heures)
                                 </td>
                             </tr>
                             <tr>
@@ -474,11 +473,11 @@
                             <tr class="resultSection">
                                 <td class="vlResult"><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:70%;"/>&nbsp;&nbsp;copies/ml
+                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
                                 </td>
                                 <td style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td>
-                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:70%;"/>&nbsp;&nbsp;copies/ml
+                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
                                 </td>
                             </tr>
                             <tr>
