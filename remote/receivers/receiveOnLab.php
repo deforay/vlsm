@@ -1,8 +1,8 @@
 <?php
 //this file is get the data from remote db
 $data = json_decode(file_get_contents('php://input'), true);
-include(dirname(__FILE__) . "/../includes/MysqliDb.php");
-include(dirname(__FILE__) . "/../General.php");
+include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
+include(dirname(__FILE__) . "/../../General.php");
 $general=new Deforay_Commons_General();
 //global config
 $cQuery="SELECT * FROM global_config";
