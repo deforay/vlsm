@@ -398,7 +398,7 @@
                             <tr>
                                 <td style="width:25%;"><label for="">Date de réception de léchantillon </label></td>
                                 <td style="width:25%;">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" onchange="checkSampleReceviedDate();" style="width:100%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" style="width:100%;"/>
                                 </td>
                                 <td style="width:25%;"></td><td style="width:25%;"></td>
                             </tr>
@@ -406,7 +406,7 @@
                               <tr>
                                 <td><label for="">Décision prise </label></td>
                                 <td>
-                                    <select class="form-control" id="status" name="status" title="Please select décision prise" onchange="checkTestStatus();" style="width:100%;">
+                                    <select class="form-control" id="status" name="status" title="Please select décision prise" <?php echo $labFieldDisabled; ?> onchange="checkTestStatus();" style="width:100%;">
                                     <option value=""> -- Sélectionner -- </option>
                                       <option value="6"> En attente d'approbation Clinique </option>
                                       <option value="7">Echantillon accepté</option>
@@ -419,7 +419,7 @@
                             <tr class="rejectionReason" style="display:none;">
                                 <td><label for="rejectionReason">Motifs de rejet <span class="mandatory">*</span></label></td>
                                 <td>
-                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" onchange="checkRejectionReason();" style="width:100%;">
+                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" <?php echo $labFieldDisabled; ?> onchange="checkRejectionReason();" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php foreach($rejectionResult as $rjctReason){ ?>
                                        <option value="<?php echo $rjctReason['rejection_reason_id']; ?>"><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
@@ -429,7 +429,7 @@
                                     </select>
                                 </td>
                                 <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser <span class="mandatory">*</span></label></td>
-                                <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" style="width:100%;display:none;"/></td>
+                                <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" <?php echo $labFieldDisabled; ?> style="width:100%;display:none;"/></td>
                             </tr>
                             <!-- <tr>
                                 <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
@@ -454,14 +454,14 @@
                             <tr>
                                 <td><label for="">Date de réalisation de la charge virale </label></td>
                                 <td>
-                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" style="width:100%;"/>
+                                    <input type="text" class="form-control date" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" <?php echo $labFieldDisabled; ?> style="width:100%;"/>
                                 </td>
                                 <td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label for="testingPlatform">Technique utilisée </label></td>
                                 <td>
-                                    <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width:100%;">
+                                    <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" <?php echo $labFieldDisabled; ?> style="width:100%;">
                                       <option value="">-- Sélectionner --</option>
                                       <?php foreach($importResult as $mName) { ?>
                                         <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -473,11 +473,11 @@
                             <tr class="resultSection">
                                 <td class="vlResult"><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
+                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
                                 </td>
                                 <td style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td>
-                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
+                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
                                 </td>
                             </tr>
                             <tr>
@@ -487,7 +487,7 @@
                             <tr>
                                 <td><label for="">Date de remise du résultat </label></td>
                                 <td>
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" onchange="checkSampleTestingDate();" style="width:100%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" <?php echo $labFieldDisabled; ?> onchange="checkSampleTestingDate();" style="width:100%;"/>
                                 </td>
                                 <td></td><td></td>
                             </tr>
