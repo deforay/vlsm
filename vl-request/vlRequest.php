@@ -322,8 +322,8 @@ $batResult = $db->rawQuery($batQuery);
   } );
   
   function fnShowHide(iCol){
-        var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
-        oTable.fnSetColumnVis( iCol, bVis ? false : true );
+    var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
+    oTable.fnSetColumnVis( iCol, bVis ? false : true );
   }
   
   function loadVlRequestData(){

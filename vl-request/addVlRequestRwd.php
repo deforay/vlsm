@@ -473,7 +473,7 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-4">
                             <label for="testingPlatform" class="col-lg-5 control-label">VL Testing Platform </label>
                             <div class="col-lg-7">
-                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform">
+                              <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" <?php echo $labFieldDisabled; ?>>
                                 <option value="">-- Select --</option>
                                 <?php foreach($importResult as $mName) { ?>
                                   <option value="<?php echo $mName['machine_name'].'##'.$mName['lower_limit'].'##'.$mName['higher_limit'];?>"><?php echo $mName['machine_name'];?></option>
@@ -486,19 +486,19 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="sampleReceivedDate">Date Sample Received at Testing Lab </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received Date" title="Please select sample received date" onchange="checkSampleReceviedDate()"/>
+                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received Date" title="Please select sample received date" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate()"/>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" onchange="checkSampleTestingDate();"/>
+                                <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" <?php echo $labFieldDisabled; ?> onchange="checkSampleTestingDate();"/>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatched Date" title="Please select result dispatched date"/>
+                                <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatched Date" title="Please select result dispatched date" <?php echo $labFieldDisabled; ?>/>
                             </div>
                         </div>
                       </div>
@@ -507,17 +507,17 @@ $sKey = ''; $sFormat = '';
                             <label class="col-lg-5 control-label" for="noResult">Sample Rejection </label>
                             <div class="col-lg-7">
                               <label class="radio-inline">
-                               <input class="" id="noResultYes" name="noResult" value="yes" title="Please check one" type="radio"> Yes
+                               <input class="" id="noResultYes" name="noResult" value="yes" title="Please check one" type="radio" <?php echo $labFieldDisabled; ?>> Yes
                               </label>
                               <label class="radio-inline">
-                               <input class="" id="noResultNo" name="noResult" value="no" title="Please check one" type="radio"> No
+                               <input class="" id="noResultNo" name="noResult" value="no" title="Please check one" type="radio" <?php echo $labFieldDisabled; ?>> No
                               </label>
                             </div>
                         </div>
                         <div class="col-md-4 rejectionReason" style="display:none;">
                             <label class="col-lg-5 control-label" for="rejectionReason">Rejection Reason </label>
                             <div class="col-lg-7">
-                              <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="checkRejectionReason();">
+                              <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" <?php echo $labFieldDisabled; ?> onchange="checkRejectionReason();">
                                 <option value="">-- Select --</option>
                                 <?php foreach($rejectionTypeResult as $type) { ?>
                                 <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
@@ -537,15 +537,15 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-4 vlResult">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" style="width:100%;" onchange="calculateLogValue(this)"/>
-                              <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd"> Target Not Detected<br>
-                              <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl"> Below Detection Level
+                              <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" <?php echo $labFieldDisabled; ?> style="width:100%;" onchange="calculateLogValue(this)"/>
+                              <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
+                              <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
                             </div>
                         </div>
                         <div class="col-md-4 vlResult">
                             <label class="col-lg-5 control-label" for="vlLog">Viral Load Log </label>
                             <div class="col-lg-7">
-                              <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);"/>
+                              <input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" <?php echo $labFieldDisabled; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
                             </div>
                         </div>
                       </div>
@@ -553,7 +553,7 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
                             <div class="col-lg-7">
-                              <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by">
+                              <select name="approvedBy" id="approvedBy" class="form-control" title="Please choose approved by" <?php echo $labFieldDisabled; ?>>
                                 <option value="">-- Select --</option>
                                 <?php foreach($userResult as $uName){ ?>
                                   <option value="<?php echo $uName['user_id'];?>" <?php echo ($uName['user_id']==$_SESSION['userId'])?"selected=selected":""; ?>><?php echo ucwords($uName['user_name']);?></option>
@@ -564,7 +564,7 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-8">
                             <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
                             <div class="col-lg-10">
-                              <textarea class="form-control" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"></textarea>
+                              <textarea class="form-control" name="labComments" id="labComments" placeholder="Lab comments" <?php echo $labFieldDisabled; ?> style="width:100%"></textarea>
                             </div>
                         </div>
                       </div>
