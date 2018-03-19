@@ -100,13 +100,13 @@ $sKey = ''; $sFormat = '';
                   <div class="box-body">
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                           <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
                           <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                           <label for="sampleReordered">
                             <input type="checkbox" class="" id="sampleReordered" name="sampleReordered" value="yes" title="Please check sample reordered"> Sample Reordered
                           </label>
@@ -115,8 +115,8 @@ $sKey = ''; $sFormat = '';
                        <!-- BARCODESTUFF START -->
                       <?php if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){ ?>
                         <div class="col-xs-3 col-md-3 pull-right">
-                          <div class="form-group">
-                            <label for="sampleCode">Print Barcode Label<span class="mandatory">*</span> </label>
+                          <div class="">
+                            <label for="sampleCode">Print Barcode Label <span class="mandatory">*</span> </label>
                             <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
                           </div>
                         </div>
@@ -125,7 +125,7 @@ $sKey = ''; $sFormat = '';
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                         <label for="province">Province <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
                             <?php echo $province;?>
@@ -133,7 +133,7 @@ $sKey = ''; $sFormat = '';
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                         <label for="district">District  <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
                             <option value=""> -- Select -- </option>
@@ -141,7 +141,7 @@ $sKey = ''; $sFormat = '';
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
                               <?php echo $facility;  ?>
@@ -149,7 +149,7 @@ $sKey = ''; $sFormat = '';
                           </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                           <label for="fCode">Clinic/Health Center Code </label>
                             <input type="text" class="form-control" style="width:100%;" name="fCode" id="fCode" placeholder="Clinic/Health Center Code" title="Please enter clinic/health center code">
                           </div>
@@ -163,6 +163,21 @@ $sKey = ''; $sFormat = '';
                       <div class="col-xs-2 col-md-2 fContactPerson" style="display:none;"><strong>Clinic Contact Person -</strong></div>
                       <div class="col-xs-2 col-md-2 fContactPerson facilityContactPerson" style="display:none;"></div>
                     </div>
+                    <?php if($sarr['user_type'] == 'remoteuser') { ?>
+                      <div class="row">
+                        <div class="col-xs-3 col-md-3">
+                            <div class="">
+                              <label for="labId">Lab Name <span class="mandatory">*</span></label>
+                              <select name="labId" id="labId" class="form-control isRequired" title="Please choose lab" style="width:100%;">
+                                <option value="">-- Select --</option>
+                                <?php foreach($lResult as $labName){ ?>
+                                  <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
+                                  <?php } ?>
+                              </select>
+                            </div>
+                        </div>
+                      </div>
+                    <?php } ?>
                   </div>
                 </div>
                 <div class="box box-primary">
@@ -453,6 +468,7 @@ $sKey = ''; $sFormat = '';
                      </div>
                     </div>
                   </div>
+                  <?php if($sarr['user_type']!= 'remoteuser') { ?>
                   <div class="box box-primary">
                     <div class="box-header with-border">
                       <h3 class="box-title">Laboratory Information</h3>
@@ -570,6 +586,7 @@ $sKey = ''; $sFormat = '';
                       </div>
                     </div>
                   </div>
+                  <?php } ?>
                </div>
               <div class="box-footer">
                 <!-- BARCODESTUFF START -->                    

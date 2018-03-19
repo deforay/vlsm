@@ -464,7 +464,7 @@
                             <tr>
                                 <td><label for="labId">Nom du laboratoire <span class="mandatory">*</span> </label> </td>
                                 <td>
-                                    <select name="labId" id="labId" class="form-control isRequired" title="Please choose lab name" style="width:100%;">
+                                    <select name="labId" id="labId" class="form-control isRequired" title="Please choose laboratoire" style="width:100%;">
                                     <option value=""> -- Sélectionner -- </option>
                                     <?php
                                     foreach($lResult as $labName){

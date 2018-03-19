@@ -132,14 +132,14 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                   <div class="box-body">
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                           <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
                           <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" readonly="readonly" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
                           <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                           <label for="sampleReordered">
                             <input type="checkbox" class="" id="sampleReordered" name="sampleReordered" value="yes" <?php echo(trim($vlQueryInfo[0]['sample_reordered']) == 'yes')?'checked="checked"':'' ?> title="Please check sample reordered"> Sample Reordered
                           </label>
@@ -148,7 +148,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                         <label for="province">Province <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
                             <option value=""> -- Select -- </option>
@@ -159,7 +159,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                         <label for="district">District  <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
                              <option value=""> -- Select -- </option>
@@ -170,7 +170,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
+                        <div class="">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
                               <option data-code="" data-emails="" data-mobile-nos="" value=""> -- Select -- </option>
@@ -195,6 +195,21 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                       <div class="col-xs-2 col-md-2 fContactPerson" style="display:<?php echo(trim($facilityResult[0]['contact_person']) != '')?'':'none'; ?>;"><strong>Clinic Contact Person -</strong></div>
                       <div class="col-xs-2 col-md-2 fContactPerson facilityContactPerson" style="display:<?php echo(trim($facilityResult[0]['contact_person']) != '')?'':'none'; ?>;"><?php echo ucwords($facilityResult[0]['contact_person']); ?></div>
                     </div>
+                    <?php if($sarr['user_type'] == 'remoteuser') { ?>
+                      <div class="row">
+                          <div class="col-xs-3 col-md-3">
+                            <div class="">
+                              <label for="labId">Lab Name <span class="mandatory">*</span></label>
+                                <select name="labId" id="labId" class="form-control isRequired" title="Please choose lab">
+                                  <option value="">-- Select --</option>
+                                  <?php foreach($lResult as $labName){ ?>
+                                    <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                          </div>
+                      </div>
+                    <?php } ?>
                   </div>
                 </div>
                 <div class="box box-primary">
@@ -516,6 +531,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                      </div>
                     </div>
                   </div>
+                  <?php if($sarr['user_type']!= 'remoteuser') { ?>
                   <div class="box box-primary">
                     <div class="box-header with-border">
                       <h3 class="box-title">Laboratory Information</h3>
@@ -657,6 +673,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                       <?php } ?>
                     </div>
                   </div>
+                  <?php } ?>
                </div>
               <div class="box-footer">
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>

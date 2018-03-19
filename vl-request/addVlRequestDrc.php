@@ -137,7 +137,7 @@
                                 </td>
                                 <td><label for="supportPartner">Partenaire dappui </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" style="width:100%;"/>
+                                  <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -168,6 +168,20 @@
                                     </select>
                                 </td>
                             </tr>
+                            <?php if($sarr['user_type']=='remoteuser') { ?>
+                              <tr>
+                                  <td><label for="labId">Nom du laboratoire <span class="mandatory">*</span></label> </td>
+                                  <td>
+                                      <select name="labId" id="labId" class="form-control isRequired" title="Please choose laboratoire" style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php foreach($lResult as $labName){ ?>
+                                        <option value="<?php echo $labName['facility_id'];?>" ><?php echo ucwords($labName['facility_name']);?></option>
+                                        <?php } ?>
+                                    </select>
+                                  </td>
+                                  <td></td><td></td>
+                              </tr>
+                            <?php } ?>
                         </table>
                         <div class="box-header with-border">
                           <h3 class="box-title">Information sur le patient </h3>&nbsp;&nbsp;&nbsp;
@@ -389,6 +403,7 @@
                         </table>
                     </div>
                 </div>
+                <?php if($sarr['user_type']!= 'remoteuser') { ?>
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="box-header with-border">
@@ -439,16 +454,16 @@
                                <td></td><td></td>
                             </tr> -->
                             <tr>
-                                <td><label for="labId">Nom du laboratoire </label> </td>
-                                <td>
-                                    <select name="labId" id="labId" class="form-control" title="Please choose lab name" style="width:100%;">
-                                    <option value=""> -- Sélectionner -- </option>
-                                    <?php foreach($lResult as $labName){ ?>
-                                      <option value="<?php echo $labName['facility_id'];?>" ><?php echo ucwords($labName['facility_name']);?></option>
-                                      <?php } ?>
-                                  </select>
-                                </td>
-                                <td></td><td></td>
+                                  <td><label for="labId">Nom du laboratoire </label> </td>
+                                  <td>
+                                      <select name="labId" id="labId" class="form-control" title="Please choose laboratoire" style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php foreach($lResult as $labName){ ?>
+                                        <option value="<?php echo $labName['facility_id'];?>" ><?php echo ucwords($labName['facility_name']);?></option>
+                                        <?php } ?>
+                                    </select>
+                                  </td>
+                                  <td></td><td></td>
                             </tr>
                             <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
@@ -494,6 +509,7 @@
                         </table>
                     </div>
                 </div>
+                <?php } ?>
                 <div class="box-header with-border">
                   <label class="radio-inline" style="margin:0;padding:0;">1. Biffer la mention inutile <br>2. Sélectionner un seul régime de traitement </label>
                 </div>
