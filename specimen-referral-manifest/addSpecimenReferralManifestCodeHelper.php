@@ -22,10 +22,10 @@ try {
                     $db=$db->where('vl_sample_id',$_POST['sampleCode'][$j]);
                     $db->update($packageTableMap,$value); 
                 }
-                $_SESSION['alertMsg']="Package details added successfully";
+                $_SESSION['alertMsg']="Manifest details added successfully";
             }
         }
-    header("location:packageList.php");
+    header("location:specimenReferralManifestList.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
