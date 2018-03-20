@@ -521,9 +521,9 @@ $batResult = $db->rawQuery($batQuery);
             "aoColumns": [
 		{"sClass":"center","bSortable":false},
                 {"sClass":"center"},
-		  <?php if($sarr['user_type']!='standalone'){ ?>
+		<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
-		  <?php } ?>
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},

@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Add New Package";
+$title = "VLSM | Add New Specimen Referral Manifest";
 include('../header.php');
 include('../includes/General.php');
 $general=new Deforay_Commons_General();
@@ -19,10 +19,11 @@ $packageNo = $general->generateRandomString(8);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-edit"></i> Create Package</h1>
+      <h1><i class="fa fa-edit"></i> Create Specimen Referral Manifest</h1>
       <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Package</li>
+	<li><a href="/specimen-referral-manifest/specimenReferralManifestList.php"> Manage Specimen Referral Manifest</a></li>
+        <li class="active">Create Specimen Referral Manifest</li>
       </ol>
     </section>
 
@@ -36,14 +37,14 @@ $packageNo = $general->generateRandomString(8);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method="post" name="addPackageForm" id="addPackageForm" autocomplete="off" action="addPackageCodeHelper.php">
+            <form class="form-horizontal" method="post" name="addSpecimenReferralManifestForm" id="addSpecimenReferralManifestForm" autocomplete="off" action="addSpecimenReferralManifestCodeHelper.php">
               <div class="box-body">
 	              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="packageCode" class="col-lg-4 control-label">Package Code <span class="mandatory">*</span></label>
+                        <label for="packageCode" class="col-lg-4 control-label">Manifest Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
-                        <input type="text" class="form-control isRequired" id="packageCode" name="packageCode" placeholder="Package Code" title="Please enter Package Code" readonly value="<?php echo strtoupper($packageNo);?>" />
+                        <input type="text" class="form-control isRequired" id="packageCode" name="packageCode" placeholder="Manifest Code" title="Please enter manifest code" readonly value="<?php echo strtoupper($packageNo);?>" />
                         </div>
                     </div>
                   </div>
@@ -62,12 +63,12 @@ $packageNo = $general->generateRandomString(8);
                       </div>
                     </div>
                 </div>
-		            <div class="row" id="alertText" style="font-size:18px;"></div>
+		<div class="row" id="alertText" style="font-size:18px;"></div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
                 <a id="packageSubmit" class="btn btn-primary" href="javascript:void(0);" title="Please select machine" onclick="validateNow();return false;" style="pointer-events:none;" disabled>Save </a>
-                <a href="packageList.php" class="btn btn-default"> Cancel</a>
+                <a href="specimenReferralManifestList.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -88,11 +89,11 @@ $packageNo = $general->generateRandomString(8);
   });
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'addPackageForm'
+        formId: 'addSpecimenReferralManifestForm'
     });
     if(flag){
       $.blockUI();
-      document.getElementById('addPackageForm').submit();
+      document.getElementById('addSpecimenReferralManifestForm').submit();
     }
   }
    $(document).ready(function() {
@@ -190,7 +191,7 @@ $packageNo = $general->generateRandomString(8);
     
     function getSampleCodeDetails(){
       $.blockUI();
-      $.post("getPackageSampleCodeDetails.php",
+      $.post("getSpecimenReferralManifestSampleCodeDetails.php",
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);

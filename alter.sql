@@ -1437,3 +1437,13 @@ alter table vl_request_form add FOREIGN key(funding_source) REFERENCES r_funding
 ALTER TABLE `vl_request_form` ADD `lab_technician` VARCHAR(500) NULL DEFAULT NULL AFTER `lab_code`;
 
 UPDATE `facility_details` SET `facility_name` = 'LABORATÓRIO DE BIOLOGIA MOLECULAR' WHERE `facility_details`.`facility_id` = 2618;
+
+-- Pal 20-Mar-2017
+UPDATE `resources` SET `display_name` = 'Manage Specimen Referral Manifests' WHERE `resources`.`resource_id` = 23;
+UPDATE `resources` SET `resource_name` = 'specimen-referral-manifest' WHERE `resources`.`resource_id` = 23;
+
+UPDATE `privileges` SET `privilege_name` = 'specimenReferralManifestList.php' WHERE `privileges`.`privilege_id` = 69;
+
+UPDATE `privileges` SET `privilege_name` = 'addSpecimenReferralManifest.php' WHERE `privileges`.`privilege_id` = 67;
+
+UPDATE `privileges` SET `privilege_name` = 'editSpecimenReferralManifest.php' WHERE `privileges`.`privilege_id` = 68;

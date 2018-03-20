@@ -102,10 +102,10 @@
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlRequestMailMenu").addClass('active');
-  }else if (splitsUrl=='packageList.php' || splitsUrl=='addPackage.php' || splitsUrl=='editPackage.php') {
+  }else if (splitsUrl=='specimenReferralManifestList.php' || splitsUrl=='addSpecimenReferralManifest.php' || splitsUrl=='editSpecimenReferralManifest.php') {
     $(".request").addClass('active');
     $(".allMenu").removeClass('active');
-    $(".packageListMenu").addClass('active');
+    $(".specimenReferralManifestListMenu").addClass('active');
   }else if (splitsUrl=='vlResultMail.php' || splitsUrl=='vlResultMailConfirm.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');

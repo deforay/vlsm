@@ -301,9 +301,9 @@ $formConfigResult=$db->query($formConfigQuery);
                   <!--<li class="allMenu importTestResultMenu">
                     <a href="../vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
                   </li>-->
-              <?php } if(isset($_SESSION['privileges']) && in_array("packageList.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
-                  <li class="allMenu packageListMenu">
-                    <a href="../package/packageList.php"><i class="fa fa-circle-o"></i> Manage Package</a>
+              <?php } if(isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
+                  <li class="allMenu specimenReferralManifestListMenu">
+                    <a href="../specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Manage Specimen Referral <br>Manifest</a>
                   </li>
               <?php } ?>
             </ul>

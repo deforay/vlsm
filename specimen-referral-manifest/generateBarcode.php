@@ -5,9 +5,12 @@ include('../includes/MysqliDb.php');
 include ('../includes/tcpdf/tcpdf.php');
 include('../General.php');
 //define('UPLOAD_PATH','../uploads');
-$general=new Deforay_Commons_General();
-$id=base64_decode($_POST['id']);
-if($id >0){
+$general = new Deforay_Commons_General();
+$id = base64_decode($_POST['id']);
+if(isset($_POST['frmSrc']) && trim($_POST['frmSrc']) == 'pk2'){
+  $id = $_POST['ids'];
+}
+if(trim($id)!= ''){
     if (!file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . "package_barcode") && !is_dir(UPLOAD_PATH. DIRECTORY_SEPARATOR."package_barcode")) {
         mkdir(UPLOAD_PATH. DIRECTORY_SEPARATOR."package_barcode");
     }
@@ -18,28 +21,15 @@ if($id >0){
     for ($i = 0; $i < sizeof($configResult); $i++) {
       $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
     }
-    $bQuery="SELECT * from package_details as pd where package_id=$id";
-    $bResult=$db->query($bQuery);
-    $dateQuery="SELECT sample_tested_datetime,result_reviewed_datetime,pd.package_code,pd.package_id from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id where pd.package_id='".$id."' AND (sample_tested_datetime IS NOT NULL AND sample_tested_datetime!= '' AND sample_tested_datetime!= '00000-00-00 00:00:00') LIMIT 1";
-    $dateResult=$db->query($dateQuery);
-    $resulted = '';
-    $reviewed = '';
-    if(isset($dateResult[0]['sample_tested_datetime']) && $dateResult[0]['sample_tested_datetime']!= '' && $dateResult[0]['sample_tested_datetime']!= NULL && $dateResult[0]['sample_tested_datetime']!= '0000-00-00 00:00:00'){
-        $sampleTestedDate = explode(" ",$dateResult[0]['sample_tested_datetime']);
-        $resulted=$general->humanDateFormat($sampleTestedDate[0])." ".$sampleTestedDate[1];
-    }if(isset($dateResult[0]['result_reviewed_datetime']) && $dateResult[0]['result_reviewed_datetime']!= '' && $dateResult[0]['result_reviewed_datetime']!= NULL && $dateResult[0]['result_reviewed_datetime']!= '0000-00-00 00:00:00'){
-        $resultReviewdDate = explode(" ",$dateResult[0]['result_reviewed_datetime']);
-        $reviewed=$general->humanDateFormat($resultReviewdDate[0])." ".$resultReviewdDate[1];
-    }
+    $bQuery = "SELECT * from package_details as pd where package_id IN($id)";
+    //echo $bQuery;die;
+    $bResult = $db->query($bQuery);
     if(count($bResult)>0){
         // Extend the TCPDF class to create custom Header and Footer
         class MYPDF extends TCPDF {
-            public function setHeading($logo,$text,$package,$resulted,$reviewed) {
+            public function setHeading($logo,$text) {
                 $this->logo = $logo;
                 $this->text = $text;
-                $this->package = $package;
-                $this->resulted = $resulted;
-                $this->reviewed = $reviewed;
             }
             //Page header
             public function Header() {
@@ -56,8 +46,6 @@ if($id >0){
                 $this->SetFont('helvetica', '', 7);
                 $this->writeHTMLCell(30,0,10,26,$this->text, 0, 0, 0, true, 'A', true);
                 $this->SetFont('helvetica', '', 13);
-                //$this->writeHTMLCell(0,0,0,10,'Package : '.$this->package, 0, 0, 0, true, 'C', true);
-                //$this->writeHTMLCell(0,0,0,20,'Package Worksheet', 0, 0, 0, true, 'C', true);
                 $this->writeHTMLCell(0,0,0,10,'SAMPLE REFERAL FORM ', 0, 0, 0, true, 'C', true);
                 $this->writeHTMLCell(0,0,0,20,'National Reference Laboratory', 0, 0, 0, true, 'C', true);
                 $this->SetFont('helvetica', '', 9);
@@ -69,8 +57,6 @@ if($id >0){
                 }
                 $this->SetFont('helvetica', '', 7);
                 $this->writeHTMLCell(30,0,255,26,$this->text, 0, 0, 0, true, 'A', true);
-                //$this->writeHTMLCell(0,0,144,10,'Resulted : '.$this->resulted, 0, 0, 0, true, 'C', true);
-                //$this->writeHTMLCell(0,0,144,16,'Reviewed : '.$this->reviewed, 0, 0, 0, true, 'C', true);
                 $html='<hr/>';
                 $this->writeHTMLCell(0, 0,10,32, $html, 0, 0, 0, true, 'J', true);
             }
@@ -89,7 +75,7 @@ if($id >0){
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         
-        $pdf->setHeading($arr['logo'],$arr['header'],$bResult[0]['package_code'],$resulted,$reviewed);
+        $pdf->setHeading($arr['logo'],$arr['header']);
         
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -150,8 +136,9 @@ if($id >0){
                 </tr>
             </thead>';
     
-    $sampleCounter = 1;
-        $sQuery="SELECT sample_code,facility_name,facility_district,patient_first_name,patient_middle_name,patient_last_name,patient_dob,patient_age_in_years,sample_name,sample_collection_date,patient_gender from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join r_sample_type as st ON st.sample_id=vl.sample_type where pd.package_id=$id";
+        $sampleCounter = 1;
+        $sQuery="SELECT remote_sample_code,facility_name,facility_district,patient_first_name,patient_middle_name,patient_last_name,patient_dob,patient_age_in_years,sample_name,sample_collection_date,patient_gender from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join r_sample_type as st ON st.sample_id=vl.sample_type where pd.package_id IN($id)";
+        //echo $sQuery;die;
         $result=$db->query($sQuery);
         foreach($result as $sample){
             $collectionDate = '';
@@ -163,11 +150,11 @@ if($id >0){
             if(isset($sample['patient_dob']) && $sample['patient_dob'] != '' && $sample['patient_dob']!= NULL && $sample['patient_dob'] != '0000-00-00'){
                 $patientDOB= $general->humanDateFormat($sample['patient_dob']);
             }
-            $params = $pdf->serializeTCPDFtagParameters(array($sample['sample_code'], 'C39', '', '','' ,7, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+            $params = $pdf->serializeTCPDFtagParameters(array($sample['remote_sample_code'], 'C39', '', '','' ,7, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
             //$tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
             $tbl.='<tr style="border:1px solid #333;">';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;width:3%;border:1px solid #333;">'.$sampleCounter.'.</td>';
-            $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;width:7%;border:1px solid #333;">'.$sample['sample_code'].'</td>';
+            $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;width:7%;border:1px solid #333;">'.$sample['remote_sample_code'].'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;width:10%;border:1px solid #333;">'.ucwords($sample['facility_district']).'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;width:10%;border:1px solid #333;">'.ucwords($sample['facility_name']).'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;width:10%;border:1px solid #333;">'.ucwords($sample['patient_first_name']." ".$sample['patient_middle_name']." ".$sample['patient_last_name']).'</td>';

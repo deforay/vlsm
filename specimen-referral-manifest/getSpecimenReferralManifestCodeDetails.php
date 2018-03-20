@@ -24,7 +24,7 @@ $general=new Deforay_Commons_General();
          * you want to insert a non-database field (for example a counter or static image)
         */
         $aColumns = array('p.package_code',"DATE_FORMAT(p.request_created_datetime,'%d-%b-%Y %H:%i:%s')");
-        $orderColumns = array('p.package_code','','p.request_created_datetime');
+        $orderColumns = array('p.package_id','p.package_code','p.package_id','p.request_created_datetime');
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
         $sTable = $tableName;
@@ -110,6 +110,7 @@ $general=new Deforay_Commons_General();
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
+	//echo $sQuery;die;
         //error_log($sQuery);die;
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
@@ -131,29 +132,31 @@ $general=new Deforay_Commons_General();
             "aaData" => array()
         );
         $package = false;
-        if(isset($_SESSION['privileges']) && (in_array("editPackage.php", $_SESSION['privileges']))){
-            $package = true;
+        if(isset($_SESSION['privileges']) && (in_array("editSpecimenReferralManifest.php", $_SESSION['privileges']))){
+          $package = true;
         }
 	
         foreach ($rResult as $aRow) {
-        $humanDate="";
-        $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\''.base64_encode($aRow['package_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-        if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
-        $date = $aRow['request_created_datetime'];
-        $humanDate =  date("d-M-Y H:i:s",strtotime($date));
-        }
-        $disable = '';$pointerEvent = '';
-        if($aRow['package_status']=='dispatch'){
-            $pointerEvent = "pointer-events:none;";
-            $disable = "disabled";
-        }
-        $row = array();
-        $row[] = $aRow['package_code'];
-        $row[] = $aRow['sample_code'];
-        $row[] = $humanDate;
-        if($package){
-            $row[] = '<a href="editPackage.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" '.$disable.' style="margin-right: 2px;'.$pointerEvent.'" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;&nbsp;'.$printBarcode;
-        }
+	  $humanDate="";
+	  $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\''.base64_encode($aRow['package_id']).'\',\'pk1\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+	  if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
+	    $date = $aRow['request_created_datetime'];
+	    $humanDate =  date("d-M-Y H:i:s",strtotime($date));
+	  }
+	  $disable = '';
+	  $pointerEvent = '';
+	  if($aRow['package_status']=='dispatch'){
+	    $pointerEvent = "pointer-events:none;";
+	    $disable = "disabled";
+	  }
+	  $row = array();
+	  $row[]= '<input type="checkbox" name="chkPackage[]" class="chkPackage" id="chkPackage' . $aRow['package_id'] . '"  value="' . $aRow['package_id'] . '" onclick="checkPackage(this);"  />';
+	  $row[] = $aRow['package_code'];
+	  $row[] = $aRow['sample_code'];
+	  $row[] = $humanDate;
+	  if($package){
+	    $row[] = '<a href="editSpecimenReferralManifest.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" '.$disable.' style="margin-right: 2px;'.$pointerEvent.'" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;&nbsp;'.$printBarcode;
+	  }
         $output['aaData'][] = $row;
         }
     echo json_encode($output);

@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Edit Package";
+$title = "VLSM | Edit Specimen Referral Manifest";
 include('../header.php');
 $id=base64_decode($_GET['id']);
 $pQuery = "Select * from package_details where package_id=".$id;
@@ -32,10 +32,11 @@ if($sarr['user_type']=='remoteuser'){
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-edit"></i> Edit Package</h1>
+      <h1><i class="fa fa-edit"></i> Edit Specimen Referral Manifest</h1>
       <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Package</li>
+	<li><a href="/specimen-referral-manifest/specimenReferralManifestList.php"> Manage Specimen Referral Manifest</a></li>
+        <li class="active">Edit Specimen Referral Manifest</li>
       </ol>
     </section>
     <!-- Main content -->
@@ -48,22 +49,22 @@ if($sarr['user_type']=='remoteuser'){
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method="post" name="editPackageForm" id="editPackageForm" autocomplete="off" action="editPackageCodeHelper.php">
+            <form class="form-horizontal" method="post" name="editSpecimenReferralManifestForm" id="editSpecimenReferralManifestForm" autocomplete="off" action="editSpecimenReferralManifestCodeHelper.php">
               <div class="box-body">
 	              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="packageCode" class="col-lg-4 control-label">Package Code <span class="mandatory">*</span></label>
+                        <label for="packageCode" class="col-lg-4 control-label">Manifest Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
-                        <input type="text" class="form-control isRequired" id="packageCode" name="packageCode" placeholder="Package Code" title="Please enter Package Code" readonly value="<?php echo strtoupper($pResult[0]['package_code']);?>" />
+                        <input type="text" class="form-control isRequired" id="packageCode" name="packageCode" placeholder="Manifest Code" title="Please enter manifest code" readonly value="<?php echo strtoupper($pResult[0]['package_code']);?>" />
                         </div>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                        <label for="packageCode" class="col-lg-4 control-label">Package Status <span class="mandatory">*</span></label>
+                        <label for="packageCode" class="col-lg-4 control-label">Manifest Status <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
-                          <select class = "form-control isRequired" name="packageStatus" id="packageStatus" title="Please select package status">
+                          <select class = "form-control isRequired" name="packageStatus" id="packageStatus" title="Please select manifest status">
                             <option value="">-- Select --</option>
                             <option value="pending" <?php echo ($pResult[0]['package_status']=='pending')?"selected='selected'":''; ?>>Pending</option>
                             <option value="dispatch" <?php echo ($pResult[0]['package_status']=='dispatch')?"selected='selected'":''; ?>>Dispatch</option>
@@ -97,7 +98,7 @@ if($sarr['user_type']=='remoteuser'){
               <div class="box-footer">
               <input type="hidden" name="packageId" value="<?php echo $pResult[0]['package_id'];?>"/>
                 <a id="packageSubmit" class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                <a href="packageList.php" class="btn btn-default"> Cancel</a>
+                <a href="specimenReferralManifestList.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -118,12 +119,12 @@ if($sarr['user_type']=='remoteuser'){
 	
   function validateNow(){
     flag = deforayValidator.init({
-        formId: 'editPackageForm'
+        formId: 'editSpecimenReferralManifestForm'
     });
     
     if(flag){
       $.blockUI();
-      document.getElementById('editPackageForm').submit();
+      document.getElementById('editSpecimenReferralManifestForm').submit();
     }
   }
    
@@ -218,7 +219,7 @@ if($sarr['user_type']=='remoteuser'){
     }
     function getSampleCodeDetails(){
       $.blockUI();
-      $.post("getPackageSampleCodeDetails.php",
+      $.post("getSpecimenReferralManifestSampleCodeDetails.php",
       function(data){
 	      if(data != ""){
           $("#sampleDetails").html(data);
