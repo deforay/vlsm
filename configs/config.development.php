@@ -26,4 +26,4 @@ $sPORT = 3306;
 
 // Linux : default for Ubuntu 16.04, may be different for your distribution
 $MYSQLDUMP = '/usr/bin/mysqldump'; 
-$REMOTEURL = '';
+$REMOTEURL = 'http://vl-remote';
