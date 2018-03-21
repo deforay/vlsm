@@ -9,8 +9,8 @@ if(!isset($REMOTEURL) || $REMOTEURL=='')
     die;
 }
 //system config
-$systemConfigQuery ="SELECT * from system_config";
-$systemConfigResult=$db->query($systemConfigQuery);
+$systemConfigQuery = "SELECT * from system_config";
+$systemConfigResult = $db->query($systemConfigQuery);
 $sarr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
@@ -26,7 +26,7 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 }
 //get remote data
 if(trim($sarr['lab_name'])==''){
-    $sarr['lab_name'] = "''";
+  $sarr['lab_name'] = "''";
 }
 $url = $REMOTEURL.'/remote/receivers/receiveOnLab.php';
 $data = array(
@@ -45,6 +45,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 );
 // execute post
 $curl_response = curl_exec($ch);
+//print_r($curl_response);die;
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
