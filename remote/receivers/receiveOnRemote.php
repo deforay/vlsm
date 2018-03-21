@@ -21,7 +21,7 @@ foreach($data['result'] as $key=>$remoteData){
     }
     //check wheather sample code empty or not
     if($lab['remote_sample_code']!=''){
-		$sQuery = "Select vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key from vl_request_form where remote_sample_code='".$lab['remote_sample_code']."'";
+	$sQuery = "Select vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key from vl_request_form where remote_sample_code='".$lab['remote_sample_code']."'";
         $sResult = $db->rawQuery($sQuery);
         if($sResult){
             $lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.

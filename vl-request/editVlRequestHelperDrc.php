@@ -178,10 +178,11 @@ try {
     if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
         $_POST['sampleCode'] = NULL;
     }
-    if($_POST['testingPlatform']!=''){
-          $platForm = explode("##",$_POST['testingPlatform']);
-          $_POST['testingPlatform'] = $platForm[0];
-          }
+    $testingPlatform = NULL;
+    if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
+      $platForm = explode("##",$_POST['testingPlatform']);
+      $testingPlatform = $platForm[0];
+    }
     $vldata=array(
                   'facility_id'=>$_POST['clinicName'],
                   'request_clinician_name'=>$_POST['clinicianName'],
@@ -209,9 +210,9 @@ try {
                   'serial_no'=>$_POST['sampleCode'],
                   'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
                   'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
-                  'vl_test_platform'=>$_POST['testingPlatform'],
-                  'result_value_log'=>$_POST['vlLog'],
-                  'result'=>$_POST['vlResult'],
+                  'vl_test_platform'=>$testingPlatform,
+                  'result_value_log'=>(isset($_POST['vlLog']))?$_POST['vlLog']:NULL,
+                  'result'=>(isset($_POST['vlResult']))?$_POST['vlResult']:NULL,
                   'date_test_ordered_by_physician'=>$_POST['dateOfDemand'],
                   'funding_source'=>(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= '')?base64_decode($_POST['fundingSource']):NULL,
                   'implementing_partner'=>(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= '')?base64_decode($_POST['implementingPartner']):NULL,

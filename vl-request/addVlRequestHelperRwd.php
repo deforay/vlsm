@@ -144,9 +144,9 @@ try {
         $_POST['vlLog'] = '';
     }
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
-        $_POST['result'] = $_POST['vlResult'];
-    }else if($_POST['vlLog']!=''){
-        $_POST['result'] = $_POST['vlLog'];
+      $_POST['result'] = $_POST['vlResult'];
+    }else if(isset($_POST['vlLog']) && trim($_POST['vlLog'])!=''){
+      $_POST['result'] = $_POST['vlLog'];
     }
     if($sarr['user_type']=='remoteuser'){
         $sampleCode = 'remote_sample_code';

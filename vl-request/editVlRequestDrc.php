@@ -34,7 +34,7 @@
     $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";
     $stateResult=$db->query($stateQuery);
     if(!isset($stateResult[0]['facility_state']) || $stateResult[0]['facility_state']== ''){
-      $stateResult[0]['facility_state'] = 0;
+      $stateResult[0]['facility_state'] = "";
     }
     //district details
     $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$stateResult[0]['facility_state']."'";
@@ -42,7 +42,7 @@
     $provinceQuery="SELECT * from province_details where province_name='".$stateResult[0]['facility_state']."'";
     $provinceResult=$db->query($provinceQuery);
     if(!isset($provinceResult[0]['province_code']) || $provinceResult[0]['province_code']==''){
-      $provinceResult[0]['province_code'] = 0;
+      $provinceResult[0]['province_code'] = "";
     }
     //get ART list
     $aQuery="SELECT * from r_art_code_details"; // where nation_identifier='drc'";
