@@ -49,8 +49,7 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
-if(count($result)>0)
-{
+if(count($result)>0){
     $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
     $allColResult = $db->rawQuery($allColumns);
     $oneDimensionalArray = array_map('current', $allColResult);

@@ -113,11 +113,11 @@ if(sizeof($requestResult)> 0){
           $sampleReceivedTime =$expStr[1];
         }
 
-        if(isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime'])!='' && $result['sample_tested_datetime']!='0000-00-00 00:00:00'){
-          $expStr=explode(" ",$result['sample_tested_datetime']);
-          $result['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+        if(isset($result['result_printed_datetime']) && trim($result['result_printed_datetime'])!='' && $result['result_printed_datetime']!='0000-00-00 00:00:00'){
+          $expStr=explode(" ",$result['result_printed_datetime']);
+          $result['result_printed_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
         }else{
-          $result['sample_tested_datetime']='';
+          $result['result_printed_datetime']='';
         }
 
         if(isset($result['last_viral_load_date']) && trim($result['last_viral_load_date'])!='' && $result['last_viral_load_date']!='0000-00-00'){
@@ -289,7 +289,7 @@ if(sizeof($requestResult)> 0){
                    $html .='</tr>';
                    $html .='<tr>';
                      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$sampleReceivedDate." ".$sampleReceivedTime.'</td>';
-                     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
+                     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['result_printed_datetime'].'</td>';
                      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['sample_name']).'</td>';
                      $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['vl_test_platform']).'</td>';
                    $html .='</tr>';
@@ -404,8 +404,12 @@ if(sizeof($requestResult)> 0){
         );
         $db->insert($tableName1,$data);
         //Update print datetime in VL tbl.
-        $db=$db->where('vl_sample_id',$result['vl_sample_id']);
-        $db->update($tableName2,array('result_printed_datetime'=>$general->getDateTime()));
+        $vlQuery = "SELECT result_printed_datetime FROM vl_request_form as vl WHERE vl.vl_sample_id ='".$result['vl_sample_id']."'";
+        $vlResult = $db->query($vlQuery);
+        if($vlResult[0]['result_printed_datetime'] == NULL || trim($vlResult[0]['result_printed_datetime']) == '' || $vlResult[0]['result_printed_datetime'] =='0000-00-00 00:00:00'){
+           $db = $db->where('vl_sample_id',$result['vl_sample_id']);
+           $db->update($tableName2,array('result_printed_datetime'=>$general->getDateTime()));
+        }
       }
     }
 

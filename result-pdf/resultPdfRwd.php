@@ -439,8 +439,12 @@ if(sizeof($requestResult)> 0){
         );
         $db->insert($tableName1,$data);
         //Update print datetime in VL tbl.
-        $db=$db->where('vl_sample_id',$result['vl_sample_id']);
-        $db->update($tableName2,array('result_printed_datetime'=>$general->getDateTime()));
+        $vlQuery = "SELECT result_printed_datetime FROM vl_request_form as vl WHERE vl.vl_sample_id ='".$result['vl_sample_id']."'";
+        $vlResult = $db->query($vlQuery);
+        if($vlResult[0]['result_printed_datetime'] == NULL || trim($vlResult[0]['result_printed_datetime']) == '' || $vlResult[0]['result_printed_datetime'] =='0000-00-00 00:00:00'){
+           $db=$db->where('vl_sample_id',$result['vl_sample_id']);
+           $db->update($tableName2,array('result_printed_datetime'=>$general->getDateTime()));
+        }
       }
     }
 
