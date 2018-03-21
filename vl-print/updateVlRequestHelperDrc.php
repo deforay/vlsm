@@ -30,22 +30,23 @@ try {
             $_POST['rejectionReason'] = NULL;
         }
     }
-     //Set sample testing date
+     //Set result prinetd date time
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
           $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
           $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
      }else{
          $_POST['sampleTestingDateAtLab'] = NULL;
      }
-     //Set Date of Completion of Viral Load
+    //Set sample testing date
     if(isset($_POST['dateOfCompletionOfViralLoad']) && trim($_POST['dateOfCompletionOfViralLoad'])!=""){
-        $_POST['dateOfCompletionOfViralLoad']=$general->dateFormat($_POST['dateOfCompletionOfViralLoad']);  
+      $dateofCompletionofViralLoad = explode(" ",$_POST['dateOfCompletionOfViralLoad']);
+      $_POST['dateOfCompletionOfViralLoad'] = $general->dateFormat($dateofCompletionofViralLoad[0])." ".$dateofCompletionofViralLoad[1];  
     }else{
-        $_POST['dateOfCompletionOfViralLoad'] = NULL;
+      $_POST['dateOfCompletionOfViralLoad'] = NULL;
     }
-    if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
-        $_POST['sampleCode'] = NULL;
-    }
+    //if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
+    //    $_POST['sampleCode'] = NULL;
+    //}
     $testingPlatform = '';
     if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
         $platForm = explode("##",$_POST['testingPlatform']);
@@ -53,13 +54,13 @@ try {
     }
         $vldata=array(
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
-          'sample_code'=>$_POST['sampleCode'],
-          'serial_no'=>$_POST['sampleCode'],
-          'result_approved_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
+          //'sample_code'=>$_POST['sampleCode'],
+          //'serial_no'=>$_POST['sampleCode'],
+          'sample_tested_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
           'vl_test_platform'=>$testingPlatform,
           'result_value_log'=>$_POST['vlLog'],
           'result'=>$_POST['vlResult'],
-          'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
+          //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
           'last_modified_datetime'=>$general->getDateTime(),
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
         );

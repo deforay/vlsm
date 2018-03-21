@@ -25,11 +25,11 @@ if(count($fMapResult)>0){
   $fMapResult = array_map('current', $fMapResult);
   $fMapResult = implode(",",$fMapResult);
 }else{
-    $fMapResult = "''";
+  $fMapResult = "''";
 }
 //get remote data
 if(trim($sarr['lab_name'])==''){
-    $sarr['lab_name'] = "''";
+  $sarr['lab_name'] = "''";
 }
 $vlQuery="SELECT * FROM vl_request_form WHERE (lab_id =".$sarr['lab_name']." OR facility_id IN (".$fMapResult.")) AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $remotedb->rawQuery($vlQuery);

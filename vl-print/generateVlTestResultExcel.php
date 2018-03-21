@@ -88,7 +88,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             }elseif($filedGroup[$f] == "Result Dispatched Date"){
                  $field = 'result_dispatched_datetime';
             }elseif($filedGroup[$f] == "Date of Viral Load Completion"){
-                 $field = 'result_approved_datetime';
+                 $field = 'sample_tested_datetime';
             }elseif($filedGroup[$f] == "VL Testing Platform"){
                  $field = 'vl_test_platform';
             }elseif($filedGroup[$f] == "Test Method"){
@@ -96,7 +96,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             }elseif($filedGroup[$f] == "Specimen Type"){
                  $field = 'sample_name';
             }elseif($filedGroup[$f] == "Sample Testing Date"){
-                 $field = 'sample_tested_datetime';
+                 $field = 'result_printed_datetime';
             }elseif($filedGroup[$f] == "Log Value"){
                  $field = 'result_value_log';
             }elseif($filedGroup[$f] == "Absolute Value"){
@@ -133,15 +133,11 @@ if(isset($rs_field) && trim($rs_field)!= ''){
             $fValueResult = $db->rawQuery($fValueQuery);
             $fieldValue = '';
             if(count($fValueResult) >0){
-               if($field == 'sample_received_at_vl_lab_datetime' || $field == 'result_dispatched_datetime' || $field == 'sample_tested_datetime' || $field == 'result_reviewed_datetime'){
+               if($field == 'sample_received_at_vl_lab_datetime' || $field == 'result_dispatched_datetime' || $field == 'sample_tested_datetime' || $field == 'result_reviewed_datetime' || $field == 'result_printed_datetime'){
                     if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00 00:00:00'){
                         $xplodDate = explode(" ",$fValueResult[0][$field]);
                         $fieldValue=$general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
                     }
-               }elseif($field ==  'result_approved_datetime'){
-                  if(isset($fValueResult[0][$field]) && trim($fValueResult[0][$field])!= '' && trim($fValueResult[0][$field])!= '0000-00-00'){
-                     $fieldValue=$general->humanDateFormat($fValueResult[0][$field]);
-                  }
                }elseif($field ==  'vl_test_platform' || $field == 'is_sample_rejected'){
                  $fieldValue = ucwords(str_replace("_"," ",$fValueResult[0][$field]));
                }elseif($field ==  'result_reviewed_by'){

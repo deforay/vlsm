@@ -481,7 +481,7 @@
                             <tr>
                                 <td><label for="">Date de réalisation de la charge virale <span class="mandatory">*</span></label></td>
                                 <td>
-                                  <input type="text" class="form-control date isRequired" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['result_approved_datetime']; ?>" style="width:100%;"/>
+                                  <input type="text" class="form-control dateTime isRequired" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réalisation de la charge virale" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>" style="width:100%;"/>
                                 </td>
                                 <td></td><td></td>
                             </tr>
@@ -508,16 +508,16 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le service effectuant la charge virale </label></td>
+                              <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le service effectuant la charge virale </label></td>
                             </tr>
-                            <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
+                            <!--<tr><td colspan="4" style="height:30px;border:none;"></td></tr>
                             <tr>
-                                <td><label for="">Date de remise du résultat<span class="mandatory">*</span> </label></td>
+                                <td><label for="">Date de remise du résultat </label></td>
                                 <td>
-                                  <input type="text" class="form-control dateTime isRequired" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>" onchange="checkSampleTestingDate();" style="width:100%;"/>
+                                  <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" value="< ?php echo $vlQueryInfo[0]['result_printed_datetime']; ?>" onchange="checkSampleTestingDate();" style="width:100%;"/>
                                 </td>
                                 <td></td><td></td>
-                            </tr>
+                            </tr>-->
                         </table>
                     </div>
                 </div>

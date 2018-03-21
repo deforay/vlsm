@@ -19,7 +19,7 @@ if(count($fMapResult)>0){
   $fMapResult = array_map('current', $fMapResult);
   $fMapResult = implode(",",$fMapResult);
 }else{
-    $fMapResult = "''";
+  $fMapResult = "''";
 }
 $sarr['lab_name'] = $data['labName'];
 

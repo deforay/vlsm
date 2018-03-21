@@ -142,11 +142,12 @@ if(isset($vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']) && trim($vlQuery
  }else{
    $vlQueryInfo[0]['date_dispatched_from_clinic_to_lab']='';
  }
- //Set Date of Completion of Viral Load
-if(isset($vlQueryInfo[0]['result_approved_datetime']) && trim($vlQueryInfo[0]['result_approved_datetime'])!="" && $vlQueryInfo[0]['result_approved_datetime']!='0000-00-00'){
-    $vlQueryInfo[0]['result_approved_datetime']=$general->humanDateFormat($vlQueryInfo[0]['result_approved_datetime']);  
+//Set Date of result printed datetime
+if(isset($vlQueryInfo[0]['result_printed_datetime']) && trim($vlQueryInfo[0]['result_printed_datetime'])!="" && $vlQueryInfo[0]['result_printed_datetime']!='0000-00-00 00:00:00'){
+  $expStr = explode(" ",$vlQueryInfo[0]['result_printed_datetime']);
+  $vlQueryInfo[0]['result_printed_datetime'] = $general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
-    $vlQueryInfo[0]['result_approved_datetime'] = '';
+  $vlQueryInfo[0]['result_printed_datetime'] = '';
 }
 //reviewed datetime
 if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['result_reviewed_datetime'])!='' && $vlQueryInfo[0]['result_reviewed_datetime']!= null && $vlQueryInfo[0]['result_reviewed_datetime']!='0000-00-00 00:00:00'){

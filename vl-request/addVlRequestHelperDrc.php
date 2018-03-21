@@ -177,12 +177,12 @@ try {
     if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){
         $_POST['status'] = 9;
     }
-    //Set sample testing date
+    //Set result prinetd date time
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
-        $sampleTestedDate = explode(" ",$_POST['sampleTestingDateAtLab']);
-        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestedDate[0])." ".$sampleTestedDate[1];
+      $sampleTestedDate = explode(" ",$_POST['sampleTestingDateAtLab']);
+      $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestedDate[0])." ".$sampleTestedDate[1];
     }else{
-        $_POST['sampleTestingDateAtLab'] = NULL;
+      $_POST['sampleTestingDateAtLab'] = NULL;
     }
     //Set Dispatched From Clinic To Lab Date
     if(isset($_POST['dateDispatchedFromClinicToLab']) && trim($_POST['dateDispatchedFromClinicToLab'])!=""){
@@ -191,14 +191,15 @@ try {
     }else{
         $_POST['dateDispatchedFromClinicToLab'] = NULL;
     }
-    //Set Date of Completion of Viral Load
+    //Set sample testing date
     if(isset($_POST['dateOfCompletionOfViralLoad']) && trim($_POST['dateOfCompletionOfViralLoad'])!=""){
-        $_POST['dateOfCompletionOfViralLoad']=$general->dateFormat($_POST['dateOfCompletionOfViralLoad']);  
+      $dateofCompletionofViralLoad = explode(" ",$_POST['dateOfCompletionOfViralLoad']);
+      $_POST['dateOfCompletionOfViralLoad'] = $general->dateFormat($dateofCompletionofViralLoad[0])." ".$dateofCompletionofViralLoad[1];  
     }else{
-        $_POST['dateOfCompletionOfViralLoad'] = NULL;
+      $_POST['dateOfCompletionOfViralLoad'] = NULL;
     }
     if(!isset($_POST['sampleCode']) || trim($_POST['sampleCode'])== ''){
-        $_POST['sampleCode'] = NULL;
+      $_POST['sampleCode'] = NULL;
     }
     $testingPlatform = NULL;
     if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
@@ -265,7 +266,7 @@ try {
                   //'lab_code'=>$_POST['labNo'],
                   'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
                   'serial_no'=>$_POST['sampleCode'],
-                  'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
+                  'sample_tested_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
                   'vl_test_platform'=>$testingPlatform,
                   'result_value_log'=>(isset($_POST['vlLog']))?$_POST['vlLog']:NULL,
                   'result'=>(isset($_POST['vlResult']))?$_POST['vlResult']:NULL,
@@ -275,7 +276,7 @@ try {
                   'vl_test_number'=>$_POST['viralLoadNo'],
                   'sample_collection_date'=>$_POST['sampleCollectionDate'],
                   'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],
-                  'result_approved_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
+                  //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
                   'request_created_by'=>$_SESSION['userId'],
                   'request_created_datetime'=>$general->getDateTime(),
                   'last_modified_by'=>$_SESSION['userId'],
