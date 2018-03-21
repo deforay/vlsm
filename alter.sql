@@ -1447,3 +1447,6 @@ UPDATE `privileges` SET `privilege_name` = 'specimenReferralManifestList.php' WH
 UPDATE `privileges` SET `privilege_name` = 'addSpecimenReferralManifest.php' WHERE `privileges`.`privilege_id` = 67;
 
 UPDATE `privileges` SET `privilege_name` = 'editSpecimenReferralManifest.php' WHERE `privileges`.`privilege_id` = 68;
+
+
+-- Version 3.0 ---------- Pal 21-Mar-2017
