@@ -16,7 +16,7 @@ $filedGroup = array();
 if($arr['vl_form'] == 2){
   $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
 }else if($arr['vl_form'] == 3){
-  $rs_field = 'Sample Received Date,Date of Viral Load Completion,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+  $rs_field = 'Sample Received Date,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
 }else if($arr['vl_form'] == 4){
   $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
 }else if($arr['vl_form'] == 7){
@@ -87,7 +87,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
                  $field = 'sample_received_at_vl_lab_datetime';
             }elseif($filedGroup[$f] == "Result Dispatched Date"){
                  $field = 'result_dispatched_datetime';
-            }elseif($filedGroup[$f] == "Date of Viral Load Completion"){
+            }elseif($filedGroup[$f] == "Sample Testing Date"){
                  $field = 'sample_tested_datetime';
             }elseif($filedGroup[$f] == "VL Testing Platform"){
                  $field = 'vl_test_platform';
@@ -95,8 +95,6 @@ if(isset($rs_field) && trim($rs_field)!= ''){
                  $field = 'test_methods';
             }elseif($filedGroup[$f] == "Specimen Type"){
                  $field = 'sample_name';
-            }elseif($filedGroup[$f] == "Sample Testing Date"){
-                 $field = 'result_printed_datetime';
             }elseif($filedGroup[$f] == "Log Value"){
                  $field = 'result_value_log';
             }elseif($filedGroup[$f] == "Absolute Value"){
