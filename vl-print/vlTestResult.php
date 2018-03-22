@@ -381,16 +381,16 @@ if($lastUrl1!='' || $lastUrl2!=''){
   }
   
   function exportAllVlTestResult(){
-     $.blockUI();
-     $.post("generateVlTestResultExcel.php", { },
-      function(data){
-	$.unblockUI();
-       if(data === "" || data === null || data === undefined){
-	 alert('Unable to generate excel..');
-       }else{
-	 location.href = '../temporary/'+data;
-       }
-      });
+    $.blockUI();
+    $.post("generateVlTestResultExcel.php", { },
+     function(data){
+       $.unblockUI();
+      if(data === "" || data === null || data === undefined){
+	alert('Unable to generate excel..');
+      }else{
+	location.href = '../temporary/'+data;
+      }
+     });
   }
   
   function reset(){
