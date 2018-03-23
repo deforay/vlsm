@@ -100,9 +100,9 @@
                         <!--<h4 style="display:none;" id="sampleCodeValue"></h4>-->
                         <table class="table" style="width:100%">
                             <tr>
-                                <td><label for="sampleCode">échantillon id </label><span class="mandatory">*</span></td>
+                                <td><label for="sampleCode">Échantillon id </label><span class="mandatory">*</span></td>
                                 <td>
-                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
+                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
                                 <td></td><td></td><td></td><td></td>
                             </tr>
