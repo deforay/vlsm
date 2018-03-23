@@ -97,9 +97,9 @@
                        <!-- <h4 id="sampleCodeValue">exemple de code:< ?php echo $vlQueryInfo[0]['sample_code']; ?></h4>-->
                         <table class="table" style="width:100%">
                             <tr>
-                                <td><label for="sampleCode">échantillon id </label></td>
+                                <td><label for="sampleCode">Échantillon id </label></td>
                                 <td>
-                                   <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="échantillon id" title="Please enter échantillon id" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;"/>
+                                   <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['sample_code']; ?>" style="width:100%;"/>
                                 </td>
                                 <td></td><td></td><td></td><td></td>
                             </tr>

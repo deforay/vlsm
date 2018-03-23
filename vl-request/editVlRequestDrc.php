@@ -99,9 +99,9 @@
                         <!--<h4 id="sampleCodeValue">exemple de code:< ?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>-->
                         <table class="table" style="width:100%">
                             <tr>
-                                <td><label for="sampleCode">échantillon id </label><span class="mandatory">*</span></td>
+                                <td><label for="sampleCode">Échantillon id </label><span class="mandatory">*</span></td>
                                 <td>
-                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="échantillon id" title="Please enter échantillon id" value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
+                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
                                 <td></td><td></td><td></td><td></td>
                             </tr>
