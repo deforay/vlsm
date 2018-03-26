@@ -202,11 +202,11 @@
                                 </td>
                                 <td style="width:6%;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:19%;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" value="<?php echo $vlQueryInfo[0]['patient_age_in_years']; ?>" onblur="clearDOB(this.value);" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" value="<?php echo $vlQueryInfo[0]['patient_age_in_years']; ?>" onchange="clearDOB(this.value);" style="width:100%;"/>
                                 </td>
                                 <td style="width:10%;"><label for="ageInMonths">Âge en mois </label></td>
                                 <td style="width:15%;">
-                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" value="<?php echo $vlQueryInfo[0]['patient_age_in_months']; ?>" onblur="clearDOB(this.value);" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" value="<?php echo $vlQueryInfo[0]['patient_age_in_months']; ?>" onchange="clearDOB(this.value);" style="width:100%;"/>
                                 </td>
                                 <td style="width:10%;text-align:center;"><label for="sex">Sexe </label></td>
                                 <td style="width:15%;">

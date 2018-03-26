@@ -196,11 +196,11 @@
                                 </td>
                                 <td style="width:6% !important;"><label for="ageInYears">Âge en années </label></td>
                                 <td style="width:19% !important;">
-                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" onblur="clearDOB(this.value);" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInYears" name="ageInYears" placeholder="Aannées" title="Please enter àge en années" onchange="clearDOB(this.value);" style="width:100%;"/>
                                 </td>
                                 <td style="width:10% !important;"><label for="ageInMonths">Âge en mois </label></td>
                                 <td style="width:15% !important;">
-                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" onblur="clearDOB(this.value);" style="width:100%;"/>
+                                    <input type="text" class="form-control checkNum" id="ageInMonths" name="ageInMonths" placeholder="Mois" title="Please enter àge en mois" onchange="clearDOB(this.value);" style="width:100%;"/>
                                 </td>
                                 <td style="width:10% !important;text-align:center;"><label for="sex">Sexe </label></td>
                                 <td style="width:15% !important;">
