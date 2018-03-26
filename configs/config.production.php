@@ -7,10 +7,10 @@ $HOST = '127.0.0.1';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
-$PORT = 3306;
+$PORT = 3436;
 
-$emailUserName='zfmailexample@gmail.com';
-$emailPassword='mko)(*&^09876';
+$emailUserName='';
+$emailPassword='';
 
 // If using WAMP default settings, then uncomment the following 2 lines
 //$PASSWORD = '';
