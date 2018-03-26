@@ -7,12 +7,6 @@ $DBNAME = 'vl_lab_request';
 //$DBNAME = 'vl_lab_request_rwanda';
 $PORT = 3306;
 
-$sHOST = 'localhost';
-$sUSER = 'root';
-$sPASSWORD = 'zaq12345';
-$sDBNAME = 'vl_lab_request';
-//$sDBNAME = 'vl_lab_request';
-$sPORT = 3306;
 
 // If using WAMP default settings, then uncomment the following 2 lines
 //$PASSWORD = '';

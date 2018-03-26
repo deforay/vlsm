@@ -1406,7 +1406,7 @@ CREATE TABLE `r_funding_sources` (
 )
 
 INSERT INTO `r_funding_sources` (`funding_source_id`, `funding_source_name`, `funding_source_status`) VALUES
-(1, 'USA Govt', 'active');
+(1, 'PEPFAR', 'active');
 
 ALTER TABLE `r_funding_sources`
   ADD PRIMARY KEY (`funding_source_id`);
@@ -1421,7 +1421,7 @@ CREATE TABLE `r_implementation_partners` (
 )
 
 INSERT INTO `r_implementation_partners` (`i_partner_id`, `i_partner_name`, `i_partner_status`) VALUES
-(1, 'USA Govt', 'active');
+(1, 'CDC', 'active');
 
 ALTER TABLE `r_implementation_partners`
   ADD PRIMARY KEY (`i_partner_id`);
@@ -1436,7 +1436,19 @@ alter table vl_request_form add FOREIGN key(funding_source) REFERENCES r_funding
 -- Pal 12-Mar-2017
 ALTER TABLE `vl_request_form` ADD `lab_technician` VARCHAR(500) NULL DEFAULT NULL AFTER `lab_code`;
 
-UPDATE `facility_details` SET `facility_name` = 'LABORATÓRIO DE BIOLOGIA MOLECULAR' WHERE `facility_details`.`facility_id` = 2618;
+-- Amit 03 Mar 2018
+
+ALTER TABLE `facility_details` CHANGE `facility_name` `facility_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+-- Amit 09 March 2018
+ALTER TABLE `vl_facility_map` CHANGE `facility_map_id` `facility_map_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+
+-- Amit 17 March 2018
+
+ALTER TABLE `s_vlsm_instance` ADD `last_vldash_sync` DATETIME NULL AFTER `instance_mac_address`;
+
+
 
 -- Pal 20-Mar-2017
 UPDATE `resources` SET `display_name` = 'Manage Specimen Referral Manifests' WHERE `resources`.`resource_id` = 23;
