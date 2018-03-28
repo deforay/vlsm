@@ -269,7 +269,8 @@
             }
         });
     }
-	function loadFemaleDataTable(){
+    
+    function loadFemaleDataTable(){
        oTableFemale = $('#vlWeeklyFemaleReportDataTable').dataTable({
         "oLanguage": {
                 "sLengthMenu": "_MENU_ records per page"
@@ -281,7 +282,7 @@
             "iDisplayLength": 10,
             "bRetrieve": true,                        
             "aoColumns": [
-				{"sClass":"center"},
+		{"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
@@ -315,7 +316,7 @@
         });
     }
     
-    function searchData(){
+    function searchData(){	
        $.blockUI();
        oTable.fnDraw();
        oTableFemale.fnDraw();
@@ -324,7 +325,7 @@
     
     function exportVLWeeklyReport(){
        $.blockUI();
-       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleTestDate").val(),collectionDate:$("#sampleCollectionDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
+       $.post("generateVlWeeklyReportExcel.php",{reportedDate:$("#sampleTestDate").val(),collectionDate:$("#sampleCollectionDate").val(),lab:($("#lab").val() == null)?'':$("#lab").val().join(','),searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){
@@ -335,9 +336,15 @@
 	     }
        });
     }
-	function exportFemaleVLWeeklyReport(){
+    
+    function exportFemaleVLWeeklyReport(){
+	var labTexts = [];
+	var texts = $("#femaleLab").select2('data');
+	for(i=0;i<texts.length;i++){
+	    labTexts.push(texts[i].text);
+	}
        $.blockUI();
-       $.post("generateVlWeeklyFemaleReportExcel.php",{sample_test_date:$("#femaleSampleTestDate").val(),sample_collection_date:$("#femaleSampleCollectionDate").val(),lab:$("#femaleLab").val(),searchData:$('.dataTables_filter input').val()},
+       $.post("generateVlWeeklyFemaleReportExcel.php",{sample_test_date:$("#femaleSampleTestDate").val(),sample_collection_date:$("#femaleSampleCollectionDate").val(),lab:(labTexts.length > 0)?labTexts.join(','):'',searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){
@@ -351,7 +358,7 @@
     
     function exportVLWeeklyReportPdf(){
       $.blockUI();
-       $.post("getVlWeeklyReportPdf.php",{reportedDate:$("#sampleTestDate").val(),lab:$("#lab").val(),searchData:$('.dataTables_filter input').val()},
+       $.post("getVlWeeklyReportPdf.php",{reportedDate:$("#sampleTestDate").val(),lab:($("#lab").val() == null)?'':$("#lab").val().join(','),searchData:$('.dataTables_filter input').val()},
        function(data){
 	     $.unblockUI();
 	     if(data == "" || data == null || data == undefined){

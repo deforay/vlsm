@@ -9,18 +9,7 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $tableName2="log_result_updates";
 try {
-    if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-        $_POST['dob']=$general->dateFormat($_POST['dob']);  
-    }else{
-        $_POST['dob'] = NULL;
-    }
     
-    if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!=""){
-        $sampleDate = explode(" ",$_POST['collectionDate']);
-        $_POST['collectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
-    }else{
-        $_POST['collectionDate'] = NULL;
-    }
     if(isset($_POST['failedTestDate']) && trim($_POST['failedTestDate'])!=""){
         $failedtestDate = explode(" ",$_POST['failedTestDate']);
         $_POST['failedTestDate']=$general->dateFormat($failedtestDate[0])." ".$failedtestDate[1];

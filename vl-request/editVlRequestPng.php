@@ -295,7 +295,9 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                       <tr>
                         <td><label for="dob">Date Of Birth</label></td>
                         <td>
-                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>"/>
+                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>" onchange="getAge();" style="width:100%;" />
+                          <input type="hidden" name="ageInYears" id="ageInYears" value="<?php echo $vlQueryInfo[0]['patient_age_in_years'];?>"/>
+			  <input type="hidden" name="ageInMonths" id="ageInMonths" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>"/>
                         </td>
                         <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
                         <td>
@@ -703,6 +705,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 	}).click(function(){
 	   $('.ui-datepicker-calendar').hide();
 	});
+      getAge();
   });
     
   function validateNow(){

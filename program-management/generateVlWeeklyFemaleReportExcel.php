@@ -5,10 +5,9 @@ include('../includes/MysqliDb.php');
 include('../General.php');
 include ('../includes/PHPExcel.php');
 $general=new Deforay_Commons_General();
-
 if(isset($_SESSION['vlStatisticsFemaleQuery']) && trim($_SESSION['vlStatisticsFemaleQuery'])!=""){
-  $rResult = $db->rawQuery($_SESSION['vlStatisticsFemaleQuery']);
- 
+ $filename = ''; 
+ $rResult = $db->rawQuery($_SESSION['vlStatisticsFemaleQuery']);
  $excel = new PHPExcel();
  $output = array();
  $sheet = $excel->getActiveSheet();
@@ -44,18 +43,18 @@ if(isset($_SESSION['vlStatisticsFemaleQuery']) && trim($_SESSION['vlStatisticsFe
      )
  );
 
- $sheet->mergeCells('A1:I1');
+ $sheet->mergeCells('A1:N1');
  $nameValue = '';
  foreach($_POST as $key=>$value){
-   if(trim($value)!='' && trim($value)!='-- Select --'){
-     $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
-   }
+    if(trim($value)!='' && trim($value)!='-- Select --'){
+      $nameValue .= str_replace("_"," ",$key)." : ".$value.",&nbsp;&nbsp;";
+    }
  }
  $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
  
  foreach ($headings as $field => $value) {
-   $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-   $colNo++;
+    $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+    $colNo++;
  }
  $sheet->getStyle('A3:N3')->applyFromArray($styleArray);
  
@@ -75,8 +74,8 @@ if(isset($_SESSION['vlStatisticsFemaleQuery']) && trim($_SESSION['vlStatisticsFe
     $row[] = $aRow['ltUnKnownAgegt1000'];
     $row[] = $aRow['lt15lt1000'];
     $row[] = $aRow['lt15gt1000'];
-  $output[] = $row;
- }
+   $output[] = $row;
+  }
 
  $start = (count($output))+2;
  foreach ($output as $rowNo => $rowData) {
@@ -96,6 +95,7 @@ if(isset($_SESSION['vlStatisticsFemaleQuery']) && trim($_SESSION['vlStatisticsFe
  $filename = 'VLSM-VL-Lab-Female-Weekly-Report-' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
- 
+}else{
+  echo '';
 }
 ?>

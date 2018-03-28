@@ -98,50 +98,50 @@ $country = $configResult[0]['value'];
 		vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
 		
 		SUM(CASE
-			WHEN (patient_gender = 'female') THEN 1
+			WHEN (patient_gender IN ('f','female','F','FEMALE')) THEN 1
 		             ELSE 0
 		           END) AS totalFemale,
 		SUM(CASE 
-             WHEN ((is_patient_pregnant ='yes') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN ((is_patient_pregnant ='Yes' OR is_patient_pregnant ='YES' OR is_patient_pregnant ='yes') AND ((vl.result < 1000 or vl.result = 'Target Not Detected' or vl.result = 'TND' or vl.result = 'tnd' or vl.result= 'Below Detection Level' or vl.result='BDL' or vl.result='bdl' or vl.result= 'Low Detection Level' or vl.result='LDL' or vl.result='ldl') AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00')) THEN 1
              ELSE 0
            END) AS preglt1000,	
 		SUM(CASE 
-             WHEN ((is_patient_pregnant ='yes')  AND result > 1000) THEN 1
+             WHEN ((is_patient_pregnant ='Yes' OR is_patient_pregnant ='YES' OR is_patient_pregnant ='yes')  AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result >= 1000 AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00') THEN 1
              ELSE 0
            END) AS preggt1000,  
 		SUM(CASE 
-             WHEN ((is_patient_breastfeeding ='yes') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN ((is_patient_breastfeeding ='Yes' OR is_patient_breastfeeding ='YES' OR is_patient_breastfeeding ='yes') AND ((vl.result < 1000 or vl.result = 'Target Not Detected' or vl.result = 'TND' or vl.result = 'tnd' or vl.result= 'Below Detection Level' or vl.result='BDL' or vl.result='bdl' or vl.result= 'Low Detection Level' or vl.result='LDL' or vl.result='ldl') AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00')) THEN 1
              ELSE 0
            END) AS bflt1000,	
 		SUM(CASE 
-             WHEN ((is_patient_breastfeeding ='yes') AND result > 1000) THEN 1
+             WHEN ((is_patient_breastfeeding ='Yes' OR is_patient_breastfeeding ='YES' OR is_patient_breastfeeding ='yes') AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result >= 1000 AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00') THEN 1
              ELSE 0
            END) AS bfgt1000,  
 		SUM(CASE 
-             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+             WHEN (patient_age_in_years > 15 AND patient_gender IN ('f','female','F','FEMALE') AND ((vl.result < 1000 or vl.result = 'Target Not Detected' or vl.result = 'TND' or vl.result = 'tnd' or vl.result= 'Below Detection Level' or vl.result='BDL' or vl.result='bdl' or vl.result= 'Low Detection Level' or vl.result='LDL' or vl.result='ldl') AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00')) THEN 1
              ELSE 0
            END) AS gt15lt1000F,
 		   SUM(CASE 
-             WHEN (patient_age_in_years > 15 AND (patient_gender != '' AND patient_gender is not NULL AND patient_gender ='female') AND result > 1000) THEN 1
+             WHEN (patient_age_in_years > 15 AND patient_gender IN ('f','female','F','FEMALE') AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result >= 1000 AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00') THEN 1
              ELSE 0
            END) AS gt15gt1000F,
 		SUM(CASE 
-			WHEN (patient_age_in_years <= 15 AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+			WHEN ((patient_age_in_years >= 0 AND patient_age_in_years <= 15) AND ((vl.result < 1000 or vl.result = 'Target Not Detected' or vl.result = 'TND' or vl.result = 'tnd' or vl.result= 'Below Detection Level' or vl.result='BDL' or vl.result='bdl' or vl.result= 'Low Detection Level' or vl.result='LDL' or vl.result='ldl') AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00')) THEN 1
 		             ELSE 0
 		           END) AS lt15lt1000,
 		SUM(CASE 
-             WHEN (patient_age_in_years <= 15 AND result > 1000) THEN 1
+             WHEN ((patient_age_in_years >= 0 AND patient_age_in_years <= 15) AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result >= 1000 AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00') THEN 1
              ELSE 0
            END) AS lt15gt1000,
 		SUM(CASE 
-			WHEN ((patient_age_in_years ='' OR patient_age_in_years IS NULL) AND (result <= 1000 OR result ='Target Not Detected')) THEN 1
+			WHEN ((patient_age_in_years ='' OR patient_age_in_years IS NULL) AND ((vl.result < 1000 or vl.result = 'Target Not Detected' or vl.result = 'TND' or vl.result = 'tnd' or vl.result= 'Below Detection Level' or vl.result='BDL' or vl.result='bdl' or vl.result= 'Low Detection Level' or vl.result='LDL' or vl.result='ldl') AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00')) THEN 1
 		             ELSE 0
 		           END) AS ltUnKnownAgelt1000,
 		SUM(CASE 
-             WHEN ((patient_age_in_years ='' OR patient_age_in_years IS NULL)  AND result > 1000) THEN 1
+             WHEN ((patient_age_in_years ='' OR patient_age_in_years IS NULL)  AND vl.result IS NOT NULL AND vl.result!= '' AND vl.result >= 1000 AND vl.result!='Failed' AND vl.result!='failed' AND vl.result!='Fail' AND vl.result!='fail' AND vl.result!='No Sample' AND vl.result!='no sample' AND sample_tested_datetime is not null AND sample_tested_datetime != '' AND DATE(sample_tested_datetime) !='1970-01-01' AND DATE(sample_tested_datetime) !='0000-00-00') THEN 1
              ELSE 0
            END) AS ltUnKnownAgegt1000  
-		FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.patient_gender='female'";
+		FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id where vl.patient_gender IN ('f','female','F','FEMALE')";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
@@ -154,22 +154,22 @@ $country = $configResult[0]['value'];
 	   }
 	}
 	$tWhere = '';
-		if(isset($sWhere) && trim($sWhere)!= ''){
-		  $sWhere = "AND". $sWhere.' AND vl.vlsm_country_id = '.$country;
-		  $tWhere = $tWhere.' AND vl.vlsm_country_id = '.$country;
-		}else{		  
-		  $sWhere = $sWhere.' AND vl.vlsm_country_id = '.$country;
-		  $tWhere = $tWhere.' AND vl.vlsm_country_id = '.$country;
-		}
+	if(isset($sWhere) && trim($sWhere)!= ''){
+	  $sWhere = "AND". $sWhere.' AND vl.vlsm_country_id = '.$country;
+	  $tWhere = $tWhere.' AND vl.vlsm_country_id = '.$country;
+	}else{		  
+	  $sWhere = $sWhere.' AND vl.vlsm_country_id = '.$country;
+	  $tWhere = $tWhere.' AND vl.vlsm_country_id = '.$country;
+	}
 		
-		if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
-			if (trim($start_date) == trim($end_date)) {
-			  $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
-			  $tWhere = $tWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
-			}else{
-			  $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
-			  $tWhere = $tWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
-			}
+	if(isset($_POST['sampleTestDate']) && trim($_POST['sampleTestDate'])!= ''){
+	    if (trim($start_date) == trim($end_date)) {
+	      $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
+	      $tWhere = $tWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
+	    }else{
+	      $sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
+	      $tWhere = $tWhere.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
+	    }
         }
         if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
             $s_t_date = explode("to", $_POST['sampleCollectionDate']);
@@ -179,31 +179,30 @@ $country = $configResult[0]['value'];
             if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
               $end_date = $general->dateFormat(trim($s_t_date[1]));
             }
-			if (trim($start_date) == trim($end_date)) {
-			  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-			  $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
-			}else{
-			  $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
-			  $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
-			}
-		}
-		if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
-			$sWhere = $sWhere." AND vl.lab_id IN (".$_POST['lab'].")";
-			$tWhere = $tWhere." AND vl.lab_id IN (".$_POST['lab'].")";
-		}
+	    if (trim($start_date) == trim($end_date)) {
+	      $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+	      $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) = "'.$start_date.'"';
+	    }else{
+	      $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+	      $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+	    }
+	}
+	if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
+	    $sWhere = $sWhere." AND vl.lab_id IN (".$_POST['lab'].")";
+	    $tWhere = $tWhere." AND vl.lab_id IN (".$_POST['lab'].")";
+	}
 		
-		$sQuery = $sQuery.' '.$sWhere;
-		$sQuery = $sQuery.' GROUP BY vl.facility_id';
+	$sQuery = $sQuery.' '.$sWhere;
+	$sQuery = $sQuery.' GROUP BY vl.facility_id';
 		
-		//die($sQuery);
-		$_SESSION['vlStatisticsFemaleQuery']=$sQuery;
-		
-		
-		if (isset($sOrder) && $sOrder != "") {
-			$sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
-			$sQuery = $sQuery.' order by '.$sOrder;
-		}
-        
+	
+	if (isset($sOrder) && $sOrder != "") {
+	    $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
+	    $sQuery = $sQuery.' order by '.$sOrder;
+	}
+            //die($sQuery);
+	$_SESSION['vlStatisticsFemaleQuery']=$sQuery;
+	    
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
@@ -211,10 +210,10 @@ $country = $configResult[0]['value'];
         $sResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
 		
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id  where vl.patient_gender='female' $sWhere GROUP BY vl.facility_id");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id  where vl.patient_gender IN ('f','female','F','FEMALE') $sWhere GROUP BY vl.facility_id");
         $iFilteredTotal = count($aResultFilterTotal);
         /* Total data set length */		
-        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id  where vl.patient_gender='female' $tWhere GROUP BY vl.facility_id");
+        $aResultTotal =  $db->rawQuery("select vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id  where vl.patient_gender IN ('f','female','F','FEMALE') $tWhere GROUP BY vl.facility_id");
         $iTotal = count($aResultTotal);
 
         /*
@@ -229,7 +228,7 @@ $country = $configResult[0]['value'];
 	
 	foreach ($sResult as $aRow) {
 	    $row = array();
-		$row[] = ucwords($aRow['facility_state']);
+	    $row[] = ucwords($aRow['facility_state']);
 	    $row[] = ucwords($aRow['facility_district']);
 	    $row[] = ucwords($aRow['facility_name']);
 	    $row[] = $aRow['totalFemale'];
@@ -239,11 +238,11 @@ $country = $configResult[0]['value'];
 	    $row[] = $aRow['bfgt1000'];			
 	    $row[] = $aRow['gt15lt1000F'];
 	    $row[] = $aRow['gt15gt1000F'];
-		$row[] = $aRow['ltUnKnownAgelt1000'];
-		$row[] = $aRow['ltUnKnownAgegt1000'];
-		$row[] = $aRow['lt15lt1000'];
+	    $row[] = $aRow['ltUnKnownAgelt1000'];
+	    $row[] = $aRow['ltUnKnownAgegt1000'];
+	    $row[] = $aRow['lt15lt1000'];
 	    $row[] = $aRow['lt15gt1000'];
-	    $output['aaData'][] = $row;
+	  $output['aaData'][] = $row;
 	}
         
     echo json_encode($output);
