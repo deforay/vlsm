@@ -167,7 +167,7 @@ $sKey = ''; $sFormat = '';
                       <div class="row">
                         <div class="col-xs-3 col-md-3">
                             <div class="">
-                              <label for="labId">Lab Name <span class="mandatory">*</span></label>
+                              <label for="labId">VL Testing Hub <span class="mandatory">*</span></label>
                               <select name="labId" id="labId" class="form-control isRequired" title="Please choose lab" style="width:100%;">
                                 <option value="">-- Select --</option>
                                 <?php foreach($lResult as $labName){ ?>

@@ -109,7 +109,8 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     }else{
       $facility .= $option;
     }
-    $facilityQuery = "SELECT * from facility_details where facility_type=2 AND facility_district='".$distName."' AND status='active'";
+    //$facilityQuery = "SELECT * from facility_details where facility_type=2 AND facility_district='".$distName."' AND status='active'";
+    $facilityQuery = "SELECT * from facility_details where facility_type=2 AND status='active'";
     $facilityLabInfo = $db->query($facilityQuery);
     $facilityLab = '';
     if($facilityLabInfo){

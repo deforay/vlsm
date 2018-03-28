@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set("Africa/Harare");
+
 /**
  * MysqliDb Class
  *
@@ -2295,4 +2295,4 @@ defined('APPLICATION_ENV')
 require_once(realpath(__DIR__."/../configs/config.".APPLICATION_ENV.".php"));
 
 $db = new MysqliDb($HOST, $USER, $PASSWORD, $DBNAME, $PORT);
-$remotedb = new MysqliDb($sHOST, $sUSER, $sPASSWORD, $sDBNAME, $sPORT);
+//$remotedb = new MysqliDb($sHOST, $sUSER, $sPASSWORD, $sDBNAME, $sPORT);

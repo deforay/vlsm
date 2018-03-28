@@ -17,6 +17,7 @@ try {
             //add random key
             $instanceQuery="SELECT * FROM s_vlsm_instance";
             $instanceResult=$db->query($instanceQuery);
+            
             if($instanceResult){
                 $_SESSION['instanceId']=$instanceResult[0]['vlsm_instance_id'];
                 $_SESSION['instanceFname']=$instanceResult[0]['instance_facility_name'];

@@ -303,7 +303,7 @@ $formConfigResult=$db->query($formConfigQuery);
                   </li>-->
               <?php } if(isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
                   <li class="allMenu specimenReferralManifestListMenu">
-                    <a href="../specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Manage Specimen Referral <br>Manifest</a>
+                    <a href="../specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Specimen Manifest</a>
                   </li>
               <?php } ?>
             </ul>
