@@ -9,7 +9,7 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 try {
     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-        $_POST['dob']=$general->dateFormat($_POST['dob']);  
+        $_POST['dob'] = $general->dateFormat($_POST['dob']);  
     }else{
         $_POST['dob'] = NULL;
     }
@@ -109,6 +109,8 @@ try {
         'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
         'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
         'patient_dob'=>$_POST['dob'],
+        'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='') ? $_POST['ageInYears'] :  NULL,
+        'patient_age_in_months'=>(isset($_POST['ageInMonths']) && $_POST['ageInMonths']!='') ? $_POST['ageInMonths'] :  NULL,
         'line_of_treatment'=>(isset($_POST['artLine']) && $_POST['artLine']!='')? $_POST['artLine'] :  NULL,
         'current_regimen'=>(isset($_POST['currentRegimen']) && $_POST['currentRegimen']!='')? $_POST['currentRegimen'] :  NULL,
         'date_of_initiation_of_current_regimen'=>$_POST['regStartDate'],
