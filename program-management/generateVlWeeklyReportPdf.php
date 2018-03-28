@@ -5,7 +5,7 @@ include('../includes/MysqliDb.php');
 include ('../includes/tcpdf/tcpdf.php');
 include ('../includes/fpdi/fpdi.php');
 include ('../includes/fpdf/fpdf.php');
-define('UPLOAD_PATH','../uploads');
+if (!defined('UPLOAD_PATH'))define('UPLOAD_PATH','../uploads');
 $tableName1="activity_log";
 $tableName2="vl_request_form";
 
