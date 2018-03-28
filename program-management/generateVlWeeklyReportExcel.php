@@ -193,7 +193,8 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
     //error_log($sQuery);
       $sheet = new PHPExcel_Worksheet($excel, '');
       $excel->addSheet($sheet, $c);
-      $sheet->setTitle('Viral Load Statistics '.$vlLab['facility_name']);
+      $vlLab['facility_name'] = preg_replace('/\s+/', '', ucwords($vlLab['facility_name']));
+      $sheet->setTitle($vlLab['facility_name']);
       
       $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
