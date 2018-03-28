@@ -1403,7 +1403,7 @@ CREATE TABLE `r_funding_sources` (
   `funding_source_id` int(11) NOT NULL,
   `funding_source_name` varchar(500) NOT NULL,
   `funding_source_status` varchar(45) NOT NULL DEFAULT 'active'
-)
+);
 
 INSERT INTO `r_funding_sources` (`funding_source_id`, `funding_source_name`, `funding_source_status`) VALUES
 (1, 'PEPFAR', 'active');
@@ -1418,7 +1418,7 @@ CREATE TABLE `r_implementation_partners` (
   `i_partner_id` int(11) NOT NULL,
   `i_partner_name` varchar(500) NOT NULL,
   `i_partner_status` varchar(45) NOT NULL DEFAULT 'active'
-)
+);
 
 INSERT INTO `r_implementation_partners` (`i_partner_id`, `i_partner_name`, `i_partner_status`) VALUES
 (1, 'CDC', 'active');
@@ -1429,9 +1429,9 @@ ALTER TABLE `r_implementation_partners`
   ALTER TABLE `r_implementation_partners`
   MODIFY `i_partner_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
-alter table vl_request_form add FOREIGN key(implementing_partner) REFERENCES r_implementing_partners(i_partner_id)
+alter table vl_request_form add FOREIGN key(implementing_partner) REFERENCES r_implementing_partners(i_partner_id);
 
-alter table vl_request_form add FOREIGN key(funding_source) REFERENCES r_funding_sources(funding_source_id)
+alter table vl_request_form add FOREIGN key(funding_source) REFERENCES r_funding_sources(funding_source_id);
 
 -- Pal 12-Mar-2017
 ALTER TABLE `vl_request_form` ADD `lab_technician` VARCHAR(500) NULL DEFAULT NULL AFTER `lab_code`;
