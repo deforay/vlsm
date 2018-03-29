@@ -3,9 +3,12 @@ ob_start();
 include('../header.php');
 include('../General.php');
 $labFieldDisabled = '';
-if($sarr['user_type']=='vluser'){
-  include('../remote/pullDataFromRemote.php');
-}else if($sarr['user_type']=='remoteuser'){
+
+// if($sarr['user_type']=='vluser'){
+//   include('../remote/pullDataFromRemote.php');
+// }else 
+
+if($sarr['user_type']=='remoteuser'){
   $labFieldDisabled = 'disabled="disabled"';
 }
 $general=new Deforay_Commons_General();
