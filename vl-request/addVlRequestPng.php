@@ -157,7 +157,9 @@ foreach($fResult as $fDetails){
                       <tr>
                         <td><label for="dob">Date Of Birth</label></td>
                         <td>
-                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" style="width:100%;" />
+                          <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" onchange="getAge();" style="width:100%;" />
+			  <input type="hidden" name="ageInYears" id="ageInYears"/>
+			  <input type="hidden" name="ageInMonths" id="ageInMonths"/>
                         </td>
                         <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
                         <td>
