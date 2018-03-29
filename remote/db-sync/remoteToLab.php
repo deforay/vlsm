@@ -1,6 +1,6 @@
 <?php
-include(dirname(__FILE__) . "/../includes/MysqliDb.php");
-include(dirname(__FILE__) . "/../General.php");
+include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
+include(dirname(__FILE__) . "/../../General.php");
 $general=new Deforay_Commons_General();
 //system config
 $systemConfigQuery ="SELECT * from system_config";
@@ -31,7 +31,16 @@ if(count($fMapResult)>0){
 if(trim($sarr['lab_name'])==''){
   $sarr['lab_name'] = "''";
 }
-$vlQuery="SELECT * FROM vl_request_form WHERE (lab_id =".$sarr['lab_name']." OR facility_id IN (".$fMapResult.")) AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+
+
+if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
+    $where = "(lab_id =".$sarr['lab_name']." OR facility_id IN (".$fMapResult."))";
+  }else{
+    $where = "lab_id =".$sarr['lab_name'];
+  }
+  
+
+$vlQuery="SELECT * FROM vl_request_form WHERE $where AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 $vlRemoteResult = $remotedb->rawQuery($vlQuery);
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
 $allColResult = $remotedb->rawQuery($allColumns);
