@@ -1,12 +1,12 @@
 <?php
 //this fille is get the data from lab db and update in remote db
-include(dirname(__FILE__) . "/../includes/MysqliDb.php");
+include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
 if(!isset($REMOTEURL) || $REMOTEURL=='')
 {
     echo "Please check your remote url";
     die;
 }
-$url = $REMOTEURL.'/remote/getFacilityDataFromRemote.php';
+$url = $REMOTEURL.'/remote/remote/facilityMap.php';
 $data = array(
     "Key"=>"vlsm-lab-Data--",
 );
@@ -42,18 +42,32 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 //get facility map id
-if(count($result)>0){
+
+
+if($result !="" && count($result)>0){
   $fMapResult = implode(",",$result);
 }else{
-  $fMapResult = "''";
+  $fMapResult = "";
 }
 //get remote data
 if(trim($sarr['lab_name'])==''){
   $sarr['lab_name'] = "''";
 }
-$vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND (lab_id =".$sarr['lab_name']." OR facility_id IN(".$fMapResult.")) AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+
+if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
+    $where = "(lab_id =".$sarr['lab_name']." OR facility_id IN (".$fMapResult."))";
+  }else{
+    $where = "lab_id =".$sarr['lab_name'];
+  }
+  
+
+
+$vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+
 $vlLabResult = $db->rawQuery($vlQuery);
-$url = $REMOTEURL.'/remote/receivers/receiveOnRemote.php';
+
+
+$url = $REMOTEURL.'/remote/remote/testResults.php';
 $data = array(
     "result"=>$vlLabResult,
     "Key"=>"vlsm-lab-Data--",
@@ -73,6 +87,7 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
+
 if(count($result)>0){
     foreach($result as $code){
         $db = $db->where('sample_code',$code);

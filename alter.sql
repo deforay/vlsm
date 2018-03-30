@@ -1462,3 +1462,4 @@ UPDATE `privileges` SET `privilege_name` = 'editSpecimenReferralManifest.php' WH
 
 
 -- Version 3.0 ---------- Pal 21-Mar-2017
+-- Version 3.2 ---------- Amit 29-Mar-2017

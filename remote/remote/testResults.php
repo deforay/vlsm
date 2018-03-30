@@ -1,8 +1,10 @@
 <?php
 //this file is receive lab data value and update in remote db
 $data = json_decode(file_get_contents('php://input'), true);
+
 include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
 include(dirname(__FILE__) . "/../../General.php");
+
 $general=new Deforay_Commons_General();
 
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$sDBNAME' AND table_name='vl_request_form'";

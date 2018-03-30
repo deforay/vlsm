@@ -1,10 +1,11 @@
 <?php
 session_start();
 ob_start();
-include('../includes/MysqliDb.php');
-require '../includes/mail/PHPMailerAutoload.php';
-include('../General.php');
-include ('../includes/PHPExcel.php');
+require(__DIR__ . "/../includes/MysqliDb.php");
+require(__DIR__ . "/../includes/mail/PHPMailerAutoload.php");
+require(__DIR__ . "/../General.php");
+require(__DIR__ . "/../includes/PHPExcel.php");
+
 $general=new Deforay_Commons_General();
 $configQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($configQuery);
