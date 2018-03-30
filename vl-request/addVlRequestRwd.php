@@ -321,7 +321,7 @@ $sKey = ''; $sFormat = '';
                         </div>
                       </div>
                     </div>
-                    <div class="row femaleSection">
+                    <div class="row femaleSection" style="display:none;">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="patientPregnant">Is Patient Pregnant? <span class="mandatory">*</span></label><br>
