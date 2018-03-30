@@ -1,7 +1,7 @@
 <?php
 //this file is get the value from remote and update in lab db
-include(dirname(__FILE__) . "/../includes/MysqliDb.php");
-include(dirname(__FILE__) . "/../General.php");
+include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
+include(dirname(__FILE__) . "/../../General.php");
 $general=new Deforay_Commons_General();
 if(!isset($REMOTEURL) || $REMOTEURL=='')
 {
@@ -28,7 +28,7 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 if(trim($sarr['lab_name'])==''){
   $sarr['lab_name'] = "''";
 }
-$url = $REMOTEURL.'/remote/receivers/receiveOnLab.php';
+$url = $REMOTEURL.'/remote/remote/getRequests.php';
 $data = array(
     'labName'=>$sarr['lab_name'],
     "Key"=>"vlsm-lab-Data--",

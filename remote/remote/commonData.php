@@ -1,7 +1,7 @@
 <?php
 //get data from remote db send to lab db
-include(dirname(__FILE__) . "/../includes/MysqliDb.php");
-include(dirname(__FILE__) . "/../General.php");
+include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
+include(dirname(__FILE__) . "/../../General.php");
 $data = json_decode(file_get_contents('php://input'), true);
 if($data['Key']=='vlsm-get-remote'){
     //r_sample_type
@@ -27,8 +27,8 @@ if($data['Key']=='vlsm-get-remote'){
     $provinceResult = $db->query($provinceQuery);
     //facility data
     $facilityQuery = "select * from facility_details";
-    if($data['provinceUpdateTime']!=''){
-        $facilityQuery .= " where updated_datetime >='".$data['provinceUpdateTime']."'";
+    if($data['facilityUpdateTime']!=''){
+        $facilityQuery .= " where updated_datetime >='".$data['facilityUpdateTime']."'";
     }
     $facilityResult = $db->query($facilityQuery);
     echo json_encode(array('sampleType'=>$sTypeResult,'artCode'=>$artCodeResult,'rejectReason'=>$rejectResult,'province'=>$provinceResult,'facilityResult'=>$facilityResult));
