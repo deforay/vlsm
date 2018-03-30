@@ -15,5 +15,4 @@ for($i = 0; $i < sizeof($configResult); $i++) {
 
 $general = new Deforay_Commons_General();
 
-
 include("../import-configs".DIRECTORY_SEPARATOR.$confFileName);

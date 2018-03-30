@@ -99,10 +99,18 @@
                         <!--<h4 id="sampleCodeValue">exemple de code:< ?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>-->
                         <table class="table" style="width:100%">
                             <tr>
+                              <?php if($sarr['user_type']=='remoteuser') { ?>
+                                <td><label for="sampleCode">Échantillon id </label></td>
+                                <td>
+                                  <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></span>
+                                  <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>"/>
+                                </td>
+                              <?php } else { ?>
                                 <td><label for="sampleCode">Échantillon id </label><span class="mandatory">*</span></td>
                                 <td>
                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
+                              <?php } ?>
                                 <td></td><td></td><td></td><td></td>
                             </tr>
                             <tr>
