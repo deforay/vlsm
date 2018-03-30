@@ -139,7 +139,7 @@ class Watermark extends PDF_Rotate {
       //Put the watermark
       $this->SetFont('helvetica', 'B', 50);
       $this->SetTextColor(148,162,204);
-      $this->RotatedText(67,119,'DRAFT',45);
+      $this->RotatedText(67,109,'DRAFT',45);
   
       if (is_null($this->_tplIdx)) {
           // THIS IS WHERE YOU GET THE NUMBER OF PAGES

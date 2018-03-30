@@ -82,9 +82,9 @@ try {
        $db=$db->where('facility_id',$_POST['fName']);
        $id=$db->update($fDetails,$fData);
     }
-    if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
-       $_POST['patientPregnant']='';
-       $_POST['breastfeeding']='';
+    if(!isset($_POST['gender']) || trim($_POST['gender']) == 'male'){
+      $_POST['patientPregnant'] = NULL;
+      $_POST['breastfeeding'] = NULL;
     }
     $instanceId = '';
     if(isset($_SESSION['instanceId'])){
@@ -155,6 +155,31 @@ try {
         $sampleCode = 'sample_code';
         $sampleCodeKey = 'sample_code_key';
     }
+    //Indication for Viral Load Testing
+    $rmVLValue = NULL;
+    if(isset($_POST['stViralTesting']) && $_POST['stViralTesting'] == 'routine'){
+      if(isset($_POST['rmTestingVlValue']) && $_POST['rmTestingVlValue']!=''){
+        $rmVLValue = $_POST['rmTestingVlValue'];
+      }else if(isset($_POST['rmTestingVlCheckValue']) && $_POST['rmTestingVlCheckValue']!=''){
+        $rmVLValue = $_POST['rmTestingVlCheckValue'];
+      }
+    }
+    $repeatTestingVLValue = NULL;
+    if(isset($_POST['stViralTesting']) && $_POST['stViralTesting'] == 'failure'){
+      if(isset($_POST['repeatTestingVlValue']) && $_POST['repeatTestingVlValue']!=''){
+        $repeatTestingVLValue = $_POST['repeatTestingVlValue'];
+      }else if(isset($_POST['repeatTestingVlCheckValue']) && $_POST['repeatTestingVlCheckValue']!=''){
+        $repeatTestingVLValue = $_POST['repeatTestingVlCheckValue'];
+      }
+    }
+    $suspendedTreatmentVLValue = NULL;
+    if(isset($_POST['stViralTesting']) && $_POST['stViralTesting'] == 'suspect'){
+      if(isset($_POST['suspendTreatmentVlValue']) && $_POST['suspendTreatmentVlValue']!=''){
+        $suspendedTreatmentVLValue = $_POST['suspendTreatmentVlValue'];
+      }else if(isset($_POST['suspendTreatmentVlCheckValue']) && $_POST['suspendTreatmentVlCheckValue']!=''){
+        $suspendedTreatmentVLValue = $_POST['suspendTreatmentVlCheckValue'];
+      }
+    }
     //check existing sample code
     $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
     $existResult = $db->rawQuery($existSampleQuery);
@@ -198,11 +223,11 @@ try {
           'arv_adherance_percentage'=>(isset($_POST['arvAdherence']) && $_POST['arvAdherence']!='') ? $_POST['arvAdherence'] :  NULL,
           'reason_for_vl_testing'=>(isset($_POST['stViralTesting']))?$_POST['stViralTesting']:NULL,
           'last_vl_date_routine'=>(isset($_POST['rmTestingLastVLDate']) && $_POST['rmTestingLastVLDate']!='') ? $general->dateFormat($_POST['rmTestingLastVLDate']) :  NULL,
-          'last_vl_result_routine'=>(isset($_POST['rmTestingVlValue']) && $_POST['rmTestingVlValue']!='') ? $_POST['rmTestingVlValue'] :  NULL,
+          'last_vl_result_routine'=>$rmVLValue,
           'last_vl_date_failure_ac'=>(isset($_POST['repeatTestingLastVLDate']) && $_POST['repeatTestingLastVLDate']!='') ? $general->dateFormat($_POST['repeatTestingLastVLDate']) :  NULL,
-          'last_vl_result_failure_ac'=>(isset($_POST['repeatTestingVlValue']) && $_POST['repeatTestingVlValue']!='') ? $_POST['repeatTestingVlValue'] :  NULL,
+          'last_vl_result_failure_ac'=>$repeatTestingVLValue,
           'last_vl_date_failure'=>(isset($_POST['suspendTreatmentLastVLDate']) && $_POST['suspendTreatmentLastVLDate']!='') ? $general->dateFormat($_POST['suspendTreatmentLastVLDate']) :  NULL,
-          'last_vl_result_failure'=>(isset($_POST['suspendTreatmentVlValue']) && $_POST['suspendTreatmentVlValue']!='') ? $_POST['suspendTreatmentVlValue'] :  NULL,
+          'last_vl_result_failure'=>$suspendedTreatmentVLValue,
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='') ? $_POST['reqClinician'] :  NULL,
           'request_clinician_phone_number'=>(isset($_POST['reqClinicianPhoneNumber']) && $_POST['reqClinicianPhoneNumber']!='') ? $_POST['reqClinicianPhoneNumber'] :  NULL,
           'test_requested_on'=>(isset($_POST['requestDate']) && $_POST['requestDate']!='') ? $general->dateFormat($_POST['requestDate']) :  NULL,

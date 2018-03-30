@@ -125,7 +125,6 @@ $disable = "disabled = 'disabled'";
                     </div>
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
                         <label for="province">Province <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="province" id="province" title="Please choose province" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDetails(this);">
                             <option value=""> -- Select -- </option>
@@ -133,10 +132,8 @@ $disable = "disabled = 'disabled'";
                               <option value="<?php echo $provinceName['province_name']."##".$provinceName['province_code'];?>" <?php echo ($facilityResult[0]['facility_state']."##".$stateResult[0]['province_code']==$provinceName['province_name']."##".$provinceName['province_code'])?"selected='selected'":""?>><?php echo ucwords($provinceName['province_name']);?></option>;
                             <?php } ?>
                           </select>
-                        </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
                         <label for="district">District  <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="district" id="district" title="Please choose district" <?php echo $disable;?> style="width:100%;" onchange="getfacilityDistrictwise(this);">
                              <option value=""> -- Select -- </option>
@@ -148,10 +145,8 @@ $disable = "disabled = 'disabled'";
                               }
                              ?>
                           </select>
-                        </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
-                        <div class="form-group">
                           <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
                             <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" <?php echo $disable;?> style="width:100%;" onchange="autoFillFacilityCode();">
                               <option data-code="" data-emails="" data-mobile-nos="" data-contact-person="" value=""> -- Select -- </option>
@@ -159,7 +154,6 @@ $disable = "disabled = 'disabled'";
                                 <option data-code="<?php echo $fDetails['facility_code']; ?>" data-emails="<?php echo $fDetails['facility_emails']; ?>" data-mobile-nos="<?php echo $fDetails['facility_mobile_numbers']; ?>" data-contact-person="<?php echo ucwords($fDetails['contact_person']); ?>" value="<?php echo $fDetails['facility_id'];?>" <?php echo ($vlQueryInfo[0]['facility_id']==$fDetails['facility_id'])?"selected='selected'":""?>><?php echo ucwords($fDetails['facility_name']);?></option>
                               <?php } ?>
                             </select>
-                          </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
@@ -192,8 +186,8 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="dob">Date of Birth </label>
-                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disable;?>/>
+                        <label for="dob">Date of Birth <span class="mandatory">*</span></label>
+                          <input type="text" name="dob" id="dob" class="form-control date isRequired" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" <?php echo $disable;?>/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -218,16 +212,16 @@ $disable = "disabled = 'disabled'";
                       </div>  
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="gender">Gender</label><br>
+                        <label for="gender">Gender <span class="mandatory">*</span></label><br>
                           <label class="radio-inline" style="margin-left:0px;">
-                            <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
-                            </label>
+                            <input type="radio" class="isRequired" id="genderMale" name="gender" value="male" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='male')?"checked='checked'":""?>> Male
+                          </label>&nbsp;&nbsp;
                           <label class="radio-inline" style="margin-left:0px;">
-                            <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
+                            <input type="radio" id="genderFemale" name="gender" value="female" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"checked='checked'":""?>> Female
                           </label>
-                          <label class="radio-inline" style="margin-left:0px;">
-                            <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>>Not Recorded
-                          </label>
+                          <!--<label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender" < ?php echo $disable;?> < ?php echo ($vlQueryInfo[0]['patient_gender']=='not_recorded')?"checked='checked'":""?>>Not Recorded
+                          </label>-->
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -281,8 +275,8 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="col-xs-3 col-md-3">
                           <div class="form-group">
-                          <label for="artRegimen">Current Regimen</label>
-                            <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" <?php echo $disable;?> style="width:100%;" onchange="checkARTValue();">
+                          <label for="artRegimen">Current Regimen <span class="mandatory">*</span></label>
+                            <select class="form-control isRequired" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" <?php echo $disable;?> style="width:100%;" onchange="checkARTValue();">
                                 <option value="">-- Select --</option>
                                 <?php foreach($artRegimenResult as $heading) { ?>
                                 <optgroup label="<?php echo ucwords($heading['headings']); ?>">
@@ -304,14 +298,14 @@ $disable = "disabled = 'disabled'";
                        </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="">Date of Initiation of Current Regimen </label>
-                          <input type="text" class="form-control date" style="width:100%;" name="regimenInitiatedOn" id="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen']; ?>">
+                        <label for="">Date of Initiation of Current Regimen<span class="mandatory">*</span></label>
+                          <input type="text" class="form-control date isRequired" style="width:100%;" name="regimenInitiatedOn" id="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen']; ?>">
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="arvAdherence">ARV Adherence </label>
-                          <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose adherence" <?php echo $disable;?>>
+                        <label for="arvAdherence">ARV Adherence <span class="mandatory">*</span></label>
+                          <select name="arvAdherence" id="arvAdherence" class="form-control isRequired" title="Please choose adherence" <?php echo $disable;?>>
                             <option value=""> -- Select -- </option>
                             <option value="good" <?php echo ($vlQueryInfo[0]['arv_adherance_percentage']=='good')?"selected='selected'":""?>>Good >= 95%</option>
                             <option value="fair" <?php echo ($vlQueryInfo[0]['arv_adherance_percentage']=='fair')?"selected='selected'":""?>>Fair (85-94%)</option>
@@ -320,26 +314,26 @@ $disable = "disabled = 'disabled'";
                         </div>
                       </div>
                     </div>
-                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female' || $vlQueryInfo[0]['patient_gender']=='' || $vlQueryInfo[0]['patient_gender']== null)?"":"none"?>";>
+                    <div class="row femaleSection" style="display:<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"":"none"?>";>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="patientPregnant">Is Patient Pregnant? </label><br>
+                        <label for="patientPregnant">Is Patient Pregnant? <span class="mandatory">*</span></label><br>
                           <label class="radio-inline">
-                            <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check one" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='yes')?"checked='checked'":""?>> Yes
+                            <input type="radio" class="<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"isRequired":""; ?>" id="pregYes" name="patientPregnant" value="yes" title="Please check patient pregnant status" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='yes')?"checked='checked'":""?>> Yes
                             </label>
                           <label class="radio-inline">
-                            <input type="radio" class="" id="pregNo" name="patientPregnant" value="no" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='no')?"checked='checked'":""?>> No
+                            <input type="radio" id="pregNo" name="patientPregnant" value="no" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_pregnant']=='no')?"checked='checked'":""?>> No
                           </label>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="breastfeeding">Is Patient Breastfeeding? </label><br>
+                        <label for="breastfeeding">Is Patient Breastfeeding? <span class="mandatory">*</span></label><br>
                           <label class="radio-inline">
-                            <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check one" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>> Yes
+                            <input type="radio" class="<?php echo ($vlQueryInfo[0]['patient_gender']=='female')?"isRequired":""; ?>" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check patient breastfeeding status" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='yes')?"checked='checked'":""?>> Yes
                             </label>
                           <label class="radio-inline">
-                            <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>> No
+                            <input type="radio" id="breastfeedingNo" name="breastfeeding" value="no" <?php echo $disable;?> <?php echo ($vlQueryInfo[0]['is_patient_breastfeeding']=='no')?"checked='checked'":""?>> No
                           </label>
                         </div>
                       </div>
@@ -347,7 +341,7 @@ $disable = "disabled = 'disabled'";
                   </div>
                   <div class="box box-primary">
                     <div class="box-header with-border">
-                       <h3 class="box-title">Indication for Viral Load Testing</h3><small> (Please tick one):(To be completed by clinician)</small>
+                       <h3 class="box-title">Indication for Viral Load Testing <span class="mandatory">*</span></h3><small> (Please tick one):(To be completed by clinician)</small>
                     </div>
                     <div class="box-body">
                       <div class="row">                
@@ -358,15 +352,19 @@ $disable = "disabled = 'disabled'";
                                     <?php
                                     $checked = '';
                                     $display = '';
+                                    $vlValue = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
+                                      if($vlQueryInfo[0]['last_vl_result_routine']!= NULL && trim($vlQueryInfo[0]['last_vl_result_routine'])!= '' && trim($vlQueryInfo[0]['last_vl_result_routine'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_routine'])!= 'tnd'){
+                                        $vlValue = $vlQueryInfo[0]['last_vl_result_routine'];
+                                      }
                                     }else{
                                       $checked = '';
                                       $display = 'none';
                                     }
                                     ?>
-                                    <input type="radio" class="" id="rmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('rmTesting');">
+                                    <input type="radio" class="isRequired" id="rmTesting" name="stViralTesting" value="routine" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('rmTesting');">
                                     <strong>Routine Monitoring</strong>
                                 </label>						
                                 </div>
@@ -383,8 +381,10 @@ $disable = "disabled = 'disabled'";
                         <div class="col-md-6">
                              <label for="rmTestingVlValue" class="col-lg-3 control-label">VL Value</label>
                              <div class="col-lg-7">
-                             <input type="text" class="form-control checkNum viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlQueryInfo[0]['last_vl_result_routine']; ?>" <?php echo $disable;?>/>
-                             (copies/ml)
+                             <input type="text" class="form-control checkNum viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlValue; ?>" <?php echo $disable;?>/>
+                             (copies/ml)<br>
+                             <input type="checkbox" id="rmTestingVlCheckValuelt20" name="rmTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_routine'] == '<20')?'checked="checked"':''; ?> value="<20" <?php echo $disable;?> title="Please check VL value"> < 20<br>
+                             <input type="checkbox" id="rmTestingVlCheckValueTnd" name="rmTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_routine'] == 'tnd')?'checked="checked"':''; ?> value="tnd" <?php echo $disable;?> title="Please check VL value"> Target Not Detected
                          </div>
                        </div>                 
                       </div>
@@ -399,12 +399,16 @@ $disable = "disabled = 'disabled'";
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
+                                      $vlValue = '';
+                                      if($vlQueryInfo[0]['last_vl_result_failure_ac']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= 'tnd'){
+                                        $vlValue = $vlQueryInfo[0]['last_vl_result_failure_ac'];
+                                      }
                                     }else{
                                       $checked = '';
                                       $display = 'none';
                                     }
                                     ?>
-                                    <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('repeatTesting');">
+                                    <input type="radio" id="repeatTesting" name="stViralTesting" value="failure" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('repeatTesting');">
                                     <strong>Repeat VL test after suspected treatment failure adherence counselling </strong>
                                 </label>						
                                 </div>
@@ -421,8 +425,10 @@ $disable = "disabled = 'disabled'";
                        <div class="col-md-6">
                             <label for="repeatTestingVlValue" class="col-lg-3 control-label">VL Value</label>
                             <div class="col-lg-7">
-                            <input type="text" class="form-control checkNum viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlQueryInfo[0]['last_vl_result_failure_ac']; ?>" <?php echo $disable;?>/>
-                            (copies/ml)
+                            <input type="text" class="form-control checkNum viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlValue; ?>" <?php echo $disable;?>/>
+                            (copies/ml)<br>
+                            <input type="checkbox" id="repeatTestingVlCheckValuelt20" name="repeatTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure_ac'] == '<20')?'checked="checked"':''; ?> value="<20" <?php echo $disable;?> title="Please check VL value"> < 20<br>
+                            <input type="checkbox" id="repeatTestingVlCheckValueTnd" name="repeatTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure_ac'] == 'tnd')?'checked="checked"':''; ?> value="tnd" <?php echo $disable;?> title="Please check VL value"> Target Not Detected
                             </div>
                       </div>                 
                      </div>
@@ -434,15 +440,19 @@ $disable = "disabled = 'disabled'";
                                     <?php
                                     $checked = '';
                                     $display = '';
+                                    $vlValue = '';
                                     if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
+                                      if($vlQueryInfo[0]['last_vl_result_failure']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure'])!= 'tnd'){
+                                        $vlValue = $vlQueryInfo[0]['last_vl_result_failure'];
+                                      }
                                     }else{
                                       $checked = '';
                                       $display = 'none';
                                     }
                                     ?>
-                                    <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
+                                    <input type="radio" id="suspendTreatment" name="stViralTesting" value="suspect" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
                                     <strong>Suspect Treatment Failure</strong>
                                 </label>						
                                 </div>
@@ -459,48 +469,50 @@ $disable = "disabled = 'disabled'";
                         <div class="col-md-6">
                              <label for="suspendTreatmentVlValue" class="col-lg-3 control-label">VL Value</label>
                              <div class="col-lg-7">
-                             <input type="text" class="form-control checkNum viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlQueryInfo[0]['last_vl_result_failure']; ?>" <?php echo $disable;?>/>
-                             (copies/ml)
+                             <input type="text" class="form-control checkNum viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlValue; ?>" <?php echo $disable;?>/>
+                             (copies/ml)<br>
+                             <input type="checkbox" id="suspendTreatmentVlCheckValuelt20" name="suspendTreatmentVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure'] == '<20')?'checked="checked"':''; ?> value="<20" <?php echo $disable;?> title="Please check VL value"> < 20<br>
+                             <input type="checkbox" id="suspendTreatmentVlCheckValueTnd" name="suspendTreatmentVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure'] == 'tnd')?'checked="checked"':''; ?> value="tnd" <?php echo $disable;?> title="Please check VL value"> Target Not Detected
                              </div>
                        </div>                 
                      </div>
                      <div class="row">
                         <div class="col-md-4">
-                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician</label>
+                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" value="<?php echo $vlQueryInfo[0]['request_clinician_name'];?>" <?php echo $disable;?>/>
+                               <input type="text" class="form-control isRequired" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" value="<?php echo $vlQueryInfo[0]['request_clinician_name'];?>" <?php echo $disable;?>/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number</label>
+                            <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control checkNum" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" value="<?php echo $vlQueryInfo[0]['request_clinician_phone_number']; ?>" <?php echo $disable;?>/>
+                               <input type="text" class="form-control checkNum isRequired" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" value="<?php echo $vlQueryInfo[0]['request_clinician_phone_number']; ?>" <?php echo $disable;?>/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="requestDate">Request Date </label>
+                            <label class="col-lg-5 control-label" for="requestDate">Request Date <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control date" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date" value="<?php echo $vlQueryInfo[0]['test_requested_on']; ?>" <?php echo $disable;?>/>
+                                <input type="text" class="form-control date isRequired" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date" value="<?php echo $vlQueryInfo[0]['test_requested_on']; ?>" <?php echo $disable;?>/>
                             </div>
                         </div>
                      </div>
                      <div class="row">
                         <div class="col-md-4">
-                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person </label>
+                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person<span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" value="<?php echo $vlQueryInfo[0]['vl_focal_person']; ?>" <?php echo $disable;?>/>
+                               <input type="text" class="form-control isRequired" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" value="<?php echo $vlQueryInfo[0]['vl_focal_person']; ?>" <?php echo $disable;?>/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number</label>
+                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control checkNum" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" value="<?php echo $vlQueryInfo[0]['vl_focal_person_phone_number']; ?>" <?php echo $disable;?>/>
+                               <input type="text" class="form-control checkNum isRequired" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" value="<?php echo $vlQueryInfo[0]['vl_focal_person_phone_number']; ?>" <?php echo $disable;?>/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="emailHf">Email for HF </label>
+                            <label class="col-lg-5 control-label" for="emailHf">Email for HF <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control isEmail" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $facilityResult[0]['facility_emails'];?>" <?php echo $disable;?>/>
+                                <input type="text" class="form-control isEmail isRequired" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $facilityResult[0]['facility_emails'];?>" <?php echo $disable;?>/>
                             </div>
                         </div>
                      </div>

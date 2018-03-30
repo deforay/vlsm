@@ -101,8 +101,14 @@ $sKey = ''; $sFormat = '';
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="">
-                          <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
+                          <?php if($sarr['user_type']=='remoteuser'){ ?>
+                            <label for="sampleCode">Sample ID </label><br>
+                            <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
+                            <input type="hidden" class="<?php echo $sampleClass;?>" id="sampleCode" name="sampleCode"/>
+                          <?php } else { ?>
+                            <label for="sampleCode">Sample ID <span class="mandatory">*</span></label>
+                            <input type="text" class="form-control isRequired <?php echo $sampleClass;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'This sample number already exists.Try another number',null)"/>
+                          <?php } ?>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -116,7 +122,7 @@ $sKey = ''; $sFormat = '';
                       <?php if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){ ?>
                         <div class="col-xs-3 col-md-3 pull-right">
                           <div class="">
-                            <label for="sampleCode">Print Barcode Label <span class="mandatory">*</span> </label>
+                            <label for="printBarCode">Print Barcode Label <span class="mandatory">*</span> </label>
                             <input type="checkbox" class="" id="printBarCode" name="printBarCode" checked/>
                           </div>
                         </div>
@@ -168,7 +174,7 @@ $sKey = ''; $sFormat = '';
                         <div class="col-xs-3 col-md-3">
                             <div class="">
                               <label for="labId">VL Testing Hub <span class="mandatory">*</span></label>
-                              <select name="labId" id="labId" class="form-control isRequired" title="Please choose lab" style="width:100%;">
+                              <select name="labId" id="labId" class="form-control isRequired" title="Please choose VL testing hub" style="width:100%;">
                                 <option value="">-- Select --</option>
                                 <?php foreach($lResult as $labName){ ?>
                                   <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
@@ -196,8 +202,8 @@ $sKey = ''; $sFormat = '';
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="dob">Date of Birth </label>
-                          <input type="text" name="dob" id="dob" class="form-control date" placeholder="Enter DOB" title="Enter dob" onchange="getAge();checkARTInitiationDate();"/>
+                        <label for="dob">Date of Birth <span class="mandatory">*</span></label>
+                          <input type="text" name="dob" id="dob" class="form-control date isRequired" placeholder="Enter DOB" title="Enter dob" onchange="getAge();checkARTInitiationDate();"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -222,16 +228,16 @@ $sKey = ''; $sFormat = '';
                       </div>  
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="gender">Gender</label><br>
+                        <label for="gender">Gender <span class="mandatory">*</span></label><br>
                           <label class="radio-inline" style="margin-left:0px;">
-                            <input type="radio" class="" id="genderMale" name="gender" value="male" title="Please check gender">Male
-                          </label>
+                            <input type="radio" class="isRequired" id="genderMale" name="gender" value="male" title="Please check gender">Male
+                          </label>&nbsp;&nbsp;
                           <label class="radio-inline" style="margin-left:0px;">
-                            <input type="radio" class="" id="genderFemale" name="gender" value="female" title="Please check gender">Female
-                          </label>
-                          <label class="radio-inline" style="margin-left:0px;">
+                            <input type="radio" id="genderFemale" name="gender" value="female" title="Please check gender">Female
+                          </label>&nbsp;&nbsp;
+                          <!--<label class="radio-inline" style="margin-left:0px;">
                             <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender">Not Recorded
-                          </label>
+                          </label>-->
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -281,8 +287,8 @@ $sKey = ''; $sFormat = '';
                       </div>
                       <div class="col-xs-3 col-md-3">
                           <div class="form-group">
-                          <label for="artRegimen">Current Regimen</label>
-                            <select class="form-control" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
+                          <label for="artRegimen">Current Regimen <span class="mandatory">*</span></label>
+                            <select class="form-control isRequired" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                  <option value="">-- Select --</option>
                                   <?php foreach($artRegimenResult as $heading) { ?>
                                   <optgroup label="<?php echo ucwords($heading['headings']); ?>">
@@ -299,14 +305,14 @@ $sKey = ''; $sFormat = '';
                        </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="">Date of Initiation of Current Regimen </label>
-                          <input type="text" class="form-control date" style="width:100%;" name="regimenInitiatedOn" id="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on">
+                        <label for="">Date of Initiation of Current Regimen<span class="mandatory">*</span></label>
+                          <input type="text" class="form-control date isRequired" style="width:100%;" name="regimenInitiatedOn" id="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on">
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="arvAdherence">ARV Adherence </label>
-                          <select name="arvAdherence" id="arvAdherence" class="form-control" title="Please choose adherence">
+                        <label for="arvAdherence">ARV Adherence <span class="mandatory">*</span></label>
+                          <select name="arvAdherence" id="arvAdherence" class="form-control isRequired" title="Please choose adherence">
                             <option value=""> -- Select -- </option>
                             <option value="good">Good >= 95%</option>
                             <option value="fair">Fair (85-94%)</option>
@@ -318,9 +324,9 @@ $sKey = ''; $sFormat = '';
                     <div class="row femaleSection">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="patientPregnant">Is Patient Pregnant? </label><br>
+                        <label for="patientPregnant">Is Patient Pregnant? <span class="mandatory">*</span></label><br>
                           <label class="radio-inline">
-                            <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check one"> Yes
+                            <input type="radio" class="" id="pregYes" name="patientPregnant" value="yes" title="Please check patient pregnant status"> Yes
                             </label>
                           <label class="radio-inline">
                             <input type="radio" class="" id="pregNo" name="patientPregnant" value="no"> No
@@ -329,9 +335,9 @@ $sKey = ''; $sFormat = '';
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="breastfeeding">Is Patient Breastfeeding? </label><br>
+                        <label for="breastfeeding">Is Patient Breastfeeding? <span class="mandatory">*</span></label><br>
                           <label class="radio-inline">
-                            <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check one"> Yes
+                            <input type="radio" class="" id="breastfeedingYes" name="breastfeeding" value="yes" title="Please check patient breastfeeding status"> Yes
                             </label>
                           <label class="radio-inline">
                             <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" value="no"> No
@@ -342,7 +348,7 @@ $sKey = ''; $sFormat = '';
                   </div>
                   <div class="box box-primary">
                     <div class="box-header with-border">
-                       <h3 class="box-title">Indication for Viral Load Testing</h3><small> (Please tick one):(To be completed by clinician)</small>
+                      <h3 class="box-title">Indication for Viral Load Testing <span class="mandatory">*</span></h3><small> (Please tick one):(To be completed by clinician)</small>
                     </div>
                     <div class="box-body">
                       <div class="row">                
@@ -350,7 +356,7 @@ $sKey = ''; $sFormat = '';
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
-                                    <input type="radio" class="" id="rmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" onclick="showTesting('rmTesting');">
+                                    <input type="radio" class="isRequired" id="rmTesting" name="stViralTesting" value="routine" title="Please check viral load indication testing type" onclick="showTesting('rmTesting');">
                                     <strong>Routine Monitoring</strong>
                                 </label>						
                                 </div>
@@ -368,7 +374,9 @@ $sKey = ''; $sFormat = '';
                              <label for="rmTestingVlValue" class="col-lg-3 control-label">VL Value</label>
                              <div class="col-lg-7">
                              <input type="text" class="form-control checkNum viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                             (copies/ml)
+                             (copies/ml)<br>
+                             <input type="checkbox" id="rmTestingVlCheckValuelt20" name="rmTestingVlCheckValue" value="<20" title="Please check VL value"> < 20<br>
+                             <input type="checkbox" id="rmTestingVlCheckValueTnd" name="rmTestingVlCheckValue" value="tnd" title="Please check VL value"> Target Not Detected
                          </div>
                        </div>                 
                       </div>
@@ -377,7 +385,7 @@ $sKey = ''; $sFormat = '';
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
-                                    <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('repeatTesting');">
+                                    <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Please check viral load indication testing type" onclick="showTesting('repeatTesting');">
                                     <strong>Repeat VL test after suspected treatment failure adherence counselling </strong>
                                 </label>						
                                 </div>
@@ -395,7 +403,9 @@ $sKey = ''; $sFormat = '';
                             <label for="repeatTestingVlValue" class="col-lg-3 control-label">VL Value</label>
                             <div class="col-lg-7">
                             <input type="text" class="form-control checkNum viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                            (copies/ml)
+                            (copies/ml)<br>
+                            <input type="checkbox" id="repeatTestingVlCheckValuelt20" name="repeatTestingVlCheckValue" value="<20" title="Please check VL value"> < 20<br>
+                            <input type="checkbox" id="repeatTestingVlCheckValueTnd" name="repeatTestingVlCheckValue" value="tnd" title="Please check VL value"> Target Not Detected
                             </div>
                       </div>                 
                      </div>
@@ -404,14 +414,14 @@ $sKey = ''; $sFormat = '';
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
-                                    <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
+                                    <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Please check viral load indication testing type" onclick="showTesting('suspendTreatment');">
                                     <strong>Suspect Treatment Failure</strong>
                                 </label>						
                                 </div>
                             </div>
                         </div>
                      </div>
-                     <div class="row suspendTreatment hideTestData" style="display: none;">
+                     <div class="row suspendTreatment hideTestData" style="display: none;margin-bottom:20px;">
                         <div class="col-md-6">
                              <label class="col-lg-5 control-label">Date of last viral load test</label>
                              <div class="col-lg-7">
@@ -422,47 +432,49 @@ $sKey = ''; $sFormat = '';
                              <label for="suspendTreatmentVlValue" class="col-lg-3 control-label">VL Value</label>
                              <div class="col-lg-7">
                              <input type="text" class="form-control checkNum viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
-                             (copies/ml)
+                             (copies/ml)<br>
+                             <input type="checkbox" id="suspendTreatmentVlCheckValuelt20" name="suspendTreatmentVlCheckValue" value="<20" title="Please check VL value"> < 20<br>
+                             <input type="checkbox" id="suspendTreatmentVlCheckValueTnd" name="suspendTreatmentVlCheckValue" value="tnd" title="Please check VL value"> Target Not Detected
                              </div>
                        </div>                 
                      </div>
                      <div class="row">
                         <div class="col-md-4">
-                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician</label>
+                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" />
+                               <input type="text" class="form-control isRequired" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" />
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number</label>
+                            <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control checkNum" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" />
+                               <input type="text" class="form-control checkNum isRequired" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" />
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="requestDate">Request Date </label>
+                            <label class="col-lg-5 control-label" for="requestDate">Request Date <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control date" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date"/>
+                                <input type="text" class="form-control date isRequired" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date"/>
                             </div>
                         </div>
                      </div>
                      <div class="row">
                         <div class="col-md-4">
-                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person </label>
+                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person<span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" />
+                               <input type="text" class="form-control isRequired" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" />
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number</label>
+                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control checkNum" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" />
+                               <input type="text" class="form-control checkNum isRequired" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" />
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="emailHf">Email for HF </label>
+                            <label class="col-lg-5 control-label" for="emailHf">Email for HF <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control isEmail" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf"/>
+                                <input type="text" class="form-control isEmail isRequired" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf"/>
                             </div>
                         </div>
                      </div>
@@ -699,11 +711,13 @@ $sKey = ''; $sFormat = '';
           pNameVal = pName.split("##");
           sCode = sCodeKey.auto;
           $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeInText").html('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
           $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
           $("#sampleCodeKey").val(sCodeKey.maxId);
           checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null);
           <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
           $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeInText").html('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
           $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
           $("#sampleCodeKey").val(sCodeKey.maxId);
           checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'This sample number already exists.Try another number',null)
@@ -748,15 +762,21 @@ $sKey = ''; $sFormat = '';
     ($.trim(fContactPerson) !='')?$(".fContactPerson").show():$(".fContactPerson").hide();
     ($.trim(fContactPerson) !='')?$(".facilityContactPerson").html(fContactPerson):$(".facilityContactPerson").html('');
   }
+  
   $("input:radio[name=gender]").click(function() {
     if($(this).val() == 'male' || $(this).val() == 'not_recorded'){
       $('.femaleSection').hide();
       $('input[name="breastfeeding"]').prop('checked', false);
       $('input[name="patientPregnant"]').prop('checked', false);
+      $('#breastfeedingYes').removeClass('isRequired');
+      $('#pregYes').removeClass('isRequired');
     }else if($(this).val() == 'female'){
       $('.femaleSection').show();
+      $('#breastfeedingYes').addClass('isRequired');
+      $('#pregYes').addClass('isRequired');
     }
   });
+  
   $("input:radio[name=noResult]").click(function() {
     if($(this).val() == 'yes'){
       $('.rejectionReason').show();
@@ -769,6 +789,7 @@ $sKey = ''; $sFormat = '';
       $('#rejectionReason').val('');
     }
   });
+  
   $('#tnd').change(function() {
     if($('#tnd').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);
@@ -778,6 +799,7 @@ $sKey = ''; $sFormat = '';
       $('#bdl').attr('disabled',false);
     }
   });
+  
   $('#bdl').change(function() {
     if($('#bdl').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);
@@ -787,6 +809,7 @@ $sKey = ''; $sFormat = '';
       $('#tnd').attr('disabled',false);
     }
   });
+  
   $('#vlResult,#vlLog').on('input',function(e){
     if(this.value != ''){
       $('#tnd').attr('disabled',true);
@@ -796,6 +819,97 @@ $sKey = ''; $sFormat = '';
       $('#bdl').attr('disabled',false);
     }
   });
+  
+  $('#rmTestingVlValue').on('input',function(e){
+    if(this.value != ''){
+      $('#rmTestingVlCheckValuelt20').attr('disabled',true);
+      $('#rmTestingVlCheckValueTnd').attr('disabled',true);
+    }else{
+      $('#rmTestingVlCheckValuelt20').attr('disabled',false);
+      $('#rmTestingVlCheckValueTnd').attr('disabled',false);
+    }
+  });
+  
+  $('#rmTestingVlCheckValuelt20').change(function() {
+    if($('#rmTestingVlCheckValuelt20').is(':checked')){
+      $('#rmTestingVlValue').attr('readonly',true);
+      $('#rmTestingVlCheckValueTnd').attr('disabled',true);
+    }else{
+      $('#rmTestingVlValue').attr('readonly',false);
+      $('#rmTestingVlCheckValueTnd').attr('disabled',false);
+    }
+  });
+  
+  $('#rmTestingVlCheckValueTnd').change(function() {
+    if($('#rmTestingVlCheckValueTnd').is(':checked')){
+      $('#rmTestingVlValue').attr('readonly',true);
+      $('#rmTestingVlCheckValuelt20').attr('disabled',true);
+    }else{
+      $('#rmTestingVlValue').attr('readonly',false);
+      $('#rmTestingVlCheckValuelt20').attr('disabled',false);
+    }
+  });
+  
+  $('#repeatTestingVlValue').on('input',function(e){
+    if(this.value != ''){
+      $('#repeatTestingVlCheckValuelt20').attr('disabled',true);
+      $('#repeatTestingVlCheckValueTnd').attr('disabled',true);
+    }else{
+      $('#repeatTestingVlCheckValuelt20').attr('disabled',false);
+      $('#repeatTestingVlCheckValueTnd').attr('disabled',false);
+    }
+  });
+  
+  $('#repeatTestingVlCheckValuelt20').change(function() {
+    if($('#repeatTestingVlCheckValuelt20').is(':checked')){
+      $('#repeatTestingVlValue').attr('readonly',true);
+      $('#repeatTestingVlCheckValueTnd').attr('disabled',true);
+    }else{
+      $('#repeatTestingVlValue').attr('readonly',false);
+      $('#repeatTestingVlCheckValueTnd').attr('disabled',false);
+    }
+  });
+  
+  $('#repeatTestingVlCheckValueTnd').change(function() {
+    if($('#repeatTestingVlCheckValueTnd').is(':checked')){
+      $('#repeatTestingVlValue').attr('readonly',true);
+      $('#repeatTestingVlCheckValuelt20').attr('disabled',true);
+    }else{
+      $('#repeatTestingVlValue').attr('readonly',false);
+      $('#repeatTestingVlCheckValuelt20').attr('disabled',false);
+    }
+  });
+  
+  $('#suspendTreatmentVlValue').on('input',function(e){
+    if(this.value != ''){
+      $('#suspendTreatmentVlCheckValuelt20').attr('disabled',true);
+      $('#suspendTreatmentVlCheckValueTnd').attr('disabled',true);
+    }else{
+      $('#suspendTreatmentVlCheckValuelt20').attr('disabled',false);
+      $('#suspendTreatmentVlCheckValueTnd').attr('disabled',false);
+    }
+  });
+  
+  $('#suspendTreatmentVlCheckValuelt20').change(function() {
+    if($('#suspendTreatmentVlCheckValuelt20').is(':checked')){
+      $('#suspendTreatmentVlValue').attr('readonly',true);
+      $('#suspendTreatmentVlCheckValueTnd').attr('disabled',true);
+    }else{
+      $('#suspendTreatmentVlValue').attr('readonly',false);
+      $('#suspendTreatmentVlCheckValueTnd').attr('disabled',false);
+    }
+  });
+  
+  $('#suspendTreatmentVlCheckValueTnd').change(function() {
+    if($('#suspendTreatmentVlCheckValueTnd').is(':checked')){
+      $('#suspendTreatmentVlValue').attr('readonly',true);
+      $('#suspendTreatmentVlCheckValuelt20').attr('disabled',true);
+    }else{
+      $('#suspendTreatmentVlValue').attr('readonly',false);
+      $('#suspendTreatmentVlCheckValuelt20').attr('disabled',false);
+    }
+  });
+  
   function checkRejectionReason(){
     var rejectionReason = $("#rejectionReason").val();
     if(rejectionReason == "other"){
@@ -807,6 +921,7 @@ $sKey = ''; $sFormat = '';
       $('#newRejectionReason').val("");
     }
   }
+  
   function validateNow(){
     var format = '<?php echo $arr['sample_code'];?>';
     var sCodeLentgh = $("#sampleCode").val();
@@ -827,6 +942,7 @@ $sKey = ''; $sFormat = '';
       document.getElementById('vlRequestFormRwd').submit();
     }
   }
+  
   function validateSaveNow(){
     var format = '<?php echo $arr['sample_code'];?>';
     var sCodeLentgh = $("#sampleCode").val();
@@ -847,6 +963,7 @@ $sKey = ''; $sFormat = '';
       document.getElementById('vlRequestFormRwd').submit();
     }
   }
+  
   function setPatientDetails(pDetails){
     patientArray = pDetails.split("##");
     $("#patientFirstName").val(patientArray[0]+" "+patientArray[1]);
@@ -861,6 +978,8 @@ $sKey = ''; $sFormat = '';
       }
       
     if($.trim(patientArray[2])!=''){
+      $('#breastfeedingYes').removeClass('isRequired');
+      $('#pregYes').removeClass('isRequired');
       if(patientArray[2] == 'male' || patientArray[2] == 'not_recorded'){
       $('.femaleSection').hide();
       $('input[name="breastfeeding"]').prop('checked', false);
@@ -873,6 +992,8 @@ $sKey = ''; $sFormat = '';
       }else if(patientArray[2] == 'female'){
         $('.femaleSection').show();
         $("#genderFemale").prop('checked', true);
+        $('#breastfeedingYes').addClass('isRequired');
+        $('#pregYes').addClass('isRequired');
         if($.trim(patientArray[6])!=''){
           if($.trim(patientArray[6])=='yes'){
             $("#pregYes").prop('checked', true);
@@ -900,6 +1021,7 @@ $sKey = ''; $sFormat = '';
       $("#artNo").val($.trim(patientArray[15]));
     }
   }
+  
   function calculateLogValue(obj){
     if(obj.id=="vlResult") {
       absValue = $("#vlResult").val();

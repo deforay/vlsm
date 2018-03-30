@@ -12,7 +12,6 @@ $fResult = $db->rawQuery($fQuery);
 
 $lastQuery="SELECT * FROM vl_request_form ORDER BY vl_sample_id DESC LIMIT 1";
 $lastResult = $db->rawQuery($lastQuery);
-
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

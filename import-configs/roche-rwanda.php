@@ -70,7 +70,7 @@ try {
         
         foreach ($sheetData as $rowIndex => $row) {
           if ($rowIndex < $skipTillRow)
-              continue;
+            continue;
           
           $sampleCode    = "";
           $batchCode     = "";

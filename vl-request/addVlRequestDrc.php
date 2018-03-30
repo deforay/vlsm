@@ -100,11 +100,19 @@
                         <!--<h4 style="display:none;" id="sampleCodeValue"></h4>-->
                         <table class="table" style="width:100%">
                             <tr>
+                              <?php if($sarr['user_type']=='remoteuser') { ?>
+                                <td><label for="sampleCode">Échantillon id </label></td>
+                                <td>
+                                  <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
+                                  <input type="hidden" id="sampleCode" name="sampleCode"/>
+                                </td>
+                              <?php } else { ?>
                                 <td><label for="sampleCode">Échantillon id </label><span class="mandatory">*</span></td>
                                 <td>
-                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
+                                  <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
-                                <td></td><td></td><td></td><td></td>
+                              <?php } ?>
+                                <td></td><td></td><td></td><td></td> 
                             </tr>
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -582,12 +590,14 @@
           pNameVal = pName.split("##");
           sCode = sCodeKey.auto;
           $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+          $("#sampleCodeInText").html('<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId);
           //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey;?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
           $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCode);
           $("#sampleCodeKey").val(sCodeKey.maxId);
           checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null);
           <?php } else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
           $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          $("#sampleCodeInText").html('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
           //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
           $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
           $("#sampleCodeKey").val(sCodeKey.maxId);
