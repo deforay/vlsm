@@ -125,7 +125,7 @@ if(trim($id)!= ''){
                     <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>District</i></strong></td>
                     <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Health facility</i></strong></td>
                     <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Patient Full Name</i></strong></td>
-                    <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Tracent ID</i></strong></td>
+                    <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Patient ART (TRACNET)</i></strong></td>
                     <td align="center" style="font-size:11px;width:3%;border:1px solid #333;"  ><strong><i>Age</i></strong></td>
                     <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Birth Date</i></strong></td>
                     <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Gender</i></strong></td>
