@@ -80,39 +80,7 @@ if(count($result)>0){
             }else{
                 if($lab['sample_collection_date']!='' && $lab['sample_collection_date']!=null && $lab['sample_collection_date']!='0000-00-00 00:00:00')
                 {
-                    $sExpDT = explode(" ",$lab['sample_collection_date']);
-                    $sExpDate = explode("-",$sExpDT[0]);
-                    $sExpDate[0] = substr($sExpDate[0], -2);
-                    $start_date = date($sExpDate[0].'-01-01');
-                    $end_date = date($sExpDate[0].'-12-31');
-                    $mnthYr = date($sExpDate[0]);
-                    if($arr['sample_code']=='MMYY'){
-                        $mnthYr = date($sExpDate[1].$sExpDate[0]);
-                    }else if($arr['sample_code']=='YY'){
-                        $mnthYr = date($sExpDate[0]);
-                    }
-                    $auto = date($sExpDate[0].$sExpDate[1].$sExpDate[2]);
-                    $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" ORDER BY vl_sample_id DESC LIMIT 1';
-                    $svlResult=$db->query($svlQuery);
-                    $prefix = $arr['sample_code_prefix'];
-                    if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
-                    $maxId = $svlResult[0]['sample_code_key']+1;
-                    $strparam = strlen($maxId);
-                    $zeros = substr("000", $strparam);
-                    $maxId = $zeros.$maxId;
-                    }else{
-                    $maxId = '001';
-                    }
-                    if($arr['sample_code']=='auto'){
-                        $lab['serial_no'] = $auto.$maxId;
-                        $lab['sample_code'] = $auto.$maxId;
-                        $lab['sample_code_key'] = $maxId;
-                    }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
-                        $lab['serial_no'] = $prefix.$mnthYr.$maxId;
-                        $lab['sample_code'] = $prefix.$mnthYr.$maxId;
-                        $lab['sample_code_format'] = $prefix.$mnthYr;
-                        $lab['sample_code_key'] =  $maxId;
-                    }
+                    
                     $lab['request_created_by'] = 0;
                     $lab['last_modified_by'] = 0;
                     $lab['request_created_datetime'] = $general->getDateTime();
