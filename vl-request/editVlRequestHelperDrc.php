@@ -7,6 +7,13 @@ $general=new Deforay_Commons_General();
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
+    $configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
      //system config
     $systemConfigQuery ="SELECT * from system_config";
     $systemConfigResult=$db->query($systemConfigQuery);
@@ -226,9 +233,45 @@ try {
                 );
     if($sarr['user_type']=='remoteuser'){
         $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-    }else if($_POST['sampleCodeCol']!=''){
-        $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
-        $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+    }else  {
+        if($_POST['sampleCodeCol']!=''){
+            $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+        }else{
+            //update sample code generation
+            $sExpDT = explode(" ",$_POST['sampleCollectionDate']);
+            $sExpDate = explode("-",$sExpDT[0]);
+            $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
+            $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
+            $mnthYr = substr($sExpDate[0],-2);
+            if($arr['sample_code']=='MMYY'){
+                $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
+            }else if($arr['sample_code']=='YY'){
+                $mnthYr = substr($sExpDate[0],-2);
+            }
+            $auto = substr($sExpDate[0],-2).$sExpDate[1].$sExpDate[2];
+            $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND sample_code_key is NOT NULL ORDER BY vl_sample_id DESC LIMIT 1';
+            $svlResult=$db->query($svlQuery);
+            $prefix = $arr['sample_code_prefix'];
+            if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
+            $maxId = $svlResult[0]['sample_code_key']+1;
+            $strparam = strlen($maxId);
+            $zeros = substr("000", $strparam);
+            $maxId = $zeros.$maxId;
+            }else{
+            $maxId = '001';
+            }
+            if($arr['sample_code']=='auto'){
+                $vldata['serial_no'] = $auto.$maxId;
+                $vldata['sample_code'] = $auto.$maxId;
+                $vldata['sample_code_key'] = $maxId;
+            }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+                $vldata['serial_no'] = $prefix.$mnthYr.$maxId;
+                $vldata['sample_code'] = $prefix.$mnthYr.$maxId;
+                $vldata['sample_code_format'] = $prefix.$mnthYr;
+                $vldata['sample_code_key'] =  $maxId;
+            }
+        }
     }
     if(isset($_POST['specimenType']) && trim($_POST['specimenType'])!= ''){
         $vldata['sample_type'] = $_POST['specimenType'];
