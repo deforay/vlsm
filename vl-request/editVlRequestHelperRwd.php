@@ -88,9 +88,9 @@ try {
        $db=$db->where('facility_id',$_POST['fName']);
        $id=$db->update($fDetails,$fData);
     }
-    if(!isset($_POST['gender']) || trim($_POST['gender']) == 'male'){
-      $_POST['patientPregnant'] = NULL;
-      $_POST['breastfeeding'] = NULL;
+    if(!isset($_POST['gender']) || trim($_POST['gender'])!= 'female'){
+      $_POST['patientPregnant'] = '';
+      $_POST['breastfeeding'] = '';
     }
     $instanceId = '';
     if(isset($_SESSION['instanceId'])){
