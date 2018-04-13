@@ -7,11 +7,12 @@ include(dirname(__FILE__) . "/../../General.php");
 
 $general=new Deforay_Commons_General();
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$sDBNAME' AND table_name='vl_request_form'";
+$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
 $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 $sampleCode = array();
 if(count($data['result'])>0){
+    $lab = array(); 
 foreach($data['result'] as $key=>$remoteData){
     foreach($oneDimensionalArray as $result){
       $lab[$result] = $remoteData[$result];
@@ -22,7 +23,7 @@ foreach($data['result'] as $key=>$remoteData){
         unset($lab[$keys]);
     }
     //check wheather sample code empty or not
-    if($lab['remote_sample_code']!=''){
+    if(isset($lab['remote_sample_code']) && $lab['remote_sample_code']!=''){
 	$sQuery = "Select vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key from vl_request_form where remote_sample_code='".$lab['remote_sample_code']."'";
         $sResult = $db->rawQuery($sQuery);
         if($sResult){
