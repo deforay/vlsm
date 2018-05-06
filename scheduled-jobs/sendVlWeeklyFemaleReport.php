@@ -157,7 +157,7 @@ $sQuery="SELECT
 		 }
 		}
 		$writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-		$filename = 'vl-lab-female-weekly-report-' . date('d-M-Y-H-i-s') . '.xls';
+		$filename = 'VLSM-Lab-Female-Weekly-Report-' . date('d-M-Y-H-i-s') . '.xls';
 		$writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
 		//echo $filename;
 		//mail part start

@@ -33,8 +33,7 @@ class MYPDF extends TCPDF {
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 // set document information
-$pdf->SetCreator(PDF_CREATOR);
-//$pdf->SetAuthor('Saravanan');
+$pdf->SetCreator('VLSM');
 $pdf->SetTitle('Vl Request Form');
 //$pdf->SetSubject('TCPDF Tutorial');
 //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -360,7 +359,7 @@ $rejectionrResult = $db->rawQuery($rejectionrQuery);
         $html.='</table>';
 $pdf->writeHTML($html);
 $pdf->lastPage();
-$filename = 'vl-form-' . date('d-M-Y-H-i-s') . '.pdf';
+$filename = 'VLSM-Requests-' . date('d-M-Y-H-i-s') . '.pdf';
 $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
 echo $filename;
 ?>

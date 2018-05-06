@@ -755,7 +755,7 @@ function checkPatientIsPregnant(value){
       if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
         //Check diff
         if(moment(artInitiationDate).isAfter(dateOfLastVLTest)) {
-          alert("Last Viral Load Test Date could not be earlier than ART initiation date!");
+          alert("Last Viral Load Test Date cannot be earlier than ART initiation date!");
           $("#lastViralLoadTestDate").val("");
         }
       }

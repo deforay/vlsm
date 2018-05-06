@@ -120,7 +120,7 @@ if(isset($_SESSION['vlTATDetails']) && trim($_SESSION['vlTATDetails'])!=""){
   }
  }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-result-TAT-details' . date('d-M-Y-H-i-s') . '.xls';
+ $filename = 'VLSM-TAT-Report' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
 }

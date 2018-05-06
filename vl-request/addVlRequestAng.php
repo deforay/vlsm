@@ -418,9 +418,9 @@
                     </div>
                     <table class="table" style="width:100%">
                       <tr>
-                        <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
+                        <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label><span class="mandatory">*</span></td>
                         <td style="width:14%;">
-                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
+                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
                         </td>
                       </tr>
                       <tr>

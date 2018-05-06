@@ -137,10 +137,33 @@ $general=new Deforay_Commons_General();
               //portugese
                 alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
               <?php }else { ?>
-                alert("Sample Received Date could not be earlier than Sample Collection Date!");
+                alert("Sample Received Date cannot be earlier than Sample Collection Date!");
               <?php } ?>
               $('#sampleReceivedDate').val('');
             }
+        }
+      }
+
+      function checkSampleReceviedAtHubDate(){
+        var sampleCollectionDate = $("#sampleCollectionDate").val();
+        var sampleReceivedAtHubOn = $("#sampleReceivedAtHubOn").val();
+        if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedAtHubOn)!= ''){
+          var scdf = $("#sampleCollectionDate").val().split(' ');
+          var stdl = $("#sampleReceivedAtHubOn").val().split(' ');
+          var scd = changeFormat(scdf[0]);
+          var std = changeFormat(stdl[0]);
+          if(moment(scd+' '+scdf[1]).isAfter(std+' '+stdl[1])) {
+            <?php if($arr['vl_form']=='3'){ ?>
+              //french
+                alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
+              <?php }else if($arr['vl_form']=='8'){ ?>
+              //portugese
+                alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
+              <?php }else { ?>
+                alert("Sample Received Date cannot be earlier than Sample Collection Date!");
+              <?php } ?>
+            $("#sampleTestingDateAtLab").val("");
+          }
         }
       }
       
@@ -160,7 +183,7 @@ $general=new Deforay_Commons_General();
               //french
               alert("Data de Teste de Amostras não pode ser anterior ao Data Hora de colheita!");
             <?php } else { ?>
-              alert("Sample Testing Date could not be earlier than Sample Collection Date!");
+              alert("Sample Testing Date cannot be earlier than Sample Collection Date!");
             <?php } ?>
             $("#sampleTestingDateAtLab").val("");
           }
@@ -179,7 +202,7 @@ $general=new Deforay_Commons_General();
             //portugese
             alert("Data de início de TARV não pode ser anterior ao Data de nascimento!");
             <?php } else { ?>
-            alert("ART Initiation Date could not be earlier than DOB!");
+            alert("ART Initiation Date cannot be earlier than DOB!");
             <?php } ?>
             $("#dateOfArtInitiation").val("");
           }

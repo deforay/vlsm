@@ -28,7 +28,7 @@
     $facility = "";
     $facility.="<option value=''> -- Sélectionner -- </option>";
     foreach($fResult as $fDetails){
-      $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+      $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name']))."</option>";
     }
     //Get selected state
     $stateQuery="SELECT * from facility_details where facility_id='".$vlQueryInfo[0]['facility_id']."'";

@@ -169,7 +169,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
      }
      $filename = '';
      $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-     $filename = 'vl-test-result-' . date('d-M-Y-H-i-s') . '.xls';
+     $filename = 'VLSM-Test-Results-' . date('d-M-Y-H-i-s') . '.xls';
      $pathFront=realpath('../temporary');
      $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
     echo $filename;

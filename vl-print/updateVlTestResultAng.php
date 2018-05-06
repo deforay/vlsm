@@ -498,9 +498,9 @@ $disable = "disabled = 'disabled'";
                     </div>
                     <table class="table" style="width:100%">
                       <tr>
-                        <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label></td>
+                        <td style="width:14%;"><label for="sampleCode">  Nº de amostra </label><span class="mandatory">*</span></td>
                         <td style="width:14%;">
-                          <input type="text" class="form-control" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" disabled="disabled" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                          <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter Nº de amostra" style="width:100%;" disabled="disabled" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
                         </td>
                       </tr>
                       <tr>

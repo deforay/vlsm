@@ -13,7 +13,7 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Facility Name","Patient ART no.","Patient phone no.","Sample Collection Date","Lab Name","Vl value in cp/ml");
+ $headings = array("Facility Name","Patient's Name","Patient ART no.","Patient phone no.","Sample Collection Date","Lab Name","Vl value in cp/ml");
  
  $colNo = 0;
  
@@ -46,6 +46,18 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
 
  $sheet->mergeCells('A1:AE1');
  $nameValue = '';
+
+ $filters = array(
+                    'hvlSampleTestDate' => 'Sample Test Date',
+                    'hvlBatchCode' => 'Batch Code',
+                    'hvlSampleType' => 'Sample Type',
+                    'hvlFacilityName' => 'Facility Name',
+                    'hvlContactStatus' => 'Contact Status',
+                    'hvlGender' => 'Gender',
+                    'hvlPatientPregnant' => 'Is Patient Pregnant',
+                    'hvlPatientBreastfeeding' => 'Is Patient Breastfeeding'
+                );
+
  foreach($_POST as $key=>$value){
    if(trim($value)!='' && trim($value)!='-- Select --'){
      $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
@@ -69,6 +81,7 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
   }
   
     $row[] = ucwords($aRow['facility_name']);
+    $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
     $row[] = $aRow['patient_art_no'];
     $row[] = $aRow['patient_mobile_number'];
     $row[] = $sampleCollectionDate;
@@ -97,9 +110,8 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
   }
  }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-highviral-load-report' . date('d-M-Y-H-i-s') . '.xls';
+ $filename = 'VLSM-High-Viral-Load-Report' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
  
 }
-?>

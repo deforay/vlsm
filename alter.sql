@@ -1463,3 +1463,9 @@ UPDATE `privileges` SET `privilege_name` = 'editSpecimenReferralManifest.php' WH
 
 -- Version 3.0 ---------- Pal 21-Mar-2017
 -- Version 3.2 ---------- Amit 29-Mar-2017
+
+
+ALTER TABLE `vl_request_form` ADD `vl_result_category` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_processed`;
+ALTER TABLE `vl_request_form` ADD `sample_received_at_hub_datetime` DATETIME NULL DEFAULT NULL AFTER `vl_focal_person_phone_number`;
+
+

@@ -1,5 +1,17 @@
 <?php
 ob_start();
+
+
+//Funding source list
+$fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+$fundingSourceList = $db->query($fundingSourceQry);
+//Implementing partner list
+$implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+$implementingPartnerList = $db->query($implementingPartnerQry);
+
+
+
+
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
   foreach($pdResult as $provinceName){
@@ -186,6 +198,44 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-2 col-md-2 fContactPerson facilityContactPerson" style="display:<?php echo(trim($facilityResult[0]['contact_person']) != '')?'':'none'; ?>;"><?php echo ucwords($facilityResult[0]['contact_person']); ?></div>
                     </div>
                   </div>
+
+
+
+
+                    <div class="row">
+                          <div class="col-xs-3 col-md-3">
+                              <div class="form-group">
+                                  <label for="implementingPartner">Implementing Partner <span class="mandatory">*</span></label>
+                                  <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;"  <?php echo $disable;?>>
+                                      <option value=""> -- Select -- </option>
+                                      <?php
+                                      foreach($implementingPartnerList as $implementingPartner){
+                                      ?>
+                                        <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>" <?php echo ($implementingPartner['i_partner_id'] == $vlQueryInfo[0]['implementing_partner'])?'selected="selected"':''; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+                                      <?php } ?>                            
+                                  </select>
+                              </div>
+                          </div>   
+                          <div class="col-xs-3 col-md-3">
+                              <div class="form-group">
+                                  <label for="fundingSource">Funding Source <span class="mandatory">*</span></label>
+                                  <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose implementing partner" style="width:100%;"  <?php echo $disable;?>>
+                                      <option value=""> -- Select -- </option>
+                                      <?php
+                                      foreach($fundingSourceList as $fundingSource){
+                                      ?>
+                                        <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>" <?php echo ($fundingSource['funding_source_id'] == $vlQueryInfo[0]['funding_source'])?'selected="selected"':''; ?>><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+                                      <?php } ?>                          
+                                  </select>
+                              </div>
+                          </div>                             
+                      </div>
+
+
+
+
+
+
                 </div>
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -554,6 +604,12 @@ $disable = "disabled = 'disabled'";
                         </div>
                       </div>
                       <div class="row">
+                      <div class="col-md-4">
+                            <label class="col-lg-5 control-label" for="sampleReceivedAtHubOn">Date Sample Received at Hub (PHL) </label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control dateTime" id="sampleReceivedAtHubOn" name="sampleReceivedAtHubOn" placeholder="Sample Received at HUB Date" title="Please select sample received at HUB date" value="<?php echo $vlQueryInfo[0]['sample_received_at_hub_datetime']; ?>"/>
+                            </div>
+                        </div>                       
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="sampleReceivedOn">Date Sample Received at Testing Lab </label>
                             <div class="col-lg-7">
@@ -566,12 +622,7 @@ $disable = "disabled = 'disabled'";
                                 <input type="text" class="isRequired form-control labSection" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>"/>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control labSection" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatched Date" title="Please select result dispatched date" value="<?php echo $vlQueryInfo[0]['result_dispatched_datetime']; ?>"/>
-                            </div>
-                        </div>
+                        
                       </div>
                       <div class="row">
                         <div class="col-md-4">
@@ -588,7 +639,7 @@ $disable = "disabled = 'disabled'";
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="noResult">Sample Rejection </label>
+                            <label class="col-lg-5 control-label" for="noResult">Sample Rejected ? </label>
                             <div class="col-lg-7">
                               <label class="radio-inline">
                                <input class="labSection" id="noResultYes" name="noResult" value="yes" title="Please check one" type="radio" <?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'checked="checked"':''; ?>> Yes
@@ -626,7 +677,7 @@ $disable = "disabled = 'disabled'";
                             <div class="col-lg-7">
                               <input type="text" class="isRequired form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;"  onchange="calculateLogValue(this);"/>
                               <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
-                              <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Lev
+                              <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
                       </div>
@@ -637,6 +688,12 @@ $disable = "disabled = 'disabled'";
                               <input type="text" class="form-control labSection" id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control labSection" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatched Date" title="Please select result dispatched date" value="<?php echo $vlQueryInfo[0]['result_dispatched_datetime']; ?>"/>
+                            </div>
+                        </div>                        
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
                             <div class="col-lg-7">
@@ -652,7 +709,10 @@ $disable = "disabled = 'disabled'";
                               </select>
                             </div>
                         </div>
-                        <div class="col-md-4" style="<?php echo (($sarr['user_type']=='remoteuser')) ? 'display:none;':''; ?>">
+                        
+                      </div><br/>
+                      <div class="row">
+                      <div class="col-md-4" style="<?php echo (($sarr['user_type']=='remoteuser')) ? 'display:none;':''; ?>">
                             <label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
                               <select class="form-control labSection  <?php echo (($sarr['user_type']!='remoteuser')) ? 'isRequired':''; ?>" id="status" name="status" title="Please select test status">
@@ -664,9 +724,7 @@ $disable = "disabled = 'disabled'";
                                 <?php } ?>
                               </select>
                             </div>
-                        </div>
-                      </div><br/>
-                      <div class="row">
+                        </div>                      
                         
                         <div class="col-md-6">
                             <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
@@ -674,12 +732,17 @@ $disable = "disabled = 'disabled'";
                               <textarea class="form-control labSection" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"><?php echo trim($vlQueryInfo[0]['approver_comments']); ?></textarea>
                             </div>
                         </div>
-                        <div class="col-md-6 reasonForResultChanges" style="visibility:hidden;">
+                        
+                      </div>
+
+                      <div class="row reasonForResultChanges"  style="display:none;">
+                      <br>
+                      <div class="col-md-6 ">
                             <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result<span class="mandatory">*</span> </label>
                             <div class="col-lg-10">
                               <textarea class="form-control" name="reasonForResultChanges" id="reasonForResultChanges" placeholder="Enter Reason For Result Changes" title="Please enter reason for result changes" style="width:100%;"></textarea>
                             </div>
-                        </div>
+                        </div>                      
                       </div>
                       <?php
                       if(count($allChange)>0){
@@ -733,6 +796,7 @@ $disable = "disabled = 'disabled'";
           $('.rejectionReason').hide();
           $('#rejectionReason').removeClass('isRequired');
           $('#rejectionReason').val('');
+          $("#status").val('');
         }
     });
   
@@ -782,10 +846,10 @@ $disable = "disabled = 'disabled'";
     $("#vlRequestFormSudan .labSection").on("change", function() {
       if($.trim(result)!= ''){
         if($("#vlRequestFormSudan .labSection").serialize() == $(__clone).serialize()){
-          $(".reasonForResultChanges").css("visibility","hidden");
+          $(".reasonForResultChanges").css("display","block");
           $("#reasonForResultChanges").removeClass("isRequired");
         }else{
-          $(".reasonForResultChanges").css("visibility","visible");
+          $(".reasonForResultChanges").css("display","block");
           $("#reasonForResultChanges").addClass("isRequired");
         }
       }

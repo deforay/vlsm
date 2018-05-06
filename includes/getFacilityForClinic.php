@@ -69,7 +69,7 @@ if(isset($_POST['pName'])){
     if($facilityInfo){
         $facility.=$option;
         foreach($facilityInfo as $fDetails){
-            $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
+            $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
         $facility.=$option;
@@ -80,6 +80,7 @@ if(isset($_POST['pName'])){
     {
       $facilityDistQuery = $facilityDistQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
     }
+    //echo $facilityDistQuery;die;
     $facilityDistInfo=$db->query($facilityDistQuery);
     if($facilityDistInfo){
         $district.=$option;
@@ -95,16 +96,17 @@ if(isset($_POST['pName'])){
 }
 if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     $distName = $_POST['dName'];
-    $facilityQuery = "SELECT * from facility_details where facility_type=1 AND facility_district='".$distName."' AND status='active'";
+    $facilityQuery = "SELECT * from facility_details where facility_district LIKE '".$distName."' AND status='active'";
     if(isset($vlfmResult[0]['facilityId'])){
       $facilityQuery = $facilityQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
     }
+    //echo $facilityQuery; die;
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
         $facility .= $option;
         foreach($facilityInfo as $fDetails){
-          $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
+          $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
       $facility .= $option;
@@ -116,7 +118,7 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     if($facilityLabInfo){
         $facilityLab .= $option;
         foreach($facilityLabInfo as $fDetails){
-          $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name']).' - '.$fDetails['facility_code']."</option>";
+          $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
       $facilityLab .= $option;

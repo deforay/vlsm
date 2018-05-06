@@ -205,7 +205,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
             }
          }
          $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-         $filename = 'vlsm-requests-' . date('d-M-Y-H-i-s') . '.xls';
+         $filename = 'VLSM-requests-' . date('d-M-Y-H-i-s') . '.xls';
          $pathFront=realpath('../temporary');
          $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
          $downloadFile = '../temporary'. DIRECTORY_SEPARATOR . $filename;

@@ -18,8 +18,8 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('f.facility_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name','vl.result');
-        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.patient_mobile_number','vl.sample_collection_date','fd.facility_name','vl.result');
+        $aColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name','vl.result');
+        $orderColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number','vl.sample_collection_date','fd.facility_name','vl.result');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -176,18 +176,19 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 						$aRow['sample_collection_date'] = '';
 					}
             $row = array();
-						$row[] = ucwords($aRow['facility_name']);
-						$row[] = $aRow['patient_art_no'];
-						$row[] = $aRow['patient_mobile_number'];
-						$row[] = $aRow['sample_collection_date'];
-						$row[] = $aRow['labName'];
+            $row[] = ucwords($aRow['facility_name']);
+            $row[] = $aRow['patient_art_no'];
+            $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
+            $row[] = $aRow['patient_mobile_number'];
+            $row[] = $aRow['sample_collection_date'];
+            $row[] = $aRow['labName'];
             $row[] = $aRow['result'];
             $row[] = '<select class="form-control" name="status" id=' . $aRow['vl_sample_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">
-												<option value=""> -- Select -- </option>
-												<option value="yes" ' . ($aRow['contact_complete_status'] == "yes" ? "selected=selected" : "") . '>Yes</option>
-												<option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
-											</select>';
-						$output['aaData'][] = $row;
+                            <option value=""> -- Select -- </option>
+                            <option value="yes" ' . ($aRow['contact_complete_status'] == "yes" ? "selected=selected" : "") . '>Yes</option>
+                            <option value="no" ' . ($aRow['contact_complete_status'] == "no" ? "selected=selected" : "") . '>No</option>
+                        </select>';
+            $output['aaData'][] = $row;
         }
         echo json_encode($output);
 ?>

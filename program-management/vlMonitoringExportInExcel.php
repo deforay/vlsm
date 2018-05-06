@@ -773,7 +773,7 @@ if(isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringRe
   $sheet->getStyle('A'.$mergeQ7.':F'.$mergeQ7)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
   $sheet->getStyle('A11:M'.$q88)->applyFromArray($borderStyle);
   $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-  $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.xls';
+  $filename = 'VLSM-Quarterly-Monitoring-Report-' . date('d-M-Y-H-i-s') . '.xls';
   $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
   echo $filename;
 }
