@@ -1,5 +1,5 @@
 <?php
-define('VERSION', '3.2');
+define('VERSION', '3.3');
 //define('USERTYPE', 'standalone');
 //define('USERTYPE', 'vluser');
 //define('USERTYPE', 'remoteuser');
