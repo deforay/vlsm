@@ -33,7 +33,7 @@
   //$facility = "";
   $facility ="<option value=''> -- Sélectionner -- </option>";
   foreach($fResult as $fDetails){
-    $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
+    $facility .= "<option value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name']))."</option>";
   }
   //get ART list
   $aQuery="SELECT * from r_art_code_details";// where nation_identifier='drc'";
@@ -72,7 +72,7 @@
       <h1><i class="fa fa-edit"></i> VIRAL LOAD LABORATORY REQUEST FORM</h1>
       <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Add Vl Request</li>
+        <li class="active">Add VL Request</li>
       </ol> 
     </section>
     <!-- Main content -->

@@ -148,11 +148,12 @@ $batResult = $db->rawQuery($batQuery);
 													<thead>
 															<tr>
 																	<th>Facility Name</th>
+																	<th>Patient's Name</th> 
 																	<th>Patient ART no.</th>                               
 																	<th>Patient Phone no.</th>                               
 																	<th>Sample Collection Date</th>                               
-																	<th>VL Lab Name</th>                               
-																	<th>VL Value in cp/ml</th>
+																	<th>Viral Load Lab</th>                               
+																	<th>Viral Load (cp/ml)</th>
 																	<th>Status</th>
 															</tr>
 													</thead>
@@ -479,6 +480,7 @@ $batResult = $db->rawQuery($batQuery);
             "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
+				{"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},

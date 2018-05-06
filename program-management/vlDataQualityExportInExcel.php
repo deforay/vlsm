@@ -96,7 +96,7 @@ if(isset($_SESSION['vlIncompleteForm']) && trim($_SESSION['vlIncompleteForm'])!=
   }
  }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-data-quality-report' . date('d-M-Y-H-i-s') . '.xls';
+ $filename = 'VLSM-Data-Quality-report' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
  

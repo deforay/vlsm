@@ -1,5 +1,13 @@
 <?php
 ob_start();
+
+//Funding source list
+$fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+$fundingSourceList = $db->query($fundingSourceQry);
+//Implementing partner list
+$implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+$implementingPartnerList = $db->query($implementingPartnerQry);
+
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
   $sampleClass = '';
   $maxLength = '';
@@ -135,7 +143,7 @@ $sKey = ''; $sFormat = '';
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="province">State <span class="mandatory">*</span></label>
+                        <label for="province">State/Province <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="province" id="province" title="Please choose state" style="width:100%;" onchange="getProvinceDistricts(this);">
                             <?php echo $province;?>
                           </select>
@@ -143,7 +151,7 @@ $sKey = ''; $sFormat = '';
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="district">County <span class="mandatory">*</span></label>
+                        <label for="district">District/County <span class="mandatory">*</span></label>
                           <select class="form-control isRequired" name="district" id="district" title="Please choose county" style="width:100%;" onchange="getFacilities(this);">
                             <option value=""> -- Select -- </option>
                           </select>
@@ -172,6 +180,34 @@ $sKey = ''; $sFormat = '';
                       <div class="col-xs-2 col-md-2 fContactPerson" style="display:none;"><strong>Clinic Contact Person -</strong></div>
                       <div class="col-xs-2 col-md-2 fContactPerson facilityContactPerson" style="display:none;"></div>
                     </div>
+                    <div class="row">
+                          <div class="col-xs-3 col-md-3">
+                              <div class="form-group">
+                                  <label for="implementingPartner">Implementing Partner <span class="mandatory">*</span></label>
+                                  <select class="form-control isRequired" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
+                                      <option value=""> -- Select -- </option>
+                                          <?php
+                                          foreach($implementingPartnerList as $implementingPartner){
+                                          ?>
+                                            <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+                                          <?php } ?>                                
+                                  </select>
+                              </div>
+                          </div>   
+                          <div class="col-xs-3 col-md-3">
+                              <div class="form-group">
+                                  <label for="fundingSource">Funding Source <span class="mandatory">*</span></label>
+                                  <select class="form-control isRequired" name="fundingSource" id="fundingSource" title="Please choose implementing partner" style="width:100%;">
+                                      <option value=""> -- Select -- </option>
+                                      <?php
+                                      foreach($fundingSourceList as $fundingSource){
+                                      ?>
+                                        <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+                                      <?php } ?>                              
+                                  </select>
+                              </div>
+                          </div>                             
+                      </div>               
                   </div>
                 </div>
                 <div class="box box-primary">
@@ -509,9 +545,15 @@ $sKey = ''; $sFormat = '';
                       </div>
                       <div class="row">
                         <div class="col-md-4">
+                            <label class="col-lg-5 control-label" for="sampleReceivedAtHubOn">Date Sample Received at Hub (PHL) </label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control dateTime" id="sampleReceivedAtHubOn" name="sampleReceivedAtHubOn" placeholder="Sample Received at HUB Date" title="Please select sample received at HUB date" onchange="checkSampleReceviedAtHubDate()"/>
+                            </div>
+                        </div>                      
+                        <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="sampleReceivedDate">Date Sample Received at Testing Lab </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received Date" title="Please select sample received date" onchange="checkSampleReceviedDate()"/>
+                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="Sample Received at LAB Date" title="Please select sample received at Lab date" onchange="checkSampleReceviedDate()"/>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -520,12 +562,7 @@ $sKey = ''; $sFormat = '';
                                 <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" onchange="checkSampleTestingDate();"/>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
-                            <div class="col-lg-7">
-                                <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatched Date" title="Please select result dispatched date"/>
-                            </div>
-                        </div>
+                        
                       </div>
                       <div class="row">
                         <div class="col-md-4">
@@ -540,7 +577,7 @@ $sKey = ''; $sFormat = '';
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="noResult">Sample Rejection </label>
+                            <label class="col-lg-5 control-label" for="noResult">Sample Rejected ? </label>
                             <div class="col-lg-7">
                               <label class="radio-inline">
                                <input class="" id="noResultYes" name="noResult" value="yes" title="Please check one" type="radio"> Yes
@@ -586,6 +623,12 @@ $sKey = ''; $sFormat = '';
                             <input type="text" class="form-control " id="vlLog" name="vlLog" placeholder="Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this);"/>
                           </div>
                         </div>
+                        <div class="col-md-4">
+                            <label class="col-lg-5 control-label" for="resultDispatchedOn">Date Results Dispatched </label>
+                            <div class="col-lg-7">
+                                <input type="text" class="form-control dateTime" id="resultDispatchedOn" name="resultDispatchedOn" placeholder="Result Dispatch Date" title="Please select result dispatched date"/>
+                            </div>
+                        </div>                        
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="approvedBy">Approved By </label>
                             <div class="col-lg-7">

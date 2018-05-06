@@ -425,7 +425,7 @@ $facilityName = ucwords($qResult[0]['instance_facility_name']);
     }
    //Super lab performance sheet end
    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-   $filename = 'vl-lab-weekly-report-' . date('d-M-Y-H-i-s') . '.xls';
+   $filename = 'VLSM-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') . '.xls';
    $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
     //mail part start
     //Create a new PHPMailer instance

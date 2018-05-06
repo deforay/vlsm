@@ -404,20 +404,20 @@ $primaryKey="vl_sample_id";
 	
         foreach ($rResult as $aRow) {
             $row = array();
-	    $row[] = $aRow['sample_code'];
-	    if($sarr['user_type']!='standalone'){
-	      $row[] = $aRow['remote_sample_code'];
-	    }
-	    $row[] = $aRow['batch_code'];
-	    $row[] = $aRow['patient_art_no'];
+	    	$row[] = $aRow['sample_code'];
+			if($sarr['user_type']!='standalone'){
+				$row[] = $aRow['remote_sample_code'];
+			}
+	    	$row[] = $aRow['batch_code'];
+	    	$row[] = $aRow['patient_art_no'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
-	    $row[] = ucwords($aRow['facility_name']);
+	   		$row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
             $row[] = ucwords($aRow['status_name']);
-	    $row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name'])!= '')?ucwords($aRow['funding_source_name']):'';
-	    $row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
-            $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
+	    	$row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name'])!= '')?ucwords($aRow['funding_source_name']):'';
+	    	$row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
+            $row[] = '<a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"></i> Result PDF</a>';
            
             $output['aaData'][] = $row;
         }

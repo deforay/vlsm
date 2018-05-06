@@ -89,7 +89,7 @@ if(isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable'
   }
  }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-result-not-available-report' . date('d-M-Y-H-i-s') . '.xls';
+ $filename = 'VLSM-Results-not-available-report' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
  

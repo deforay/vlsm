@@ -152,7 +152,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = ucwords($aRow['facility_district']);
   $row[] = ucwords($aRow['facility_state']);
   $row[] = $aRow['patient_art_no'];
-  $row[] = '';
+  $row[] = $aRow['patient_first_name'].' '.$aRow['patient_last_name'];
   $row[] = $dob;
   $row[] = ($aRow['patient_age_in_years']!= NULL && trim($aRow['patient_age_in_years'])!= '' && $aRow['patient_age_in_years'] >0)?$aRow['patient_age_in_years']:0;
   $row[] = $gender;
@@ -197,7 +197,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }
  }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.xls';
+ $filename = 'VLSM-Export-Data-' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
 }

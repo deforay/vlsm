@@ -146,7 +146,7 @@ include ('../includes/PHPExcel.php');
   }
  }
  $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'vl-result-' . date('d-M-Y-H-i-s') . '.xls';
+ $filename = 'VLSM-results-' . date('d-M-Y-H-i-s') . '.xls';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
 ?>

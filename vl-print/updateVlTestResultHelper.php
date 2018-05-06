@@ -23,6 +23,16 @@ try {
     }else{
         $_POST['sampleReceivedOn'] = NULL;
     }
+
+  
+    if(isset($_POST['sampleReceivedAtHubOn']) && trim($_POST['sampleReceivedAtHubOn'])!=""){
+        $sampleReceivedAtHubOn = explode(" ",$_POST['sampleReceivedAtHubOn']);
+        $_POST['sampleReceivedAtHubOn']=$general->dateFormat($sampleReceivedAtHubOn[0])." ".$sampleReceivedAtHubOn[1];  
+    }else{
+        $_POST['sampleReceivedAtHubOn'] = NULL;
+    }
+
+
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
         $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
         $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];  
@@ -93,6 +103,7 @@ try {
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
           //'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
+          'sample_received_at_hub_datetime'=>$_POST['sampleReceivedAtHubOn'],
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedOn'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],

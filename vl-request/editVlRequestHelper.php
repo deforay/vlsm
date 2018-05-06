@@ -107,6 +107,16 @@ try {
     }else{
         $_POST['sampleReceivedDate'] = NULL;
     }
+
+  
+    if(isset($_POST['sampleReceivedAtHubOn']) && trim($_POST['sampleReceivedAtHubOn'])!=""){
+        $sampleReceivedAtHubOn = explode(" ",$_POST['sampleReceivedAtHubOn']);
+        $_POST['sampleReceivedAtHubOn']=$general->dateFormat($sampleReceivedAtHubOn[0])." ".$sampleReceivedAtHubOn[1];  
+    }else{
+        $_POST['sampleReceivedAtHubOn'] = NULL;
+    }
+
+
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
         $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
         $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];  
@@ -212,6 +222,7 @@ try {
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
           //'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
+          'sample_received_at_hub_datetime'=>$_POST['sampleReceivedAtHubOn'],
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
           'result_dispatched_datetime'=>$_POST['resultDispatchedOn'],
@@ -225,6 +236,8 @@ try {
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
+          'funding_source'=>(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= '')?base64_decode($_POST['fundingSource']):NULL,
+          'implementing_partner'=>(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= '')?base64_decode($_POST['implementingPartner']):NULL,          
           'reason_for_vl_result_changes'=>$reasonForChanges,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),

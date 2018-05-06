@@ -84,6 +84,15 @@ if(isset($vlQueryInfo[0]['test_requested_on']) && trim($vlQueryInfo[0]['test_req
  $vlQueryInfo[0]['test_requested_on']='';
 }
 
+
+if(isset($vlQueryInfo[0]['sample_received_at_hub_datetime']) && trim($vlQueryInfo[0]['sample_received_at_hub_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_hub_datetime']!='0000-00-00 00:00:00'){
+  $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_hub_datetime']);
+  $vlQueryInfo[0]['sample_received_at_hub_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+ }else{
+  $vlQueryInfo[0]['sample_received_at_hub_datetime']='';
+ }
+ 
+
 if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQueryInfo[0]['sample_received_at_vl_lab_datetime'])!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='0000-00-00 00:00:00'){
  $expStr=explode(" ",$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']);
  $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
