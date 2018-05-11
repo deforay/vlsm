@@ -13,7 +13,7 @@ if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralL
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Facility Name","Patient ART no.","Sample Collection Date","Lab Name","Rejection Reason");
+ $headings = array("Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name","Rejection Reason");
  
  $colNo = 0;
  
@@ -69,6 +69,7 @@ if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralL
   }
     $row[] = ucwords($aRow['facility_name']);
     $row[] = $aRow['patient_art_no'];
+    $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
     $row[] = $sampleCollectionDate;
     $row[] = $aRow['result'];
     $row[] = $aRow['rejection_reason_name'];
