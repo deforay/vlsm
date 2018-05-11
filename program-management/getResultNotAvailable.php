@@ -17,8 +17,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('f.facility_name','vl.patient_art_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name');
-        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.sample_collection_date','fd.facility_name');
+        $aColumns = array('f.facility_name','vl.patient_art_no','vl.patient_first_name',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name');
+        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.sample_collection_date','fd.facility_name');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -173,7 +173,8 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 					}
             $row = array();
 						$row[] = ucwords($aRow['facility_name']);
-						$row[] = $aRow['patient_art_no'];
+                        $row[] = $aRow['patient_art_no'];
+                        $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
 						$row[] = $aRow['sample_collection_date'];
             $row[] = ucwords($aRow['labName']);
 						$output['aaData'][] = $row;

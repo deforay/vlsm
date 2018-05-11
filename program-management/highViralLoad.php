@@ -252,6 +252,7 @@ $batResult = $db->rawQuery($batQuery);
 																	<tr>
 																			<th>Facility Name</th>
 																			<th>Patient ART no.</th> 
+																			<th>Patient Name</th> 
 																			<th>Sample Collection Date</th>
 																			<th>VL Lab Name</th>       
 																			<th>Rejection Reason</th>
@@ -352,6 +353,7 @@ $batResult = $db->rawQuery($batQuery);
 																	<tr>
 																			<th>Facility Name</th>
 																			<th>Patient ART no.</th> 
+																			<th>Patient Name</th> 
 																			<th>Sample Collection Date</th>
 																			<th>VL Lab Name</th>
 																	</tr>
@@ -530,7 +532,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-                //{"sClass":"center"},
+                {"sClass":"center"},
             ],
             "aaSorting": [[ 1, "DESC" ]],
             "bProcessing": true,
@@ -572,6 +574,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+				{"sClass":"center"}
             ],
             "aaSorting": [[ 1, "DESC" ]],
             "bProcessing": true,

@@ -1406,7 +1406,7 @@ CREATE TABLE `r_funding_sources` (
 );
 
 INSERT INTO `r_funding_sources` (`funding_source_id`, `funding_source_name`, `funding_source_status`) VALUES
-(1, 'PEPFAR', 'active');
+(1, 'MOH', 'active');
 
 ALTER TABLE `r_funding_sources`
   ADD PRIMARY KEY (`funding_source_id`);
@@ -1421,7 +1421,7 @@ CREATE TABLE `r_implementation_partners` (
 );
 
 INSERT INTO `r_implementation_partners` (`i_partner_id`, `i_partner_name`, `i_partner_status`) VALUES
-(1, 'CDC', 'active');
+(1, 'MOH', 'active');
 
 ALTER TABLE `r_implementation_partners`
   ADD PRIMARY KEY (`i_partner_id`);
