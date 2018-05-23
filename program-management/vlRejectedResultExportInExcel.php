@@ -4,7 +4,7 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 include ('../includes/PHPExcel.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 
 if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralLoadResult'])!=""){
   $rResult = $db->rawQuery($_SESSION['rejectedViralLoadResult']);

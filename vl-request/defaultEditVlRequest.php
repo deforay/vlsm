@@ -777,7 +777,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     provinceName = true;
     facilityName = true;
     $(document).ready(function() {
-        getAge();
+        //getAge();
         __clone = $("#vlRequestFormRwd .labSection").clone();
         reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
         result = ($("#vlResult").length)?$("#vlResult").val():'';

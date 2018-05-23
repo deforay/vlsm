@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $start_date = '';
 $end_date = '';
 $urgent = $_POST['urgent'];

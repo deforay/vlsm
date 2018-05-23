@@ -2,7 +2,7 @@
 ob_start();
 include('../header.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $qrVal = explode(',',$_GET['q']);
 if(!isset($qrVal[56]) || $qrVal[56]== '' || $qrVal[56]== null){
   $_SESSION['alertMsg']="OOPS..Please try again later";

@@ -28,9 +28,9 @@ include('MysqliDb.php');
                     $parameters=array($value);
                     $result=$db->rawQuery($sQuery,$parameters);
                     if($result){
-                    $data = base64_encode($result[0]['vl_sample_id'])."##".$result[0]['remote_sample_code'];
+                        $data = base64_encode($result[0]['vl_sample_id'])."##".$result[0]['remote_sample_code'];
                     }else{
-                    $data = 0;
+                        $data = 0;
                     }
                 }else{
                     $data = 0;

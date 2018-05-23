@@ -5,9 +5,18 @@ $data = json_decode(file_get_contents('php://input'), true);
 include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
 include(dirname(__FILE__) . "/../../General.php");
 
-$general=new Deforay_Commons_General();
+$cQuery="SELECT * FROM global_config";
+$cResult=$db->query($cQuery);
+$arr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($cResult); $i++) {
+  $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
+}
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
+
+$general=new General();
+
+$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form' AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." DAY)";
 $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 $sampleCode = array();

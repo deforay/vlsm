@@ -69,10 +69,12 @@ try {
                   $infoFromFile = array();
                   $testDateRow = "";
                   $skip = 23;
-                  
+                  ini_set("auto_detect_line_endings", "1"); 
                    $row = 1;
-                   if (($handle = fopen('../temporary'. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== FALSE) {
+                   if (($handle = fopen(dirname(__FILE__) . "/../temporary". DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== FALSE) {
+                       
                        while (($sheetData = fgetcsv($handle, 1000, "\t")) !== FALSE) {
+                        
                          $num = count($sheetData);
                          $row++;
                          if($row < $skip) continue;
@@ -137,10 +139,7 @@ try {
                         if($sampleCode == ""){
                            $sampleCode = $sampleType.$m;
                         }
-                            
-                            
-
-            
+                         
                         if (!isset($infoFromFile[$sampleCode])) {
                             $infoFromFile[$sampleCode] = array(
                                 "sampleCode" => $sampleCode,
@@ -167,8 +166,8 @@ try {
                    }
         }
         
-        
-        
+        //echo "<pre>";
+        //var_dump($infoFromFile);die;
         $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
             if($d['sampleCode']==$d['sampleType'].$inc){
@@ -254,7 +253,7 @@ try {
             $inc++;
         }
     }
-
+//die;
     $_SESSION['alertMsg'] = "Results imported successfully";
     //Add event log
     $eventType            = 'import';

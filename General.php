@@ -4,7 +4,13 @@
  *
  * @author Amit
  */
-class Deforay_Commons_General {
+class General {
+
+    protected $db = null;
+
+    public function __construct($db = null){
+        $this->db = $db;
+    }
 
     public static function generateRandomString($length = 8, $seeds = 'alphanum') {
         // Possible seeds
@@ -118,6 +124,30 @@ class Deforay_Commons_General {
         // Clean up
         $dir->close();
         return rmdir($dirname);
+    }
+
+    public function getSystemConfig($name = null){
+        if($name == null){
+            $systemConfigQuery ="SELECT * from system_config";
+        }else{
+            $systemConfigQuery ="SELECT * from system_config WHERE `name` = '$name'";
+        }
+        
+        $systemConfigResult=$this->db->query($systemConfigQuery);
+        $sarr = array();
+        // now we create an associative array so that we can easily create view variables
+        for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+          $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+        }  
+        
+
+        if($name == null){
+            return $sarr;
+        }else{
+            return $sarr[$name];
+        }
+
+        
     }
 }
 

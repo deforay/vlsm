@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="temp_sample_import";
 $tableName1="vl_request_form";
 $tableName2="hold_sample_import";

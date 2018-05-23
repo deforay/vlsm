@@ -18,7 +18,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
       $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
     }
 
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
 

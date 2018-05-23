@@ -2,7 +2,7 @@
 ob_start();
 $tableName1="activity_log";
 $tableName2="vl_request_form";
-$general=new Deforay_Commons_General();
+$general=new General();
 
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);

@@ -6,7 +6,7 @@ include(dirname(__FILE__) . "/../../General.php");
 
 $labId = $data['labName'];
 
-$general=new Deforay_Commons_General();
+//$general=new General();
 //global config
 $cQuery="SELECT * FROM global_config";
 $cResult=$db->query($cQuery);
@@ -22,25 +22,19 @@ if(count($fMapResult)>0){
   $fMapResult = array_map('current', $fMapResult);
   $fMapResult = implode(",",$fMapResult);
 }else{
-  $fMapResult = "''";
+  $fMapResult = "";
 }
-//$sarr['lab_name'] = "''";
 
 if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
-  $where = "(lab_id =".$labId." OR facility_id IN (".$fMapResult."))";
+  $condition = "(lab_id =".$labId." OR facility_id IN (".$fMapResult."))";
 }else{
-  $where = "lab_id =".$labId;
+  $condition = "lab_id =".$labId;
 }
 
+$vlQuery="SELECT * FROM vl_request_form WHERE $condition AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." DAY)";
 
-$vlQuery="SELECT * FROM vl_request_form WHERE $where 
-AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
-
-
-
+//$vlQuery="SELECT * FROM vl_request_form WHERE $condition AND data_sync=0";
 
 $vlRemoteResult = $db->rawQuery($vlQuery);
-
-
 
 echo json_encode($vlRemoteResult);

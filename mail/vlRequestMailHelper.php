@@ -4,7 +4,7 @@ session_start();
 include('../includes/MysqliDb.php');
 require '../includes/mail/PHPMailerAutoload.php';
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="vl_request_form";
 //get other config details
 $geQuery="SELECT * FROM other_config WHERE type = 'request'";

@@ -1,9 +1,15 @@
-<?php
+$systemType<?php
 session_start();
 ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
-$general=new Deforay_Commons_General();
+
+$general=new General($db);
+
+
+$systemType = $general->getSystemConfig('user_type');
+
+
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
         $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
@@ -77,6 +83,13 @@ try {
             //check clinic or lab user
             $_SESSION['userType'] = '';
             $_SESSION['privileges'] = $priId;
+
+
+            if($systemType == 'vluser'){
+                $_SESSION['system'] = $systemType;
+            }else{
+                $_SESSION['system'] = null;
+            }            
             header("location:".$redirect);
         }else{
             header("location:login.php");

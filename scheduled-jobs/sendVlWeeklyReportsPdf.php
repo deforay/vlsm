@@ -1,7 +1,7 @@
 <?php
 include('../includes/General.php');
 require '../includes/mail/PHPMailerAutoload.php';
-$general=new Deforay_Commons_General();
+$general=new General();
 $reportFilename = '';
 $postdata = $_POST;
 $end_date = date('Y-m-d');

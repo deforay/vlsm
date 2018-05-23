@@ -3,7 +3,7 @@ ob_start();
 $title = "VLSM | Import Result File";
 include('../header.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $query="SELECT config_id,machine_name,import_machine_file_name FROM import_config where status='active'";
 $iResult = $db->rawQuery($query);
 

@@ -4,7 +4,7 @@ session_start();
 include('../includes/MysqliDb.php');
 include ('../includes/PHPExcel.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($formConfigQuery);
 $arr = array();

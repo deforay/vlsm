@@ -3,6 +3,8 @@
 $title = "VLSM | Dashboard";
 
 include('../header.php');
+
+
 /* Total data set length */
   $vlFormTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form");
  // $aResultTotal = $countResult->fetch_row();

@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 //system config
 $systemConfigQuery ="SELECT * from system_config";
 $systemConfigResult=$db->query($systemConfigQuery);

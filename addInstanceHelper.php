@@ -5,7 +5,7 @@ include('includes/MysqliDb.php');
 include('General.php');
 include('includes/ImageResize.php');
 define('UPLOAD_PATH','uploads');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="s_vlsm_instance";
 $globalTable="global_config";
 function getMacLinux() {

@@ -9,7 +9,7 @@ require(__DIR__ . "/../includes/PHPExcel.php");
 
 
 
-$general=new Deforay_Commons_General();
+$general=new General();
 
 $query ="SELECT * from s_vlsm_instance";
 $qResult=$db->query($query);

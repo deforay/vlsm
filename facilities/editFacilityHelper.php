@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general = new Deforay_Commons_General();
+$general = new General();
 $tableName="facility_details";
 $facilityId=base64_decode($_POST['facilityId']);
 $tableName1="province_details";

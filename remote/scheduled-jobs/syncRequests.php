@@ -2,10 +2,9 @@
 //this file is get the value from remote and update in lab db
 include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
 include(dirname(__FILE__) . "/../../General.php");
-$general=new Deforay_Commons_General();
-if(!isset($REMOTEURL) || $REMOTEURL=='')
-{
-    echo "Please check your remote url";
+$general=new General();
+if(!isset($REMOTEURL) || $REMOTEURL==''){
+    echo "Please check your Remote URL";
     die;
 }
 //system config
@@ -45,7 +44,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 );
 // execute post
 $curl_response = curl_exec($ch);
-//print_r($curl_response);die;
+
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
@@ -57,8 +56,19 @@ if(count($result)>0){
         foreach($oneDimensionalArray as $result){
           $lab[$result] = $remoteData[$result];
         }
-        $removeKeys = array('vl_sample_id','result_value_log','result_value_absolute','result_value_absolute_decimal','result_value_text','result_value',
-        'sample_tested_datetime','sample_received_at_vl_lab_datetime','result_dispatched_datetime','is_sample_rejected','reason_for_sample_rejection','result_approved_by');
+        $removeKeys = array(
+            'vl_sample_id',
+            'result_value_log',
+            'result_value_absolute',
+            'result_value_absolute_decimal',
+            'result_value_text',
+            'result_value',
+            'sample_tested_datetime',
+            'sample_received_at_vl_lab_datetime',
+            'result_dispatched_datetime',
+            'is_sample_rejected',
+            'reason_for_sample_rejection',
+            'result_approved_by');
         foreach($removeKeys as $keys){
             unset($lab[$keys]);
         }
@@ -80,7 +90,6 @@ if(count($result)>0){
             }else{
                 if($lab['sample_collection_date']!='' && $lab['sample_collection_date']!=null && $lab['sample_collection_date']!='0000-00-00 00:00:00')
                 {
-                    
                     $lab['request_created_by'] = 0;
                     $lab['last_modified_by'] = 0;
                     $lab['request_created_datetime'] = $general->getDateTime();

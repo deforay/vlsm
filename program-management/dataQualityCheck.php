@@ -11,7 +11,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 }
 
 
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
 

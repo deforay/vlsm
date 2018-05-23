@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 include('../includes/General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 //include('../header.php');
 $tableName="user_details";
 try {
