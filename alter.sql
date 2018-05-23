@@ -1470,3 +1470,5 @@ ALTER TABLE `vl_request_form` ADD `sample_received_at_hub_datetime` DATETIME NUL
 
 
 -- Version 3.3 ---------- Amit 06-May-2018
+
+-- Version 3.4 ---------- Amit 23-May-2018
