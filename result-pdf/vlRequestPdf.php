@@ -73,7 +73,7 @@ $pdf->SetFont('helvetica', '', 10);
 $pathFront=realpath('../uploads');
 //$pdf = new TCPDF();
 $pdf->AddPage();
-$general=new Deforay_Commons_General();
+$general=new General();
 $id=$_POST['id'];
 
 $configQuery="SELECT * from global_config";

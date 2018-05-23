@@ -4,7 +4,8 @@ require(__DIR__ . "/../includes/MysqliDb.php");
 require(__DIR__ . "/../General.php");
 require(__DIR__ . "/../includes/PHPExcel.php");
 
-$general=new Deforay_Commons_General();
+$general=new General();
+
 try {
     $instanceQuery="SELECT * FROM s_vlsm_instance";
     $instanceResult=$db->query($instanceQuery);
@@ -18,7 +19,32 @@ try {
         }
 
         
-        $sQuery="SELECT vl.*,s.sample_name,s.status as sample_type_status,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,f.facility_mobile_numbers,f.address,f.facility_hub_name,f.contact_person,f.report_email,f.country,f.longitude,f.latitude,f.facility_type,f.status as facility_status,ft.facility_type_name,lft.facility_type_name as labFacilityTypeName,l_f.facility_name as labName,l_f.facility_code as labCode,l_f.facility_state as labState,l_f.facility_district as labDistrict,l_f.facility_mobile_numbers as labPhone,l_f.address as labAddress,l_f.facility_hub_name as labHub,l_f.contact_person as labContactPerson,l_f.report_email as labReportMail,l_f.country as labCountry,l_f.longitude as labLongitude,l_f.latitude as labLatitude,l_f.facility_type as labFacilityType,l_f.status as labFacilityStatus,tr.test_reason_name,tr.test_reason_status,rsrr.rejection_reason_name,rsrr.rejection_reason_status FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection";
+        $sQuery="SELECT vl.*,s.sample_name,s.status as sample_type_status,
+                        ts.*,f.facility_name,l_f.facility_name as labName,
+                        f.facility_code,f.facility_state,f.facility_district,
+                        f.facility_mobile_numbers,f.address,f.facility_hub_name,
+                        f.contact_person,f.report_email,f.country,f.longitude,
+                        f.latitude,f.facility_type,f.status as facility_status,
+                        ft.facility_type_name,lft.facility_type_name as labFacilityTypeName,
+                        l_f.facility_name as labName,l_f.facility_code as labCode,
+                        l_f.facility_state as labState,l_f.facility_district as labDistrict,
+                        l_f.facility_mobile_numbers as labPhone,l_f.address as labAddress,
+                        l_f.facility_hub_name as labHub,l_f.contact_person as labContactPerson,
+                        l_f.report_email as labReportMail,l_f.country as labCountry,
+                        l_f.longitude as labLongitude,l_f.latitude as labLatitude,
+                        l_f.facility_type as labFacilityType,
+                        l_f.status as labFacilityStatus,tr.test_reason_name,
+                        tr.test_reason_status,rsrr.rejection_reason_name,
+                        rsrr.rejection_reason_status 
+                FROM vl_request_form as vl 
+                LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
+                LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+                INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+                LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing 
+                LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type 
+                LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type 
+                LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection";
 
         if($instanceUpdateOn != ""){
             $sQuery .= " WHERE DATE(vl.last_modified_datetime) >= $instanceUpdateOn"; 
@@ -164,7 +190,7 @@ try {
         $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
         $currentDate = date("Y-m-d-H-i-s");
         $filename = 'export-vl-result-'.$currentDate.'.xls';
-        $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
+        $writer->save(__DIR__ . "/../temporary". DIRECTORY_SEPARATOR . $filename);
      
         //echo $filename;
         //Excel send via API
@@ -180,7 +206,7 @@ try {
         //$apiUrl.="?key_identity=XXX&key_credential=YYY";
         
         $data = [];
-        $data['vlFile'] = new CURLFile("../temporary". DIRECTORY_SEPARATOR .$filename,'application/vnd.ms-excel',$filename);
+        $data['vlFile'] = new CURLFile(__DIR__ . "/../temporary". DIRECTORY_SEPARATOR .$filename,'application/vnd.ms-excel',$filename);
         
         $options=[
             CURLOPT_RETURNTRANSFER => true,

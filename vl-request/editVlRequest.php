@@ -11,7 +11,7 @@ $labFieldDisabled = '';
 if($sarr['user_type']=='remoteuser'){
   $labFieldDisabled = 'disabled="disabled"';
 }
-$general=new Deforay_Commons_General();
+$general=new General();
 $id = base64_decode($_GET['id']);
 $sCode = '';
 if(isset($_GET['c'])){
@@ -342,12 +342,12 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
       var agYrs = '';
       var agMnths = '';
       var dob = changeFormat($("#dob").val());
-      if(agYrs==''){
+      if(agYrs=='' && $("#dob").val() !=''){
       //calculate age
-      var years = moment().diff(dob, 'years',false);
-      var months = (years == 0)?moment().diff(dob, 'months',false):'';
-      $("#ageInYears").val(years); // Gives difference as years
-      $("#ageInMonths").val(months); // Gives difference as months
+        var years = moment().diff(dob, 'years',false);
+        var months = (years == 0)?moment().diff(dob, 'months',false):'';
+        $("#ageInYears").val(years); // Gives difference as years
+        $("#ageInMonths").val(months); // Gives difference as months
       }
     }
     

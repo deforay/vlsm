@@ -2,7 +2,7 @@
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="temp_sample_import";
 try {
     $result = 0;

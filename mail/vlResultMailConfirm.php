@@ -3,7 +3,7 @@ ob_start();
 include('../header.php');
 include ('../includes/tcpdf/tcpdf.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="vl_request_form";
 //get other config values
 $geQuery="SELECT * FROM other_config WHERE type = 'result'";

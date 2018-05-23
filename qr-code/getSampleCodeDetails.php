@@ -14,7 +14,7 @@ $configResult=$db->query($configQuery);
     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
       $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
     }
-$general=new Deforay_Commons_General();
+$general=new General();
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */

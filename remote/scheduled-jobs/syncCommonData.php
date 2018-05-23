@@ -7,7 +7,7 @@ if(!isset($REMOTEURL) || $REMOTEURL=='')
     echo "Please check your remote url";
     die;
 }
-$general=new Deforay_Commons_General();
+$general=new General();
 $globalConfigQuery ="SELECT * from system_config";
 $configResult=$db->query($globalConfigQuery);
 $arr = array();
@@ -42,6 +42,9 @@ if(isset($facilityLResult[0]['updated_datetime']) && $facilityLResult[0]['update
     $fDateTime = $facilityLResult[0]['updated_datetime'];
 }
 $url = $REMOTEURL.'/remote/remote/commonData.php';
+
+
+
 $data = array(
     'artCodeUpdateTime'=>$artCodeTime,
     'rjtUpdateTime'=>$rjtDateTime,
@@ -64,7 +67,6 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
-
 //update or insert sample type
 if(count($result['sampleType'])>0){
     foreach($result['sampleType'] as $type){

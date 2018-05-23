@@ -2,7 +2,7 @@
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 $cDate = date('Y-m-d');

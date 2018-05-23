@@ -2,7 +2,7 @@
 ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="batch_details";
 try {
     $id = $_POST['id'];

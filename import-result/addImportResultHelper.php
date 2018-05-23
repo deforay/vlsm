@@ -13,6 +13,6 @@ for($i = 0; $i < sizeof($configResult); $i++) {
     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 
-$general = new Deforay_Commons_General();
+$general = new General();
 
 include("../import-configs".DIRECTORY_SEPARATOR.$confFileName);

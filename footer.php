@@ -10,7 +10,10 @@
 <!-- jQuery UI 1.11.4 -->
 <!--<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>-->
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+
 <script type="text/javascript" src="../assets/js/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="../assets/js/js.cookie.js"></script>
 
 <script src="../assets/js/select2.js"></script>
 <!-- Bootstrap 3.3.6 -->
@@ -27,7 +30,113 @@
 <script src="../assets/js/moment.min.js"></script>
 
 <script type="text/javascript">
+
+
+
+
+
+<?php
+if(isset($_SESSION['system']) && $_SESSION['system'] =='vluser'){
+  
+  ?>
+
+  var remoteSync = true;
+  var remoteUrl = '<?php echo $REMOTEURL; ?>';
+  
+
+function syncRemoteData(){
+  if(!navigator.onLine){
+    alert('Please connect to internet to sync with VLSTS');
+    return false;
+  }
+
+  syncStatus = Cookies.get('sync-completed')
+  if(syncStatus != undefined && syncStatus != null && syncStatus == 'synced'){
+    return false;
+  }
+  
+  if(remoteSync && remoteUrl != null && remoteUrl != ''){
+    $.blockUI({ message: '<h3>Trying to do VLSTS Remote sync. Please wait...</h3>' });
+    var jqxhr = $.ajax({
+                    url : "../remote/scheduled-jobs/syncCommonData.php",
+                  })
+                  .done(function(data) {
+                    //console.log(data);
+                    //alert( "success" );
+                  })
+                  .fail(function() {
+                    $.unblockUI();
+                    alert( "Unable to do VLSTS Remote Sync. Please contact technical team for assistance." );
+                  })
+                  .always(function() {
+                    //alert( "complete" );
+                    $.unblockUI();
+                    syncRequests();
+                  });
+  }
+}
+
+function syncRequests(){
+  $.blockUI({ message: '<h3>Trying to do VLSTS Remote sync. Please wait...</h3>' });
+  
+  if(remoteSync && remoteUrl != null && remoteUrl != ''){
+    var jqxhr = $.ajax({
+                    url : "../remote/scheduled-jobs/syncRequests.php",
+                  })
+                  .done(function(data) {
+                    //console.log(data);
+                    //alert( "success" );
+                  })
+                  .fail(function() {
+                    $.unblockUI();
+                    alert( "Unable to do VLSTS Remote Sync. Please contact technical team for assistance." );
+                  })
+                  .always(function() {
+                    $.unblockUI();
+                    syncResults();
+                  });
+  }
+}
+
+
+function syncResults(){
+  
+  $.blockUI({ message: '<h3>Trying to do VLSTS Remote sync. Please wait...</h3>' });
+  
+  if(remoteSync && remoteUrl != null && remoteUrl != ''){
+    var jqxhr = $.ajax({
+                    url : "../remote/scheduled-jobs/syncResults.php",
+                  })
+                  .done(function(data) {
+                    //console.log(data);
+                    //alert( "success" );
+                  })
+                  .fail(function() {
+                    $.unblockUI();
+                    alert( "Unable to do VLSTS Remote Sync. Please contact technical team for assistance." );
+                  })
+                  .always(function() {
+                    $.unblockUI();
+                    Cookies.set('sync-completed', 'synced', { expires: 1 });
+                  });
+  }
+}
+
+
+  <?php
+}
+?>
+
   $(document).ready(function(){
+
+<?php
+if(isset($_SESSION['system']) && $_SESSION['system'] =='vluser'){
+  ?>
+   syncRemoteData();
+   <?php
+}
+?>
+
   <?php
   if(isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg'])!=""){
   ?>
@@ -205,5 +314,9 @@
 	      }
   });
 </script>
+
+
+
+
 </body>
 </html>

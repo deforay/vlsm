@@ -9,6 +9,8 @@ $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
 $PORT = 3306;
 
+
+//Please use only GMAIL ID AND PASSWORD
 $emailUserName='';
 $emailPassword='';
 
@@ -24,4 +26,6 @@ $MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
 
 // Linux : default for Ubuntu 16.04, may be different for your distribution
 //$MYSQLDUMP = '/usr/bin/mysqldump';
-$REMOTEURL = 'http://vlsms.rbc.gov.rw';
+
+
+$REMOTEURL = 'http://vl-remote.deforay.in';

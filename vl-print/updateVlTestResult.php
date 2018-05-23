@@ -3,7 +3,7 @@ ob_start();
 $title = "VLSM | Enter VL Result";
 include('../header.php');
 include('../General.php');
-$general = new Deforay_Commons_General();
+$general = new General();
 $id = base64_decode($_GET['id']);
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);

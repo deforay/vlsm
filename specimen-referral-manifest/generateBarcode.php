@@ -5,7 +5,7 @@ include('../includes/MysqliDb.php');
 include ('../includes/tcpdf/tcpdf.php');
 include('../General.php');
 //define('UPLOAD_PATH','../uploads');
-$general = new Deforay_Commons_General();
+$general = new General();
 $id = base64_decode($_POST['id']);
 if(isset($_POST['frmSrc']) && trim($_POST['frmSrc']) == 'pk2'){
   $id = $_POST['ids'];

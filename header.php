@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include('../includes/MysqliDb.php');
 $gQuery = "SELECT * FROM global_config";
 $gResult=$db->query($gQuery);
@@ -47,6 +48,10 @@ if(isset($global['instance_type']) && $global['instance_type']!=''){
 if(!isset($_SESSION['userId'])){
     header("location:../login.php");
 }
+
+
+
+
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/',$link);
 if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='importedStatistics.php' && end($link_array)!='vlExportField.php'){
@@ -132,6 +137,7 @@ $formConfigResult=$db->query($formConfigQuery);
   <link href="../assets/css/style.css" rel="stylesheet" />
   <link href="../assets/css/deforayModal.css" rel="stylesheet" />
   <link href="../assets/css/jquery.fastconfirm.css" rel="stylesheet" />
+
  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

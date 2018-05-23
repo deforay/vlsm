@@ -1,7 +1,7 @@
 <?php
 include('./includes/MysqliDb.php');
 include('General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $uQuery = "SELECT * FROM user_details";
 $uResult=$db->query($uQuery);
 if($uResult){

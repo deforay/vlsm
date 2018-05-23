@@ -1,7 +1,7 @@
  <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $artNo=$_GET['artNo'];
 //global config
 $cQuery="SELECT * FROM global_config";

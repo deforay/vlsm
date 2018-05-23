@@ -12,7 +12,7 @@ $labFieldDisabled = '';
 if($sarr['user_type']=='remoteuser'){
   $labFieldDisabled = 'disabled="disabled"';
 }
-$general=new Deforay_Commons_General();
+$general=new General();
 
 //global config
   $configQuery="SELECT * from global_config";

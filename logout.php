@@ -5,7 +5,7 @@ session_start();
 ob_start();
 include('./includes/MysqliDb.php');
 include('General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 
 $tableName1="activity_log";
 //Add event log

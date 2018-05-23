@@ -2,7 +2,7 @@
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="temp_sample_import";
 $primaryKey="temp_sample_id";
 $configQuery="SELECT value FROM global_config WHERE name ='import_non_matching_sample'";

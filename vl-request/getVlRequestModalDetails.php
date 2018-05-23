@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
 

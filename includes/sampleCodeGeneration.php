@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('MysqliDb.php');
 include('General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 //global config
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);

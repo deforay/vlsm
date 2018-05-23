@@ -3,7 +3,7 @@ ob_start();
 include('../header.php');
 include ('../includes/PHPExcel.php');
 include('../General.php');
-$general=new Deforay_Commons_General();
+$general=new General();
 //get other config details
 $geQuery="SELECT * FROM other_config WHERE type = 'request'";
 $geResult = $db->rawQuery($geQuery);
