@@ -1,7 +1,10 @@
 
   <footer class="main-footer">
     <a href="http://taskforce.org/">Funded by TaskForce</a>
-    <span class="pull-right">v <?php echo VERSION; ?></span>
+    <span class="pull-right">&nbsp;&nbsp;v <?php echo VERSION; ?></span>
+    <?php if(isset($_SESSION['userName']) && isset($_SESSION['system']) && $_SESSION['system'] =='vluser'){ ?>
+      <small class="pull-right"><a href="javascript:forceRemoteSync();" class="text-muted">Force VLSTS sync</a>&nbsp;&nbsp;</small>
+    <?php } ?>
   </footer>
 </div>
 <!-- ./wrapper -->
@@ -42,7 +45,12 @@ if(isset($_SESSION['system']) && $_SESSION['system'] =='vluser'){
 
   var remoteSync = true;
   var remoteUrl = '<?php echo $REMOTEURL; ?>';
-  
+
+
+function forceRemoteSync(){
+  Cookies.remove('vlsts-sync-status');
+  syncRemoteData();
+}
 
 function syncRemoteData(){
   if(!navigator.onLine){
@@ -50,7 +58,7 @@ function syncRemoteData(){
     return false;
   }
 
-  syncStatus = Cookies.get('sync-completed')
+  syncStatus = Cookies.get('vlsts-sync-status')
   if(syncStatus != undefined && syncStatus != null && syncStatus == 'synced'){
     return false;
   }
@@ -117,7 +125,8 @@ function syncResults(){
                   })
                   .always(function() {
                     $.unblockUI();
-                    Cookies.set('sync-completed', 'synced', { expires: 1 });
+                    var in30Minutes = 1/48;
+                    Cookies.set('vlsts-sync-status', 'synced', { expires: in30Minutes });
                   });
   }
 }
