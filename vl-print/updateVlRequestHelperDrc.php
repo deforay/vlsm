@@ -52,6 +52,20 @@ try {
         $platForm = explode("##",$_POST['testingPlatform']);
         $testingPlatform = $platForm[0];
     }
+
+
+    $textResult =  null;
+    if(isset($_POST['vlTND']) && $_POST['vlTND'] =='yes' && $_POST['rejectionReason'] == NULL){
+        $textResult = $_POST['vlResult'] = 'Target not Detected';
+        $_POST['vlLog'] = '';
+    }
+    if(isset($_POST['vlLt20']) && $_POST['vlLt20'] =='yes' && $_POST['rejectionReason'] == NULL){
+        $textResult = $_POST['vlResult'] = '< 20';
+        $_POST['vlLog'] = '';
+    }
+
+    echo "<pre>";var_dump($_POST);die;
+    
         $vldata=array(
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           //'sample_code'=>$_POST['sampleCode'],
@@ -60,6 +74,7 @@ try {
           'vl_test_platform'=>$testingPlatform,
           'result_value_log'=>$_POST['vlLog'],
           'result'=>$_POST['vlResult'],
+          'result_value_text'=>$textResult,
           //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
           'last_modified_datetime'=>$general->getDateTime(),
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
