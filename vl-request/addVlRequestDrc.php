@@ -498,7 +498,8 @@
                                 <td>
                                     <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>
                                     <input type="checkbox" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value"> < 20<br>
-                                    <input type="checkbox" id="vlTND" name="vlTND" value="yes" title="Please check VL value">  Target Not Detected / Non Détecté
+                                    <input type="checkbox" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value"> < 40<br>
+                                    <input type="checkbox" id="vlTND" name="vlTND" value="yes" title="Please check VL value"> Target Not Detected / Non Détecté
                                 </td>
                                 <td style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td>
@@ -793,9 +794,11 @@
     $('#vlResult').on('input',function(e){
       if(this.value != ''){
         $('#vlLt20').attr('disabled',true);
+        $('#vlLt40').attr('disabled',true);
         $('#vlTND').attr('disabled',true);
       }else{
         $('#vlLt20').attr('disabled',false);
+        $('#vlLt40').attr('disabled',false);
         $('#vlTND').attr('disabled',false);
       }
     });
@@ -807,10 +810,28 @@
         $('#vlResult').attr('readonly',true);
         $('#vlLog').attr('readonly',true);
         $('#vlTND').attr('disabled',true);
+        $('#vlLt40').attr('disabled',true);
       }else{
         $('#vlResult').attr('readonly',false);
         $('#vlLog').attr('readonly',false);
         $('#vlTND').attr('disabled',false);
+        $('#vlLt40').attr('disabled',false);
+      }
+    });
+
+    $('#vlLt40').change(function() {
+      if($('#vlLt40').is(':checked')){
+        $('#vlResult').val('');
+        $('#vlLog').val('');        
+        $('#vlResult').attr('readonly',true);
+        $('#vlLog').attr('readonly',true);
+        $('#vlTND').attr('disabled',true);
+        $('#vlLt20').attr('disabled',true);
+      }else{
+        $('#vlResult').attr('readonly',false);
+        $('#vlLog').attr('readonly',false);
+        $('#vlTND').attr('disabled',false);
+        $('#vlLt20').attr('disabled',false);
       }
     });
     
@@ -821,10 +842,12 @@
         $('#vlResult').attr('readonly',true);
         $('#vlLog').attr('readonly',true);
         $('#vlLt20').attr('disabled',true);
+        $('#vlLt40').attr('disabled',true);
       }else{
         $('#vlResult').attr('readonly',false);
         $('#vlLog').attr('readonly',false);
         $('#vlLt20').attr('disabled',false);
+        $('#vlLt40').attr('disabled',false);
       }
     });
   });

@@ -63,8 +63,12 @@ try {
         $textResult = $_POST['vlResult'] = '< 20';
         $_POST['vlLog'] = '';
     }
+    if(isset($_POST['vlLt40']) && $_POST['vlLt40'] =='yes' && $_POST['rejectionReason'] == NULL){
+        $textResult = $_POST['vlResult'] = '< 40';
+        $_POST['vlLog'] = '';
+    }
 
-    echo "<pre>";var_dump($_POST);die;
+    //echo "<pre>";var_dump($_POST);die;
     
         $vldata=array(
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
