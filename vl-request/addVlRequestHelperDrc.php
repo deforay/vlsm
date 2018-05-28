@@ -229,6 +229,24 @@ try {
             header("location:addVlRequest.php");
         }
     }
+
+
+    $textResult =  null;
+    if(isset($_POST['vlTND']) && $_POST['vlTND'] =='yes' && $_POST['rejectionReason'] == NULL){
+        $textResult = $_POST['vlResult'] = 'Target not Detected';
+        $_POST['vlLog'] = '';
+    }
+    if(isset($_POST['vlLt20']) && $_POST['vlLt20'] =='yes' && $_POST['rejectionReason'] == NULL){
+        $textResult = $_POST['vlResult'] = '< 20';
+        $_POST['vlLog'] = '';
+    }
+    if(isset($_POST['vlLt40']) && $_POST['vlLt40'] =='yes' && $_POST['rejectionReason'] == NULL){
+        $textResult = $_POST['vlResult'] = '< 40';
+        $_POST['vlLog'] = '';
+    }
+
+
+
     $vldata=array(
                   'vlsm_instance_id'=>$instanceId,
                   'vlsm_country_id'=>3,
@@ -270,6 +288,7 @@ try {
                   'vl_test_platform'=>$testingPlatform,
                   'result_value_log'=>(isset($_POST['vlLog']))?$_POST['vlLog']:NULL,
                   'result'=>(isset($_POST['vlResult']))?$_POST['vlResult']:NULL,
+                  'result_value_text'=>$textResult,
                   'date_test_ordered_by_physician'=>$_POST['dateOfDemand'],
                   'funding_source'=>(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= '')?base64_decode($_POST['fundingSource']):NULL,
                   'implementing_partner'=>(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= '')?base64_decode($_POST['implementingPartner']):NULL,

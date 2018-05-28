@@ -3,11 +3,11 @@ require_once(__DIR__.'/../system/system.php');
 
 // These settings are for the portable Uniform Server distribution
 
-$HOST = '127.0.0.1';
+$HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
-$PORT = 3306;
+$PORT = 3436;
 
 
 //Please use only GMAIL ID AND PASSWORD
@@ -28,4 +28,4 @@ $MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
 //$MYSQLDUMP = '/usr/bin/mysqldump';
 
 
-$REMOTEURL = 'http://vl-remote.deforay.in';
+$REMOTEURL = '';
