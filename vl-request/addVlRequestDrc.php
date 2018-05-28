@@ -496,11 +496,13 @@
                             <tr class="resultSection">
                                 <td class="vlResult"><label for="vlResult">Résultat </label></td>
                                 <td>
-                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
+                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>
+                                    <input type="checkbox" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value"> < 20<br>
+                                    <input type="checkbox" id="vlTND" name="vlTND" value="yes" title="Please check VL value">  Target Not Detected / Non Détecté
                                 </td>
                                 <td style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td>
-                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
+                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -699,6 +701,8 @@
       $("#rejectionReason").addClass('isRequired');
       $("#vlResult").val('').css('pointer-events','none');
       $("#vlLog").val('').css('pointer-events','none');
+      $('#vlLt20').prop('checked', false).removeAttr('checked');
+      $('#vlTND').prop('checked', false).removeAttr('checked');
     }else{
       $(".resultSection").show();
       $(".rejectionReason").hide();
@@ -735,6 +739,8 @@
       absValue = $("#vlResult").val();
       if(absValue!='' && absValue!=0){
         $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+      }else{
+        $("#vlLog").val("");
       }
     }
     if(obj.id=="vlLog") {
@@ -780,4 +786,47 @@
       $("#patientArtNo").val($.trim(patientArray[15]));
     }
   }
+
+
+  $(document).ready(function(){
+    
+    $('#vlResult').on('input',function(e){
+      if(this.value != ''){
+        $('#vlLt20').attr('disabled',true);
+        $('#vlTND').attr('disabled',true);
+      }else{
+        $('#vlLt20').attr('disabled',false);
+        $('#vlTND').attr('disabled',false);
+      }
+    });
+    
+    $('#vlLt20').change(function() {
+      if($('#vlLt20').is(':checked')){
+        $('#vlResult').val('');
+        $('#vlLog').val('');        
+        $('#vlResult').attr('readonly',true);
+        $('#vlLog').attr('readonly',true);
+        $('#vlTND').attr('disabled',true);
+      }else{
+        $('#vlResult').attr('readonly',false);
+        $('#vlLog').attr('readonly',false);
+        $('#vlTND').attr('disabled',false);
+      }
+    });
+    
+    $('#vlTND').change(function() {
+      if($('#vlTND').is(':checked')){
+        $('#vlResult').val('');
+        $('#vlLog').val('');        
+        $('#vlResult').attr('readonly',true);
+        $('#vlLog').attr('readonly',true);
+        $('#vlLt20').attr('disabled',true);
+      }else{
+        $('#vlResult').attr('readonly',false);
+        $('#vlLog').attr('readonly',false);
+        $('#vlLt20').attr('disabled',false);
+      }
+    });
+  });
+
   </script>

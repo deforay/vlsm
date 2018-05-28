@@ -487,6 +487,9 @@ foreach($fResult as $fDetails){
 			    </select>
 			</td>
 		      </tr>
+      <tr>
+      <th colspan="6" style="font-size: 18px; font-weight: bold;">Final Result</th>
+      </tr>
 		      <tr>
 			<td class=""><label for="finalViralResult">Final Viral Load Result(copies/ml)</label></td>
 			<td>

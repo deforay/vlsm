@@ -500,7 +500,10 @@
                               <tr>
                                 <td class="vlResult"><label for="vlResult">Résultat</label></td>
                                 <td class="vlResult">
-                                  <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat" title="Please enter résultat" <?php echo $labFieldDisabled; ?> value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:100%;"/>&nbsp;(copies/ml)
+
+                                  <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" <?php echo $labFieldDisabled; ?> value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:100%;"/>
+                                  <input type="checkbox" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 20' || $vlQueryInfo[0]['result'] == '<20') ? 'checked="checked"':''; ?>> < 20<br>
+                                  <input type="checkbox" id="vlTND" name="vlTND" value="yes" title="Please check VL value" <?php echo in_array(strtolower($vlQueryInfo[0]['result']), array('target not detected','non détecté', 'non détecté', 'non detecte', 'non detectee', 'tnd', 'bdl', 'below detection level')) ? 'checked="checked"':''; ?> > Target Not Detected / Non Détecté
                                 </td>
                                 <td class="vlLog" style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td class="vlLog">
@@ -643,12 +646,17 @@
     function checkTestStatus(){
       var status = $("#status").val();
       if(status == 4){
+        $('#vlLt20').prop('checked', false).removeAttr('checked');
+        $('#vlTND').prop('checked', false).removeAttr('checked');  
+        $('#vlResult').attr('disabled',false);
+        $('#vlLog').attr('disabled',false);        
         $(".rejectionReason").show();
         $("#rejectionReason").addClass('isRequired');
         $("#vlResult").val('').css('pointer-events','none');
         $("#vlLog").val('').css('pointer-events','none');
         $("#rejectionReason").val('').css('pointer-events','auto');
         $(".vlResult, .vlLog").hide();
+
        //$("#vlResult").removeClass('isRequired');
       }else{
         $(".rejectionReason").hide();
@@ -710,4 +718,69 @@
         document.getElementById('editVlRequestForm').submit();
       }
     }
+
+
+
+$(document).ready(function(){
+    
+    $('#vlResult').on('input',function(e){
+      if(this.value != ''){
+        $('#vlLt20').attr('disabled',true);
+        $('#vlTND').attr('disabled',true);
+      }else{
+        $('#vlLt20').attr('disabled',false);
+        $('#vlTND').attr('disabled',false);
+      }
+    });
+    
+    $('#vlLt20').change(function() {
+      if($('#vlLt20').is(':checked')){
+        $('#vlResult').val('');
+        $('#vlLog').val('');        
+        $('#vlResult').attr('readonly',true);
+        $('#vlLog').attr('readonly',true);
+        $('#vlTND').attr('disabled',true);
+      }else{
+        $('#vlResult').attr('readonly',false);
+        $('#vlLog').attr('readonly',false);
+        $('#vlTND').attr('disabled',false);
+      }
+    });
+    
+    $('#vlTND').change(function() {
+      if($('#vlTND').is(':checked')){
+        $('#vlResult').val('');
+        $('#vlLog').val('');        
+        $('#vlResult').attr('readonly',true);
+        $('#vlLog').attr('readonly',true);
+        $('#vlLt20').attr('disabled',true);
+      }else{
+        $('#vlResult').attr('readonly',false);
+        $('#vlLog').attr('readonly',false);
+        $('#vlLt20').attr('disabled',false);
+      }
+    });
+
+      if($('#vlLt20').is(':checked')){
+        $('#vlResult').val('');
+        $('#vlLog').val('');
+        $('#vlResult').attr('readonly',true);
+        $('#vlLog').attr('readonly',true);
+        $('#vlTND').attr('disabled',true);
+      }
+      if($('#vlResult').val() != ''){
+        $('#vlLt20').attr('disabled',true);
+        $('#vlTND').attr('disabled',true);
+      }
+      if($('#vlTND').is(':checked')){
+        $('#vlResult').val('');
+        $('#vlLog').val('');
+        $('#vlResult').attr('readonly',true);
+        $('#vlLog').attr('readonly',true);
+        $('#vlLt20').attr('disabled',true);
+      }     
+
+  });
+  
+  
   </script>
