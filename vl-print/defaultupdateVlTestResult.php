@@ -65,7 +65,7 @@ $districtResult = array();
 if(trim($stateName)!= ''){
   $districtQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='".$stateName."' AND status='active'";
   $districtResult = $db->query($districtQuery);
-  $facilityQuery="SELECT * from facility_details where facility_district='".$facilityResult[0]['facility_district']."' AND status='active' AND facility_type='2'";
+  $facilityQuery="SELECT * from facility_details where `status`='active' AND facility_type='2'";
   $lResult=$db->query($facilityQuery);
 }
 

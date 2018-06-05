@@ -1464,7 +1464,7 @@ UPDATE `privileges` SET `privilege_name` = 'editSpecimenReferralManifest.php' WH
 -- Version 3.0 ---------- Pal 21-Mar-2017
 -- Version 3.2 ---------- Amit 29-Mar-2017
 
-
+ALTER TABLE `vl_request_form` ADD `consultation` VARCHAR(255) NULL DEFAULT NULL AFTER `manual_result_entry`, ADD `first_line` VARCHAR(255) NULL DEFAULT NULL AFTER `consultation`, ADD `second_line` VARCHAR(255) NULL DEFAULT NULL AFTER `first_line`, ADD `first_viral_load` VARCHAR(255) NULL DEFAULT NULL AFTER `second_line`, ADD `collection_type` VARCHAR(255) NULL DEFAULT NULL AFTER `first_viral_load`, ADD `sample_processed` VARCHAR(255) NULL DEFAULT NULL AFTER `collection_type`;
 ALTER TABLE `vl_request_form` ADD `vl_result_category` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_processed`;
 ALTER TABLE `vl_request_form` ADD `sample_received_at_hub_datetime` DATETIME NULL DEFAULT NULL AFTER `vl_focal_person_phone_number`;
 
@@ -1473,3 +1473,6 @@ UPDATE `privileges` SET `privilege_name` = 'vlWeeklyReport.php' WHERE `privilege
 -- Version 3.3 ---------- Amit 06-May-2018
 
 -- Version 3.4 ---------- Amit 23-May-2018
+
+
+

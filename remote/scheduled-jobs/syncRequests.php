@@ -74,7 +74,7 @@ if(count($result)>0){
         }
         //check wheather sample code empty or not
         if($lab['sample_code']!='' && $lab['sample_code']!=0 && $lab['sample_code']!=NULL){
-            $sQuery = "Select vl_sample_id from vl_request_form where sample_code='".$lab['sample_code']."'";
+            $sQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code='".$lab['sample_code']."'";
             $sResult = $db->rawQuery($sQuery);
             $lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.
             unset($lab['request_created_by']);unset($lab['last_modified_by']);unset($lab['request_created_datetime']);
@@ -84,7 +84,7 @@ if(count($result)>0){
             $samplePackageId = $lab['sample_package_id'];
         }else{
             //check exist remote
-            $exsvlQuery="SELECT vl_sample_id,sample_code FROM vl_request_form as vl WHERE remote_sample_code='".$lab['remote_sample_code']."'";
+            $exsvlQuery="SELECT vl_sample_id,sample_code FROM vl_request_form AS vl WHERE remote_sample_code='".$lab['remote_sample_code']."'";
             $exsvlResult=$db->query($exsvlQuery);
             if($exsvlResult){
             }else{
