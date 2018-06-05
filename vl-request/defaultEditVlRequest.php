@@ -89,7 +89,7 @@ $districtResult = array();
 if(trim($facilityResult[0]['facility_state'])!= ''){
   $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$facilityResult[0]['facility_state']."' AND status='active'";
   $districtResult=$db->query($districtQuery);
-  $facilityQuery="SELECT * from facility_details where facility_district='".$facilityResult[0]['facility_district']."' AND status='active' AND facility_type='2'";
+  $facilityQuery="SELECT * from facility_details where `status`='active' AND facility_type='2'";
   $lResult=$db->query($facilityQuery);
 }
 //set reason for changes history

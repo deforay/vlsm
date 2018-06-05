@@ -35,7 +35,7 @@ include('../header.php');
                 <tr>
 		  <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="checkPackageData" onclick="checkAllPackageRows(this);"/></th>
                   <th>Manifest Code</th>
-                  <th>No. of Sample</th>
+                  <th>No. of Samples</th>
                   <th>Added On</th>
 		  <?php if(isset($_SESSION['privileges']) && in_array("editSpecimenReferralManifest.php", $_SESSION['privileges'])){ ?>
                   <th>Action</th>

@@ -1,9 +1,9 @@
 <?php
 ob_start();
 session_start();
-include('../includes/MysqliDb.php');
-include ('../includes/tcpdf/tcpdf.php');
-include('../General.php');
+include_once(dirname(__FILE__) . '/../includes/MysqliDb.php');
+include_once(dirname(__FILE__) . '/../includes/tcpdf/tcpdf.php');
+include_once(dirname(__FILE__) . '/../General.php');
 //define('UPLOAD_PATH','../uploads');
 $general = new General();
 $id = base64_decode($_POST['id']);
@@ -25,8 +25,8 @@ class MYPDF extends TCPDF {
         //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
         if(trim($this->logo)!=""){
-            if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-                $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+            if (file_exists(dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+                $image_file = dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
                 $this->Image($image_file,15, 10, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
@@ -38,8 +38,8 @@ class MYPDF extends TCPDF {
         $this->writeHTMLCell(0,0,0,20,$this->labname, 0, 0, 0, true, 'C', true);
         
         if(trim($this->logo)!=""){
-            if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-                $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+            if (file_exists(dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+                $image_file = dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
                 $this->Image($image_file,262, 10, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
@@ -67,7 +67,7 @@ if(trim($id)!= ''){
 
 
 
-    $sQuery="SELECT remote_sample_code,fd.facility_name as clinic_name,fd.facility_district,patient_first_name,patient_middle_name,patient_last_name,patient_dob,patient_age_in_years,sample_name,sample_collection_date,patient_gender, l.facility_name as lab_name from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join facility_details as l ON l.facility_id=vl.lab_id Join r_sample_type as st ON st.sample_id=vl.sample_type where pd.package_id IN($id)";
+    $sQuery="SELECT remote_sample_code,fd.facility_name as clinic_name,fd.facility_district,patient_first_name,patient_middle_name,patient_last_name,patient_dob,patient_age_in_years,sample_name,sample_collection_date,patient_gender,patient_art_no, l.facility_name as lab_name from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join facility_details as l ON l.facility_id=vl.lab_id Join r_sample_type as st ON st.sample_id=vl.sample_type where pd.package_id IN($id)";
     $result=$db->query($sQuery);
 
 
@@ -155,6 +155,7 @@ if(trim($id)!= ''){
         $sampleCounter = 1;
 
         foreach($result as $sample){
+            //var_dump($sample);die;
             $collectionDate = '';
             if(isset($sample['sample_collection_date']) && $sample['sample_collection_date'] != '' && $sample['sample_collection_date']!= NULL && $sample['sample_collection_date'] != '0000-00-00 00:00:00'){
                 $cDate = explode(" ",$sample['sample_collection_date']);
@@ -172,7 +173,7 @@ if(trim($id)!= ''){
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.ucwords($sample['facility_district']).'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.ucwords($sample['clinic_name']).'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.ucwords($sample['patient_first_name']." ".$sample['patient_middle_name']." ".$sample['patient_last_name']).'</td>';
-            $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.$bResult[0]['package_code'].'</td>';
+            $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.$sample['patient_art_no'].'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.ucwords($sample['patient_age_in_years']).'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.$patientDOB.'</td>';
             $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'.ucwords(str_replace("_"," ",$sample['patient_gender'])).'</td>';
@@ -196,7 +197,7 @@ if(trim($id)!= ''){
     //$tbl.='<br/><br/><b style="text-align:left;">Printed On:  </b>'.date('d/m/Y H:i:s');
     $pdf->writeHTMLCell('', '', 11,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
     $filename = trim($bResult[0]['package_code']).'.pdf';
-    $pdf->Output('.././uploads'. DIRECTORY_SEPARATOR.'package_barcode'. DIRECTORY_SEPARATOR.$filename, "F");
+    $pdf->Output(dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR.'package_barcode'. DIRECTORY_SEPARATOR.$filename, "F");
     echo $filename;
   }
 }

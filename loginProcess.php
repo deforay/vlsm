@@ -7,8 +7,10 @@ include('General.php');
 $general=new General($db);
 
 
-$systemType = $general->getSystemConfig('user_type');
+$systemInfo = $general->getSystemConfig();
 
+$systemType = $systemInfo['user_type'];
+$systemLabId = $systemInfo['lab_name'];
 
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
@@ -85,7 +87,7 @@ try {
             $_SESSION['privileges'] = $priId;
 
 
-            if($systemType == 'vluser'){
+            if($systemType == 'vluser' && $systemLabId != ''){
                 $_SESSION['system'] = $systemType;
             }else{
                 $_SESSION['system'] = null;
