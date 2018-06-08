@@ -46,8 +46,12 @@ try {
                 LEFT JOIN facility_type as lft ON lft.facility_type_id=l_f.facility_type 
                 LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection";
 
+
+
+        $sQuery .= " WHERE sample_code is not null AND sample_code !='' ";     
+
         if($instanceUpdateOn != ""){
-            $sQuery .= " WHERE DATE(vl.last_modified_datetime) >= $instanceUpdateOn"; 
+            $sQuery .= " AND DATE(vl.last_modified_datetime) >= $instanceUpdateOn"; 
         }
 
         //echo $instanceUpdateOn;
@@ -60,7 +64,7 @@ try {
         $output = array();
         $sheet = $excel->getActiveSheet();
         
-        $headings = array("Serial No.","Instance Id","Gender","Age In Years","Clinic Name","Clinic Code","Clinic State","Clinic District","Clinic Phone Number","Clinic Address","Clinic HUB Name","Clinic Contact Person","Clinic Report Mail","Clinic Country","Clinic Longitude","Clinic Latitude","Clinic Status","Clinic Type","Sample Type","Sample Type Status","Sample Collection Date","LAB Name","Lab Code","Lab State","Lab District","Lab Phone Number","Lab Address","Lab HUB Name","Lab Contact Person","Lab Report Mail","Lab Country","Lab Longitude","Lab Latitude","Lab Status","Lab Type","Lab Tested Date","Log Value","Absolute Value","Text Value","Absolute Decimal Value","Result","Testing Reason","Test Reason Status","Testing Status","Sample Received Datetime","Line Of Treatment","Sample Rejected","Rejection Reason Name","Rejection Reason Status","Pregnant","Breast Feeding","Art Code","Regimen Initiated Date","ARV Adherance Percentage","Is Adherance poor","Approved Datetime");
+        $headings = array("Sample Code","Instance ID","Gender","Age In Years","Clinic Name","Clinic Code","Clinic State","Clinic District","Clinic Phone Number","Clinic Address","Clinic HUB Name","Clinic Contact Person","Clinic Report Mail","Clinic Country","Clinic Longitude","Clinic Latitude","Clinic Status","Clinic Type","Sample Type","Sample Type Status","Sample Collection Date","LAB Name","Lab Code","Lab State","Lab District","Lab Phone Number","Lab Address","Lab HUB Name","Lab Contact Person","Lab Report Mail","Lab Country","Lab Longitude","Lab Latitude","Lab Status","Lab Type","Lab Tested Date","Log Value","Absolute Value","Text Value","Absolute Decimal Value","Result","Testing Reason","Test Reason Status","Testing Status","Sample Received Datetime","Line Of Treatment","Sample Rejected","Rejection Reason Name","Rejection Reason Status","Pregnant","Breast Feeding","Art Code","Regimen Initiated Date","ARV Adherance Percentage","Is Adherance poor","Approved Datetime","DashVL_Abs","DashVL_AnalysisResult");
         $colNo = 0;
     
         $styleArray = array(
@@ -101,19 +105,59 @@ try {
      
         foreach ($rResult as $aRow) {
             $row = array();
-            if($aRow['sample_tested_datetime']=='0000-00-00 00:00:00')
-            {
+            if($aRow['sample_tested_datetime']=='0000-00-00 00:00:00'){
              $aRow['sample_tested_datetime'] = '';
             }
-            if($aRow['sample_collection_date']=='0000-00-00 00:00:00')
-            {
+            if($aRow['sample_collection_date']=='0000-00-00 00:00:00'){
              $aRow['sample_collection_date'] = '';
             }
-            if($aRow['sample_received_at_vl_lab_datetime']=='0000-00-00 00:00:00')
-            {
+            if($aRow['sample_received_at_vl_lab_datetime']=='0000-00-00 00:00:00'){
              $aRow['sample_received_at_vl_lab_datetime'] = '';
             }
-            $row[] = $aRow['serial_no'];
+
+
+
+            $VLAnalysisResult = $aRow['result_value_absolute'];
+            if ($aRow['result_value_text'] == 'Target not Detected' || $aRow['result_value_text'] == 'Target Not Detected' || strtolower($aRow['result_value_text']) == 'tnd') {
+                $VLAnalysisResult = 20;
+            }
+            else if ($aRow['result_value_text'] == '< 20' || $aRow['result_value_text'] == '<20') {
+                $VLAnalysisResult = 20;
+            }
+            else if ($aRow['result_value_text'] == '< 40' || $aRow['result_value_text'] == '<40') {
+                $VLAnalysisResult = 40;
+            }
+            else if ($aRow['result_value_text'] == 'Nivel de detecÁao baixo' || $aRow['result_value_text'] == 'NÌvel de detecÁ„o baixo') {
+                $VLAnalysisResult = 20;
+            }
+            else if ($aRow['result_value_text'] == 'Suppressed') {
+                $VLAnalysisResult = 500;
+            }
+            else if ($aRow['result_value_text'] == 'Not Suppressed') {
+                $VLAnalysisResult = 1500;
+            }
+            else if ($aRow['result_value_text'] == 'Negative' || $aRow['result_value_text'] == 'NEGAT') {
+                $VLAnalysisResult = 20;
+            }	
+            else if ($aRow['result_value_text'] == 'Positive') {
+                $VLAnalysisResult = 1500;
+            }	
+            else if ($aRow['result_value_text'] == 'Indeterminado') {
+                $VLAnalysisResult = "";
+            }	
+        
+            if ($VLAnalysisResult == 'NULL' || $VLAnalysisResult == ''){
+                $DashVL_Abs = 0; 
+                $DashVL_AnalysisResult ='';
+            }else if ($VLAnalysisResult < 1000){
+                $DashVL_AnalysisResult ='Suppressed';
+                $DashVL_Abs = $VLAnalysisResult;
+            }else if ($VLAnalysisResult >= 1000){
+                $DashVL_AnalysisResult ='Not Suppressed';
+                $DashVL_Abs = $VLAnalysisResult;
+            }
+
+            $row[] = $aRow['sample_code'];
             $row[] = $aRow['vlsm_instance_id'];
             $row[] = $aRow['patient_gender'];
             $row[] = $aRow['patient_age_in_years'];
@@ -169,6 +213,8 @@ try {
             $row[] = $aRow['arv_adherance_percentage'];
             $row[] = $aRow['is_adherance_poor'];
             $row[] = $aRow['result_approved_datetime'];
+            $row[] =   $DashVL_Abs;
+            $row[] =   $DashVL_AnalysisResult;
             $output[] = $row;
         }
     
@@ -196,7 +242,7 @@ try {
         //Excel send via API
         
         //global config
-        $configQuery="SELECT value FROM global_config WHERE name ='vldashboard_url'";
+        $configQuery="SELECT `value` FROM global_config WHERE name ='vldashboard_url'";
         $configResult=$db->query($configQuery);
         $vldashboardUrl = trim($configResult[0]['value']);
     
@@ -220,7 +266,7 @@ try {
         $result=curl_exec($ch);
         curl_close($ch);
         
-        var_dump($result);
+        //var_dump($result);
         $deResult=json_decode($result,true);
         if(isset($deResult['status']) && trim($deResult['status'])=='success'){
             $data=array(
