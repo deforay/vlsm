@@ -1474,5 +1474,7 @@ UPDATE `privileges` SET `privilege_name` = 'vlWeeklyReport.php' WHERE `privilege
 
 -- Version 3.4 ---------- Amit 23-May-2018
 
+-- Version 3.5 ---------- Amit 08-Jun-2018
+
 
 
