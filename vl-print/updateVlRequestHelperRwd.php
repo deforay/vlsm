@@ -53,6 +53,7 @@ try {
     }
     
     $isRejection = false;
+    $textValue = NULL;
     if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
         $isRejection = true;
         $_POST['vlResult'] = '';
@@ -60,11 +61,11 @@ try {
     }
     
     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'Target Not Detected';
+        $_POST['vlResult'] = $textValue = 'Target Not Detected';
         $_POST['vlLog'] = '';
     }
     if(isset($_POST['bdl']) && $_POST['bdl'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'Below Detection Level';
+        $_POST['vlResult'] = $textValue = 'Below Detection Level';
         $_POST['vlLog'] = '';
     }
     
@@ -98,7 +99,7 @@ try {
           'reason_for_sample_rejection'=>(isset($_POST['rejectionReason']) && $_POST['rejectionReason']!='') ? $_POST['rejectionReason'] :  NULL,
           'result_value_log'=>(isset($_POST['vlLog']) && $_POST['vlLog']!='')? $_POST['vlLog'] :  NULL,
           'result_value_absolute'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? $_POST['vlResult'] :  NULL,
-          'result_value_text'=>NULL,
+          'result_value_text'=>$textValue,
           'result_value_absolute_decimal'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' && ($_POST['vlResult']!='Target Not Detected' && $_POST['vlResult']!='Below Detection Level')) ? number_format((float)$_POST['vlResult'], 2, '.', '') :  NULL,
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,

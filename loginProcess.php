@@ -1,4 +1,4 @@
-$systemType<?php
+<?php
 session_start();
 ob_start();
 include('./includes/MysqliDb.php');
@@ -8,9 +8,13 @@ $general=new General($db);
 
 
 $systemInfo = $general->getSystemConfig();
+$systemType = $systemLabId = null;
+if($systemInfo != false){
+    $systemType = $systemInfo['user_type'];
+    $systemLabId = $systemInfo['lab_name'];
+}
 
-$systemType = $systemInfo['user_type'];
-$systemLabId = $systemInfo['lab_name'];
+$dashboardUrl = $general->getGlobalConfig('vldashboard_url');
 
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
@@ -87,11 +91,18 @@ try {
             $_SESSION['privileges'] = $priId;
 
 
-            if($systemType == 'vluser' && $systemLabId != ''){
+            if($systemType !=null && $systemType == 'vluser' && $systemLabId != '' && $systemLabId != null){
                 $_SESSION['system'] = $systemType;
             }else{
                 $_SESSION['system'] = null;
-            }            
+            }    
+            if($dashboardUrl !=null && $dashboardUrl != ''){
+                $_SESSION['vldashboard_url'] = $dashboardUrl;
+            }else{
+                $_SESSION['vldashboard_url'] = null;
+            }    
+            
+            
             header("location:".$redirect);
         }else{
             header("location:login.php");

@@ -1,4 +1,3 @@
-
   <footer class="main-footer">
     <a href="http://taskforce.org/">Funded by TaskForce</a>
     <span class="pull-right">&nbsp;&nbsp;v <?php echo VERSION; ?></span>
@@ -34,7 +33,51 @@
 
 <script type="text/javascript">
 
+<?php
+if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $_SESSION['vldashboard_url'] !=null){  
+?>
 
+  var vldashSync = true;
+  var vldashUrl = '<?php echo $_SESSION['vldashboard_url']; ?>';
+
+
+function syncVLDashboard(){
+  if(!navigator.onLine){
+    alert('Please connect to internet to sync with Vl Dashboard');
+    return false;
+  }
+
+  vlDashSyncStatus = Cookies.get('vldash-sync-status')
+  if(vlDashSyncStatus != undefined && vlDashSyncStatus != null && vlDashSyncStatus == 'synced'){
+    return false;
+  }
+  if(vldashSync && vldashUrl != null && vldashUrl != ''){
+    $.blockUI({ message: '<h3>Trying to do VL Dashboard sync. Please wait...</h3>' });
+    var jqxhr = $.ajax({
+                    url : "../scheduled-jobs/vldashboard.php",
+                  })
+                  .done(function(data) {
+                    //console.log(data);
+                    //alert( "success" );
+                  })
+                  .fail(function() {
+                    $.unblockUI();
+                    alert( "Unable to do VL Dashboard Sync. Please contact technical team for assistance." );
+                  })
+                  .always(function() {
+                    //alert( "complete" );
+                    $.unblockUI();
+                    var inHalfADay = 0.5;
+                    Cookies.set('vldash-sync-status', 'synced', { expires: inHalfADay });                    
+                  });
+  }
+
+}
+
+
+<?php
+}
+?>
 
 
 
@@ -51,6 +94,7 @@ function forceRemoteSync(){
   Cookies.remove('vlsts-sync-status');
   syncRemoteData();
 }
+
 
 function syncRemoteData(){
   if(!navigator.onLine){
@@ -142,6 +186,13 @@ function syncResults(){
 if(isset($_SESSION['system']) && $_SESSION['system'] =='vluser'){
   ?>
    syncRemoteData();
+   <?php
+}
+?>
+<?php
+if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $_SESSION['vldashboard_url'] !=null){  
+  ?>
+   syncVLDashboard();
    <?php
 }
 ?>
