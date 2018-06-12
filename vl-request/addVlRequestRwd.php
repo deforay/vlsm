@@ -472,9 +472,9 @@ $sKey = ''; $sFormat = '';
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="emailHf">Email for HF <span class="mandatory">*</span></label>
+                            <label class="col-lg-5 control-label" for="emailHf">Email for HF</label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control isEmail isRequired" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf"/>
+                                <input type="text" class="form-control isEmail" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf"/>
                             </div>
                         </div>
                      </div>
