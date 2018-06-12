@@ -370,7 +370,17 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-               
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="edit_profile" class="col-lg-4 control-label">Allow users to Edit Profile  </label>
+                      <div class="col-lg-8">
+                        <input type="radio" class="" id="edit_profile_yes" name="edit_profile" value="yes" <?php echo($arr['edit_profile'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
+                        <input type="radio" class="" id="edit_profile_no" name="edit_profile" value="no" <?php echo($arr['edit_profile'] == 'no')?'checked':''; ?>>&nbsp;&nbsp;No
+                      </div>
+                    </div>
+                   </div>
+                </div>
               </div>
         </div>
 <div class="panel panel-default">

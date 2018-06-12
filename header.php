@@ -54,7 +54,7 @@ if(!isset($_SESSION['userId'])){
 
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/',$link);
-if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='importedStatistics.php' && end($link_array)!='vlExportField.php'){
+if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='editProfile.php' && end($link_array)!='importedStatistics.php' && end($link_array)!='vlExportField.php'){
   if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
     header("location:../error/error.php");
   }
@@ -202,8 +202,20 @@ $formConfigResult=$db->query($formConfigQuery);
             </a>
             <ul class="dropdown-menu">
               <!-- Menu Footer-->
-              <li class="user-footer">
+              
+              <?php
+              $alignRight = '';
+              $showProfileBtn = "style=display:none;";
+               if($global['edit_profile']!='no'){
+                $alignRight = "pull-right";
+                $showProfileBtn = "style=display:block;";
+              } ?>
+              <li class="user-footer <?php echo $alignRight;?>">
                   <a href="../logout.php" class="">Sign out</a>
+              </li>
+              
+              <li class="user-footer pull-left" <?php echo $showProfileBtn;?>>
+                  <a href="../users/editProfile.php" class="">Edit Profile</a>
               </li>
             </ul>
           </li>
