@@ -14,6 +14,8 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 }
 if($sarr['user_type']=='remoteuser'){
     $sCode = 'remote_sample_code';
+    $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='".$_SESSION['userId']."'";
+    $vlfmResult = $db->rawQuery($vlfmQuery);
   }else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
     $sCode = 'sample_code';
   }
@@ -94,12 +96,18 @@ $general=new General();
          * SQL queries
          * Get data to display
         */
+        $facilityQuery = '';
         $sQuery="select p.request_created_datetime ,p.package_code,p.package_status,p.package_id,count(vl.".$sCode.") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id";
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
             $sWhere= $sWhere. 'AND vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
         }else{
             $sWhere=' where vl.vlsm_country_id ="'.$configResult[0]['value'].'"';
+        }
+        if(isset($vlfmResult[0]['facilityId']))
+        {
+          $sWhere = $sWhere." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
+          $facilityQuery = " AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
         }
 	    $sQuery = $sQuery.' '.$sWhere;
         $sQuery = $sQuery.' group by p.package_id';
@@ -110,7 +118,6 @@ $general=new General();
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
-	//echo $sQuery;die;
         //error_log($sQuery);die;
         $rResult = $db->rawQuery($sQuery);
         /* Data set length after filtering */
@@ -118,7 +125,7 @@ $general=new General();
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl.".$sCode.") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id where vl.vlsm_country_id ='".$configResult[0]['value']."' group by p.package_id");
+        $aResultTotal =  $db->rawQuery("select p.request_created_datetime ,p.package_code,p.package_status,count(vl.".$sCode.") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id where vl.vlsm_country_id ='".$configResult[0]['value']."' $facilityQuery group by p.package_id");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = count($aResultTotal);

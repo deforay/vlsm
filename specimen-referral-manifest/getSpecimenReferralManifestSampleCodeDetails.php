@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general=new General();
@@ -17,18 +18,26 @@ $country = $configResult[0]['value'];
 
 // $rpQuery="SELECT GROUP_CONCAT(DISTINCT rp.sample_id SEPARATOR ',') as sampleId FROM r_package_details_map as rp";
 // $rpResult = $db->rawQuery($rpQuery);
+if($sarr['user_type']=='remoteuser'){
+  $sCode = 'remote_sample_code';
+  $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='".$_SESSION['userId']."'";
+  $vlfmResult = $db->rawQuery($vlfmQuery);
+}else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
+  $sCode = 'sample_code';
+}
 
 $query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='') AND vl.vlsm_country_id = $country";
 // if(isset($rpResult[0]['sampleId'])){
 //     $query = $query." AND vl_sample_id NOT IN(".$rpResult[0]['sampleId'].")";
 // }
+if(isset($vlfmResult[0]['facilityId']))
+{
+  $query = $query." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
+}
+
 $query = $query." ORDER BY vl.request_created_datetime ASC";
 $result = $db->rawQuery($query);
-if($sarr['user_type']=='remoteuser'){
-  $sCode = 'remote_sample_code';
-}else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
-  $sCode = 'sample_code';
-}
+
 ?>
 <div class="col-md-8">
 <div class="form-group">
