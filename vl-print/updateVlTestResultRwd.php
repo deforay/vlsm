@@ -622,7 +622,8 @@ $disable = "disabled = 'disabled'";
                         <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result<span class="mandatory">*</span> (copiesl/ml) </label>
                             <div class="col-lg-7">
-                              <input type="text" class="vlResult checkNum form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+                              <input type="text" class="<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'no' && $vlQueryInfo[0]['result'] != 'Target Not Detected' && $vlQueryInfo[0]['result'] == 'Below Detection Level')?'isRequired':''; ?> vlResult checkNum form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
+
                               <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
                             </div>
@@ -722,38 +723,33 @@ $disable = "disabled = 'disabled'";
     });
     
     $("input:radio[name=noResult]").click(function() {
-        if($(this).val() == 'yes'){
-          $('.rejectionReason').show();
-          $('#rejectionReason').addClass('isRequired');
-          $("#status").val(4);
-           $('#vlResult').removeClass('isRequired');
-        }else{
-          $('.rejectionReason').hide();
-          $('#rejectionReason').removeClass('isRequired');
-          $('#rejectionReason').val('');
-            $('#vlResult').addClass('isRequired');
-        }
-    });
-  
-    $("input:radio[name=noResult]").click(function() {
       if($(this).val() == 'yes'){
         $('.rejectionReason').show();
-        $('.vlResult').css('visibility','hidden');
+        $('.vlResult').css('display','none');
         $('#rejectionReason').addClass('isRequired');
+        $("#status").val(4);
+        $('#vlResult').removeClass('isRequired');
       }else{
-        $('.vlResult').css('visibility','visible');
+        $('.vlResult').css('display','block');
         $('.rejectionReason').hide();
         $('#rejectionReason').removeClass('isRequired');
         $('#rejectionReason').val('');
+        $("#status").val('');
+        $('#vlResult').addClass('isRequired');
+        if($('#tnd').is(':checked') || $('#bdl').is(':checked')){
+          $('#vlResult').removeClass('isRequired');
+        }
       }
     });
   
     $('#tnd').change(function() {
       if($('#tnd').is(':checked')){
         $('#vlResult,#vlLog').attr('readonly',true);
+        $("#vlResult").removeClass("isRequired");
         $('#bdl').attr('disabled',true);
       }else{
         $('#vlResult,#vlLog').attr('readonly',false);
+        $("#vlResult").addClass("isRequired");
         $('#bdl').attr('disabled',false);
       }
     });
@@ -761,9 +757,11 @@ $disable = "disabled = 'disabled'";
     $('#bdl').change(function() {
       if($('#bdl').is(':checked')){
         $('#vlResult,#vlLog').attr('readonly',true);
+        $("#vlResult").removeClass("isRequired");
         $('#tnd').attr('disabled',true);
       }else{
         $('#vlResult,#vlLog').attr('readonly',false);
+        $("#vlResult").addClass("isRequired");
         $('#tnd').attr('disabled',false);
       }
     });
