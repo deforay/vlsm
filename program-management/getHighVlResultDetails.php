@@ -18,8 +18,8 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
          * you want to insert a non-database field (for example a counter or static image)
         */
         
-        $aColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name','vl.result');
-        $orderColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number','vl.sample_collection_date','fd.facility_name','vl.result');
+        $aColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
+        $orderColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -184,6 +184,12 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 						$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
 					}else{
 						$aRow['sample_collection_date'] = '';
+                    }
+                    if(isset($aRow['sample_tested_datetime']) && trim($aRow['sample_tested_datetime'])!= '' && $aRow['sample_tested_datetime']!= '0000-00-00 00:00:00'){
+						$xplodDate = explode(" ",$aRow['sample_tested_datetime']);
+						$aRow['sample_tested_datetime'] = $general->humanDateFormat($xplodDate[0]);
+					}else{
+						$aRow['sample_tested_datetime'] = '';
 					}
             $row = array();
             $row[] = ucwords($aRow['facility_name']);
@@ -191,6 +197,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
             $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
             $row[] = $aRow['patient_mobile_number'];
             $row[] = $aRow['sample_collection_date'];
+            $row[] = $aRow['sample_tested_datetime'];
             $row[] = $aRow['labName'];
             $row[] = $aRow['result'];
             $row[] = '<select class="form-control" name="status" id=' . $aRow['vl_sample_id'] . ' title="Please select status" onchange="updateStatus(this.id,this.value)">

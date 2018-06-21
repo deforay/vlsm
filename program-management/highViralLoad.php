@@ -152,6 +152,7 @@ $batResult = $db->rawQuery($batQuery);
 																	<th>Patient ART no.</th>                               
 																	<th>Patient Phone no.</th>                               
 																	<th>Sample Collection Date</th>                               
+																	<th>Sample Tested Date</th>   
 																	<th>Viral Load Lab</th>                               
 																	<th>Viral Load (cp/ml)</th>
 																	<th>Status</th>
@@ -159,7 +160,7 @@ $batResult = $db->rawQuery($batQuery);
 													</thead>
 													<tbody>
 															<tr>
-																	<td colspan="6" class="dataTables_empty">Loading data from server</td>
+																	<td colspan="7" class="dataTables_empty">Loading data from server</td>
 															</tr>
 													</tbody>
 											</table>
@@ -483,6 +484,7 @@ $batResult = $db->rawQuery($batQuery);
             "aoColumns": [
                 {"sClass":"center"},
 				{"sClass":"center"},
+                {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
