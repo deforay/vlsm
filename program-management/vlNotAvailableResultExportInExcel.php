@@ -57,7 +57,11 @@ if(isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable'
    $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
    $colNo++;
  }
- $sheet->getStyle('A3:D3')->applyFromArray($styleArray);
+ $sheet->getStyle('A3:A3')->applyFromArray($styleArray);
+ $sheet->getStyle('B3:B3')->applyFromArray($styleArray);
+ $sheet->getStyle('C3:C3')->applyFromArray($styleArray);
+ $sheet->getStyle('D3:D3')->applyFromArray($styleArray);
+ $sheet->getStyle('E3:E3')->applyFromArray($styleArray);
  
  foreach ($rResult as $aRow) {
   $row = array();
