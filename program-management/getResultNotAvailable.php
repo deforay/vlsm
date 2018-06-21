@@ -98,12 +98,21 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
         */
 	$aWhere = '';
 	$sQuery="SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id where vl.result_status=7 AND (vl.result IS NULL OR vl.result='')";
-		
+	$start_date = '';
+	$end_date = '';
 	if(isset($_POST['noResultBatchCode']) && trim($_POST['noResultBatchCode'])!= ''){
 	    $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['noResultBatchCode'].'%"';
 	}
 	
 	if(isset($_POST['noResultSampleTestDate']) && trim($_POST['noResultSampleTestDate'])!= ''){
+        $s_c_date = explode("to", $_POST['noResultSampleTestDate']);
+        //print_r($s_c_date);die;
+        if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+            $start_date = $general->dateFormat(trim($s_c_date[0]));
+        }
+        if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+            $end_date = $general->dateFormat(trim($s_c_date[1]));
+        }
 	    if (trim($start_date) == trim($end_date)) {
 					$sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
 	    }else{
