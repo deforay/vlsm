@@ -99,7 +99,9 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         */
 	$aWhere = '';
 	$sQuery="SELECT vl.*,f.*,s.*,b.*,art.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id where vl.result_status=7 AND vl.result > ".$thresholdLimit;
-	
+	$start_date = '';
+	$end_date = '';
+    
 	if(isset($_POST['hvlBatchCode']) && trim($_POST['hvlBatchCode'])!= ''){
 	    $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['hvlBatchCode'].'%"';
 	}
@@ -113,6 +115,14 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 	}
 	
 	if(isset($_POST['hvlSampleTestDate']) && trim($_POST['hvlSampleTestDate'])!= ''){
+        $s_c_date = explode("to", $_POST['hvlSampleTestDate']);
+        //print_r($s_c_date);die;
+        if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+            $start_date = $general->dateFormat(trim($s_c_date[0]));
+        }
+        if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+            $end_date = $general->dateFormat(trim($s_c_date[1]));
+        }
 	    if (trim($start_date) == trim($end_date)) {
 					$sWhere = $sWhere.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
 	    }else{

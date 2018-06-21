@@ -56,7 +56,7 @@ $batResult = $db->rawQuery($batQuery);
 															<tr>
 																	<td><b>Sample Test Date&nbsp;:</b></td>
 																	<td>
-																		<input type="text" id="hvlSampleTestDate" name="hvlSampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+																		<input type="text" id="hvlSampleTestDate" name="hvlSampleTestDate" class="form-control stDate" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" onchange="setSampleTestDate(this)"/>
 																	</td>
 																	<td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 																	<td>
@@ -104,8 +104,8 @@ $batResult = $db->rawQuery($batQuery);
 																		<select class="form-control" id="hvlContactStatus" name="hvlContactStatus" title="Please select contact status" style="width:220px;">
 																		<option value=""> -- Select -- </option>
 																		<option value="yes">Completed</option>
-																		<option value="no" selected="selected">Not Completed</option>
-																		<option value="all">All</option>
+																		<option value="no">Not Completed</option>
+																		<option value="all" selected="selected">All</option>
 																		</select>
 																	</td>
 																	<td><b>Gender&nbsp;:</b></td>
@@ -169,7 +169,7 @@ $batResult = $db->rawQuery($batQuery);
 															<tr>
 																	<td><b>Sample Test Date&nbsp;:</b></td>
 																	<td>
-																		<input type="text" id="rjtSampleTestDate" name="rjtSampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+																		<input type="text" id="rjtSampleTestDate" name="rjtSampleTestDate" class="form-control stDate" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" onchange="setSampleTestDate(this)"/>
 																	</td>
 																	<td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 																	<td>
@@ -270,7 +270,7 @@ $batResult = $db->rawQuery($batQuery);
 															<tr>
 																	<td><b>Sample Test Date&nbsp;:</b></td>
 																	<td>
-																		<input type="text" id="noResultSampleTestDate" name="noResultSampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+																		<input type="text" id="noResultSampleTestDate" name="noResultSampleTestDate" class="form-control stDate" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" onchange="setSampleTestDate(this)"/>
 																	</td>
 																	<td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 																	<td>
@@ -496,7 +496,7 @@ $batResult = $db->rawQuery($batQuery);
             "sAjaxSource": "getHighVlResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 							aoData.push({"name": "hvlBatchCode", "value": $("#hvlBatchCode").val()});
-							aoData.push({"name": "hvlSampleTestDate", "value": $("#sampleTestDate").val()});
+							aoData.push({"name": "hvlSampleTestDate", "value": $("#hvlSampleTestDate").val()});
 							aoData.push({"name": "hvlFacilityName", "value": $("#hvlFacilityName").val()});
 							aoData.push({"name": "hvlSampleType", "value": $("#hvlSampleType").val()});
 							aoData.push({"name": "hvlContactStatus", "value": $("#hvlContactStatus").val()});
@@ -734,6 +734,10 @@ function incompleteForm(){
 			$("#"+pregnant).attr("disabled",true);
 			$("#"+breastFeeding).attr("disabled",true);
 		}
+	}
+	function setSampleTestDate(obj)
+	{
+		$(".stDate").val($("#"+obj.id).val());
 	}
 </script>
  <?php
