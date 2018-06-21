@@ -148,8 +148,8 @@ $batResult = $db->rawQuery($batQuery);
 													<thead>
 															<tr>
 																	<th>Facility Name</th>
-																	<th>Patient's Name</th> 
 																	<th>Patient ART no.</th>                               
+																	<th>Patient's Name</th> 																	
 																	<th>Patient Phone no.</th>                               
 																	<th>Sample Collection Date</th>                               
 																	<th>Viral Load Lab</th>                               
