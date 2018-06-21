@@ -1338,7 +1338,7 @@ ALTER TABLE `system_config`
 --
 
 INSERT INTO `user_admin_details` (`user_admin_id`, `user_admin_name`, `user_admin_login`, `user_admin_password`) VALUES
-(1, 'ilahir', 'ilahir', '123');
+(1, 'S Admin', 'sadmin', 'sadmin@123');
 
 ALTER TABLE `user_admin_details`
   ADD UNIQUE KEY `user_admin_id` (`user_admin_id`);
@@ -1478,5 +1478,6 @@ UPDATE `privileges` SET `privilege_name` = 'vlWeeklyReport.php' WHERE `privilege
 
 
 
+UPDATE `global_config` SET `value` = '5' WHERE `global_config`.`name` = 'data_sync_interval'; 
 -- saravanan 12-jun-2018
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Edit Profile', 'edit_profile', 'no');

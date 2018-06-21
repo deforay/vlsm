@@ -170,6 +170,9 @@ $formConfigResult=$db->query($formConfigQuery);
     color: #fff !important;
     font-family:helvetica, arial, sans-serif;
   }
+  .navbar-nav>.user-menu>.dropdown-menu{
+    max-width:200px;
+  }
 </style>
 </head>
 <body class="hold-transition <?php echo $skin; ?> sidebar-mini">
@@ -207,16 +210,17 @@ $formConfigResult=$db->query($formConfigQuery);
               $alignRight = '';
               $showProfileBtn = "style=display:none;";
                if($global['edit_profile']!='no'){
-                $alignRight = "pull-right";
+                $alignRight = "pull-right-xxxxx";
                 $showProfileBtn = "style=display:block;";
               } ?>
+
+              <li class="user-footer" <?php echo $showProfileBtn;?>>
+                  <a href="../users/editProfile.php" class="">Edit Profile</a>
+              </li>              
               <li class="user-footer <?php echo $alignRight;?>">
                   <a href="../logout.php" class="">Sign out</a>
               </li>
               
-              <li class="user-footer pull-left" <?php echo $showProfileBtn;?>>
-                  <a href="../users/editProfile.php" class="">Edit Profile</a>
-              </li>
             </ul>
           </li>
         </ul>
