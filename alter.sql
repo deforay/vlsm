@@ -1338,7 +1338,7 @@ ALTER TABLE `system_config`
 --
 
 INSERT INTO `user_admin_details` (`user_admin_id`, `user_admin_name`, `user_admin_login`, `user_admin_password`) VALUES
-(1, 'ilahir', 'ilahir', '123');
+(1, 'S Admin', 'sadmin', 'sadmin@123');
 
 ALTER TABLE `user_admin_details`
   ADD UNIQUE KEY `user_admin_id` (`user_admin_id`);
