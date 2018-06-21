@@ -13,7 +13,7 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Facility Name","Patient's Name","Patient ART no.","Patient phone no.","Sample Collection Date","Lab Name","Vl value in cp/ml");
+ $headings = array("Facility Name","Patient's Name","Patient ART no.","Patient phone no.","Sample Collection Date","Sample Tested Date","Lab Name","Vl value in cp/ml");
  
  $colNo = 0;
  
@@ -59,7 +59,7 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
                 );
 
  foreach($_POST as $key=>$value){
-   if(trim($value)!='' && trim($value)!='-- Select --'){
+   if(trim($value)!='' && trim($value)!='-- Select --' && trim($key)!='markAsComplete'){
      $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
    }
  }
@@ -69,22 +69,35 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
    $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
    $colNo++;
  }
- $sheet->getStyle('A3:F3')->applyFromArray($styleArray);
+ $sheet->getStyle('A3:A3')->applyFromArray($styleArray);
+ $sheet->getStyle('B3:B3')->applyFromArray($styleArray);
+ $sheet->getStyle('C3:C3')->applyFromArray($styleArray);
+ $sheet->getStyle('D3:D3')->applyFromArray($styleArray);
+ $sheet->getStyle('E3:E3')->applyFromArray($styleArray);
+ $sheet->getStyle('F3:F3')->applyFromArray($styleArray);
+ $sheet->getStyle('G3:G3')->applyFromArray($styleArray);
+ $sheet->getStyle('H3:H3')->applyFromArray($styleArray);
+
  $vlSampleId = array();
  foreach ($rResult as $aRow) {
   $row = array();
   //sample collecion date
-  $sampleCollectionDate = '';
+  $sampleCollectionDate = '';$sampleTestDate = '';
   if($aRow['sample_collection_date']!= NULL && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00 00:00:00'){
    $expStr = explode(" ",$aRow['sample_collection_date']);
    $sampleCollectionDate =  date("d-m-Y", strtotime($expStr[0]));
   }
+  if($aRow['sample_tested_datetime']!= NULL && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00 00:00:00'){
+    $expStr = explode(" ",$aRow['sample_tested_datetime']);
+    $sampleTestDate =  date("d-m-Y", strtotime($expStr[0]));
+   }
   
     $row[] = ucwords($aRow['facility_name']);
     $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
     $row[] = $aRow['patient_art_no'];
     $row[] = $aRow['patient_mobile_number'];
     $row[] = $sampleCollectionDate;
+    $row[] = $sampleTestDate;
     $row[] = $aRow['labName'];
     $row[] = $aRow['result'];
     $vlSampleId[] = $aRow['vl_sample_id'];
