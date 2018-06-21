@@ -1478,5 +1478,6 @@ UPDATE `privileges` SET `privilege_name` = 'vlWeeklyReport.php' WHERE `privilege
 
 
 
+UPDATE `global_config` SET `value` = '5' WHERE `global_config`.`name` = 'data_sync_interval'; 
 -- saravanan 12-jun-2018
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Edit Profile', 'edit_profile', 'no');
