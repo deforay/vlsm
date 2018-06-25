@@ -183,8 +183,8 @@ $sKey = ''; $sFormat = '';
                     <div class="row">
                           <div class="col-xs-3 col-md-3">
                               <div class="form-group">
-                                  <label for="implementingPartner">Implementing Partner <span class="mandatory">*</span></label>
-                                  <select class="form-control isRequired" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
+                                  <label for="implementingPartner">Implementing Partner</label>
+                                  <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;">
                                       <option value=""> -- Select -- </option>
                                           <?php
                                           foreach($implementingPartnerList as $implementingPartner){
@@ -196,8 +196,8 @@ $sKey = ''; $sFormat = '';
                           </div>   
                           <div class="col-xs-3 col-md-3">
                               <div class="form-group">
-                                  <label for="fundingSource">Funding Source <span class="mandatory">*</span></label>
-                                  <select class="form-control isRequired" name="fundingSource" id="fundingSource" title="Please choose implementing partner" style="width:100%;">
+                                  <label for="fundingSource">Funding Source</label>
+                                  <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose implementing partner" style="width:100%;">
                                       <option value=""> -- Select -- </option>
                                       <?php
                                       foreach($fundingSourceList as $fundingSource){
