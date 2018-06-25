@@ -3,7 +3,7 @@ require_once(__DIR__.'/../system/system.php');
 
 // These settings are for the portable Uniform Server distribution
 
-$HOST = 'localhost';
+$HOST = '127.0.0.1';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';

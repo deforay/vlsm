@@ -205,7 +205,7 @@ $disable = "disabled = 'disabled'";
                     <div class="row">
                           <div class="col-xs-3 col-md-3">
                               <div class="form-group">
-                                  <label for="implementingPartner">Implementing Partner <span class="mandatory">*</span></label>
+                                  <label for="implementingPartner">Implementing Partner</label>
                                   <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner" style="width:100%;"  <?php echo $disable;?>>
                                       <option value=""> -- Select -- </option>
                                       <?php
@@ -218,7 +218,7 @@ $disable = "disabled = 'disabled'";
                           </div>   
                           <div class="col-xs-3 col-md-3">
                               <div class="form-group">
-                                  <label for="fundingSource">Funding Source <span class="mandatory">*</span></label>
+                                  <label for="fundingSource">Funding Source</label>
                                   <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose implementing partner" style="width:100%;"  <?php echo $disable;?>>
                                       <option value=""> -- Select -- </option>
                                       <?php
