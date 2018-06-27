@@ -209,7 +209,10 @@
                 'Last 7 Days': [moment().subtract('days', 6), moment()],
                 'Last 30 Days': [moment().subtract('days', 29), moment()],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
+                'Last 12 Months': [moment().subtract('month', 12).startOf('month'), moment().endOf('month')],
+                'Last 18 Months': [moment().subtract('month', 18).startOf('month'), moment().endOf('month')],
+                'Last 24 Months': [moment().subtract('month', 24).startOf('month'), moment().endOf('month')]
             }
         },
         function(start, end) {
