@@ -86,7 +86,6 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
          ),
      )
  );
- 
  if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
    $vlLabQuery="SELECT * FROM facility_details where facility_id IN (".$_POST['lab'].") AND status='active'";
    $vlLabResult = $db->rawQuery($vlLabQuery);
@@ -111,6 +110,12 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
  $sheet->mergeCells('S2:S3');
  $sheet->mergeCells('T2:T3');
  
+ $totQuery = "SELECT 
+ SUM(
+   CASE  
+      WHEN(DATE(sample_collection_date) >= '".$collection_start_date."' AND DATE(sample_collection_date) <= '".$collection_end_date."') THEN 1 ELSE 0 END) AS collectCount,
+ SUM(CASE  WHEN (DATE(sample_collection_date) <= '".date('Y-m-d')."') THEN 1 ELSE 0 END) AS totalCount FROM vl_request_form as vl  WHERE  vl.vlsm_country_id = ".$country;
+  $totalResult = $db->rawQuery($totQuery);
  $c = 0;
  foreach($vlLabResult as $vlLab){
     $sQuery="SELECT
@@ -325,144 +330,25 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
          $colNo++;
        }
       }
+      $firstRowCount = $rRowCount+1;
+      $secondRowCount = $rRowCount+2;
+      $firstCell = $sheet->getCellByColumnAndRow(1, $firstRowCount)->getColumn();
+      $secondCell = $sheet->getCellByColumnAndRow(2, $firstRowCount)->getColumn();
+      $sheet->getStyle($firstCell.$firstRowCount.':'.$firstCell.$firstRowCount)->applyFromArray($styleArray);
+      $sheet->getStyle($secondCell.$firstRowCount.':'.$secondCell.$firstRowCount)->applyFromArray($styleArray);
+      $sheet->setCellValue($firstCell.$firstRowCount, html_entity_decode("Total Sample As On ".$s_t_date[0], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue($secondCell.$firstRowCount, html_entity_decode($totalResult[0]['totalCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      
+      $firstCell = $sheet->getCellByColumnAndRow(1, $secondRowCount)->getColumn();
+      $secondCell = $sheet->getCellByColumnAndRow(2, $secondRowCount)->getColumn();
+      $sheet->getStyle($firstCell.$secondRowCount.':'.$firstCell.$secondRowCount)->applyFromArray($styleArray);
+      $sheet->getStyle($secondCell.$secondRowCount.':'.$secondCell.$secondRowCount)->applyFromArray($styleArray);
+      $sheet->setCellValue($firstCell.$secondRowCount, html_entity_decode("Samples Collected Between ".$_POST['collectionDate'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue($secondCell.$secondRowCount, html_entity_decode($totalResult[0]['collectCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
     $c++;
   }
  //Statistics sheet end
- //Super lab performance sheet start
  if($c > 0){
-   $sheet = new PHPExcel_Worksheet($excel, '');
-   $excel->addSheet($sheet, $c);
-   $sheet->setTitle('Super Lab Performance Report');
-    
-   $sheet->setCellValue('A1', html_entity_decode('VL ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('D1', html_entity_decode('Collection Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('E1', html_entity_decode($_POST['collectionDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('D2', html_entity_decode('Super Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('E2', html_entity_decode('Lab ID ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('F2', html_entity_decode('Total Number of VL samples Received at Laboratory ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('G2', html_entity_decode('Total Number of Viral load tests done (inc failed tests) ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('H2', html_entity_decode('No. of Samples Not Tested ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('I2', html_entity_decode('Assay Failure Rate(%) ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('J2', html_entity_decode('Average Result TAT (lab) ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   $sheet->setCellValue('K2', html_entity_decode('Average Result TAT -Total (from sample  collection to results getting to the facility/hub) ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-   
-   $sheet->getStyle('A1')->applyFromArray($headingStyle);
-   $sheet->getStyle('B1')->applyFromArray($backgroundTitleStyle);
-   $sheet->getStyle('D1')->applyFromArray($backgroundTitleStyle);
-   $sheet->getStyle('B2')->applyFromArray($styleArray);
-   $sheet->getStyle('C2')->applyFromArray($styleArray);
-   $sheet->getStyle('D2')->applyFromArray($styleArray);
-   $sheet->getStyle('E2')->applyFromArray($styleArray);
-   $sheet->getStyle('F2')->applyFromArray($styleArray);
-   $sheet->getStyle('G2')->applyFromArray($styleArray);
-   $sheet->getStyle('H2')->applyFromArray($styleArray);
-   $sheet->getStyle('I2')->applyFromArray($styleArray);
-   $sheet->getStyle('J2')->applyFromArray($styleArray);
-   $sheet->getStyle('K2')->applyFromArray($styleArray);
-   $output = array();
-    $r=1;
-    foreach ($vlLabResult as $vlLab) {
-       $sQuery="SELECT vl.vl_sample_id,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.sample_tested_datetime,vl.result_printed_datetime,vl.result,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.vlsm_country_id = '".$country."'";
-       if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
-          if (trim($start_date) == trim($end_date)) {
-            $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
-          }else{
-            $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
-          }
-       }
-       if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
-        if (trim($collection_start_date) == trim($collection_end_date)) {
-          $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) = "'.$collection_start_date.'"';
-        }else{
-          $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$collection_start_date.'" AND DATE(vl.sample_collection_date) <= "'.$collection_end_date.'"';
-        }
-      }
-       if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-         //$sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
-       }
-       $sResult = $db->rawQuery($sQuery);
-       $noOfSampleReceivedAtLab = array();
-       $noOfSampleTested = array();
-       $noOfSampleNotTested = array();
-       $resultTat = array();
-       $resultDTat = array();
-       $assayFailures = array();
-       foreach($sResult as $result){
-         $sampleCollectionDate = '';
-         $dateOfSampleReceivedAtTestingLab = '';
-         $dateResultPrinted = '';
-         if(trim($result['sample_collection_date'])!= '' && $result['sample_collection_date'] != NULL && $result['sample_collection_date'] != '0000-00-00 00:00:00'){
-            $sampleCollectionDate = $result['sample_collection_date'];
-         }
-         
-         if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
-            $dateOfSampleReceivedAtTestingLab = $result['sample_received_at_vl_lab_datetime'];
-            $noOfSampleReceivedAtLab[] = $result['vl_sample_id'];
-         }
-         
-         if(trim($result['sample_tested_datetime'])!= '' && $result['sample_tested_datetime'] != NULL && $result['sample_tested_datetime'] != '0000-00-00 00:00:00'){
-            $noOfSampleTested[] = $result['vl_sample_id'];
-         }else{
-            if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
-               $noOfSampleNotTested[] = $result['vl_sample_id'];
-            }
-         }
-         
-         if(trim($result['result_printed_datetime'])!= '' && $result['result_printed_datetime'] != NULL && $result['result_printed_datetime'] != '0000-00-00 00:00:00'){
-            $dateResultPrinted = $result['result_printed_datetime'];
-         }
-         
-         if(trim($dateOfSampleReceivedAtTestingLab)!= '' && trim($dateResultPrinted)!= ''){
-            $date_result_printed = strtotime($dateResultPrinted);
-            $date_of_sample_received_at_testing_lab = strtotime($dateOfSampleReceivedAtTestingLab);
-            $daydiff = $date_result_printed - $date_of_sample_received_at_testing_lab;
-            $tat = (int)floor($daydiff / (60 * 60 * 24));
-            $resultTat[] = $tat;
-         }
-         if(trim($sampleCollectionDate)!= '' && trim($dateResultPrinted)!= ''){
-            $date_result_printed = strtotime($dateResultPrinted);
-            $sample_collection_date = strtotime($sampleCollectionDate);
-            $daydiff = $date_result_printed - $sample_collection_date;
-            $tatD = (int)floor($daydiff / (60 * 60 * 24));
-            $resultDTat[] = $tatD;
-         }
-         if(trim(strtolower($result['result']))== 'failed' || trim(strtolower($result['result']))== 'fail'){
-            $assayFailures[] = $result['vl_sample_id'];
-         }
-       }
-       $row = array();
-       $row[] = $r;
-       $row[] = ucwords($vlLab['facility_state']);
-       $row[] = ucwords($vlLab['facility_district']);
-       $row[] = ucwords($vlLab['facility_name']);
-       $row[] = $vlLab['facility_code'];
-       $row[] = count($noOfSampleReceivedAtLab);
-       $row[] = count($noOfSampleTested);
-       $row[] = count($noOfSampleNotTested);
-       $row[] = (count($sResult) >0) ? (round(count($assayFailures)/count($sResult)))*100 : 0;
-       $row[] = (count($resultTat) >0) ? round(array_sum($resultTat)/count($resultTat)) : 0;
-       $row[] = (count($resultDTat) >0) ? (round(array_sum($resultDTat)/count($resultDTat)) - count($resultDTat)) : 0;
-       $output[] = $row;
-     $r++;
-    }
-   
-    $start = (count($output));
-    foreach ($output as $rowNo => $rowData) {
-        $colNo = 0;
-        foreach ($rowData as $field => $value) {
-          $rRowCount = $rowNo + 3;
-          $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
-          $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
-          $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
-          $sheet->getDefaultRowDimension()->setRowHeight(15);
-          $sheet->getCellByColumnAndRow($colNo, $rowNo + 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-          $colNo++;
-        }
-    }
    //Super lab performance sheet end
    $instance = isset($_SESSION['instanceFname']) ? $_SESSION['instanceFname'] : $_SESSION['instanceId'];
    $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
