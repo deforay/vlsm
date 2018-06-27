@@ -21,7 +21,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant","Is Patient Breastfeeding","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Rejection","Date Sample Received at PHL","Date Sent to NHRL","Date Results Received at PHL","Value(Results)","Results in Log","Date Results Dispatched Facilities","TAT Result Dispatch(days)","Comments","Funding Source","Implementing Partner");
+ $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant","Is Patient Breastfeeding","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Rejection","Sample Tested On","Result (cp/ml)","Result (log)","Date Results Dispatched Facilities","TAT Result Dispatch(days)","Comments","Funding Source","Implementing Partner");
  
  $colNo = 0;
  
@@ -105,6 +105,13 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   if($aRow['test_requested_on']!= NULL && trim($aRow['test_requested_on'])!='' && $aRow['test_requested_on']!='0000-00-00'){
    $requestedDate =  date("d-m-Y", strtotime($aRow['test_requested_on']));
   }
+  
+  
+  $sampleTestedOn = '';
+  if($aRow['sample_tested_datetime']!= NULL && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00'){
+    $sampleTestedOn =  date("d-m-Y", strtotime($aRow['sample_tested_datetime']));
+  }
+
   //set ARV adherecne
   $arvAdherence = '';
   if(trim($aRow['arv_adherance_percentage']) == 'good'){
@@ -137,8 +144,8 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $logVal = '0.0';
   if($aRow['result_value_log']!= NULL && trim($aRow['result_value_log'])!= ''){
    $logVal = round($aRow['result_value_log'],1);
-  }else if($aRow['result_value_absolute']!= NULL && trim($aRow['result_value_absolute'])!= ''){
-   $logVal = round(log10($aRow['result_value_absolute']),1);
+  }else if($aRow['result_value_absolute']!= NULL && trim($aRow['result_value_absolute'])!= '' && $aRow['result_value_absolute'] > 0){
+   $logVal = round(log10((float)$aRow['result_value_absolute']),1);
   }
   if($sarr['user_type']=='remoteuser'){
     $sampleCode = 'remote_sample_code';
@@ -168,9 +175,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = ucwords($aRow['request_clinician_name']);
   $row[] = $requestedDate;
   $row[] = $sampleRejection;
-  $row[] = '';
-  $row[] = '';
-  $row[] = '';
+  $row[] = $sampleTestedOn;
   $row[] = $aRow['result'];
   $row[] = $logVal;
   $row[] = $resultDispatchedDate;
