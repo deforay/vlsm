@@ -203,7 +203,7 @@ $sKey = ''; $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="dob">Date of Birth <span class="mandatory">*</span></label>
-                          <input type="text" name="dob" id="dob" class="form-control date isRequired" placeholder="Enter DOB" title="Enter dob" onchange="getAge();checkARTInitiationDate();"/>
+                          <input type="text" name="dob" id="dob" class="form-control date <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" placeholder="Enter DOB" title="Enter dob" onchange="getAge();checkARTInitiationDate();"/>
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
@@ -288,7 +288,7 @@ $sKey = ''; $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                           <div class="form-group">
                           <label for="artRegimen">Current Regimen <span class="mandatory">*</span></label>
-                            <select class="form-control isRequired" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
+                            <select class="form-control  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                  <option value="">-- Select --</option>
                                   <?php foreach($artRegimenResult as $heading) { ?>
                                   <optgroup label="<?php echo ucwords($heading['headings']); ?>">
@@ -308,13 +308,13 @@ $sKey = ''; $sFormat = '';
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="">Date of Initiation of Current Regimen<span class="mandatory">*</span></label>
-                          <input type="text" class="form-control date isRequired" style="width:100%;" name="regimenInitiatedOn" id="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on">
+                          <input type="text" class="form-control date <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" style="width:100%;" name="regimenInitiatedOn" id="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on">
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="arvAdherence">ARV Adherence <span class="mandatory">*</span></label>
-                          <select name="arvAdherence" id="arvAdherence" class="form-control isRequired" title="Please choose adherence">
+                          <select name="arvAdherence" id="arvAdherence" class="form-control <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" title="Please choose adherence">
                             <option value=""> -- Select -- </option>
                             <option value="good">Good >= 95%</option>
                             <option value="fair">Fair (85-94%)</option>
@@ -444,19 +444,19 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-4">
                             <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control isRequired" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" />
+                               <input type="text" class="form-control <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control checkNum isRequired" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" />
+                               <input type="text" class="form-control checkNum <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="requestDate">Request Date <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control date isRequired" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date"/>
+                                <input type="text" class="form-control date <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date"/>
                             </div>
                         </div>
                      </div>
@@ -464,13 +464,13 @@ $sKey = ''; $sFormat = '';
                         <div class="col-md-4">
                             <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person<span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control isRequired" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" />
+                               <input type="text" class="form-control <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                               <input type="text" class="form-control checkNum isRequired" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" />
+                               <input type="text" class="form-control checkNum <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" />
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -938,6 +938,13 @@ $sKey = ''; $sFormat = '';
     $('.isRequired').each(function () {
       ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
+    var userType = "<?php echo $sarr['user_type']; ?>";
+    if(userType!='remoteuser'){
+      if($.trim($("#dob").val())=='' && $.trim($("#ageInYears").val())=='' && $.trim($("#ageInMonths").val())==''){
+        alert("Please make sure enter DOB or Age");
+        return false;
+      }
+    }
     $("#saveNext").val('save');
     if(flag){
       $.blockUI();
