@@ -232,7 +232,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="dob">Date of Birth <span class="mandatory">*</span></label>
+                        <label for="dob">Date of Birth <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                           <input type="text" name="dob" id="dob" class="form-control date <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" placeholder="Enter DOB" title="Enter dob" value="<?php echo $vlQueryInfo[0]['patient_dob']; ?>" onchange="getAge();checkARTInitiationDate();"/>
                         </div>
                       </div>
@@ -317,7 +317,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                       </div>
                       <div class="col-xs-3 col-md-3">
                           <div class="form-group">
-                          <label for="artRegimen">Current Regimen <span class="mandatory">*</span></label>
+                          <label for="artRegimen">Current Regimen <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                             <select class="form-control <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                 <option value="">-- Select --</option>
                                 <?php foreach($artRegimenResult as $heading) { ?>
@@ -337,13 +337,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                        </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="">Date of Initiation of Current Regimen<span class="mandatory">*</span></label>
+                        <label for="">Date of Initiation of Current Regimen<?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                           <input type="text" class="form-control date  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" style="width:100%;" name="regimenInitiatedOn" id="regimenInitiatedOn" placeholder="Current Regimen Initiated On" title="Please enter current regimen initiated on" value="<?php echo $vlQueryInfo[0]['date_of_initiation_of_current_regimen']; ?>">
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                        <label for="arvAdherence">ARV Adherence <span class="mandatory">*</span></label>
+                        <label for="arvAdherence">ARV Adherence <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                           <select name="arvAdherence" id="arvAdherence" class="form-control  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" title="Please choose adherence">
                             <option value=""> -- Select -- </option>
                             <option value="good" <?php echo ($vlQueryInfo[0]['arv_adherance_percentage']=='good')?"selected='selected'":""?>>Good >= 95%</option>
@@ -517,19 +517,19 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                      </div>
                      <div class="row">
                         <div class="col-md-4">
-                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <span class="mandatory">*</span></label>
+                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                             <div class="col-lg-7">
                                <input type="text" class="form-control  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" value="<?php echo $vlQueryInfo[0]['request_clinician_name'];?>"/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number <span class="mandatory">*</span></label>
+                            <label for="reqClinicianPhoneNumber" class="col-lg-5 control-label">Phone Number <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                             <div class="col-lg-7">
                                <input type="text" class="form-control checkNum  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="reqClinicianPhoneNumber" name="reqClinicianPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter request clinician phone number" value="<?php echo $vlQueryInfo[0]['request_clinician_phone_number']; ?>"/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="requestDate">Request Date <span class="mandatory">*</span></label>
+                            <label class="col-lg-5 control-label" for="requestDate">Request Date <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                             <div class="col-lg-7">
                                 <input type="text" class="form-control date  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="requestDate" name="requestDate" placeholder="Request Date" title="Please select request date" value="<?php echo $vlQueryInfo[0]['test_requested_on']; ?>"/>
                             </div>
@@ -537,13 +537,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                      </div>
                      <div class="row">
                         <div class="col-md-4">
-                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person<span class="mandatory">*</span></label>
+                            <label for="vlFocalPerson" class="col-lg-5 control-label">VL Focal Person<?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                             <div class="col-lg-7">
                                <input type="text" class="form-control  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="vlFocalPerson" name="vlFocalPerson" placeholder="VL Focal Person" title="Please enter vl focal person name" value="<?php echo $vlQueryInfo[0]['vl_focal_person']; ?>"/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number <span class="mandatory">*</span></label>
+                            <label for="vlFocalPersonPhoneNumber" class="col-lg-5 control-label">VL Focal Person Phone Number <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                             <div class="col-lg-7">
                                <input type="text" class="form-control checkNum  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="vlFocalPersonPhoneNumber" name="vlFocalPersonPhoneNumber" maxlength="15" placeholder="Phone Number" title="Please enter vl focal person phone number" value="<?php echo $vlQueryInfo[0]['vl_focal_person_phone_number']; ?>"/>
                             </div>
