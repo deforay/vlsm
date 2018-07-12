@@ -12,6 +12,11 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
+$fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
+$fundingSourceList = $db->query($fundingSourceQry);
+//Implementing partner list
+$implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
+$implementingPartnerList = $db->query($implementingPartnerQry);
 ?>
 <style>
   .select2-selection__choice{
@@ -114,7 +119,28 @@ $batResult = $db->rawQuery($batQuery);
 														<td>
 															<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
 														</td>
-														<td colspan="4"></td>
+														<td><b>Funding Sources&nbsp;:</b></td>
+														<td>
+															<select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
+															<option value=""> -- Select -- </option>
+															<?php
+															foreach($fundingSourceList as $fundingSource){
+															?>
+															<option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+															<?php } ?>
+															</select>
+														</td>
+														<td><b>Implementing Partners&nbsp;:</b></td>
+														<td>
+															<select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
+															<option value=""> -- Select -- </option>
+															<?php
+															foreach($implementingPartnerList as $implementingPartner){
+															?>
+															<option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+															<?php } ?>
+															</select>
+														</td>
 												</tr>
 												<tr>
 													<td colspan="6">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -261,7 +287,35 @@ $batResult = $db->rawQuery($batQuery);
 														<td>
 															<input type="text" id="printSampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
 														</td>
-														<td colspan="4"></td>
+														<td><b>Sample Test Date&nbsp;:</b></td>
+														<td>
+															<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
+														</td>
+														<td><b>Funding Sources&nbsp;:</b></td>
+														<td>
+															<select class="form-control" name="fundingSource" id="printFundingSource" title="Please choose funding source">
+															<option value=""> -- Select -- </option>
+															<?php
+															foreach($fundingSourceList as $fundingSource){
+															?>
+															<option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+															<?php } ?>
+															</select>
+														</td>
+														
+												</tr>
+												<tr>
+														<td><b>Implementing Partners&nbsp;:</b></td>
+														<td>
+															<select class="form-control" name="implementingPartner" id="printImplementingPartner" title="Please choose implementing partner">
+															<option value=""> -- Select -- </option>
+															<?php
+															foreach($implementingPartnerList as $implementingPartner){
+															?>
+															<option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+															<?php } ?>
+															</select>
+														</td>
 												</tr>
 												<tr>
 													<td colspan="6">&nbsp;<input type="button" onclick="searchPrintedVlRequestData();" value="Search" class="btn btn-success btn-sm">
@@ -490,6 +544,8 @@ $batResult = $db->rawQuery($batQuery);
 		  aoData.push({"name": "gender", "value": $("#gender").val()});
 		  aoData.push({"name": "artNo", "value": $("#artNo").val()});
 		  aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
+		  aoData.push({"name": "fundingSource", "value": $("#fundingSource").val()});
+		  aoData.push({"name": "implementingPartner", "value": $("#implementingPartner").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -560,6 +616,8 @@ $batResult = $db->rawQuery($batQuery);
 		aoData.push({"name": "gender", "value": $("#printGender").val()});
 		aoData.push({"name": "artNo", "value": $("#printArtNo").val()});
 		aoData.push({"name": "sampleTestDate", "value": $("#printSampleTestDate").val()});
+		aoData.push({"name": "fundingSource", "value": $("#printFundingSource").val()});
+		  aoData.push({"name": "implementingPartner", "value": $("#printImplementingPartner").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
