@@ -176,6 +176,13 @@ $primaryKey="vl_sample_id";
 				$sWhere = $sWhere.' AND vl.patient_gender ="'.$_POST['gender'].'"';
 			    }
 			}
+			if(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= ''){
+				$sWhere = $sWhere.' AND vl.funding_source ="'.base64_decode($_POST['fundingSource']).'"';
+			  }
+			  if(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= ''){
+				$sWhere = $sWhere.' AND vl.implementing_partner ="'.base64_decode($_POST['implementingPartner']).'"';
+			  }
+
 		}else{
 			if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
 				$setWhr = 'where';
@@ -257,6 +264,24 @@ $primaryKey="vl_sample_id";
 				}
 			    }
 			}
+			if(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= ''){
+				if(isset($setWhr)){
+			  $sWhere = $sWhere.' AND vl.funding_source ="'.base64_decode($_POST['fundingSource']).'"';
+				}else{
+			  $setWhr = 'where';
+			  $sWhere=' where '.$sWhere;
+			  $sWhere = $sWhere.' vl.funding_source ="'.base64_decode($_POST['fundingSource']).'"';
+				}
+			  }
+			  if(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= ''){
+				if(isset($setWhr)){
+			  $sWhere = $sWhere.' AND vl.implementing_partner ="'.base64_decode($_POST['implementingPartner']).'"';
+				}else{
+			  $setWhr = 'where';
+			  $sWhere=' where '.$sWhere;
+			  $sWhere = $sWhere.' vl.implementing_partner ="'.base64_decode($_POST['implementingPartner']).'"';
+				}
+			  }
 		}
 		$dWhere = '';
 		// Only approved results can be printed
