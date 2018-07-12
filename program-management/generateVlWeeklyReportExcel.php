@@ -17,15 +17,15 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
      $end_date = $general->dateFormat(trim($s_t_date[1]));
    }
 }
-if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
-  $s_t_date = explode("to", $_POST['collectionDate']);
-  if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
-    $collection_start_date = $general->dateFormat(trim($s_t_date[0]));
-  }
-  if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
-    $collection_end_date = $general->dateFormat(trim($s_t_date[1]));
-  }
-}
+// if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
+//   $s_t_date = explode("to", $_POST['collectionDate']);
+//   if (isset($s_t_date[0]) && trim($s_t_date[0]) != "") {
+//     $collection_start_date = $general->dateFormat(trim($s_t_date[0]));
+//   }
+//   if (isset($s_t_date[1]) && trim($s_t_date[1]) != "") {
+//     $collection_end_date = $general->dateFormat(trim($s_t_date[1]));
+//   }
+// }
  //excel code start
  $excel = new PHPExcel();
  $sheet = $excel->getActiveSheet();
@@ -183,13 +183,13 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
           $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
         }
     }
-    if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
-      if (trim($collection_start_date) == trim($collection_end_date)) {
-        $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) = "'.$collection_start_date.'"';
-      }else{
-        $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$collection_start_date.'" AND DATE(vl.sample_collection_date) <= "'.$collection_end_date.'"';
-      }
-  }
+  //   if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
+  //     if (trim($collection_start_date) == trim($collection_end_date)) {
+  //       $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) = "'.$collection_start_date.'"';
+  //     }else{
+  //       $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$collection_start_date.'" AND DATE(vl.sample_collection_date) <= "'.$collection_end_date.'"';
+  //     }
+  // }
     if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
         //$sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
     }
@@ -205,8 +205,8 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
       $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('D1', html_entity_decode('Super Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('E1', html_entity_decode(ucwords($vlLab['facility_name']), ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('F1', html_entity_decode('Collection Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('G1', html_entity_decode($_POST['collectionDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$sheet->setCellValue('F1', html_entity_decode('Collection Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$sheet->setCellValue('G1', html_entity_decode($_POST['collectionDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('D2', html_entity_decode('Site Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -236,8 +236,8 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
       $sheet->getStyle('C1')->applyFromArray($backgroundFieldStyle);
       $sheet->getStyle('D1')->applyFromArray($backgroundTitleStyle);
       $sheet->getStyle('E1')->applyFromArray($backgroundFieldStyle);
-      $sheet->getStyle('F1')->applyFromArray($backgroundTitleStyle);
-      $sheet->getStyle('G1')->applyFromArray($backgroundFieldStyle);
+      //$sheet->getStyle('F1')->applyFromArray($backgroundTitleStyle);
+      //$sheet->getStyle('G1')->applyFromArray($backgroundFieldStyle);
       $sheet->getStyle('B2:B3')->applyFromArray($styleArray);
       $sheet->getStyle('C2:C3')->applyFromArray($styleArray);
       $sheet->getStyle('D2:D3')->applyFromArray($styleArray);
@@ -343,7 +343,7 @@ if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
       $secondCell = $sheet->getCellByColumnAndRow(2, $secondRowCount)->getColumn();
       $sheet->getStyle($firstCell.$secondRowCount.':'.$firstCell.$secondRowCount)->applyFromArray($styleArray);
       $sheet->getStyle($secondCell.$secondRowCount.':'.$secondCell.$secondRowCount)->applyFromArray($styleArray);
-      $sheet->setCellValue($firstCell.$secondRowCount, html_entity_decode("Samples Collected Between ".$_POST['collectionDate'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$sheet->setCellValue($firstCell.$secondRowCount, html_entity_decode("Samples Collected Between ".$_POST['collectionDate'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue($secondCell.$secondRowCount, html_entity_decode($totalResult[0]['collectCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
     $c++;
   }
