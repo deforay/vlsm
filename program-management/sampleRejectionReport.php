@@ -141,6 +141,19 @@ $cResult = $db->rawQuery($cQuery);
       });
     $.unblockUI();
   }
+  function exportInexcel() {
+    $.blockUI();
+    $.post("exportSampleRejectionReport.php",{sample_collection_date:$("#sampleCollectionDate").val(),lab_name:$("#labName").val(),clinic_name:$("#clinicName").val(),sample_type:$("#sampleType").val()},
+    function(data){
+	  if(data == "" || data == null || data == undefined){
+			$.unblockUI();
+				alert('Unable to generate excel.');
+			}else{
+				$.unblockUI();
+				location.href = '../temporary/'+data;
+			}
+    });
+  }
 </script>
  <?php
  include('../footer.php');
