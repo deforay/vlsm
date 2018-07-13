@@ -77,10 +77,12 @@ if(isset($tResult) && count($tResult)>0){
 ?>
 <div id="container" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;"></div>
 <!--<div id="rejectedType" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;float:right;"></div>-->
-<?php } ?>
+<?php }
+if(isset($tableResult) && count($tableResult)>0){ ?>
 <div class="pull-right">
 <button class="btn btn-success" type="button" onclick="exportInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</button>
 </div>
+<?php } ?>
 <table id="vlRequestDataTable" class="table table-bordered table-striped">
    <thead>
       <tr>
