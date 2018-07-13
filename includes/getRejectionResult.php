@@ -19,13 +19,13 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
      $end_date = $general->dateFormat(trim($s_c_date[1]));
    }
    //get value by rejection reason id
-   $vlQuery = "select vl.reason_for_sample_rejection,sr.rejection_reason_name,sr.rejection_type,sr.rejection_reason_code from vl_request_form as vl inner join r_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection";
+   $vlQuery = "select vl.reason_for_sample_rejection,sr.rejection_reason_name,sr.rejection_type,sr.rejection_reason_code,fd.facility_name from vl_request_form as vl inner join r_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection inner join facility_details as fd ON fd.facility_id=vl.facility_id";
    $sWhere.= ' where DATE(vl.sample_collection_date) <= "'.$end_date.'" AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" AND reason_for_sample_rejection!="" AND reason_for_sample_rejection IS NOT NULL';
    $vlQuery = $vlQuery.$sWhere." group by reason_for_sample_rejection";
    $vlResult = $db->rawQuery($vlQuery);
    $rejectionType = array();
    foreach($vlResult as $rejectedResult){
-	  $tQuery="select COUNT(vl_sample_id) as total,vl.sample_collection_date FROM vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.reason_for_sample_rejection=".$rejectedResult['reason_for_sample_rejection'];
+	  $tQuery="select COUNT(vl_sample_id) as total,vl.sample_collection_date,fd.facility_name FROM vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type inner join facility_details as fd ON fd.facility_id=vl.facility_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.reason_for_sample_rejection=".$rejectedResult['reason_for_sample_rejection'];
 	  //filter
 	  $sWhere = '';
 	  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -78,10 +78,14 @@ if(isset($tResult) && count($tResult)>0){
 <div id="container" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;"></div>
 <!--<div id="rejectedType" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;float:right;"></div>-->
 <?php } ?>
+<div class="pull-right">
+<button class="btn btn-success" type="button" onclick="exportInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</button>
+</div>
 <table id="vlRequestDataTable" class="table table-bordered table-striped">
    <thead>
       <tr>
          <th>Sample Collection Date</th>
+         <th>Facility Name</th>
          <th>Rejection Reason</th>
          <th>Reason Type</th>
          <th>No. Of Records</th>
@@ -95,6 +99,7 @@ if(isset($tResult) && count($tResult)>0){
 			   <tr>
 				  <td><?php $dateExp = explode(" ",$rejectedData[0]['sample_collection_date']);
 				  echo $general->humanDateFormat($dateExp[0]);?></td>
+                  <td><?php echo ucwords($rejectedData[0]['facility_name']);?></td>
 				  <td><?php echo ucwords($rejectedData[0]['rejection_reason_name']);?></td>
 				  <td><?php echo strtoupper($rejectedData[0]['rejection_type']);?></td>
 				  <td><?php echo $rejectedData[0]['total'];?></td>
