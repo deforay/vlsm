@@ -467,7 +467,7 @@ $batResult = $db->rawQuery($batQuery);
 				highViralLoadReport();
 				sampleRjtReport();
 				notAvailReport();
-				//incompleteForm();
+				incompleteForm();
 			});
   function highViralLoadReport(){
     $.blockUI();
@@ -492,7 +492,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
             ],
-            "aaSorting": [[ 1, "DESC" ]],
+            aaSorting: [[ 4, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getHighVlResultDetails.php",
@@ -536,7 +536,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
             ],
-            "aaSorting": [[ 1, "DESC" ]],
+            "aaSorting": [[ 3, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getSampleRejectionReport.php",
@@ -578,7 +578,7 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
 				{"sClass":"center"}
             ],
-            "aaSorting": [[ 1, "DESC" ]],
+            "aaSorting": [[ 3, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getResultNotAvailable.php",
@@ -626,7 +626,7 @@ function incompleteForm(){
                 {"sClass":"center"},
                 {"sClass":"center"},
             ],
-            "aaSorting": [[ 1, "DESC" ]],
+            "aaSorting": [[ 1, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "dataQualityCheck.php",
@@ -650,7 +650,7 @@ function incompleteForm(){
     oTableViralLoad.fnDraw();
     oTableRjtReport.fnDraw();
     oTablenotAvailReport.fnDraw();
-		incompleteForm();
+		//incompleteForm();
 		oTableincompleteReport.fnDraw();
     $.unblockUI();
 	}

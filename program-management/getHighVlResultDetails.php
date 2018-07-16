@@ -19,7 +19,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         */
         
         $aColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
-        $orderColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
+        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -158,6 +158,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
+        //error_log($sQuery);
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
