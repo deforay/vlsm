@@ -9,7 +9,14 @@ $gconfig = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $gconfig[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 
 $general=new General();
 $tableName="vl_request_form";
@@ -173,7 +180,13 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$gconfig['vl_form'].'"';
 	}else{
 	    $sWhere = $sWhere.' where  vl.vlsm_country_id="'.$gconfig['vl_form'].'"';
-	}
+    }
+    $userQuery = '';
+    if($sarr['user_type']!='remoteuser'){
+        $sWhere = $sWhere. ' AND remote_sample="no"';
+        $userQuery = $userQuery. ' AND remote_sample="no"';
+    }
+    
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
 	$_SESSION['vlIncompleteForm'] = $sQuery;
@@ -192,7 +205,7 @@ $primaryKey="vl_sample_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$gconfig['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$gconfig['vl_form']."' $userQuery");
        // $aResultTotal = $countResult->fetch_row();
        //print_r($aResultTotal);
         $iTotal = $aResultTotal[0]['total'];
