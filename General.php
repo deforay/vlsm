@@ -184,7 +184,11 @@ class General {
             
         }  
     }
-
-
+    public function checkMandatoryField($sampleId,$sampleCollectionDate)
+    {
+        if($sampleId=='' || $sampleCollectionDate==''){
+            return true;
+        }
+    }
 }
 
