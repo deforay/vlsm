@@ -184,10 +184,12 @@ class General {
             
         }  
     }
-    public function checkMandatoryField($sampleId,$sampleCollectionDate)
+    public function checkMandatoryField($field)
     {
-        if($sampleId=='' || $sampleCollectionDate==''){
-            return true;
+        foreach($field as $chkField){
+            if($chkField==''){
+                return true;
+            }
         }
     }
 }
