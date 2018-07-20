@@ -9,6 +9,12 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
+    $chkValidation = $general->checkMandatoryField($_POST['sampleCode'],$_POST['sampleCollectionDate']);
+    if($chkValidation){
+        $_SESSION['alertMsg']="Please make sure enter mandatory field!";
+        header("location:editVlRequest.php?id=".base64_encode($_POST['vlSampleId']));
+        die;
+    }
      //system config
     $systemConfigQuery ="SELECT * from system_config";
     $systemConfigResult=$db->query($systemConfigQuery);
