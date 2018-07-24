@@ -2,7 +2,7 @@
 //print_r($result);die;
 ob_start();
 include('../includes/MysqliDb.php');
-include('../includes/General.php');
+include('../General.php');
 include ('../includes/tcpdf/tcpdf.php');
 define('UPLOAD_PATH','../uploads');
 //header and footer

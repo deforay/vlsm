@@ -1,11 +1,28 @@
 <?php
 ob_start();
-include('MysqliDb.php');
-include('General.php');
-$general=new General();
+include_once('MysqliDb.php');
+include_once('../General.php');
+
+
+$general=new General($db); // passing $db which is coming from MysqliDb.php
+
+
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
-$tsQuery = "select * from r_sample_status where status_id!=9";
+
+
+$userType = $general->getSystemConfig('user_type');
+
+if($userType != 'remoteuser'){
+    $whereCondition = " AND vl.result_status!=9";
+    $tsQuery = "select * from r_sample_status where status_id!=9";
+}else{
+    $whereCondition = "";
+    $tsQuery = "select * from r_sample_status";
+}
+
+
+
 $tsResult = $db->rawQuery($tsQuery);
 //date
 $start_date = '';
@@ -21,8 +38,13 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 $i = 0;
+
+
+
+
 foreach($tsResult as $tsId){
    $tQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status='".$tsId['status_id']."'";
+   
    //filter
    $sWhere = '';
    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
@@ -43,7 +65,7 @@ foreach($tsResult as $tsId){
 }
 //HVL and LVL Samples
 $hvlQuery = '';$lvlQuery = '';
-$vlSampleQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status!=9";
+$vlSampleQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' $whereCondition";
 $sWhere = '';
    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
       $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';
@@ -74,7 +96,7 @@ $sWhere = '';
                         AND vl.result is not null
                         AND vl.result != ''
                         AND DATE(vl.sample_collection_date) >= '".$start_date."'
-                        AND DATE(vl.sample_collection_date) <= '".$end_date."' AND vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status !=9 group by MONTH(vl.sample_collection_date) order by DATE(vl.sample_collection_date)";
+                        AND DATE(vl.sample_collection_date) <= '".$end_date."' AND vl.vlsm_country_id='".$configFormResult[0]['value']."' $whereCondition group by MONTH(vl.sample_collection_date) order by DATE(vl.sample_collection_date)";
    $sWhere = '';
    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
       $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';
@@ -98,9 +120,21 @@ $sWhere = '';
        $j++;
    }
 ?>
-<div id="sampleStatusOverviewContainer" style="float:left;min-width: 480px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
-<div id="samplesVlOverview" style="float:right;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
-<div id="labAverageTat" style="padding:5px 0px 5px 0px;"></div>
+<div class="col-xs-12">
+          <div class="box">
+<div class="box-body" >
+    <div id="sampleStatusOverviewContainer" style="float:left;min-width: 480px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
+    <div id="samplesVlOverview" style="float:right;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
+</div>
+</div>
+</div>
+<div class="col-xs-12">
+          <div class="box">
+<div class="box-body" >
+    <div id="labAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
+</div>
+</div>
+</div>
 <script>
     <?php
     if(isset($tResult) && count($tResult)>0){ ?>

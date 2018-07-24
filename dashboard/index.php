@@ -90,12 +90,10 @@ include('../header.php');
             <a href="vlRequest.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>-->
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-body" id="pieChartDiv">
+        
+            <div id="pieChartDiv">
             </div>
-          </div>
-        </div>
+          
       </div>
       
       <!-- /.row -->
@@ -114,7 +112,7 @@ include('../header.php');
       function(data){
 	  if($.trim(data)!=''){
 	    $("#pieChartDiv").html(data);
-		$("#labAverageTat").hide();
+		  //$("#labAverageTat").hide();
 	  }
       });
     

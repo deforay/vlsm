@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 include('../includes/MysqliDb.php');
-include('../includes/General.php');
+include('../General.php');
 include ('../includes/PHPExcel.php');
 $general=new General();
 

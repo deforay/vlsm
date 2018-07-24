@@ -90,10 +90,15 @@ $batResult = $db->rawQuery($batQuery);
 		</tr>
 		
 	    </table>
+</div>
+</div>
+      
             <!-- /.box-header -->
-            <div class="box-body" id="pieChartDiv">
+            <div id="pieChartDiv">
               
             </div>
+            <div class="col-xs-12">
+          <div class="box">
 						<div class="box-body">
 							<button class="btn btn-success pull-right" type="button" onclick="exportInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
               <table id="vlRequestDataTable" class="table table-bordered table-striped">

@@ -93,8 +93,8 @@ class General {
         }
     }
     
-    public static function getDateTime($timezone = 'Africa/Harare') {
-        $date = new DateTime( date('Y-m-d H:i:s'), new DateTimeZone($timezone));
+    public static function getDateTime() {
+        $date = new DateTime(date('Y-m-d H:i:s'));
         return $date->format('Y-m-d H:i:s');
     }
     
@@ -126,11 +126,10 @@ class General {
         return rmdir($dirname);
     }
 
-
-
+    // get data from the system_config table from database    
     public function getSystemConfig($name = null){
-        
-        if($this->db == null) return null;
+
+        if($this->db == null) return false;
 
         if($name == null){
             $systemConfigQuery ="SELECT * from system_config";
@@ -145,8 +144,53 @@ class General {
           $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
         }  
         
-        return $sarr;
+        if($name == null){
+            return $sarr;
+        }else{
+            if(isset($sarr[$name])){
+                return $sarr[$name];
+            }else{
+                return null;
+            }
+        }  
     }
+
+    // get data from the global_config table from database    
+    public function getGlobalConfig($name = null){
+
+        if($this->db == null) return false;
+
+        if($name == null){
+            $globalConfigQuery ="SELECT * from global_config";
+        }else{
+            $globalConfigQuery ="SELECT * from global_config WHERE `name` = '$name'";
+        }
         
+        $globalConfigResult=$this->db->query($globalConfigQuery);
+        $garr = array();
+        // now we create an associative array so that we can easily create view variables
+        for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
+            $garr[$globalConfigResult[$i]['name']] = $globalConfigResult[$i]['value'];
+        }  
+        
+        if($name == null){
+            return $garr;
+        }else{
+            if(isset($garr[$name])){
+                return $garr[$name];
+            }else{
+                return null;
+            }
+            
+        }  
+    }
+    public function checkMandatoryField($field)
+    {
+        foreach($field as $chkField){
+            if($chkField==''){
+                return true;
+            }
+        }
+    }
 }
 

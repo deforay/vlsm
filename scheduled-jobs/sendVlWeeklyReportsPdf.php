@@ -1,5 +1,5 @@
 <?php
-include('../includes/General.php');
+include('../General.php');
 require '../includes/mail/PHPMailerAutoload.php';
 $general=new General();
 $reportFilename = '';

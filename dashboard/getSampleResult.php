@@ -1,12 +1,24 @@
 <?php
+
 ob_start();
-include('../includes/MysqliDb.php');
-include('../General.php');
-$general=new General();
+include_once('../includes/MysqliDb.php');
+include_once('../General.php');
+
+$general=new General($db); // passing $db which is coming from MysqliDb.php
+
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 $cDate = date('Y-m-d');
 $lastSevenDay = date('Y-m-d', strtotime('-7 days'));
+
+$u = $general->getSystemConfig('user_type');
+
+if($u != 'remoteuser'){
+    $whereCondition = "result_status!=9 AND ";
+}else{
+    $whereCondition = "";
+}
+
 
 if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
    $s_c_date = explode("to", $_POST['sampleCollectionDate']);
@@ -20,7 +32,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 $sWhere = '';
 $vlQuery = "select DISTINCT YEAR(sample_collection_date), MONTH(sample_collection_date), DAY(sample_collection_date)  from vl_request_form as vl ";
-$sWhere.= ' where result_status!=9 AND DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
+$sWhere.= ' where '.$whereCondition.' DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
 $vlQuery = $vlQuery.$sWhere;
 
 
@@ -35,7 +47,7 @@ $rejectedDate = '';
 $i = 0;
 
 //get waiting data
-$waitingQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status!=9 AND vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (vl.result is null or vl.result = '')";
+$waitingQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (vl.result is null or vl.result = '')";
 
 $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
 if($waitingResult[$i][0]['total']!= 0){
@@ -47,7 +59,7 @@ if($waitingResult[$i][0]['total']!= 0){
 }
 
 foreach($vlResult as $vlData){
-   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status!=9 AND vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
+   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
    $date = $vlData['YEAR(sample_collection_date)']."-".$vlData['MONTH(sample_collection_date)']."-".$vlData['DAY(sample_collection_date)'];
    $dFormat = date("d M", strtotime($date));
    //filter
@@ -85,7 +97,7 @@ foreach($vlResult as $vlData){
 //for sample tested
 $stWhere = '';
 $stVlQuery = "select DISTINCT YEAR(sample_tested_datetime), MONTH(sample_tested_datetime), DAY(sample_tested_datetime) from vl_request_form as vl";
-$stWhere.= ' where result_status!=9 AND DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
+$stWhere.= ' where '.$whereCondition.' DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
 $stVlQuery = $stVlQuery.$stWhere;
 $stVlResult = $db->rawQuery($stVlQuery);
 
@@ -93,7 +105,7 @@ $j=0;
 $acceptedTotal = 0;
 $acceptedDate = '';
 foreach($stVlResult as $vlData){
-   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status!=9 AND vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
+   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
    $date = $vlData['YEAR(sample_tested_datetime)']."-".$vlData['MONTH(sample_tested_datetime)']."-".$vlData['DAY(sample_tested_datetime)'];
    $dFormat = date("d M", strtotime($date));
 
