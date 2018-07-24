@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include('../includes/MysqliDb.php');
+include_once('../includes/MysqliDb.php');
 $gQuery = "SELECT * FROM global_config";
 $gResult=$db->query($gQuery);
 $global = array();

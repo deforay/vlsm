@@ -2,7 +2,7 @@
 ob_start();
 $title = "VLSM | Add New Specimen Referral Manifest";
 include('../header.php');
-include('../includes/General.php');
+include('../General.php');
 $general=new General();
 $packageNo = $general->generateRandomString(8);
 ?>

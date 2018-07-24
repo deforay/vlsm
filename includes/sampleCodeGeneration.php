@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 include('MysqliDb.php');
-include('General.php');
+include('../General.php');
 $general=new General();
 //global config
 $configQuery="SELECT * from global_config";
