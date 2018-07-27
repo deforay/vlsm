@@ -529,7 +529,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 			</td>
 			<td class="vlResult" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"none":""; ?>"><label for="vlResult">VL result</label></td>
 			<td class="vlResult" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"none":""; ?>">
-			  <input type="text" class="form-control" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result'];?>">
+			  <input type="text" class="form-control" name="cphlvlResult" id="cphlvlResult" placeholder="VL Result" title="Enter VL Result" style="width:100%;" value="<?php echo $vlQueryInfo[0]['cphl_vl_result'];?>">
 			</td>
                         <td class="vlresultequ" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"none"; ?>"></td>
 			<td class="vlresultequ" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"none"; ?>"></td>
@@ -791,7 +791,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 //    }else if(pName=='' && cName==''){
 //      provinceName = true;
 //      facilityName = true;
-//      $("#province").html("<? php echo $province;?>");
+//      $("#province").html("< ?php echo $province;?>");
 //      $("#clinicName").html("< ?php echo $facility;?>");
 //    }
   }

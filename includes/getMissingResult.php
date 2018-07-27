@@ -1,4 +1,5 @@
 <?php
+session_start();
 ob_start();
 include_once('MysqliDb.php');
 include_once('../General.php');
@@ -17,7 +18,11 @@ if($userType != 'remoteuser'){
     $whereCondition = " AND vl.result_status!=9";
     $tsQuery = "select * from r_sample_status where status_id!=9";
 }else{
-    $whereCondition = "";
+    $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+    $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
+    if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
+        $whereCondition = " AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")";
+    }
     $tsQuery = "select * from r_sample_status";
 }
 
@@ -43,7 +48,7 @@ $i = 0;
 
 
 foreach($tsResult as $tsId){
-   $tQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status='".$tsId['status_id']."'";
+   $tQuery="select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.result_status='".$tsId['status_id']."' $whereCondition";
    
    //filter
    $sWhere = '';

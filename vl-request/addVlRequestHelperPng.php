@@ -145,6 +145,7 @@ try {
         'sample_tested_datetime'=>(isset($_POST['testDate']) && $_POST['testDate']!='' ? $_POST['testDate'] :  NULL),
         //'last_viral_load_result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
         'vl_test_platform'=>(isset($_POST['testingTech']) && $_POST['testingTech']!='') ? $_POST['testingTech'] :  NULL,
+        'cphl_vl_result'=>(isset($_POST['cphlvlResult']) && $_POST['cphlvlResult']!='' ? $_POST['cphlvlResult'] :  NULL),
         'result'=>(isset($_POST['vlResult']) && trim($_POST['vlResult'])!='') ? $_POST['vlResult'] :  NULL,
         'qc_tech_name'=>(isset($_POST['qcTechName']) && $_POST['qcTechName']!='' ? $_POST['qcTechName'] :  NULL),
         'qc_tech_sign'=>(isset($_POST['qcTechSign']) && $_POST['qcTechSign']!='' ? $_POST['qcTechSign'] :  NULL),

@@ -396,7 +396,7 @@ foreach($fResult as $fDetails){
 			</td>
 			<td class="vlResult"><label for="vlResult">VL result</label></td>
 			<td class="vlResult">
-			    <input type="text" class="form-control" name="vlResult" id="vlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;">
+			    <input type="text" class="form-control" name="cphlvlResult" id="cphlvlResult" placeholder="VL Result" title="Enter VL Result"  style="width:100%;">
 			</td>
 			<td class="vlresultequ" style="display:none;"></td>
 			<td class="vlresultequ" style="display:none;"></td>
