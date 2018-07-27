@@ -1484,3 +1484,6 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Edit Prof
 
 
 -- Version 3.7 ---------- Amit 24-Jul-2018
+
+-- saravanan 26-july-2018
+ALTER TABLE `vl_request_form` ADD `cphl_vl_result` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_test_platform`; -- for png form
