@@ -111,10 +111,18 @@ $primaryKey="vl_sample_id";
 	$sQuery="select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime,vl.request_created_by,vl.".$sampleCode." from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
-                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' AND vl.result_status!=9";
+                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."'";
 	if($sarr['user_type']=='remoteuser'){
-			$sQuery = $sQuery." AND request_created_by='".$_SESSION['userId']."'";
-	}
+        $whereCondition = '';
+        $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+        $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
+        if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
+            $whereCondition = " AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")";
+        }
+        $sQuery = $sQuery.$whereCondition;
+	}else{
+        $sQuery = $sQuery." AND vl.result_status!=9";
+    }
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -165,12 +173,14 @@ $primaryKey="vl_sample_id";
         /* Data set length after filtering */
 				$rUser = '';
 				if($sarr['user_type']=='remoteuser'){
-					$rUser = $rUser." AND request_created_by='".$_SESSION['userId']."'";
-				}
+					$rUser = $rUser.$whereCondition;
+				}else{
+                    $rUser = " AND vl.result_status!=9";
+                }
         $aResultFilterTotal =$db->rawQuery("select vl.sample_collection_date,vl.sample_tested_datetime,vl.sample_received_at_vl_lab_datetime,vl.result_printed_datetime,vl.result_mail_datetime from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
                         AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
                         AND vl.result is not null
-                        AND vl.result != '' AND vl.result_status!=9 AND vl.vlsm_country_id='".$gconfig['vl_form']."' $saWhere $rUser");
+                        AND vl.result != '' AND vl.vlsm_country_id='".$gconfig['vl_form']."' $saWhere $rUser");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
