@@ -133,7 +133,7 @@ $sWhere = '';
 </div>
 </div>
 </div>
-<div class="col-xs-12">
+<div class="col-xs-12 labAverageTatDiv">
           <div class="box">
 <div class="box-body" >
     <div id="labAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
