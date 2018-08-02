@@ -62,10 +62,9 @@ if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
   
 
 
-$vlQuery="SELECT * FROM vl_request_form WHERE data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+$vlQuery="SELECT * FROM vl_request_form WHERE remote_sample_code !='' AND  remote_sample_code is not null AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
 $vlLabResult = $db->rawQuery($vlQuery);
-
 
 $url = $REMOTEURL.'/remote/remote/testResults.php';
 $data = array(
@@ -87,7 +86,6 @@ $curl_response = curl_exec($ch);
 //close connection
 curl_close($ch);
 $result = json_decode($curl_response, true);
-
 
 if(count($result)>0){
     foreach($result as $code){

@@ -87,6 +87,7 @@ if(count($result)>0){
             $exsvlQuery="SELECT vl_sample_id,sample_code FROM vl_request_form AS vl WHERE remote_sample_code='".$lab['remote_sample_code']."'";
             $exsvlResult=$db->query($exsvlQuery);
             if($exsvlResult){
+                // do nothing
             }else{
                 if($lab['sample_collection_date']!='' && $lab['sample_collection_date']!=null && $lab['sample_collection_date']!='0000-00-00 00:00:00')
                 {

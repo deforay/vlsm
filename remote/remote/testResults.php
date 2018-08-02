@@ -24,7 +24,9 @@ if(count($data['result'])>0){
     $lab = array(); 
     foreach($data['result'] as $key=>$remoteData){
         foreach($oneDimensionalArray as $result){
-            $lab[$result] = $remoteData[$result];
+        	if(isset($remoteData[$result])){
+            	$lab[$result] = $remoteData[$result];
+	        }
         }
         //remove result value
         $removeKeys = array('vl_sample_id');
