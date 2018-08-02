@@ -47,7 +47,7 @@ $pdQuery="SELECT * from province_details";
   }
 $pdResult=$db->query($pdQuery);
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND vl.sample_code_title="'.$arr['sample_code'].'"  AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY vl_sample_id DESC LIMIT 1';
+$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 
 $prefix = $arr['sample_code_prefix'];
