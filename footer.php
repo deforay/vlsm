@@ -108,7 +108,7 @@ function syncRemoteData(){
   }
   
   if(remoteSync && remoteUrl != null && remoteUrl != ''){
-    $.blockUI({ message: '<h3>Trying to do VLSTS Remote sync. Please wait...</h3>' });
+    $.blockUI({ message: '<h3>Preparing for VLSTS Remote sync.<br>Please wait...</h3>' });
     var jqxhr = $.ajax({
                     url : "../remote/scheduled-jobs/syncCommonData.php",
                   })
@@ -129,7 +129,7 @@ function syncRemoteData(){
 }
 
 function syncRequests(){
-  $.blockUI({ message: '<h3>Trying to do VLSTS Remote sync. Please wait...</h3>' });
+  $.blockUI({ message: '<h3>Trying to sync Test Requests<br>Please wait...</h3>' });
   
   if(remoteSync && remoteUrl != null && remoteUrl != ''){
     var jqxhr = $.ajax({
@@ -153,7 +153,7 @@ function syncRequests(){
 
 function syncResults(){
   
-  $.blockUI({ message: '<h3>Trying to do VLSTS Remote sync. Please wait...</h3>' });
+  $.blockUI({ message: '<h3>Trying to sync Test Results<br>Please wait...</h3>' });
   
   if(remoteSync && remoteUrl != null && remoteUrl != ''){
     var jqxhr = $.ajax({
