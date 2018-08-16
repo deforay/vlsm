@@ -43,7 +43,40 @@ if($arr['sample_code']=='MMYY'){
 }
 
 $auto = $samColDate.$sampleColDateArray[1].$sampleColDateArray[2];
+if(isset($_POST['sampleFrom'])){
+  $svlQuery = 'SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND province_id='.$_POST['provinceId'].' AND '.$sampleCode.' IS NOT NULL AND '.$sampleCode.'!= "" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
+error_log($svlQuery);
+  $svlResult = $db->query($svlQuery);
+
+  if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+    $maxId = $svlResult[0][$sampleCodeKey]+1;
+    $strparam = strlen($maxId);
+    $zeros = (isset($_POST['autoTyp']) && trim($_POST['autoTyp']) == 'auto2')?substr("0000", $strparam):substr("000", $strparam);
+    $maxId = $zeros.$maxId;
+  }else{
+    $maxId = (isset($_POST['autoTyp']) && trim($_POST['autoTyp']) == 'auto2')?'0001':'001';
+  }
+  $sCode = $rKey."R".date('y').$_POST['provinceCode']."VL".$maxId;
+$j = 1;
+do{
+$sQuery = "select sample_code from vl_request_form as vl where sample_code='".$sCode."'";
+$svlResult = $db->query($sQuery);
+if(!$svlResult){
+  $maxId;
+  break;
+}else{
+  $x = $maxId + 1;
+  $strparam = strlen($x);
+  $zeros = (isset($_POST['autoTyp']) && trim($_POST['autoTyp']) == 'auto2')?substr("0000", $strparam):substr("000", $strparam);
+  $maxId = $zeros.$x;
+  $sCode = $rKey."R".date('y').$_POST['provinceCode']."VL".$maxId;
+}
+}
+while($sCode);
+
+}else{
 $svlQuery = 'SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.' IS NOT NULL AND '.$sampleCode.'!= "" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
+
 $svlResult = $db->query($svlQuery);
 if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
   $maxId = $svlResult[0][$sampleCodeKey]+1;
@@ -52,5 +85,6 @@ if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && 
   $maxId = $zeros.$maxId;
 }else{
   $maxId = (isset($_POST['autoTyp']) && trim($_POST['autoTyp']) == 'auto2')?'0001':'001';
+}
 }
 echo json_encode(array('maxId'=>$maxId,'mnthYr'=>$mnthYr,'auto'=>$auto));
