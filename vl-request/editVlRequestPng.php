@@ -259,10 +259,10 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                           <input type="text" class="form-control checkNum" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_phone_number'];?>" >
                         </td>
                         <td>
-                        <label for="clinicDate">Date  <span class="mandatory">*</span></label>
+                        <label for="clinicDate">Date  </label>
                         </td>
                         <td>
-                          <input type="text" class="form-control isRequired date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['clinic_date']; ?>"  >
+                          <input type="text" class="form-control date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['clinic_date']; ?>"  >
                         </td>
                       </tr>
                       <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td></tr>
@@ -296,14 +296,22 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <td><label for="dob">Date Of Birth</label></td>
                         <td>
                           <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" value="<?php echo $vlQueryInfo[0]['patient_dob'];?>" onchange="getAge();" style="width:100%;" />
-                          <input type="hidden" name="ageInYears" id="ageInYears" value="<?php echo $vlQueryInfo[0]['patient_age_in_years'];?>"/>
-			  <input type="hidden" name="ageInMonths" id="ageInMonths" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>"/>
                         </td>
-                        <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
+                        <td><label for="ageInYears">If DOB unknown, Age in Years</label></td>
+                        <td>
+                        <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year" title="Enter age in years" value="<?php echo $vlQueryInfo[0]['patient_age_in_years'];?>"/>
+                        </td>
+                        <td><label for="ageInMonths">If Age < 1, Age in Months </label></td>
+                        <td>
+                        <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months" value="<?php echo $vlQueryInfo[0]['patient_age_in_months'];?>"/>
+                        </td>
+                        
+                      </tr>
+                      <tr>
+                      <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
                         <td>
                          <input type="text" class="form-control isRequired" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;" />
-                        </td>
-			<td></td><td></td>
+                        </td>        
                       </tr>
                       <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 3: ART Information</td></tr>
                       <tr>

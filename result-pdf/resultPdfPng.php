@@ -168,6 +168,7 @@ if(sizeof($requestResult)> 0){
             //$showMessage = 'Value outside machine detection limit';
           }else if(trim($result['result'])=='<20'){
             $vlResult = '&lt;20';
+            $result['result'] = str_replace("<","&lt;",$result['result']);
             $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
             $showMessage = ucfirst($arr['l_vl_msg']);
           }else if(trim($result['result'])=='>10000000'){

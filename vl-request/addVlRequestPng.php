@@ -25,7 +25,7 @@ $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option data-code='' data-name='' value=''> -- Select -- </option>";
 foreach($pdResult as $provinceName){
-  $province .= "<option data-code='".$provinceName['province_code']."' data-name='".substr(strtoupper($provinceName['province_name']),0,3)."' value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
+  $province .= "<option data-code='".$provinceName['province_code']."' data-province-id='".$provinceName['province_id']."' data-name='".substr(strtoupper($provinceName['province_name']),0,3)."' value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
 }
 $facility = '';
 $facility.="<option value=''> -- Select -- </option>";
@@ -121,10 +121,10 @@ foreach($fResult as $fDetails){
                           <input type="text" class="form-control checkNum" name="telephone" id="telephone" placeholder="Telephone" title="Enter Telephone"  style="width:100%;" >
                         </td>
 			<td style="width:10%">
-                        <label for="clinicDate">Date  <span class="mandatory">*</span></label>
+                        <label for="clinicDate">Date  </label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control isRequired date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date"  style="width:100%;" >
+                          <input type="text" class="form-control date" name="clinicDate" id="clinicDate" placeholder="Date" title="Enter Date"  style="width:100%;" >
                         </td>
                       </tr>
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 2: Patient Information</td></tr>
@@ -158,14 +158,22 @@ foreach($fResult as $fDetails){
                         <td><label for="dob">Date Of Birth</label></td>
                         <td>
                           <input type="text" class="form-control date" placeholder="DOB" name="dob" id="dob" title="Please choose DOB" onchange="getAge();" style="width:100%;" />
-			  <input type="hidden" name="ageInYears" id="ageInYears"/>
-			  <input type="hidden" name="ageInMonths" id="ageInMonths"/>
                         </td>
-                        <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
+                        <td><label for="ageInYears">If DOB unknown, Age in Years</label></td>
                         <td>
-			  <input type="text" class="form-control isRequired" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" style="width:100%;" />
+                        <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year" title="Enter age in years"/>
                         </td>
-			<td></td><td></td>
+                        <td><label for="ageInMonths">If Age < 1, Age in Months </label></td>
+                        <td>
+                        <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months"/>
+                        </td>
+                        
+                      </tr>
+                      <tr>
+                      <td><label for="patientARTNo">Clinic ID <span class="mandatory">*</span></label></td>
+                        <td>
+			                  <input type="text" class="form-control isRequired" placeholder="Enter Clinic ID" name="patientARTNo" id="patientARTNo" title="Please enter Clinic ID" style="width:100%;" />
+                        </td>
                       </tr>
 		      <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 3: ART Information</td></tr>
                       <tr>
@@ -526,6 +534,7 @@ foreach($fResult as $fDetails){
                 <?php } ?>
 		<input type="hidden" name="saveNext" id="saveNext"/>
                 <input type="hidden" name="formId" id="formId" value="5"/>
+                <input type="hidden" name="provinceId" id="provinceId"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -714,20 +723,22 @@ foreach($fResult as $fDetails){
     var pName = $("#province").val();
     var sDate = $("#collectionDate").val();
     if(pName!='' && sDate!=''){
-      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate, autoTyp : 'auto2'},
+      var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '')?$("#province").find(":selected").attr("data-name"):$("#province").find(":selected").attr("data-code");
+      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate, autoTyp : 'auto2',provinceCode:provinceCode,'sampleFrom':'png','provinceId':$("#province").find(":selected").attr("data-province-id")},
       function(data){
 	  var sCodeKey = JSON.parse(data);
 	  <?php if($arr['sample_code']=='auto2'){ ?>
-	  var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '')?$("#province").find(":selected").attr("data-name"):$("#province").find(":selected").attr("data-code");
 	  $("#sampleCode").val('<?php echo $rKey;?>R'+(new Date().getFullYear()+'').slice(-2)+provinceCode+'VL'+sCodeKey.maxId);
 	  $("#sampleCodeFormat").val('<?php echo $rKey;?>'+provinceCode+sCodeKey.auto);
 	  $("#sampleCodeKey").val(sCodeKey.maxId);
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
 	  checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The laboratory ID that you entered already exists. Please try another ID',null);
 	<?php } else if($arr['sample_code']=='auto'){ ?>
 	  pNameVal = pName.split("##");
 	  $("#sampleCode").val('<?php echo $rKey;?>'+pNameVal[1]+sCodeKey.auto+sCodeKey.maxId);
 	  $("#sampleCodeFormat").val('<?php echo $rKey;?>'+pNameVal[1]+sCodeKey.auto);
 	  $("#sampleCodeKey").val(sCodeKey.maxId);
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
 	  checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The laboratory ID that you entered already exists. Please try another ID',null);
 	<?php } else { ?>
 	  $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);

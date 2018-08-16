@@ -1493,3 +1493,6 @@ ALTER TABLE `temp_sample_import` CHANGE `sample_review_by` `sample_review_by` VA
 
 -- saravanana 02-Aug-2018
 ALTER TABLE `vl_request_form` CHANGE `remote_sample_code_key` `remote_sample_code_key` INT NULL DEFAULT NULL, CHANGE `sample_code_key` `sample_code_key` INT NULL DEFAULT NULL;
+
+-- saravanan 16-aug-2018
+ALTER TABLE `vl_request_form` ADD `province_id` VARCHAR(255) NULL DEFAULT NULL AFTER `facility_id`;
