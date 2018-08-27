@@ -59,10 +59,11 @@ $_SESSION['aliasPage'] = 1;
 class MYPDF extends TCPDF {
 
     //Page header
-    public function setHeading($logo,$text,$lab) {
+    public function setHeading($logo,$text,$lab,$title=null) {
       $this->logo = $logo;
       $this->text = $text;
       $this->lab = $lab;
+      $this->htitle = $title;
     }
     //Page header
     public function Header() {
@@ -70,6 +71,24 @@ class MYPDF extends TCPDF {
         //$image_file = K_PATH_IMAGES.'logo_example.jpg';
         //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
+        if($this->htitle!=''){
+          if(trim($this->logo)!=''){
+            if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+              $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+              $this->Image($image_file,95, 5, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            }
+          }
+          $this->SetFont('helvetica', 'B', 7);
+          $this->writeHTMLCell(0,0,10,22,$this->text, 0, 0, 0, true, 'C', true);
+          if(trim($this->lab)!= ''){
+            $this->SetFont('helvetica', '', 9);
+            $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+          }
+          $this->SetFont('helvetica', '', 18);
+          $this->writeHTMLCell(0,0,10,30,'VIRAL LOAD PATIENT REPORT', 0, 0, 0, true, 'C', true);
+          
+          $this->writeHTMLCell(0,0,15,38,'<hr>', 0, 0, 0, true, 'C', true);
+        }else{
         if(trim($this->logo)!=''){
             if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
               $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
@@ -85,6 +104,7 @@ class MYPDF extends TCPDF {
           $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
         }
         $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
+      }
     }
 
     // Page footer
