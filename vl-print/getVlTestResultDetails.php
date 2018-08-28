@@ -335,8 +335,14 @@ $primaryKey="vl_sample_id";
 		    $dWhere = "WHERE vl.vlsm_country_id='".$arr['vl_form']."' AND vl.result_status!=9";
 		}
 		if($sarr['user_type']=='remoteuser'){
-			$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
-			$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
+			//$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
+			//$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
+			$userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+			$userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
+			if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
+				$sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+				$dWhere = $dWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+			}
 		}
 		$sQuery = $sQuery.' '.$sWhere;
 		$_SESSION['vlResultQuery']=$sQuery;
