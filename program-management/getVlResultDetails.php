@@ -365,8 +365,15 @@ $primaryKey="vl_sample_id";
 	}
 	$cWhere = '';
 	if($sarr['user_type']=='remoteuser'){
-	 $sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
-	 $cWhere = " AND request_created_by='".$_SESSION['userId']."'";
+	 //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
+	 //$cWhere = " AND request_created_by='".$_SESSION['userId']."'";
+		$userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+		$userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
+		if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
+			$sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+			$cWhere = " AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+
+		}
 	}
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
@@ -388,7 +395,7 @@ $primaryKey="vl_sample_id";
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."' AND result_status!=9 $cWhere");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vlsm_country_id='".$arr['vl_form']."' AND result_status!=9 $cWhere");
        // $aResultTotal = $countResult->fetch_row();
         $iTotal = $aResultTotal[0]['total'];
 

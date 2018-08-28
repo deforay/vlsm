@@ -13,6 +13,15 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+
 $thresholdLimit = $arr['viral_load_threshold_limit'];
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
@@ -143,7 +152,18 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 	}
 	if(isset($_POST['hvlPatientBreastfeeding']) && $_POST['hvlPatientBreastfeeding']!=''){
 		$sWhere = $sWhere.' AND vl.is_patient_breastfeeding = "'.$_POST['hvlPatientBreastfeeding'].'"';
-	}
+    }
+    $dWhere = '';
+    if($sarr['user_type']=='remoteuser'){
+        //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
+        //$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
+        $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+        $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
+        if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
+            $sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+            $dWhere = $dWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+        }
+    }
 
 			$sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
 
@@ -167,7 +187,7 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */
-        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status=7 AND result > $thresholdLimit AND vlsm_country_id='".$arr['vl_form']."'");
+        $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status=7 AND result > $thresholdLimit AND vlsm_country_id='".$arr['vl_form']."' $dWhere");
         $iTotal = $aResultTotal[0]['total'];
         /*
          * Output
