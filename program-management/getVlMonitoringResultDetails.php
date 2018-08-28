@@ -9,6 +9,14 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 $general=new General();
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
@@ -195,7 +203,16 @@ $primaryKey="vl_sample_id";
 	    $sWhere = $sWhere.' AND vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
 	}else{
 	    $sWhere = $sWhere.' where vl.result!="" AND vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
-	}
+    }
+    if($sarr['user_type']=='remoteuser'){
+        //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
+        //$dWhere = $dWhere." AND request_created_by='".$_SESSION['userId']."'";
+        $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+        $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
+        if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
+            $sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+        }
+    }
 	$sQuery = $sQuery.' '.$sWhere;
 	//echo $sQuery;die;
 	$_SESSION['vlMonitoringResultQuery']=$sQuery;
