@@ -8,6 +8,14 @@ $primaryKey="vl_sample_id";
 $configQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($configQuery);
 $country = $configResult[0]['value'];
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
@@ -204,7 +212,15 @@ $country = $configResult[0]['value'];
 	    $sWhere = $sWhere." AND vl.lab_id IN (".$_POST['lab'].")";
 	    $tWhere = $tWhere." AND vl.lab_id IN (".$_POST['lab'].")";
 	}
-	
+    if($sarr['user_type']=='remoteuser'){
+
+        $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+        $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
+        if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
+            $sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
+            $tWhere = $tWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes' ";
+        }
+    }
 	$sQuery = $sQuery.' '.$sWhere;
 	$sQuery = $sQuery.' GROUP BY vl.facility_id';
 	
@@ -227,6 +243,7 @@ $country = $configResult[0]['value'];
         $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $sWhere GROUP BY vl.facility_id");
         $iFilteredTotal = count($aResultFilterTotal);
         /* Total data set length */
+        
         $aResultTotal =  $db->rawQuery("select vl.vl_sample_id FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id $tWhere GROUP BY vl.facility_id");
         $iTotal = count($aResultTotal);
 

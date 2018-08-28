@@ -234,7 +234,7 @@ $primaryKey="vl_sample_id";
 	  $sFilter = ' AND result_status!=9';
 	}
 	$sQuery = $sQuery.' '.$sWhere;
-error_log($sQuery);
+//error_log($sQuery);
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery." ORDER BY ".$sOrder;
