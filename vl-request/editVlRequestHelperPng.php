@@ -83,10 +83,10 @@ try {
           $result=$db->insert('r_art_code_details',$data);
           $_POST['currentRegimen'] = $_POST['newArtRegimen'];
     }
-    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'accept'){
+    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'no'){
         $_POST['rejectionReason'] = NULL;
     }
-    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'reject'){
+    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes'){
         $_POST['vlResult'] = NULL;
     }
     $vldata=array(
@@ -95,7 +95,7 @@ try {
         'facility_id'=>(isset($_POST['clinicName']) && trim($_POST['clinicName'])!='') ? $_POST['clinicName'] :  NULL,
         //'ward'=>(isset($_POST['wardData']) && $_POST['wardData']!='' ? $_POST['wardData'] :  NULL),
         'patient_art_no'=>(isset($_POST['patientARTNo']) && trim($_POST['patientARTNo'])!='') ? $_POST['patientARTNo'] :  NULL,
-        'lab_contact_person'=>(isset($_POST['officerName']) && $_POST['officerName']!='' ? $_POST['officerName'] :  NULL),
+        'request_clinician_name'=>(isset($_POST['officerName']) && $_POST['officerName']!='' ? $_POST['officerName'] :  NULL),
         'lab_phone_number'=>(isset($_POST['telephone']) && $_POST['telephone']!='' ? $_POST['telephone'] :  NULL),
         'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
         'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
@@ -110,6 +110,7 @@ try {
         'art_cd_date'=>$_POST['cdDate'],
         'who_clinical_stage'=>(isset($_POST['clinicalStage']) && $_POST['clinicalStage']!='' ? $_POST['clinicalStage'] :  NULL),
         'reason_testing_png'=>(isset($_POST['reasonForTest']) && $_POST['reasonForTest']!='' ? $_POST['reasonForTest'] :  NULL),
+        'reason_for_vl_testing'=>(isset($_POST['reasonForTest']) && $_POST['reasonForTest']!='' ? $_POST['reasonForTest'] :  NULL),
         'sample_to_transport'=>(isset($_POST['typeOfSample']) && $_POST['typeOfSample']!='' ? $_POST['typeOfSample'] :  NULL),
         'whole_blood_ml'=>(isset($_POST['wholeBloodOne']) && $_POST['wholeBloodOne']!='' ? $_POST['wholeBloodOne'] :  NULL),
         'whole_blood_vial'=>(isset($_POST['wholeBloodTwo']) && $_POST['wholeBloodTwo']!='' ? $_POST['wholeBloodTwo'] :  NULL),
