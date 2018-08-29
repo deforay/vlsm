@@ -327,10 +327,10 @@ foreach($fResult as $fDetails){
 			<td><label for="sampleQuality">Sample Quality</label></td>
 			<td>
 			 <label class="radio-inline">
-			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality">Accept
+			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="no" title="Check Sample Quality">Accept
 			 </label>
 			 <label class="radio-inline">
-			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="reject" title="Check Sample Quality">Reject
+			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="yes" title="Check Sample Quality">Reject
 			 </label>
 			</td>
 			<td class="rejectionReason" style="display:none;"><label for="rejectionReason">Reason <span class="mandatory">*</span></label></td>
