@@ -250,7 +250,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <label for="officerName">Requesting Medical Officer <span class="mandatory">*</span></label>
                         </td>
                         <td>
-                          <input type="text" class="form-control isRequired" name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_contact_person'];?>" >
+                          <input type="text" class="form-control isRequired" name="officerName" id="officerName" placeholder="Officer Name" title="Enter Medical Officer Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['request_clinician_name'];?>" >
                         </td>
                         <td>
                         <label for="telephone">Telephone </label>
@@ -461,10 +461,10 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
 			<td><label for="sampleQuality">Sample Quality</label></td>
                         <td>
 			 <label class="radio-inline">
-			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="accept" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='accept')?"checked='checked'":""?>>Accept
+			    <input type="radio" id="sampleQtyAccept" name="sampleQuality" value="no" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='no')?"checked='checked'":""?>>Accept
 			 </label>
 			 <label class="radio-inline">
-			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="reject" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"checked='checked'":""?>>Reject
+			    <input type="radio" id="sampleQtyReject" name="sampleQuality" value="yes" title="Check Sample Quality" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='yes')?"checked='checked'":""?>>Reject
 			 </label>
 			</td>
 			<td class="rejectionReason" style="display:<?php echo ($vlQueryInfo[0]['is_sample_rejected']=='reject')?"":"none"; ?>"><label for="rejectionReason">Reason <span class="mandatory">*</span></label></td>
