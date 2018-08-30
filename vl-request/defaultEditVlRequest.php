@@ -878,6 +878,12 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#vlResult').addClass('isRequired');
+      if($('#tnd').is(':checked')){
+        $('#vlResult').removeClass('isRequired');
+      }
+      if($('#bdl').is(':checked')){
+        $('#vlResult').removeClass('isRequired');
+      }
       $('#rejectionReason').val('');
       $('.vlLog').css('display','block');
       $("#status").val('');
@@ -890,6 +896,9 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     }else{
       $('#vlResult,#vlLog').attr('readonly',false);
       $('#bdl').attr('disabled',false);
+      if($('#noResultNo').is(':checked')){
+        $('#vlResult').addClass('isRequired');
+      }
     }
   });
   $('#bdl').change(function() {
@@ -899,6 +908,9 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     }else{
       $('#vlResult,#vlLog').attr('readonly',false);
       $('#tnd').attr('disabled',false);
+      if($('#noResultNo').is(':checked')){
+        $('#vlResult').addClass('isRequired');
+      }
     }
   });
   $('#vlResult,#vlLog').on('input',function(e){

@@ -45,7 +45,7 @@ if($arr['sample_code']=='MMYY'){
 $auto = $samColDate.$sampleColDateArray[1].$sampleColDateArray[2];
 if(isset($_POST['sampleFrom'])){
   $svlQuery = 'SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND province_id='.$_POST['provinceId'].' AND '.$sampleCode.' IS NOT NULL AND '.$sampleCode.'!= "" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
-error_log($svlQuery);
+
   $svlResult = $db->query($svlQuery);
 
   if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
@@ -75,7 +75,8 @@ if(!$svlResult){
 while($sCode);
 
 }else{
-$svlQuery = 'SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.' IS NOT NULL AND '.$sampleCode.'!= "" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
+  $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
+
 
 $svlResult = $db->query($svlQuery);
 if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
