@@ -22,28 +22,24 @@ $artCodeLQuery = "select * from r_art_code_details order by updated_datetime DES
 $artCodeLResult = $db->query($artCodeLQuery);
 if(isset($artCodeLResult[0]['updated_datetime']) && $artCodeLResult[0]['updated_datetime']!='' && $artCodeLResult[0]['updated_datetime']!=NULL && $artCodeLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $artCodeTime = $artCodeLResult[0]['updated_datetime'];
-    $artCodeTime = '2018-01-01 00:00:00';
 }
 //rejection reason last update time
 $rejectLQuery = "select * from r_sample_rejection_reasons order by updated_datetime DESC limit 1";
 $rejectLResult = $db->query($rejectLQuery);
 if(isset($rejectLResult[0]['updated_datetime']) && $rejectLResult[0]['updated_datetime']!='' && $rejectLResult[0]['updated_datetime']!=NULL && $rejectLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $rjtDateTime = $rejectLResult[0]['updated_datetime'];
-    $rjtDateTime = '2018-01-01 00:00:00';
 }
 //prvince data last update time
 $provinceLQuery = "select * from province_details order by updated_datetime DESC limit 1";
 $provinceLResult = $db->query($provinceLQuery);
 if(isset($provinceLResult[0]['updated_datetime']) && $provinceLResult[0]['updated_datetime']!='' && $provinceLResult[0]['updated_datetime']!=NULL && $provinceLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $provinceDateTime = $provinceLResult[0]['updated_datetime'];
-    $provinceDateTime = '2018-01-01 00:00:00';
 }
 //facility data last update time
 $facilityLQuery = "select * from facility_details order by updated_datetime DESC limit 1";
 $facilityLResult = $db->query($facilityLQuery);
 if(isset($facilityLResult[0]['updated_datetime']) && $facilityLResult[0]['updated_datetime']!='' && $facilityLResult[0]['updated_datetime']!=NULL && $facilityLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $fDateTime = $facilityLResult[0]['updated_datetime'];
-    $fDateTime = '2018-01-01 00:00:00';
 }
 $url = $REMOTEURL.'/remote/remote/commonData.php';
 
