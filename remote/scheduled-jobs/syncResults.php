@@ -59,12 +59,12 @@ if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
   }else{
     $where = "lab_id =".$sarr['lab_name'];
   }
-  
 
 
 $vlQuery="SELECT * FROM vl_request_form WHERE remote_sample_code !='' AND  remote_sample_code is not null AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
 $vlLabResult = $db->rawQuery($vlQuery);
+
 
 $url = $REMOTEURL.'/remote/remote/testResults.php';
 $data = array(

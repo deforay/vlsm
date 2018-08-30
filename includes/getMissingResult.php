@@ -66,6 +66,7 @@ foreach($tsResult as $tsId){
       $sWhere.= ' AND f.facility_id IN ('.implode(",",$_POST['facilityName']).')';
    }
    $tQuery = $tQuery.' '.$sWhere;
+   
    $tResult[$i] = $db->rawQuery($tQuery);
    $i++;
 }

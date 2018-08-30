@@ -285,7 +285,8 @@ try {
                     $mnthYr = substr($sExpDate[0],-2);
                 }
                 $auto = substr($sExpDate[0],-2).$sExpDate[1].$sExpDate[2];
-                $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND sample_code_key is NOT NULL ORDER BY sample_code_key DESC LIMIT 1';
+
+                $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND sample_code!="" ORDER BY sample_code_key DESC LIMIT 1';
                 $svlResult=$db->query($svlQuery);
                 $prefix = $arr['sample_code_prefix'];
                 if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
@@ -308,6 +309,7 @@ try {
                 }
             }
         }
+        
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $id=$db->update($tableName,$vldata);
         if($id>0){

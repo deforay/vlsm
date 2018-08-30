@@ -824,6 +824,12 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
       $('.rejectionReason').hide();
       $('#rejectionReason').removeClass('isRequired');
       $('#vlResult').addClass('isRequired');
+      if($('#tnd').is(':checked')){
+        $('#vlResult').removeClass('isRequired');
+      }
+      if($('#bdl').is(':checked')){
+        $('#vlResult').removeClass('isRequired');
+      }
       $('#rejectionReason').val('');
     }
   });
@@ -832,9 +838,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     if($('#tnd').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);
       $('#bdl').attr('disabled',true);
+      $('#vlResult').removeClass('isRequired');
     }else{
       $('#vlResult,#vlLog').attr('readonly',false);
       $('#bdl').attr('disabled',false);
+      if($('#noResultNo').is(':checked')){
+        $('#vlResult').addClass('isRequired');
+      }
     }
   });
   
@@ -842,9 +852,13 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
     if($('#bdl').is(':checked')){
       $('#vlResult,#vlLog').attr('readonly',true);
       $('#tnd').attr('disabled',true);
+      $('#vlResult').removeClass('isRequired');
     }else{
       $('#vlResult,#vlLog').attr('readonly',false);
       $('#tnd').attr('disabled',false);
+      if($('#noResultNo').is(':checked')){
+        $('#vlResult').addClass('isRequired');
+      }
     }
   });
   
