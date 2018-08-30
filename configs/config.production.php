@@ -7,7 +7,7 @@ $HOST = '127.0.0.1';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
-$PORT = 3306;
+$PORT = 3436;
 
 
 //Please use only GMAIL ID AND PASSWORD
@@ -28,4 +28,4 @@ $MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
 //$MYSQLDUMP = '/usr/bin/mysqldump';
 
 
-$REMOTEURL = 'http://vlsm-rwanda.deforay.in';
+$REMOTEURL = '';
