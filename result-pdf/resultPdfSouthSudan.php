@@ -242,16 +242,27 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
               $html .='<td colspan="4" style="line-height:10px;"></td>';
              $html .='</tr>';
-              $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ART (TRACNET) NO.</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL JUSTIFICATION</td>';
-              $html .='</tr>';
-              $html .='<tr>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']." ".$result['patient_last_name']).'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_art_no'].'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['reason_for_vl_testing']).'</td>';
-              $html .='</tr>';
+
+             $html .='<tr>';
+
+             $html .='<td colspan="3">';
+                $html .='<table style="padding:2px;">';
+                  $html .='<tr>';
+                  $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ART (TRACNET) NO.</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL JUSTIFICATION</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
+                  $html .='</tr>';
+                  $html .='<tr>';
+                  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']." ".$result['patient_last_name']).'</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_art_no'].'</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['reason_for_vl_testing']).'</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+                  $html .='</tr>';
+                $html .='</table>';
+               $html .='</td>';
+               $html .='</tr>';
+
               $html .='<tr>';
               $html .='<td colspan="3" style="line-height:10px;"></td>';
              $html .='</tr>';

@@ -59,10 +59,10 @@ try {
         $platForm = explode("##",$_POST['failedTestingTech']);
         $_POST['failedTestingTech'] = $platForm[0];
     }
-    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'accept'){
+    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'no'){
         $_POST['rejectionReason'] = NULL;
     }
-    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'reject'){
+    if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes'){
         $_POST['vlResult'] = NULL;
     }
     $vldata=array(
