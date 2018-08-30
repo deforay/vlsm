@@ -38,6 +38,7 @@ if(count($data['result'])>0){
             $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE remote_sample_code='".$lab['remote_sample_code']."'";
             $sResult = $db->rawQuery($sQuery);
             if($sResult){
+                $lab['result_printed_datetime'] = NULL;
                 $lab['data_sync'] = 1;//column data sync value is 1 equal to data sync done.value 0 is not done.
                 $lab['last_modified_datetime'] = $general->getDateTime();
                 $lab['remote_sample_code'] = $sResult[0]['remote_sample_code'];
@@ -48,7 +49,9 @@ if(count($data['result'])>0){
                 unset($lab['sample_package_id']);
                 $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
                 $id = $db->update('vl_request_form',$lab);
-                $sampleCode[] = $lab['sample_code'];
+                if($id>0){
+                    $sampleCode[] = $lab['sample_code'];
+                }
             }
         }
     }
