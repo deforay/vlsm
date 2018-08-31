@@ -138,6 +138,9 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
         <li class="active">Edit Vl Request</li>
       </ol>
     </section>
+    <?php
+    //print_r(array_column($vlTestReasonResult, 'last_name')$oneDimensionalArray = array_map('current', $vlTestReasonResult));die;
+    ?>
     <!-- Main content -->
     <section class="content">
       <!-- SELECT2 EXAMPLE -->
@@ -443,9 +446,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
                                     <?php
+                                    $vlTestReasonQueryRow="SELECT * from r_vl_test_reasons where test_reason_id='".trim($vlQueryInfo[0]['reason_for_vl_testing'])."' OR test_reason_name = '".trim($vlQueryInfo[0]['reason_for_vl_testing'])."'";
+                                    $vlTestReasonResultRow=$db->query($vlTestReasonQueryRow);
                                     $checked = '';
                                     $display = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine'){
+                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'routine'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
                                     }else{
@@ -483,7 +488,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     <?php
                                     $checked = '';
                                     $display = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure'){
+                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'failure'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
                                     }else{
@@ -493,7 +498,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     ?>
                                     <input type="radio" class="" id="repeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $checked;?> onclick="showTesting('repeatTesting');">
                                     <strong>Repeat VL test after suspected treatment failure adherence counselling </strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -521,7 +526,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     <?php
                                     $checked = '';
                                     $display = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect'){
+                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'suspect'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
                                     }else{

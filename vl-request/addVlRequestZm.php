@@ -47,7 +47,7 @@ $pdQuery="SELECT * from province_details";
   }
 $pdResult=$db->query($pdQuery);
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND vl.sample_code_title="'.$arr['sample_code'].'"  AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
+$svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
 $svlResult=$db->query($svlQuery);
 
 $prefix = $arr['sample_code_prefix'];
@@ -367,7 +367,7 @@ if($urgency==''){ $urgency= 'normal';}
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
                             <option value=""> -- Select -- </option>
                             <?php foreach($testReason as $reason){ ?>
-                              <option value="<?php echo $reason['test_reason_name'];?>"><?php echo ucwords($reason['test_reason_name']);?></option>
+                              <option value="<?php echo $reason['test_reason_id'];?>"><?php echo ucwords($reason['test_reason_name']);?></option>
                               <?php } ?>
                            </select>
                         </td>

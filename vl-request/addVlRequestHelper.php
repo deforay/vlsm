@@ -184,6 +184,22 @@ try {
         $sampleCode = 'sample_code';
         $sampleCodeKey = 'sample_code_key';
     }
+    
+    //set vl test reason
+    if(isset($_POST['stViralTesting']) && trim($_POST['stViralTesting'])!=""){
+        $reasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['stViralTesting']."'";         
+        $reasonResult = $db->rawQuery($reasonQuery);
+        if(isset($reasonResult[0]['test_reason_id']) && $reasonResult[0]['test_reason_id']!=''){
+            $_POST['stViralTesting'] = $reasonResult[0]['test_reason_id'];
+        }else{
+            $data=array(
+                'test_reason_name'=>$_POST['stViralTesting'],
+                'test_reason_status'=>'active'
+                );
+                $id=$db->insert('r_vl_test_reasons',$data);
+                $_POST['stViralTesting'] = $id;
+        }
+    }
     //check existing sample code
     $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
     $existResult = $db->rawQuery($existSampleQuery);

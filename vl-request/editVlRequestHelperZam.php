@@ -158,6 +158,7 @@ try {
                'test_reason_status'=>'active'
              );
              $result=$db->insert('r_vl_test_reasons',$data);
+             $_POST['vlTestReason'] = $result;
           }
      }
      //last vl test date
