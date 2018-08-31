@@ -280,7 +280,7 @@ foreach($fResult as $fDetails){
                           <select name="vlTestReason" id="vlTestReason" class="form-control" title="Please choose Reason For VL test" style="width:200px;">
                             <option value=""> -- Select -- </option>
                             <?php foreach($vlTestReasonResult as $reason){ ?>
-                              <option value="<?php echo $reason['test_reason_name'];?>"  <?php echo ($vlQueryInfo[0]['reason_for_vl_testing']==$reason['test_reason_name'])?"selected='selected'":""?>><?php echo ucwords($reason['test_reason_name']);?></option>
+                              <option value="<?php echo $reason['test_reason_id'];?>"  <?php echo ($vlQueryInfo[0]['reason_for_vl_testing']==$reason['test_reason_name'] || $vlQueryInfo[0]['reason_for_vl_testing']==$reason['test_reason_id'])?"selected='selected'":""?>><?php echo ucwords($reason['test_reason_name']);?></option>
                               <?php } ?>
                            </select>
                         </td>

@@ -225,6 +225,20 @@ try {
         }
         if(isset($_POST['indicateVlTesing']) && $_POST['indicateVlTesing']!='')
         {
+
+            $reasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['indicateVlTesing']."'";   
+            $reasonResult = $db->rawQuery($reasonQuery);
+            if(isset($reasonResult[0]['test_reason_id']) && $reasonResult[0]['test_reason_id']!=''){
+                $_POST['indicateVlTesing'] = $reasonResult[0]['test_reason_id'];
+            }else{
+                $data=array(
+                    'test_reason_name'=>$_POST['indicateVlTesing'],
+                    'test_reason_status'=>'active'
+                    );
+                    $id=$db->insert('r_vl_test_reasons',$data);
+                    $_POST['indicateVlTesing'] = $id;
+            }
+
             $vldata['reason_for_vl_testing'] = $_POST['indicateVlTesing'];
             $lastVlDate = (isset($_POST['lastVlDate']) && $_POST['lastVlDate']!='') ? $general->dateFormat($_POST['lastVlDate']) :  NULL;
             $lastVlResult = (isset($_POST['lastVlResult']) && $_POST['lastVlResult']!='') ? $_POST['lastVlResult'] :  NULL;

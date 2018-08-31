@@ -389,10 +389,12 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
                                     <?php
+                                    $vlTestReasonQueryRow="SELECT * from r_vl_test_reasons where test_reason_id='".trim($vlQueryInfo[0]['reason_for_vl_testing'])."' OR test_reason_name = '".trim($vlQueryInfo[0]['reason_for_vl_testing'])."'";
+                                    $vlTestReasonResultRow=$db->query($vlTestReasonQueryRow);
                                     $checked = '';
                                     $display = '';
                                     $vlValue = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine'){
+                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'routine'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
                                       if($vlQueryInfo[0]['last_vl_result_routine']!= NULL && trim($vlQueryInfo[0]['last_vl_result_routine'])!= '' && trim($vlQueryInfo[0]['last_vl_result_routine'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_routine'])!= 'tnd'){
@@ -436,7 +438,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     $checked = '';
                                     $display = '';
                                     $vlValue = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure'){
+                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'failure'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
                                       if($vlQueryInfo[0]['last_vl_result_failure_ac']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= 'tnd'){
@@ -480,7 +482,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                     $checked = '';
                                     $display = '';
                                     $vlValue = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect'){
+                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'suspect'){
                                       $checked = 'checked="checked"';
                                       $display = 'block';
                                       if($vlQueryInfo[0]['last_vl_result_failure']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure'])!= 'tnd'){

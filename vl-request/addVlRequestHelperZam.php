@@ -146,7 +146,7 @@ try {
      }
      //vl test reason
      if(isset($_POST['newVlTestReason']) && trim($_POST['newVlTestReason'])!="" && trim($_POST['vlTestReason'])== "other"){
-          $_POST['vlTestReason'] = $_POST['newVlTestReason'];
+          
           $checkTestReasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['newVlTestReason']."' OR test_reason_name='".strtolower($_POST['newVlTestReason'])."' OR test_reason_name='".ucfirst(strtolower($_POST['newVlTestReason']))."'";
           $checkTestReasonResult = $db->rawQuery($checkTestReasonQuery);
           if(!isset($checkTestReasonResult[0]['test_reason_id'])){
@@ -155,6 +155,7 @@ try {
                'test_reason_status'=>'active'
              );
              $result=$db->insert('r_vl_test_reasons',$data);
+             $_POST['vlTestReason'] = $result;
           }
      }
      //last vl test date

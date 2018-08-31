@@ -417,31 +417,35 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                             <h3 class="box-title">D. INDICAÇÃO PARA SOLICITAÇÃO DE CARGA VIRAL</h3>
                         </div>
                         <table class="table" style="width:100%">
+                        <?php
+                        $vlTestReasonQueryRow="SELECT * from r_vl_test_reasons where test_reason_id='".trim($vlQueryInfo[0]['reason_for_vl_testing'])."' OR test_reason_name = '".trim($vlQueryInfo[0]['reason_for_vl_testing'])."'";
+                        $vlTestReasonResultRow=$db->query($vlTestReasonQueryRow);
+                        ?>
                             <tr>
                                 <td colspan="6">
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Monitoria de rotina</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="routineMonitoring" name="indicateVlTesing" value="routine" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "routine")?'checked="checked"':''; ?> title="Please check Monitoria de rotina">
+                                        <input type="radio" class="" id="routineMonitoring" name="indicateVlTesing" value="routine" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "routine" || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'routine')?'checked="checked"':''; ?> title="Please check Monitoria de rotina">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Diagnóstico de criança exposta </label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="exposeChild" name="indicateVlTesing" value="expose" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "expose")?'checked="checked"':''; ?> title="Please check Diagnóstico de criança exposta">
+                                        <input type="radio" class="" id="exposeChild" name="indicateVlTesing" value="expose" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "expose" || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'expose')?'checked="checked"':''; ?> title="Please check Diagnóstico de criança exposta">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Suspeita de falência de tratamento</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="suspectedTreatment" name="indicateVlTesing" value="suspect" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "suspect")?'checked="checked"':''; ?> title="Please check Suspeita de falência de tratamento">
+                                        <input type="radio" class="" id="suspectedTreatment" name="indicateVlTesing" value="suspect" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "suspect" || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'suspect')?'checked="checked"':''; ?> title="Please check Suspeita de falência de tratamento">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Repetição após CV≥ 1000 cp/mL</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="repetition" name="indicateVlTesing" value="repetition" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "repetition")?'checked="checked"':''; ?> title="Please check Repetição após CV≥ 1000 cp/mL">
+                                        <input type="radio" class="" id="repetition" name="indicateVlTesing" value="repetition" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "repetition" || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'repetition')?'checked="checked"':''; ?> title="Please check Repetição após CV≥ 1000 cp/mL">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Falência clínica</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="clinicalFailure" name="indicateVlTesing" value="clinical" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "clinical")?'checked="checked"':''; ?> title="Please check Falência clínica">
+                                        <input type="radio" class="" id="clinicalFailure" name="indicateVlTesing" value="clinical" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "clinical" || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'clinical')?'checked="checked"':''; ?> title="Please check Falência clínica">
                                     </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Falência imunológica</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
-                                        <input type="radio" class="" id="immunologicalFailure" name="indicateVlTesing" value="immunological" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "immunological")?'checked="checked"':''; ?> title="Please check Falência imunológica">
+                                        <input type="radio" class="" id="immunologicalFailure" name="indicateVlTesing" value="immunological" <?php echo (trim($vlQueryInfo[0]['reason_for_vl_testing']) == "immunological" || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'immunological')?'checked="checked"':''; ?> title="Please check Falência imunológica">
                                     </label>
                                 </td>
                             </tr>
