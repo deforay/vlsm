@@ -240,13 +240,13 @@ if(sizeof($requestResult)> 0){
                 $html .='</td>';
                 $html .='</tr>';
               $html .='<tr>';
-              $html .='<td colspan="4" style="line-height:10px;"></td>';
+              $html .='<td colspan="4" style="line-height:10px;border-bottom:1px thin #eee;"></td>';
              $html .='</tr>';
 
              $html .='<tr>';
 
              $html .='<td colspan="3">';
-                $html .='<table style="padding:2px;">';
+                $html .='<table style="padding:8px 2px 2px 2px;">';
                   $html .='<tr>';
                   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
                   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ART (TRACNET) NO.</td>';
@@ -264,12 +264,12 @@ if(sizeof($requestResult)> 0){
                $html .='</tr>';
 
               $html .='<tr>';
-              $html .='<td colspan="3" style="line-height:10px;"></td>';
+              $html .='<td colspan="3" style="line-height:10px;border-bottom:1px thin #eee;"></td>';
              $html .='</tr>';
 
              $html .='<tr>';
              $html .='<td colspan="3">';
-                 $html .='<table style="padding:2px;">';
+                 $html .='<table style="padding:8px 2px 2px 2px;">';
                    $html .='<tr>';
                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">GENDER</td>';
@@ -291,10 +291,10 @@ if(sizeof($requestResult)> 0){
                 $html .='</tr>';
 
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:10px;"></td>';
+               $html .='<td colspan="3" style="line-height:10px;border-bottom:1px thin #eee;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">REQUESTING CLINICIAN NAME</td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><br/><br/>REQUESTING CLINICIAN NAME</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td colspan="3" style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['request_clinician_name']).'</td>';
@@ -335,18 +335,14 @@ if(sizeof($requestResult)> 0){
               
               $html .='<tr>';
                 $html .='<td colspan="3">';
-                 $html .='<table style="padding:2px;">';
-                   $html .='<tr>';
-                    $html .='<td colspan="3"></td>';
-                    $html .='<td rowspan="3" style="text-align:left;">'.$smileyContent.'</td>';
-                   $html .='</tr>';
+                 $html .='<table style="padding:12px 2px 2px 2px;">';
                    $logValue = '';
                    if($result['result_value_log']!='' && $result['result_value_log']!=null && ($result['reason_for_sample_rejection']=='' || $result['reason_for_sample_rejection']==null)){
                     $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result_value_log'];
                    }else{
                     $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;0.0';
                    }
-                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Viral Load Result (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].$logValue.'</td></tr>';
+                   $html .='<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:26px;font-size:12px;font-weight:bold;">&nbsp;&nbsp;Viral Load Result (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].$logValue.'</td><td style="">'.$smileyContent.'</td></tr>';
                    if($result['reason_for_sample_rejection']!=''){
                     $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">&nbsp;&nbsp;Rejection Reason&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['rejection_reason_name'].'</td></tr>';
                    }
