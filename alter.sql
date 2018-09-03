@@ -1497,3 +1497,6 @@ ALTER TABLE `vl_request_form` CHANGE `remote_sample_code_key` `remote_sample_cod
 -- saravanan 16-aug-2018
 ALTER TABLE `vl_request_form` ADD `province_id` VARCHAR(255) NULL DEFAULT NULL AFTER `facility_id`;
 -- Version 3.8 ---------- Amit 28-Aug-2018
+
+-- saravanan 03-sep-2018
+ALTER TABLE `vl_request_form` ADD `reason_for_vl_testing_other` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_for_vl_testing`;

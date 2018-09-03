@@ -379,23 +379,27 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         </td>
                       </tr>
                       <tr><td colspan="6" style="font-size: 18px; font-weight: bold;">Section 4: Reason For Testing</td></tr>
+                      <?php
+                        $vlTestReasonQueryRow="SELECT * from r_vl_test_reasons where test_reason_id='".trim($vlQueryInfo[0]['reason_for_vl_testing'])."' OR test_reason_name = '".trim($vlQueryInfo[0]['reason_for_vl_testing'])."'";
+                        $vlTestReasonResultRow=$db->query($vlTestReasonQueryRow);
+                      ?>
                       <tr>
                          <td colspan="3" class="routine">
 			    <label for="routine">Routine</label><br/>
                           <label class="radio-inline">
-                             &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="routineOne" name="reasonForTest" value="First VL, routine monitoring (On ART for at least 6 months)" title="Please Check Routine"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='First VL, routine monitoring (On ART for at least 6 months)')?"checked='checked'":""?>>First VL, routine monitoring (On ART for at least 6 months)
+                             &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="routineOne" name="reasonForTest" value="First VL, routine monitoring (On ART for at least 6 months)" title="Please Check Routine"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='First VL, routine monitoring (On ART for at least 6 months)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'First VL, routine monitoring (On ART for at least 6 months)')?"checked='checked'":""?>>First VL, routine monitoring (On ART for at least 6 months)
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" id="routineTwo" name="reasonForTest" value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine" <?php echo ($vlQueryInfo[0]['reason_testing_png']=='Annual routine follow-up VL (Previous VL < 1000 cp/mL)')?"checked='checked'":""?>>Annual routine follow-up VL (Previous VL < 1000 cp/mL)
+                            <input type="radio" id="routineTwo" name="reasonForTest" value="Annual routine follow-up VL (Previous VL < 1000 cp/mL)" title="Please Check Routine" <?php echo ($vlQueryInfo[0]['reason_testing_png']=='Annual routine follow-up VL (Previous VL < 1000 cp/mL)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Annual routine follow-up VL (Previous VL < 1000 cp/mL)')?"checked='checked'":""?>>Annual routine follow-up VL (Previous VL < 1000 cp/mL)
                           </label>
 			 </td>
                          <td colspan="3" class="suspect">
 			  <label for="suspect">Suspected Treatment Failure</label><br/>
                           <label class="radio-inline">
-                             <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" title="Please Suspected TF"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='Suspected TF')?"checked='checked'":""?>>Suspected TF
+                             <input type="radio" id="suspectOne" name="reasonForTest" value="Suspected TF" title="Please Suspected TF"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='Suspected TF' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Suspected TF')?"checked='checked'":""?>>Suspected TF
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" id="suspectTwo" name="reasonForTest" value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='Follow-up VL after EAC (Previous VL >= 1000 cp/mL)')?"checked='checked'":""?>>Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
+                            <input type="radio" id="suspectTwo" name="reasonForTest" value="Follow-up VL after EAC (Previous VL >= 1000 cp/mL)" title="Please Suspected TF"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='Follow-up VL after EAC (Previous VL >= 1000 cp/mL)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Follow-up VL after EAC (Previous VL >= 1000 cp/mL)')?"checked='checked'":""?>>Follow-up VL after EAC (Previous VL >= 1000 cp/mL)
                           </label>
 			 </td>
                       </tr>
@@ -403,17 +407,17 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <td colspan="3">
 			  <label for="defaulter">Defaulter/ LTFU/ Poor Adherer</label><br/>
 			  <label class="radio-inline">
-			  <input type="radio" id="defaulter" name="reasonForTest" value="VL (after 3 months EAC)" title="Check Defaulter/ LTFU/ Poor Adherer"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='VL (after 3 months EAC)')?"checked='checked'":""?>>VL (after 3 months EAC)
+			  <input type="radio" id="defaulter" name="reasonForTest" value="VL (after 3 months EAC)" title="Check Defaulter/ LTFU/ Poor Adherer"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='VL (after 3 months EAC)' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'VL (after 3 months EAC)')?"checked='checked'":""?>>VL (after 3 months EAC)
 			  </label>&nbsp;&nbsp;
 			</td>
 			<td colspan="3">
 			  <label for="other">Other</label><br/>
 			  <label class="radio-inline">
-                             <input type="radio" id="other" name="reasonForTest" value="Re-collection requested by lab" title="Please check Other"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='Re-collection requested by lab')?"checked='checked'":""?>>Re-collection requested by lab
+                             <input type="radio" id="other" name="reasonForTest" value="Re-collection requested by lab" title="Please check Other"<?php echo ($vlQueryInfo[0]['reason_testing_png']=='Re-collection requested by lab' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Re-collection requested by lab')?"checked='checked'":""?>>Re-collection requested by lab
                           </label>
 			  <label for="reason">&nbsp;&nbsp;&nbsp;&nbsp;Reason</label>
                           <label class="radio-inline">
-                            <input type="text" class="form-control" id="reason" name="reason" placeholder="Enter Reason" title="Enter Reason" style="width:100%;" />
+                            <input type="text" class="form-control" id="reason" name="reason" placeholder="Enter Reason" title="Enter Reason" style="width:100%;" <?php echo ($vlQueryInfo[0]['reason_testing_png']=='Re-collection requested by lab' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'Re-collection requested by lab')?"":"readonly='readonly'"?> value="<?php echo $vlQueryInfo[0]['reason_for_vl_testing_other'];?>"/>
                           </label>
 			</td>
                       </tr>
@@ -839,6 +843,13 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
       $(".reasonequ,.vlResult").show();
       $(".rejectionReason,.vlresultequ").hide();
       $('#rejectionReason').removeClass("isRequired");
+    }
+  })
+  $("input:radio[name=reasonForTest]").on("change",function(){
+    if($(this).val() == 'Re-collection requested by lab'){
+      $('#reason').addClass("isRequired").attr('readonly',false);
+    }else{
+      $('#reason').removeClass("isRequired").attr('readonly',true).val('');
     }
   })
 </script>

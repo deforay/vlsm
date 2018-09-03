@@ -89,6 +89,24 @@ try {
     if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes'){
         $_POST['vlResult'] = NULL;
     }
+
+    $reasonForTestField = NULL;
+    if(isset($_POST['reasonForTest']) && $_POST['reasonForTest']!=''){
+
+        $reasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['reasonForTest']."'";   
+        $reasonResult = $db->rawQuery($reasonQuery);
+        if(isset($reasonResult[0]['test_reason_id']) && $reasonResult[0]['test_reason_id']!=''){
+            $reasonForTestField = $reasonResult[0]['test_reason_id'];
+        }else{
+            $data=array(
+                'test_reason_name'=>$_POST['reasonForTest'],
+                'test_reason_status'=>'active'
+                );
+                $id=$db->insert('r_vl_test_reasons',$data);
+                $reasonForTestField = $id;
+        }
+    }
+
     $vldata=array(
         'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
         'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
@@ -109,8 +127,9 @@ try {
         'art_cd_cells'=>(isset($_POST['cdCells']) && $_POST['cdCells']!='' ? $_POST['cdCells'] :  NULL),
         'art_cd_date'=>$_POST['cdDate'],
         'who_clinical_stage'=>(isset($_POST['clinicalStage']) && $_POST['clinicalStage']!='' ? $_POST['clinicalStage'] :  NULL),
-        'reason_testing_png'=>(isset($_POST['reasonForTest']) && $_POST['reasonForTest']!='' ? $_POST['reasonForTest'] :  NULL),
-        'reason_for_vl_testing'=>(isset($_POST['reasonForTest']) && $_POST['reasonForTest']!='' ? $_POST['reasonForTest'] :  NULL),
+        //'reason_testing_png'=>(isset($_POST['reasonForTest']) && $_POST['reasonForTest']!='' ? $_POST['reasonForTest'] :  NULL),
+        'reason_for_vl_testing'=>$reasonForTestField,
+        'reason_for_vl_testing_other'=>(isset($_POST['reason']) && $_POST['reason']!='' ? $_POST['reason'] :  NULL),
         'sample_to_transport'=>(isset($_POST['typeOfSample']) && $_POST['typeOfSample']!='' ? $_POST['typeOfSample'] :  NULL),
         'whole_blood_ml'=>(isset($_POST['wholeBloodOne']) && $_POST['wholeBloodOne']!='' ? $_POST['wholeBloodOne'] :  NULL),
         'whole_blood_vial'=>(isset($_POST['wholeBloodTwo']) && $_POST['wholeBloodTwo']!='' ? $_POST['wholeBloodTwo'] :  NULL),

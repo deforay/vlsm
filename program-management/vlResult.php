@@ -208,6 +208,9 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Clear Search</span></button>
 		    
 		    &nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('vlResultExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download</button>
+				<?php if($_SESSION['roleCode']=='ad' || $_SESSION['roleCode']=='AD' && $arr['vl_form']=='7'){ ?>
+					&nbsp;<button class="btn btn-success" type="button" onclick="exportInexcel('vlResultExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download with Alphanumeric Headings</button>
+				<?php } ?>
 
 				&nbsp;<button class="btn btn-default pull-right" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 		  </td>
@@ -446,9 +449,13 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
   }
   
   function exportInexcel(fileName) {
+		var withAlphaNum = null;
+		if(fileName=='vlResultExportInExcel.php'){
+			withAlphaNum = 'yes'
+		}
     $.blockUI();
     oTable.fnDraw();
-    $.post(fileName,{Sample_Collection_Date:$("#sampleCollectionDate").val(),Batch_Code:$("#batchCode  option:selected").text(),Sample_Type:$("#sampleType  option:selected").text(),Facility_Name:$("#facilityName  option:selected").text(),sample_Test_Date:$("#sampleTestDate").val(),Viral_Load:$("#vLoad  option:selected").text(),Print_Date:$("#printDate").val(),Gender:$("#gender  option:selected").text(),Status:$("#status  option:selected").text(),Show_Reorder_Sample:$("#showReordSample option:selected").text()},
+    $.post(fileName,{Sample_Collection_Date:$("#sampleCollectionDate").val(),Batch_Code:$("#batchCode  option:selected").text(),Sample_Type:$("#sampleType  option:selected").text(),Facility_Name:$("#facilityName  option:selected").text(),sample_Test_Date:$("#sampleTestDate").val(),Viral_Load:$("#vLoad  option:selected").text(),Print_Date:$("#printDate").val(),Gender:$("#gender  option:selected").text(),Status:$("#status  option:selected").text(),Show_Reorder_Sample:$("#showReordSample option:selected").text(),withAlphaNum:withAlphaNum},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 			$.unblockUI();
