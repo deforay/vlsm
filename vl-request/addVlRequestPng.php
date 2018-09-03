@@ -275,7 +275,7 @@ foreach($fResult as $fDetails){
                           </label>
 			  <label for="reason">&nbsp;&nbsp;&nbsp;&nbsp;Reason</label>
                           <label class="radio-inline">
-                            <input type="text" class="form-control" id="reason" name="reason" placeholder="Enter Reason" title="Enter Reason" style="width:100%;" />
+                            <input type="text" class="form-control" id="reason" name="reason" placeholder="Enter Reason" title="Enter Reason" style="width:100%;" readonly />
                           </label>
 			</td>
                       </tr>
@@ -744,6 +744,7 @@ foreach($fResult as $fDetails){
 	  $("#sampleCode").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr+sCodeKey.maxId);
 	  $("#sampleCodeFormat").val('<?php echo $rKey.$prefix;?>'+sCodeKey.mnthYr);
 	  $("#sampleCodeKey").val(sCodeKey.maxId);
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
 	  checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','sampleCode',null,'The laboratory ID that you entered already exists. Please try another ID',null)
 	<?php } ?>
       });
@@ -759,6 +760,13 @@ foreach($fResult as $fDetails){
       $(".reasonequ,.vlResult").show();
       $(".rejectionReason,.vlresultequ").hide();
       $('#rejectionReason').removeClass("isRequired");
+    }
+  })
+  $("input:radio[name=reasonForTest]").on("change",function(){
+    if($(this).val() == 'Re-collection requested by lab'){
+      $('#reason').addClass("isRequired").attr('readonly',false);
+    }else{
+      $('#reason').removeClass("isRequired").attr('readonly',true).val('');
     }
   })
   </script>

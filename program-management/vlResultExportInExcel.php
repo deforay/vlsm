@@ -60,11 +60,19 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
    }
  }
  $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
- 
+ if($_POST['withAlphaNum']=='yes'){
+  foreach ($headings as $field => $value) {
+    $string = str_replace(' ', '', $value);
+    $value = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+    $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+    $colNo++;
+  }
+ }else{
  foreach ($headings as $field => $value) {
    $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
    $colNo++;
  }
+}
  $sheet->getStyle('A3:AG3')->applyFromArray($styleArray);
  
  $no =1;
