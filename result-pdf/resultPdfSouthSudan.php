@@ -256,7 +256,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<tr>';
                   $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']." ".$result['patient_last_name']).'</td>';
                   $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_art_no'].'</td>';
-                  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['reason_for_vl_testing']).'</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['test_reason_name']).'</td>';
                   $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
                   $html .='</tr>';
                 $html .='</table>';

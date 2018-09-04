@@ -6,6 +6,7 @@ include('../General.php');
 $general=new General();
 //include('../header.php');
 $tableName="user_details";
+$tableName2="vl_user_facility_map";
 try {
     if(trim($_POST['userName'])!='' && trim($_POST['loginId'])!='' && ($_POST['role'])!='' && ($_POST['password'])!=''){
         
@@ -27,8 +28,22 @@ try {
     'role_id'=>$_POST['role'],
     'status'=>'active'
     );
-    $db->insert($tableName,$data);    
-    
+    $id = $db->insert($tableName,$data);    
+    if($id>0 && trim($_POST['selectedFacility'])!=''){
+        if($id>0 && trim($_POST['selectedFacility'])!='')
+		{
+			$selectedFacility = explode(",",$_POST['selectedFacility']);
+			for($j = 0; $j < count($selectedFacility); $j++){
+				$data=array(
+					'facility_id'=>$selectedFacility[$j],
+					'user_id'=>$data['user_id'],
+				);
+				$db->insert($tableName2,$data);
+			}
+		}
+    }
+
+
     $_SESSION['alertMsg']="User details added successfully";
     }
     header("location:users.php");
