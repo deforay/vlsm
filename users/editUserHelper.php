@@ -6,6 +6,7 @@ include('../includes/MysqliDb.php');
 
 
 $tableName="user_details";
+$tableName2="vl_user_facility_map";
 $userId=base64_decode($_POST['userId']);
 
 try {
@@ -26,8 +27,20 @@ try {
     
     $db=$db->where('user_id',$userId);
     //print_r($data);die;
-    $db->update($tableName,$data);    
-    
+    $db->update($tableName,$data);
+    $db=$db->where('user_id',$userId);
+		$delId = $db->delete($tableName2);
+		if($userId!='' && trim($_POST['selectedFacility'])!='')
+		{
+			$selectedFacility = explode(",",$_POST['selectedFacility']);
+			for($j = 0; $j < count($selectedFacility); $j++){
+				$data=array(
+					'facility_id'=>$selectedFacility[$j],
+					'user_id'=>$userId,
+				);
+				$db->insert($tableName2,$data);
+			}
+		}
     $_SESSION['alertMsg']="User details updated successfully";
     }
     header("location:users.php");

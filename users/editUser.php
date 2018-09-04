@@ -6,6 +6,17 @@ $userQuery="SELECT * from user_details where user_id='".$id."'";
 $userInfo=$db->query($userQuery);
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
+$fResult = array();
+$display = 'display:none';
+if($sarr['user_type']=='remoteuser'){
+//get all facility list with lab,clinic
+$fQuery="SELECT facility_name,facility_id FROM facility_details where facility_type IN('1,4')";
+$fResult = $db->rawQuery($fQuery);
+$display = 'display:block';
+}
+$selectedQuery="SELECT * FROM vl_user_facility_map as vlfm join user_details as ud ON ud.user_id=vlfm.user_id join facility_details as fd ON fd.facility_id=vlfm.facility_id where vlfm.user_id = '".$id."'";
+$selectedResult = $db->rawQuery($selectedQuery);
+
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -107,6 +118,7 @@ $result = $db->rawQuery($query);
                         </div>
                     </div>
                   </div>
+
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
@@ -119,11 +131,49 @@ $result = $db->rawQuery($query);
                         </div>
                     </div>
                   </div>
+
                 </div>
                
+                <div class="row" style="<?php echo $display;?>" >
+                <h4>Facility User Map Details</h4>
+                  <div class="col-xs-5">
+                      <select name="from[]" id="search" class="form-control" size="8" multiple="multiple">
+                          <?php
+                          if($fResult>0){
+                            foreach($fResult as $fName){
+                                ?>
+                                    <option value="<?php echo $fName['facility_id'];?>"><?php echo ucwords($fName['facility_name']);?></option>
+                                <?php
+                            }
+                          }
+                          ?>
+                      </select>
+                  </div>
+
+                  <div class="col-xs-2">
+                      <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+                      <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                      <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                      <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+                  </div>
+
+                  <div class="col-xs-5">
+                      <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple">
+                      <?php
+                          foreach($selectedResult as $uName){
+                              ?>
+                                  <option value="<?php echo $uName['facility_id'];?>" selected="selected"><?php echo ucwords($uName['facility_name']);?></option>
+                              <?php
+                          }
+                          ?>
+                      </select>
+                  </div>
+                </div>
               </div>
+              
               <!-- /.box-body -->
               <div class="box-footer">
+              <input type="hidden" name="selectedFacility" id="selectedFacility"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="users.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -138,10 +188,27 @@ $result = $db->rawQuery($query);
     </section>
     <!-- /.content -->
   </div>
-  
+  <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
   <script type="text/javascript">
+  jQuery(document).ready(function($) {
+    $('#search').multiselect({
+        search: {
+            left: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+            right: '<input type="text" name="q" class="form-control" placeholder="Search..." />',
+        },
+        fireSearch: function(value) {
+            return value.length > 3;
+        }
+    });
+    });
     pwdflag = true;
     function validateNow(){
+      var selVal = []; 
+    $('#search_to option').each(function(i, selected){
+      selVal[i] = $(selected).val(); 
+    });
+    $("#selectedFacility").val(selVal);
+    
       flag = deforayValidator.init({
           formId: 'userEditForm'
       });
