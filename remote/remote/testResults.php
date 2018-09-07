@@ -34,7 +34,7 @@ if(count($data['result'])>0){
             unset($lab[$keys]);
         }
         //check wheather sample code empty or not
-        if(isset($lab['remote_sample_code']) && $lab['remote_sample_code']!=''){
+        if(isset($lab['remote_sample_code']) && $lab['remote_sample_code']!='' && $lab['result']!=''){
             $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE remote_sample_code='".$lab['remote_sample_code']."'";
             $sResult = $db->rawQuery($sQuery);
             if($sResult){

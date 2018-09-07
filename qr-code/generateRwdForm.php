@@ -178,7 +178,7 @@
   $html .='<tr>';
    $html .='<th colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h3>Indication for Viral Load Testing (Please tick one):<small>(To be completed by clinician)</small></h3><hr/></th>';
   $html .='</tr>';
-  if($vl['reason_for_vl_testing']=='routine'){
+  if($vl['test_reason_name']=='routine'){
     $html .='<tr>';
       $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h4>Routine Monitoring</h4></td>';
     $html .='</tr>';
@@ -190,7 +190,7 @@
       $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$general->humanDateFormat($vl['last_vl_date_routine']).'</td>';
       $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_routine'].'</td>';
     $html .='</tr>';
-  }else if($vl['reason_for_vl_testing']=='failure'){
+  }else if($vl['test_reason_name']=='failure'){
     $html .='<tr>';
       $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h4>Repeat VL test after suspected treatment failure adherence counselling</h4></td>';
     $html .='</tr>';
@@ -202,7 +202,7 @@
       $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$general->humanDateFormat($vl['last_vl_date_failure_ac']).'</td>';
       $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$vl['last_vl_result_failure_ac'].'</td>';
     $html .='</tr>';
-  }else if($vl['reason_for_vl_testing']=='suspect'){
+  }else if($vl['test_reason_name']=='suspect'){
     $html .='<tr>';
       $html .='<td colspan="3" style="line-height:11px;font-size:12px;font-weight:bold;text-align:left;">Suspect Treatment Failure</td>';
     $html .='</tr>';
