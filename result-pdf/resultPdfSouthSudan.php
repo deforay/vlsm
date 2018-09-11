@@ -250,7 +250,7 @@ if(sizeof($requestResult)> 0){
                   $html .='<tr>';
                   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">PATIENT NAME</td>';
                   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">ART (TRACNET) NO.</td>';
-                  $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">VL JUSTIFICATION</td>';
+                  $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">REASON FOR VL TESTING</td>';
                   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"></td>';
                   $html .='</tr>';
                   $html .='<tr>';

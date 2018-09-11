@@ -1500,3 +1500,10 @@ ALTER TABLE `vl_request_form` ADD `province_id` VARCHAR(255) NULL DEFAULT NULL A
 
 -- saravanan 03-sep-2018
 ALTER TABLE `vl_request_form` ADD `reason_for_vl_testing_other` VARCHAR(255) NULL DEFAULT NULL AFTER `reason_for_vl_testing`;
+
+
+-- Amit 05 Sep 2018
+
+UPDATE vl_request_form INNER JOIN r_vl_test_reasons
+    ON vl_request_form.reason_for_vl_testing = r_vl_test_reasons.test_reason_name
+SET vl_request_form.reason_for_vl_testing = r_vl_test_reasons.test_reason_id
