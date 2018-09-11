@@ -249,7 +249,7 @@ $batResult = $db->rawQuery($batQuery);
 			if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
 				?>
 					<script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
-					<script src="../assets/js/dymo-format.js"></script>    
+					<script src="../configs/dymo-format.js"></script>        
 					<script src="../assets/js/dymo-print.js"></script>    
 				<?php
 			}else if($global['bar_code_printing'] == 'zebra-printer'){
