@@ -49,7 +49,7 @@ include('../header.php');
       <!-- Small boxes (Stat box) -->
       <div class="row" style="padding-top:10px;padding-bottom:20px;">
 	<div class="col-lg-7">
-	  <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;">
+	  <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
 		<tr>
 		    <td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
 		    <td>

@@ -170,9 +170,7 @@ $formConfigResult=$db->query($formConfigQuery);
     color: #fff !important;
     font-family:helvetica, arial, sans-serif;
   }
-  .navbar-nav>.user-menu>.dropdown-menu{
-    max-width:200px;
-  }
+  
 </style>
 </head>
 <body class="hold-transition <?php echo $skin; ?> sidebar-mini">
@@ -333,7 +331,7 @@ $formConfigResult=$db->query($formConfigQuery);
         <?php } if($testResultMenuAccess == true){ ?>
         <li class="treeview test" style="<?php echo $hideResult;?>">
             <a href="#">
-                <i class="fa fa-edit"></i>
+                <i class="fa fa-tasks"></i>
                 <span>Test Result Management</span>
                 <span class="pull-right-container">
                   <i class="fa fa-angle-left pull-right"></i>
