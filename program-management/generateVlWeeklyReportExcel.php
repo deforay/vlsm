@@ -4,6 +4,7 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 include ('../includes/PHPExcel.php');
+
 $general=new General();
 $configQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($configQuery);
@@ -26,6 +27,16 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
 //     $collection_end_date = $general->dateFormat(trim($s_t_date[1]));
 //   }
 // }
+
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+
+
  //excel code start
  $excel = new PHPExcel();
  $sheet = $excel->getActiveSheet();
@@ -86,13 +97,18 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
          ),
      )
  );
- if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
+
+  if($sarr['user_type']=='vluser'){
+    $vlLabQuery="SELECT * FROM facility_details where status='active' AND facility_id = ". $sarr['lab_name'];
+    $vlLabResult = $db->rawQuery($vlLabQuery);
+  }
+  else if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
    $vlLabQuery="SELECT * FROM facility_details where facility_id IN (".$_POST['lab'].") AND status='active'";
    $vlLabResult = $db->rawQuery($vlLabQuery);
- }else{
+  }else{
    $vlLabQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
    $vlLabResult = $db->rawQuery($vlLabQuery);
- }
+  }
  //echo $vlLabQuery;die;
  
  //Statistics sheet start
@@ -176,6 +192,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
 		COUNT(result) as total
 		 FROM vl_request_form as vl RIGHT JOIN facility_details as f ON f.facility_id=vl.facility_id
        WHERE vl.lab_id = ".$vlLab['facility_id']." AND vl.vlsm_country_id = ".$country;
+
     if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
         if (trim($start_date) == trim($end_date)) {
           $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
@@ -183,16 +200,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
           $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
         }
     }
-  //   if(isset($_POST['collectionDate']) && trim($_POST['collectionDate'])!= ''){
-  //     if (trim($collection_start_date) == trim($collection_end_date)) {
-  //       $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) = "'.$collection_start_date.'"';
-  //     }else{
-  //       $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$collection_start_date.'" AND DATE(vl.sample_collection_date) <= "'.$collection_end_date.'"';
-  //     }
-  // }
-    if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-        //$sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
-    }
+
     $sQuery = $sQuery.' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
     //error_log($sQuery);
@@ -203,7 +211,7 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
       
       $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('D1', html_entity_decode('Super Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('D1', html_entity_decode('Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       $sheet->setCellValue('E1', html_entity_decode(ucwords($vlLab['facility_name']), ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       //$sheet->setCellValue('F1', html_entity_decode('Collection Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       //$sheet->setCellValue('G1', html_entity_decode($_POST['collectionDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
@@ -330,21 +338,21 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
          $colNo++;
        }
       }
-      $firstRowCount = $rRowCount+1;
-      $secondRowCount = $rRowCount+2;
-      $firstCell = $sheet->getCellByColumnAndRow(1, $firstRowCount)->getColumn();
-      $secondCell = $sheet->getCellByColumnAndRow(2, $firstRowCount)->getColumn();
-      $sheet->getStyle($firstCell.$firstRowCount.':'.$firstCell.$firstRowCount)->applyFromArray($styleArray);
-      $sheet->getStyle($secondCell.$firstRowCount.':'.$secondCell.$firstRowCount)->applyFromArray($styleArray);
-      $sheet->setCellValue($firstCell.$firstRowCount, html_entity_decode("Total Sample As On ".$s_t_date[0], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue($secondCell.$firstRowCount, html_entity_decode($totalResult[0]['totalCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$firstRowCount = $rRowCount+1;
+      //$secondRowCount = $rRowCount+2;
+      //$firstCell = $sheet->getCellByColumnAndRow(1, $firstRowCount)->getColumn();
+      //$secondCell = $sheet->getCellByColumnAndRow(2, $firstRowCount)->getColumn();
+      //$sheet->getStyle($firstCell.$firstRowCount.':'.$firstCell.$firstRowCount)->applyFromArray($styleArray);
+      //$sheet->getStyle($secondCell.$firstRowCount.':'.$secondCell.$firstRowCount)->applyFromArray($styleArray);
+      //$sheet->setCellValue($firstCell.$firstRowCount, html_entity_decode("Total Sample As On ".$s_t_date[0], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$sheet->setCellValue($secondCell.$firstRowCount, html_entity_decode($totalResult[0]['totalCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
       
-      $firstCell = $sheet->getCellByColumnAndRow(1, $secondRowCount)->getColumn();
-      $secondCell = $sheet->getCellByColumnAndRow(2, $secondRowCount)->getColumn();
-      $sheet->getStyle($firstCell.$secondRowCount.':'.$firstCell.$secondRowCount)->applyFromArray($styleArray);
-      $sheet->getStyle($secondCell.$secondRowCount.':'.$secondCell.$secondRowCount)->applyFromArray($styleArray);
+      //$firstCell = $sheet->getCellByColumnAndRow(1, $secondRowCount)->getColumn();
+      //$secondCell = $sheet->getCellByColumnAndRow(2, $secondRowCount)->getColumn();
+      //$sheet->getStyle($firstCell.$secondRowCount.':'.$firstCell.$secondRowCount)->applyFromArray($styleArray);
+      //$sheet->getStyle($secondCell.$secondRowCount.':'.$secondCell.$secondRowCount)->applyFromArray($styleArray);
       //$sheet->setCellValue($firstCell.$secondRowCount, html_entity_decode("Samples Collected Between ".$_POST['collectionDate'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue($secondCell.$secondRowCount, html_entity_decode($totalResult[0]['collectCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$sheet->setCellValue($secondCell.$secondRowCount, html_entity_decode($totalResult[0]['collectCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
     $c++;
   }
  //Statistics sheet end

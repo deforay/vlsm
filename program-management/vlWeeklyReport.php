@@ -1,6 +1,13 @@
    <?php
    include('../header.php');
+   
    $facilityQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
+   
+   if(isset($_SESSION['system']) && $_SESSION['system'] =='vluser'){
+    $labId = $sarr['lab_name'];
+    $facilityQuery .= " AND facility_id = ".$labId;
+   }
+
    $facilityResult = $db->rawQuery($facilityQuery);
    ?>
    <link href="../assets/css/multi-select.css" rel="stylesheet" />

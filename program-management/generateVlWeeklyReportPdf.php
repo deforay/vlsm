@@ -31,7 +31,23 @@ if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
      $end_date = $general->dateFormat(trim($s_t_date[1]));
    }
 }
-if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
+
+
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+  $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+
+
+
+if($sarr['user_type']=='vluser'){
+  $vlLabQuery="SELECT * FROM facility_details where status='active' AND facility_id = ". $sarr['lab_name'];
+  $vlLabResult = $db->rawQuery($vlLabQuery);
+}
+else if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
     $vlLabQuery="SELECT * FROM facility_details where facility_id IN (".$_POST['lab'].") AND status='active'";
     $vlLabResult = $db->rawQuery($vlLabQuery);
 }else{
@@ -83,7 +99,7 @@ if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
           // Set font
           $this->SetFont('helvetica', '', 8);
           // Page number
-          $this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');
+          $this->Cell(0, 10,  'Report generated on '.date('d/m/Y H:i:s'), 0, false, 'C', 0, '', 0, false, 'T', 'M');
       }
   }
    
@@ -314,142 +330,8 @@ if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
     $_SESSION['aliasPage'] = $page;
     //Statistics pdf end
     if($page > 1){
-      //Super lab performance pdf start
-      // create new PDF document
-        $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        //$pdf->setHeaderTemplateAutoreset(true);
-        $pdf->setHeading('SUPER LAB PERFORMANCE REPORT',$arr['logo'],$arr['header'],'',$_POST['reportedDate']);
-        $pdf->setPageOrientation('L');
-      // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle('VIRAL LOAD LAB WEEKLY REPORT');
-        //$pdf->SetSubject('TCPDF Tutorial');
-        //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-
-        // set default header data
-        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH,PDF_HEADER_TITLE, PDF_HEADER_STRING);
-
-        // set header and footer fonts
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '',PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '',PDF_FONT_SIZE_DATA));
-
-        // set default monospaced font
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-        // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT,PDF_MARGIN_TOP+14,PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        // set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-        // set image scale factor
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // set font
-        $pdf->SetFont('helvetica', '', 8);
-        $pdf->AddPage();
-        $html = '';
-          $html.='<table style="border:2px solid #f4f4f4;">';
-           $html.='<thead>';
-              $html.='<tr>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Province/State</strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>District/County </strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Super Lab Name </strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Lab ID</strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Total Number of VL samples Received at Laboratory</strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Total Number of Viral load tests done (inc failed tests)</strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>No. of Samples Not Tested</strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Assay Failure Rate(%)</strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Average Result TAT (lab)</strong></th>';
-                $html.='<th align="center" style="border:1px solid #f4f4f4;"><strong>Average Result TAT -Total (from sample  collection to results getting to the facility/hub)</strong></th>';
-              $html.='</tr>';
-          $html.='</thead>';
-          $html.='<tbody>';
-            foreach ($vlLabResult as $vlLab) {
-             $sQuery="SELECT vl.vl_sample_id,vl.sample_collection_date,vl.sample_received_at_vl_lab_datetime,vl.sample_tested_datetime,vl.result_printed_datetime,vl.result,f.facility_name FROM vl_request_form as vl INNER JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE vl.lab_id = '".$vlLab['facility_id']."' AND vl.vlsm_country_id = '".$country."'";
-             if(isset($_POST['reportedDate']) && trim($_POST['reportedDate'])!= ''){
-                if (trim($start_date) == trim($end_date)) {
-                  $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) = "'.$start_date.'"';
-                }else{
-                  $sQuery = $sQuery.' AND DATE(vl.sample_tested_datetime) >= "'.$start_date.'" AND DATE(vl.sample_tested_datetime) <= "'.$end_date.'"';
-                }
-             }
-             if(isset($_POST['searchData']) && trim($_POST['searchData'])!= ''){
-                $sQuery = $sQuery.' AND (f.facility_state LIKE "%'.$_POST['searchData'].'%" OR f.facility_district LIKE "%'.$_POST['searchData'].'%" OR f.facility_name LIKE "%'.$_POST['searchData'].'%")';
-             }
-             $sResult = $db->rawQuery($sQuery);
-             $noOfSampleReceivedAtLab = array();
-             $noOfSampleTested = array();
-             $noOfSampleNotTested = array();
-             $resultTat = array();
-             $resultDTat = array();
-             $assayFailures = array();
-             foreach($sResult as $result){
-               $sampleCollectionDate = '';
-               $dateOfSampleReceivedAtTestingLab = '';
-               $dateResultPrinted = '';
-               if(trim($result['sample_collection_date'])!= '' && $result['sample_collection_date'] != NULL && $result['sample_collection_date'] != '0000-00-00 00:00:00'){
-                  $sampleCollectionDate = $result['sample_collection_date'];
-               }
-               
-               if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
-                  $dateOfSampleReceivedAtTestingLab = $result['sample_received_at_vl_lab_datetime'];
-                  $noOfSampleReceivedAtLab[] = $result['vl_sample_id'];
-               }
-               
-               if(trim($result['sample_tested_datetime'])!= '' && $result['sample_tested_datetime'] != NULL && $result['sample_tested_datetime'] != '0000-00-00 00:00:00'){
-                  $noOfSampleTested[] = $result['vl_sample_id'];
-               }else{
-                  if(trim($result['sample_received_at_vl_lab_datetime'])!= '' && $result['sample_received_at_vl_lab_datetime'] != NULL && $result['sample_received_at_vl_lab_datetime'] != '0000-00-00 00:00:00'){
-                     $noOfSampleNotTested[] = $result['vl_sample_id'];
-                  }
-               }
-               
-               if(trim($result['result_printed_datetime'])!= '' && $result['result_printed_datetime'] != NULL && $result['result_printed_datetime'] != '0000-00-00 00:00:00'){
-                  $dateResultPrinted = $result['result_printed_datetime'];
-               }
-               
-               if(trim($dateOfSampleReceivedAtTestingLab)!= '' && trim($dateResultPrinted)!= ''){
-                  $date_result_printed = strtotime($dateResultPrinted);
-                  $date_of_sample_received_at_testing_lab = strtotime($dateOfSampleReceivedAtTestingLab);
-                  $daydiff = $date_result_printed - $date_of_sample_received_at_testing_lab;
-                  $tat = (int)floor($daydiff / (60 * 60 * 24));
-                  $resultTat[] = $tat;
-               }
-               if(trim($sampleCollectionDate)!= '' && trim($dateResultPrinted)!= ''){
-                  $date_result_printed = strtotime($dateResultPrinted);
-                  $sample_collection_date = strtotime($sampleCollectionDate);
-                  $daydiff = $date_result_printed - $sample_collection_date;
-                  $tatD = (int)floor($daydiff / (60 * 60 * 24));
-                  $resultDTat[] = $tatD;
-               }
-               if(trim(strtolower($result['result']))== 'failed' || trim(strtolower($result['result']))== 'fail'){
-                  $assayFailures[] = $result['vl_sample_id'];
-               }
-             }
-             $noOfSampleReceivedAtTestingLab = count($noOfSampleReceivedAtLab);
-             $assayFailureRate = (count($sResult) >0) ? (round(count($assayFailures)/count($sResult)))*100 : 0;
-             $avgResultTat = (count($resultTat) >0) ? round(array_sum($resultTat)/count($resultTat)) : 0;
-             $avgResultTatTotal = (count($resultDTat) >0) ? (round(array_sum($resultDTat)/count($resultDTat)) - count($resultDTat)) : 0;
-             $html.='<tr>';
-             $html.='<td style="height:20px;border:1px solid #f4f4f4;">'.ucwords($vlLab['facility_state']).'</td>';
-             $html.='<td style="border:1px solid #f4f4f4;">'.ucwords($vlLab['facility_district']).'</td>';
-             $html.='<td style="border:1px solid #f4f4f4;">'.ucwords($vlLab['facility_name']).'</td>';
-             $html.='<td style="border:1px solid #f4f4f4;">'.$vlLab['facility_code'].'</td>';
-             $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$noOfSampleReceivedAtTestingLab.'</td>';
-             $html.='<td align="center" style="border:1px solid #f4f4f4;">'.count($noOfSampleTested).'</td>';
-             $html.='<td align="center" style="border:1px solid #f4f4f4;">'.count($noOfSampleNotTested).'</td>';
-             $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$assayFailureRate.'</td>';
-             $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$avgResultTat.'</td>';
-             $html.='<td align="center" style="border:1px solid #f4f4f4;">'.$avgResultTatTotal.'</td>';
-             $html.='</tr>';
-            }
-          $html.='</tbody>';
-        $html.='</table>';
-        $pdf->writeHTML($html);
-        $pdf->lastPage();
+      
+        
         $filename = $pathFront. DIRECTORY_SEPARATOR .'p'.$page. '.pdf';
         $pdf->Output($filename,"F");
         $pages[] = $filename;
