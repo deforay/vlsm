@@ -80,6 +80,40 @@ if(trim($facilityResult[0]['facility_state'])!= ''){
   $districtQuery="SELECT DISTINCT facility_district from facility_details where facility_state='".$facilityResult[0]['facility_state']."' AND status='active'";
   $districtResult=$db->query($districtQuery);
 }
+//suggest sample id when lab user add request sample
+$sampleSuggestion = '';
+$sampleSuggestionDisplay = 'display:none;';
+if($sarr['user_type']=='vluser' && $sCode!=''){
+      $sExpDT = explode(" ",$sampleCollectionDate);
+      $sExpDate = explode("-",$sExpDT[0]);
+      $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
+      $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
+      $mnthYr = substr($sExpDate[0],-2);
+      if($arr['sample_code']=='MMYY'){
+          $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
+      }else if($arr['sample_code']=='YY'){
+          $mnthYr = substr($sExpDate[0],-2);
+      }
+      $auto = substr($sExpDate[0],-2).$sExpDate[1].$sExpDate[2];
+      $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND sample_code!="" ORDER BY sample_code_key DESC LIMIT 1';
+      $svlResult=$db->query($svlQuery);
+      $prefix = $arr['sample_code_prefix'];
+      if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
+      $maxId = $svlResult[0]['sample_code_key']+1;
+      $strparam = strlen($maxId);
+      $zeros = substr("000", $strparam);
+      $maxId = $zeros.$maxId;
+      }else{
+      $maxId = '001';
+      }
+      if($arr['sample_code']=='auto'){
+        $sampleSuggestion = $auto.$maxId;
+      }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+        $sampleSuggestion = $prefix.$mnthYr.$maxId;
+      }
+$sampleSuggestionDisplay = 'display:block;';
+}
+
 //set reason for changes history
 $rch = '';
 if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['reason_for_vl_result_changes']!= '' && $vlQueryInfo[0]['reason_for_vl_result_changes']!= null){
@@ -129,6 +163,11 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                   <div class="box-header with-border">
                     <h3 class="box-title">Clinic Information: (To be filled by requesting Clinican/Nurse)</h3>
                   </div>
+                  <div class="row">
+                    <div class="" style="<?php echo $sampleSuggestionDisplay;?>">
+                    <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Suggest Sample ID - </label>
+                    <?php echo $sampleSuggestion; ?>
+                    </div>
                   <div class="box-body">
                     <div class="row">
                       <div class="col-xs-3 col-md-3">

@@ -72,10 +72,12 @@ if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])
 }
 
 if(isset($vlQueryInfo[0]['sample_collection_date']) && trim($vlQueryInfo[0]['sample_collection_date'])!='' && $vlQueryInfo[0]['sample_collection_date']!='0000-00-00 00:00:00'){
- $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
- $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+  $sampleCollectionDate = $vlQueryInfo[0]['sample_collection_date'];
+  $expStr=explode(" ",$vlQueryInfo[0]['sample_collection_date']);
+  $vlQueryInfo[0]['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
 }else{
- $vlQueryInfo[0]['sample_collection_date']='';
+  $sampleCollectionDate = '';
+  $vlQueryInfo[0]['sample_collection_date']='';
 }
 
 if(isset($vlQueryInfo[0]['treatment_initiated_date']) && trim($vlQueryInfo[0]['treatment_initiated_date'])!='' && $vlQueryInfo[0]['treatment_initiated_date']!='0000-00-00'){
