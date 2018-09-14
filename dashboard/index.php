@@ -105,20 +105,20 @@ include('../header.php');
   </div>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
-  <script src="../assets/js/highchart.js"></script>
+  <script src="../assets/js/highcharts.js"></script>
   <script>
     $(function () {
     $.post("../includes/getMissingResult.php",{sampleCollectionDate:'',batchCode:'',facilityName:'',sampleType:''},
       function(data){
-	  if($.trim(data)!=''){
-	    $("#pieChartDiv").html(data);
-		  $(".labAverageTatDiv").hide();
-	  }
+        if($.trim(data)!=''){
+          $("#pieChartDiv").html(data);
+          $(".labAverageTatDiv").hide();
+        }
       });
     
     $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+	          separator: ' to ',
             startDate: moment().subtract('days', 6),
             endDate: moment(),
             maxDate: moment(),
@@ -135,7 +135,7 @@ include('../header.php');
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
-    searchVlRequestData();
+      searchVlRequestData();
     });
     
     function searchVlRequestData(){
@@ -152,7 +152,7 @@ include('../header.php');
     function resetSearchVlRequestData(){
       $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+	          separator: ' to ',
             startDate: moment().subtract('days', 6),
             endDate: moment(),
             maxDate: moment(),

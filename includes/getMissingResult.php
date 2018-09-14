@@ -128,11 +128,16 @@ $sWhere = '';
    }
 ?>
 <div class="col-xs-12">
-          <div class="box">
-<div class="box-body" >
-    <div id="sampleStatusOverviewContainer" style="float:left;min-width: 480px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
-    <div id="samplesVlOverview" style="float:right;min-width: 410px; height: 480px; max-width: 600px; margin: 0 auto;"></div>
-</div>
+    <div class="box">
+        <div class="box-body" >
+            <div id="sampleStatusOverviewContainer" style="float:left;width:100%; margin: 0 auto;"></div>
+        </div>
+    </div>
+    <div class="box">    
+        <div class="box-body" >
+            <div id="samplesVlOverview" style="float:right;width:100%;margin: 0 auto;"></div>
+        </div>
+    </div>
 </div>
 </div>
 <div class="col-xs-12 labAverageTatDiv">
@@ -163,7 +168,7 @@ $sWhere = '';
                 },
                 plotOptions: {
                     pie: {
-                        size:'70%',
+                        size:'100%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
@@ -171,7 +176,7 @@ $sWhere = '';
                             useHTML: true,
                             format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
                             style: {
-                              width: '100px',
+                              
                               //crop:false,
                               //overflow:'none',
                               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
@@ -224,7 +229,7 @@ $sWhere = '';
                 },
                 plotOptions: {
                     pie: {
-                        size:'70%',
+                        size:'100%',
                         allowPointSelect: true,
                         cursor: 'pointer',
                         dataLabels: {
@@ -232,7 +237,6 @@ $sWhere = '';
                             useHTML: true,
                             format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
                             style: {
-                                width: '100px',
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             },
                             distance:10
