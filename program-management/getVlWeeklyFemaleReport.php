@@ -207,6 +207,10 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
             $sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
             $tWhere = $tWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes' ";
         }
+    }else if($sarr['user_type']=='vluser'){
+
+        $sWhere = $sWhere." AND vl.lab_id = ". $sarr['lab_name'];
+	    $tWhere = $tWhere." AND vl.lab_id = ". $sarr['lab_name'];  
     }
 		
 	$sQuery = $sQuery.' '.$sWhere;

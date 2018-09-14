@@ -207,11 +207,13 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 		      $sWhere = $sWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
 		      $tWhere = $tWhere.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
 		    }
-	}
+    }
+    
 	if(isset($_POST['lab']) && trim($_POST['lab'])!= ''){
 	    $sWhere = $sWhere." AND vl.lab_id IN (".$_POST['lab'].")";
 	    $tWhere = $tWhere." AND vl.lab_id IN (".$_POST['lab'].")";
-	}
+    }
+    
     if($sarr['user_type']=='remoteuser'){
 
         $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
@@ -221,6 +223,12 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
             $tWhere = $tWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes' ";
         }
     }
+    else if($sarr['user_type']=='vluser'){
+
+        $sWhere = $sWhere." AND vl.lab_id = ". $sarr['lab_name'];
+	    $tWhere = $tWhere." AND vl.lab_id = ". $sarr['lab_name'];  
+    }
+
 	$sQuery = $sQuery.' '.$sWhere;
 	$sQuery = $sQuery.' GROUP BY vl.facility_id';
 	

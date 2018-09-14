@@ -57,6 +57,8 @@ try {
         //echo $instanceUpdateOn;
 
         // echo $sQuery;die;
+
+        $sQuery .= " LIMIT 1000";
         
         $rResult = $db->rawQuery($sQuery);
         

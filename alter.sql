@@ -1506,4 +1506,4 @@ ALTER TABLE `vl_request_form` ADD `reason_for_vl_testing_other` VARCHAR(255) NUL
 
 UPDATE vl_request_form INNER JOIN r_vl_test_reasons
     ON vl_request_form.reason_for_vl_testing = r_vl_test_reasons.test_reason_name
-SET vl_request_form.reason_for_vl_testing = r_vl_test_reasons.test_reason_id
+SET vl_request_form.reason_for_vl_testing = r_vl_test_reasons.test_reason_id;

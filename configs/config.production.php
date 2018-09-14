@@ -28,4 +28,4 @@ $MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
 //$MYSQLDUMP = '/usr/bin/mysqldump';
 
 
-$REMOTEURL = '';
+$REMOTEURL = 'http://vlsms.rbc.gov.rw/';

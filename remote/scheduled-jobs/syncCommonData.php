@@ -2,8 +2,7 @@
 //update common table from remote to lab db
 include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
 include(dirname(__FILE__) . "/../../General.php");
-if(!isset($REMOTEURL) || $REMOTEURL=='')
-{
+if(!isset($REMOTEURL) || $REMOTEURL==''){
     echo "Please check your remote url";
     die;
 }
@@ -69,6 +68,12 @@ curl_close($ch);
 $result = json_decode($curl_response, true);
 //update or insert sample type
 if(count($result['sampleType'])>0){
+    // making all local rows inactive 
+    // this way any additional rows in local that are not on remote
+    // become inactive.
+
+    $db->update('r_sample_type',array('status'=>'inactive'));    
+
     foreach($result['sampleType'] as $type){
         $sTypeQuery = "select * from r_sample_type where sample_id=".$type['sample_id'];
         $sTypeLocalResult = $db->query($sTypeQuery);
@@ -87,12 +92,18 @@ if(count($result['sampleType'])>0){
 
 //update or insert art code deatils
 if(count($result['artCode'])>0){
+    // making all local rows inactive 
+    // this way any additional rows in local that are not on remote
+    // become inactive.
+
+    $db->update('r_art_code_details',array('art_status'=>'inactive'));    
+
     foreach($result['artCode'] as $artCode){
         $artCodeQuery = "select * from r_art_code_details where art_id=".$artCode['art_id'];
         $artCodeLocalResult = $db->query($artCodeQuery);
         $artCodeData = array('art_code'=>$artCode['art_code'],'parent_art'=>$artCode['parent_art'],
                              'headings'=>$artCode['headings'],'nation_identifier'=>$artCode['nation_identifier'],
-                             'art_status'=>$artCode['art_status'],'data_sync'=>1,'updated_datetime'=>$general->getDateTime());
+                             'art_status'=>$artCode['art_status'],'data_sync'=>1,'updated_datetime'=>$artCode['updated_datetime']);
         $lastId = 0;
         if($artCodeLocalResult){
             $db = $db->where('art_id',$artCode['art_id']);
@@ -107,12 +118,19 @@ if(count($result['artCode'])>0){
 
 //update or insert rejected reason
 if(count($result['rejectReason'])>0){
+    
+    // making all local rows inactive 
+    // this way any additional rows in local that are not on remote
+    // become inactive.
+
+    $db->update('r_sample_rejection_reasons',array('rejection_reason_status'=>'inactive'));    
+
     foreach($result['rejectReason'] as $reason){
         $rejectQuery = "select * from r_sample_rejection_reasons where rejection_reason_id=".$reason['rejection_reason_id'];
         $rejectLocalResult = $db->query($rejectQuery);
         $rejectResultData = array('rejection_reason_name'=>$reason['rejection_reason_name'],'rejection_type'=>$reason['rejection_type'],
                              'rejection_reason_status'=>$reason['rejection_reason_status'],'rejection_reason_code'=>$reason['rejection_reason_code'],
-                             'data_sync'=>1,'updated_datetime'=>$general->getDateTime());
+                             'data_sync'=>1,'updated_datetime'=>$reason['updated_datetime']);
         $lastId = 0;
         if($rejectLocalResult){
             $db = $db->where('rejection_reason_id',$reason['rejection_reason_id']);
@@ -127,10 +145,11 @@ if(count($result['rejectReason'])>0){
 
 //update or insert province
 if(count($result['province'])>0){
+
     foreach($result['province'] as $province){
         $provinceQuery = "select * from province_details where province_id=".$province['province_id'];
         $provinceLocalResult = $db->query($provinceQuery);
-        $provinceData = array('province_name'=>$province['province_name'],'province_code'=>$province['province_code'],'data_sync'=>1,'updated_datetime'=>$general->getDateTime());
+        $provinceData = array('province_name'=>$province['province_name'],'province_code'=>$province['province_code'],'data_sync'=>1,'updated_datetime'=>$province['updated_datetime']);
         $lastId = 0;
         if($provinceLocalResult){
             $db = $db->where('province_id',$province['province_id']);
@@ -147,6 +166,13 @@ if(count($result['province'])>0){
 $instanceQuery = "select vlsm_instance_id from s_vlsm_instance";
 $instanceResult = $db->query($instanceQuery);
 if(count($result['facilityResult'])>0){
+    
+    // making all local rows inactive 
+    // this way any additional rows in local that are not on remote
+    // become inactive.
+
+    $db->update('facility_details',array('status'=>'inactive'));
+
     foreach($result['facilityResult'] as $facility){
         $facilityQuery = "select * from facility_details where facility_id=".$facility['facility_id'];
         $facilityLocalResult = $db->query($facilityQuery);
@@ -157,7 +183,7 @@ if(count($result['facilityResult'])>0){
                               'country'=>$facility['country'],'facility_state'=>$facility['facility_state'],
                               'facility_district'=>$facility['facility_district'],'facility_hub_name'=>$facility['facility_hub_name'],
                               'latitude'=>$facility['latitude'],'longitude'=>$facility['longitude'],'facility_type'=>$facility['facility_type'],
-                              'status'=>$facility['status'],'data_sync'=>1,'updated_datetime'=>$general->getDateTime());
+                              'status'=>$facility['status'],'data_sync'=>1,'updated_datetime'=>$facility['updated_datetime']);
         $lastId = 0;
         if($facilityLocalResult){
             $db = $db->where('facility_id',$facility['facility_id']);
