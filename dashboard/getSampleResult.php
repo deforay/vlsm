@@ -135,7 +135,7 @@ foreach($stVlResult as $vlData){
   $j++;
 }
 ?>
-<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
     <div class="dashboard-stat2 bluebox" style="cursor:pointer;" >
         <div class="display">
             <div class="number">
@@ -153,7 +153,7 @@ foreach($stVlResult as $vlData){
         <div id="samplesReceivedChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
-<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
     <div class="dashboard-stat2 " style="cursor:pointer;" >
         <div class="display">
             <div class="number">
@@ -172,26 +172,7 @@ foreach($stVlResult as $vlData){
     </div>
 </div>
 
-<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-    <div class="dashboard-stat2 " style="cursor:pointer;">
-        <div class="display">
-            <div class="number">
-                <h3 class="font-purple-soft">
-                    <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
-                </h3>
-                <small class="font-purple-soft">SAMPLES WAITING</small><br>
-                <small class="font-purple-soft"  style="font-size:0.75em;">As of today</small>
-                <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
-            </div>
-            <div class="icon">
-                <i class="icon-pie-chart"></i>
-            </div>
-        </div>
-        <div id="samplesWaitingChart" width="210" height="150" style="min-height:150px;"></div>
-    </div>
-</div>
-
-<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
     <div class="dashboard-stat2 " style="cursor:pointer;" >
         <div class="display">
             <div class="number">
@@ -207,6 +188,25 @@ foreach($stVlResult as $vlData){
             </div>
         </div>
         <div id="samplesRejectedChart" width="210" height="150" style="min-height:150px;"></div>
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
+    <div class="dashboard-stat2 " style="cursor:pointer;">
+        <div class="display">
+            <div class="number">
+                <h3 class="font-purple-soft">
+                    <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
+                </h3>
+                <small class="font-purple-soft">SAMPLES WAITING</small><br>
+                <small class="font-purple-soft"  style="font-size:0.75em;">As of today</small>
+                <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
+            </div>
+            <div class="icon">
+                <i class="icon-pie-chart"></i>
+            </div>
+        </div>
+        <div id="samplesWaitingChart" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 
@@ -237,7 +237,10 @@ foreach($stVlResult as $vlData){
                 echo '"'.ucwords($total['date']).'",';
             }
             ?>],
-            crosshair: true
+            crosshair: true,          
+            scrollbar: {
+                enabled: true
+            },            
         },
         yAxis: {
             min: 0,
@@ -277,7 +280,7 @@ foreach($stVlResult as $vlData){
             ?>]
 
         }],
-        colors : ['#2ab4c0']
+        colors : ['#2ab4c0'],
     });
     <?php } 
     //waiting result
@@ -302,7 +305,10 @@ foreach($stVlResult as $vlData){
                 echo "'".ucwords($total['date'])."',";
             }
             ?>],
-            crosshair: true
+            crosshair: true,
+            scrollbar: {
+                enabled: true
+            },              
         },
         yAxis: {
             min: 0,
@@ -361,7 +367,10 @@ $('#samplesTestedChart').highcharts({
                 echo "'".ucwords($total['date'])."',";
             }
             ?>],
-            crosshair: true
+            crosshair: true,
+            scrollbar: {
+                enabled: true
+            },              
         },
         yAxis: {
             min: 0,
@@ -421,7 +430,10 @@ $('#samplesRejectedChart').highcharts({
                 echo "'".ucwords($total['date'])."',";
             }
             ?>],
-            crosshair: true
+            crosshair: true,
+            scrollbar: {
+                enabled: true
+            },              
         },
         yAxis: {
             min: 0,
