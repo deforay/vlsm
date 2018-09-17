@@ -100,10 +100,17 @@ try {
                         $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                         $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
                         
-                        if(strpos($sheetData[$resultCol], 'Log (IU/mL)') !== false){
+                        if(strpos($sheetData[$resultCol], 'Copies / mL') !== false){
+                            $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
+                            $absVal = str_replace(",", "", $sheetData[$resultCol]);
+                            preg_match_all('!\d+!', $absVal, $absDecimalVal);
+                            $absVal=$absDecimalVal = implode("",$absDecimalVal[0]);
+                        }
+                        else if(strpos($sheetData[$resultCol], 'Log (IU/mL)') !== false){
                              $logVal = str_replace("Log (IU/mL)", "", $sheetData[$resultCol]);
                              $logVal = str_replace(",", ".", $logVal);
-                        }else if(strpos($sheetData[$resultCol], 'IU/mL') !== false){
+                        }
+                        else if(strpos($sheetData[$resultCol], 'IU/mL') !== false){
                              $absVal = str_replace("IU/mL", "", $sheetData[$resultCol]);
                              $absVal = str_replace(" ", "", $sheetData[$resultCol]);
                              preg_match_all('!\d+!', $absVal, $absDecimalVal);
@@ -131,7 +138,7 @@ try {
                         $lotNumberVal = $sheetData[$lotNumberCol];
                         if(trim($sheetData[$lotExpirationDateCol]) !=''){
                             //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                            $sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
+                            //$sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
                             $lotExpirationDateVal = date('Y-m-d', strtotime($sheetData[$lotExpirationDateCol]));
                         }
                       
