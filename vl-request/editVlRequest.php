@@ -181,6 +181,17 @@ if($vlQueryInfo[0]['patient_first_name']!=''){
 }else{
   $patientFirstName = '';
 }
+if($vlQueryInfo[0]['patient_middle_name']!=''){
+  $patientMiddleName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_middle_name'],$sampleCode);
+}else{
+  $patientMiddleName = '';
+}
+if($vlQueryInfo[0]['patient_last_name']!=''){
+  $patientLastName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_last_name'],$sampleCode);
+}else{
+  $patientLastName = '';
+}
+
 ?>
 <style>
   .ui_tpicker_second_label {display: none !important; }

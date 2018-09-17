@@ -93,8 +93,8 @@ try {
           'request_clinician_name'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
           'sample_collection_date'=>(isset($_POST['sampleCollectionDate']) && $_POST['sampleCollectionDate']!='' ? $_POST['sampleCollectionDate'] :  NULL),
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='' ? $_POST['collectedBy'] :  NULL),
-          'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
-          'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
+          //'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
+          //'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
           'patient_dob'=>(isset($_POST['dob']) && $_POST['dob']!='' ? $_POST['dob'] :  NULL),
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='' ? $_POST['ageInYears'] :  NULL),
@@ -135,6 +135,14 @@ try {
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
         }
+        if($_POST['isRemoteSample']=='yes'){
+          $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
+          $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
+        }else{
+          $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
+          $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
+        }
+
           if($vloadResultUpdate){
             $vldata['manual_result_entry']='yes';
             $vldata['import_machine_file_name']='';

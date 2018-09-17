@@ -167,7 +167,7 @@ try {
     $vldata=array(
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
-          'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='') ? $_POST['patientFirstName'] :  NULL,
+          //'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='') ? $_POST['patientFirstName'] :  NULL,
           'patient_province'=>(isset($_POST['patientDistrict']) && $_POST['patientDistrict']!='') ? $_POST['patientDistrict'] :  NULL,
           'patient_district'=>(isset($_POST['patientProvince']) && $_POST['patientProvince']!='') ? $_POST['patientProvince'] :  NULL,
           'patient_responsible_person'=>(isset($_POST['responsiblePersonName']) && $_POST['responsiblePersonName']!='') ? $_POST['responsiblePersonName'] :  NULL,
@@ -223,6 +223,12 @@ try {
             $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
             $vldata['result_status']=(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL;
         }
+        if($_POST['isRemoteSample']=='yes'){
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['remote_sample_code']);
+          }else{
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['sample_code']);
+          }
+
         if(isset($_POST['indicateVlTesing']) && $_POST['indicateVlTesing']!='')
         {
 

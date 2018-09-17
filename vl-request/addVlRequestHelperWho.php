@@ -128,9 +128,9 @@ try {
           //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='' ? $_POST['fName'] :  NULL),
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
-          'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='' ? $_POST['patientFirstName'] :  NULL),
-          'patient_middle_name'=>(isset($_POST['patientMiddleName']) && $_POST['patientMiddleName']!='' ? $_POST['patientMiddleName'] :  NULL),
-          'patient_last_name'=>(isset($_POST['patientLastName']) && $_POST['patientLastName']!='' ? $_POST['patientLastName'] :  NULL),
+          //'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='' ? $_POST['patientFirstName'] :  NULL),
+          //'patient_middle_name'=>(isset($_POST['patientMiddleName']) && $_POST['patientMiddleName']!='' ? $_POST['patientMiddleName'] :  NULL),
+          //'patient_last_name'=>(isset($_POST['patientLastName']) && $_POST['patientLastName']!='' ? $_POST['patientLastName'] :  NULL),
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
           'patient_dob'=>$_POST['dob'],
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='' ? $_POST['ageInYears'] :  NULL),
@@ -179,10 +179,16 @@ try {
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
             $vldata['remote_sample'] = 'yes';
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['remote_sample_code']);
+            $vldata['patient_middle_name'] = $general->crypto('encrypt',$_POST['patientMiddleName'],$vldata['remote_sample_code']);
+            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['patientLastName'],$vldata['remote_sample_code']);
         }else{
             $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['sample_code']);
+            $vldata['patient_middle_name'] = $general->crypto('encrypt',$_POST['patientMiddleName'],$vldata['sample_code']);
+            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['patientLastName'],$vldata['sample_code']);
         }
           $id=$db->insert($tableName,$vldata);
           if($id>0){

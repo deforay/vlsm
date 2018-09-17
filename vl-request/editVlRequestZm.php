@@ -173,13 +173,13 @@ foreach($fResult as $fDetails){
                         <label for="patientFname">Patient First Name <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:20%">
-                          <input type="text" class="form-control isRequired " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" >
+                          <input type="text" class="form-control isRequired " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $patientFirstName;?>" >
                         </td>
                         <td style="width:10%">
                         <label for="surName">Last Name <span class="mandatory">*</span></label>
                         </td>
                         <td style="width:18%">
-                          <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Last Name" title="Enter Last Name"  style="width:100%;"  value="<?php echo $vlQueryInfo[0]['patient_last_name'];?>" >
+                          <input type="text" class="form-control isRequired" name="surName" id="surName" placeholder="Last Name" title="Enter Last Name"  style="width:100%;"  value="<?php echo $patientLastName;?>" >
                         </td>
                       </tr>
                       <tr>
@@ -406,6 +406,7 @@ foreach($fResult as $fDetails){
               <!-- /.box-body -->
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample'];?>"/>
                 <input type="hidden" name="treamentId" id="treamentId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
                 <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>

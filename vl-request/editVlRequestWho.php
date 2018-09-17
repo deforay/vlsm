@@ -174,15 +174,15 @@ $districtResult=$db->query($districtQuery);
                             <tr>
                               <td><label for="patientFirstName">Patient First Name</label></td>
                               <td>
-                                <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter First Name" title="Enter patient first name" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>"/>
+                                <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter First Name" title="Enter patient first name" value="<?php echo $patientFirstName;?>"/>
                               </td>
                               <td><label for="patientMiddleName">Patient Middle Name</label></td>
                               <td>
-                                <input type="text" name="patientMiddleName" id="patientMiddleName" class="form-control" placeholder="Enter Middle Name" title="Enter patient middle name" value="<?php echo $vlQueryInfo[0]['patient_middle_name'];?>"/>
+                                <input type="text" name="patientMiddleName" id="patientMiddleName" class="form-control" placeholder="Enter Middle Name" title="Enter patient middle name" value="<?php echo $patientMiddleName;?>"/>
                               </td>
                               <td><label for="patientLastName">Patient Last Name</label></td>
                               <td>
-                                <input type="text" name="patientLastName" id="patientLastName" class="form-control" placeholder="Enter Last Name" title="Enter patient last name" value="<?php echo $vlQueryInfo[0]['patient_last_name'];?>"/>
+                                <input type="text" name="patientLastName" id="patientLastName" class="form-control" placeholder="Enter Last Name" title="Enter patient last name" value="<?php echo $patientLastName;?>"/>
                               </td>
                             </tr>
                             <tr>
@@ -531,6 +531,7 @@ $districtResult=$db->query($districtQuery);
                   </div>
                 </div>
               <div class="box-footer">
+              <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample'];?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>

@@ -174,8 +174,8 @@ try {
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='') ? $_POST['reqClinician'] :  NULL,
           'request_clinician_phone_number'=>(isset($_POST['reqClinicianPhoneNumber']) && $_POST['reqClinicianPhoneNumber']!='') ? $_POST['reqClinicianPhoneNumber'] :  NULL,
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
-          'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='') ? $_POST['patientFname'] :  NULL,
-          'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='') ? $_POST['surName'] :  NULL,
+          //'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='') ? $_POST['patientFname'] :  NULL,
+          //'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='') ? $_POST['surName'] :  NULL,
           'patient_art_no'=>(isset($_POST['patientArtNo']) && $_POST['patientArtNo']!='') ? $_POST['patientArtNo'] :  NULL,
           'patient_mobile_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='') ? $_POST['patientPhoneNumber'] :  NULL,
           'patient_dob'=>(isset($_POST['dob']) && $_POST['dob']!='') ? $_POST['dob'] :  NULL,
@@ -220,6 +220,13 @@ try {
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
      }
+     if($_POST['isRemoteSample']=='yes'){
+        $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
+        $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
+      }else{
+        $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
+        $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
+      }
      $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
      $id = $db->update($tableName,$vldata);
      if($id>0){

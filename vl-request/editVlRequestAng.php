@@ -236,7 +236,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
                                 <tr>
                                     <td style="width:14%;"><label for="patientFirstName">Nome completo </label></td>
                                     <td style="width:14%;">
-                                        <input type="text" class="form-control " id="patientFirstName" name="patientFirstName" placeholder="Nome completo" title="Please enter Nome completo" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name']; ?>"/>
+                                        <input type="text" class="form-control " id="patientFirstName" name="patientFirstName" placeholder="Nome completo" title="Please enter Nome completo" style="width:100%;" value="<?php echo $patientFirstName; ?>"/>
                                     </td>
                                     <td style="width:14%;"><label for="patientArtNo">Nº Processo Clínico </label></td>
                                     <td style="width:14%;">
@@ -661,6 +661,7 @@ if($vlQueryInfo[0]['reason_for_vl_testing']!=''){
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
+                <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample'];?>"/>
                 <input type="hidden" name="reasonForResultChangesHistory" id="reasonForResultChangesHistory" value="<?php echo $vlQueryInfo[0]['reason_for_vl_result_changes']; ?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
