@@ -265,7 +265,7 @@ if(sizeof($requestResult)> 0){
                $html .='<tr>';
 
 
-               if($aRow['remote_sample']=='yes'){
+               if($result['remote_sample']=='yes'){
                     $patientFname = ucwords($general->crypto('decrypt',$result['patient_first_name'],$result['remote_sample_code']));
 
                }else{
