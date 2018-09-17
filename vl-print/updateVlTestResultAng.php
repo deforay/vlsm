@@ -219,7 +219,7 @@ $disable = "disabled = 'disabled'";
                                 <tr>
                                     <td style="width:14%;"><label for="patientFirstName">Nome completo </label></td>
                                     <td style="width:14%;">
-                                        <input type="text" class="form-control " id="patientFirstName" name="patientFirstName" placeholder="Nome completo" title="Please enter Nome completo" style="width:100%;" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['patient_first_name']; ?>"/>
+                                        <input type="text" class="form-control " id="patientFirstName" name="patientFirstName" placeholder="Nome completo" title="Please enter Nome completo" style="width:100%;" <?php echo $disable;?> value="<?php echo $patientFirstName; ?>"/>
                                     </td>
                                     <td style="width:14%;"><label for="patientArtNo">Nº Processo Clínico </label></td>
                                     <td style="width:14%;">

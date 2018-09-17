@@ -128,8 +128,8 @@ try {
           'request_clinician_name'=>(isset($_POST['clinicianName']) && $_POST['clinicianName']!='' ? $_POST['clinicianName'] :  NULL),
           'sample_collection_date'=>(isset($_POST['sampleCollectionDate']) && $_POST['sampleCollectionDate']!='' ? $_POST['sampleCollectionDate'] :  NULL),
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='' ? $_POST['collectedBy'] :  NULL),
-          'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
-          'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
+          //'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
+          //'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
           'patient_dob'=>(isset($_POST['dob']) && $_POST['dob']!='' ? $_POST['dob'] :  NULL),
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='' ? $_POST['ageInYears'] :  NULL),
@@ -171,10 +171,14 @@ try {
             $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? "R".$_POST['serialNo'] :  NULL;
             $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
             $vldata['remote_sample'] = 'yes';
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
+            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
         }else{
             $vldata['sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
             $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
+            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
         }
           $id=$db->insert($tableName,$vldata);
           if($id>0){
