@@ -158,15 +158,15 @@ $disable = "disabled = 'disabled'";
                             <tr>
                               <td><label for="patientFirstName">Patient First Name</label></td>
                               <td>
-                                <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter First Name" title="Enter patient first name" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" <?php echo $disable;?>/>
+                                <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter First Name" title="Enter patient first name" value="<?php echo $patientFirstName;?>" <?php echo $disable;?>/>
                               </td>
                               <td><label for="patientMiddleName">Patient Middle Name</label></td>
                               <td>
-                                <input type="text" name="patientMiddleName" id="patientMiddleName" class="form-control" placeholder="Enter Middle Name" title="Enter patient middle name" value="<?php echo $vlQueryInfo[0]['patient_middle_name'];?>" <?php echo $disable;?>/>
+                                <input type="text" name="patientMiddleName" id="patientMiddleName" class="form-control" placeholder="Enter Middle Name" title="Enter patient middle name" value="<?php echo $patientMiddleName;?>" <?php echo $disable;?>/>
                               </td>
                               <td><label for="patientLastName">Patient Last Name</label></td>
                               <td>
-                                <input type="text" name="patientLastName" id="patientLastName" class="form-control" placeholder="Enter Last Name" title="Enter patient last name" value="<?php echo $vlQueryInfo[0]['patient_last_name'];?>" <?php echo $disable;?>/>
+                                <input type="text" name="patientLastName" id="patientLastName" class="form-control" placeholder="Enter Last Name" title="Enter patient last name" value="<?php echo $patientLastName;?>" <?php echo $disable;?>/>
                               </td>
                             </tr>
                             <tr>

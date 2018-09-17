@@ -160,6 +160,27 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }else{
     $sampleCode = 'sample_code';
   }
+  if($aRow['remote_sample']=='yes'){
+    $sampleId = $aRow['remote_sample_code'];
+  }else{
+    $sampleId = $aRow['sample_code'];
+  }
+  if($aRow['patient_first_name']!=''){
+    $patientFirstName = $general->crypto('decrypt',$aRow['patient_first_name'],$sampleId);
+  }else{
+    $patientFirstName = '';
+  }
+  if($aRow['patient_middle_name']!=''){
+    $patientMiddleName = " ".$general->crypto('decrypt',$aRow['patient_middle_name'],$sampleId);
+  }else{
+    $patientMiddleName = '';
+  }
+  if($aRow['patient_last_name']!=''){
+    $patientLastName = " ".$general->crypto('decrypt',$aRow['patient_last_name'],$sampleId);
+  }else{
+    $patientLastName = '';
+  }
+
   $row[] = $no;
   $row[] = $aRow[$sampleCode];
   $row[] = ucwords($aRow['facility_name']);
@@ -167,7 +188,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = ucwords($aRow['facility_district']);
   $row[] = ucwords($aRow['facility_state']);
   $row[] = $aRow['patient_art_no'];
-  $row[] = $aRow['patient_first_name'].' '.$aRow['patient_last_name'];
+  $row[] = ucwords($patientFirstName).ucwords($patientMiddleName).ucwords($patientLastName);
   $row[] = $dob;
   $row[] = ($aRow['patient_age_in_years']!= NULL && trim($aRow['patient_age_in_years'])!= '' && $aRow['patient_age_in_years'] >0)?$aRow['patient_age_in_years']:0;
   $row[] = $gender;

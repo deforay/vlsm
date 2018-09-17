@@ -273,13 +273,13 @@ $disable = "disabled = 'disabled'";
                         <label for="patientFname">First Name </label>
                         </td>
                         <td>
-                          <input type="text" class="form-control" name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" >
+                          <input type="text" class="form-control" name="patientFname" id="patientFname" <?php echo $disable; ?> placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $patientFirstName;?>" >
                         </td>
                         <td>
                         <label for="surName">Last Name </label>
                         </td>
                         <td>
-                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Last Name" <?php echo $disable; ?> title="Enter Last Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_last_name'];?>" >
+                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Last Name" <?php echo $disable; ?> title="Enter Last Name"  style="width:100%;" value="<?php echo $patientLastName;?>" >
                         </td>
                         <td colspan="2">
                         <label for="gender">Gender &nbsp;&nbsp;</label>

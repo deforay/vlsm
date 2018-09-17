@@ -207,7 +207,7 @@ $disable = "disabled = 'disabled'";
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="patientFirstName">Patient Name </label>
-                            <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter Patient Name" title="Enter patient name" <?php echo $disable;?> value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>"/>
+                            <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter Patient Name" title="Enter patient name" <?php echo $disable;?> value="<?php echo $patientFirstName;?>"/>
                           </div>
                       </div>  
                       <div class="col-xs-3 col-md-3">
