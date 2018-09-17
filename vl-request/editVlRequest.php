@@ -171,6 +171,16 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
 }else{
  $vlQueryInfo[0]['result_reviewed_datetime']='';
 }
+if($vlQueryInfo[0]['remote_sample']=='yes'){
+  $sampleCode = $vlQueryInfo[0]['remote_sample_code'];
+}else{
+  $sampleCode = $vlQueryInfo[0]['sample_code'];
+}
+if($vlQueryInfo[0]['patient_first_name']!=''){
+  $patientFirstName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_first_name'],$sampleCode);
+}else{
+  $patientFirstName = '';
+}
 ?>
 <style>
   .ui_tpicker_second_label {display: none !important; }

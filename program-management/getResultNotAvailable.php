@@ -189,19 +189,30 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
         );
 
         foreach ($rResult as $aRow) {
-					if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
-						$xplodDate = explode(" ",$aRow['sample_collection_date']);
-						$aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
-					}else{
-						$aRow['sample_collection_date'] = '';
-					}
+            if(isset($aRow['sample_collection_date']) && trim($aRow['sample_collection_date'])!= '' && $aRow['sample_collection_date']!= '0000-00-00 00:00:00'){
+                $xplodDate = explode(" ",$aRow['sample_collection_date']);
+                $aRow['sample_collection_date'] = $general->humanDateFormat($xplodDate[0]);
+            }else{
+                $aRow['sample_collection_date'] = '';
+            }
+            if($aRow['remote_sample']=='yes'){
+                $decrypt = 'remote_sample_code';
+                $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
+                $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
+                $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
+            }else{
+                $decrypt = 'sample_code';
+                $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
+                $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
+                $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
+            }
             $row = array();
-						$row[] = ucwords($aRow['facility_name']);
-                        $row[] = $aRow['patient_art_no'];
-                        $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
-						$row[] = $aRow['sample_collection_date'];
+            $row[] = ucwords($aRow['facility_name']);
+            $row[] = $aRow['patient_art_no'];
+            $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
+            $row[] = $aRow['sample_collection_date'];
             $row[] = ucwords($aRow['labName']);
-						$output['aaData'][] = $row;
+			$output['aaData'][] = $row;
         }
         echo json_encode($output);
 ?>

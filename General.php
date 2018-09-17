@@ -192,5 +192,29 @@ class General {
             }
         }
     }
+
+    function crypto($action, $inputString, $secretIv) {
+ 
+        if (empty($inputString)) return "";
+     
+        $output = false;
+        $encrypt_method = "AES-256-CBC";
+        $secret_key = 'rXBCNkAzkHXGBKEReqrTfPhGDqhzxgDRQ7Q0XqN6BVvuJjh1OBVvuHXGBKEReqrTfPhGDqhzxgDJjh1OB4QcIGAGaml';
+       
+        // hash
+        $key = hash('sha256', $secret_key);
+       
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+        $iv = substr(hash('sha256', $secretIv), 0, 16);
+     
+        if ( $action == 'encrypt' ) {
+            $output = openssl_encrypt($inputString, $encrypt_method, $key, 0, $iv);
+            $output = base64_encode($output);
+        } else if( $action == 'decrypt' ) {
+            $output = openssl_decrypt(base64_decode($inputString), $encrypt_method, $key, 0, $iv);
+        }
+        return $output;
+    }
+
 }
 

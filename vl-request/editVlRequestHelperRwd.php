@@ -235,7 +235,7 @@ try {
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
-          'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='') ? $_POST['patientFirstName'] :  NULL,
+          //'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='') ? $_POST['patientFirstName'] :  NULL,
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='') ? $_POST['gender'] :  NULL,
           'patient_dob'=>$_POST['dob'],
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='') ? $_POST['ageInYears'] :  NULL,
@@ -283,6 +283,7 @@ try {
           'manual_result_entry'=>'yes',
           'data_sync'=>0
         );
+        
        if($sarr['user_type']=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
         }else {
@@ -325,6 +326,11 @@ try {
                     $vldata['sample_code_key'] =  $maxId;
                 }
             }
+        }
+        if($_POST['sampleComingFrom']=='yes'){
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['remote_sample_code']);
+        }else{
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['sample_code']);
         }
         
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);

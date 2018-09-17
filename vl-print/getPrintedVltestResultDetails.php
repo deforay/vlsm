@@ -349,15 +349,27 @@ $primaryKey="vl_sample_id";
 				     //$row[] = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"><i class="fa fa-pencil-square-o"></i> Enter Result</a>
 				     //         <a href="javascript:void(0);" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="View" onclick="convertSearchResultToPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> Result PDF</i></a>';
 	     $print = '<a href="updateVlTestResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
-	    }
+			}
+			if($aRow['remote_sample']=='yes'){
+				$decrypt = 'remote_sample_code';
+				$patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
+				$patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
+				$patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
+			}else{
+				$decrypt = 'sample_code';
+				$patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
+				$patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
+				$patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
+			}
+
             $row[] = $aRow['sample_code'];
 	    if($sarr['user_type']!='standalone'){
 	      $row[] = $aRow['remote_sample_code'];
 	    }
             $row[] = $aRow['batch_code'];
             $row[] = $aRow['patient_art_no'];
-            $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
-	    $row[] = ucwords($aRow['facility_name']);
+            $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
+	    			$row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['sample_name']);
             $row[] = $aRow['result'];
 	    if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
