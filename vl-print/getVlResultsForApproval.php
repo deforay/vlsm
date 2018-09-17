@@ -247,7 +247,17 @@ $primaryKey="vl_sample_id";
 	    }else{
 		    $aRow['sample_collection_date'] = '';
 	    }
-	  
+		if($aRow['remote_sample']=='yes'){
+			$decrypt = 'remote_sample_code';
+			$patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
+			$patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
+			$patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
+		}else{
+			$decrypt = 'sample_code';
+			$patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
+			$patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
+			$patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
+		}
 	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['vl_sample_id'].'" title="Please select status" onchange="updateStatus(this)">
  				<option value="">-- Select --</option>
 				<option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
@@ -264,7 +274,7 @@ $primaryKey="vl_sample_id";
 			$row[] = $aRow['sample_collection_date'];
 			$row[] = $aRow['batch_code'];
 			$row[] = $aRow['patient_art_no'];
-			$row[] = ucwords($aRow['patient_first_name']." ".$aRow['patient_last_name']);
+			$row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
 			$row[] = ucwords($aRow['facility_name']);
 			$row[] = ucwords($aRow['sample_name']);
 			$row[] = $aRow['result'];
