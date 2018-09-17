@@ -141,7 +141,7 @@ $districtResult=$db->query($districtQuery);
                           </div>
                       </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-xs-3 col-md-3">
                           <div class="form-group">
@@ -318,7 +318,7 @@ $districtResult=$db->query($districtQuery);
                     <small>(Please tick one):(To be completed by clinician)</small>
                 </div>
                 <div class="box-body">
-                    <div class="row">                
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-lg-12">
@@ -337,7 +337,7 @@ $districtResult=$db->query($districtQuery);
                                     ?>
                                     <input type="radio" class="" id="RmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" <?php echo $checked;?> onclick="showTesting('RmTesting');">
                                     <strong>Routine Monitoring</strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -355,9 +355,9 @@ $districtResult=$db->query($districtQuery);
                             <input type="text" class="form-control viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlQueryInfo[0]['last_vl_result_routine']; ?>"/>
                             (copies/ml)
                         </div>
-                      </div>                 
+                      </div>
                     </div>
-                    <div class="row">                
+                    <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="col-lg-12">
@@ -376,7 +376,7 @@ $districtResult=$db->query($districtQuery);
                                     ?>
                                     <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" <?php echo $checked;?> onclick="showTesting('RepeatTesting');">
                                     <strong>Repeat VL test after detectable viraemia and six months of adherence counselling </strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -394,9 +394,9 @@ $districtResult=$db->query($districtQuery);
                             <input type="text" class="form-control viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlQueryInfo[0]['last_vl_result_failure_ac']; ?>" />
                             (copies/ml)
                             </div>
-                      </div>                 
+                      </div>
                     </div>
-                    <div class="row">                
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-lg-12">
@@ -415,7 +415,7 @@ $districtResult=$db->query($districtQuery);
                                     ?>
                                     <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
                                     <strong>Suspect Treatment Failure</strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -433,7 +433,7 @@ $districtResult=$db->query($districtQuery);
                              <input type="text" class="form-control viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" value="<?php echo $vlQueryInfo[0]['last_vl_result_failure']; ?>" />
                              (copies/ml)
                              </div>
-                       </div>                 
+                       </div>
                     </div>
                 </div>
                 <div class="row">
@@ -548,10 +548,10 @@ $districtResult=$db->query($districtQuery);
     __clone = $("#vlRequestForm .labSection").clone();
     reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
     result = ($("#vlResult").length)?$("#vlResult").val():'';
-    
-    
+
+
     hideReasonfield();
-    
+
   });
   function validateNow(){
     var format = '<?php echo $arr['sample_code'];?>';
@@ -676,5 +676,5 @@ $districtResult=$db->query($districtQuery);
         $(".failureReason").hide();
       }
     }
-  
+
 </script>

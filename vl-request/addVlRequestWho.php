@@ -38,14 +38,14 @@ $province = '';
 $province.="<option value=''> -- Select -- </option>";
             foreach($pdResult as $provinceName){
               $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
-            } 
+            }
 $facility = '';
 $facility.="<option data-code='' value=''> -- Select -- </option>";
 $aQuery="SELECT * from r_art_code_details where nation_identifier='who'";
 $aResult=$db->query($aQuery);
 
   $end_date = date('Y-12-31');
-  $start_date = date('Y-01-01');  
+  $start_date = date('Y-01-01');
 //$svlQuery='select MAX(sample_code_key) FROM vl_request_form as vl where vl.vlsm_country_id="1" AND vl.sample_code_title="'.$arr['sample_code'].'" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $svlQuery='SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'" AND '.$sampleCode.'!="" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
 
@@ -303,14 +303,14 @@ $sKey = '';$sFormat = '';
                     <small>(Please tick one):(To be completed by clinician)</small>
                 </div>
                 <div class="box-body">
-                    <div class="row">                
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
                                     <input type="radio" class="" id="RmTesting" name="stViralTesting" value="routine" title="Please check routine monitoring" onclick="showTesting('RmTesting');">
                                     <strong>Routine Monitoring</strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -328,16 +328,16 @@ $sKey = '';$sFormat = '';
                             <input type="text" class="form-control viralTestData" id="rmTestingVlValue" name="rmTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
                             (copies/ml)
                         </div>
-                      </div>                 
+                      </div>
                     </div>
-                    <div class="row">                
+                    <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
                                     <input type="radio" class="" id="RepeatTesting" name="stViralTesting" value="failure" title="Repeat VL test after suspected treatment failure adherence counseling" onclick="showTesting('RepeatTesting');">
                                     <strong>Repeat VL test after detectable viraemia and six months of adherence counselling </strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -355,16 +355,16 @@ $sKey = '';$sFormat = '';
                             <input type="text" class="form-control viralTestData" id="repeatTestingVlValue" name="repeatTestingVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
                             (copies/ml)
                             </div>
-                      </div>                 
+                      </div>
                     </div>
-                    <div class="row">                
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
                                     <input type="radio" class="" id="suspendTreatment" name="stViralTesting" value="suspect" title="Suspect Treatment Failure" onclick="showTesting('suspendTreatment');">
                                     <strong>Suspect Treatment Failure</strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -382,7 +382,7 @@ $sKey = '';$sFormat = '';
                              <input type="text" class="form-control viralTestData" id="suspendTreatmentVlValue" name="suspendTreatmentVlValue" placeholder="Enter VL Value" title="Please enter vl value" />
                              (copies/ml)
                              </div>
-                       </div>                 
+                       </div>
                     </div>
                 </div>
                 <div class="row">
@@ -535,7 +535,7 @@ $sKey = '';$sFormat = '';
         formId: 'vlRequestForm'
     });
     $('.isRequired').each(function () {
-      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF') 
+      ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
     });
     $("#saveNext").val('next');
     if(flag){
@@ -605,7 +605,7 @@ $sKey = '';$sFormat = '';
     if(dName!=''){
       $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
-        if(data != ""){ 
+        if(data != ""){
           details = data.split("###");
           $("#fName").html(details[0]);
           $("#labId").html(details[1]);

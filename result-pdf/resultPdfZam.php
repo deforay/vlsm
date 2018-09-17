@@ -262,8 +262,24 @@ if(sizeof($requestResult)> 0){
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">MOBILE NO.</td>';
               $html .='</tr>';
               $html .='<tr>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']).'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_last_name']).'</td>';
+
+              if($result['remote_sample']=='yes'){
+                   $patientFname = ucwords($general->crypto('decrypt',$result['patient_first_name'],$result['remote_sample_code']));
+                   $patientLname = ucwords($general->crypto('decrypt',$result['patient_last_name'],$result['remote_sample_code']));
+
+
+              }else{
+                   $patientFname = ucwords($general->crypto('decrypt',$result['patient_first_name'],$result['sample_code']));
+                   $patientLname = ucwords($general->crypto('decrypt',$result['patient_last_name'],$result['sample_code']));
+
+              }
+
+              $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$patientFname.'</td>';
+              $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$patientLname.'</td>';
+
+
+                // $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']).'</td>';
+                // $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_last_name']).'</td>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
               $html .='</tr>';
               $html .='<tr>';
