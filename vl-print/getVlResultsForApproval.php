@@ -249,15 +249,12 @@ $primaryKey="vl_sample_id";
 	    }
 		if($aRow['remote_sample']=='yes'){
 			$decrypt = 'remote_sample_code';
-			$patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
-			$patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
-			$patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
 		}else{
 			$decrypt = 'sample_code';
-			$patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
-			$patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
-			$patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
 		}
+		$patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
+		$patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
+		$patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
 	    $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['vl_sample_id'].'" title="Please select status" onchange="updateStatus(this)">
  				<option value="">-- Select --</option>
 				<option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
