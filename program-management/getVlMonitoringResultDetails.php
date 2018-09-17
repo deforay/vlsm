@@ -250,15 +250,13 @@ $primaryKey="vl_sample_id";
         foreach ($rResult as $aRow) {
             if($aRow['remote_sample']=='yes'){
                 $decrypt = 'remote_sample_code';
-                $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
-                $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
-                $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
             }else{
                 $decrypt = 'sample_code';
-                $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]));
-                $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]));
-                $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]));
             }
+            
+            $patientFname = $general->crypto('decrypt',$aRow['patient_first_name'],$aRow[$decrypt]);
+            $patientMname = $general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]);
+            $patientLname = $general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]);
 
             $row = array();
             $row[] = $aRow['sample_code'];
