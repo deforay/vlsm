@@ -51,9 +51,10 @@ try {
         $skipTillRow = 23;
         
         $sampleIdCol   = 1;
+        $sampleTypeCol = 2;
         $resultCol     = 5;
         $txtValCol     = 6;
-        $sampleTypeCol = 2;
+        
         $batchCodeVal  = "";
         $flagCol       = 10;
         $testDateCol   = 11;
@@ -69,12 +70,10 @@ try {
                   $infoFromFile = array();
                   $testDateRow = "";
                   $skip = 23;
-                  ini_set("auto_detect_line_endings", "1"); 
+                  
                    $row = 1;
                    if (($handle = fopen(dirname(__FILE__) . "/../temporary". DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== FALSE) {
-                       
                        while (($sheetData = fgetcsv($handle, 1000, "\t")) !== FALSE) {
-                        
                          $num = count($sheetData);
                          $row++;
                          if($row < $skip) continue;
@@ -101,11 +100,18 @@ try {
                         $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                         $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
                         
-                        if(strpos($sheetData[$resultCol], 'Log (Copies / mL)') !== false){
-                             $logVal = str_replace("Log (Copies / mL)", "", $sheetData[$resultCol]);
+                        if(strpos($sheetData[$resultCol], 'Copies / mL') !== false){
+                            $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
+                            $absVal = str_replace(",", "", $sheetData[$resultCol]);
+                            preg_match_all('!\d+!', $absVal, $absDecimalVal);
+                            $absVal=$absDecimalVal = implode("",$absDecimalVal[0]);
+                        }
+                        else if(strpos($sheetData[$resultCol], 'Log (IU/mL)') !== false){
+                             $logVal = str_replace("Log (IU/mL)", "", $sheetData[$resultCol]);
                              $logVal = str_replace(",", ".", $logVal);
-                        }else if(strpos($sheetData[$resultCol], 'Copies / mL') !== false){
-                             $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
+                        }
+                        else if(strpos($sheetData[$resultCol], 'IU/mL') !== false){
+                             $absVal = str_replace("IU/mL", "", $sheetData[$resultCol]);
                              $absVal = str_replace(" ", "", $sheetData[$resultCol]);
                              preg_match_all('!\d+!', $absVal, $absDecimalVal);
                              $absVal=$absDecimalVal = implode("",$absDecimalVal[0]);
@@ -132,14 +138,17 @@ try {
                         $lotNumberVal = $sheetData[$lotNumberCol];
                         if(trim($sheetData[$lotExpirationDateCol]) !=''){
                             //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                            $sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
+                            //$sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
                             $lotExpirationDateVal = date('Y-m-d', strtotime($sheetData[$lotExpirationDateCol]));
                         }
                       
                         if($sampleCode == ""){
                            $sampleCode = $sampleType.$m;
                         }
-                         
+                            
+                            
+
+            
                         if (!isset($infoFromFile[$sampleCode])) {
                             $infoFromFile[$sampleCode] = array(
                                 "sampleCode" => $sampleCode,
@@ -166,8 +175,8 @@ try {
                    }
         }
         
-        //echo "<pre>";
-        //var_dump($infoFromFile);die;
+        
+        
         $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
             if($d['sampleCode']==$d['sampleType'].$inc){
@@ -253,7 +262,7 @@ try {
             $inc++;
         }
     }
-//die;
+
     $_SESSION['alertMsg'] = "Results imported successfully";
     //Add event log
     $eventType            = 'import';
