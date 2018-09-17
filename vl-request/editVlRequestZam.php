@@ -180,13 +180,13 @@ $efResult = $db->rawQuery($efQuery);
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                           <label for="surName">Surname </label>
-                            <input type="text" class="form-control" style="width:100%;" name="surName" id="surName" placeholder="Patient Surname" title="Please enter patient surname" value="<?php echo $vlQueryInfo[0]['patient_last_name']; ?>">
+                            <input type="text" class="form-control" style="width:100%;" name="surName" id="surName" placeholder="Patient Surname" title="Please enter patient surname" value="<?php echo $patientLastName; ?>">
                           </div>
                         </div>
                         <div class="col-xs-4 col-md-4">
                           <div class="form-group">
                           <label for="patientFname">First Name </label>
-                            <input type="text" class="form-control" style="width:100%;" name="patientFname" id="patientFname" placeholder="Patient First Name" title="Please enter patient first name" value="<?php echo $vlQueryInfo[0]['patient_first_name']; ?>">
+                            <input type="text" class="form-control" style="width:100%;" name="patientFname" id="patientFname" placeholder="Patient First Name" title="Please enter patient first name" value="<?php echo $patientFirstName; ?>">
                           </div>
                         </div>
                         <div class="col-xs-4 col-md-4">
@@ -540,6 +540,7 @@ $efResult = $db->rawQuery($efQuery);
                 </div>
                 <div class="box-footer">
                   <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
+                  <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample'];?>"/>
                   <input type="hidden" name="oldStatus" value="<?php echo $vlQueryInfo[0]['result_status']; ?>"/>
                   <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
                   <a href="vlRequest.php" class="btn btn-default"> Cancel</a>

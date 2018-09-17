@@ -8,6 +8,15 @@ $tableName="vl_request_form";
 $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 try {
+     //system config
+     $systemConfigQuery ="SELECT * from system_config";
+     $systemConfigResult=$db->query($systemConfigQuery);
+     $sarr = array();
+     // now we create an associative array so that we can easily create view variables
+     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+       $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+     }
+     
     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
         $_POST['dob'] = $general->dateFormat($_POST['dob']);  
     }else{
@@ -123,8 +132,8 @@ try {
         'patient_art_no'=>(isset($_POST['patientARTNo']) && trim($_POST['patientARTNo'])!='') ? $_POST['patientARTNo'] :  NULL,
         'request_clinician_name'=>(isset($_POST['officerName']) && $_POST['officerName']!='' ? $_POST['officerName'] :  NULL),
         'lab_phone_number'=>(isset($_POST['telephone']) && $_POST['telephone']!='' ? $_POST['telephone'] :  NULL),
-        'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
-        'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
+        //'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
+        //'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
         'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
         'patient_dob'=>$_POST['dob'],
         'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='') ? $_POST['ageInYears'] :  NULL,
@@ -179,6 +188,14 @@ try {
         'last_modified_datetime'=>$general->getDateTime(),
         'manual_result_entry'=>'yes'
         );
+        if($sarr['user_type']=='remoteuser'){
+            $vldata['remote_sample'] = 'yes';
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
+            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
+        }else{
+            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
+            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
+        }
     $id=$db->insert($tableName,$vldata);
     //echo $id;die;
         if($id>0){

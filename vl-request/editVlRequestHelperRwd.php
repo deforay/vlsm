@@ -327,7 +327,7 @@ try {
                 }
             }
         }
-        if($_POST['sampleComingFrom']=='yes'){
+        if($_POST['isRemoteSample']=='yes'){
             $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['remote_sample_code']);
         }else{
             $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['sample_code']);

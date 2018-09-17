@@ -91,9 +91,29 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
     $expStr = explode(" ",$aRow['sample_tested_datetime']);
     $sampleTestDate =  date("d-m-Y", strtotime($expStr[0]));
    }
+   if($aRow['remote_sample']=='yes'){
+    $sampleId = $aRow['remote_sample_code'];
+  }else{
+    $sampleId = $aRow['sample_code'];
+  }
+   if($aRow['patient_first_name']!=''){
+    $patientFirstName = $general->crypto('decrypt',$aRow['patient_first_name'],$sampleId);
+  }else{
+    $patientFirstName = '';
+  }
+  if($aRow['patient_middle_name']!=''){
+    $patientMiddleName = " ".$general->crypto('decrypt',$aRow['patient_middle_name'],$sampleId);
+  }else{
+    $patientMiddleName = '';
+  }
+  if($aRow['patient_last_name']!=''){
+    $patientLastName = " ".$general->crypto('decrypt',$aRow['patient_last_name'],$sampleId);
+  }else{
+    $patientLastName = '';
+  }
   
     $row[] = ucwords($aRow['facility_name']);
-    $row[] = ucwords($aRow['patient_first_name']).' '.ucwords($aRow['patient_last_name']);
+    $row[] = ucwords($patientFirstName).ucwords($patientMiddleName).ucwords($patientLastName);
     $row[] = $aRow['patient_art_no'];
     $row[] = $aRow['patient_mobile_number'];
     $row[] = $sampleCollectionDate;

@@ -271,13 +271,13 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                         <label for="patientFname">First Name  </label>
                         </td>
                         <td>
-                          <input type="text" class="form-control " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_first_name'];?>" >
+                          <input type="text" class="form-control " name="patientFname" id="patientFname" placeholder="First Name" title="Enter First Name"  style="width:100%;" value="<?php echo $patientFirstName;?>" >
                         </td>
                         <td>
                         <label for="surName">Last Name </label>
                         </td>
                         <td>
-                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Last Name" title="Enter Last Name"  style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_last_name'];?>" >
+                          <input type="text" class="form-control" name="surName" id="surName" placeholder="Last Name" title="Enter Last Name"  style="width:100%;" value="<?php echo $patientLastName;?>" >
                         </td>
                         <td colspan="2">
                         <label for="gender">Gender &nbsp;&nbsp;</label>
@@ -663,6 +663,7 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
+              <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample'];?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
