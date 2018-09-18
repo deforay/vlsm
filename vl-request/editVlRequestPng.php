@@ -187,8 +187,16 @@ if(isset($vlQueryInfo[0]['clinic_date']) && trim($vlQueryInfo[0]['clinic_date'])
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
-                          <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control sampleCode isRequired " id="sampleCode" name="sampleCode" placeholder="Enter Laboratory ID" title="Please enter laboratory ID" style="width:100%;"  value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" onblur="checkNameValidation('vl_request_form','<?php echo $sampleCode;?>',this,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"]; ?>','The Laboratory ID that you entered already exists. Please try another ID',null)"/>
+                        <?php if($sarr['user_type']=='remoteuser'){ ?>
+                            <label for="sampleCode">Laboratory ID </label><br>
+                            <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></span>
+                            <input type="hidden" class="" id="sampleCode" name="sampleCode" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>"/>
+                          <?php } else { ?>
+                            <label for="sampleCode">Laboratory ID <span class="mandatory">*</span></label>
+                            <input type="text" class="form-control isRequired " id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" readonly="readonly" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
+                            <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                          <?php } ?>
+
                         </div>
                       </div>
                     </div>

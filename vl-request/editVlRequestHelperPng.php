@@ -8,6 +8,29 @@ $tableName="vl_request_form";
 $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 try {
+    $validateField = array($_POST['sampleCode'],$_POST['collectionDate']);
+    $chkValidation = $general->checkMandatoryField($validateField);
+    if($chkValidation){
+        $_SESSION['alertMsg']="Please enter all mandatory fields to save the test request";
+        header("location:editVlRequest.php?id=".base64_encode($_POST['vlSampleId']));
+        die;
+    }
+    $configQuery="SELECT * from global_config";
+    $configResult=$db->query($configQuery);
+    $arr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($configResult); $i++) {
+      $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+    }
+    //system config
+    $systemConfigQuery ="SELECT * from system_config";
+    $systemConfigResult=$db->query($systemConfigQuery);
+    $sarr = array();
+    // now we create an associative array so that we can easily create view variables
+    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+    }
+
     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
         $_POST['dob']=$general->dateFormat($_POST['dob']);  
     }else{
@@ -108,8 +131,8 @@ try {
     }
 
     $vldata=array(
-        'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-        'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
+        //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
+        //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
         'facility_id'=>(isset($_POST['clinicName']) && trim($_POST['clinicName'])!='') ? $_POST['clinicName'] :  NULL,
         //'ward'=>(isset($_POST['wardData']) && $_POST['wardData']!='' ? $_POST['wardData'] :  NULL),
         'patient_art_no'=>(isset($_POST['patientARTNo']) && trim($_POST['patientARTNo'])!='') ? $_POST['patientARTNo'] :  NULL,
@@ -158,7 +181,7 @@ try {
         //'last_viral_load_result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
         'vl_test_platform'=>(isset($_POST['testingTech']) && trim($_POST['testingTech'])!='') ? $_POST['testingTech'] :  NULL,
         'cphl_vl_result'=>(isset($_POST['cphlvlResult']) && $_POST['cphlvlResult']!='' ? $_POST['cphlvlResult'] :  NULL),
-        'result'=>(isset($_POST['vlResult']) && trim($_POST['vlResult'])!='') ? $_POST['vlResult'] :  NULL,
+        'result'=>(isset($_POST['finalViralResult']) && trim($_POST['finalViralResult'])!='') ? $_POST['finalViralResult'] :  NULL,
         'qc_tech_name'=>(isset($_POST['qcTechName']) && $_POST['qcTechName']!='' ? $_POST['qcTechName'] :  NULL),
         'qc_tech_sign'=>(isset($_POST['qcTechSign']) && $_POST['qcTechSign']!='' ? $_POST['qcTechSign'] :  NULL),
         'qc_date'=>$_POST['qcDate'],
@@ -166,6 +189,49 @@ try {
         'report_date'=>$_POST['reportDate'],
         'last_modified_datetime'=>$general->getDateTime(),
         );
+        if($sarr['user_type']=='remoteuser'){
+            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        }else {
+            if($_POST['sampleCodeCol']!=''){
+                $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+                $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+            }else{
+                //update sample code generation
+                $sExpDT = explode(" ",$_POST['sampleCollectionDate']);
+                $sExpDate = explode("-",$sExpDT[0]);
+                $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
+                $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
+                $mnthYr = substr($sExpDate[0],-2);
+                if($arr['sample_code']=='MMYY'){
+                    $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
+                }else if($arr['sample_code']=='YY'){
+                    $mnthYr = substr($sExpDate[0],-2);
+                }
+                $auto = substr($sExpDate[0],-2).$sExpDate[1].$sExpDate[2];
+
+                $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND sample_code!="" ORDER BY sample_code_key DESC LIMIT 1';
+                $svlResult=$db->query($svlQuery);
+                $prefix = $arr['sample_code_prefix'];
+                if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
+                $maxId = $svlResult[0]['sample_code_key']+1;
+                $strparam = strlen($maxId);
+                $zeros = substr("000", $strparam);
+                $maxId = $zeros.$maxId;
+                }else{
+                $maxId = '001';
+                }
+                if($arr['sample_code']=='auto'){
+                    $vldata['serial_no'] = $auto.$maxId;
+                    $vldata['sample_code'] = $auto.$maxId;
+                    $vldata['sample_code_key'] = $maxId;
+                }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+                    $vldata['serial_no'] = $prefix.$mnthYr.$maxId;
+                    $vldata['sample_code'] = $prefix.$mnthYr.$maxId;
+                    $vldata['sample_code_format'] = $prefix.$mnthYr;
+                    $vldata['sample_code_key'] =  $maxId;
+                }
+            }
+        }
         if($_POST['isRemoteSample']=='yes'){
             $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
             $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
@@ -177,9 +243,9 @@ try {
     $id=$db->update($tableName,$vldata);
     $_SESSION['alertMsg']="VL request updated successfully";
     //Add event log
-    $eventType = 'update-vl-request-zam';
+    $eventType = 'update-vl-request-png';
     $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
-    $resource = 'vl-request-zam';
+    $resource = 'vl-request-png';
     $data=array(
     'event_type'=>$eventType,
     'action'=>$action,

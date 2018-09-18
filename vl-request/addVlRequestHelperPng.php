@@ -120,10 +120,10 @@ try {
         $instanceId = $_SESSION['instanceId'];
     }
     $vldata=array(
-        'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-        'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='')? $_POST['sampleCode'] :  NULL,
+        //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
+        //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='')? $_POST['sampleCode'] :  NULL,
         //'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='')? $_POST['sampleCodeFormat'] :  NULL,
-        'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='')? $_POST['sampleCodeKey'] :  NULL,
+        //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='')? $_POST['sampleCodeKey'] :  NULL,
         'vlsm_instance_id'=>$instanceId,
         'vlsm_country_id'=>'5',
         'facility_id'=>(isset($_POST['clinicName']) && trim($_POST['clinicName'])!='') ? $_POST['clinicName'] :  NULL,
@@ -175,7 +175,7 @@ try {
         //'last_viral_load_result'=>(isset($_POST['vlResult']) && $_POST['vlResult']!='' ? $_POST['vlResult'] :  NULL),
         'vl_test_platform'=>(isset($_POST['testingTech']) && $_POST['testingTech']!='') ? $_POST['testingTech'] :  NULL,
         'cphl_vl_result'=>(isset($_POST['cphlvlResult']) && $_POST['cphlvlResult']!='' ? $_POST['cphlvlResult'] :  NULL),
-        'result'=>(isset($_POST['vlResult']) && trim($_POST['vlResult'])!='') ? $_POST['vlResult'] :  NULL,
+        'result'=>(isset($_POST['finalViralResult']) && trim($_POST['finalViralResult'])!='') ? $_POST['finalViralResult'] :  NULL,
         'qc_tech_name'=>(isset($_POST['qcTechName']) && $_POST['qcTechName']!='' ? $_POST['qcTechName'] :  NULL),
         'qc_tech_sign'=>(isset($_POST['qcTechSign']) && $_POST['qcTechSign']!='' ? $_POST['qcTechSign'] :  NULL),
         'qc_date'=>$_POST['qcDate'],
@@ -189,10 +189,15 @@ try {
         'manual_result_entry'=>'yes'
         );
         if($sarr['user_type']=='remoteuser'){
+            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
             $vldata['remote_sample'] = 'yes';
             $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
             $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
         }else{
+            $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+            $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
             $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
             $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
         }
