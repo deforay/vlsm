@@ -283,7 +283,7 @@ try {
                   //'sample_code'=>$_POST['sampleCode'],
                   //'lab_code'=>$_POST['labNo'],
                   'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
-                  'serial_no'=>$_POST['sampleCode'],
+                  //'serial_no'=>$_POST['sampleCode'],
                   'sample_tested_datetime'=>$_POST['dateOfCompletionOfViralLoad'],
                   'vl_test_platform'=>$testingPlatform,
                   'result_value_log'=>(isset($_POST['vlLog']))?$_POST['vlLog']:NULL,
