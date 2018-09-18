@@ -225,7 +225,6 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 	  noOfSamples = <?php echo intval($batchInfo[0]['max_no_of_samples_in_a_batch']); ?>;
 	<?php }
 	?>
-	//console.log(noOfSamples);
 	$("#facilityName").select2({placeholder:"Select Facilities"});
         $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -247,10 +246,12 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 	      endDate = end.format('YYYY-MM-DD');
 	});
 	$('#sampleCollectionDate').val("");
-	
+	var unSelectedLength = $('.search > option').length - $(".search :selected").length;
 	$('.search').multiSelect({
 	    selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
 	    selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Enter Sample Code'>",
+			selectableFooter: "<div style='background-color: #367FA9;color: white;padding:5px;text-align: center;' class='custom-header' id='unselectableCount'>Unselectable samples("+unSelectedLength+")</div>",
+      selectionFooter: "<div style='background-color: #367FA9;color: white;padding:5px;text-align: center;' class='custom-header' id='selectableCount'>Selectable samples("+$(".search :selected").length+")</div>",
 	    afterInit: function(ms){
 	      var that = this,
 		  $selectableSearch = that.$selectableUl.prev(),
@@ -290,6 +291,8 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 		}
 		 this.qs1.cache();
 		 this.qs2.cache();
+		 $("#unselectableCount").html("Unselectable samples("+this.qs1.cache().matchedResultsCount+")");
+        $("#selectableCount").html("Selectable samples("+this.qs2.cache().matchedResultsCount+")");
 	  },
 	  afterDeselect: function(){
 	    //button disabled/enabled
@@ -309,6 +312,8 @@ $importConfigResult = $db->rawQuery($importConfigQuery);
 	     }
 	     this.qs1.cache();
 	     this.qs2.cache();
+			 $("#unselectableCount").html("Unselectable samples("+this.qs1.cache().matchedResultsCount+")");
+        $("#selectableCount").html("Selectable samples("+this.qs2.cache().matchedResultsCount+")");
 	  }
        });
 	$('#select-all-samplecode').click(function(){
