@@ -252,7 +252,7 @@
     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$vl['facility_emails'].'</td>';
   $html .='</tr>';
   $html.='</table>';
-  
+
   $html.='<table style="padding:0px 2px 2px 2px;">';
   $html .='<tr>';
    $html .='<th colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;"><h3>Laboratory Information</h3><hr/></th>';
@@ -287,7 +287,7 @@
     if($vl['is_sample_rejected'] == 'yes'){
       $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Rejection Reason</td>';
     }else{
-      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Result (copiesl/ml)</td>'; 
+      $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Result (copiesl/ml)</td>';
       $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Viral Load Log </td>';
     }
   $html .='</tr>';
