@@ -1,4 +1,4 @@
-    <?php
+<?php
     ob_start();
     //Funding source list
     $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
@@ -47,7 +47,50 @@
     //get ART list
     $aQuery="SELECT * from r_art_code_details"; // where nation_identifier='drc'";
     $aResult=$db->query($aQuery);
-    ?>
+
+
+    //suggest sample id when lab user add request sample
+    $sampleSuggestion = '';
+    $sampleSuggestionDisplay = 'display:none;';
+
+
+    if($sarr['user_type']=='vluser' && $sCode!=''){
+
+         $sExpDT = explode(" ",$sampleCollectionDate);
+         $sExpDate = explode("-",$sExpDT[0]);
+         $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
+         $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
+         $mnthYr = substr($sExpDate[0],-2);
+         if($arr['sample_code']=='MMYY'){
+              $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
+         }else if($arr['sample_code']=='YY'){
+              $mnthYr = substr($sExpDate[0],-2);
+         }
+
+         $auto = substr($sExpDate[0],-2).$sExpDate[1].$sExpDate[2];
+         //Getting a sample code
+         $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE
+         DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND sample_code!="" ORDER BY sample_code_key DESC LIMIT 1';
+         $svlResult=$db->query($svlQuery);
+         //Getting arraty sample code value
+         $prefix = $arr['sample_code_prefix']; //generate VL txt
+         if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
+              $maxId = $svlResult[0]['sample_code_key']+1; //Increment one value
+              $strparam = strlen($maxId);
+              $zeros = substr("000", $strparam);
+              $maxId = $zeros.$maxId;
+         }else{
+              $maxId = '001';
+         }
+         if($arr['sample_code']=='auto'){
+              $sampleSuggestion = $auto.$maxId;
+         }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
+              $sampleSuggestion = $prefix.$mnthYr.$maxId; //getting result
+         }
+         $sampleSuggestionDisplay = 'display:block;';
+    }
+
+?>
     <style>
       .translate-content{
         color:#0000FF;
@@ -96,8 +139,14 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
+                        <div class="" style="<?php echo $sampleSuggestionDisplay;?>">
+                            <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Suggérer un ID d'échantillon - </label>
+                            <?php echo $sampleSuggestion; ?>
+                       </div>
                         <!--<h4 id="sampleCodeValue">exemple de code:< ?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>-->
                         <table class="table" style="width:100%">
+
+
                             <tr>
                               <?php if($sarr['user_type']=='remoteuser') { ?>
                                 <td><label for="sampleCode">Échantillon id </label></td>
@@ -326,7 +375,7 @@
                                         <input type="radio" class="" id="breastfeedingNo" name="breastfeeding" <?php echo(trim($vlQueryInfo[0]['is_patient_breastfeeding']) == "no")?'checked="checked"':''; ?> value="no">
                                     </label>
                                 </td>
-                                <td colspan="5"><label for="patientPregnant">Ou enceinte ? </label> 
+                                <td colspan="5"><label for="patientPregnant">Ou enceinte ? </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
                                     <label class="radio-inline" style="width:4%;padding-bottom:22px;margin-left:0;">
                                         <input type="radio" class="" id="pregYes" name="patientPregnant" <?php echo(trim($vlQueryInfo[0]['is_patient_pregnant']) == "yes")?'checked="checked"':''; ?> value="yes" title="Please check Si Ou enceinte ">
@@ -564,12 +613,12 @@
         $("#rejectionReason").removeClass('isRequired');
         $("#vlResult").css('pointer-events','auto');
         $("#vlLog").css('pointer-events','auto');
-       
+
         $(".vlResult, .vlLog").show();
         //$("#vlResult").addClass('isRequired');
       }
      });
-     
+
     function getfacilityDetails(obj){
       $.blockUI();
       var pName = $("#province").val();
@@ -603,7 +652,7 @@
       }
       $.unblockUI();
     }
-    
+
     $("input:radio[name=hasChangedRegimen]").click(function() {
       if($(this).val() == 'yes'){
          $(".arvChangedElement").show();
@@ -611,7 +660,7 @@
         $(".arvChangedElement").hide();
       }
     });
-    
+
     $("input:radio[name=isPatientNew]").click(function() {
       if($(this).val() == 'yes'){
         $(".du").css("visibility","visible");
@@ -648,9 +697,9 @@
       var status = $("#status").val();
       if(status == 4){
         $('#vlLt20').prop('checked', false).removeAttr('checked');
-        $('#vlTND').prop('checked', false).removeAttr('checked');  
+        $('#vlTND').prop('checked', false).removeAttr('checked');
         $('#vlResult').attr('disabled',false);
-        $('#vlLog').attr('disabled',false);        
+        $('#vlLog').attr('disabled',false);
         $(".rejectionReason").show();
         $("#rejectionReason").addClass('isRequired');
         $("#vlResult").val('').css('pointer-events','none');
@@ -709,7 +758,7 @@
         }
       }
     }
-    
+
     function validateNow(){
       flag = deforayValidator.init({
         formId: 'editVlRequestForm'
@@ -723,7 +772,7 @@
 
 
 $(document).ready(function(){
-    
+
   $('#vlResult').on('input',function(e){
       if(this.value != ''){
         $('#vlLt20').attr('disabled',true);
@@ -735,11 +784,11 @@ $(document).ready(function(){
         $('#vlTND').attr('disabled',false);
       }
     });
-    
+
     $('#vlLt20').change(function() {
       if($('#vlLt20').is(':checked')){
         $('#vlResult').val('');
-        $('#vlLog').val('');        
+        $('#vlLog').val('');
         $('#vlResult').attr('readonly',true);
         $('#vlLog').attr('readonly',true);
         $('#vlTND').attr('disabled',true);
@@ -755,7 +804,7 @@ $(document).ready(function(){
     $('#vlLt40').change(function() {
       if($('#vlLt40').is(':checked')){
         $('#vlResult').val('');
-        $('#vlLog').val('');        
+        $('#vlLog').val('');
         $('#vlResult').attr('readonly',true);
         $('#vlLog').attr('readonly',true);
         $('#vlTND').attr('disabled',true);
@@ -769,11 +818,11 @@ $(document).ready(function(){
     });
 
 
-    
+
     $('#vlTND').change(function() {
       if($('#vlTND').is(':checked')){
         $('#vlResult').val('');
-        $('#vlLog').val('');        
+        $('#vlLog').val('');
         $('#vlResult').attr('readonly',true);
         $('#vlLog').attr('readonly',true);
         $('#vlLt20').attr('disabled',true);
@@ -817,9 +866,9 @@ $(document).ready(function(){
         $('#vlLog').attr('readonly',true);
         $('#vlLt20').attr('disabled',true);
         $('#vlLt40').attr('disabled',true);
-      }     
+      }
 
   });
-  
-  
+
+
   </script>
