@@ -141,11 +141,11 @@ foreach($pdResult as $provinceName){
                                    </div>
                               </div>
 
-                              <div class="row">
+                              <div class="row" style=<?php echo $display;?>>
                                    <h4 style=" margin-left: 40px;"> Filter Facilities by Province & Districts</h4>
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="province" style="margin-left:-42px;"  class="col-lg-4 control-label">Province <span class="mandatory">*</span></label>
+                                             <label for="province" style="margin-left:-42px;"  class="col-lg-4 control-label">Province </label>
                                              <div class="col-lg-7">
                                                   <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
                                                        <?php echo $province;?>
@@ -154,10 +154,10 @@ foreach($pdResult as $provinceName){
                                         </div>
                                    </div>
                               </div>
-                              <div class="row">
+                              <div class="row" style=<?php echo $display;?>>
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="province" style="margin-left:-42px;"  class="col-lg-4 control-label">District <span class="mandatory">*</span></label>
+                                             <label for="province" style="margin-left:-42px;"  class="col-lg-4 control-label">District </label>
                                              <div class="col-lg-7">
                                                   <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
                                                        <option value=""> -- Select -- </option>
@@ -167,8 +167,8 @@ foreach($pdResult as $provinceName){
                                    </div>
                               </div>
 
-                              <div class="row" style= "margin: 15px;" "<?php echo $display;?>" >
-                                   <h4 style=" margin-left: 15px;"> Facility User Map Details</h4>
+                              <div class="row" style= "margin: 15px;<?php echo $display;?>" >
+                                   <h4 style=" margin-left: 15px;"> Facility User Map Detailss</h4>
                                    <div class="col-xs-5">
                                         <!-- <div class="col-lg-5"> -->
 
