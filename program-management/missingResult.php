@@ -132,6 +132,7 @@ $batResult = $db->rawQuery($batQuery);
   <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
   <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script src="../assets/js/highcharts.js"></script>
+  <script src="../assets/js/highchart-exporting.js"></script>
   <script>
   $(function () {
     $("#facilityName").select2({placeholder:"Select Facilities"});
