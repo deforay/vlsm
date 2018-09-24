@@ -227,7 +227,11 @@ if(sizeof($requestResult)> 0){
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">AGE</td>';
                $html .='</tr>';
                $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords($result['patient_first_name']." ".$result['patient_last_name']).'</td>';
+
+               $patientFname = ucwords($general->crypto('decrypt',$result['patient_first_name'],$result['patient_art_no']));
+               $patientLname = ucwords($general->crypto('decrypt',$result['patient_last_name'],$result['patient_art_no']));
+
+               $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$patientFname." ".$patientLname.'</td>';
                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_mobile_number'].'</td>';
                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$age.'</td>';
                $html .='</tr>';

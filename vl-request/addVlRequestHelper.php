@@ -40,32 +40,31 @@ try {
             $db->insert('province_details',array('province_name'=>$splitProvince[0],'province_code'=>$splitProvince[1]));
         }
     }
-    //var_dump($_POST);die;
     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
          $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
          $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
     }else{
         $_POST['sampleCollectionDate'] = NULL;
     }
-    
+
     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-       $_POST['dob']=$general->dateFormat($_POST['dob']);  
+       $_POST['dob']=$general->dateFormat($_POST['dob']);
     }else{
        $_POST['dob'] = NULL;
     }
-    
+
     if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
-       $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
+       $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);
     }else{
        $_POST['dateOfArtInitiation'] = NULL;
     }
-    
+
     if(isset($_POST['regimenInitiatedOn']) && trim($_POST['regimenInitiatedOn'])!=""){
-       $_POST['regimenInitiatedOn']=$general->dateFormat($_POST['regimenInitiatedOn']);  
+       $_POST['regimenInitiatedOn']=$general->dateFormat($_POST['regimenInitiatedOn']);
     }else{
        $_POST['regimenInitiatedOn'] = NULL;
     }
-    
+
     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
          $artQuery ="SELECT art_id,art_code FROM r_art_code_details where (art_code='".$_POST['newArtRegimen']."' OR art_code='".strtolower($_POST['newArtRegimen'])."' OR art_code='".ucfirst(strtolower($_POST['newArtRegimen']))."') AND nation_identifier='sudan'";
          $artResult = $db->rawQuery($artQuery);
@@ -79,10 +78,10 @@ try {
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
          }else{
-          $_POST['artRegimen'] = $artResult[0]['art_code']; 
+          $_POST['artRegimen'] = $artResult[0]['art_code'];
          }
     }
-    
+
     //update facility code
     if(trim($_POST['fCode'])!=''){
        $fData = array('facility_code'=>$_POST['fCode']);
@@ -110,22 +109,22 @@ try {
     }
     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
         $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
-        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
+        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];
     }else{
         $_POST['sampleReceivedDate'] = NULL;
     }
 
     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
         $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
-        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
+        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];
     }else{
         $_POST['sampleReceivedDate'] = NULL;
     }
-    
-    
+
+
     if(isset($_POST['sampleReceivedAtHubOn']) && trim($_POST['sampleReceivedAtHubOn'])!=""){
         $sampleReceivedAtHubOn = explode(" ",$_POST['sampleReceivedAtHubOn']);
-        $_POST['sampleReceivedAtHubOn']=$general->dateFormat($sampleReceivedAtHubOn[0])." ".$sampleReceivedAtHubOn[1];  
+        $_POST['sampleReceivedAtHubOn']=$general->dateFormat($sampleReceivedAtHubOn[0])." ".$sampleReceivedAtHubOn[1];
     }else{
         $_POST['sampleReceivedAtHubOn'] = NULL;
     }
@@ -133,11 +132,11 @@ try {
 
     if(isset($_POST['resultDispatchedOn']) && trim($_POST['resultDispatchedOn'])!=""){
         $resultDispatchedOn = explode(" ",$_POST['resultDispatchedOn']);
-        $_POST['resultDispatchedOn']=$general->dateFormat($resultDispatchedOn[0])." ".$resultDispatchedOn[1];  
+        $_POST['resultDispatchedOn']=$general->dateFormat($resultDispatchedOn[0])." ".$resultDispatchedOn[1];
     }else{
         $_POST['resultDispatchedOn'] = NULL;
     }
-    
+
     if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
          $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
          $rejectionResult = $db->rawQuery($rejectionReasonQuery);
@@ -154,14 +153,14 @@ try {
             $_POST['rejectionReason'] = $rejectionResult[0]['rejection_reason_id'];
          }
     }
-    
+
     $isRejection = false;
     if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
         $isRejection = true;
         $_POST['vlResult'] = '';
         $_POST['vlLog'] = '';
     }
-    
+
     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
         $_POST['vlResult'] = 'Target Not Detected';
         $_POST['vlLog'] = '';
@@ -170,7 +169,7 @@ try {
         $_POST['vlResult'] = 'Below Detection Level';
         $_POST['vlLog'] = '';
     }
-    
+
     $_POST['result'] = '';
     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
         $_POST['result'] = $_POST['vlResult'];
@@ -184,10 +183,10 @@ try {
         $sampleCode = 'sample_code';
         $sampleCodeKey = 'sample_code_key';
     }
-    
+
     //set vl test reason
     if(isset($_POST['stViralTesting']) && trim($_POST['stViralTesting'])!=""){
-        $reasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['stViralTesting']."'";         
+        $reasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['stViralTesting']."'";
         $reasonResult = $db->rawQuery($reasonQuery);
         if(isset($reasonResult[0]['test_reason_id']) && $reasonResult[0]['test_reason_id']!=''){
             $_POST['stViralTesting'] = $reasonResult[0]['test_reason_id'];
@@ -272,13 +271,16 @@ try {
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'result_status'=>$status,
           'funding_source'=>(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= '')?base64_decode($_POST['fundingSource']):NULL,
-          'implementing_partner'=>(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= '')?base64_decode($_POST['implementingPartner']):NULL,          
+          'implementing_partner'=>(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= '')?base64_decode($_POST['implementingPartner']):NULL,
           'request_created_by'=>$_SESSION['userId'],
           'request_created_datetime'=>$general->getDateTime(),
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
+
+
+
         if($sarr['user_type']=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
@@ -304,7 +306,7 @@ try {
              'date_time'=>$general->getDateTime()
              );
              $db->insert($tableName1,$data);
-             
+
              $barcode = "";
             if(isset($_POST['printBarCode']) && $_POST['printBarCode'] =='on'){
                   $s = $_POST['sampleCode'];
@@ -313,7 +315,7 @@ try {
                   $f = ucwords($facResult[0]['facility_name'])." | ".$_POST['sampleCollectionDate'];
                   $barcode = "?barcode=true&s=$s&f=$f";
              }
-             
+
              if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
                 header("location:addVlRequest.php");
              }else{
@@ -322,7 +324,7 @@ try {
         }else{
              $_SESSION['alertMsg']="Please try again later";
         }
-  
+
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

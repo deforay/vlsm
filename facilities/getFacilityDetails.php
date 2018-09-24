@@ -14,12 +14,12 @@ $primaryKey="facility_id";
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        
+
         $aColumns = array('facility_code','facility_name','facility_type_name','status');
-        
+
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
-        
+
         $sTable = $tableName;
         /*
          * Paging
@@ -29,11 +29,11 @@ $primaryKey="facility_id";
             $sOffset = $_POST['iDisplayStart'];
             $sLimit = $_POST['iDisplayLength'];
         }
-        
+
         /*
          * Ordering
         */
-        
+
         $sOrder = "";
         if (isset($_POST['iSortCol_0'])) {
             $sOrder = "";
@@ -45,14 +45,14 @@ $primaryKey="facility_id";
             }
             $sOrder = substr_replace($sOrder, "", -2);
         }
-        
+
         /*
          * Filtering
          * NOTE this does not match the built-in DataTables filtering which does it
          * word by word on any field. It's possible to do here, but concerned about efficiency
          * on very large tables, and MySQL's regex functionality is very limited
         */
-        
+
         $sWhere = "";
         if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
             $searchArray = explode(" ", $_POST['sSearch']);
@@ -64,7 +64,7 @@ $primaryKey="facility_id";
                     $sWhereSub .= " AND (";
                 }
                 $colSize = count($aColumns);
-                
+
                 for ($i = 0; $i < $colSize; $i++) {
                     if ($i < $colSize - 1) {
                         $sWhereSub .= $aColumns[$i] . " LIKE '%" . ($search ) . "%' OR ";
@@ -76,7 +76,7 @@ $primaryKey="facility_id";
             }
             $sWhere .= $sWhereSub;
         }
-        
+
         /* Individual column filtering */
         for ($i = 0; $i < count($aColumns); $i++) {
             if (isset($_POST['bSearchable_' . $i]) && $_POST['bSearchable_' . $i] == "true" && $_POST['sSearch_' . $i] != '') {
@@ -87,24 +87,24 @@ $primaryKey="facility_id";
                 }
             }
         }
-        
+
         /*
          * SQL queries
          * Get data to display
         */
-        
+
        $sQuery="SELECT * FROM facility_details as f_d LEFT JOIN facility_type as f_t ON f_t.facility_type_id=f_d.facility_type";
-        
+
         if (isset($sWhere) && $sWhere != "") {
             $sWhere=' where '.$sWhere;
             $sQuery = $sQuery.' '.$sWhere;
         }
-        
+
         if (isset($sOrder) && $sOrder != "") {
             $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
             $sQuery = $sQuery.' order by '.$sOrder;
         }
-        
+
         if (isset($sLimit) && isset($sOffset)) {
             $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
         }
@@ -113,7 +113,7 @@ $primaryKey="facility_id";
         $rResult = $db->rawQuery($sQuery);
        // print_r($rResult);
         /* Data set length after filtering */
-        
+
         $aResultFilterTotal =$db->rawQuery("SELECT * FROM facility_details as f_d LEFT JOIN facility_type as f_t ON f_t.facility_type_id=f_d.facility_type $sWhere order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
@@ -132,18 +132,18 @@ $primaryKey="facility_id";
             "iTotalDisplayRecords" => $iFilteredTotal,
             "aaData" => array()
         );
-	
+
         foreach ($rResult as $aRow) {
             $row = array();
             $row[] = $aRow['facility_code'];
 	    $row[] = ucwords($aRow['facility_name']);
             $row[] = ucwords($aRow['facility_type_name']);
             $row[] = ucwords($aRow['status']);
-	    if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges']) && (($sarr['user_type']=='remoteuser') || ($sarr['user_type']=='standalone'))){ 
+	    if(isset($_SESSION['privileges']) && in_array("editFacility.php", $_SESSION['privileges']) && (($sarr['user_type']=='remoteuser') || ($sarr['user_type']=='standalone'))){
             $row[] = '<a href="editFacility.php?id=' . base64_encode($aRow['facility_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
            }
             $output['aaData'][] = $row;
         }
-        
+
         echo json_encode($output);
 ?>
