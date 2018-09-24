@@ -349,19 +349,21 @@ $disable = "disabled = 'disabled'";
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
-                                    <?php
+                                  <?php
+                                    $vlTestReasonQueryRow="SELECT * from r_vl_test_reasons where test_reason_id='".trim($vlQueryInfo[0]['reason_for_vl_testing'])."' OR test_reason_name = '".trim($vlQueryInfo[0]['reason_for_vl_testing'])."'";
+                                    $vlTestReasonResultRow=$db->query($vlTestReasonQueryRow);
                                     $checked = '';
                                     $display = '';
                                     $vlValue = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine'){
-                                      $checked = 'checked="checked"';
-                                      $display = 'block';
-                                      if($vlQueryInfo[0]['last_vl_result_routine']!= NULL && trim($vlQueryInfo[0]['last_vl_result_routine'])!= '' && trim($vlQueryInfo[0]['last_vl_result_routine'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_routine'])!= 'tnd'){
-                                        $vlValue = $vlQueryInfo[0]['last_vl_result_routine'];
-                                      }
+                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='routine' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'routine'){
+                                        $checked = 'checked="checked"';
+                                        $display = 'block';
+                                        if($vlQueryInfo[0]['last_vl_result_routine']!= NULL && trim($vlQueryInfo[0]['last_vl_result_routine'])!= '' && trim($vlQueryInfo[0]['last_vl_result_routine'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_routine'])!= 'tnd'){
+                                              $vlValue = $vlQueryInfo[0]['last_vl_result_routine'];
+                                        }
                                     }else{
-                                      $checked = '';
-                                      $display = 'none';
+                                        $checked = '';
+                                        $display = 'none';
                                     }
                                     ?>
                                     <input type="radio" class="isRequired" id="rmTesting" name="stViralTesting" value="routine" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('rmTesting');">
@@ -393,21 +395,21 @@ $disable = "disabled = 'disabled'";
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
-                                    <?php
-                                    $checked = '';
-                                    $display = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure'){
-                                      $checked = 'checked="checked"';
-                                      $display = 'block';
-                                      $vlValue = '';
-                                      if($vlQueryInfo[0]['last_vl_result_failure_ac']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= 'tnd'){
-                                        $vlValue = $vlQueryInfo[0]['last_vl_result_failure_ac'];
-                                      }
-                                    }else{
-                                      $checked = '';
-                                      $display = 'none';
+                                <?php
+                                $checked = '';
+                                $display = '';
+                                $vlValue = '';
+                                if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='failure' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'failure'){
+                                    $checked = 'checked="checked"';
+                                    $display = 'block';
+                                    if($vlQueryInfo[0]['last_vl_result_failure_ac']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure_ac'])!= 'tnd'){
+                                          $vlValue = $vlQueryInfo[0]['last_vl_result_failure_ac'];
                                     }
-                                    ?>
+                                }else{
+                                    $checked = '';
+                                    $display = 'none';
+                                }
+                                ?>
                                     <input type="radio" id="repeatTesting" name="stViralTesting" value="failure" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('repeatTesting');">
                                     <strong>Repeat VL test after suspected treatment failure adherence counselling </strong>
                                 </label>
@@ -437,21 +439,21 @@ $disable = "disabled = 'disabled'";
                             <div class="form-group">
                                 <div class="col-lg-12">
                                 <label class="radio-inline">
-                                    <?php
-                                    $checked = '';
-                                    $display = '';
-                                    $vlValue = '';
-                                    if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect'){
-                                      $checked = 'checked="checked"';
-                                      $display = 'block';
-                                      if($vlQueryInfo[0]['last_vl_result_failure']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure'])!= 'tnd'){
-                                        $vlValue = $vlQueryInfo[0]['last_vl_result_failure'];
-                                      }
-                                    }else{
-                                      $checked = '';
-                                      $display = 'none';
+                                <?php
+                                $checked = '';
+                                $display = '';
+                                $vlValue = '';
+                                if(trim($vlQueryInfo[0]['reason_for_vl_testing']) =='suspect' || isset($vlTestReasonResultRow[0]['test_reason_id']) && $vlTestReasonResultRow[0]['test_reason_name'] == 'suspect'){
+                                    $checked = 'checked="checked"';
+                                    $display = 'block';
+                                    if($vlQueryInfo[0]['last_vl_result_failure']!= NULL && trim($vlQueryInfo[0]['last_vl_result_failure'])!= '' && trim($vlQueryInfo[0]['last_vl_result_failure'])!='<20' && trim($vlQueryInfo[0]['last_vl_result_failure'])!= 'tnd'){
+                                          $vlValue = $vlQueryInfo[0]['last_vl_result_failure'];
                                     }
-                                    ?>
+                                }else{
+                                    $checked = '';
+                                    $display = 'none';
+                                }
+                                ?>
                                     <input type="radio" id="suspendTreatment" name="stViralTesting" value="suspect" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
                                     <strong>Suspect Treatment Failure</strong>
                                 </label>
