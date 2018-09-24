@@ -288,6 +288,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                }
 
                      $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow['patient_art_no']));
+                     $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow['patient_art_no']));
+                     $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow['patient_art_no']));
                     
 
                $row = array();
@@ -300,8 +302,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = $aRow['sample_collection_date'];
                $row[] = $aRow['batch_code'];
                $row[] = $aRow['patient_art_no'];
-                $row[] = ucwords($patientFname);
-               //$row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
+               // $row[] = ucwords($patientFname);
+               $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
                $row[] = ucwords($aRow['facility_name']);
                $row[] = ucwords($aRow['facility_state']);
                $row[] = ucwords($aRow['facility_district']);

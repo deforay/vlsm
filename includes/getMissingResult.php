@@ -323,7 +323,7 @@ $sWhere = '';
             ?>
             {
             showInLegend: true,
-            name: 'Sample Tested TAT',
+            name: 'Collected - Tested',
             data: [<?php echo implode(",",$result['sampleTestedDiff']);?>],
             color : '#1B325F',
         },
@@ -333,7 +333,7 @@ $sWhere = '';
         ?>
          {
             showInLegend: true,
-            name: 'Sample Received TAT',
+            name: 'Collected - Received at Lab',
             data: [<?php echo implode(",",$result['sampleReceivedDiff']);?>],
             color : '#9c9393',
         },
@@ -343,7 +343,7 @@ $sWhere = '';
         ?>
             {
                 showInLegend: true,
-                name: 'Sample Printed TAT',
+                name: 'Collected - Result Printed',
                 data: [<?php echo implode(",",$result['samplePrintedDiff']);?>],
                 color : '#6a4545',
             },
