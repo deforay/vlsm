@@ -72,7 +72,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
 			 ?>
 		      </select>
 		    </td>
-		
+
 		    <td><b>Sample Type&nbsp;:</b></td>
 		    <td>
 		      <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
@@ -101,8 +101,8 @@ if($lastUrl1!='' || $lastUrl2!=''){
 			?>
 		      </select>
 		    </td>
-		    
-		
+
+
 		  <td><b>Gender&nbsp;:</b></td>
 		  <td>
 		    <select name="gender" id="gender" class="form-control" title="Please choose gender" style="width:220px;">
@@ -165,7 +165,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
 				    <div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="status_name"  class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Status</label>
 				    </div>
-				    
+
 				</div>
 			    </div>
 			</span>
@@ -251,7 +251,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
      } else if(($lastUrl1!='' || $lastUrl2!='') && isset($_COOKIE['collectionDate'])){ ?>
       $('#sampleCollectionDate').val("<?php echo $_COOKIE['collectionDate'];?>");
      <?php } ?>
-     
+
      loadVlRequestData();
      $(".showhideCheckBox").change(function(){
             if($(this).attr('checked')){
@@ -262,24 +262,24 @@ if($lastUrl1!='' || $lastUrl2!=''){
                 $("#"+idpart+"-sort").hide();
             }
         });
-        
+
         $("#showhide").hover(function(){}, function(){$(this).fadeOut('slow')});
         var i = '<?php echo $i;?>';
         for(colNo=0;colNo <=i;colNo++){
             $("#iCol"+colNo).attr("checked",oTable.fnSettings().aoColumns[parseInt(colNo)].bVisible);
             if(oTable.fnSettings().aoColumns[colNo].bVisible){
-                $("#iCol"+colNo+"-sort").show();    
+                $("#iCol"+colNo+"-sort").show();
             }else{
-                $("#iCol"+colNo+"-sort").hide();    
+                $("#iCol"+colNo+"-sort").hide();
             }
         }
   } );
-  
+
   function fnShowHide(iCol){
     var bVis = oTable.fnSettings().aoColumns[iCol].bVisible;
     oTable.fnSetColumnVis( iCol, bVis ? false : true );
   }
-  
+
   function loadVlRequestData(){
      $.blockUI();
      oTable = $('#vlRequestDataTable').dataTable({
@@ -292,7 +292,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
             "bScrollCollapse": true,
             //"bStateSave" : true,
             "iDisplayLength": 100,
-            "bRetrieve": true,                             
+            "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
 		<?php if($sarr['user_type']!='standalone'){ ?>
@@ -335,7 +335,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
         });
      $.unblockUI();
   }
-  
+
   function searchVlRequestData(){
     $.blockUI();
     oTable.fnDraw();
@@ -347,7 +347,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
     document.cookie = "status="+$("#status").val();
     $.unblockUI();
   }
-  
+
   function convertResultToPdf(id,newData){
     <?php
     $path = '';
@@ -362,12 +362,12 @@ if($lastUrl1!='' || $lastUrl2!=''){
 	  }
       });
   }
-  
+
   function convertSearchResultToPdf(id,newData){
     $.blockUI();
     <?php
     $path = '';
-    $path = '../result-pdf/vlRequestSearchResultPdf.php'; 
+    $path = '../result-pdf/vlRequestSearchResultPdf.php';
     ?>
     $.post("<?php echo $path;?>", { source:'print',id:id,newData:newData},
       function(data){
@@ -379,7 +379,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
       });
     $.unblockUI();
   }
-  
+
   function exportAllVlTestResult(){
     $.blockUI();
     $.post("generateVlTestResultExcel.php", { },
@@ -392,7 +392,7 @@ if($lastUrl1!='' || $lastUrl2!=''){
       }
      });
   }
-  
+
   function reset(){
     document.cookie = "collectionDate=";
     document.cookie = "batchCode=";

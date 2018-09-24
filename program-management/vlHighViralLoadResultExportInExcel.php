@@ -7,144 +7,139 @@ include ('../includes/PHPExcel.php');
 $general=new General();
 
 if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""){
-  $rResult = $db->rawQuery($_SESSION['highViralResult']);
- 
- $excel = new PHPExcel();
- $output = array();
- $sheet = $excel->getActiveSheet();
- 
- $headings = array("Facility Name","Patient's Name","Patient ART no.","Patient phone no.","Sample Collection Date","Sample Tested Date","Lab Name","Vl value in cp/ml");
- 
- $colNo = 0;
- 
- $styleArray = array(
-     'font' => array(
-         'bold' => true,
-         'size' => '13',
-     ),
-     'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-         'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
-     ),
-     'borders' => array(
-         'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
-         ),
-     )
- );
- 
- $borderStyle = array(
-     'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-     ),
-     'borders' => array(
-         'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
-         ),
-     )
- );
+     $rResult = $db->rawQuery($_SESSION['highViralResult']);
 
- $sheet->mergeCells('A1:AE1');
- $nameValue = '';
+     $excel = new PHPExcel();
+     $output = array();
+     $sheet = $excel->getActiveSheet();
 
- $filters = array(
-                    'hvlSampleTestDate' => 'Sample Test Date',
-                    'hvlBatchCode' => 'Batch Code',
-                    'hvlSampleType' => 'Sample Type',
-                    'hvlFacilityName' => 'Facility Name',
-                    'hvlContactStatus' => 'Contact Status',
-                    'hvlGender' => 'Gender',
-                    'hvlPatientPregnant' => 'Is Patient Pregnant',
-                    'hvlPatientBreastfeeding' => 'Is Patient Breastfeeding'
-                );
+     $headings = array("Facility Name","Patient's Name","Patient ART no.","Patient phone no.","Sample Collection Date","Sample Tested Date","Lab Name","Vl value in cp/ml");
 
- foreach($_POST as $key=>$value){
-   if(trim($value)!='' && trim($value)!='-- Select --' && trim($key)!='markAsComplete'){
-     $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
-   }
- }
- $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
- 
- foreach ($headings as $field => $value) {
-   $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-   $colNo++;
- }
- $sheet->getStyle('A3:A3')->applyFromArray($styleArray);
- $sheet->getStyle('B3:B3')->applyFromArray($styleArray);
- $sheet->getStyle('C3:C3')->applyFromArray($styleArray);
- $sheet->getStyle('D3:D3')->applyFromArray($styleArray);
- $sheet->getStyle('E3:E3')->applyFromArray($styleArray);
- $sheet->getStyle('F3:F3')->applyFromArray($styleArray);
- $sheet->getStyle('G3:G3')->applyFromArray($styleArray);
- $sheet->getStyle('H3:H3')->applyFromArray($styleArray);
+     $colNo = 0;
 
- $vlSampleId = array();
- foreach ($rResult as $aRow) {
-  $row = array();
-  //sample collecion date
-  $sampleCollectionDate = '';$sampleTestDate = '';
-  if($aRow['sample_collection_date']!= NULL && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00 00:00:00'){
-   $expStr = explode(" ",$aRow['sample_collection_date']);
-   $sampleCollectionDate =  date("d-m-Y", strtotime($expStr[0]));
-  }
-  if($aRow['sample_tested_datetime']!= NULL && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00 00:00:00'){
-    $expStr = explode(" ",$aRow['sample_tested_datetime']);
-    $sampleTestDate =  date("d-m-Y", strtotime($expStr[0]));
-   }
-   if($aRow['remote_sample']=='yes'){
-    $sampleId = $aRow['remote_sample_code'];
-  }else{
-    $sampleId = $aRow['sample_code'];
-  }
-   if($aRow['patient_first_name']!=''){
-    $patientFirstName = $general->crypto('decrypt',$aRow['patient_first_name'],$sampleId);
-  }else{
-    $patientFirstName = '';
-  }
-  if($aRow['patient_middle_name']!=''){
-    $patientMiddleName = " ".$general->crypto('decrypt',$aRow['patient_middle_name'],$sampleId);
-  }else{
-    $patientMiddleName = '';
-  }
-  if($aRow['patient_last_name']!=''){
-    $patientLastName = " ".$general->crypto('decrypt',$aRow['patient_last_name'],$sampleId);
-  }else{
-    $patientLastName = '';
-  }
-  
-    $row[] = ucwords($aRow['facility_name']);
-    $row[] = ucwords($patientFirstName).ucwords($patientMiddleName).ucwords($patientLastName);
-    $row[] = $aRow['patient_art_no'];
-    $row[] = $aRow['patient_mobile_number'];
-    $row[] = $sampleCollectionDate;
-    $row[] = $sampleTestDate;
-    $row[] = $aRow['labName'];
-    $row[] = $aRow['result'];
-    $vlSampleId[] = $aRow['vl_sample_id'];
-  $output[] = $row;
- }
- if($_POST['markAsComplete']=='true'){
-  $vlId = implode(",",$vlSampleId);
-  $db->rawQuery("UPDATE vl_request_form SET contact_complete_status = 'yes' WHERE vl_sample_id IN (".$vlId.")");
- }
+     $styleArray = array(
+          'font' => array(
+               'bold' => true,
+               'size' => '13',
+          ),
+          'alignment' => array(
+               'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+               'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+          ),
+          'borders' => array(
+               'outline' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
+               ),
+          )
+     );
 
- $start = (count($output))+2;
- foreach ($output as $rowNo => $rowData) {
-  $colNo = 0;
-  foreach ($rowData as $field => $value) {
-    $rRowCount = $rowNo + 4;
-    $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
-    $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
-    $sheet->getDefaultRowDimension()->setRowHeight(18);
-    $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
-    $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
-    $sheet->getStyleByColumnAndRow($colNo, $rowNo + 4)->getAlignment()->setWrapText(true);
-    $colNo++;
-  }
- }
- $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'VLSM-High-Viral-Load-Report' . date('d-M-Y-H-i-s') . '.xls';
- $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
- echo $filename;
- 
+     $borderStyle = array(
+          'alignment' => array(
+               'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+          ),
+          'borders' => array(
+               'outline' => array(
+                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
+               ),
+          )
+     );
+
+     $sheet->mergeCells('A1:AE1');
+     $nameValue = '';
+
+     $filters = array(
+          'hvlSampleTestDate' => 'Sample Test Date',
+          'hvlBatchCode' => 'Batch Code',
+          'hvlSampleType' => 'Sample Type',
+          'hvlFacilityName' => 'Facility Name',
+          'hvlContactStatus' => 'Contact Status',
+          'hvlGender' => 'Gender',
+          'hvlPatientPregnant' => 'Is Patient Pregnant',
+          'hvlPatientBreastfeeding' => 'Is Patient Breastfeeding'
+     );
+
+     foreach($_POST as $key=>$value){
+          if(trim($value)!='' && trim($value)!='-- Select --' && trim($key)!='markAsComplete'){
+               $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
+          }
+     }
+     $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
+
+     foreach ($headings as $field => $value) {
+          $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+          $colNo++;
+     }
+     $sheet->getStyle('A3:A3')->applyFromArray($styleArray);
+     $sheet->getStyle('B3:B3')->applyFromArray($styleArray);
+     $sheet->getStyle('C3:C3')->applyFromArray($styleArray);
+     $sheet->getStyle('D3:D3')->applyFromArray($styleArray);
+     $sheet->getStyle('E3:E3')->applyFromArray($styleArray);
+     $sheet->getStyle('F3:F3')->applyFromArray($styleArray);
+     $sheet->getStyle('G3:G3')->applyFromArray($styleArray);
+     $sheet->getStyle('H3:H3')->applyFromArray($styleArray);
+
+     $vlSampleId = array();
+     foreach ($rResult as $aRow) {
+          $row = array();
+          //sample collecion date
+          $sampleCollectionDate = '';$sampleTestDate = '';
+          if($aRow['sample_collection_date']!= NULL && trim($aRow['sample_collection_date'])!='' && $aRow['sample_collection_date']!='0000-00-00 00:00:00'){
+               $expStr = explode(" ",$aRow['sample_collection_date']);
+               $sampleCollectionDate =  date("d-m-Y", strtotime($expStr[0]));
+          }
+          if($aRow['sample_tested_datetime']!= NULL && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00 00:00:00'){
+               $expStr = explode(" ",$aRow['sample_tested_datetime']);
+               $sampleTestDate =  date("d-m-Y", strtotime($expStr[0]));
+          }
+
+          if($aRow['patient_first_name']!=''){
+               $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow['patient_art_no']));
+          }else{
+               $patientFname = '';
+          }
+          if($aRow['patient_middle_name']!=''){
+               $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow['patient_art_no']));
+          }else{
+               $patientMname = '';
+          }
+          if($aRow['patient_last_name']!=''){
+               $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow['patient_art_no']));
+          }else{
+               $patientLname = '';
+          }
+          $row[] = ucwords($aRow['facility_name']);
+          $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
+          $row[] = $aRow['patient_art_no'];
+          $row[] = $aRow['patient_mobile_number'];
+          $row[] = $sampleCollectionDate;
+          $row[] = $sampleTestDate;
+          $row[] = $aRow['labName'];
+          $row[] = $aRow['result'];
+          $vlSampleId[] = $aRow['vl_sample_id'];
+          $output[] = $row;
+     }
+     if($_POST['markAsComplete']=='true'){
+          $vlId = implode(",",$vlSampleId);
+          $db->rawQuery("UPDATE vl_request_form SET contact_complete_status = 'yes' WHERE vl_sample_id IN (".$vlId.")");
+     }
+
+     $start = (count($output))+2;
+     foreach ($output as $rowNo => $rowData) {
+          $colNo = 0;
+          foreach ($rowData as $field => $value) {
+               $rRowCount = $rowNo + 4;
+               $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
+               $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+               $sheet->getDefaultRowDimension()->setRowHeight(18);
+               $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
+               $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+               $sheet->getStyleByColumnAndRow($colNo, $rowNo + 4)->getAlignment()->setWrapText(true);
+               $colNo++;
+          }
+     }
+     $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+     $filename = 'VLSM-High-Viral-Load-Report' . date('d-M-Y-H-i-s') . '.xls';
+     $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
+     echo $filename;
+
 }

@@ -450,11 +450,8 @@ if(sizeof($requestResult)> 0){
           $html.='<table style="border-spacing: 3px;border:1px solid #000;">';
           $html .='<tr>';
 
-               if($result['remote_sample']=='yes'){
-                    $patientFname = ucwords($general->crypto('decrypt',$result['patient_first_name'],$result['remote_sample_code']));
-               }else{
-                    $patientFname = ucwords($general->crypto('decrypt',$result['patient_first_name'],$result['sample_code']));
-               }
+
+          $patientFname = ucwords($general->crypto('decrypt',$result['patient_first_name'],$result['patient_art_no']));
 
           $html .='<td style="line-height:10px;font-size:10px;font-weight:bold;text-align:left;">Nome completo</td>';
           $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$patientFname.'</td>';

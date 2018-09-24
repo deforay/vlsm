@@ -5,7 +5,7 @@ $province.="<option value=''> -- Select -- </option>";
   foreach($pdResult as $provinceName){
     $province .= "<option value='".$provinceName['province_name']."##".$provinceName['province_code']."'>".ucwords($provinceName['province_name'])."</option>";
   }
-    
+
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
@@ -209,7 +209,7 @@ $disable = "disabled = 'disabled'";
                           <label for="patientFirstName">Patient Name </label>
                             <input type="text" name="patientFirstName" id="patientFirstName" class="form-control" placeholder="Enter Patient Name" title="Enter patient name" <?php echo $disable;?> value="<?php echo $patientFirstName;?>"/>
                           </div>
-                      </div>  
+                      </div>
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                         <label for="gender">Gender <span class="mandatory">*</span></label><br>
@@ -344,7 +344,7 @@ $disable = "disabled = 'disabled'";
                        <h3 class="box-title">Indication for Viral Load Testing <span class="mandatory">*</span></h3><small> (Please tick one):(To be completed by clinician)</small>
                     </div>
                     <div class="box-body">
-                      <div class="row">                
+                      <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-lg-12">
@@ -366,7 +366,7 @@ $disable = "disabled = 'disabled'";
                                     ?>
                                     <input type="radio" class="isRequired" id="rmTesting" name="stViralTesting" value="routine" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('rmTesting');">
                                     <strong>Routine Monitoring</strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -386,9 +386,9 @@ $disable = "disabled = 'disabled'";
                              <input type="checkbox" id="rmTestingVlCheckValuelt20" name="rmTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_routine'] == '<20')?'checked="checked"':''; ?> value="<20" <?php echo $disable;?> title="Please check VL value"> < 20<br>
                              <input type="checkbox" id="rmTestingVlCheckValueTnd" name="rmTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_routine'] == 'tnd')?'checked="checked"':''; ?> value="tnd" <?php echo $disable;?> title="Please check VL value"> Target Not Detected
                          </div>
-                       </div>                 
+                       </div>
                       </div>
-                      <div class="row">        
+                      <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
                                 <div class="col-lg-12">
@@ -410,7 +410,7 @@ $disable = "disabled = 'disabled'";
                                     ?>
                                     <input type="radio" id="repeatTesting" name="stViralTesting" value="failure" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('repeatTesting');">
                                     <strong>Repeat VL test after suspected treatment failure adherence counselling </strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -430,9 +430,9 @@ $disable = "disabled = 'disabled'";
                             <input type="checkbox" id="repeatTestingVlCheckValuelt20" name="repeatTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure_ac'] == '<20')?'checked="checked"':''; ?> value="<20" <?php echo $disable;?> title="Please check VL value"> < 20<br>
                             <input type="checkbox" id="repeatTestingVlCheckValueTnd" name="repeatTestingVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure_ac'] == 'tnd')?'checked="checked"':''; ?> value="tnd" <?php echo $disable;?> title="Please check VL value"> Target Not Detected
                             </div>
-                      </div>                 
+                      </div>
                      </div>
-                     <div class="row">         
+                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-lg-12">
@@ -454,7 +454,7 @@ $disable = "disabled = 'disabled'";
                                     ?>
                                     <input type="radio" id="suspendTreatment" name="stViralTesting" value="suspect" title="Please check viral load indication testing type" <?php echo $disable;?> <?php echo $checked;?> onclick="showTesting('suspendTreatment');">
                                     <strong>Suspect Treatment Failure</strong>
-                                </label>						
+                                </label>
                                 </div>
                             </div>
                         </div>
@@ -474,7 +474,7 @@ $disable = "disabled = 'disabled'";
                              <input type="checkbox" id="suspendTreatmentVlCheckValuelt20" name="suspendTreatmentVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure'] == '<20')?'checked="checked"':''; ?> value="<20" <?php echo $disable;?> title="Please check VL value"> < 20<br>
                              <input type="checkbox" id="suspendTreatmentVlCheckValueTnd" name="suspendTreatmentVlCheckValue" <?php echo ($vlQueryInfo[0]['last_vl_result_failure'] == 'tnd')?'checked="checked"':''; ?> value="tnd" <?php echo $disable;?> title="Please check VL value"> Target Not Detected
                              </div>
-                       </div>                 
+                       </div>
                      </div>
                      <div class="row">
                         <div class="col-md-4">
@@ -721,7 +721,7 @@ $disable = "disabled = 'disabled'";
         reason = ($("#reasonForResultChanges").length)?$("#reasonForResultChanges").val():'';
         result = ($("#vlResult").length)?$("#vlResult").val():'';
     });
-    
+
     $("input:radio[name=noResult]").click(function() {
       if($(this).val() == 'yes'){
         $('.rejectionReason').show();
@@ -741,7 +741,7 @@ $disable = "disabled = 'disabled'";
         }
       }
     });
-  
+
     $('#tnd').change(function() {
       if($('#tnd').is(':checked')){
         $('#vlResult,#vlLog').attr('readonly',true);
@@ -753,7 +753,7 @@ $disable = "disabled = 'disabled'";
         $('#bdl').attr('disabled',false);
       }
     });
-  
+
     $('#bdl').change(function() {
       if($('#bdl').is(':checked')){
         $('#vlResult,#vlLog').attr('readonly',true);
@@ -765,7 +765,7 @@ $disable = "disabled = 'disabled'";
         $('#tnd').attr('disabled',false);
       }
     });
-  
+
     $('#vlResult,#vlLog').on('input',function(e){
       if(this.value != ''){
         $('#tnd').attr('disabled',true);
@@ -775,7 +775,7 @@ $disable = "disabled = 'disabled'";
         $('#bdl').attr('disabled',false);
       }
     });
-  
+
     $("#vlRequestFormRwd .labSection").on("change", function() {
       if($.trim(result)!= ''){
         if($("#vlRequestFormRwd .labSection").serialize() == $(__clone).serialize()){
@@ -787,7 +787,7 @@ $disable = "disabled = 'disabled'";
         }
       }
     });
-  
+
     function checkRejectionReason(){
       var rejectionReason = $("#rejectionReason").val();
       if(rejectionReason == "other"){
@@ -799,7 +799,7 @@ $disable = "disabled = 'disabled'";
         $('#newRejectionReason').val("");
       }
     }
-  
+
     function calculateLogValue(obj){
       if(obj.id=="vlResult") {
         absValue = $("#vlResult").val();
@@ -821,12 +821,12 @@ $disable = "disabled = 'disabled'";
         }
       }
     }
-  
+
     function validateNow(){
         flag = deforayValidator.init({
             formId: 'vlRequestFormRwd'
         });
-        
+
         $('.isRequired').each(function () {
           ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
         });

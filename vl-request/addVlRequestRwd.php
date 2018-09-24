@@ -1,5 +1,7 @@
 <?php
 ob_start();
+
+echo "hi";
 if($arr['sample_code']=='auto' || $arr['sample_code']=='alphanumeric' || $arr['sample_code']=='MMYY' || $arr['sample_code']=='YY'){
      $sampleClass = '';
      $maxLength = '';

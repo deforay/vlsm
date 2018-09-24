@@ -39,7 +39,7 @@ class General {
 
         return $str;
     }
-    
+
     /**
      * Used to format date from dd-mmm-yyyy to yyyy-mm-dd for storing in database
      *
@@ -92,12 +92,12 @@ class General {
             return $newDate;
         }
     }
-    
+
     public static function getDateTime() {
         $date = new DateTime(date('Y-m-d H:i:s'));
         return $date->format('Y-m-d H:i:s');
     }
-    
+
     function removeDirectory($dirname) {
         // Sanity check
         if (!file_exists($dirname)) {
@@ -126,7 +126,7 @@ class General {
         return rmdir($dirname);
     }
 
-    // get data from the system_config table from database    
+    // get data from the system_config table from database
     public function getSystemConfig($name = null){
 
         if($this->db == null) return false;
@@ -136,14 +136,14 @@ class General {
         }else{
             $systemConfigQuery ="SELECT * from system_config WHERE `name` = '$name'";
         }
-        
+
         $systemConfigResult=$this->db->query($systemConfigQuery);
         $sarr = array();
         // now we create an associative array so that we can easily create view variables
         for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
           $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-        }  
-        
+        }
+
         if($name == null){
             return $sarr;
         }else{
@@ -152,10 +152,10 @@ class General {
             }else{
                 return null;
             }
-        }  
+        }
     }
 
-    // get data from the global_config table from database    
+    // get data from the global_config table from database
     public function getGlobalConfig($name = null){
 
         if($this->db == null) return false;
@@ -165,14 +165,14 @@ class General {
         }else{
             $globalConfigQuery ="SELECT * from global_config WHERE `name` = '$name'";
         }
-        
+
         $globalConfigResult=$this->db->query($globalConfigQuery);
         $garr = array();
         // now we create an associative array so that we can easily create view variables
         for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
             $garr[$globalConfigResult[$i]['name']] = $globalConfigResult[$i]['value'];
-        }  
-        
+        }
+
         if($name == null){
             return $garr;
         }else{
@@ -181,8 +181,8 @@ class General {
             }else{
                 return null;
             }
-            
-        }  
+
+        }
     }
     public function checkMandatoryField($field)
     {
@@ -194,27 +194,29 @@ class General {
     }
 
     function crypto($action, $inputString, $secretIv) {
- 
         if (empty($inputString)) return "";
-     
+
         $output = false;
         $encrypt_method = "AES-256-CBC";
         $secret_key = 'rXBCNkAzkHXGBKEReqrTfPhGDqhzxgDRQ7Q0XqN6BVvuJjh1OBVvuHXGBKEReqrTfPhGDqhzxgDJjh1OB4QcIGAGaml';
-       
+
         // hash
         $key = hash('sha256', $secret_key);
-       
+
+          if(empty($secretIv)){
+               $secretIv = 'sd893urijsdf8w9eurj';
+          }
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secretIv), 0, 16);
-     
+
         if ( $action == 'encrypt' ) {
             $output = openssl_encrypt($inputString, $encrypt_method, $key, 0, $iv);
             $output = base64_encode($output);
         } else if( $action == 'decrypt' ) {
             $output = openssl_decrypt(base64_decode($inputString), $encrypt_method, $key, 0, $iv);
+
         }
         return $output;
     }
 
 }
-

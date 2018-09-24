@@ -14,17 +14,17 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
   $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
 if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
- 
+
  $rResult = $db->rawQuery($_SESSION['vlResultQuery']);
- 
+
  $excel = new PHPExcel();
  $output = array();
  $sheet = $excel->getActiveSheet();
- 
+
  $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant","Is Patient Breastfeeding","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Rejection","Sample Tested On","Result (cp/ml)","Result (log)","Date Results Dispatched Facilities","TAT Result Dispatch(days)","Comments","Funding Source","Implementing Partner");
- 
+
  $colNo = 0;
- 
+
  $styleArray = array(
      'font' => array(
          'bold' => true,
@@ -40,7 +40,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
          ),
      )
  );
- 
+
  $borderStyle = array(
      'alignment' => array(
          'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -74,7 +74,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  }
 }
  $sheet->getStyle('A3:AG3')->applyFromArray($styleArray);
- 
+
  $no =1;
  foreach ($rResult as $aRow) {
   $row = array();
@@ -113,8 +113,8 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   if($aRow['test_requested_on']!= NULL && trim($aRow['test_requested_on'])!='' && $aRow['test_requested_on']!='0000-00-00'){
    $requestedDate =  date("d-m-Y", strtotime($aRow['test_requested_on']));
   }
-  
-  
+
+
   $sampleTestedOn = '';
   if($aRow['sample_tested_datetime']!= NULL && trim($aRow['sample_tested_datetime'])!='' && $aRow['sample_tested_datetime']!='0000-00-00'){
     $sampleTestedOn =  date("d-m-Y", strtotime($aRow['sample_tested_datetime']));
@@ -160,25 +160,21 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }else{
     $sampleCode = 'sample_code';
   }
-  if($aRow['remote_sample']=='yes'){
-    $sampleId = $aRow['remote_sample_code'];
-  }else{
-    $sampleId = $aRow['sample_code'];
-  }
+
   if($aRow['patient_first_name']!=''){
-    $patientFirstName = $general->crypto('decrypt',$aRow['patient_first_name'],$sampleId);
+       $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow['patient_art_no']));
   }else{
-    $patientFirstName = '';
+    $patientFname = '';
   }
   if($aRow['patient_middle_name']!=''){
-    $patientMiddleName = " ".$general->crypto('decrypt',$aRow['patient_middle_name'],$sampleId);
+       $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow['patient_art_no']));
   }else{
-    $patientMiddleName = '';
+    $patientMname = '';
   }
   if($aRow['patient_last_name']!=''){
-    $patientLastName = " ".$general->crypto('decrypt',$aRow['patient_last_name'],$sampleId);
+       $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow['patient_art_no']));
   }else{
-    $patientLastName = '';
+    $patientLname = '';
   }
 
   $row[] = $no;
@@ -188,7 +184,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = ucwords($aRow['facility_district']);
   $row[] = ucwords($aRow['facility_state']);
   $row[] = $aRow['patient_art_no'];
-  $row[] = ucwords($patientFirstName).ucwords($patientMiddleName).ucwords($patientLastName);
+  $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
   $row[] = $dob;
   $row[] = ($aRow['patient_age_in_years']!= NULL && trim($aRow['patient_age_in_years'])!= '' && $aRow['patient_age_in_years'] >0)?$aRow['patient_age_in_years']:0;
   $row[] = $gender;

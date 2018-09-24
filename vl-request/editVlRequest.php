@@ -171,23 +171,25 @@ if(isset($vlQueryInfo[0]['result_reviewed_datetime']) && trim($vlQueryInfo[0]['r
 }else{
      $vlQueryInfo[0]['result_reviewed_datetime']='';
 }
-if($vlQueryInfo[0]['remote_sample']=='yes'){
-     $sampleCode = $vlQueryInfo[0]['remote_sample_code'];
-}else{
-     $sampleCode = $vlQueryInfo[0]['sample_code'];
-}
+// if($vlQueryInfo[0]['remote_sample']=='yes'){
+//      $sampleCode = $vlQueryInfo[0]['remote_sample_code'];
+// }else{
+//      $sampleCode = $vlQueryInfo[0]['sample_code'];
+// }
+
+
 if($vlQueryInfo[0]['patient_first_name']!=''){
-     $patientFirstName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_first_name'],$sampleCode);
+     $patientFirstName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_first_name'],$vlQueryInfo[0]['patient_art_no']);
 }else{
      $patientFirstName = '';
 }
 if($vlQueryInfo[0]['patient_middle_name']!=''){
-     $patientMiddleName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_middle_name'],$sampleCode);
+     $patientMiddleName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_middle_name'],$vlQueryInfo[0]['patient_art_no']);
 }else{
      $patientMiddleName = '';
 }
 if($vlQueryInfo[0]['patient_last_name']!=''){
-     $patientLastName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_last_name'],$sampleCode);
+     $patientLastName = $general->crypto('decrypt',$vlQueryInfo[0]['patient_last_name'],$vlQueryInfo[0]['patient_art_no']);
 }else{
      $patientLastName = '';
 }
