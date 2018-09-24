@@ -98,8 +98,16 @@ $sWhere = '';
       $start_date = date('Y-m-d', $date);
       $end_date = date('Y-m-d');
    }
-   $tatSampleQuery="select DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgDiff from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
-                        AND (vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00')
+   $tatSampleQuery="select 
+                        DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,
+                        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgTestedDiff,
+                        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
+                        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
+                        
+                        from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
+                        AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR 
+                        (vl.result_printed_datetime is not null AND vl.result_printed_datetime != '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR 
+                        (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime != '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
                         AND vl.result is not null
                         AND vl.result != ''
                         AND DATE(vl.sample_collection_date) >= '".$start_date."'
@@ -122,7 +130,9 @@ $sWhere = '';
    $j=0;
    foreach($tatResult as $sRow){
        if($sRow["monthDate"] == null) continue;
-       $result['all'][$j] = (isset($sRow["AvgDiff"]) && $sRow["AvgDiff"] > 0 && $sRow["AvgDiff"] != NULL) ? round($sRow["AvgDiff"],2) : 0;
+       $result['sampleTestedDiff'][$j] = (isset($sRow["AvgTestedDiff"]) && $sRow["AvgTestedDiff"] > 0 && $sRow["AvgTestedDiff"] != NULL) ? round($sRow["AvgTestedDiff"],2) : null;
+       $result['sampleReceivedDiff'][$j] = (isset($sRow["AvgReceivedDiff"]) && $sRow["AvgReceivedDiff"] > 0 && $sRow["AvgReceivedDiff"] != NULL) ? round($sRow["AvgReceivedDiff"],2) : null;
+       $result['samplePrintedDiff'][$j] = (isset($sRow["AvgPrintedDiff"]) && $sRow["AvgPrintedDiff"] > 0 && $sRow["AvgPrintedDiff"] != NULL) ? round($sRow["AvgPrintedDiff"],2) : null;
        $result['date'][$j] = $sRow["monthDate"];
        $j++;
    }
@@ -309,15 +319,37 @@ $sWhere = '';
         
         series: [
             <?php
-            if(isset($result['all'])){
+            if(isset($result['sampleTestedDiff'])){
             ?>
             {
-            showInLegend: false,
-            name: 'Days',
-            data: [<?php echo implode(",",$result['all']);?>],
+            showInLegend: true,
+            name: 'Sample Tested TAT',
+            data: [<?php echo implode(",",$result['sampleTestedDiff']);?>],
             color : '#1B325F',
         },
-        <?php } ?>
+        <?php 
+        }
+        if(isset($result['sampleReceivedDiff'])){
+        ?>
+         {
+            showInLegend: true,
+            name: 'Sample Received TAT',
+            data: [<?php echo implode(",",$result['sampleReceivedDiff']);?>],
+            color : '#9c9393',
+        },
+        <?php
+        }
+        if(isset($result['samplePrintedDiff'])){
+        ?>
+            {
+                showInLegend: true,
+                name: 'Sample Printed TAT',
+                data: [<?php echo implode(",",$result['samplePrintedDiff']);?>],
+                color : '#6a4545',
+            },
+        <?php
+        }
+        ?>
         ],
     });
     <?php } ?>
