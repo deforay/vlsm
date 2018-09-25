@@ -8,57 +8,57 @@ $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
      //system config
-    $systemConfigQuery ="SELECT * from system_config";
-    $systemConfigResult=$db->query($systemConfigQuery);
-    $sarr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-    }
+     $systemConfigQuery ="SELECT * from system_config";
+     $systemConfigResult=$db->query($systemConfigQuery);
+     $sarr = array();
+     // now we create an associative array so that we can easily create view variables
+     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+          $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+     }
      if($sarr['user_type']=='remoteuser' && $_POST['oldStatus']==9){
-        $status = 9;
-    }else if($_POST['oldStatus']==9){
-        $status = 6;
-    }else{
-     $status = $_POST['oldStatus'];
-    }
+          $status = 9;
+     }else if($_POST['oldStatus']==9){
+          $status = 6;
+     }else{
+          $status = $_POST['oldStatus'];
+     }
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
           $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
      }
-     
+
      if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
           $sampleReceivedDate = explode(" ",$_POST['sampleReceivedDate']);
           $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDate[0])." ".$sampleReceivedDate[1];
      }
-     
+
      if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-          $_POST['dob']=$general->dateFormat($_POST['dob']);  
+          $_POST['dob']=$general->dateFormat($_POST['dob']);
      }
-     
+
      if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
-          $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
+          $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);
      }
-     
+
      if(isset($_POST['lastViralLoadTestDate']) && trim($_POST['lastViralLoadTestDate'])!=""){
-          $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);  
+          $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);
      }
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
           $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
-          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];
      }
-     
+
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
-            'art_code'=>$_POST['newArtRegimen'],
-            'nation_identifier'=>'zmb',
-            'updated_datetime'=>$general->getDateTime(),
+               'art_code'=>$_POST['newArtRegimen'],
+               'nation_identifier'=>'zmb',
+               'updated_datetime'=>$general->getDateTime(),
           );
-          
+
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
      }
-    
+
      if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
           $_POST['patientPregnant']='';
           $_POST['breastfeeding']='';
@@ -75,7 +75,7 @@ try {
      $viralLoadData = array('result_value_absolute'=>$_POST['vlResult'],'result_value_log'=>$_POST['vlLog']);
      $db = $db->where('vl_sample_id',$_POST['treamentId']);
      $vloadResultUpdate = $db->update($tableName,$viralLoadData);
-     
+
      //
      if(!isset($_POST['noResult'])){
           $_POST['noResult'] = '';
@@ -128,47 +128,46 @@ try {
           'result_status'=>(isset($status) && $status!='') ? $status :  NULL,
           'last_modified_datetime'=>$general->getDateTime(),
           'data_sync'=>0
-        );
-          if($sarr['user_type']=='remoteuser'){
-            $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
-        }else if($_POST['sampleCodeCol']!=''){
-            $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
-        }
-        if($_POST['isRemoteSample']=='yes'){
-          $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
-          $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
-        }else{
-          $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
-          $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
-        }
+     );
 
-          if($vloadResultUpdate){
-            $vldata['manual_result_entry']='yes';
-            $vldata['import_machine_file_name']='';
-          }
-          $db=$db->where('vl_sample_id',$_POST['treamentId']);
-          $id = $db->update($tableName,$vldata);
-          if($id>0){
+     if($sarr['user_type']=='remoteuser'){
+          $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
+     }else if($_POST['sampleCodeCol']!=''){
+          $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+          $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+     }
+
+
+     $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['patient_art_no']);
+     $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['patient_art_no']);
+
+
+     if($vloadResultUpdate){
+          $vldata['manual_result_entry']='yes';
+          $vldata['import_machine_file_name']='';
+     }
+     $db=$db->where('vl_sample_id',$_POST['treamentId']);
+     $id = $db->update($tableName,$vldata);
+     if($id>0){
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log
           $eventType = 'update-vl-request-zm';
           $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['serialNo'];
           $resource = 'vl-request-zm';
           $data=array(
-          'event_type'=>$eventType,
-          'action'=>$action,
-          'resource'=>$resource,
-          'date_time'=>$general->getDateTime()
+               'event_type'=>$eventType,
+               'action'=>$action,
+               'resource'=>$resource,
+               'date_time'=>$general->getDateTime()
           );
           $db->insert($tableName1,$data);
-          }else{
-               $_SESSION['alertMsg']="Please try again later";
-          }
-          header("location:vlRequest.php");
-    
-  
+     }else{
+          $_SESSION['alertMsg']="Please try again later";
+     }
+     header("location:vlRequest.php");
+
+
 } catch (Exception $exc) {
-    error_log($exc->getMessage());
-    error_log($exc->getTraceAsString());
+     error_log($exc->getMessage());
+     error_log($exc->getTraceAsString());
 }
