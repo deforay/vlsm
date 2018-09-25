@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general = new General();
+$general = new General($db);
 $tableName="facility_details";
 $tableName1="province_details";
 $tableName2="vl_user_facility_map";
@@ -58,8 +58,8 @@ try {
         'facility_emails'=>$_POST['email'],
         'report_email'=>$email,
         'contact_person'=>$_POST['contactPerson'],
-	'facility_type'=>$_POST['facilityType'],
-	'updated_datetime'=>$general->getDateTime(),
+		'facility_type'=>$_POST['facilityType'],
+		'updated_datetime'=>$general->getDateTime(),
         'status'=>'active'
         );
         
@@ -76,7 +76,8 @@ try {
 				$db->insert($tableName2,$data);
 			}
 		}
-        $_SESSION['alertMsg']="Facility details added successfully";
+		$_SESSION['alertMsg']="Facility details added successfully";
+		$general->activityLog('add-facility',$_SESSION['userName']. ' added new facility '.$_POST['facilityName'],'facility');
     }
     header("location:facilities.php");
   

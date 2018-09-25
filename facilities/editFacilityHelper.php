@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general = new General();
+$general = new General($db);
 $tableName="facility_details";
 $facilityId=base64_decode($_POST['facilityId']);
 $tableName1="province_details";
@@ -73,7 +73,8 @@ try {
 				$db->insert($tableName2,$data);
 			}
 		}
-        $_SESSION['alertMsg']="Facility details updated successfully";
+		$_SESSION['alertMsg']="Facility details updated successfully";
+		$general->activityLog('update-facility',$_SESSION['userName']. ' updated facility '.$_POST['facilityName'],'facility');
     }
     header("location:facilities.php");
   
