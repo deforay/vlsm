@@ -12,7 +12,7 @@ try {
            $db->update($tableName,$data);
         }
     }
-    $_SESSION['alertMsg']="Other Config values updated successfully";
+    $_SESSION['alertMsg']="Global Config values updated successfully";
     header("location:testResultEmailConfig.php");
 }catch (Exception $exc) {
     error_log($exc->getMessage());

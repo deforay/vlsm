@@ -26,13 +26,13 @@ $primaryKey="vl_sample_id";
 * you want to insert a non-database field (for example a counter or static image)
 */
 $sampleCode = 'sample_code';
-$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
-$orderColumns = array('vl.sample_code','vl.remote_sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y %H:%i:%s')",'ts.status_name');
+$orderColumns = array('vl.sample_code','vl.last_modified_datetime','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
 if($sarr['user_type']=='remoteuser'){
      $sampleCode = 'remote_sample_code';
 }else if($sarr['user_type']=='standalone') {
-     $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
-     $orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+     $aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result',"DATE_FORMAT(vl.last_modified_datetime,'%d-%b-%Y %H:%i:%s')",'ts.status_name');
+     $orderColumns = array('vl.last_modified_datetime','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','vl.last_modified_datetime','ts.status_name');
 }
 
 
@@ -286,6 +286,12 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                }else{
                     $aRow['sample_collection_date'] = '';
                }
+               if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
+                  $xplodDate = explode(" ",$aRow['last_modified_datetime']);
+          $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+            }else{
+                  $aRow['last_modified_datetime'] = '';
+            }
 
                      $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow['patient_art_no']));
                      $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow['patient_art_no']));
@@ -309,6 +315,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $row[] = ucwords($aRow['facility_district']);
                $row[] = ucwords($aRow['sample_name']);
                $row[] = $aRow['result'];
+               $row[] = $aRow['last_modified_datetime'];
                $row[] = ucwords($aRow['status_name']);
                //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
                //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
