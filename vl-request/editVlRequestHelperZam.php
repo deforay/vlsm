@@ -53,7 +53,7 @@ try {
      }
      //dob
      if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-        $_POST['dob']=$general->dateFormat($_POST['dob']);  
+        $_POST['dob']=$general->dateFormat($_POST['dob']);
      }else{
         $_POST['dob'] = NULL;
      }
@@ -77,19 +77,19 @@ try {
      }else if(isset($_POST['newSuspectedTreatmentFailureAt']) && trim($_POST['newSuspectedTreatmentFailureAt'])!=""){
          $_POST['suspectedTreatmentFailureAt'] = str_replace(' ','_',$_POST['newSuspectedTreatmentFailureAt']);
      }else{
-         $_POST['suspectedTreatmentFailureAt'] = NULL; 
+         $_POST['suspectedTreatmentFailureAt'] = NULL;
      }
      //sample received date
      if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
         $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
-        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
+        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];
      }else{
         $_POST['sampleReceivedDate'] = NULL;
      }
      //sample testing date at lab
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
         $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
-        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];  
+        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];
      }else{
         $_POST['sampleTestingDateAtLab'] = NULL;
      }
@@ -122,19 +122,19 @@ try {
      //reviewed by date time
      if(isset($_POST['reviewedByDatetime']) && trim($_POST['reviewedByDatetime'])!=""){
         $reviewedByDatetime = explode(" ",$_POST['reviewedByDatetime']);
-        $_POST['reviewedByDatetime']=$general->dateFormat($reviewedByDatetime[0])." ".$reviewedByDatetime[1];  
+        $_POST['reviewedByDatetime']=$general->dateFormat($reviewedByDatetime[0])." ".$reviewedByDatetime[1];
      }else{
         $_POST['reviewedByDatetime'] = NULL;
      }
      //date of ART initiation
      if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
-          $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
+          $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);
      }else{
         $_POST['dateOfArtInitiation'] = NULL;
      }
      //ART regimen
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!= "" && trim($_POST['artRegimen'])== "other"){
-          $_POST['artRegimen'] = $_POST['newArtRegimen']; 
+          $_POST['artRegimen'] = $_POST['newArtRegimen'];
           $checkArtQuery ="SELECT art_id FROM r_art_code_details where art_code='".$_POST['newArtRegimen']."' OR art_code='".strtolower($_POST['newArtRegimen'])."' OR art_code='".ucfirst(strtolower($_POST['newArtRegimen']))."'";
           $checkArtResult = $db->rawQuery($checkArtQuery);
           if(!isset($checkArtResult[0]['art_id'])){
@@ -163,7 +163,7 @@ try {
      }
      //last vl test date
      if(isset($_POST['lastViralLoadTestDate']) && trim($_POST['lastViralLoadTestDate'])!=""){
-          $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);  
+          $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);
      }else{
         $_POST['lastViralLoadTestDate'] = NULL;
      }
@@ -220,15 +220,13 @@ try {
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
      }
-     if($_POST['isRemoteSample']=='yes'){
-        $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
-        $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
-      }else{
-        $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
-        $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
-      }
+
+     $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['patient_art_no']);
+     $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['patient_art_no']);
+
      $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
      $id = $db->update($tableName,$vldata);
+     
      if($id>0){
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log

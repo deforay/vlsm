@@ -193,9 +193,12 @@ class General {
         }
     }
 
-    function crypto($action, $inputString, $secretIv) {
-        if (empty($inputString)) return "";
+    public function crypto($action, $inputString, $secretIv) {
 
+        return $inputString;
+ 
+        if (empty($inputString)) return "";
+     
         $output = false;
         $encrypt_method = "AES-256-CBC";
         $secret_key = 'rXBCNkAzkHXGBKEReqrTfPhGDqhzxgDRQ7Q0XqN6BVvuJjh1OBVvuHXGBKEReqrTfPhGDqhzxgDJjh1OB4QcIGAGaml';
@@ -217,6 +220,19 @@ class General {
 
         }
         return $output;
+    }
+
+
+    public function activityLog($eventType,$action,$resource){
+
+        $data=array(
+            'event_type'=>$eventType,
+            'action'=>$action,
+            'resource'=>$resource,
+            'date_time'=>$this->getDateTime()
+        );
+
+        $this->db->insert('activity_log',$data);        
     }
 
 }
