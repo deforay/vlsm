@@ -9,205 +9,205 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-    $validateField = array($_POST['sampleCode'],$_POST['sampleCollectionDate']);
-    $chkValidation = $general->checkMandatoryField($validateField);
-    if($chkValidation){
-        $_SESSION['alertMsg']="Please enter all mandatory fields to save the test request";
-        header("location:editVlRequest.php?id=".base64_encode($_POST['vlSampleId']));
-        die;
-    }
+     $validateField = array($_POST['sampleCode'],$_POST['sampleCollectionDate']);
+     $chkValidation = $general->checkMandatoryField($validateField);
+     if($chkValidation){
+          $_SESSION['alertMsg']="Please enter all mandatory fields to save the test request";
+          header("location:editVlRequest.php?id=".base64_encode($_POST['vlSampleId']));
+          die;
+     }
      //system config
-    $systemConfigQuery ="SELECT * from system_config";
-    $systemConfigResult=$db->query($systemConfigQuery);
-    $sarr = array();
-    // now we create an associative array so that we can easily create view variables
-    for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-    }
-    if(($sarr['user_type']=='remoteuser') && $_POST['oldStatus']==9){
-        $_POST['status'] = 9;
-    }else if($_POST['oldStatus']==9){
-        $_POST['status'] = 6;
-    }
-    if($_POST['status']==''){
-        $_POST['status']  = $_POST['oldStatus'];
-    }
-    //add province
-    $splitProvince = explode("##",$_POST['province']);
-    if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){
-        $provinceQuery="SELECT * from province_details where province_name='".$splitProvince[0]."'";
-        $provinceInfo=$db->query($provinceQuery);
-        if(!isset($provinceInfo) || count($provinceInfo) == 0){
-            $db->insert('province_details',array('province_name'=>$splitProvince[0],'province_code'=>$splitProvince[1]));
-        }
-    }
-    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
-         $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
-         $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
-    }else{
-        $_POST['sampleCollectionDate'] = NULL;
-    }
-    
-    if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-       $_POST['dob']=$general->dateFormat($_POST['dob']);  
-    }else{
-       $_POST['dob'] = NULL;
-    }
-    
-    if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
-       $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
-    }else{
-       $_POST['dateOfArtInitiation'] = NULL;
-    }
-    
-    if(isset($_POST['regimenInitiatedOn']) && trim($_POST['regimenInitiatedOn'])!=""){
-       $_POST['regimenInitiatedOn']=$general->dateFormat($_POST['regimenInitiatedOn']);  
-    }else{
-       $_POST['regimenInitiatedOn'] = NULL;
-    }
-    
-    if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
-         $artQuery ="SELECT art_id,art_code FROM r_art_code_details where (art_code='".$_POST['newArtRegimen']."' OR art_code='".strtolower($_POST['newArtRegimen'])."' OR art_code='".ucfirst(strtolower($_POST['newArtRegimen']))."') AND nation_identifier='sudan'";
-         $artResult = $db->rawQuery($artQuery);
-         if(!isset($artResult[0]['art_id'])){
-            $data=array(
-            'art_code'=>$_POST['newArtRegimen'],
-            'nation_identifier'=>'sudan',
-            'parent_art'=>'1',
-            'updated_datetime'=>$general->getDateTime(),
+     $systemConfigQuery ="SELECT * from system_config";
+     $systemConfigResult=$db->query($systemConfigQuery);
+     $sarr = array();
+     // now we create an associative array so that we can easily create view variables
+     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+          $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+     }
+     if(($sarr['user_type']=='remoteuser') && $_POST['oldStatus']==9){
+          $_POST['status'] = 9;
+     }else if($_POST['oldStatus']==9){
+          $_POST['status'] = 6;
+     }
+     if($_POST['status']==''){
+          $_POST['status']  = $_POST['oldStatus'];
+     }
+     //add province
+     $splitProvince = explode("##",$_POST['province']);
+     if(isset($splitProvince[0]) && trim($splitProvince[0])!= ''){
+          $provinceQuery="SELECT * from province_details where province_name='".$splitProvince[0]."'";
+          $provinceInfo=$db->query($provinceQuery);
+          if(!isset($provinceInfo) || count($provinceInfo) == 0){
+               $db->insert('province_details',array('province_name'=>$splitProvince[0],'province_code'=>$splitProvince[1]));
+          }
+     }
+     if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
+          $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
+          $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
+     }else{
+          $_POST['sampleCollectionDate'] = NULL;
+     }
+
+     if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
+          $_POST['dob']=$general->dateFormat($_POST['dob']);
+     }else{
+          $_POST['dob'] = NULL;
+     }
+
+     if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
+          $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);
+     }else{
+          $_POST['dateOfArtInitiation'] = NULL;
+     }
+
+     if(isset($_POST['regimenInitiatedOn']) && trim($_POST['regimenInitiatedOn'])!=""){
+          $_POST['regimenInitiatedOn']=$general->dateFormat($_POST['regimenInitiatedOn']);
+     }else{
+          $_POST['regimenInitiatedOn'] = NULL;
+     }
+
+     if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
+          $artQuery ="SELECT art_id,art_code FROM r_art_code_details where (art_code='".$_POST['newArtRegimen']."' OR art_code='".strtolower($_POST['newArtRegimen'])."' OR art_code='".ucfirst(strtolower($_POST['newArtRegimen']))."') AND nation_identifier='sudan'";
+          $artResult = $db->rawQuery($artQuery);
+          if(!isset($artResult[0]['art_id'])){
+               $data=array(
+                    'art_code'=>$_POST['newArtRegimen'],
+                    'nation_identifier'=>'sudan',
+                    'parent_art'=>'1',
+                    'updated_datetime'=>$general->getDateTime(),
+               );
+               $result=$db->insert('r_art_code_details',$data);
+               $_POST['artRegimen'] = $_POST['newArtRegimen'];
+          }else{
+               $_POST['artRegimen'] = $artResult[0]['art_code'];
+          }
+     }
+
+     //update facility code
+     if(trim($_POST['fCode'])!=''){
+          $fData = array('facility_code'=>$_POST['fCode']);
+          $db=$db->where('facility_id',$_POST['fName']);
+          $id=$db->update($fDetails,$fData);
+     }
+     //update facility emails
+     //if(trim($_POST['emailHf'])!=''){
+     //   $fData = array('facility_emails'=>$_POST['emailHf']);
+     //   $db=$db->where('facility_id',$_POST['fName']);
+     //   $id=$db->update($fDetails,$fData);
+     //}
+     if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
+          $_POST['patientPregnant']='';
+          $_POST['breastfeeding']='';
+     }
+     $instanceId = '';
+     if(isset($_SESSION['instanceId'])){
+          $instanceId = $_SESSION['instanceId'];
+     }
+     $testingPlatform = '';
+     if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
+          $platForm = explode("##",$_POST['testingPlatform']);
+          $testingPlatform = $platForm[0];
+     }
+     if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
+          $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
+          $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];
+     }else{
+          $_POST['sampleReceivedDate'] = NULL;
+     }
+
+
+     if(isset($_POST['sampleReceivedAtHubOn']) && trim($_POST['sampleReceivedAtHubOn'])!=""){
+          $sampleReceivedAtHubOn = explode(" ",$_POST['sampleReceivedAtHubOn']);
+          $_POST['sampleReceivedAtHubOn']=$general->dateFormat($sampleReceivedAtHubOn[0])." ".$sampleReceivedAtHubOn[1];
+     }else{
+          $_POST['sampleReceivedAtHubOn'] = NULL;
+     }
+
+
+     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
+          $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];
+     }else{
+          $_POST['sampleTestingDateAtLab'] = NULL;
+     }
+     if(isset($_POST['resultDispatchedOn']) && trim($_POST['resultDispatchedOn'])!=""){
+          $resultDispatchedOn = explode(" ",$_POST['resultDispatchedOn']);
+          $_POST['resultDispatchedOn']=$general->dateFormat($resultDispatchedOn[0])." ".$resultDispatchedOn[1];
+     }else{
+          $_POST['resultDispatchedOn'] = NULL;
+     }
+
+     if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
+          $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
+          $rejectionResult = $db->rawQuery($rejectionReasonQuery);
+          if(!isset($rejectionResult[0]['rejection_reason_id'])){
+               $data=array(
+                    'rejection_reason_name'=>$_POST['newRejectionReason'],
+                    'rejection_type'=>'general',
+                    'rejection_reason_status'=>'active',
+                    'updated_datetime'=>$general->getDateTime(),
+               );
+               $id=$db->insert('r_sample_rejection_reasons',$data);
+               $_POST['rejectionReason'] = $id;
+          }else{
+               $_POST['rejectionReason'] = $rejectionResult[0]['rejection_reason_id'];
+          }
+     }
+
+     $isRejection = false;
+     if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
+          $isRejection = true;
+          $_POST['vlResult'] = '';
+          $_POST['vlLog'] = '';
+     }
+
+     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
+          $_POST['vlResult'] = 'Target Not Detected';
+          $_POST['vlLog'] = '';
+     }
+     if(isset($_POST['bdl']) && $_POST['bdl'] =='yes' && $isRejection == false){
+          $_POST['vlResult'] = 'Below Detection Level';
+          $_POST['vlLog'] = '';
+     }
+
+     $_POST['result'] = '';
+     if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
+          $_POST['result'] = $_POST['vlResult'];
+     }else if($_POST['vlLog']!=''){
+          $_POST['result'] = $_POST['vlLog'];
+     }
+     $reasonForChanges = '';
+     $allChange = array();
+     if(isset($_POST['reasonForResultChangesHistory']) && $_POST['reasonForResultChangesHistory'] !=''){
+          $allChange = json_decode(base64_decode($_POST['reasonForResultChangesHistory']),true);
+     }
+     if(isset($_POST['reasonForResultChanges']) && trim($_POST['reasonForResultChanges'])!=''){
+          $allChange[] = array(
+               'usr' => $_SESSION['userId'],
+               'msg' => $_POST['reasonForResultChanges'],
+               'dtime' => $general->getDateTime()
           );
-          $result=$db->insert('r_art_code_details',$data);
-          $_POST['artRegimen'] = $_POST['newArtRegimen'];
-         }else{
-          $_POST['artRegimen'] = $artResult[0]['art_code'];
-         }
-    }
-    
-    //update facility code
-    if(trim($_POST['fCode'])!=''){
-       $fData = array('facility_code'=>$_POST['fCode']);
-       $db=$db->where('facility_id',$_POST['fName']);
-       $id=$db->update($fDetails,$fData);
-    }
-    //update facility emails
-    //if(trim($_POST['emailHf'])!=''){
-    //   $fData = array('facility_emails'=>$_POST['emailHf']);
-    //   $db=$db->where('facility_id',$_POST['fName']);
-    //   $id=$db->update($fDetails,$fData);
-    //}
-    if(isset($_POST['gender']) && trim($_POST['gender'])=='male'){
-       $_POST['patientPregnant']='';
-       $_POST['breastfeeding']='';
-    }
-    $instanceId = '';
-    if(isset($_SESSION['instanceId'])){
-        $instanceId = $_SESSION['instanceId'];
-    }
-    $testingPlatform = '';
-    if(isset($_POST['testingPlatform']) && trim($_POST['testingPlatform'])!=''){
-        $platForm = explode("##",$_POST['testingPlatform']);
-        $testingPlatform = $platForm[0];
-    }
-    if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
-        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
-        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];  
-    }else{
-        $_POST['sampleReceivedDate'] = NULL;
-    }
+     }
+     if(count($allChange) > 0){
+          $reasonForChanges = json_encode($allChange);
+     }
+     //set vl test reason
+     if(isset($_POST['stViralTesting']) && trim($_POST['stViralTesting'])!=""){
+          $reasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['stViralTesting']."'";
+          $reasonResult = $db->rawQuery($reasonQuery);
+          if(isset($reasonResult[0]['test_reason_id']) && $reasonResult[0]['test_reason_id']!=''){
+               $_POST['stViralTesting'] = $reasonResult[0]['test_reason_id'];
+          }else{
+               $data=array(
+                    'test_reason_name'=>$_POST['stViralTesting'],
+                    'test_reason_status'=>'active'
+               );
+               $id=$db->insert('r_vl_test_reasons',$data);
+               $_POST['stViralTesting'] = $id;
+          }
+     }
 
-  
-    if(isset($_POST['sampleReceivedAtHubOn']) && trim($_POST['sampleReceivedAtHubOn'])!=""){
-        $sampleReceivedAtHubOn = explode(" ",$_POST['sampleReceivedAtHubOn']);
-        $_POST['sampleReceivedAtHubOn']=$general->dateFormat($sampleReceivedAtHubOn[0])." ".$sampleReceivedAtHubOn[1];  
-    }else{
-        $_POST['sampleReceivedAtHubOn'] = NULL;
-    }
-
-
-    if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
-        $sampleTestingDateAtLab = explode(" ",$_POST['sampleTestingDateAtLab']);
-        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateAtLab[0])." ".$sampleTestingDateAtLab[1];  
-    }else{
-        $_POST['sampleTestingDateAtLab'] = NULL;
-    }
-    if(isset($_POST['resultDispatchedOn']) && trim($_POST['resultDispatchedOn'])!=""){
-        $resultDispatchedOn = explode(" ",$_POST['resultDispatchedOn']);
-        $_POST['resultDispatchedOn']=$general->dateFormat($resultDispatchedOn[0])." ".$resultDispatchedOn[1];  
-    }else{
-        $_POST['resultDispatchedOn'] = NULL;
-    }
-    
-    if(isset($_POST['newRejectionReason']) && trim($_POST['newRejectionReason'])!=""){
-         $rejectionReasonQuery ="SELECT rejection_reason_id FROM r_sample_rejection_reasons where rejection_reason_name='".$_POST['newRejectionReason']."' OR rejection_reason_name='".strtolower($_POST['newRejectionReason'])."' OR rejection_reason_name='".ucfirst(strtolower($_POST['newRejectionReason']))."'";
-         $rejectionResult = $db->rawQuery($rejectionReasonQuery);
-         if(!isset($rejectionResult[0]['rejection_reason_id'])){
-            $data=array(
-            'rejection_reason_name'=>$_POST['newRejectionReason'],
-            'rejection_type'=>'general',
-            'rejection_reason_status'=>'active',
-            'updated_datetime'=>$general->getDateTime(),
-            );
-            $id=$db->insert('r_sample_rejection_reasons',$data);
-            $_POST['rejectionReason'] = $id;
-         }else{
-            $_POST['rejectionReason'] = $rejectionResult[0]['rejection_reason_id'];
-         }
-    }
-    
-    $isRejection = false;
-    if(isset($_POST['noResult']) && $_POST['noResult'] =='yes'){
-        $isRejection = true;
-        $_POST['vlResult'] = '';
-        $_POST['vlLog'] = '';
-    }
-    
-    if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'Target Not Detected';
-        $_POST['vlLog'] = '';
-    }
-    if(isset($_POST['bdl']) && $_POST['bdl'] =='yes' && $isRejection == false){
-        $_POST['vlResult'] = 'Below Detection Level';
-        $_POST['vlLog'] = '';
-    }
-    
-    $_POST['result'] = '';
-    if(isset($_POST['vlResult']) && trim($_POST['vlResult']) != ''){
-        $_POST['result'] = $_POST['vlResult'];
-    }else if($_POST['vlLog']!=''){
-        $_POST['result'] = $_POST['vlLog'];
-    }
-    $reasonForChanges = '';
-    $allChange = array();
-    if(isset($_POST['reasonForResultChangesHistory']) && $_POST['reasonForResultChangesHistory'] !=''){
-        $allChange = json_decode(base64_decode($_POST['reasonForResultChangesHistory']),true);
-    }
-    if(isset($_POST['reasonForResultChanges']) && trim($_POST['reasonForResultChanges'])!=''){
-        $allChange[] = array(
-            'usr' => $_SESSION['userId'],
-            'msg' => $_POST['reasonForResultChanges'],
-            'dtime' => $general->getDateTime()
-        );
-    }
-    if(count($allChange) > 0){
-       $reasonForChanges = json_encode($allChange);
-    }
-    //set vl test reason
-    if(isset($_POST['stViralTesting']) && trim($_POST['stViralTesting'])!=""){
-        $reasonQuery ="SELECT test_reason_id FROM r_vl_test_reasons where test_reason_name='".$_POST['stViralTesting']."'";   
-        $reasonResult = $db->rawQuery($reasonQuery);
-        if(isset($reasonResult[0]['test_reason_id']) && $reasonResult[0]['test_reason_id']!=''){
-            $_POST['stViralTesting'] = $reasonResult[0]['test_reason_id'];
-        }else{
-            $data=array(
-                'test_reason_name'=>$_POST['stViralTesting'],
-                'test_reason_status'=>'active'
-                );
-                $id=$db->insert('r_vl_test_reasons',$data);
-                $_POST['stViralTesting'] = $id;
-        }
-    }
-
-    $vldata=array(
+     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
           'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
@@ -260,47 +260,44 @@ try {
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
           'funding_source'=>(isset($_POST['fundingSource']) && trim($_POST['fundingSource'])!= '')?base64_decode($_POST['fundingSource']):NULL,
-          'implementing_partner'=>(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= '')?base64_decode($_POST['implementingPartner']):NULL,          
+          'implementing_partner'=>(isset($_POST['implementingPartner']) && trim($_POST['implementingPartner'])!= '')?base64_decode($_POST['implementingPartner']):NULL,
           'reason_for_vl_result_changes'=>$reasonForChanges,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes',
           'data_sync'=>0
-        );
-        if($sarr['user_type']=='remoteuser'){
-            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-        }else if($_POST['sampleCodeCol']!=''){
-            $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
-        }
+     );
+     if($sarr['user_type']=='remoteuser'){
+          $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+     }else if($_POST['sampleCodeCol']!=''){
+          $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+          $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
+     }
 
-        if($_POST['isRemoteSample']=='yes'){
-            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['remote_sample_code']);
-        }else{
-            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['sample_code']);
-        }
+     $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['patient_art_no']);
 
-        $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
-        $id=$db->update($tableName,$vldata);
-        if($id>0){
-             $_SESSION['alertMsg']="VL request updated successfully";
-             //Add event log
-             $eventType = 'update-vl-request-rwd';
-             $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
-             $resource = 'vl-request-rwd';
-             $data=array(
-             'event_type'=>$eventType,
-             'action'=>$action,
-             'resource'=>$resource,
-             'date_time'=>$general->getDateTime()
-             );
-             $db->insert($tableName1,$data);
-             header("location:vlRequest.php");
-        }else{
-             $_SESSION['alertMsg']="Please try again later";
-        }
-  
+
+     $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
+     $id=$db->update($tableName,$vldata);
+     if($id>0){
+          $_SESSION['alertMsg']="VL request updated successfully";
+          //Add event log
+          $eventType = 'update-vl-request-rwd';
+          $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
+          $resource = 'vl-request-rwd';
+          $data=array(
+               'event_type'=>$eventType,
+               'action'=>$action,
+               'resource'=>$resource,
+               'date_time'=>$general->getDateTime()
+          );
+          $db->insert($tableName1,$data);
+          header("location:vlRequest.php");
+     }else{
+          $_SESSION['alertMsg']="Please try again later";
+     }
+
 } catch (Exception $exc) {
-    error_log($exc->getMessage());
-    error_log($exc->getTraceAsString());
+     error_log($exc->getMessage());
+     error_log($exc->getTraceAsString());
 }
