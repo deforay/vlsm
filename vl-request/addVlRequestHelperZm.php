@@ -32,41 +32,41 @@ try {
     }else{
      $_POST['labNo'] = '1';
     }
-     
+
      //var_dump($_POST);die;
      if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
           $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
           $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
      }
-     
+
      if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
           $sampleReceivedDate = explode(" ",$_POST['sampleReceivedDate']);
           $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDate[0])." ".$sampleReceivedDate[1];
      }
-     
+
      if(isset($_POST['dob']) && trim($_POST['dob'])!=""){
-          $_POST['dob']=$general->dateFormat($_POST['dob']); 
+          $_POST['dob']=$general->dateFormat($_POST['dob']);
      }
-     
+
      if(isset($_POST['dateOfArtInitiation']) && trim($_POST['dateOfArtInitiation'])!=""){
-          $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);  
+          $_POST['dateOfArtInitiation']=$general->dateFormat($_POST['dateOfArtInitiation']);
      }
-     
+
      if(isset($_POST['lastViralLoadTestDate']) && trim($_POST['lastViralLoadTestDate'])!=""){
-          $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);  
+          $_POST['lastViralLoadTestDate']=$general->dateFormat($_POST['lastViralLoadTestDate']);
      }
      if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
           $sampleTestingDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
-          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];  
+          $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleTestingDateLab[0])." ".$sampleTestingDateLab[1];
      }
-    
+
      if(isset($_POST['newArtRegimen']) && trim($_POST['newArtRegimen'])!=""){
           $data=array(
             'art_code'=>$_POST['newArtRegimen'],
             'nation_identifier'=>'zmb',
             'updated_datetime'=>$general->getDateTime(),
           );
-          
+
           $result=$db->insert('r_art_code_details',$data);
           $_POST['artRegimen'] = $_POST['newArtRegimen'];
      }
@@ -167,18 +167,19 @@ try {
           'last_modified_datetime'=>$general->getDateTime(),
           'manual_result_entry'=>'yes'
         );
+
+        $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['patient_art_no']);
+        $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['patient_art_no']);
+
+
          if($sarr['user_type']=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? "R".$_POST['serialNo'] :  NULL;
             $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
             $vldata['remote_sample'] = 'yes';
-            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['remote_sample_code']);
-            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['remote_sample_code']);
         }else{
             $vldata['sample_code'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['serialNo']) && $_POST['serialNo']!='') ? $_POST['serialNo'] :  NULL;
             $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
-            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['sample_code']);
-            $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['sample_code']);
         }
           $id=$db->insert($tableName,$vldata);
           if($id>0){
@@ -208,7 +209,7 @@ try {
           }else{
                $_SESSION['alertMsg']="Please try again later";
           }
-  
+
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

@@ -279,18 +279,17 @@ try {
           'manual_result_entry'=>'yes'
         );
 
+        $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['patient_art_no']);
 
 
         if($sarr['user_type']=='remoteuser'){
             $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
             $vldata['remote_sample'] = 'yes';
-            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['remote_sample_code']);
         }else{
             $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
             $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
-            $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['sample_code']);
         }
         $id=$db->insert($tableName,$vldata);
         if($id>0){
