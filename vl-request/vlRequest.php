@@ -170,6 +170,9 @@ $batResult = $db->rawQuery($batQuery);
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="result" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Result</label>
 				    </div>
 						<div class="col-md-3">
+					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="last_modified_datetime" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Last Modified Date</label>
+				    </div>
+						<div class="col-md-3">
 					    <input type="checkbox" onclick="javascript:fnShowHide(this.value);" value="<?php echo $i = $i+1;?>" id="iCol<?php echo $i;?>" data-showhide="status_name" class="showhideCheckBox" /> <label for="iCol<?php echo $i;?>">Status</label>
 				    </div>
 				</div>
@@ -194,6 +197,7 @@ $batResult = $db->rawQuery($batQuery);
 		  <th>District/County</th>
                   <th>Sample Type</th>
                   <th>Result</th>
+                  <th>Last Modified Date</th>
                   <th>Status</th>
 		  <?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
                   <th>Action</th>
@@ -202,7 +206,7 @@ $batResult = $db->rawQuery($batQuery);
                 </thead>
                 <tbody>
                   <tr>
-                    <td colspan="15" class="dataTables_empty">Loading data from server</td>
+                    <td colspan="16" class="dataTables_empty">Loading data from server</td>
                 </tr>
                 </tbody>
               </table>
@@ -354,11 +358,12 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
+                {"sClass":"center"},
 		<?php if(isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))){ ?>
 		{"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-	    "aaSorting": [[ <?php echo ($sarr['user_type'] == 'remoteuser')?1:0 ?>, "asc" ]],
+	    "aaSorting": [[ <?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser')?11:10 ?>, "asc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;

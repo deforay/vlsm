@@ -47,6 +47,13 @@ if(count($data['result'])>0){
                 unset($lab['last_modified_by']);
                 unset($lab['request_created_datetime']);
                 unset($lab['sample_package_id']);
+		if($lab['result_status']!=7 && $lab['result_status']!=4){
+                unset($lab['result']);
+                unset($lab['result_value_log']);
+		unset($lab['result_value_absolute']);
+		unset($lab['result_value_text']);
+		unset($lab['result_value_absolute_decimal']);
+		}
                 $db=$db->where('vl_sample_id',$sResult[0]['vl_sample_id']);
                 $id = $db->update('vl_request_form',$lab);
                 if($id>0){
