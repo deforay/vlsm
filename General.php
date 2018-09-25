@@ -193,9 +193,10 @@ class General {
         }
     }
 
-    function crypto($action, $inputString, $secretIv) {
+    public function crypto($action, $inputString, $secretIv) {
+ 
         if (empty($inputString)) return "";
-
+     
         $output = false;
         $encrypt_method = "AES-256-CBC";
         $secret_key = 'rXBCNkAzkHXGBKEReqrTfPhGDqhzxgDRQ7Q0XqN6BVvuJjh1OBVvuHXGBKEReqrTfPhGDqhzxgDJjh1OB4QcIGAGaml';
