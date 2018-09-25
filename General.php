@@ -222,4 +222,17 @@ class General {
         return $output;
     }
 
+
+    public function activityLog($eventType,$action,$resource){
+
+        $data=array(
+            'event_type'=>$eventType,
+            'action'=>$action,
+            'resource'=>$resource,
+            'date_time'=>$this->getDateTime()
+        );
+
+        $this->db->insert('activity_log',$data);        
+    }
+
 }
