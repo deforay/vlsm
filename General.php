@@ -194,6 +194,8 @@ class General {
     }
 
     public function crypto($action, $inputString, $secretIv) {
+
+        return $inputString;
  
         if (empty($inputString)) return "";
      
