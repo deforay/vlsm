@@ -67,8 +67,8 @@ if(isset($_POST['pName'])){
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
-        if(!isset($_POST['comingFromUser'])){
-         $facility.=$option; //commented by vivek 18th Sept
+        if(!isset($_POST['comingFromUser'])){
+         $facility.=$option;
         }
         foreach($facilityInfo as $fDetails){
             $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
@@ -107,7 +107,7 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     $facility = '';
     if($facilityInfo){
         if(!isset($_POST['comingFromUser'])){
-         $facility .= $option; //commented by vivek 18th Sept
+         $facility .= $option;
         }
         foreach($facilityInfo as $fDetails){
           $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
