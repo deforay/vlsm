@@ -252,8 +252,6 @@ foreach($pdResult as $provinceName){
 <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
 <script type="text/javascript">
 
-provinceName = true;
-facilityName = true;
 jQuery(document).ready(function($) {
      $('#search').multiselect({
           search: {
@@ -313,46 +311,29 @@ function checkPasswordLength(){
 
 function getProvinceDistricts(obj){
      $.blockUI();
-     var cName = $("#fName").val();
      var pName = $("#province").val();
-     if(pName!='' && provinceName && facilityName){ facilityName = false; }
      if(pName!=''){
-          if(provinceName){
-               $.post("../includes/getFacilityForClinic.php", { pName : pName},
+               $.post("../includes/getFacilityForClinic.php", { pName : pName,comingFromUser:'yes'},
                function(data){
                     if(data != ""){
                          details = data.split("###");
                          $("#district").html(details[1]);
                          $("#search").html(details[0]);
 
-                         $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-                         $(".facilityDetails").hide();
-
                     }
                });
-          }
-          // sampleCodeGeneration();
-     }else if(pName=='' && cName==''){
-          provinceName = true;
-          facilityName = true;
-          $("#province").html("<?php echo $province;?>");
-
      }
      $.unblockUI();
 }
 function getFacilities(obj){
      $.blockUI();
      var dName = $("#district").val();
-     var cName = $("#fName").val();
      if(dName!=''){
-          $.post("../includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
+          $.post("../includes/getFacilityForClinic.php", {dName:dName,comingFromUser:'yes'},
           function(data){
                if(data != ""){
                     details = data.split("###");
                     $("#search").html(details[0]);
-                    $("#labId").html(details[1]);
-                    $(".facilityDetails").hide();
-
                }
           });
      }
