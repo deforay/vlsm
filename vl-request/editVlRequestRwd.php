@@ -166,7 +166,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                    </div>
                                    <div class="row">
                                         <div class="" style="<?php echo $sampleSuggestionDisplay;?>">
-                                             <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Suggest Sample ID - </label>
+                                             <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Sample ID (might change while submitting the form) - </label>
                                              <?php echo $sampleSuggestion; ?>
                                         </div>
                                         <div class="box-body">
