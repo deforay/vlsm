@@ -188,21 +188,22 @@ try {
       }
     }
     //check existing sample code
-    $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
-    $existResult = $db->rawQuery($existSampleQuery);
-    if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
-        if($existResult[0][$sampleCodeKey]!=''){
-            $sCode = $existResult[0][$sampleCodeKey] + 1;
-            $strparam = strlen($sCode);
-            $zeros = substr("000", $strparam);
-            $maxId = $zeros.$sCode;
-            $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
-            $_POST['sampleCodeKey'] = $maxId;
-        }else{
-            $_SESSION['alertMsg']="Please check your sample ID";
-            header("location:addVlRequest.php");
-        }
-    }
+
+    // $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
+    // $existResult = $db->rawQuery($existSampleQuery);
+    // if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+    //     if($existResult[0][$sampleCodeKey]!=''){
+    //         $sCode = $existResult[0][$sampleCodeKey] + 1;
+    //         $strparam = strlen($sCode);
+    //         $zeros = substr("000", $strparam);
+    //         $maxId = $zeros.$sCode;
+    //         $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+    //         $_POST['sampleCodeKey'] = $maxId;
+    //     }else{
+    //         $_SESSION['alertMsg']="Please check your sample ID";
+    //         header("location:addVlRequest.php");
+    //     }
+    // }
 
     //set vl test reason
     if(isset($_POST['stViralTesting']) && trim($_POST['stViralTesting'])!=""){
@@ -282,16 +283,21 @@ try {
 
         $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['patient_art_no']);
 
-        if($sarr['user_type']=='remoteuser'){
-            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-            $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
-            $vldata['remote_sample'] = 'yes';
+        // if($sarr['user_type']=='remoteuser'){
+        //     $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        //     $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+        //     $vldata['remote_sample'] = 'yes';
+        // }else{
+        //     $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        //     $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+        //     $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+        // }
+        if(isset($_POST['vlSampleId']) && $_POST['vlSampleId']!=''){
+            $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
+            $id=$db->update($tableName,$vldata);
         }else{
-            $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-            $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+            $id=$db->insert($tableName,$vldata);
         }
-        $id=$db->insert($tableName,$vldata);
         if($id>0){
              $_SESSION['alertMsg']="VL request added successfully";
              //Add event log
@@ -322,6 +328,6 @@ try {
              $_SESSION['alertMsg']="Please try again later";
         }
 } catch (Exception $exc) {
-    error_log($exc->getMessage());
+    echo $exc->getMessage();die;
     error_log($exc->getTraceAsString());
 }

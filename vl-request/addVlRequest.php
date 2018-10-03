@@ -255,6 +255,21 @@ $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQ
                                                                                                                    $.unblockUI();
                                                                                                               }
                                                                                                          }
+                                                                                                         function insertSampleCode(formId,vlSampleId)
+                                                                                                         {
+                                                                                                            $.blockUI();
+                                                                                                            $.post("../includes/insertNewSample.php", { sampleCode : $("#sampleCode").val(),sampleCodeKey: $("#sampleCodeKey").val(),sampleCodeFormat: $("#sampleCodeFormat").val()},
+                                                                                                            function(data){
+                                                                                                                if(data>0){
+                                                                                                                    document.getElementById("vlSampleId").value = data;
+                                                                                                                    document.getElementById(formId).submit();
+                                                                                                                }else{
+                                                                                                                    $("#sampleCollectionDate").val('');
+                                                                                                                    alert("Something went wrong!");
+                                                                                                                }
+                                                                                                                   });
+                                                                                                                $.unblockUI();
+                                                                                                         }
 
                                                                                                          function checkARTRegimenValue(){
                                                                                                               var artRegimen = $("#artRegimen").val();

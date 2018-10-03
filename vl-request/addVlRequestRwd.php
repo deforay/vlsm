@@ -631,6 +631,7 @@ $sKey = ''; $sFormat = '';
                                                        <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                                                        <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                                                   <?php } ?>
+                                                  <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                                                   <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                                                   <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
                                              </div>
@@ -950,8 +951,9 @@ $sKey = ''; $sFormat = '';
                                         }
                                         $("#saveNext").val('save');
                                         if(flag){
-                                             $.blockUI();
-                                             document.getElementById('vlRequestFormRwd').submit();
+                                            $.blockUI();
+                                            insertSampleCode('vlRequestFormRwd','sampleId');
+                                            //document.getElementById('vlRequestFormRwd').submit();
                                         }
                                    }
 
