@@ -1243,16 +1243,16 @@ ALTER TABLE `vl_user_facility_map`
   ADD CONSTRAINT `vl_user_facility_map_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_details` (`user_id`),
   ADD CONSTRAINT `vl_user_facility_map_ibfk_2` FOREIGN KEY (`facility_id`) REFERENCES `facility_details` (`facility_id`);
   
-  --saravanan 06-nov-2017
+-- saravanan 06-nov-2017
 ALTER TABLE `vl_request_form` ADD `remote_sample_code` VARCHAR(255) NULL DEFAULT NULL AFTER `vlsm_country_id`;
 ALTER TABLE `vl_request_form` ADD `remote_sample_code_key` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_reordered`;
---saravanan 09-nov-2017
+-- saravanan 09-nov-2017
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Data Sync Interval', 'data_sync_interval', '3');
 
---saravanna 13-nov-2017
+-- saravanna 13-nov-2017
 ALTER TABLE `vl_request_form` ADD `data_sync` VARCHAR(10) NOT NULL DEFAULT '0' AFTER `vl_service_sector`;
 
---saravanna 15-nov-2017
+-- saravanna 15-nov-2017
 ALTER TABLE `user_details` ADD `user_alpnum_id` VARCHAR(255) NOT NULL AFTER `user_id`;
 UPDATE vl_request_form
 SET last_vl_date_routine = NULL
@@ -1287,16 +1287,16 @@ ALTER TABLE `vl_request_form` CHANGE `request_created_by` `request_created_by` V
 ALTER TABLE `vl_user_facility_map` CHANGE `user_id` `user_id` VARCHAR(255) NOT NULL;
 ALTER TABLE `user_details` CHANGE `user_id` `user_id` VARCHAR(255) NOT NULL;
 
---saravanna 17-nov-2017
+-- saravanna 17-nov-2017
 ALTER TABLE `vl_request_form` CHANGE `professional_number` `requesting_professional_number` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `category` `requesting_category` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL, CHANGE `vl_service_sector` `requesting_vl_service_sector` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 ALTER TABLE `vl_request_form` ADD `requesting_facility_id` INT NULL DEFAULT NULL AFTER `requesting_vl_service_sector`, ADD `requesting_person` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_facility_id`, ADD `requesting_phone` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_person`, ADD `requesting_date` DATE NULL DEFAULT NULL AFTER `requesting_phone`;
---saravanan 20-nov-2017
+-- saravanan 20-nov-2017
 ALTER TABLE `vl_request_form` ADD `collection_site` VARCHAR(255) NULL DEFAULT NULL AFTER `requesting_date`;
---saravanan 21-nov-2017
+-- saravanan 21-nov-2017
 ALTER TABLE `vl_request_form` ADD `remote_sample` VARCHAR(255) NOT NULL DEFAULT 'no' AFTER `data_sync`;
 
---saravanan 23-nov-2017
+-- saravanan 23-nov-2017
 ALTER TABLE `r_sample_type` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `status`;
 ALTER TABLE `r_art_code_details` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `art_status`;
 ALTER TABLE `r_sample_rejection_reasons` ADD `data_sync` INT NOT NULL DEFAULT '0' AFTER `rejection_reason_code`;
