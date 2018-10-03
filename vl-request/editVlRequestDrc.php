@@ -140,7 +140,7 @@
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
                         <div class="" style="<?php echo $sampleSuggestionDisplay;?>">
-                            <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Suggérer un ID d'échantillon - </label>
+                            <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Suggérer un ID d'échantillon (peut changer en soumettant le formulaire) - </label>
                             <?php echo $sampleSuggestion; ?>
                        </div>
                         <!--<h4 id="sampleCodeValue">exemple de code:< ?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>-->
@@ -149,7 +149,7 @@
 
                             <tr>
                               <?php if($sarr['user_type']=='remoteuser') { ?>
-                                <td><label for="sampleCode">Échantillon id </label></td>
+                                <td><label for="sampleCode">Échantillon ID </label></td>
                                 <td>
                                   <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></span>
                                   <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>"/>
