@@ -533,6 +533,7 @@
                 <?php } ?>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="formId" id="formId" value="3"/>
+                <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                 <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code'];?>"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -762,7 +763,11 @@
     });
     if(flag){
       $.blockUI();
-      document.getElementById('addVlRequestForm').submit();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+      insertSampleCode('addVlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
+      <?php }else{ ?>
+          document.getElementById('addVlRequestForm').submit();
+      <?php } ?>
     }
   }
   

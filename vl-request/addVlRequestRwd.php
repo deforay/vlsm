@@ -952,8 +952,11 @@ $sKey = ''; $sFormat = '';
                                         $("#saveNext").val('save');
                                         if(flag){
                                             $.blockUI();
-                                            insertSampleCode('vlRequestFormRwd','sampleId');
-                                            //document.getElementById('vlRequestFormRwd').submit();
+                                            <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+                                            insertSampleCode('vlRequestFormRwd','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',7,'sampleCollectionDate');
+                                            <?php }else{ ?>
+                                                document.getElementById('vlRequestFormRwd').submit();
+                                            <?php } ?>
                                         }
                                    }
 
@@ -973,8 +976,12 @@ $sKey = ''; $sFormat = '';
                                         });
                                         $("#saveNext").val('next');
                                         if(flag){
-                                             $.blockUI();
-                                             document.getElementById('vlRequestFormRwd').submit();
+                                            $.blockUI();
+                                            <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+                                            insertSampleCode('vlRequestFormRwd','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',7,'sampleCollectionDate');
+                                            <?php }else{ ?>
+                                                document.getElementById('vlRequestFormRwd').submit();
+                                            <?php } ?>
                                         }
                                    }
 

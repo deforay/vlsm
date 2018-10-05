@@ -6,6 +6,7 @@ include('General.php');
 $general=new General();
 $tableName="vl_request_form";
 //system config
+$id = '';
     $systemConfigQuery ="SELECT * from system_config";
     $systemConfigResult=$db->query($systemConfigQuery);
     $sarr = array();
@@ -13,6 +14,13 @@ $tableName="vl_request_form";
     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
       $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
     }
+    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!=""){
+        $sampleDate = explode(" ",$_POST['sampleCollectionDate']);
+        $_POST['sampleCollectionDate']=$general->dateFormat($sampleDate[0])." ".$sampleDate[1];
+   }else{
+       $_POST['sampleCollectionDate'] = NULL;
+   }
+
     if($sarr['user_type']=='remoteuser'){
         $sampleCode = 'remote_sample_code';
         $sampleCodeKey = 'remote_sample_code_key';
@@ -31,7 +39,7 @@ $tableName="vl_request_form";
         $_POST['sampleCodeKey'] = $maxId;
     }
     $vldata = array(
-                    'vlsm_country_id'=>7,
+                    'vlsm_country_id'=>$_POST['countryId'],
                     'vlsm_instance_id'=>$_SESSION['instanceId'],
                     'request_created_by'=>$_SESSION['userId'],
                     'request_created_datetime'=>$general->getDateTime(),
@@ -51,8 +59,9 @@ $tableName="vl_request_form";
         $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
         $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
     }
-    //print_r($vldata);die;
+    if(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' && $_POST['sampleCollectionDate']!=NULL && $_POST['sampleCollectionDate']!=''){
     $id=$db->insert($tableName,$vldata);
+    }
     if($id>0){
         echo $id;
     }else{
