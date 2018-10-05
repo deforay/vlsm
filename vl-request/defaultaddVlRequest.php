@@ -108,7 +108,7 @@ $sKey = ''; $sFormat = '';
                </div>
                <div class="box-body">
                     <!-- form start -->
-                    <form class="form-inline" method="post" name="vlRequestFormRwd" id="vlRequestFormRwd" autocomplete="off" action="addVlRequestHelper.php">
+                    <form class="form-inline" method="post" name="vlRequestFormSs" id="vlRequestFormSs" autocomplete="off" action="addVlRequestHelper.php">
                          <div class="box-body">
                               <div class="box box-primary">
                                    <div class="box-header with-border">
@@ -678,6 +678,7 @@ $sKey = ''; $sFormat = '';
                                                        <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                                                        <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                                                   <?php } ?>
+                                                  <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                                                   <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                                                   <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
                                              </div>
@@ -884,15 +885,19 @@ $sKey = ''; $sFormat = '';
                                              return false;
                                         }
                                         flag = deforayValidator.init({
-                                             formId: 'vlRequestFormRwd'
+                                             formId: 'vlRequestFormSs'
                                         });
                                         $('.isRequired').each(function () {
                                              ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
                                         });
                                         $("#saveNext").val('save');
                                         if(flag){
-                                             $.blockUI();
-                                             document.getElementById('vlRequestFormRwd').submit();
+                                            $.blockUI();
+                                            <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+                                            insertSampleCode('vlRequestFormSs','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',1,'sampleCollectionDate');
+                                            <?php }else{ ?>
+                                                document.getElementById('vlRequestFormSs').submit();
+                                            <?php } ?>
                                         }
                                    }
                                    function validateSaveNow(){
@@ -904,15 +909,19 @@ $sKey = ''; $sFormat = '';
                                              return false;
                                         }
                                         flag = deforayValidator.init({
-                                             formId: 'vlRequestFormRwd'
+                                             formId: 'vlRequestFormSs'
                                         });
                                         $('.isRequired').each(function () {
                                              ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
                                         });
                                         $("#saveNext").val('next');
                                         if(flag){
-                                             $.blockUI();
-                                             document.getElementById('vlRequestFormRwd').submit();
+                                            $.blockUI();
+                                            <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+                                            insertSampleCode('vlRequestFormSs','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',1,'sampleCollectionDate');
+                                            <?php }else{ ?>
+                                                document.getElementById('vlRequestFormSs').submit();
+                                            <?php } ?>
                                         }
                                    }
                                    function checkPatientReceivesms(val){

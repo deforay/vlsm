@@ -245,8 +245,7 @@ $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQ
                                                                                                                    $("#"+id).val('');
                                                                                                                    <?php if($arr['vl_form']=='3'){ ?>
                                                                                                                         $("#sampleCodeValue").html('').hide();
-                                                                                                                        <?php } ?>
-                                                                                                                        <?php } else { ?>
+                                                                                                                        <?php }  } else { ?>
                                                                                                                              data = data.split("##");
                                                                                                                              document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                                                                                                                              <?php } ?>
@@ -255,20 +254,22 @@ $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQ
                                                                                                                    $.unblockUI();
                                                                                                               }
                                                                                                          }
-                                                                                                         function insertSampleCode(formId,vlSampleId)
+
+                                                                                                         function insertSampleCode(formId,vlSampleId,sampleCode,sampleCodeKey,sampleCodeFormat,countryId,sampleCollectionDate)
                                                                                                          {
                                                                                                             $.blockUI();
-                                                                                                            $.post("../includes/insertNewSample.php", { sampleCode : $("#sampleCode").val(),sampleCodeKey: $("#sampleCodeKey").val(),sampleCodeFormat: $("#sampleCodeFormat").val()},
+                                                                                                            $.post("../includes/insertNewSample.php", { sampleCode : $("#"+sampleCode).val(),sampleCodeKey: $("#"+sampleCodeKey).val(),sampleCodeFormat: $("#"+sampleCodeFormat).val(),countryId:countryId,sampleCollectionDate:$("#"+sampleCollectionDate).val()},
                                                                                                             function(data){
                                                                                                                 if(data>0){
+                                                                                                                    $.unblockUI();
                                                                                                                     document.getElementById("vlSampleId").value = data;
                                                                                                                     document.getElementById(formId).submit();
                                                                                                                 }else{
+                                                                                                                    $.unblockUI();
                                                                                                                     $("#sampleCollectionDate").val('');
                                                                                                                     alert("Something went wrong!");
                                                                                                                 }
                                                                                                                    });
-                                                                                                                $.unblockUI();
                                                                                                          }
 
                                                                                                          function checkARTRegimenValue(){

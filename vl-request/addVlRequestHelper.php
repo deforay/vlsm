@@ -120,7 +120,12 @@ try {
     }else{
         $_POST['sampleReceivedDate'] = NULL;
     }
-
+    if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
+        $sampleReceivedDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
+        $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];
+    }else{
+        $_POST['sampleTestingDateAtLab'] = NULL;
+    }
 
     if(isset($_POST['sampleReceivedAtHubOn']) && trim($_POST['sampleReceivedAtHubOn'])!=""){
         $sampleReceivedAtHubOn = explode(" ",$_POST['sampleReceivedAtHubOn']);
@@ -199,34 +204,15 @@ try {
                 $_POST['stViralTesting'] = $id;
         }
     }
-    //check existing sample code
-    $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
-    $existResult = $db->rawQuery($existSampleQuery);
-    if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
-        if($existResult[0][$sampleCodeKey]!=''){
-            $sCode = $existResult[0][$sampleCodeKey] + 1;
-            $strparam = strlen($sCode);
-            $zeros = substr("000", $strparam);
-            $maxId = $zeros.$sCode;
-            $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
-            $_POST['sampleCodeKey'] = $maxId;
-        }else{
-            $_SESSION['alertMsg']="Please check your sample ID";
-            header("location:addVlRequest.php");
-        }
-    }
+    
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>1,
           'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='') ? $_POST['sampleCodeTitle'] :  'auto' ,
-          //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL ,
           'sample_reordered'=>(isset($_POST['sampleReordered']) && $_POST['sampleReordered']!='') ? $_POST['sampleReordered'] :  'no',
-          //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL,
-          //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL,
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'sample_collection_date'=>$_POST['sampleCollectionDate'],
-          //'patient_first_name'=>(isset($_POST['patientFirstName']) && $_POST['patientFirstName']!='') ? $_POST['patientFirstName'] :  NULL,
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='') ? $_POST['gender'] :  NULL,
           'patient_dob'=>$_POST['dob'],
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='') ? $_POST['ageInYears'] :  NULL,
@@ -235,7 +221,6 @@ try {
           'is_patient_breastfeeding'=>(isset($_POST['breastfeeding']) && $_POST['breastfeeding']!='') ? $_POST['breastfeeding'] :  NULL,
           'patient_art_no'=>(isset($_POST['artNo']) && $_POST['artNo']!='') ? $_POST['artNo'] :  NULL,
           'treatment_initiated_date'=>$_POST['dateOfArtInitiation'],
-          //'treatment_initiation'=>(isset($_POST['treatPeriod']) && $_POST['treatPeriod']!='') ? $_POST['treatPeriod'] :  NULL,
           'current_regimen'=>(isset($_POST['artRegimen']) && $_POST['artRegimen']!='') ? $_POST['artRegimen'] :  NULL,
           'date_of_initiation_of_current_regimen'=>$_POST['regimenInitiatedOn'],
           'patient_mobile_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='') ? $_POST['patientPhoneNumber'] :  NULL,
@@ -256,7 +241,6 @@ try {
           'vl_focal_person_phone_number'=>(isset($_POST['vlFocalPersonPhoneNumber']) && $_POST['vlFocalPersonPhoneNumber']!='') ? $_POST['vlFocalPersonPhoneNumber'] :  NULL,
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
           'vl_test_platform'=>$testingPlatform,
-          //'test_methods'=>(isset($_POST['testMethods']) && $_POST['testMethods']!='') ? $_POST['testMethods'] :  NULL,
           'sample_received_at_hub_datetime'=>$_POST['sampleReceivedAtHubOn'],
           'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
           'sample_tested_datetime'=>$_POST['sampleTestingDateAtLab'],
@@ -280,24 +264,48 @@ try {
         );
 
         $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['patient_art_no']);
-
-
-        if($sarr['user_type']=='remoteuser'){
-            $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-            $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
-            $vldata['remote_sample'] = 'yes';
+        
+        if(isset($_POST['vlSampleId']) && $_POST['vlSampleId']!=''){
+            $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
+            $id=$db->update($tableName,$vldata);
         }else{
-            $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-            $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-            $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+            //check existing sample code
+            
+            $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
+            $existResult = $db->rawQuery($existSampleQuery);
+            if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+                if($existResult[0][$sampleCodeKey]!=''){
+                    $sCode = $existResult[0][$sampleCodeKey] + 1;
+                    $strparam = strlen($sCode);
+                    $zeros = substr("000", $strparam);
+                    $maxId = $zeros.$sCode;
+                    $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+                    $_POST['sampleCodeKey'] = $maxId;
+                }else{
+                    $_SESSION['alertMsg']="Please check your sample ID";
+                    header("location:addVlRequest.php");
+                }
+            }
+
+            if($sarr['user_type']=='remoteuser'){
+                $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+                $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+                $vldata['remote_sample'] = 'yes';
+            }else{
+                $vldata['sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+                $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
+                $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
+            }
+            $vldata['sample_code_format']=(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL;
+            $id=$db->insert($tableName,$vldata);
         }
-        $id=$db->insert($tableName,$vldata);
+        
         if($id>0){
              $_SESSION['alertMsg']="VL request added successfully";
              //Add event log
              $eventType = 'add-vl-request-sudan';
              $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
-             $resource = 'vl-request-rwd';
+             $resource = 'vl-request-ss';
              $data=array(
              'event_type'=>$eventType,
              'action'=>$action,
