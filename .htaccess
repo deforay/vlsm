@@ -1,1 +1,3 @@
 Options -Indexes
+
+SetEnv APPLICATION_ENV development
