@@ -20,23 +20,83 @@ $id = '';
    }else{
        $_POST['sampleCollectionDate'] = NULL;
    }
+   $rKey = '';
 
     if($sarr['user_type']=='remoteuser'){
+        $rKey = 'R';
         $sampleCode = 'remote_sample_code';
         $sampleCodeKey = 'remote_sample_code_key';
     }else{
         $sampleCode = 'sample_code';
         $sampleCodeKey = 'sample_code_key';
     }
+
+    $_POST['sampleCode'] = 'RR18ESVL0001';
+
     $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
     $existResult = $db->rawQuery($existSampleQuery);
-    if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
-        $sCode = $existResult[0][$sampleCodeKey] + 1;
-        $strparam = strlen($sCode);
-        $zeros = substr("000", $strparam);
-        $maxId = $zeros.$sCode;
-        $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+
+    if(isset($_POST['provinceId'])){
+        if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+        //global config
+        $configQuery="SELECT * from global_config";
+        $configResult=$db->query($configQuery);
+        $arr = array();
+        // now we create an associative array so that we can easily create view variables
+        for ($i = 0; $i < sizeof($configResult); $i++) {
+        $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+        }
+        $sampleColDateTimeArray = explode(" ",$_POST['sampleCollectionDate']);
+        $sampleCollectionDate = $general->dateFormat($sampleColDateTimeArray[0]);
+        $sampleColDateArray = explode("-",$sampleCollectionDate);
+        $samColDate = substr($sampleColDateArray[0], -2);
+        
+        $start_date = $sampleColDateArray[2].'-01-01';
+        $end_date = $sampleColDateArray[2].'-12-31';
+        
+
+
+        $svlQuery = 'SELECT '.$sampleCodeKey.' FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND province_id='.$_POST['provinceId'].' AND '.$sampleCode.' IS NOT NULL AND '.$sampleCode.'!= "" ORDER BY '.$sampleCodeKey.' DESC LIMIT 1';
+
+        $svlResult = $db->query($svlQuery);
+
+        if(isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
+            $maxId = $svlResult[0][$sampleCodeKey]+1;
+            $strparam = strlen($maxId);
+            $zeros = substr("0000", $strparam);
+            $maxId = $zeros.$maxId;
+        }else{
+            $maxId = '0001';
+        }
+        $sCode = $rKey."R".date('y').$_POST['provinceCode']."VL".$maxId;
+        $j = 1;
+        do{
+        $sQuery = "select sample_code from vl_request_form as vl where sample_code='".$sCode."'";
+        $svlResult = $db->query($sQuery);
+        if(!$svlResult){
+        $maxId;
+        break;
+        }else{
+        $x = $maxId + 1;
+        $strparam = strlen($x);
+        $zeros = substr("0000", $strparam);
+        $maxId = $zeros.$x;
+        $sCode = $rKey."R".date('y').$_POST['provinceCode']."VL".$maxId;
+        }
+        }
+        while($sCode);
+        $_POST['sampleCode'] = $sCode;
         $_POST['sampleCodeKey'] = $maxId;
+        }
+    }else{
+        if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+            $sCode = $existResult[0][$sampleCodeKey] + 1;
+            $strparam = strlen($sCode);
+            $zeros = substr("000", $strparam);
+            $maxId = $zeros.$sCode;
+            $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+            $_POST['sampleCodeKey'] = $maxId;
+        }
     }
     $vldata = array(
                     'vlsm_country_id'=>$_POST['countryId'],
