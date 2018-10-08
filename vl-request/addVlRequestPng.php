@@ -533,6 +533,7 @@ foreach($fResult as $fDetails){
                   <input type="hidden" name="sampleCodeKey" id="sampleCodeKey"/>
                 <?php } ?>
 		<input type="hidden" name="saveNext" id="saveNext"/>
+    <input type="hidden" name="vlSampleId" id="vlSampleId"/>
                 <input type="hidden" name="formId" id="formId" value="5"/>
                 <input type="hidden" name="provinceId" id="provinceId"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
@@ -599,8 +600,13 @@ foreach($fResult as $fDetails){
       });
       $("#saveNext").val('save');
       if(flag){
-	$.blockUI();
-	document.getElementById('vlRequestForm').submit();
+	      $.blockUI();
+        var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '')?$("#province").find(":selected").attr("data-name"):$("#province").find(":selected").attr("data-code");
+        <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='auto2' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+          insertSampleCode('vlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',5,'collectionDate',provinceCode,$("#province").find(":selected").attr("data-province-id"));
+        <?php } else { ?>
+	      document.getElementById('vlRequestForm').submit();
+        <?php } ?>
       }
   }
   
