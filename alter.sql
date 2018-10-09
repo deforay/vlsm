@@ -1514,3 +1514,5 @@ SET vl_request_form.reason_for_vl_testing = r_vl_test_reasons.test_reason_id;
 
 -- Amit 25 Sep 2018
 ALTER TABLE `activity_log` CHANGE `action` `action` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+-- Version 3.9.5 ------- saravanan 09-oct-2018

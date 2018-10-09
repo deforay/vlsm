@@ -547,6 +547,7 @@
                   <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                   <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                 <?php } ?>
+                <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="formId" id="formId" value="8"/>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
@@ -684,7 +685,11 @@
         return false;
       }
       $.blockUI();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        insertSampleCode('addVlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',8,'sampleCollectionDate');
+      <?php } else {?>
       document.getElementById('addVlRequestForm').submit();
+      <?php } ?>
     }
   }
   function calculateLogValue(obj){

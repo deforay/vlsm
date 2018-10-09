@@ -416,6 +416,7 @@ $artResult=$db->query($artQuery);
                     </div>
                   </div>
                 </div>
+                <?php if($sarr['user_type']!= 'remoteuser') { ?>
                 <div class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">Section 4: For Laboratory Use Only</h3>
@@ -532,6 +533,7 @@ $artResult=$db->query($artQuery);
                     </div>
                   </div>
                 </div>
+                              <?php } ?>
                 <div class="box-footer">
                 <!-- BARCODESTUFF START -->
                 <?php if(isset($global['bar_code_printing']) && $global['bar_code_printing'] == 'zebra-printer'){ ?>
@@ -557,6 +559,7 @@ $artResult=$db->query($artQuery);
                     <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                     <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                   <?php } ?>
+                  <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                   <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>&nbsp;
                   <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>&nbsp;
                   <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
@@ -778,7 +781,11 @@ $artResult=$db->query($artQuery);
     $("#saveNext").val('save');
     if(flag){
       $.blockUI();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        insertSampleCode('vlRequestFormZam','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',4,'sampleCollectionDate');
+      <?php } else { ?>
       document.getElementById('vlRequestFormZam').submit();
+      <?php } ?>
     }
   }
   function validateSaveNow(){
@@ -798,7 +805,11 @@ $artResult=$db->query($artQuery);
     $("#saveNext").val('next');
     if(flag){
       $.blockUI();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        insertSampleCode('vlRequestFormZam','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',4,'sampleCollectionDate');
+      <?php } else { ?>
       document.getElementById('vlRequestFormZam').submit();
+      <?php } ?>
     }
   }
   function setPatientDetails(pDetails){

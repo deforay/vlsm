@@ -145,6 +145,19 @@ $sKey = '';$sFormat = '';
                             </select>
                           </div>
                         </div>
+                        <?php if($sarr['user_type'] == 'remoteuser') { ?>
+                                                  <div class="col-xs-3 col-md-3">
+                                                       <div class="">
+                                                            <label for="labId">VL Testing Hub <span class="mandatory">*</span></label>
+                                                            <select name="labId" id="labId" class="form-control isRequired" title="Please choose VL testing hub" style="width:100%;">
+                                                                 <option value="">-- Select --</option>
+                                                                 <?php foreach($lResult as $labName){ ?>
+                                                                      <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
+                                                                 <?php } ?>
+                                                            </select>
+                                                       </div>
+                                                  </div>
+                                        <?php } ?>
                     </div>
                     </div>
                 </div>
@@ -401,6 +414,7 @@ $sKey = '';$sFormat = '';
                 </div><br/>
                 </div>
               </div>
+              <?php if($sarr['user_type']!= 'remoteuser') { ?>
               <div class="box box-primary">
                   <div class="box-body">
                     <div class="box-header with-border">
@@ -467,6 +481,7 @@ $sKey = '';$sFormat = '';
                     </table>
                   </div>
               </div>
+              <?php } ?>
               <div class="box-footer">
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="saveNext" id="saveNext"/>
@@ -476,6 +491,7 @@ $sKey = '';$sFormat = '';
                 <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                 <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                 <?php } ?>
+                <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -520,7 +536,11 @@ $sKey = '';$sFormat = '';
     $("#saveNext").val('save');
     if(flag){
       $.blockUI();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        insertSampleCode('vlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',6,'sampleCollectionDate');
+      <?php } else { ?>
       document.getElementById('vlRequestForm').submit();
+      <?php } ?>
     }
   }
   function validateSaveNow(){
@@ -540,7 +560,11 @@ $sKey = '';$sFormat = '';
     $("#saveNext").val('next');
     if(flag){
       $.blockUI();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+        insertSampleCode('vlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',6,'sampleCollectionDate');
+      <?php } else { ?>
       document.getElementById('vlRequestForm').submit();
+      <?php } ?>
     }
   }
   function showTesting(chosenClass){

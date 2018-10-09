@@ -171,36 +171,16 @@ try {
           $sampleCode = 'sample_code';
           $sampleCodeKey = 'sample_code_key';
      }
-     //check existing sample code
-     $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
-     $existResult = $db->rawQuery($existSampleQuery);
-     if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
-          if($existResult[0][$sampleCodeKey]!=''){
-               $sCode = $existResult[0][$sampleCodeKey] + 1;
-               $strparam = strlen($sCode);
-               $zeros = substr("000", $strparam);
-               $maxId = $zeros.$sCode;
-               $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
-               $_POST['sampleCodeKey'] = $maxId;
-          }else{
-               $_SESSION['alertMsg']="Please check your sample ID";
-               header("location:addVlRequest.php");
-          }
-     }
+     
      $vldata=array(
           'vlsm_instance_id'=>$instanceId,
           'vlsm_country_id'=>'4',
           //'sample_code_title'=>(isset($_POST['sampleCodeTitle']) && $_POST['sampleCodeTitle']!='') ? $_POST['sampleCodeTitle'] :  'auto',
-          //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
-          //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL,
-          //'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL,
           'facility_id'=>(isset($_POST['fName']) && $_POST['fName']!='') ? $_POST['fName'] :  NULL,
           'request_clinician_name'=>(isset($_POST['reqClinician']) && $_POST['reqClinician']!='') ? $_POST['reqClinician'] :  NULL,
           'request_clinician_phone_number'=>(isset($_POST['reqClinicianPhoneNumber']) && $_POST['reqClinicianPhoneNumber']!='') ? $_POST['reqClinicianPhoneNumber'] :  NULL,
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='') ? $_POST['labId'] :  NULL,
-          //'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='') ? $_POST['patientFname'] :  NULL,
-          //'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='') ? $_POST['surName'] :  NULL,
           'patient_art_no'=>(isset($_POST['patientArtNo']) && $_POST['patientArtNo']!='') ? $_POST['patientArtNo'] :  NULL,
           'patient_mobile_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='') ? $_POST['patientPhoneNumber'] :  NULL,
           'patient_dob'=>(isset($_POST['dob']) && $_POST['dob']!='') ? $_POST['dob'] :  NULL,
@@ -246,7 +226,22 @@ try {
      $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['patient_art_no']);
      $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['patient_art_no']);
 
-
+     if(isset($_POST['vlSampleId']) && $_POST['vlSampleId']!=''){
+        $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
+        $id=$db->update($tableName,$vldata);
+    }else{
+        //check existing sample code
+        $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
+        $existResult = $db->rawQuery($existSampleQuery);
+        if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
+            $sCode = $existResult[0][$sampleCodeKey] + 1;
+            $strparam = strlen($sCode);
+            $zeros = substr("000", $strparam);
+            $maxId = $zeros.$sCode;
+            $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
+            $_POST['sampleCodeKey'] = $maxId;
+        }
+        
      if($sarr['user_type']=='remoteuser'){
           $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? "R".$_POST['sampleCode'] :  NULL;
           $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
@@ -256,8 +251,8 @@ try {
           $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
           $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
      }
-
      $id=$db->insert($tableName,$vldata);
+    }
      if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
