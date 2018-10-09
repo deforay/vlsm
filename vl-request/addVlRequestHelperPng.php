@@ -92,11 +92,18 @@ try {
           $result=$db->insert('r_art_code_details',$data);
           $_POST['currentRegimen'] = $_POST['newArtRegimen'];
      }
+
+     $status = 6;
+    if($sarr['user_type']=='remoteuser'){
+        $status = 9;
+    }
+
      if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'no'){
           $_POST['rejectionReason'] = NULL;
      }
      if(isset($_POST['sampleQuality']) && trim($_POST['sampleQuality']) == 'yes'){
           $_POST['vlResult'] = NULL;
+          $status = 4;
      }
      $reasonForTestField = NULL;
      if(isset($_POST['reasonForTest']) && $_POST['reasonForTest']!=''){
@@ -181,7 +188,7 @@ try {
           'qc_date'=>$_POST['qcDate'],
           'clinic_date'=>$_POST['clinicDate'],
           'report_date'=>$_POST['reportDate'],
-          'result_status'=>6,
+          'result_status'=>$status,
           'request_created_by'=>$_SESSION['userId'],
           'request_created_datetime'=>$general->getDateTime(),
           'last_modified_by'=>$_SESSION['userId'],

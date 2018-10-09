@@ -758,7 +758,7 @@ foreach($fResult as $fDetails){
   }
   
   $("input:radio[name=sampleQuality]").on("change",function(){
-    if($(this).val() == 'reject'){
+    if($(this).val() == 'yes'){
       $(".rejectionReason,.vlresultequ").show();
       $(".reasonequ,.vlResult").hide();
       $('#rejectionReason').addClass("isRequired");
