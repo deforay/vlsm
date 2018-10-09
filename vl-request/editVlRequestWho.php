@@ -94,9 +94,15 @@ $districtResult=$db->query($districtQuery);
                     <div class="row">
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
+                        <?php if($sarr['user_type']=='remoteuser'){ ?>
+                            <label for="sampleCode">Sample ID </label><br>
+                            <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></span>
+                            <input type="hidden" class="" id="sampleCode" name="sampleCode" value="<?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>"/>
+                          <?php } else { ?>
                           <label for="sampleCode">Sample Code <span class="mandatory">*</span></label>
                           <input type="text" class="form-control isRequired <?php echo $numeric;?>" id="sampleCode" name="sampleCode" <?php echo $maxLength;?> placeholder="Enter Sample Code" title="Please enter sample code" style="width:100%;" value="<?php echo $vlQueryInfo[0]['sample_code'];?>" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','This sample number already exists.Try another number',null)"/>
                           <input type="hidden" name="sampleCodeCol" value="<?php echo $vlQueryInfo[0]['sample_code'];?>"/>
+                          <?php } ?>
                         </div>
                       </div>
                     </div>
@@ -160,6 +166,19 @@ $districtResult=$db->query($districtQuery);
                             </select>
                           </div>
                         </div>
+                        <?php if($sarr['user_type'] == 'remoteuser') { ?>
+                                                  <div class="col-xs-3 col-md-3">
+                                                       <div class="">
+                                                            <label for="labId">VL Testing Hub <span class="mandatory">*</span></label>
+                                                            <select name="labId" id="labId" class="form-control isRequired" title="Please choose VL testing hub" style="width:100%;">
+                                                                 <option value="">-- Select --</option>
+                                                                 <?php foreach($lResult as $labName){ ?>
+                                                                  <option value="<?php echo $labName['facility_id'];?>" <?php echo ($vlQueryInfo[0]['lab_id']==$labName['facility_id'])?"selected='selected'":""?>><?php echo ucwords($labName['facility_name']);?></option>
+                                                                 <?php } ?>
+                                                            </select>
+                                                       </div>
+                                                  </div>
+                                        <?php } ?>
                     </div>
                     </div>
                 </div>
@@ -452,6 +471,7 @@ $districtResult=$db->query($districtQuery);
                 </div><br/>
                 </div>
               </div>
+              <?php if($sarr['user_type'] != 'remoteuser') { ?>
               <div class="box box-primary">
                   <div class="box-body">
                     <div class="box-header with-border">
@@ -530,6 +550,7 @@ $districtResult=$db->query($districtQuery);
                     </table>
                   </div>
                 </div>
+                            <?php } ?>
               <div class="box-footer">
               <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample'];?>"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>

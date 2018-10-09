@@ -408,6 +408,7 @@ $efResult = $db->rawQuery($efQuery);
                     </div>
                   </div>
                 </div>
+                <?php if($sarr['user_type']!= 'remoteuser') { ?>
                 <div class="box box-primary">
                   <div class="box-header with-border">
                     <h3 class="box-title">Section 4: For Laboratory Use Only</h3>
@@ -538,6 +539,7 @@ $efResult = $db->rawQuery($efQuery);
                     </div>
                   </div>
                 </div>
+                                <?php } ?>
                 <div class="box-footer">
                   <input type="hidden" name="vlSampleId" id="vlSampleId" value="<?php echo $vlQueryInfo[0]['vl_sample_id'];?>"/>
                   <input type="hidden" name="isRemoteSample" value="<?php echo $vlQueryInfo[0]['remote_sample'];?>"/>
@@ -563,7 +565,9 @@ $efResult = $db->rawQuery($efQuery);
     }else{
        $(".rejectionReason").hide();
            $("#rejectionReason").removeClass("isRequired");
+           <?php if($sarr['user_type']!='remoteuser'){ ?>
           $("#result").addClass("isRequired");
+           <?php } ?>
          $(".result").show();
     }
     

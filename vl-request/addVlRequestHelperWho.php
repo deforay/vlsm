@@ -179,8 +179,10 @@ try {
      $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['patient_art_no']);
      $vldata['patient_middle_name'] = $general->crypto('encrypt',$_POST['patientMiddleName'],$vldata['patient_art_no']);
      $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['patientLastName'],$vldata['patient_art_no']);
-
-
+     if(isset($_POST['vlSampleId']) && $_POST['vlSampleId']!=''){
+        $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
+        $id=$db->update($tableName,$vldata);
+    }else{
      if($sarr['user_type']=='remoteuser'){
           $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
           $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
@@ -190,8 +192,8 @@ try {
           $vldata['serial_no'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
           $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
      }
-
      $id=$db->insert($tableName,$vldata);
+    }
      if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
