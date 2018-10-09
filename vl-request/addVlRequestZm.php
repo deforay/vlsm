@@ -160,7 +160,7 @@ if($urgency==''){ $urgency= 'normal';}
                       <div class="col-xs-3 col-md-3">
                         <div class="form-group">
                           <label for="serialNo">Form Serial No <span class="mandatory">*</span></label>
-                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null)" />
+                          <input type="text" class="form-control serialNo <?php echo $numeric;?> isRequired removeValue" id="serialNo" name="serialNo" placeholder="Enter Form Serial No." title="" style="width:100%;" value="<?php echo $sCodeValue;?>" onblur="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>','serialNo',null,'This sample number already exists.Try another number',null)" />
                         </div>
                       </div>
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
@@ -498,6 +498,7 @@ if($urgency==''){ $urgency= 'normal';}
                 <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat;?>"/>
                 <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey;?>"/>
                 <?php } ?>
+                <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -539,7 +540,11 @@ if($urgency==''){ $urgency= 'normal';}
           return false;
         }
       $.blockUI();
-      document.getElementById('vlRequestForm').submit();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+      insertSampleCode('vlRequestForm','vlSampleId','serialNo','sampleCodeKey','sampleCodeFormat',2,'sampleCollectionDate');
+      <?php }else{ ?>
+          document.getElementById('vlRequestForm').submit();
+      <?php } ?>
     }
     }
   }
@@ -568,7 +573,11 @@ if($urgency==''){ $urgency= 'normal';}
           return false;
         }
       $.blockUI();
-      document.getElementById('vlRequestForm').submit();
+      <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
+      insertSampleCode('vlRequestForm','vlSampleId','serialNo','sampleCodeKey','sampleCodeFormat',2,'sampleCollectionDate');
+      <?php }else{ ?>
+          document.getElementById('vlRequestForm').submit();
+      <?php } ?>
       }
     }
   }

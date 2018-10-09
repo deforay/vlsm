@@ -31,12 +31,11 @@ $id = '';
         $sampleCodeKey = 'sample_code_key';
     }
 
-    $_POST['sampleCode'] = 'RR18ESVL0001';
 
     $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
     $existResult = $db->rawQuery($existSampleQuery);
 
-    if(isset($_POST['provinceId'])){
+    if(isset($_POST['provinceId']) && $_POST['provinceId']!=null && $_POST['provinceId']!=''){
         if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
         //global config
         $configQuery="SELECT * from global_config";
@@ -109,7 +108,6 @@ $id = '';
                     'result_status'=>9,
                     'sample_code_format'=>(isset($_POST['sampleCodeFormat']) && $_POST['sampleCodeFormat']!='') ? $_POST['sampleCodeFormat'] :  NULL,
                     );
-
     if($sarr['user_type']=='remoteuser'){
         $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
         $vldata['remote_sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;

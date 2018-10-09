@@ -268,17 +268,12 @@ try {
             $existSampleQuery ="SELECT ".$sampleCode.",".$sampleCodeKey." FROM vl_request_form where ".$sampleCode." ='".trim($_POST['sampleCode'])."'";
             $existResult = $db->rawQuery($existSampleQuery);
             if(isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey]!=''){
-                if($existResult[0][$sampleCodeKey]!=''){
                     $sCode = $existResult[0][$sampleCodeKey] + 1;
                     $strparam = strlen($sCode);
                     $zeros = substr("000", $strparam);
                     $maxId = $zeros.$sCode;
                     $_POST['sampleCode'] = $_POST['sampleCodeFormat'].$maxId;
                     $_POST['sampleCodeKey'] = $maxId;
-                }else{
-                    $_SESSION['alertMsg']="Please check your sample ID";
-                    header("location:addVlRequest.php");
-                }
             }
             if($sarr['user_type']=='remoteuser'){
                 $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
