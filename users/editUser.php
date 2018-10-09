@@ -176,7 +176,7 @@ foreach($pdResult as $provinceName){
 
                                              <label for="province" style="margin-left:-42px;" class="col-lg-4 control-label">Province </label>
                                              <div class="col-lg-7">
-                                                  <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
+                                                  <select class="form-control " name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
                                                        <?php echo $province;?>
                                                   </select>
                                              </div>
@@ -188,7 +188,7 @@ foreach($pdResult as $provinceName){
                                         <div class="form-group">
                                              <label for="province"  style="margin-left:-42px;" class="col-lg-4 control-label">District </label>
                                              <div class="col-lg-7">
-                                                  <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
+                                                  <select class="form-control " name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
                                                        <option value=""> -- Select -- </option>
                                                   </select>
                                              </div>

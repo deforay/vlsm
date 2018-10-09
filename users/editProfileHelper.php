@@ -22,9 +22,9 @@ try {
     $db=$db->where('user_id',$userId);
     $db->update($tableName,$data);
     
-    $_SESSION['alertMsg']="Profile details updated successfully";
+    $_SESSION['alertMsg']="Your profile changes have been saved. You can continue using VLSM";
     }
-    header("location:../dashboard/index.php");
+    header("location:editProfile.php");
   
 } catch (Exception $exc) {
     error_log($exc->getMessage());
