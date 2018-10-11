@@ -77,9 +77,9 @@ if(isset($_POST['pName'])){
             $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
-        if(isset($_POST['comingFromUser'])){
-            $option = ' ';
-        }
+        // if(isset($_POST['comingFromUser'])){
+        //     $option = ' ';
+        // }
         $facility.=$option;
     }
     $district = '';
