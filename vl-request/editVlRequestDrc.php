@@ -867,7 +867,9 @@ $(document).ready(function(){
         $('#vlLt20').attr('disabled',true);
         $('#vlLt40').attr('disabled',true);
       }
-
+      $('#clinicName').select2({placeholder:"Select Clinic/Health Center"});
+    $('#district').select2({placeholder:"District"});
+    $('#province').select2({placeholder:"Province"});
   });
 
 
