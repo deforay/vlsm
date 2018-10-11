@@ -217,6 +217,7 @@ try {
             $row[] = $aRow['result_approved_datetime'];
             $row[] =   $DashVL_Abs;
             $row[] =   $DashVL_AnalysisResult;
+            $row[] = $aRow['patient_art_no'];
             $output[] = $row;
         }
     
