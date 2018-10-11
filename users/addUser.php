@@ -14,21 +14,6 @@ if($sarr['user_type']=='remoteuser'){
 //province Stratt
 $rKey = '';
 $pdQuery="SELECT * from province_details";
-if($sarr['user_type']=='remoteuser'){
-     $sampleCodeKey = 'remote_sample_code_key';
-     $sampleCode = 'remote_sample_code';
-     //check user exist in user_facility_map table
-     $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='".$_SESSION['userId']."'";
-     $chkUserFcMapResult = $db->query($chkUserFcMapQry);
-     if($chkUserFcMapResult){
-          $pdQuery="SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='".$_SESSION['userId']."' group by province_name";
-     }
-     $rKey = 'R';
-}else{
-     $sampleCodeKey = 'sample_code_key';
-     $sampleCode = 'sample_code';
-     $rKey = '';
-}
 $pdResult=$db->query($pdQuery);
 $province = '';
 $province.="<option value=''> -- Select -- </option>";
@@ -39,7 +24,8 @@ foreach($pdResult as $provinceName){
 // $facility = '';
 // $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
 //province end
-
+$fQuery="SELECT * FROM facility_type where facility_type_id IN(1,4)";
+$ftResult = $db->rawQuery($fQuery);
 
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -142,34 +128,55 @@ foreach($pdResult as $provinceName){
                               </div>
 
                               <div class="row" style=<?php echo $display;?>>
-                                   <h4 style=" margin-left: 40px;"> Filter Facilities by Province & Districts</h4>
-                                   <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <a href="javascript:void(0);" id="showFilter" class="btn btn-primary">Show Advanced Filter</a>
+                                    <a href="javascript:void(0);" style="display:none;" id="hideFilter" class="btn btn-danger">Hide Advanced Filter</a>
+                                </div>
+                                <div id="facilityFilter" style="display:none;">
+                                    <h4 style="padding:36px 0px 0px 14px;"> Filter Facilities by Province & Districts</h4>
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                             <label for="province" style="margin-left:-42px;"  class="col-lg-4 control-label">Province </label>
-                                             <div class="col-lg-7">
-                                                  <select class="form-control " name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
-                                                       <?php echo $province;?>
-                                                  </select>
-                                             </div>
+                                            <label for="province" style=""  class="col-lg-4 control-label">Province </label>
+                                            <div class="col-lg-7">
+                                                <select class="form-control " name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts();">
+                                                    <?php echo $province;?>
+                                                </select>
+                                            </div>
                                         </div>
-                                   </div>
-                              </div>
-                              <div class="row" style=<?php echo $display;?>>
-                                   <div class="col-md-6">
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                             <label for="province" style="margin-left:-42px;"  class="col-lg-4 control-label">District </label>
-                                             <div class="col-lg-7">
-                                                  <select class="form-control " name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
-                                                       <option value=""> -- Select -- </option>
-                                                  </select>
-                                             </div>
+                                            <label for="province" style=""  class="col-lg-4 control-label">District </label>
+                                            <div class="col-lg-7">
+                                                <select class="form-control " name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities();">
+                                                    <option value=""> -- Select -- </option>
+                                                </select>
+                                            </div>
                                         </div>
-                                   </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="province" style=""  class="col-lg-4 control-label">Facility Type </label>
+                                            <div class="col-lg-7">
+                                                <select class="form-control" id="facilityType" name="facilityType" title="Please select facility type" onchange = "getFacility()">
+                                                    <option value=""> -- Select -- </option>
+                                                    <?php
+                                                    foreach($ftResult as $type){
+                                                    ?>
+                                                    <option value="<?php echo $type['facility_type_id'];?>"><?php echo ucwords($type['facility_type_name']);?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                               </div>
 
                               <div class="row" style= "margin: 15px;<?php echo $display;?>" >
-                                   <h4 style=" margin-left: 15px;"> Facility User Map Detailss</h4>
-                                   <div class="col-xs-5">
+                                   <h4 style=" "> Facility User Map Details</h4>
+                                   <div class="col-md-5">
                                         <!-- <div class="col-lg-5"> -->
 
                                         <select name="facilityMap[]" id="search" class="form-control" size="8" multiple="multiple">
@@ -185,14 +192,14 @@ foreach($pdResult as $provinceName){
                                         </select>
                                    </div>
 
-                                   <div class="col-xs-2">
+                                   <div class="col-md-2">
                                         <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
                                         <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
                                         <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
                                         <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
                                    </div>
 
-                                   <div class="col-xs-5">
+                                   <div class="col-md-5">
                                         <select name="to[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
                                    </div>
                               </div>
@@ -231,6 +238,15 @@ jQuery(document).ready(function($) {
                return value.length > 3;
           }
      });
+        $("#showFilter").click(function(){
+        $("#showFilter").hide();
+        $("#facilityFilter,#hideFilter").fadeIn();
+        });
+
+        $("#hideFilter").click(function(){
+            $("#facilityFilter,#hideFilter").hide();
+            $("#showFilter").fadeIn();
+        }); 
 });
 function validateNow(){
      var selVal = [];
@@ -274,39 +290,54 @@ function checkPasswordLength(){
      return regex.test(pwd);
 }
 
-function getProvinceDistricts(obj){
+function getProvinceDistricts(){
      $.blockUI();
      var pName = $("#province").val();
      if(pName!=''){
-               $.post("../includes/getFacilityForClinic.php", { pName : pName,comingFromUser:'yes'},
+               $.post("../includes/getFacilityForClinic.php", { pName : pName,fType:$("#facilityType").val(),comingFromUser:'yes'},
                function(data){
                     if(data != ""){
                          details = data.split("###");
                          $("#district").html(details[1]);
                          $("#search").html(details[0]);
-                         $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-
                     }
                });
      }
      $.unblockUI();
 }
-function getFacilities(obj){
+function getFacilities(){
      $.blockUI();
      var dName = $("#district").val();
      if(dName!=''){
-          $.post("../includes/getFacilityForClinic.php", {dName:dName,comingFromUser:'yes'},
+          $.post("../includes/getFacilityForClinic.php", {dName:dName,fType:$("#facilityType").val(),comingFromUser:'yes'},
           function(data){
                if(data != ""){
                     details = data.split("###");
                     $("#search").html(details[0]);
-
                }
           });
      }
      $.unblockUI();
 }
 
+function getFacility()
+{
+    $.blockUI();
+    var pName = $("#province").val();
+    var dName = $("#district").val();
+    var fType = $("#facilityType").val();
+    if(dName!=''){
+        getFacilities();
+    }else if(pName!=''){
+        getProvinceDistricts();
+    }else if(fType!=''){
+        $.post("../includes/getFacilityForClinic.php", { fType:fType,comingFromUser:'yes'},
+        function(data){
+            $("#search").html(data);
+        });
+    }
+    $.unblockUI();
+}
 </script>
 <?php
 include('../footer.php');

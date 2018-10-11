@@ -64,6 +64,9 @@ if(isset($_POST['pName'])){
     {
       $facilityQuery = $facilityQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
     }
+    if(isset($_POST['fType']) && trim($_POST['fType'])!=''){
+        $facilityQuery = $facilityQuery." AND facility_type='".$_POST['fType']."'";   
+    }
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
@@ -74,6 +77,9 @@ if(isset($_POST['pName'])){
             $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
+        if(isset($_POST['comingFromUser'])){
+            $option = ' ';
+        }
         $facility.=$option;
     }
     $district = '';
@@ -102,17 +108,23 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
     if(isset($vlfmResult[0]['facilityId'])){
       $facilityQuery = $facilityQuery." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
     }
+    if(isset($_POST['fType']) && trim($_POST['fType'])!=''){
+        $facilityQuery = $facilityQuery." AND facility_type='".$_POST['fType']."'";   
+    }
     //echo $facilityQuery; die;
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
         if(!isset($_POST['comingFromUser'])){
-         $facility .= $option;
+         $facility .= $option;
         }
         foreach($facilityInfo as $fDetails){
           $facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
         }
     }else{
+        if(isset($_POST['comingFromUser'])){
+            $option = ' ';
+        }
       $facility .= $option;
     }
     //$facilityQuery = "SELECT * from facility_details where facility_type=2 AND facility_district='".$distName."' AND status='active'";
@@ -128,5 +140,20 @@ if(isset($_POST['dName']) && trim($_POST['dName'])!=''){
       $facilityLab .= $option;
     }
   echo $facility ."###".$facilityLab."###";
+}
+
+//this statement coming from user
+if(isset($_POST['fType']) && $_POST['fType']!='' && !isset($_POST['dName']) && !isset($_POST['pName'])){
+    $facilityQuery = "SELECT * from facility_details where facility_type='".$_POST['fType']."' AND status='active'";
+    $facilityLabInfo = $db->query($facilityQuery);
+    $facilityLab = '';
+    if($facilityLabInfo){
+        foreach($facilityLabInfo as $fDetails){
+          $facilityLab .= "<option value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
+        }
+    }else{
+      $facilityLab .= ' ';
+    }
+  echo $facilityLab;
 }
 ?>

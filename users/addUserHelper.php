@@ -32,13 +32,16 @@ try {
     if($id>0 && trim($_POST['selectedFacility'])!=''){
         if($id>0 && trim($_POST['selectedFacility'])!='')
 		{
-			$selectedFacility = explode(",",$_POST['selectedFacility']);
-			for($j = 0; $j < count($selectedFacility); $j++){
+            $selectedFacility = explode(",",$_POST['selectedFacility']);
+            $uniqueFacilityId = array_unique($selectedFacility);
+			for($j = 0; $j <= count($selectedFacility); $j++){
+                if(isset($uniqueFacilityId[$j])){
 				$data=array(
 					'facility_id'=>$selectedFacility[$j],
 					'user_id'=>$data['user_id'],
 				);
-				$db->insert($tableName2,$data);
+                $db->insert($tableName2,$data);
+                }
 			}
 		}
     }
