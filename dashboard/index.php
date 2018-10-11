@@ -33,6 +33,7 @@ include('../header.php');
         border:1px solid #3598DC;
     }
     .input-mini{width:100% !important;}
+    /* .labAverageTatDiv{display:none;} */
 </style>
 
   <!-- Content Wrapper. Contains page content -->
@@ -112,7 +113,7 @@ include('../header.php');
       function(data){
         if($.trim(data)!=''){
           $("#pieChartDiv").html(data);
-          $(".labAverageTatDiv").hide();
+          $(".labAverageTatDiv").css("display","none");
         }
       });
     

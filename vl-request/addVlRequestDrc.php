@@ -129,7 +129,7 @@
                                 </td>
                                 <td><label for="clinicName">Structure/Service </label><span class="mandatory">*</span></td>
                                 <td>
-                                    <select class="form-control isRequired" name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
+                                    <select class="form-control isRequired " name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                       <?php echo $facility;  ?>
                                     </select>
                                 </td>
@@ -855,6 +855,9 @@
         $('#vlLt40').attr('disabled',false);
       }
     });
+    $('#clinicName').select2({placeholder:"Select Clinic/Health Center"});
+    $('#district').select2({placeholder:"District"});
+    $('#province').select2({placeholder:"Province"});
   });
 
   </script>
