@@ -210,14 +210,14 @@ try {
             $row[] = $aRow['rejection_reason_status'];
             $row[] = (isset($aRow['is_patient_pregnant']) && $aRow['is_patient_pregnant'] != null && $aRow['is_patient_pregnant'] != '') ? $aRow['is_patient_pregnant'] : 'unreported';
             $row[] = (isset($aRow['is_patient_breastfeeding']) && $aRow['is_patient_breastfeeding'] != null && $aRow['is_patient_breastfeeding'] != '') ? $aRow['is_patient_breastfeeding'] : 'unreported';
-            $row[] = $aRow['current_regimen'];
+            $row[] = $aRow['patient_art_no'];
             $row[] = $aRow['date_of_initiation_of_current_regimen'];
             $row[] = $aRow['arv_adherance_percentage'];
             $row[] = $aRow['is_adherance_poor'];
             $row[] = $aRow['result_approved_datetime'];
             $row[] =   $DashVL_Abs;
             $row[] =   $DashVL_AnalysisResult;
-            $row[] = $aRow['patient_art_no'];
+            $row[] = $aRow['current_regimen'];
             $output[] = $row;
         }
     
