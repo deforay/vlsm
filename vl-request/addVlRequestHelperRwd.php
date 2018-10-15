@@ -9,8 +9,8 @@ $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
 $fDetails="facility_details";
 try {
-    $validateField = array($_POST['sampleCode'],$_POST['sampleCollectionDate']);
-    $chkValidation = $general->checkMandatoryField($validateField);
+    $validateFields = array($_POST['sampleCode'],$_POST['sampleCollectionDate']);
+    $chkValidation = $general->checkMandatoryFields($validateFields);
     if($chkValidation){
         $_SESSION['alertMsg']="Please enter all mandatory fields to save the test request";
         header("location:addVlRequest.php");

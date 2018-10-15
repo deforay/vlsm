@@ -184,13 +184,15 @@ class General {
 
         }
     }
-    public function checkMandatoryField($field)
-    {
+    // checking if the provided field list has any empty or null values
+    public function checkMandatoryFields($field){
         foreach($field as $chkField){
-            if($chkField==''){
+            if(empty(trim($chkField))){
                 return true;
             }
         }
+
+        return false;
     }
 
     public function crypto($action, $inputString, $secretIv) {
