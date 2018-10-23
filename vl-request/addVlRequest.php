@@ -10,139 +10,140 @@ $labFieldDisabled = '';
 // }else
 
 if($sarr['user_type']=='remoteuser'){
-     $labFieldDisabled = 'disabled="disabled"';
+    $labFieldDisabled = 'disabled="disabled"';
+    $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='".$_SESSION['userId']."'";
+    $vlfmResult = $db->rawQuery($vlfmQuery);
 }
-$general=new General();
+$general=new General($db);
 
 //global config
-$configQuery="SELECT * from global_config";
-$configResult=$db->query($configQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($configResult); $i++) {
-     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
-}
+$arr = $general->getGlobalConfig();
+
 //get import config
-$importQuery="SELECT * FROM import_config WHERE status = 'active'";
-$importResult=$db->query($importQuery);
-$userQuery="SELECT * FROM user_details where status='active'";
-$userResult = $db->rawQuery($userQuery);
+$condition = "status = 'active'";
+$importResult = $general->fetchDataFromTable('import_config',$condition);
+$userResult = $general->fetchDataFromTable('user_details',$condition);
+
 //get lab facility details
-$lQuery="SELECT * FROM facility_details where facility_type='2' AND status='active'";
-$lResult = $db->rawQuery($lQuery);
+$condition = "facility_type='2' AND status='active'";
+$lResult = $general->fetchDataFromTable('facility_details',$condition);
 //sample rejection reason
-$rejectionQuery="SELECT * FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
-$rejectionResult = $db->rawQuery($rejectionQuery);
+$condition = "rejection_reason_status ='active'";
+$rejectionResult = $general->fetchDataFromTable('r_sample_rejection_reasons',$condition);
+
 //rejection type
 $rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
 //get active sample types
-$sQuery="SELECT * from r_sample_type where status='active'";
-$sResult=$db->query($sQuery);
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
+$condition = "status = 'active'";
+$sResult = $general->fetchDataFromTable('r_sample_type',$condition);
+
+if(isset($vlfmResult[0]['facilityId']))
+    {
+        $condition = $condition." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
+    }
+$fResult = $general->fetchDataFromTable('facility_details',$condition);
+
 //get vltest reason details
-$testRQuery="SELECT * FROM r_vl_test_reasons";
-$testReason = $db->rawQuery($testRQuery);
-$pdQuery="SELECT * from province_details";
-$pdResult=$db->query($pdQuery);
+$testReason = $general->fetchDataFromTable('r_vl_test_reasons');
+$pdResult = $general->fetchDataFromTable('province_details');
 //get suspected treatment failure at
 $suspectedTreatmentFailureAtQuery="SELECT DISTINCT vl_sample_suspected_treatment_failure_at FROM vl_request_form where vlsm_country_id='".$arr['vl_form']."'";
 $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQuery);
 ?>
 <style>
 .ui_tpicker_second_label {
-     display: none !important;
+display: none !important;
+}.ui_tpicker_second_slider {
+display: none !important;
+}.ui_tpicker_millisec_label {
+display: none !important;
+}.ui_tpicker_millisec_slider {
+display: none !important;
+}.ui_tpicker_microsec_label {
+display: none !important;
+}.ui_tpicker_microsec_slider {
+display: none !important;
+}.ui_tpicker_timezone_label {
+display: none !important;
+}.ui_tpicker_timezone {
+display: none !important;
+}.ui_tpicker_time_input{
+width:100%;
 }
-.ui_tpicker_second_slider {
-     display: none !important;
-     }.ui_tpicker_millisec_label {
-          display: none !important;
-          }.ui_tpicker_millisec_slider {
-               display: none !important;
-               }.ui_tpicker_microsec_label {
-                    display: none !important;
-                    }.ui_tpicker_microsec_slider {
-                         display: none !important;
-                         }.ui_tpicker_timezone_label {
-                              display: none !important;
-                              }.ui_tpicker_timezone {
-                                   display: none !important;
-                                   }.ui_tpicker_time_input{
-                                        width:100%;
-                                   }
-                              </style>
-                              <?php
-                              if($arr['vl_form']==1){
-                                   include('defaultaddVlRequest.php');
-                              }else if($arr['vl_form']==2){
-                                   include('addVlRequestZm.php');
-                              }else if($arr['vl_form']==3){
-                                   include('addVlRequestDrc.php');
-                              }else if($arr['vl_form']==4){
-                                   include('addVlRequestZam.php');
-                              }else if($arr['vl_form']==5){
-                                   include('addVlRequestPng.php');
-                              }else if($arr['vl_form']==6){
-                                   include('addVlRequestWho.php');
-                              }else if($arr['vl_form']==7){
-                                   include('addVlRequestRwd.php');
-                              }else if($arr['vl_form']==8){
-                                   include('addVlRequestAng.php');
-                              }
-                              ?>
-                              <script>
-                              $(document).ready(function() {
-                                   $('.date').datepicker({
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        dateFormat: 'dd-M-yy',
-                                        timeFormat: "hh:mm TT",
-                                        maxDate: "Today",
-                                        yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-                                   }).click(function(){
-                                        $('.ui-datepicker-calendar').show();
-                                   });
-                                   $('.dateTime').datetimepicker({
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        dateFormat: 'dd-M-yy',
-                                        timeFormat: "HH:mm",
-                                        maxDate: "Today",
-                                        onChangeMonthYear: function(year, month, widget) {
-                                             setTimeout(function() {
-                                                  $('.ui-datepicker-calendar').show();
-                                             });
-                                        },
-                                        yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-                                   }).click(function(){
-                                        $('.ui-datepicker-calendar').show();
-                                   });
-                                   $('.date').mask('99-aaa-9999');
-                                   $('.dateTime').mask('99-aaa-9999 99:99');
-                              });
-                              function checkSampleReceviedDate(){
-                                   var sampleCollectionDate = $("#sampleCollectionDate").val();
-                                   var sampleReceivedDate = $("#sampleReceivedDate").val();
-                                   if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= ''){
-                                        var scdf = $("#sampleCollectionDate").val().split(' ');
-                                        var srdf = $("#sampleReceivedDate").val().split(' ');
-                                        var scd = changeFormat(scdf[0]);
-                                        var srd = changeFormat(srdf[0]);
-                                        if(moment(scd+' '+scdf[1]).isAfter(srd+' '+srdf[1])) {
-                                             <?php if($arr['vl_form']=='3'){ ?>
-                                                  //french
-                                                  alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
-                                                  <?php }else if($arr['vl_form']=='8'){ ?>
-                                                       //portugese
-                                                       alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
-                                                       <?php }else { ?>
-                                                            alert("Sample Received Date cannot be earlier than Sample Collection Date!");
-                                                            <?php } ?>
-                                                            $('#sampleReceivedDate').val('');
-                                                       }
-                                                  }
-                                             }
+</style>
+<?php
+if($arr['vl_form']==1){
+    include('defaultaddVlRequest.php');
+}else if($arr['vl_form']==2){
+    include('addVlRequestZm.php');
+}else if($arr['vl_form']==3){
+    include('addVlRequestDrc.php');
+}else if($arr['vl_form']==4){
+    include('addVlRequestZam.php');
+}else if($arr['vl_form']==5){
+    include('addVlRequestPng.php');
+}else if($arr['vl_form']==6){
+    include('addVlRequestWho.php');
+}else if($arr['vl_form']==7){
+    include('addVlRequestRwd.php');
+}else if($arr['vl_form']==8){
+    include('addVlRequestAng.php');
+}
+?>
+<script>
+    $(document).ready(function() {
+        $('.date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "hh:mm TT",
+            maxDate: "Today",
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function(){
+            $('.ui-datepicker-calendar').show();
+        });
+        $('.dateTime').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                    setTimeout(function() {
+                        $('.ui-datepicker-calendar').show();
+                    });
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function(){
+            $('.ui-datepicker-calendar').show();
+        });
+        $('.date').mask('99-aaa-9999');
+        $('.dateTime').mask('99-aaa-9999 99:99');
+        });
+        function checkSampleReceviedDate(){
+            var sampleCollectionDate = $("#sampleCollectionDate").val();
+            var sampleReceivedDate = $("#sampleReceivedDate").val();
+            if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= ''){
+            var scdf = $("#sampleCollectionDate").val().split(' ');
+            var srdf = $("#sampleReceivedDate").val().split(' ');
+            var scd = changeFormat(scdf[0]);
+            var srd = changeFormat(srdf[0]);
+                if(moment(scd+' '+scdf[1]).isAfter(srd+' '+srdf[1])) {
+                    <?php if($arr['vl_form']=='3'){ ?>
+                    //french
+                    alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
+                    <?php }else if($arr['vl_form']=='8'){ ?>
+                    //portugese
+                    alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
+                    <?php }else { ?>
+                    alert("Sample Received Date cannot be earlier than Sample Collection Date!");
+                    <?php } ?>
+                    $('#sampleReceivedDate').val('');
+                }
+            }
+        }
 
                                              function checkSampleReceviedAtHubDate(){
                                                   var sampleCollectionDate = $("#sampleCollectionDate").val();

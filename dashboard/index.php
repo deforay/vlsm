@@ -33,7 +33,7 @@ include('../header.php');
         border:1px solid #3598DC;
     }
     .input-mini{width:100% !important;}
-    /* .labAverageTatDiv{display:none;} */
+    .labAverageTatDiv{display:none;}
 </style>
 
   <!-- Content Wrapper. Contains page content -->

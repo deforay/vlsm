@@ -4,6 +4,7 @@
  *
  * @author Amit
  */
+
 class General {
 
     protected $db = null;
@@ -128,7 +129,6 @@ class General {
 
     // get data from the system_config table from database
     public function getSystemConfig($name = null){
-
         if($this->db == null) return false;
 
         if($name == null){
@@ -181,9 +181,23 @@ class General {
             }else{
                 return null;
             }
-
         }
     }
+
+    public function fetchDataFromTable($tableName=null,$condition=null,$fieldName=NULL)
+    {
+        if($this->db == null || $tableName==null) return false;
+        $fieldName = ($fieldName!=null)?$fieldName:'*';
+        if($condition==null){
+            $configQuery ="SELECT $fieldName from $tableName";
+        }else{
+            $configQuery ="SELECT $fieldName from $tableName WHERE $condition";
+        }
+        $configResult=$this->db->query($configQuery);
+        return $configResult;
+    }
+
+
     // checking if the provided field list has any empty or null values
     public function checkMandatoryFields($field){
         foreach($field as $chkField){

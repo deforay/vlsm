@@ -192,7 +192,6 @@ class General {
                 return true;
             }
         }
-
         return false;
     }
 }
