@@ -248,6 +248,7 @@ try {
                   'date_dispatched_from_clinic_to_lab'=>$_POST['dateDispatchedFromClinicToLab'],
                   //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
                   'last_modified_by'=>$_SESSION['userId'],
+                  'data_sync'=>0,
                   'last_modified_datetime'=>$general->getDateTime()
                 );
     if($sarr['user_type']=='remoteuser'){

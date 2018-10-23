@@ -42,6 +42,9 @@ foreach($pdResult as $provinceName){
 }
 $facility = '';
 $facility.="<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>";
+foreach($fResult as $fDetails){
+$facility .= "<option data-code='".$fDetails['facility_code']."' data-emails='".$fDetails['facility_emails']."' data-mobile-nos='".$fDetails['facility_mobile_numbers']."' data-contact-person='".ucwords($fDetails['contact_person'])."' value='".$fDetails['facility_id']."'>".ucwords(addslashes($fDetails['facility_name'])).' - '.$fDetails['facility_code']."</option>";
+}
 //regimen heading
 $artRegimenQuery="SELECT DISTINCT headings FROM r_art_code_details WHERE nation_identifier ='rwd'";
 $artRegimenResult = $db->rawQuery($artRegimenQuery);
@@ -752,6 +755,30 @@ $sKey = ''; $sFormat = '';
                                         $.unblockUI();
                                    }
                                    function fillFacilityDetails(){
+                                    $.blockUI();
+                                        //check facility name
+                                        var cName = $("#fName").val();
+                                        var pName = $("#province").val();
+                                        if(cName!='' && provinceName && facilityName){
+                                            provinceName = false;
+                                        }
+                                        if(cName!='' && facilityName){
+                                        $.post("../includes/getFacilityForClinic.php", { cName : cName},
+                                        function(data){
+                                            if(data != ""){
+                                                details = data.split("###");
+                                                $("#province").html(details[0]);
+                                                $("#district").html(details[1]);
+                                                $("#clinicianName").val(details[2]);
+                                            }
+                                        });
+                                        }else if(pName=='' && cName==''){
+                                        provinceName = true;
+                                        facilityName = true;
+                                        $("#province").html("<?php echo $province;?>");
+                                        $("#fName").html("<?php echo $facility;?>");
+                                        }
+                                        $.unblockUI();
                                         $("#fCode").val($('#fName').find(':selected').data('code'));
                                         var femails = $('#fName').find(':selected').data('emails');
                                         var fmobilenos = $('#fName').find(':selected').data('mobile-nos');

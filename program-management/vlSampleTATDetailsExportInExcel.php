@@ -94,7 +94,7 @@ if(isset($_SESSION['vlTATDetails']) && trim($_SESSION['vlTATDetails'])!=""){
     $mailDate = '';
   }
 
-  $row[] = $aRow['serial_no'];
+  $row[] = $aRow['sample_code'];
   $row[] = $sampleCollectionDate;
   $row[] = $sampleRecievedDate;
   $row[] = $testDate;
