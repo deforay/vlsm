@@ -101,8 +101,10 @@ class MYPDF extends TCPDF {
         $this->writeHTMLCell(0,0,10,18,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
         if(trim($this->lab)!= ''){
           $this->SetFont('helvetica', '', 9);
-          $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+          $this->writeHTMLCell(0,0,10,25,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
         }
+        $this->SetFont('helvetica', '', 12);
+        $this->writeHTMLCell(0,0,10,30,'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
         $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
       }
     }
