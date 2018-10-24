@@ -27,7 +27,7 @@ if(sizeof($requestResult)> 0){
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         //$pdf->SetAuthor('Pal');
-        $pdf->SetTitle('Viral Load Test Result');
+        $pdf->SetTitle('PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
