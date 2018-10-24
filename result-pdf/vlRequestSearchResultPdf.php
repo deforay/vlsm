@@ -97,8 +97,8 @@ class MYPDF extends TCPDF {
         }
         $this->SetFont('helvetica', 'B', 7);
         $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
-        $this->SetFont('helvetica', '', 18);
-        $this->writeHTMLCell(0,0,10,18,'VIRAL LOAD TEST RESULT', 0, 0, 0, true, 'C', true);
+        $this->SetFont('helvetica', '', 14);
+        $this->writeHTMLCell(0,0,10,18,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
         if(trim($this->lab)!= ''){
           $this->SetFont('helvetica', '', 9);
           $this->writeHTMLCell(0,0,10,26,strtoupper($this->lab), 0, 0, 0, true, 'C', true);

@@ -61,7 +61,7 @@ if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
   }
 
 
-$vlQuery="SELECT * FROM vl_request_form WHERE remote_sample_code !='' AND  remote_sample_code is not null AND result!='' AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+$vlQuery="SELECT * FROM vl_request_form WHERE remote_sample_code !='' AND  remote_sample_code is not null  AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
 $vlLabResult = $db->rawQuery($vlQuery);
 
