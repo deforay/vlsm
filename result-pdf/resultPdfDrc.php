@@ -183,6 +183,8 @@ if(sizeof($requestResult)> 0){
               $vlResult = $result['result'];
               //$showMessage = 'Invalid value';
             }
+          }
+            
             $chkSign = '';
             $chkSign = strchr($result['result'],'<');
             if($chkSign!=''){
@@ -195,7 +197,7 @@ if(sizeof($requestResult)> 0){
             }else if($smileyShow!='' && $smileyShow > $arr['viral_load_threshold_limit']){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
             }
-          }
+          
         }
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
           $smileyContent = '';
@@ -306,7 +308,7 @@ if(sizeof($requestResult)> 0){
                    }else{
                     $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;0.0';
                    }
-                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Résultat(copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].$logValue.'</td></tr>';
+                   $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Résultat(copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$vlResult.$logValue.'</td></tr>';
                    $html .='<tr><td colspan="3"></td></tr>';
                  $html .='</table>';
                 $html .='</td>';
