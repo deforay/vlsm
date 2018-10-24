@@ -192,9 +192,9 @@ if(sizeof($requestResult)> 0){
               $vlResult = str_replace("<","&lt;",$result['result']);
               //$showMessage = 'Invalid value';
             }
-            if($smileyShow!='' && $smileyShow <= $arr['viral_load_threshold_limit']){
+            if(isset($smileyShow) && $smileyShow!='' && $smileyShow <= $arr['viral_load_threshold_limit']){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_smile.png" alt="smile_face"/>';
-            }else if($smileyShow!='' && $smileyShow > $arr['viral_load_threshold_limit']){
+            }else if(isset($smileyShow) && $smileyShow!='' && $smileyShow > $arr['viral_load_threshold_limit']){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
             }
           
