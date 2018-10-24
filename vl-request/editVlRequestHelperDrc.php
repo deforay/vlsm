@@ -22,9 +22,9 @@ try {
     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
       $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
     }
-    if($sarr['user_type']=='remoteuser' && $_POST['oldStatus']==9){
+    if( $sarr['user_type']=='remoteuser' && $_POST['oldStatus']==9 ){
         $_POST['status'] = 9;
-    }else if($_POST['oldStatus']==9){
+    }else if( $_POST['oldStatus']==9 && $sarr['user_type']=='vluser' && $_POST['status'] == '' ){
         $_POST['status'] = 6;
     }
     //Set Date of demand
@@ -297,6 +297,12 @@ try {
         $vldata['sample_type'] = $_POST['specimenType'];
         $vldata['plasma_conservation_temperature'] = $_POST['conservationTemperature'];
         $vldata['plasma_conservation_duration'] = $_POST['durationOfConservation'];
+    }
+    if(isset($_POST['status']) && trim($_POST['status'])!= ''){
+        $vldata['result_status'] = $_POST['status'];
+        if(isset($_POST['rejectionReason'])){
+            $vldata['reason_for_sample_rejection'] = $_POST['rejectionReason'];
+        }
     }
     if(isset($_POST['status']) && trim($_POST['status'])!= ''){
         $vldata['result_status'] = $_POST['status'];
