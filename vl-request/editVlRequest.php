@@ -64,7 +64,6 @@ $suspectedTreatmentFailureAtResult = $db->rawQuery($suspectedTreatmentFailureAtQ
 
 $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";
 $vlQueryInfo=$db->query($vlQuery);
-
 if(isset($vlQueryInfo[0]['patient_dob']) && trim($vlQueryInfo[0]['patient_dob'])!='' && $vlQueryInfo[0]['patient_dob']!='0000-00-00'){
      $vlQueryInfo[0]['patient_dob']=$general->humanDateFormat($vlQueryInfo[0]['patient_dob']);
 }else{
@@ -220,183 +219,182 @@ if($arr['vl_form']==1){
 }
 ?>
 <script>
-$(document).ready(function() {
-     $('.date').datepicker({
-          changeMonth: true,
-          changeYear: true,
-          dateFormat: 'dd-M-yy',
-          timeFormat: "hh:mm TT",
-          maxDate: "Today",
-          yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     }).click(function(){
-          $('.ui-datepicker-calendar').show();
-     });
-     $('.dateTime').datetimepicker({
-          changeMonth: true,
-          changeYear: true,
-          dateFormat: 'dd-M-yy',
-          timeFormat: "HH:mm",
-          maxDate: "Today",
-          onChangeMonthYear: function(year, month, widget) {
-               setTimeout(function() {
-                    $('.ui-datepicker-calendar').show();
-               });
-          },
-          yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-     }).click(function(){
-          $('.ui-datepicker-calendar').show();
-     });
-     $('.date').mask('99-aaa-9999');
-     $('.dateTime').mask('99-aaa-9999 99:99');
-});
+    $(document).ready(function() {
+        $('.date').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "hh:mm TT",
+            maxDate: "Today",
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function(){
+            $('.ui-datepicker-calendar').show();
+        });
+        $('.dateTime').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                        $('.ui-datepicker-calendar').show();
+                });
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function(){
+            $('.ui-datepicker-calendar').show();
+        });
+        $('.date').mask('99-aaa-9999');
+        $('.dateTime').mask('99-aaa-9999 99:99');
+    });
 
+    function checkSampleReceviedAtHubDate(){
+        var sampleCollectionDate = $("#sampleCollectionDate").val();
+        var sampleReceivedAtHubOn = $("#sampleReceivedAtHubOn").val();
+        if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedAtHubOn)!= ''){
+            var scdf = $("#sampleCollectionDate").val().split(' ');
+            var stdl = $("#sampleReceivedAtHubOn").val().split(' ');
+            var scd = changeFormat(scdf[0]);
+            var std = changeFormat(stdl[0]);
+            if(moment(scd+' '+scdf[1]).isAfter(std+' '+stdl[1])) {
+                <?php if($arr['vl_form']=='3'){ ?>
+                        //french
+                        alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
+                    <?php }else if($arr['vl_form']=='8'){ ?>
+                        //portugese
+                        alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
+                    <?php }else { ?>
+                        alert("Sample Received Date cannot be earlier than Sample Collection Date!");
+                    <?php } ?>
+                        $("#sampleTestingDateAtLab").val("");
+                }
+        }
+    }
 
-function checkSampleReceviedAtHubDate(){
-     var sampleCollectionDate = $("#sampleCollectionDate").val();
-     var sampleReceivedAtHubOn = $("#sampleReceivedAtHubOn").val();
-     if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedAtHubOn)!= ''){
-          var scdf = $("#sampleCollectionDate").val().split(' ');
-          var stdl = $("#sampleReceivedAtHubOn").val().split(' ');
-          var scd = changeFormat(scdf[0]);
-          var std = changeFormat(stdl[0]);
-          if(moment(scd+' '+scdf[1]).isAfter(std+' '+stdl[1])) {
-               <?php if($arr['vl_form']=='3'){ ?>
+    function checkSampleReceviedDate(){
+        var sampleCollectionDate = $("#sampleCollectionDate").val();
+        var sampleReceivedDate = $("#sampleReceivedDate").val();
+        if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= ''){
+            var scdf = $("#sampleCollectionDate").val().split(' ');
+            var srdf = $("#sampleReceivedDate").val().split(' ');
+            var scd = changeFormat(scdf[0]);
+            var srd = changeFormat(srdf[0]);
+            if(moment(scd+' '+scdf[1]).isAfter(srd+' '+srdf[1])) {
+                <?php if($arr['vl_form']=='3'){ ?>
                     //french
                     alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
-                    <?php }else if($arr['vl_form']=='8'){ ?>
-                         //portugese
-                         alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
-                         <?php }else { ?>
-                              alert("Sample Received Date cannot be earlier than Sample Collection Date!");
-                              <?php } ?>
-                              $("#sampleTestingDateAtLab").val("");
-                         }
-                    }
-               }
+                <?php }else if($arr['vl_form']=='8'){ ?>
+                    //portugese
+                    alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
+                <?php }else { ?>
+                    alert("Sample Received Date cannot be earlier than Sample Collection Date!");
+                <?php } ?>
+                    $('#sampleReceivedDate').val('');
+            }
+        }
+    }
+    function checkSampleTestingDate(){
+        var sampleCollectionDate = $("#sampleCollectionDate").val();
+        var sampleTestingDate = $("#sampleTestingDateAtLab").val();
+        if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= ''){
+            var scdf = $("#sampleCollectionDate").val().split(' ');
+            var stdl = $("#sampleTestingDateAtLab").val().split(' ');
+            var scd = changeFormat(scdf[0]);
+            var std = changeFormat(stdl[0]);
+            if(moment(scd+' '+scdf[1]).isAfter(std+' '+stdl[1])) {
+                <?php if($arr['vl_form']=='3'){ ?>
+                    //french
+                    alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
+                <?php }else if($arr['vl_form']=='8'){ ?>
+                    //french
+                    alert("Data de Teste de Amostras não pode ser anterior ao Data Hora de colheita!");
+                <?php } else { ?>
+                    alert("Sample Testing Date cannot be earlier than Sample Collection Date!");
+                <?php } ?>
+                    $("#sampleTestingDateAtLab").val("");
+            }
+        }
+    }
+    function checkARTInitiationDate(){
+        var dob = changeFormat($("#dob").val());
+        var artInitiationDate = $("#dateOfArtInitiation").val();
+        if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
+            var artInitiationDate = changeFormat($("#dateOfArtInitiation").val());
+            if(moment(dob).isAfter(artInitiationDate)) {
+                <?php if($arr['vl_form']=='3'){ ?>
+                    //french
+                    alert("La date d'ouverture de l'ART ne peut pas être antérieure à!");
+                <?php }else if($arr['vl_form']=='8'){ ?>
+                    //portugese
+                    alert("Data de início de TARV não pode ser anterior ao Data de nascimento!");
+                <?php } else { ?>
+                    alert("ART Initiation Date cannot be earlier than DOB!");
+                <?php } ?>
+                    $("#dateOfArtInitiation").val("");
+            }
+        }
+    }
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
+    {
+        if($.trim($("#"+id).val())!=''){
+            $.blockUI();
+            $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+            function(data){
+                if(data!=0){
+                    <?php if($sarr['user_type']=='remoteuser' || $sarr['user_type']=='standalone'){ ?>
+                    alert(alrt);
+                    $("#"+id).val('');
+                    <?php } else { ?>
+                        data = data.split("##");
+                        document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
+                    <?php } ?>
+                }
+            });
+            $.unblockUI();
+        }
+    }
 
-               function checkSampleReceviedDate(){
-                    var sampleCollectionDate = $("#sampleCollectionDate").val();
-                    var sampleReceivedDate = $("#sampleReceivedDate").val();
-                    if($.trim(sampleCollectionDate)!= '' && $.trim(sampleReceivedDate)!= ''){
-                         var scdf = $("#sampleCollectionDate").val().split(' ');
-                         var srdf = $("#sampleReceivedDate").val().split(' ');
-                         var scd = changeFormat(scdf[0]);
-                         var srd = changeFormat(srdf[0]);
-                         if(moment(scd+' '+scdf[1]).isAfter(srd+' '+srdf[1])) {
-                              <?php if($arr['vl_form']=='3'){ ?>
-                                   //french
-                                   alert("L'échantillon de données reçues ne peut pas être antérieur à la date de collecte de l'échantillon!");
-                                   <?php }else if($arr['vl_form']=='8'){ ?>
-                                        //portugese
-                                        alert("Amostra de Data Recebida no Laboratório de Teste não pode ser anterior ao Data Hora de colheita!");
-                                        <?php }else { ?>
-                                             alert("Sample Received Date cannot be earlier than Sample Collection Date!");
-                                             <?php } ?>
-                                             $('#sampleReceivedDate').val('');
-                                        }
-                                   }
-                              }
-                              function checkSampleTestingDate(){
-                                   var sampleCollectionDate = $("#sampleCollectionDate").val();
-                                   var sampleTestingDate = $("#sampleTestingDateAtLab").val();
-                                   if($.trim(sampleCollectionDate)!= '' && $.trim(sampleTestingDate)!= ''){
-                                        var scdf = $("#sampleCollectionDate").val().split(' ');
-                                        var stdl = $("#sampleTestingDateAtLab").val().split(' ');
-                                        var scd = changeFormat(scdf[0]);
-                                        var std = changeFormat(stdl[0]);
-                                        if(moment(scd+' '+scdf[1]).isAfter(std+' '+stdl[1])) {
-                                             <?php if($arr['vl_form']=='3'){ ?>
-                                                  //french
-                                                  alert("La date d'essai de l'échantillon ne peut pas être antérieure à la date de collecte de l'échantillon!");
-                                                  <?php }else if($arr['vl_form']=='8'){ ?>
-                                                       //french
-                                                       alert("Data de Teste de Amostras não pode ser anterior ao Data Hora de colheita!");
-                                                       <?php } else { ?>
-                                                            alert("Sample Testing Date cannot be earlier than Sample Collection Date!");
-                                                            <?php } ?>
-                                                            $("#sampleTestingDateAtLab").val("");
-                                                       }
-                                                  }
-                                             }
-                                             function checkARTInitiationDate(){
-                                                  var dob = changeFormat($("#dob").val());
-                                                  var artInitiationDate = $("#dateOfArtInitiation").val();
-                                                  if($.trim(dob)!= '' && $.trim(artInitiationDate)!= '') {
-                                                       var artInitiationDate = changeFormat($("#dateOfArtInitiation").val());
-                                                       if(moment(dob).isAfter(artInitiationDate)) {
-                                                            <?php if($arr['vl_form']=='3'){ ?>
-                                                                 //french
-                                                                 alert("La date d'ouverture de l'ART ne peut pas être antérieure à!");
-                                                                 <?php }else if($arr['vl_form']=='8'){ ?>
-                                                                      //portugese
-                                                                      alert("Data de início de TARV não pode ser anterior ao Data de nascimento!");
-                                                                      <?php } else { ?>
-                                                                           alert("ART Initiation Date cannot be earlier than DOB!");
-                                                                           <?php } ?>
-                                                                           $("#dateOfArtInitiation").val("");
-                                                                      }
-                                                                 }
-                                                            }
-                                                            function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt)
-                                                            {
-                                                                 if($.trim($("#"+id).val())!=''){
-                                                                      $.blockUI();
-                                                                      $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
-                                                                      function(data){
-                                                                           if(data!=0){
-                                                                                <?php if($sarr['user_type']=='remoteuser' || $sarr['user_type']=='standalone'){ ?>
-                                                                                     alert(alrt);
-                                                                                     $("#"+id).val('');
-                                                                                     <?php } else { ?>
-                                                                                          data = data.split("##");
-                                                                                          document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
-                                                                                          <?php } ?>
-                                                                                     }
-                                                                                });
-                                                                                $.unblockUI();
-                                                                           }
-                                                                      }
+    function getAge(){
+        var agYrs = '';
+        var agMnths = '';
+        var dob = changeFormat($("#dob").val());
+        if(agYrs=='' && $("#dob").val() !=''){
+            //calculate age
+            var years = moment().diff(dob, 'years',false);
+            var months = (years == 0)?moment().diff(dob, 'months',false):'';
+            $("#ageInYears").val(years); // Gives difference as years
+            $("#ageInMonths").val(months); // Gives difference as months
+        }
+    }
 
-                                                                      function getAge(){
-                                                                           var agYrs = '';
-                                                                           var agMnths = '';
-                                                                           var dob = changeFormat($("#dob").val());
-                                                                           if(agYrs=='' && $("#dob").val() !=''){
-                                                                                //calculate age
-                                                                                var years = moment().diff(dob, 'years',false);
-                                                                                var months = (years == 0)?moment().diff(dob, 'months',false):'';
-                                                                                $("#ageInYears").val(years); // Gives difference as years
-                                                                                $("#ageInMonths").val(months); // Gives difference as months
-                                                                           }
-                                                                      }
+    function clearDOB(val){
+        if($.trim(val)!= ""){
+            $("#dob").val("");
+        }
+    }
 
-                                                                      function clearDOB(val){
-                                                                           if($.trim(val)!= ""){
-                                                                                $("#dob").val("");
-                                                                           }
-                                                                      }
-
-                                                                      function checkARTRegimenValue(){
-                                                                           var artRegimen = $("#artRegimen").val();
-                                                                           if(artRegimen=='other'){
-                                                                                $(".newArtRegimen").show();
-                                                                                $("#newArtRegimen").addClass("isRequired");
-                                                                                $("#newArtRegimen").focus();
-                                                                           }else{
-                                                                                $(".newArtRegimen").hide();
-                                                                                $("#newArtRegimen").removeClass("isRequired");
-                                                                                $('#newArtRegimen').val("");
-                                                                           }
-                                                                      }
-                                                                      function changeFormat(date)
-                                                                      {
-                                                                           splitDate = date.split("-");
-                                                                           var fDate = new Date(splitDate[1] + splitDate[2]+", "+splitDate[0]);
-                                                                           var monthDigit = fDate.getMonth();
-                                                                           var fMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
-                                                                           fMonth = (fMonth<10) ? '0'+fMonth: fMonth;
-                                                                           format = splitDate[2]+'-'+fMonth+'-'+splitDate[0];
-                                                                           return format;
-                                                                      }
-                                                                      </script>
-                                                                      <?php include('../footer.php');?>
+    function checkARTRegimenValue(){
+            var artRegimen = $("#artRegimen").val();
+            if(artRegimen=='other'){
+                $(".newArtRegimen").show();
+                $("#newArtRegimen").addClass("isRequired");
+                $("#newArtRegimen").focus();
+            }else{
+                $(".newArtRegimen").hide();
+                $("#newArtRegimen").removeClass("isRequired");
+                $('#newArtRegimen').val("");
+            }
+    }
+    function changeFormat(date)
+    {
+        splitDate = date.split("-");
+        var fDate = new Date(splitDate[1] + splitDate[2]+", "+splitDate[0]);
+        var monthDigit = fDate.getMonth();
+        var fMonth = isNaN(monthDigit) ? 1 : (parseInt(monthDigit)+parseInt(1));
+        fMonth = (fMonth<10) ? '0'+fMonth: fMonth;
+        format = splitDate[2]+'-'+fMonth+'-'+splitDate[0];
+        return format;
+    }
+</script>
+<?php include('../footer.php');?>
