@@ -72,7 +72,7 @@ if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], ar
 }else{
   $allAdminMenuAccess = false;  
 }
-if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php','batchcode.php','vlRequestMail.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php','batchcode.php','vlRequestMail.php','specimenReferralManifestList.php'))) {
   $requestMenuAccess = true;
 }else{
   $requestMenuAccess = false;  

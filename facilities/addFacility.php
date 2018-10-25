@@ -7,6 +7,7 @@ $fResult = $db->rawQuery($fQuery);
 $pQuery="SELECT * FROM province_details";
 $pResult = $db->rawQuery($pQuery);
 ?>
+<link href="../assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -28,7 +29,7 @@ $pResult = $db->rawQuery($pQuery);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" action="addFacilityHelper.php">
+            <form class="form-horizontal" method='post' name='addFacilityForm' id='addFacilityForm' autocomplete="off" enctype="multipart/form-data" action="addFacilityHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
@@ -191,6 +192,30 @@ $pResult = $db->rawQuery($pQuery);
                     </div>
                 </div>
               </div>
+              <div class="row logoImage" style="display:none;" >
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="" class="col-lg-4 control-label">Logo Image </label>
+                <div class="col-lg-8">
+                 <div class="fileinput fileinput-new labLogo" data-provides="fileinput">
+                  <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
+                     <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
+                  </div>
+                  <div>
+                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span>
+                    <input type="file" id="labLogo" name="labLogo" title="Please select logo image" >
+                    </span>
+                    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                  </div>
+                  </div>
+                  <div class="box-body">
+                      Please make sure logo image size of: <code>80x80</code>
+                  </div>
+                </div>
+              </div>
+             </div>
+        </div>
+
                <div class="row" id="userDetails">
                 
                </div>
@@ -214,6 +239,7 @@ $pResult = $db->rawQuery($pQuery);
   </div>
   
   <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+  <script type="text/javascript" src="../assets/js/jasny-bootstrap.js"></script>
   <script type="text/javascript">
 
   function validateNow(){
@@ -267,6 +293,11 @@ $pResult = $db->rawQuery($pQuery);
         });
     }else{
       $("#userDetails").html('');
+    }
+    if($("#facilityType").val() == '2'){
+      $(".logoImage").show();
+    }else{
+      $(".logoImage").hide();
     }
   }
   </script>
