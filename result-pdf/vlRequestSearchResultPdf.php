@@ -43,7 +43,7 @@ if(isset($_POST['newData']) && $_POST['newData']!=''){
 }
 if(isset($_POST['id']) && trim($_POST['id'])!=''){
   if(isset($_POST['resultMail'])){
-    $searchQuery="SELECT vl.*,f.*,rst.*,l.facility_name as labName,rsrr.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.vl_sample_id IN(".$_POST['id'].")";
+    $searchQuery="SELECT vl.*,f.*,rst.*,l.facility_name as labName,l.facility_logo as facilityLogo,rsrr.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.vl_sample_id IN(".$_POST['id'].")";
   }else{
     $searchQuery = $query." and vl.vl_sample_id IN(".$_POST['id'].")";
   }
@@ -59,11 +59,12 @@ $_SESSION['aliasPage'] = 1;
 class MYPDF extends TCPDF {
 
     //Page header
-    public function setHeading($logo,$text,$lab,$title=null) {
+    public function setHeading($logo,$text,$lab,$title=null,$labFacilityId = null) {
       $this->logo = $logo;
       $this->text = $text;
       $this->lab = $lab;
       $this->htitle = $title;
+      $this->labFacilityId = $labFacilityId;
     }
     //Page header
     public function Header() {
@@ -90,7 +91,10 @@ class MYPDF extends TCPDF {
           $this->writeHTMLCell(0,0,15,38,'<hr>', 0, 0, 0, true, 'C', true);
         }else{
         if(trim($this->logo)!=''){
-            if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+          if(file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $this->labFacilityId . DIRECTORY_SEPARATOR . $this->logo)){
+            $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'facility-logo'. DIRECTORY_SEPARATOR . $this->labFacilityId . DIRECTORY_SEPARATOR.$this->logo;
+            $this->Image($image_file,16, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+          }else if(file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
               $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
               $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
@@ -98,13 +102,13 @@ class MYPDF extends TCPDF {
         $this->SetFont('helvetica', 'B', 7);
         $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
         $this->SetFont('helvetica', '', 14);
-        $this->writeHTMLCell(0,0,10,18,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
         if(trim($this->lab)!= ''){
           $this->SetFont('helvetica', '', 9);
-          $this->writeHTMLCell(0,0,10,25,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+          $this->writeHTMLCell(0,0,10,23,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
         }
         $this->SetFont('helvetica', '', 12);
-        $this->writeHTMLCell(0,0,10,30,'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0,0,10,28,'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
         $this->writeHTMLCell(0,0,15,36,'<hr>', 0, 0, 0, true, 'C', true);
       }
     }

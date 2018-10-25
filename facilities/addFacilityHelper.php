@@ -4,6 +4,7 @@ session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 $general = new General($db);
+include('../includes/ImageResize.php');
 $tableName="facility_details";
 $tableName1="province_details";
 $tableName2="vl_user_facility_map";
@@ -76,6 +77,25 @@ try {
 				$db->insert($tableName2,$data);
 			}
 		}
+
+		if(isset($_FILES['labLogo']['name']) && $_FILES['labLogo']['name'] != ""){
+			if(!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo")) {
+				mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo");
+			}
+			mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $lastId);
+			$extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['labLogo']['name'], PATHINFO_EXTENSION));
+			$string = $general->generateRandomString(6).".";
+			$imageName = "logo".$string.$extension;
+			if (move_uploaded_file($_FILES["labLogo"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR . $imageName)) {
+				$resizeObj = new Deforay_Image_Resize(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR .$imageName);
+				  $resizeObj->resizeImage(80, 80, 'auto');
+				$resizeObj->saveImage(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $lastId . DIRECTORY_SEPARATOR. $imageName, 100);
+				$image=array('facility_logo'=>$imageName);
+				$db=$db->where('facility_id',$lastId);
+				$db->update($tableName,$image);
+			}
+		}
+
 		$_SESSION['alertMsg']="Facility details added successfully";
 		$general->activityLog('add-facility',$_SESSION['userName']. ' added new facility '.$_POST['facilityName'],'facility');
     }

@@ -29,6 +29,7 @@ $uResult = $db->rawQuery($uQuery);
 $selectedQuery="SELECT * FROM vl_user_facility_map as vlfm join user_details as ud ON ud.user_id=vlfm.user_id join facility_details as fd ON fd.facility_id=vlfm.facility_id where vlfm.facility_id = ".$id;
 $selectedResult = $db->rawQuery($selectedQuery);
 ?>
+<link href="../assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -50,7 +51,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
         <!-- /.box-header -->
         <div class="box-body">
           <!-- form start -->
-            <form class="form-horizontal" method='post'  name='editFacilityForm' id='editFacilityForm' autocomplete="off" action="editFacilityHelper.php">
+            <form class="form-horizontal" method='post'  name='editFacilityForm' id='editFacilityForm' autocomplete="off" enctype="multipart/form-data" action="editFacilityHelper.php">
               <div class="box-body">
                 <div class="row">
                   <div class="col-md-6">
@@ -228,6 +229,41 @@ $selectedResult = $db->rawQuery($selectedQuery);
                     </div>
                   </div>
                </div>
+               <div class="row" >
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="" class="col-lg-4 control-label">Logo Image </label>
+                <div class="col-lg-8">
+                 <div class="fileinput fileinput-new labLogo" data-provides="fileinput">
+                  <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
+                    <?php
+                    
+                    if(isset($facilityInfo[0]['facility_logo']) && trim($facilityInfo[0]['facility_logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $facilityInfo[0]['facility_id']. DIRECTORY_SEPARATOR . $facilityInfo[0]['facility_logo'])){
+                    ?>
+                     <img src=".././uploads/facility-logo/<?php echo $facilityInfo[0]['facility_id']; ?>/<?php echo $facilityInfo[0]['facility_logo']; ?>" alt="Logo image">
+                    <?php } else { ?>
+                     <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
+                    <?php } ?>
+                  </div>
+                  <div>
+                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span>
+                    <input type="file" id="labLogo" name="labLogo" title="Please select logo image" onchange="getNewLabImage('<?php echo $facilityInfo[0]['facility_logo']; ?>');">
+                    </span>
+                    <?php
+                    if(isset($facilityInfo[0]['facility_logo']) && trim($facilityInfo[0]['facility_logo'])!= '' && file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $facilityInfo[0]['facility_id']. DIRECTORY_SEPARATOR . $facilityInfo[0]['facility_logo'])){
+                    ?>
+                      <a id="clearLabImage" href="javascript:void(0);" class="btn btn-default" data-dismiss="fileupload" onclick="clearLabImage('<?php echo $facilityInfo[0]['facility_logo']; ?>')">Clear</a>
+                    <?php } ?>
+                    <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                  </div>
+                  </div>
+                  <div class="box-body">
+                      Please make sure logo image size of: <code>80x80</code>
+                  </div>
+                </div>
+              </div>
+             </div>
+        </div>
                
                <div class="row" id="userDetails">
                 <?php if(($facilityInfo[0]['facility_type']==1 || $facilityInfo[0]['facility_type']==4) && ($sarr['user_type']=='remoteuser')){ ?>
@@ -268,6 +304,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
               <!-- /.box-body -->
               <div class="box-footer">
                 <input type="hidden" name="selectedUser" id="selectedUser"/>
+                <input type="hidden" name="removedLabLogoImage" id="removedLabLogoImage"/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="facilities.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -283,7 +320,8 @@ $selectedResult = $db->rawQuery($selectedQuery);
     <!-- /.content -->
   </div>
   <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
-  
+  <script type="text/javascript" src="../assets/js/jasny-bootstrap.js"></script>
+
   <script type="text/javascript">
     var selVal = []; 
     $('#search_to option').each(function(i, selected){
@@ -367,6 +405,20 @@ $selectedResult = $db->rawQuery($selectedQuery);
     }else{
       $("#userDetails").html('');
     }
+    if($("#facilityType").val() == '2'){
+      $(".logoImage").show();
+    }else{
+      $(".logoImage").hide();
+    }
+  }
+  function clearLabImage(img){
+    $(".labLogo").fileinput("clear");
+    $("#clearLabImage").addClass("hide");
+    $("#removedLabLogoImage").val(img);
+  }
+  function getNewLabImage(img){
+    $("#clearLabImage").addClass("hide");
+    $("#removedLabLogoImage").val(img);
   }
 </script>
  <?php

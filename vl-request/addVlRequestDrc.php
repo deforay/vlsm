@@ -223,9 +223,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="patientArtNo">Code du patient </label></td>
+                                <td><label for="patientArtNo">Code du patient <span class="mandatory">*</span></label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"  onchange="checkPatientDetails('vl_request_form','patient_art_no',this,null)"/>
+                                    <input type="text" class="form-control isRequired" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" style="width:100%;"  onchange="checkPatientDetails('vl_request_form','patient_art_no',this,null)"/>
                                 </td>
                                 <td colspan="2"><label for="isPatientNew">Si S/ARV </label>
                                     <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>

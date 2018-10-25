@@ -279,9 +279,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td><label for="patientArtNo">Code du patient </label></td>
+                                <td><label for="patientArtNo">Code du patient <span class="mandatory">*</span></label></td>
                                 <td>
-                                  <input type="text" class="form-control" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;"/>
+                                  <input type="text" class="form-control isRequired" id="patientArtNo" name="patientArtNo" placeholder="Code du patient" title="Please enter code du patient" value="<?php echo $vlQueryInfo[0]['patient_art_no']; ?>" style="width:100%;"/>
                                 </td>
                                 <td colspan="2"><label for="isPatientNew">Si S/ARV </label>
                                   <label class="radio-inline" style="padding-left:17px !important;margin-left:0;">Oui</label>
