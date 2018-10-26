@@ -174,7 +174,7 @@ try {
         $_POST['status'] = 6;
         $_POST['rejectionReason'] = NULL;
     }
-    if($_SESSION['userType']=='clinic' || $_SESSION['userType']=='lab'){
+    if($sarr['user_type']=='remoteuser'){
         $_POST['status'] = 9;
     }
     //Set result prinetd date time
