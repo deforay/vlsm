@@ -127,7 +127,7 @@
                                       ?>
                                   </select>
                                 </td>
-                                <td><label for="clinicName">Structure/Service </label></td>
+                                <td><label for="clinicName">Nom de l'installation </label></td>
                                 <td>
                                      <select class="form-control" name="clinicName" id="clinicName" title="Please choose service provider" <?php echo $disable; ?> style="width:100%;">
                                         <option value=""> -- Sélectionner -- </option>
@@ -147,9 +147,17 @@
                                 <td>
                                     <input type="text" class="form-control checkNum" id="clinicanTelephone" name="clinicanTelephone" placeholder="Téléphone" title="Please enter téléphone" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['request_clinician_phone_number']; ?>" style="width:100%;"/>
                                 </td>
-                                <td><label for="supportPartner">Partenaire dappui </label></td>
+                                <td><label for="supportPartner">Partnaire d'appui </label></td>
                                 <td>
-                                    <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" <?php echo $disable; ?> value="<?php echo $vlQueryInfo[0]['facility_support_partner']; ?>" style="width:100%;"/>
+                                    <!-- <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" <?php echo $disable; ?> value="< ?php echo $vlQueryInfo[0]['facility_support_partner']; ?>" style="width:100%;"/> -->
+                                    <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" <?php echo $disable; ?> style="width:100%;">
+                                      <option value=""> -- Sélectionner -- </option>
+                                      <?php
+                                      foreach($implementingPartnerList as $implementingPartner){
+                                      ?>
+                                        <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>" <?php echo ($implementingPartner['i_partner_id'] == $vlQueryInfo[0]['implementing_partner'])?'selected="selected"':''; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+                                      <?php } ?>
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
@@ -168,17 +176,17 @@
                                       <?php } ?>
                                     </select>
                                 </td>
-                                <td><label for="implementingPartner">Partenaire de mise en œuvre </label></td>
+                                <!-- <td><label for="implementingPartner">Partenaire de mise en œuvre </label></td>
                                 <td>
                                     <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" <?php echo $disable; ?> style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
-                                      <?php
+                                      < ?php
                                       foreach($implementingPartnerList as $implementingPartner){
                                       ?>
-                                        <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>" <?php echo ($implementingPartner['i_partner_id'] == $vlQueryInfo[0]['implementing_partner'])?'selected="selected"':''; ?>><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
-                                      <?php } ?>
+                                        <option value="< ?php echo base64_encode($implementingPartner['i_partner_id']); ?>" <?php echo ($implementingPartner['i_partner_id'] == $vlQueryInfo[0]['implementing_partner'])?'selected="selected"':''; ?>>< ?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+                                      < ?php } ?>
                                     </select>
-                                </td>
+                                </td> -->
                             </tr>
                         </table>
                         <div class="box-header with-border">

@@ -203,7 +203,6 @@ if(sizeof($requestResult)> 0){
             }else if(isset($smileyShow) && $smileyShow!='' && $smileyShow > $arr['viral_load_threshold_limit']){
               $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../assets/img/smiley_frown.png" alt="frown_face"/>';
             }
-          
         }
         if(isset($arr['show_smiley']) && trim($arr['show_smiley']) == "no"){
           $smileyContent = '';
@@ -243,7 +242,8 @@ if(sizeof($requestResult)> 0){
               //$html .='</tr>';
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sexe</td>';
-               $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Partenaire de mise en œuvre</td>';
+               $implementationPartner = "Partnaire d'appui";
+               $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">'.$implementationPartner.'</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
@@ -272,7 +272,8 @@ if(sizeof($requestResult)> 0){
                $html .='<td colspan="3" style="line-height:10px;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom de l�installation</td>';
+              $healthCenter = "Nom de l'installation";
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">'.$healthCenter.'</td>';
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Nom clinicien</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -316,6 +317,9 @@ if(sizeof($requestResult)> 0){
                    }else{
                     $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;0.0';
                    }
+                   if($result['result']=="< 40"){
+                    $logValue = '<br/>&nbsp;&nbsp;Log Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;1.60';
+                   }
                    $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Résultat(copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$vlResult.$logValue.'</td></tr>';
                    $html .='<tr><td colspan="3"></td></tr>';
                  $html .='</table>';
@@ -357,21 +361,25 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:14px;"></td>';
               $html .='</tr>';
+              
+              
+              if($result['last_viral_load_date']!='' || $result['last_viral_load_result']!=''){
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">R�sultats pr�c�dents</td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Resultats prècèdents</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:8px;"></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Date derni�re charge virale (demande)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_date'].'</span></td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Date dernière charge virale (demande)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_date'].'</span></td>';
               $html .='</tr>';
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">R�sultat derni�re charge virale(copies/ml)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_result'].'</span></td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Resultats dernière charge virale(copies/ml)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_result'].'</span></td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:110px;border-bottom:2px solid #d3d3d3;"></td>';
               $html .='</tr>';
+              }
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:2px;"></td>';
               $html .='</tr>';
