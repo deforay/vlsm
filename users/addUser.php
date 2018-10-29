@@ -7,7 +7,7 @@ $fResult = array();
 $display = 'display:none';
 if($sarr['user_type']=='remoteuser'){
      //get all facility list with lab,clinic
-     $fQuery="SELECT facility_name,facility_id FROM facility_details where facility_type IN('1,4')";
+     $fQuery="SELECT facility_name,facility_id FROM facility_details";
      $fResult = $db->rawQuery($fQuery);
      $display = 'display:block';
 }
