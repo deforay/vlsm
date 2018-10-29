@@ -99,10 +99,15 @@ class MYPDF extends TCPDF {
               $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
+        if(file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.'drc-logo.png')){
+          $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.'drc-logo.png';
+              $this->Image($image_file,180, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        }
+
         $this->SetFont('helvetica', 'B', 7);
         $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
         $this->SetFont('helvetica', '', 14);
-        $this->writeHTMLCell(0,0,10,10,'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0,0,10,9,'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
         $this->SetFont('helvetica', '', 14);
         $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
         if(trim($this->lab)!= ''){
