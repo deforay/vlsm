@@ -31,7 +31,7 @@ if($sarr['user_type']=='remoteuser'){
 for ($i = 0; $i < sizeof($gResult); $i++) {
   $global[$gResult[$i]['name']] = $gResult[$i]['value'];
 }
-if(isset($global['default_time_zone']) && count($global['default_time_zone'])> 0){
+if(isset($global['default_time_zone']) && $global['default_time_zone']!=''){
   date_default_timezone_set($global['default_time_zone']);
 }else{
   date_default_timezone_set("Europe/London");
@@ -72,7 +72,7 @@ if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], ar
 }else{
   $allAdminMenuAccess = false;  
 }
-if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php','batchcode.php','vlRequestMail.php','specimenReferralManifestList.php'))) {
+if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('vlRequest.php', 'addVlRequest.php','batchcode.php','vlRequestMail.php','specimenReferralManifestList.php','sample-list.php'))) {
   $requestMenuAccess = true;
 }else{
   $requestMenuAccess = false;  
@@ -324,6 +324,10 @@ $formConfigResult=$db->query($formConfigQuery);
               <?php } if(isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
                   <li class="allMenu specimenReferralManifestListMenu">
                     <a href="../specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Specimen Manifest</a>
+                  </li>
+              <?php } if(isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
+                  <li class="allMenu sampleListMenu">
+                    <a href="../move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
                   </li>
               <?php } ?>
             </ul>
