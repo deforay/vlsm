@@ -171,7 +171,7 @@ $province = "";
               <!-- /.box-body -->
               <div class="box-footer">
               <input type="hidden" name="labId" id="labId" title="Please choose lab from name"/>
-                <a id="batchSubmit" class="btn btn-primary" href="javascript:void(0);" title="Please select machine" onclick="validateNow();return false;" style="pointer-events:none;" disabled>Save</a>
+                <a id="sampleSubmit" class="btn btn-primary" href="javascript:void(0);" title="Please select machine" onclick="validateNow();return false;" style="pointer-events:none;" disabled>Save</a>
                 <a href="sampleList.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -186,8 +186,6 @@ $province = "";
   </div>
   <script src="../assets/js/jquery.multi-select.js"></script>
   <script src="../assets/js/jquery.quicksearch.js"></script>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
   <script type="text/javascript">
   noOfSamples = 0;
   provinceName = true;
@@ -249,11 +247,11 @@ $province = "";
        afterDeselect: function(){
          //button disabled/enabled
 	    if(this.qs2.cache().matchedResultsCount == 0){
-            $("#batchSubmit").attr("disabled",true);
-	        $("#batchSubmit").css("pointer-events","none");
+            $("#sampleSubmit").attr("disabled",true);
+	        $("#sampleSubmit").css("pointer-events","none");
         }else{
-                $("#batchSubmit").attr("disabled",false);
-                $("#batchSubmit").css("pointer-events","auot");
+                $("#sampleSubmit").attr("disabled",false);
+                $("#sampleSubmit").css("pointer-events","auot");
             }
         this.qs1.cache();
         this.qs2.cache();
@@ -266,8 +264,8 @@ $province = "";
      });
      $('#deselect-all-samplecode').click(function(){
        $('#sampleCode').multiSelect('deselect_all');
-       $("#batchSubmit").attr("disabled",true);
-       $("#batchSubmit").css("pointer-events","none");
+       $("#sampleSubmit").attr("disabled",true);
+       $("#sampleSubmit").css("pointer-events","none");
        return false;
      });
    });
@@ -285,8 +283,8 @@ $province = "";
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);
-	    $("#batchSubmit").attr("disabled",true);
-	    $("#batchSubmit").css("pointer-events","none");
+	    $("#sampleSubmit").attr("disabled",true);
+	    $("#sampleSubmit").css("pointer-events","none");
 	  }
       });
       $.unblockUI();
