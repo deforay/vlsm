@@ -80,11 +80,11 @@ $result = $db->rawQuery($query);
         },
         afterSelect: function(){
             if(this.qs2.cache().matchedResultsCount == 0){
-                $("#batchSubmit").attr("disabled",true);
-                $("#batchSubmit").css("pointer-events","none");
+                $("#sampleSubmit").attr("disabled",true);
+                $("#sampleSubmit").css("pointer-events","none");
             }else{
-                $("#batchSubmit").attr("disabled",false);
-                $("#batchSubmit").css("pointer-events","auto");
+                $("#sampleSubmit").attr("disabled",false);
+                $("#sampleSubmit").css("pointer-events","auto");
             }
 	      this.qs1.cache();
 	      this.qs2.cache();
@@ -94,11 +94,11 @@ $result = $db->rawQuery($query);
        afterDeselect: function(){
          //button disabled/enabled
             if(this.qs2.cache().matchedResultsCount == 0){
-                $("#batchSubmit").attr("disabled",true);
-                $("#batchSubmit").css("pointer-events","none");
+                $("#sampleSubmit").attr("disabled",true);
+                $("#sampleSubmit").css("pointer-events","none");
             }else{
-                $("#batchSubmit").attr("disabled",false);
-                $("#batchSubmit").css("pointer-events","auto");
+                $("#sampleSubmit").attr("disabled",false);
+                $("#sampleSubmit").css("pointer-events","auto");
             }
             this.qs1.cache();
             this.qs2.cache();
@@ -112,8 +112,8 @@ $result = $db->rawQuery($query);
       });
       $('#deselect-all-samplecode').click(function(){
         $('#sampleCode').multiSelect('deselect_all');
-        $("#batchSubmit").attr("disabled",true);
-        $("#batchSubmit").css("pointer-events","none");
+        $("#sampleSubmit").attr("disabled",true);
+        $("#sampleSubmit").css("pointer-events","none");
         return false;
       });
    });
