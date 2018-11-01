@@ -51,26 +51,26 @@ function syncVLDashboard(){
   if(vlDashSyncStatus != undefined && vlDashSyncStatus != null && vlDashSyncStatus == 'synced'){
     return false;
   }
-  if(vldashSync && vldashUrl != null && vldashUrl != ''){
-    $.blockUI({ message: '<h3>Trying to do VL Dashboard sync. Please wait...</h3>' });
-    var jqxhr = $.ajax({
-                    url : "../scheduled-jobs/vldashboard.php",
-                  })
-                  .done(function(data) {
-                    //console.log(data);
-                    //alert( "success" );
-                  })
-                  .fail(function() {
-                    $.unblockUI();
-                    alert( "Unable to do VL Dashboard Sync. Please contact technical team for assistance." );
-                  })
-                  .always(function() {
-                    //alert( "complete" );
-                    $.unblockUI();
-                    var inHalfADay = 0.5;
-                    Cookies.set('vldash-sync-status', 'synced', { expires: inHalfADay });                    
-                  });
-  }
+  // if(vldashSync && vldashUrl != null && vldashUrl != ''){
+  //   $.blockUI({ message: '<h3>Trying to do VL Dashboard sync. Please wait...</h3>' });
+  //   var jqxhr = $.ajax({
+  //                   url : "../scheduled-jobs/vldashboard.php",
+  //                 })
+  //                 .done(function(data) {
+  //                   //console.log(data);
+  //                   //alert( "success" );
+  //                 })
+  //                 .fail(function() {
+  //                   $.unblockUI();
+  //                   alert( "Unable to do VL Dashboard Sync. Please contact technical team for assistance." );
+  //                 })
+  //                 .always(function() {
+  //                   //alert( "complete" );
+  //                   $.unblockUI();
+  //                   var inHalfADay = 0.5;
+  //                   Cookies.set('vldash-sync-status', 'synced', { expires: inHalfADay });                    
+  //                 });
+  // }
 
 }
 
@@ -192,7 +192,7 @@ if(isset($_SESSION['system']) && $_SESSION['system'] =='vluser'){
 <?php
 if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $_SESSION['vldashboard_url'] !=null){  
   ?>
-   syncVLDashboard();
+   //syncVLDashboard();
    <?php
 }
 ?>
