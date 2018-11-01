@@ -54,7 +54,11 @@ if(sizeof($requestResult)> 0){
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT,PDF_MARGIN_TOP+14,PDF_MARGIN_RIGHT);
+        if(isset($headerText) && $headerText!=''){
+          $pdf->SetMargins(PDF_MARGIN_LEFT,PDF_MARGIN_TOP+14,PDF_MARGIN_RIGHT); 
+        }else{
+          $pdf->SetMargins(PDF_MARGIN_LEFT,PDF_MARGIN_TOP+7,PDF_MARGIN_RIGHT);
+        }
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -131,6 +135,13 @@ if(sizeof($requestResult)> 0){
         }else{
           $result['result_printed_datetime']='';
         }
+
+        if(isset($result['sample_tested_datetime']) && trim($result['sample_tested_datetime'])!='' && $result['sample_tested_datetime']!='0000-00-00 00:00:00'){
+          $expStr=explode(" ",$result['sample_tested_datetime']);
+          $result['sample_tested_datetime']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+        }else{
+          $result['sample_tested_datetime']='';
+        }        
 
         if(isset($result['last_viral_load_date']) && trim($result['last_viral_load_date'])!='' && $result['last_viral_load_date']!='0000-00-00'){
           $result['last_viral_load_date']=$general->humanDateFormat($result['last_viral_load_date']);
@@ -221,7 +232,6 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Échantillon id</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date du prélèvement</td>';
-               
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code du patient</td>';
               $html .='</tr>';
               $html .='<tr>';
@@ -316,6 +326,13 @@ if(sizeof($requestResult)> 0){
                      $html .='<td colspan="4" style="line-height:16px;"></td>';
                    $html .='</tr>';
                    $html .='<tr>';
+                    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de réalisation de la charge virale</td>';
+                    $html .='</tr>';
+                    $html .='<tr>';
+                     $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_tested_datetime'].'</td>';
+                     $html .='</tr>';  
+
+                   $html .='<tr>';
                     $html .='<td colspan="3"></td>';
                     $html .='<td rowspan="3" style="text-align:left;">'.$smileyContent.'</td>';
                    $html .='</tr>';
@@ -350,7 +367,7 @@ if(sizeof($requestResult)> 0){
                $html .='</tr>';
              }
               $html .='<tr>';
-               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuv� par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$resultApprovedBy.'</span></td>';
+               $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$resultApprovedBy.'</span></td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
