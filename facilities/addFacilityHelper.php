@@ -60,6 +60,7 @@ try {
         'report_email'=>$email,
         'contact_person'=>$_POST['contactPerson'],
 		'facility_type'=>$_POST['facilityType'],
+		'header_text'=>$_POST['headerText'],
 		'updated_datetime'=>$general->getDateTime(),
         'status'=>'active'
         );

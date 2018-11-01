@@ -104,12 +104,13 @@ class MYPDF extends TCPDF {
               $this->Image($image_file,180, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
         }
 
-        $this->SetFont('helvetica', 'B', 7);
-        $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);
+        // $this->SetFont('helvetica', 'B', 7);
+        // $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);(this two lines comment out for drc)
         $this->SetFont('helvetica', '', 14);
         $this->writeHTMLCell(0,0,10,9,'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
-        $this->SetFont('helvetica', '', 14);
-        $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
+        $this->SetFont('helvetica', '', 12);
+//        $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0,0,10,16,strtoupper($this->text), 0, 0, 0, true, 'C', true);
         if(trim($this->lab)!= ''){
           $this->SetFont('helvetica', '', 9);
           $this->writeHTMLCell(0,0,10,23,strtoupper($this->lab), 0, 0, 0, true, 'C', true);
@@ -127,7 +128,8 @@ class MYPDF extends TCPDF {
         // Set font
         $this->SetFont('helvetica', '', 8);
         // Page number
-        $this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');
+        //$this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');(this commentit out for drc form)
+        
     }
 }
 

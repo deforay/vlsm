@@ -29,7 +29,13 @@ if(sizeof($requestResult)> 0){
           $logoPrintInPdf = $arr['logo'];
         }
 
-        $pdf->setHeading($logoPrintInPdf,'',$result['labName'],'',$result['lab_id']);
+        if(isset($result['headerText']) && $result['headerText']!=''){
+          $headerText = $result['headerText'];
+        }else{
+          $headerText = $arr['header']; 
+        }
+
+        $pdf->setHeading($logoPrintInPdf,$headerText,$result['labName'],'',$result['lab_id']);
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         //$pdf->SetAuthor('Pal');
@@ -215,14 +221,14 @@ if(sizeof($requestResult)> 0){
               $html .='<tr>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Échantillon id</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date du prélèvement</td>';
-               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Âge</td>';
-              //  $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code du patient</td>';
+               
+               $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code du patient</td>';
               $html .='</tr>';
               $html .='<tr>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_code'].'</td>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['sample_collection_date']." ".$sampleCollectionTime.'</td>';
-                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$age.'</td>';
-                // $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_art_no'].'</td>';
+                
+                $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$result['patient_art_no'].'</td>';
               $html .='</tr>';
               $html .='<tr>';
                $html .='<td colspan="3" style="line-height:10px;"></td>';
@@ -241,11 +247,13 @@ if(sizeof($requestResult)> 0){
                //$html .='<td colspan="3" style="line-height:10px;"></td>';
               //$html .='</tr>';
               $html .='<tr>';
+              $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Âge</td>';
                $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Sexe</td>';
                $implementationPartner = "Partnaire d'appui";
                $html .='<td colspan="2" style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">'.$implementationPartner.'</td>';
               $html .='</tr>';
               $html .='<tr>';
+              $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$age.'</td>';
                 $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.ucwords(str_replace("_"," ",$result['patient_gender'])).'</td>';
                 $html .='<td colspan="2" style="line-height:11px;font-size:11px;text-align:left;">'.$result['i_partner_name'].'</td>';
               $html .='</tr>';

@@ -55,7 +55,8 @@ try {
 	    'facility_emails'=>$_POST['email'],
 	    'report_email'=>$email,
 	    'contact_person'=>$_POST['contactPerson'],
-	    'facility_type'=>$_POST['facilityType'],
+		'facility_type'=>$_POST['facilityType'],
+		'header_text'=>$_POST['headerText'],
 		'updated_datetime'=>$general->getDateTime(),
 	    'status'=>$_POST['status']
         );
