@@ -214,6 +214,14 @@ $pResult = $db->rawQuery($pQuery);
                 </div>
               </div>
              </div>
+             <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="" class="col-lg-4 control-label">Header Text</label>
+                        <div class="col-lg-7">
+                        <input type="text" class="form-control " id="headerText" name="headerText" placeholder="Header Text" title="Please enter header text" />
+                        </div>
+                    </div>
+                </div>
         </div>
 
                <div class="row" id="userDetails">
