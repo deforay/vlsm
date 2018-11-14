@@ -341,7 +341,7 @@ if(sizeof($requestResult)> 0){
           $html .='<td colspan="3"></td>';
           $html .='<td rowspan="3" style="text-align:left;">'.$smileyContent.'</td>';
           $html .='</tr>';
-          $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;VIRAL LOAD RESULT (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['result'].'</td></tr>';
+          $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;VIRAL LOAD RESULT (copies/ml)&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$vlResult.'</td></tr>';
           $html .='<tr><td colspan="3"></td></tr>';
           $html .='</table>';
           $html .='</td>';

@@ -5,7 +5,7 @@ require_once(__DIR__.'/config.production.php');
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vlsm_drc';
+$DBNAME = 'vlsm_rwd';
 $PORT = 3306;
 
 
@@ -21,4 +21,4 @@ $PORT = 3306;
 
 // Linux : default for Ubuntu 16.04, may be different for your distribution
 $MYSQLDUMP = '/usr/bin/mysqldump';
-$REMOTEURL = 'http://vlsm-drc.deforay.in';
+$REMOTEURL = '';
