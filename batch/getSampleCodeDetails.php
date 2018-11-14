@@ -52,7 +52,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 //$query = $query." ORDER BY f.facility_name ASC";
-$query = $query." ORDER BY vl.request_created_datetime ASC";
+$query = $query." ORDER BY vl.last_modified_datetime ASC";
 $result = $db->rawQuery($query);
 ?>
 <div class="col-md-8">
