@@ -141,7 +141,10 @@ $general=new General();
 	    if(trim($aRow['request_created_datetime'])!="" && $aRow['request_created_datetime']!='0000-00-00 00:00:00'){
 		$date = $aRow['request_created_datetime'];
 		$humanDate =  date("d-M-Y H:i:s",strtotime($date));
-	    }
+        }
+        //get no. of samplesa have result.
+	    $noOfSampleHaveResult = "select count(vl.sample_code) as no_of_sample_have_result from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."' and vl.result!=''";
+	    $noOfSampleHaveResultCount = $db->rawQuery($noOfSampleHaveResult);
 	    //get no. of sample tested.
 	    $noOfSampleTested = "select count(vl.sample_code) as no_of_sample_tested from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."' and vl.result_status=7";
 	    $noOfSampleResultCount = $db->rawQuery($noOfSampleTested);
@@ -159,7 +162,12 @@ $general=new General();
            $row = array();
 	    $printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
 	    $printQrcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\''.base64_encode($aRow['batch_id']).'\');"><i class="fa fa-qrcode"> Print QR code</i></a>';
-	    $editPosition ='<a href="editBatchControlsPosition.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
+        $editPosition ='<a href="editBatchControlsPosition.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
+        $deleteBatch = '';
+        if($aRow['sample_code']==0 || $noOfSampleHaveResultCount[0]['no_of_sample_have_result']==0){
+        $deleteBatch = '<a href="javascript:void(0);" class="btn btn-danger btn-xs" style="margin-right: 2px;margin-top:6px;" title="" onclick="deleteBatchCode(\''.base64_encode($aRow['batch_id']).'\',\''.$aRow['batch_code'].'\');"><i class="fa fa-barcode"> Delete</i></a>';
+        }
+
 	    $date = '';
 	    if($noOfSampleLastDateTested[0]['last_tested_date']!='0000-00-00 00:00:00' && $noOfSampleLastDateTested[0]['last_tested_date']!=null){
 		$exp = explode(" ",$noOfSampleLastDateTested[0]['last_tested_date']);
@@ -180,7 +188,7 @@ $general=new General();
 		$row[] = $printQrcode;
 	    }else{
 		if($batch){
-		    $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;'.$printBarcode.'&nbsp;'.$editPosition;
+		    $row[] = '<a href="editBatch.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;'.$printBarcode.'&nbsp;'.$editPosition.'&nbsp;'.$deleteBatch;
 		}
 	    }
             $output['aaData'][] = $row;

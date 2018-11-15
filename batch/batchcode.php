@@ -157,6 +157,22 @@ include('../header.php');
 //	   oTable.fnDraw();
 //	}
 //  }
+
+  function deleteBatchCode(bId,batchCode)
+  {
+    var conf = confirm("Do you wish to delete batch code "+batchCode+"?\n Note:We can not undo");
+    if(conf){
+    $.post("deleteBatchCode.php",{id:bId},
+      function(data){
+        if(data==1){
+          alert("Batchcode delete successfully!");
+        }else{
+          alert("please try again!");
+        }
+        oTable.fnDraw();
+      });
+    }
+  }
  
 </script>
  <?php
