@@ -647,14 +647,14 @@ $sKey = ''; $sFormat = '';
                          if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
                               if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
                                    ?>
-                                   <script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
+                                   <script src="../assets/js/DYMO.Label.Framework.js"></script>
                                    <script src="../configs/dymo-format.js"></script>
                                    <script src="../assets/js/dymo-print.js"></script>
                                    <?php
                               }else if($global['bar_code_printing'] == 'zebra-printer'){
                                    ?>
-                                   <script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
-                                   <script src="../assets/js/zebra-format.js"></script>
+                                   <script src="../assets/js/zebra-browserprint.js.js"></script>
+                                   <script src="../configs/zebra-format.js"></script>
                                    <script src="../assets/js/zebra-print.js"></script>
                                    <?php
                               }
