@@ -200,6 +200,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     $sWhere = $sWhere." AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")   AND remote_sample='yes'";
                }
           }
+          $sWhere = $sWhere.' AND vl.result!=""';
           $sQuery = $sQuery.' '.$sWhere;
           //echo $sQuery;die;
           //echo $sQuery;die;
