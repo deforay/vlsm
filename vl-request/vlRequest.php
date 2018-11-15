@@ -252,14 +252,14 @@ $batResult = $db->rawQuery($batQuery);
 		if(isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"){
 			if($global['bar_code_printing'] == 'dymo-labelwriter-450'){
 				?>
-					<script src="../assets/js/DYMO.Label.Framework.2.0.2.js"></script>
+					<script src="../assets/js/DYMO.Label.Framework.js"></script>
 					<script src="../configs/dymo-format.js"></script>        
 					<script src="../assets/js/dymo-print.js"></script>    
 				<?php
 			}else if($global['bar_code_printing'] == 'zebra-printer'){
 				?>
-					<script src="../assets/js/BrowserPrint-1.0.4.min.js"></script>
-					<script src="../assets/js/zebra-format.js"></script>				
+					<script src="../assets/js/zebra-browserprint.js.js"></script>
+					<script src="../configs/zebra-format.js"></script>
 					<script src="../assets/js/zebra-print.js"></script>				
 				<?php				
 			}
@@ -363,7 +363,7 @@ $batResult = $db->rawQuery($batQuery);
 		{"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-	    "aaSorting": [[ <?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser')?11:10 ?>, "asc" ]],
+	    "aaSorting": [[ <?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser')?11:10 ?>, "desc" ]],
 	    "fnDrawCallback": function() {
 		var checkBoxes=document.getElementsByName("chk[]");
                 len = checkBoxes.length;
