@@ -288,10 +288,10 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                }
                if(isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime'])!= '' && $aRow['last_modified_datetime']!= '0000-00-00 00:00:00'){
                   $xplodDate = explode(" ",$aRow['last_modified_datetime']);
-          $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
-            }else{
-                  $aRow['last_modified_datetime'] = '';
-            }
+                  $aRow['last_modified_datetime'] = $general->humanDateFormat($xplodDate[0])." ".$xplodDate[1];
+                  }else{
+                        $aRow['last_modified_datetime'] = '';
+                  }
 
                      $patientFname = ucwords($general->crypto('decrypt',$aRow['patient_first_name'],$aRow['patient_art_no']));
                      $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow['patient_art_no']));
