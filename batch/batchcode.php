@@ -160,14 +160,14 @@ include('../header.php');
 
   function deleteBatchCode(bId,batchCode)
   {
-    var conf = confirm("Do you wish to delete batch code "+batchCode+"?\n Note:We can not undo");
+    var conf = confirm("Are you sure you want to delete Batch : "+batchCode+"?\nThis action cannot be undone.");
     if(conf){
     $.post("deleteBatchCode.php",{id:bId},
       function(data){
         if(data==1){
-          alert("Batchcode delete successfully!");
+          alert("Batch deleted successfully!");
         }else{
-          alert("please try again!");
+          alert("Something went wrong. Please try again!");
         }
         oTable.fnDraw();
       });

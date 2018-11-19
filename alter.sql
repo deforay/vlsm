@@ -1527,3 +1527,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Version 3.9.6 ------- saravanan 01-nov-2018
 ALTER TABLE `facility_details` ADD `header_text` VARCHAR(255) NULL DEFAULT NULL AFTER `facility_logo`;
+
+
+-- Version 3.9.7 ---------- Amit 16-Nov-2018
