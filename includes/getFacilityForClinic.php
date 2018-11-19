@@ -70,7 +70,7 @@ if(isset($_POST['pName'])){
     $facilityInfo=$db->query($facilityQuery);
     $facility = '';
     if($facilityInfo){
-        if(!isset($_POST['comingFromUser'])){
+        if(!isset($_POST['comingFromUser'])){
          $facility.=$option;
         }
         foreach($facilityInfo as $fDetails){
