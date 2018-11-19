@@ -257,14 +257,12 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                             $sPrefixYYDisplay = '';
                         }
                         ?>
-                        <input type="radio" class="" id="auto_generate_yy" name="sample_code" value="YY" <?php echo($arr['sample_code'] == 'YY')?'checked':''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay;?> type="text" class="boxWidth prefixYY" id="prefixYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY;?>"/>
-                        YY&nbsp;&nbsp;
-                        <input type="radio" class="" id="auto_generate_mmyy" name="sample_code" value="MMYY" <?php echo($arr['sample_code'] == 'MMYY')?'checked':''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay;?>  type="text" class="boxWidth prefixMMYY" id="prefixMMYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY;?>"/>
-                        MMYY&nbsp;&nbsp;
-                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>><span id="auto1"><?php echo ($arr['vl_form'] == 5)?'Auto 1':'Auto'; ?> </span>&nbsp;&nbsp;
-                        <input type="radio" class="" id="auto_generate2" name="sample_code" value="auto2" <?php echo($arr['sample_code'] == 'auto2')?'checked':''; ?> style="display:<?php echo ($arr['vl_form'] == 5)?'':'none'; ?>"><span id="auto2" style="display:<?php echo ($arr['vl_form'] == 5)?'':'none'; ?>">Auto 2 &nbsp;&nbsp;</span>
-                        <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>>Numeric&nbsp;&nbsp;
-                        <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>>Alpha Numeric
+                        <input type="radio" class="" id="auto_generate_yy" name="sample_code" value="YY" <?php echo($arr['sample_code'] == 'YY')?'checked':''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay;?> type="text" class="boxWidth prefixYY" id="prefixYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY;?>"/> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                        <input type="radio" class="" id="auto_generate_mmyy" name="sample_code" value="MMYY" <?php echo($arr['sample_code'] == 'MMYY')?'checked':''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay;?>  type="text" class="boxWidth prefixMMYY" id="prefixMMYY" name="sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY;?>"/> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_generate" name="sample_code" value="auto" <?php echo($arr['sample_code'] == 'auto')?'checked':''; ?>><span id="auto1"><?php echo ($arr['vl_form'] == 5)?' Auto 1':' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="" id="auto_generate2" name="sample_code" value="auto2" <?php echo($arr['sample_code'] == 'auto2')?'checked':''; ?> style="display:<?php echo ($arr['vl_form'] == 5)?'':'none'; ?>"><span id="auto2" style="display:<?php echo ($arr['vl_form'] == 5)?'':'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <input type="radio" class="" id="numeric" name="sample_code" value="numeric" <?php echo($arr['sample_code'] == 'numeric')?'checked':''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="" id="alpha_numeric" name="sample_code" value="alphanumeric" <?php echo($arr['sample_code']=='alphanumeric')?'checked':''; ?>> Alpha Numeric
                       </div>
                     </div>
                    </div>
@@ -322,20 +320,20 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     <div class="form-group" style="height:38px;">
                       <label for="manager_email" class="col-lg-4 control-label">Manager Email</label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control" id="manager_email" name="manager_email" placeholder="Manager Email" title="Please enter manager email" value="<?php echo $arr['manager_email']; ?>"/>
+                        <input type="text" class="form-control" id="manager_email" name="manager_email" placeholder="eg. manager1@example.com, manager2@example.com" title="Please enter manager email" value="<?php echo $arr['manager_email']; ?>"/>
                       </div>
                     </div>
                    </div>
                 </div>
                 <div class="row">
                   <div class="col-md-7" style="text-align:center;">
-                      <code>You can enter multiple email by separating them with comma</code>
+                      <code>You can enter multiple emails by separating them with commas</code>
                   </div>
                 </div><br/>
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="instance_type" class="col-lg-4 control-label">Barcode Printing <span class="mandatory">*</span> </label>
+                      <label for="instance_type" class="col-lg-4 control-label">Sample ID Barcode Label Printing <span class="mandatory">*</span> </label>
                       <div class="col-lg-8">
                         <select class="form-control isRequired" name="bar_code_printing" id="bar_code_printing" title="Please select the barcode printing">
                             <option value="off" <?php echo ('off'==$arr['bar_code_printing'])?"selected='selected'":""?>>Off</option>
@@ -360,16 +358,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="form-group">
-                      <label for="data_sync_interval" class="col-lg-4 control-label">Data Sync Interval (in Days) <span class="mandatory">*</span> </label>
-                      <div class="col-lg-8">
-                        <input type="number" min="1" max="1000" class="form-control checkNum" id="data_sync_interval" name="data_sync_interval" placeholder="Data Sync Interval" title="Please enter sync interval" value="<?php echo $arr['data_sync_interval']; ?>"/>
-                      </div>
-                    </div>
-                   </div>
-                </div>
+
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
@@ -388,7 +377,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
     <h3 class="panel-title">VLSM Connect</h3>
   </div>
   <div class="panel-body">
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">
                       <label for="sync_path" class="col-lg-4 control-label">Sync Path (Dropbox or Shared folder)</label>
@@ -402,12 +391,22 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                   <div class="col-md-7 col-md-offset-2" style="text-align:center;">
                       <code>Used for Dropbox or shared folder sync using the vlsm-connect module</code>
                   </div>
-                </div><br/>
+                </div><br/> -->
                 
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
-                      <label for="enable_qr_mechanism" class="col-lg-4 control-label">Enable QR Code Mechanism </label>
+                      <label for="data_sync_interval" class="col-lg-4 control-label">VLSTS Data Sync Interval (in Days) <span class="mandatory">*</span> </label>
+                      <div class="col-lg-8">
+                        <input type="number" min="1" max="1000" class="form-control checkNum" id="data_sync_interval" name="data_sync_interval" placeholder="Data Sync Interval" title="Please enter sync interval" value="<?php echo $arr['data_sync_interval']; ?>"/>
+                      </div>
+                    </div>
+                   </div>
+                </div>                
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-group">
+                      <label for="enable_qr_mechanism" class="col-lg-4 control-label">Enable QR Code </label>
                       <div class="col-lg-8">
                         <input type="radio" class="" id="enable_qr_mechanism_yes" name="enable_qr_mechanism" value="yes" <?php echo($arr['enable_qr_mechanism'] == 'yes')?'checked':''; ?>>&nbsp;&nbsp;Yes&nbsp;&nbsp;
                         <input type="radio" class="" id="enable_qr_mechanism_no" name="enable_qr_mechanism" value="no" <?php echo($arr['enable_qr_mechanism'] == 'no' || $arr['enable_qr_mechanism'] == '')?'checked':''; ?>>&nbsp;&nbsp;No
@@ -418,9 +417,9 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                 <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">
-                      <label for="sync_path" class="col-lg-4 control-label">Vldashboard Url</label>
+                      <label for="sync_path" class="col-lg-4 control-label">VL Dashboard URL</label>
                       <div class="col-lg-8">
-                        <input type="text" class="form-control" id="vldashboard_url" name="vldashboard_url" placeholder="Vldashboard Url" title="Please enter vldashboard url" value="<?php echo $arr['vldashboard_url']; ?>"/>
+                        <input type="text" class="form-control" id="vldashboard_url" name="vldashboard_url" placeholder="Enter the full VL Dashboard URL here" title="Please enter vldashboard url" value="<?php echo $arr['vldashboard_url']; ?>"/>
                       </div>
                     </div>
                    </div>

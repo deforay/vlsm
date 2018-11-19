@@ -54,9 +54,9 @@ $ftResult = $db->rawQuery($fQuery);
                               <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="userName" class="col-lg-4 control-label">User Name <span class="mandatory">*</span></label>
+                                             <label for="userName" class="col-lg-4 control-label">Full Name <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
-                                                  <input type="text" class="form-control isRequired" id="userName" name="userName" placeholder="User Name" title="Please enter user name" />
+                                                  <input type="text" class="form-control isRequired" id="userName" name="userName" placeholder="Full Name" title="Please enter user name" />
                                              </div>
                                         </div>
                                    </div>
@@ -100,31 +100,36 @@ $ftResult = $db->rawQuery($fQuery);
                               <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="loginId" class="col-lg-4 control-label">Login Id <span class="mandatory">*</span></label>
+                                             <label for="loginId" class="col-lg-4 control-label">Login ID <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <input type="text" class="form-control isRequired" id="loginId" name="loginId" placeholder="Login Id" title="Please enter login id" onblur="checkNameValidation('user_details','login_id',this,null,'This login id that you entered already exists.Try another login id',null)"/>
                                              </div>
                                         </div>
                                    </div>
-                                   <div class="col-md-6">
+                                   
+                              </div>
+                              <div class="row">
+                              
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="password" class="col-lg-4 control-label">Password <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <input type="password" class="form-control ppwd isRequired" id="confirmPassword" name="password" placeholder="Password" title="Please enter the password"/>
-                                                  <code>Password must be at least 8 characters long and must include AT LEAST one number, one alphabet and may have special characters.</code>
+                                                  <code>Password must be at least 8 characters long and must include AT LEAST one number, one alphabet. You can also use special characters.</code>
                                              </div>
                                         </div>
-                                   </div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-md-6">
+                                    </div>                              
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="confirmPassword" class="col-lg-4 control-label">Confirm Password <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <input type="password" class="form-control cpwd isRequired confirmPassword" id="confirmPassword" name="password" placeholder="Confirm Password" title="" />
                                              </div>
                                         </div>
-                                   </div>
+                                    </div>
+                                   
+                                    
+                                    
                               </div>
 
                               <div class="row" style=<?php echo $display;?>>

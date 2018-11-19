@@ -1,4 +1,5 @@
 <?php
+$title = "VLSM | Request Email & SMS Config";
 include('../header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->

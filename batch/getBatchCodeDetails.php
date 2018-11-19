@@ -165,7 +165,7 @@ $general=new General();
         $editPosition ='<a href="editBatchControlsPosition.php?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
         $deleteBatch = '';
         if($aRow['sample_code']==0 || $noOfSampleHaveResultCount[0]['no_of_sample_have_result']==0){
-        $deleteBatch = '<a href="javascript:void(0);" class="btn btn-danger btn-xs" style="margin-right: 2px;margin-top:6px;" title="" onclick="deleteBatchCode(\''.base64_encode($aRow['batch_id']).'\',\''.$aRow['batch_code'].'\');"><i class="fa fa-barcode"> Delete</i></a>';
+        $deleteBatch = '<a href="javascript:void(0);" class="btn btn-danger btn-xs" style="margin-right: 2px;margin-top:6px;" title="" onclick="deleteBatchCode(\''.base64_encode($aRow['batch_id']).'\',\''.$aRow['batch_code'].'\');"><i class="fa fa-times"> Delete</i></a>';
         }
 
 	    $date = '';

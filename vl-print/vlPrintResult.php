@@ -46,9 +46,9 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 						<div class="widget">
 							<div class="widget-content">
 									<div class="bs-example bs-example-tabs">
-											<ul id="myTab" class="nav nav-tabs">
-												<li class="active"><a href="#notPrintedData" data-toggle="tab">Not Printed </a></li>
-												<li><a href="#printedData" data-toggle="tab">Printed </a></li>
+											<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
+												<li class="active"><a href="#notPrintedData" data-toggle="tab">Results not yet Printed </a></li>
+												<li><a href="#printedData" data-toggle="tab">Results already Printed </a></li>
 											</ul>
 											<div id="myTabContent" class="tab-content" >
 												<div class="tab-pane fade in active" id="notPrintedData">

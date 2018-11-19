@@ -1,5 +1,6 @@
 <?php
 ob_start();
+$title = "VLSM | Edit user";
 include('../header.php');
 $id=base64_decode($_GET['id']);
 $userQuery="SELECT * from user_details where user_id='".$id."'";
@@ -114,18 +115,19 @@ $ftResult = $db->rawQuery($fQuery);
                                              </div>
                                         </div>
                                    </div>
-                                   <div class="col-md-6">
+
+                              </div>
+
+                              <div class="row">
+                              <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="password" class="col-lg-4 control-label">Password </label>
                                              <div class="col-lg-7">
                                                   <input type="password" class="form-control ppwd" id="confirmPassword" name="password" placeholder="Password" title="Please enter the password"/>
-                                                  <code>Password must be at least 8 characters long and must include AT LEAST one number, one alphabet and may have special characters.</code>
+                                                  <code>Password must be at least 8 characters long and must include AT LEAST one number, one alphabet. You can also use special characters.</code>
                                              </div>
                                         </div>
-                                   </div>
-                              </div>
-
-                              <div class="row">
+                                   </div>                              
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="confirmPassword" class="col-lg-4 control-label">Confirm Password</label>
@@ -137,7 +139,7 @@ $ftResult = $db->rawQuery($fQuery);
 
                                    <div class="col-md-6">
                                         <div class="form-group">
-                                             <label for="status" class="col-lg-4 control-label">Status <span class="mandatory">*</span></label>
+                                             <label for="status" class="col-lg-4 control-label">User Status <span class="mandatory">*</span></label>
                                              <div class="col-lg-7">
                                                   <select class="form-control isRequired" name='status' id='status' title="Please select the status">
                                                        <option value=""> -- Select -- </option>
