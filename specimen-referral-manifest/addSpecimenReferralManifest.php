@@ -82,7 +82,7 @@ $packageNo = $general->generateRandomString(8);
   <script src="../assets/js/jquery.multi-select.js"></script>
   <script src="../assets/js/jquery.quicksearch.js"></script>
   <script type="text/javascript">
-   noOfSamples = 20;
+   noOfSamples = 100;
    sortedTitle = [];
   $(document).ready(function() {
     getSampleCodeDetails();
