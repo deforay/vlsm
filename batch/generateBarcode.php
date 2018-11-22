@@ -125,10 +125,11 @@ if($id >0){
             <thead>
                 <tr nobr="true">
                     <td align="center" width="6%"><strong>Pos.</strong></td>
-                    <td align="center" width="27%"><strong>Sample ID</strong></td>
-                    <td align="center" width="39%"><strong>Barcode</strong></td>
-                    <td align="center" width="14%"><strong>LOT NO <br>DATE</strong></td>
-                    <td align="center" width="14%"><strong>VL Result</strong></td>
+                    <td align="center" width="20%"><strong>Sample ID</strong></td>
+                    <td align="center" width="35%"><strong>Barcode</strong></td>
+                    <td align="center" width="13%"><strong>Patient Code</strong></td>
+                    <td align="center" width="13%"><strong>LOT NO <br>DATE</strong></td>
+                    <td align="center" width="13%"><strong>VL Result</strong></td>
                 </tr>
             </thead>';
     $tbl.='</table>';
@@ -141,7 +142,7 @@ if($id >0){
             }
             $xplodJsonToArray = explode("_",$jsonToArray[$j]);
             if(count($xplodJsonToArray)>1 && $xplodJsonToArray[0] == "s"){
-                $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
+                $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date,patient_art_no from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
                 $sampleResult=$db->query($sampleQuery);
                 
                 $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], 'C39', '', '','' ,15, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
@@ -157,10 +158,11 @@ if($id >0){
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
                 $tbl.='<tr>';
                 $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
-                $tbl.='<td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
-                $tbl.='<td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['result'].'</td>';
+                $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
+                $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['patient_art_no'].'</td>';
+                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
+                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['result'].'</td>';
                 $tbl.='</tr>';
                 $tbl.='</table>';
             }else{
@@ -170,10 +172,11 @@ if($id >0){
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
                 $tbl.='<tr>';
                 $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
-                $tbl.='<td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$label.'</td>';
-                $tbl.='<td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
-                $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$label.'</td>';
+                $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
+                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
                 $tbl.='</tr>';
                 $tbl.='</table>';
             }
@@ -187,10 +190,11 @@ if($id >0){
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
                      <tr nobr="true">
                     <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$i.'.</td>
-                    <td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">In-House Controls '. $i.'</td>
-                    <td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">In-House Controls '. $i.'</td>
+                    <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
                 </tr></table>';
             }
         }
@@ -202,10 +206,11 @@ if($id >0){
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
                     <tr nobr="true">
                     <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sNo.'.</td>
-                    <td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">Manufacturer Controls '. $i.'</td>
-                    <td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">Manufacturer Controls '. $i.'</td>
+                    <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
                 </tr></table>';
             }
         }
@@ -217,15 +222,16 @@ if($id >0){
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
                     <tr nobr="true">
                     <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sNo.'.</td>
-                    <td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">Calibrators '. $i.'</td>
-                    <td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">Calibrators '. $i.'</td>
+                    <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
                 </tr></table>';
             }
         }
         $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
-        $sQuery="SELECT sample_code,lot_number,lot_expiration_date,result from vl_request_form where sample_batch_id=$id";
+        $sQuery="SELECT sample_code,lot_number,lot_expiration_date,result,patient_art_no from vl_request_form where sample_batch_id=$id";
         $result=$db->query($sQuery);
         foreach($result as $sample){
             if($pdf->getY()>=250){
@@ -245,10 +251,11 @@ if($id >0){
             $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
             $tbl.='<tr>';
             $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
-            $tbl.='<td align="center" width="27%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['sample_code'].'</td>';
-            $tbl.='<td align="center" width="39%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-            $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
-            $tbl.='<td align="center" width="14%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['result'].'</td>';
+            $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['sample_code'].'</td>';
+            $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['patient_art_no'].'</td>';
+            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
+            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['result'].'</td>';
             $tbl.='</tr>';
             $tbl .='</table>';
           $sampleCounter++;
