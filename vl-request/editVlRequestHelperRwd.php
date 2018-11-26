@@ -294,8 +294,8 @@ try {
                 //update sample code generation
                 $sExpDT = explode(" ",$_POST['sampleCollectionDate']);
                 $sExpDate = explode("-",$sExpDT[0]);
-                $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
-                $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
+                $start_date = date($sExpDate[0].'-'.$sExpDate[1].'-01')." ".'00:00:00';
+                $end_date = date($sExpDate[0].'-'.$sExpDate[1].'-31')." ".'23:59:59';
                 $mnthYr = substr($sExpDate[0],-2);
                 if($arr['sample_code']=='MMYY'){
                     $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
@@ -328,9 +328,10 @@ try {
             }
         }
         $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFirstName'],$vldata['patient_art_no']);
-
+        
         $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
         $id=$db->update($tableName,$vldata);
+        
         if($id>0){
              $_SESSION['alertMsg']="VL request updated successfully";
              //Add event log
