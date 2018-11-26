@@ -86,8 +86,8 @@ $sampleSuggestionDisplay = 'display:none;';
 if($sarr['user_type']=='vluser' && $sCode!=''){
      $sExpDT = explode(" ",$sampleCollectionDate);
      $sExpDate = explode("-",$sExpDT[0]);
-     $start_date = date($sExpDate[0].'-'.$sExpDate[1].'-01')." ".'00:00:00';
-     $end_date = date($sExpDate[0].'-'.$sExpDate[1].'-31')." ".'23:59:59';
+     $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
+     $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
      $mnthYr = substr($sExpDate[0],-2);
      if($arr['sample_code']=='MMYY'){
           $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
@@ -166,8 +166,18 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                    </div>
                                    <div class="row">
                                         <div class="" style="<?php echo $sampleSuggestionDisplay;?>">
+<?php
+if($vlQueryInfo[0]['sample_code']!='')
+{
+?>
+<label for="sampleSuggest">This sample has already been imported with VLSM Sample ID <?php echo $vlQueryInfo[0]['sample_code'];?></label>
+<?php
+}else{
+?>
                                              <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Sample ID (might change while submitting the form) - </label>
                                              <?php echo $sampleSuggestion; ?>
+<?php } ?>
+
                                         </div>
                                         <div class="box-body">
                                              <div class="row">
