@@ -294,8 +294,8 @@ try {
                 //update sample code generation
                 $sExpDT = explode(" ",$_POST['sampleCollectionDate']);
                 $sExpDate = explode("-",$sExpDT[0]);
-                $start_date = date($sExpDate[0].'-'.$sExpDate[1].'-01')." ".'00:00:00';
-                $end_date = date($sExpDate[0].'-'.$sExpDate[1].'-31')." ".'23:59:59';
+                $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
+                $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
                 $mnthYr = substr($sExpDate[0],-2);
                 if($arr['sample_code']=='MMYY'){
                     $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
