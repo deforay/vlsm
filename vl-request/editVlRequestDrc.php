@@ -146,7 +146,7 @@
 if($vlQueryInfo[0]['sample_code']!='')
 {
 ?>
-<label for="sampleSuggest">Cet exemple a déjà été importé avec l'ID échantillon VLSM <?php echo $vlQueryInfo[0]['sample_code'];?></label>
+<label for="sampleSuggest" class="text-danger">Cet exemple a déjà été importé avec l'ID échantillon VLSM <?php echo $vlQueryInfo[0]['sample_code'];?></label>
 <?php
 }else{
 ?>
