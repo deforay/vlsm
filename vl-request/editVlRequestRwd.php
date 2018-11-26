@@ -164,16 +164,16 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                    <div class="box-header with-border">
                                         <h3 class="box-title">Clinic Information: (To be filled by requesting Clinican/Nurse)</h3>
                                    </div>
-                                   <div class="row">
+                                   <div class="">
                                         <div class="" style="<?php echo $sampleSuggestionDisplay;?>">
-<?php
-if($vlQueryInfo[0]['sample_code']!='')
-{
-?>
-<label for="sampleSuggest">This sample has already been imported with VLSM Sample ID <?php echo $vlQueryInfo[0]['sample_code'];?></label>
-<?php
-}else{
-?>
+                                        <?php
+                                        if($vlQueryInfo[0]['sample_code']!='')
+                                        {
+                                        ?>
+                                        <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Please note that this Remote Sample has already been imported with VLSM Sample ID <?php echo $vlQueryInfo[0]['sample_code'];?></label> 
+                                        <?php
+                                        }else{
+                                        ?>
                                              <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Sample ID (might change while submitting the form) - </label>
                                              <?php echo $sampleSuggestion; ?>
 <?php } ?>
