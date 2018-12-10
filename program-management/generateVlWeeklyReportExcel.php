@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-include ('../includes/PHPExcel.php');
+include ('../vendor/autoload.php');
 
 $general=new General();
 $configQuery ="SELECT * from global_config where name='vl_form'";
@@ -38,7 +38,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 
 
  //excel code start
- $excel = new PHPExcel();
+ $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
  $sheet = $excel->getActiveSheet();
  $headingStyle = array(
      'font' => array(
@@ -46,7 +46,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          'size' => '11',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
      )
  );
  $backgroundTitleStyle = array(
@@ -55,10 +55,10 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          'size' => '11',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
      ),
       'fill' => array(
-         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+         'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
          'color' => array('rgb' => 'FFFF00')
       )
  );
@@ -68,7 +68,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          'size' => '11',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT
      )
  );
  $styleArray = array(
@@ -77,23 +77,23 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          'size' => '13',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-         'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
      ),
      'borders' => array(
          'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
+             'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
          ),
      )
  );
  
  $borderStyle = array(
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+        //  'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
      ),
      'borders' => array(
          'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
+             'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
          ),
      )
  );
@@ -204,41 +204,41 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
     $sQuery = $sQuery.' GROUP BY vl.facility_id';
     $sResult = $db->rawQuery($sQuery);
     //error_log($sQuery);
-      $sheet = new PHPExcel_Worksheet($excel, '');
+      $sheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($excel, '');
       $excel->addSheet($sheet, $c);
       $vlLab['facility_name'] = preg_replace('/\s+/', '', ucwords($vlLab['facility_name']));
       $sheet->setTitle($vlLab['facility_name']);
       
-      $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('D1', html_entity_decode('Lab Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('E1', html_entity_decode(ucwords($vlLab['facility_name']), ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      //$sheet->setCellValue('F1', html_entity_decode('Collection Date ' , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      //$sheet->setCellValue('G1', html_entity_decode($_POST['collectionDate'] , ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('D2', html_entity_decode('Site Name ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('E2', html_entity_decode('Facility ID ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('F2', html_entity_decode('No. of Rejections ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('G2', html_entity_decode('Viral Load Result- Peds ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('G3', html_entity_decode('<15 yrs <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('H3', html_entity_decode('<15 yrs >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('I2', html_entity_decode('Viral Load Result- Adults ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('I3', html_entity_decode('>15yrs Male <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('J3', html_entity_decode('>15yrs Male >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('K3', html_entity_decode('>15yrs Female <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('L3', html_entity_decode('>15yrs  Female >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('M2', html_entity_decode('Viral Load Results- Pregnant/Breastfeeding Women ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('M3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('N3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('O2', html_entity_decode('Age/Sex Unknown ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('O3', html_entity_decode('Unknown Age/Sex <= 1000ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('P3', html_entity_decode('Unknown Age/Sex > 1000ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('Q2', html_entity_decode('Totals ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('Q3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('R3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('S2', html_entity_decode('Total Test per Clinic ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      $sheet->setCellValue('T2', html_entity_decode('Comments ', ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      $sheet->setCellValue('B1', html_entity_decode('Reported Date ' , ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('C1', html_entity_decode($_POST['reportedDate'] , ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('D1', html_entity_decode('Lab Name ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('E1', html_entity_decode(ucwords($vlLab['facility_name']), ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      //$sheet->setCellValue('F1', html_entity_decode('Collection Date ' , ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      //$sheet->setCellValue('G1', html_entity_decode($_POST['collectionDate'] , ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('B2', html_entity_decode('Province/State ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('C2', html_entity_decode('District/County ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('D2', html_entity_decode('Site Name ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('E2', html_entity_decode('Facility ID ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('F2', html_entity_decode('No. of Rejections ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('G2', html_entity_decode('Viral Load Result- Peds ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('G3', html_entity_decode('<15 yrs <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('H3', html_entity_decode('<15 yrs >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('I2', html_entity_decode('Viral Load Result- Adults ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('I3', html_entity_decode('>15yrs Male <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('J3', html_entity_decode('>15yrs Male >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('K3', html_entity_decode('>15yrs Female <=1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('L3', html_entity_decode('>15yrs  Female >1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('M2', html_entity_decode('Viral Load Results- Pregnant/Breastfeeding Women ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('M3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('N3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('O2', html_entity_decode('Age/Sex Unknown ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('O3', html_entity_decode('Unknown Age/Sex <= 1000ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('P3', html_entity_decode('Unknown Age/Sex > 1000ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('Q2', html_entity_decode('Totals ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('Q3', html_entity_decode('<= 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('R3', html_entity_decode('> 1000 copies/ml ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('S2', html_entity_decode('Total Test per Clinic ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      $sheet->setCellValue('T2', html_entity_decode('Comments ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
       
       $sheet->getStyle('B1')->applyFromArray($backgroundTitleStyle);
       $sheet->getStyle('C1')->applyFromArray($backgroundFieldStyle);
@@ -327,14 +327,19 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
      
       $start = (count($output));
       foreach ($output as $rowNo => $rowData) {
-       $colNo = 0;
+       $colNo = 1;
        foreach ($rowData as $field => $value) {
          $rRowCount = $rowNo + 4;
          $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
          $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
          $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
          $sheet->getDefaultRowDimension()->setRowHeight(15);
-         $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+         if($colNo <= 5){
+            $cellDataType = \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING;
+         }else{
+            $cellDataType = \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC;
+         }
+         $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value),$cellDataType);
          $colNo++;
        }
       }
@@ -344,23 +349,23 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
       //$secondCell = $sheet->getCellByColumnAndRow(2, $firstRowCount)->getColumn();
       //$sheet->getStyle($firstCell.$firstRowCount.':'.$firstCell.$firstRowCount)->applyFromArray($styleArray);
       //$sheet->getStyle($secondCell.$firstRowCount.':'.$secondCell.$firstRowCount)->applyFromArray($styleArray);
-      //$sheet->setCellValue($firstCell.$firstRowCount, html_entity_decode("Total Sample As On ".$s_t_date[0], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      //$sheet->setCellValue($secondCell.$firstRowCount, html_entity_decode($totalResult[0]['totalCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$sheet->setCellValue($firstCell.$firstRowCount, html_entity_decode("Total Sample As On ".$s_t_date[0], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      //$sheet->setCellValue($secondCell.$firstRowCount, html_entity_decode($totalResult[0]['totalCount'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
       
       //$firstCell = $sheet->getCellByColumnAndRow(1, $secondRowCount)->getColumn();
       //$secondCell = $sheet->getCellByColumnAndRow(2, $secondRowCount)->getColumn();
       //$sheet->getStyle($firstCell.$secondRowCount.':'.$firstCell.$secondRowCount)->applyFromArray($styleArray);
       //$sheet->getStyle($secondCell.$secondRowCount.':'.$secondCell.$secondRowCount)->applyFromArray($styleArray);
-      //$sheet->setCellValue($firstCell.$secondRowCount, html_entity_decode("Samples Collected Between ".$_POST['collectionDate'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
-      //$sheet->setCellValue($secondCell.$secondRowCount, html_entity_decode($totalResult[0]['collectCount'], ENT_QUOTES, 'UTF-8'), \PHPExcel_Cell_DataType::TYPE_STRING);
+      //$sheet->setCellValue($firstCell.$secondRowCount, html_entity_decode("Samples Collected Between ".$_POST['collectionDate'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+      //$sheet->setCellValue($secondCell.$secondRowCount, html_entity_decode($totalResult[0]['collectCount'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $c++;
   }
  //Statistics sheet end
  if($c > 0){
    //Super lab performance sheet end
    $instance = isset($_SESSION['instanceFname']) ? $_SESSION['instanceFname'] : $_SESSION['instanceId'];
-   $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-   $filename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') ."-".$instance. '.xls';
+   $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+   $filename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') ."-".$instance. '.xlsx';
    $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
    echo $filename;
  }else{

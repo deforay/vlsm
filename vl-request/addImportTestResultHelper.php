@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 include('../includes/MysqliDb.php');
-include ('../includes/PHPExcel.php');
+include ('../vendor/autoload.php');
 include('../General.php');
 $general=new General();
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
@@ -23,7 +23,7 @@ try {
                 mkdir('../temporary');
             }
             if(move_uploaded_file($_FILES['resultFile']['tmp_name'], '../temporary' . DIRECTORY_SEPARATOR . $fileName)) {
-                $objPHPExcel = \PHPExcel_IOFactory::load('../temporary' . DIRECTORY_SEPARATOR . $fileName);
+                $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load('../temporary' . DIRECTORY_SEPARATOR . $fileName);
                 $sheet = $objPHPExcel->getActiveSheet();
                 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 $count = count($sheetData);

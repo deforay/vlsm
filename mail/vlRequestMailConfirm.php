@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('../header.php');
-include ('../includes/PHPExcel.php');
+include ('../vendor/autoload.php');
 include('../General.php');
 $general=new General();
 //get other config details
@@ -19,7 +19,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
      $filedGroup = array();
      if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
           //Excel code start
-          $excel = new PHPExcel();
+          $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
           $sheet = $excel->getActiveSheet();
           $styleArray = array(
           'font' => array(
@@ -27,36 +27,36 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
               'size' => '13',
           ),
           'alignment' => array(
-              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-              'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+              'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+              'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
           ),
           'borders' => array(
               'outline' => array(
-                  'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                  'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
               ),
           )
          );
          $borderStyle = array(
                'alignment' => array(
-                   'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                   'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                ),
                'borders' => array(
                    'outline' => array(
-                       'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                       'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                    ),
                )
          );
          $allField = array('Sample ID','Urgency','Province','District Name','Clinic Name','Clinician Name','Sample Collection Date','Sample Received Date','Collected by (Initials)','Gender','Date Of Birth','Age in years','Age in months','Is Patient Pregnant?','Is Patient Breastfeeding?','Patient OI/ART Number','Date Of ART Initiation','ART Regimen','Patient consent to SMS Notification?','Patient Mobile Number','Date Of Last Viral Load Test','Result Of Last Viral Load','Viral Load Log','Reason For VL Test','Lab Name','LAB No','VL Testing Platform','Specimen type','Sample Testing Date','Viral Load Result(copiesl/ml)','Log Value','If no result','Rejection Reason','Reviewed By','Approved By','Laboratory Scientist Comments','Status');
          $filedGroup = explode(",",$mailconf['rq_field']);
          //Set heading row
-         $colNo = 0;
+         $colNo = 1;
          foreach ($allField as $heading) {
           if($heading == 'Province'){
             $heading = 'Province/State';
           }else if($heading == 'District Name'){
             $heading = 'District/County';
           }
-          $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($heading), PHPExcel_Cell_DataType::TYPE_STRING);
+          $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($heading), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
           $cellName = $sheet->getCellByColumnAndRow($colNo,1)->getColumn();
           $sheet->getColumnDimension($cellName)->setVisible(in_array($heading,$filedGroup)?TRUE:FALSE);
           $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
@@ -190,7 +190,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
          //print_r($output);die;
          $start = (count($output));
          foreach ($output as $rowNo => $rowData) {
-            $colNo = 0;
+            $colNo = 1;
             foreach ($rowData as $field => $value) {
               $rRowCount = $rowNo + 2;
               $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
@@ -199,13 +199,13 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
               $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
               $sheet->getDefaultRowDimension()->setRowHeight(20);
               $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
-              $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode(($value == 'hide')?'':$value), PHPExcel_Cell_DataType::TYPE_STRING);
+              $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode(($value == 'hide')?'':$value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
               $sheet->getStyleByColumnAndRow($colNo, $rowNo + 2)->getAlignment()->setWrapText(true);
              $colNo++;
             }
          }
-         $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-         $filename = 'VLSM-requests-' . date('d-M-Y-H-i-s') . '.xls';
+         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+         $filename = 'VLSM-requests-' . date('d-M-Y-H-i-s') . '.xlsx';
          $pathFront=realpath('../temporary');
          $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
          $downloadFile = '../temporary/' . $filename;

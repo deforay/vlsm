@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 include('../includes/MysqliDb.php');
-include ('../includes/PHPExcel.php');
+include ('../vendor/autoload.php');
 include('../General.php');
 $general=new General();
 //get other config details
@@ -16,7 +16,7 @@ foreach($geResult as $row){
 $filedGroup = array();
 if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
      //Excel code start
-     $excel = new PHPExcel();
+     $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
      $sheet = $excel->getActiveSheet();
      $styleArray = array(
      'font' => array(
@@ -24,36 +24,36 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
          'size' => '13',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-         'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
      ),
      'borders' => array(
          'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
+             'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
          ),
      )
     );
     $borderStyle = array(
           'alignment' => array(
-              'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+              'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
           ),
           'borders' => array(
               'outline' => array(
-                  'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                  'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
               ),
           )
      );
     $filedGroup = explode(",",$mailconf['rq_field']);
     $headings = $filedGroup;
     //Set heading row
-    $colNo = 0;
+    $colNo = 1;
     foreach ($headings as $field => $value) {
       if($value == 'Province'){
          $value = 'Province/State';
       }else if($value == 'District Name'){
          $value = 'District/County';
       }
-     $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+     $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
      $cellName = $sheet->getCellByColumnAndRow($colNo,1)->getColumn();
      $sheet->getStyle($cellName.'1')->applyFromArray($styleArray);
      $colNo++;
@@ -181,20 +181,20 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
       }
      $start = (count($output));
      foreach ($output as $rowNo => $rowData) {
-          $colNo = 0;
+          $colNo = 1;
           foreach ($rowData as $field => $value) {
             $rRowCount = $rowNo + 2;
             $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
             $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
             $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
             $sheet->getDefaultRowDimension()->setRowHeight(15);
-            $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+            $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $colNo++;
           }
      }
      $filename = '';
-     $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
-     $filename = 'VLSM-Test-Requests-' . date('d-M-Y-H-i-s') . '.xls';
+     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+     $filename = 'VLSM-Test-Requests-' . date('d-M-Y-H-i-s') . '.xlsx';
      $pathFront=realpath('../temporary');
      $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
     echo $filename;

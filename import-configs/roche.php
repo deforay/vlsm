@@ -30,7 +30,7 @@ try {
         //$file_info = new finfo(FILEINFO_MIME); // object oriented approach!
         //$mime_type = $file_info->buffer(file_get_contents('../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName)); // e.g. gives "image/jpeg"
 
-        $objPHPExcel = \PHPExcel_IOFactory::load('../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName);
+        $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load('../temporary' . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName);
         $sheetData   = $objPHPExcel->getActiveSheet();
         
         $bquery    = "select MAX(batch_code_key) from batch_details";
@@ -88,7 +88,7 @@ try {
           
           /*$d=explode(" ",$row[$testingDateCol]);
           //$testingDate=str_replace("/","-",$d[0],$checked);
-          //$testingDate = date("Y-m-d H:i:s", PHPExcel_Shared_Date::ExcelToPHP($testingDate));
+          //$testingDate = date("Y-m-d H:i:s", \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($testingDate));
           $dt=explode("/",$d[0]);
           if(count($dt) > 1){
             // Date time in the provided Roche Sample file is in this format : 2016/09/20 12:22:03
