@@ -321,9 +321,12 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
                 'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],								
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'Last 90 Days': [moment().subtract('days', 89), moment()],
+                'Last 120 Days': [moment().subtract('days', 119), moment()],
+								'Last 12 Months': [moment().subtract('month', 12).startOf('month'), moment().endOf('month')]
             }
         },
         function(start, end) {
