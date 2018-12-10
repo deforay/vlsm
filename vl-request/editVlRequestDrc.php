@@ -140,10 +140,21 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
                         </div>
+                        
                         <div class="" style="<?php echo $sampleSuggestionDisplay;?>">
+                        <?php
+if($vlQueryInfo[0]['sample_code']!='')
+{
+?>
+<label for="sampleSuggest" class="text-danger">Cet exemple a déjà été importé avec l'ID échantillon VLSM <?php echo $vlQueryInfo[0]['sample_code'];?></label>
+<?php
+}else{
+?>
                             <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Suggérer un ID d'échantillon (peut changer en soumettant le formulaire) - </label>
                             <?php echo $sampleSuggestion; ?>
+                            <?php } ?>
                        </div>
+
                         <!--<h4 id="sampleCodeValue">exemple de code:< ?php echo ($sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?></h4>-->
                         <table class="table" style="width:100%">
 
