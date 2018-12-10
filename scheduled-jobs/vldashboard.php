@@ -2,7 +2,7 @@
 
 require(__DIR__ . "/../includes/MysqliDb.php");
 require(__DIR__ . "/../General.php");
-require(__DIR__ . "/../includes/PHPExcel.php");
+require(__DIR__ . "/../includes/\PhpOffice\PhpSpreadsheet\Spreadsheet.php");
 
 $general=new General();
 
@@ -62,12 +62,12 @@ try {
         
         $rResult = $db->rawQuery($sQuery);
         
-        $excel = new PHPExcel();
+        $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $output = array();
         $sheet = $excel->getActiveSheet();
         
         $headings = array("Sample Code","Instance ID","Gender","Age In Years","Clinic Name","Clinic Code","Clinic State","Clinic District","Clinic Phone Number","Clinic Address","Clinic HUB Name","Clinic Contact Person","Clinic Report Mail","Clinic Country","Clinic Longitude","Clinic Latitude","Clinic Status","Clinic Type","Sample Type","Sample Type Status","Sample Collection Date","LAB Name","Lab Code","Lab State","Lab District","Lab Phone Number","Lab Address","Lab HUB Name","Lab Contact Person","Lab Report Mail","Lab Country","Lab Longitude","Lab Latitude","Lab Status","Lab Type","Lab Tested Date","Log Value","Absolute Value","Text Value","Absolute Decimal Value","Result","Testing Reason","Test Reason Status","Testing Status","Sample Received Datetime","Line Of Treatment","Sample Rejected","Rejection Reason Name","Rejection Reason Status","Pregnant","Breast Feeding","Art Code","Regimen Initiated Date","ARV Adherance Percentage","Is Adherance poor","Approved Datetime","DashVL_Abs","DashVL_AnalysisResult","Current Regimen");
-        $colNo = 0;
+        $colNo = 1;
     
         $styleArray = array(
             'font' => array(
@@ -75,23 +75,23 @@ try {
                 'size' => '13',
             ),
             'alignment' => array(
-                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ),
             'borders' => array(
                 'outline' => array(
-                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                 ),
             )
         );
      
         $borderStyle = array(
             'alignment' => array(
-                'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
             ),
             'borders' => array(
                 'outline' => array(
-                    'style' => \PHPExcel_Style_Border::BORDER_THIN,
+                    'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                 ),
             )
         );
@@ -99,7 +99,7 @@ try {
      
         foreach ($headings as $field => $value) {
          
-         $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+         $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
          $colNo++;
          
         }
@@ -223,7 +223,7 @@ try {
     
         $start = (count($output));
         foreach ($output as $rowNo => $rowData) {
-         $colNo = 0;
+         $colNo = 1;
          foreach ($rowData as $field => $value) {
            $rRowCount = $rowNo + 2;
            $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
@@ -231,14 +231,14 @@ try {
            $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
            $sheet->getDefaultRowDimension()->setRowHeight(18);
            $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
-           $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+           $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
            $sheet->getStyleByColumnAndRow($colNo, $rowNo + 2)->getAlignment()->setWrapText(true);
            $colNo++;
          }
         }
-        $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
         $currentDate = date("Y-m-d-H-i-s");
-        $filename = 'export-vl-result-'.$currentDate.'.xls';
+        $filename = 'export-vl-result-'.$currentDate.'.xlsx';
         $writer->save(__DIR__ . "/../temporary". DIRECTORY_SEPARATOR . $filename);
      
         //echo $filename;

@@ -3,16 +3,16 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-include ('../includes/PHPExcel.php');
+include ('../vendor/autoload.php');
 $general=new General();
 
- $excel = new PHPExcel();
+ $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
  $output = array();
  $sheet = $excel->getActiveSheet();
  
  $headings = array("Sample Collection Date","Facility Name","Rejection Reason","Reason Type","No. of Records");
  
- $colNo = 0;
+ $colNo = 1;
  
  $styleArray = array(
      'font' => array(
@@ -20,23 +20,23 @@ $general=new General();
          'size' => '13',
      ),
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-         'vertical' => \PHPExcel_Style_Alignment::VERTICAL_CENTER,
+         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
      ),
      'borders' => array(
          'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
+             'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
          ),
      )
  );
  
  $borderStyle = array(
      'alignment' => array(
-         'horizontal' => \PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
      ),
      'borders' => array(
          'outline' => array(
-             'style' => \PHPExcel_Style_Border::BORDER_THIN,
+             'style' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
          ),
      )
  );
@@ -48,10 +48,10 @@ $general=new General();
      $nameValue .= str_replace("_"," ",$key)." : ".$value."&nbsp;&nbsp;";
    }
  }
- $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue));
+ $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
  
  foreach ($headings as $field => $value) {
-   $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+   $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
    $colNo++;
  }
  $sheet->getStyle('A3:E3')->applyFromArray($styleArray);
@@ -124,20 +124,20 @@ foreach($tableResult as $key=>$rejectedData){
 
  $start = (count($output))+2;
  foreach ($output as $rowNo => $rowData) {
-  $colNo = 0;
+  $colNo = 1;
   foreach ($rowData as $field => $value) {
     $rRowCount = $rowNo + 4;
     $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
     $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
     $sheet->getDefaultRowDimension()->setRowHeight(18);
     $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
-    $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), PHPExcel_Cell_DataType::TYPE_STRING);
+    $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->getStyleByColumnAndRow($colNo, $rowNo + 4)->getAlignment()->setWrapText(true);
     $colNo++;
   }
  }
- $writer = PHPExcel_IOFactory::createWriter($excel, 'Excel5');
- $filename = 'VLSM-Rejected-Data-report' . date('d-M-Y-H-i-s') . '.xls';
+ $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+ $filename = 'VLSM-Rejected-Data-report' . date('d-M-Y-H-i-s') . '.xlsx';
  $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
  echo $filename;
 
