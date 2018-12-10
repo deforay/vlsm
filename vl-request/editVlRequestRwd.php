@@ -379,7 +379,7 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
                                                                                      <?php } } ?>
                                                                                 </optgroup>
                                                                            <?php } if($sarr['user_type']!='vluser'){  ?>
-                                                                                <option value="other">Other</option>
+                                                                                <!-- <option value="other">Other</option> -->
                                                                            <?php } ?>
                                                                       </select>
                                                                       <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;">

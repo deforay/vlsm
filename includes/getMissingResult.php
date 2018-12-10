@@ -111,7 +111,7 @@ $sWhere = '';
                         AND vl.result is not null
                         AND vl.result != ''
                         AND DATE(vl.sample_collection_date) >= '".$start_date."'
-                        AND DATE(vl.sample_collection_date) <= '".$end_date."' AND vl.vlsm_country_id='".$configFormResult[0]['value']."' $whereCondition group by MONTH(vl.sample_collection_date) order by DATE(vl.sample_collection_date)";
+                        AND DATE(vl.sample_collection_date) <= '".$end_date."' AND vl.vlsm_country_id='".$configFormResult[0]['value']."' $whereCondition group by MONTH(vl.sample_collection_date) ORDER BY (vl.sample_collection_date)";
    $sWhere = '';
    if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
       $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';
