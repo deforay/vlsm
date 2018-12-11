@@ -148,7 +148,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     }
                }
                if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
-                    $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+                    $sWhere = $sWhere.' AND vl.lab_id = "'.$_POST['facilityName'].'"';
                }
                if(isset($_POST['district']) && trim($_POST['district'])!= ''){
                     $sWhere = $sWhere." AND f.facility_district LIKE '%" . $_POST['district'] . "%' ";
@@ -166,11 +166,11 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                }
                if(isset($_POST['facilityName']) && trim($_POST['facilityName'])!= ''){
                     if(isset($setWhr)){
-                         $sWhere = $sWhere.' AND f.facility_id = "'.$_POST['facilityName'].'"';
+                         $sWhere = $sWhere.' AND vl.lab_id = "'.$_POST['facilityName'].'"';
                     }else{
                          $setWhr = 'where';
                          $sWhere=' where '.$sWhere;
-                         $sWhere = $sWhere.' f.facility_id = "'.$_POST['facilityName'].'"';
+                         $sWhere = $sWhere.' vl.lab_id = "'.$_POST['facilityName'].'"';
                     }
                }
                if(isset($_POST['district']) && trim($_POST['district'])!= ''){
