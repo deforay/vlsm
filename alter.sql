@@ -1529,3 +1529,5 @@ ALTER TABLE `facility_details` ADD `header_text` VARCHAR(255) NULL DEFAULT NULL 
 
 
 -- Version 3.9.7 ---------- Amit 16-Nov-2018
+
+-- Version 3.9.8 ---------- Amit 11-Dec-2018
