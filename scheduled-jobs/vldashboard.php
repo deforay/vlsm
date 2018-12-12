@@ -2,7 +2,7 @@
 
 require(__DIR__ . "/../includes/MysqliDb.php");
 require(__DIR__ . "/../General.php");
-require(__DIR__ . "/../includes/\PhpOffice\PhpSpreadsheet\Spreadsheet.php");
+require(__DIR__ . "/../vendor/autoload.php');
 
 $general=new General();
 
