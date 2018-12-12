@@ -4,7 +4,7 @@ ob_start();
 require(__DIR__ . "/../includes/MysqliDb.php");
 require(__DIR__ . "/../includes/mail/PHPMailerAutoload.php");
 require(__DIR__ . "/../General.php");
-require(__DIR__ . "/../includes/\PhpOffice\PhpSpreadsheet\Spreadsheet.php");
+require(__DIR__ . "/../vendor/autoload.php");
 
 $general=new General();
 $configQuery ="SELECT * from global_config where name='vl_form'";
