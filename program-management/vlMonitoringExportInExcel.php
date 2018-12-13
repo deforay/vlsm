@@ -316,7 +316,8 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
             'size' => '11',
         ),
         'alignment' => array(
-            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            //'wrapText' => true
+            //'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
         ),
         'fill' => array(
             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -399,7 +400,7 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->mergeCells('B13:F14');
     $sheet->setCellValue('B13', html_entity_decode('Number Of Viral Load tests reported by the laboratory during the current quarter', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G13:I14');
-    $sheet->setCellValue('G13', html_entity_decode(count($rResult), ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G13', html_entity_decode(count($rResult), ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J13:M14');
     $sheet->getStyle('A13')->applyFromArray($questionStyle);
     $sheet->getStyle('B13')->applyFromArray($questionStyle);
@@ -411,8 +412,8 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->setCellValue('G15', html_entity_decode('Suppressed < 1000 copies/mL ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('H15:I16');
     $sheet->mergeCells('H17:I17');
-    $sheet->setCellValue('G17', html_entity_decode($sResult[0]['lt1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H17', html_entity_decode($sResult[0]['gt1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G17', html_entity_decode($sResult[0]['lt1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H17', html_entity_decode($sResult[0]['gt1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->setCellValue('H15', html_entity_decode('Suppressed Failure >= 1000 copies/mL ', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('J15:M17');
     $sheet->getStyle('A15')->applyFromArray($questionStyle);
@@ -435,22 +436,22 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->setCellValue('B20', html_entity_decode('Female', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G20:G20');
     $sheet->mergeCells('H20:I20');
-    $sheet->setCellValue('G20', html_entity_decode($sResult[0]['ltFemale1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H20', html_entity_decode($sResult[0]['gtFemale1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G20', html_entity_decode($sResult[0]['ltFemale1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H20', html_entity_decode($sResult[0]['gtFemale1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J20:M20');
     $sheet->mergeCells('B21:F21');
     $sheet->setCellValue('B21', html_entity_decode('Not Specified', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G21:G21');
     $sheet->mergeCells('H21:I21');
-    $sheet->setCellValue('G21', html_entity_decode($sResult[0]['ltNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H21', html_entity_decode($sResult[0]['gtNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G21', html_entity_decode($sResult[0]['ltNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H21', html_entity_decode($sResult[0]['gtNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J21:M21');
     $sheet->mergeCells('B22:F22');
     $sheet->setCellValue('B22', html_entity_decode('Total', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G22:G22');
     $sheet->mergeCells('H22:I22');
-    $sheet->setCellValue('G22', html_entity_decode($sResult[0]['ltTotalGender1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H22', html_entity_decode($sResult[0]['gtTotalGender1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G22', html_entity_decode($sResult[0]['ltTotalGender1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H22', html_entity_decode($sResult[0]['gtTotalGender1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J22:M22');
 
     $sheet->mergeCells('A23:A23');
@@ -462,73 +463,73 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->setCellValue('B24', html_entity_decode('<1', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G24:G24');
     $sheet->mergeCells('H24:I24');
-    $sheet->setCellValue('G24', html_entity_decode($sResult[0]['ltAgeOne1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H24', html_entity_decode($sResult[0]['gtAgeOne1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G24', html_entity_decode($sResult[0]['ltAgeOne1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H24', html_entity_decode($sResult[0]['gtAgeOne1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J24:M24');
     $sheet->mergeCells('B25:F25');
     $sheet->setCellValue('B25', html_entity_decode('1-9', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G25:G25');
     $sheet->mergeCells('H25:I25');
-    $sheet->setCellValue('G25', html_entity_decode($sResult[0]['ltAgeOnetoNine1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H25', html_entity_decode($sResult[0]['gtAgeOnetoNine1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G25', html_entity_decode($sResult[0]['ltAgeOnetoNine1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H25', html_entity_decode($sResult[0]['gtAgeOnetoNine1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J25:M25');
     $sheet->mergeCells('B26:F26');
     $sheet->setCellValue('B26', html_entity_decode('10-14', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G26:G26');
     $sheet->mergeCells('H26:I26');
-    $sheet->setCellValue('G26', html_entity_decode($sResult[0]['ltAgeTentoFourteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H26', html_entity_decode($sResult[0]['gtAgeTentoFourteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G26', html_entity_decode($sResult[0]['ltAgeTentoFourteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H26', html_entity_decode($sResult[0]['gtAgeTentoFourteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J26:M26');
     $sheet->mergeCells('B27:F27');
     $sheet->setCellValue('B27', html_entity_decode('<15(Subtotal)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G27:G27');
     $sheet->mergeCells('H27:I27');
-    $sheet->setCellValue('G27', html_entity_decode($sResult[0]['ltAgeTotalFifteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H27', html_entity_decode($sResult[0]['gtAgeTotalFifteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G27', html_entity_decode($sResult[0]['ltAgeTotalFifteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H27', html_entity_decode($sResult[0]['gtAgeTotalFifteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J27:M27');
     $sheet->mergeCells('B28:F28');
     $sheet->setCellValue('B28', html_entity_decode('15-19', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G28:G28');
     $sheet->mergeCells('H28:I28');
-    $sheet->setCellValue('G28', html_entity_decode($sResult[0]['ltAgeFifteentoNineteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H28', html_entity_decode($sResult[0]['gtAgeFifteentoNineteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G28', html_entity_decode($sResult[0]['ltAgeFifteentoNineteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H28', html_entity_decode($sResult[0]['gtAgeFifteentoNineteen1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J28:M28');
     $sheet->mergeCells('B29:F29');
     $sheet->setCellValue('B29', html_entity_decode('20-24', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G29:G29');
     $sheet->mergeCells('H29:I29');
-    $sheet->setCellValue('G29', html_entity_decode($sResult[0]['ltAgeTwentytoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H29', html_entity_decode($sResult[0]['gtAgeTwentytoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G29', html_entity_decode($sResult[0]['ltAgeTwentytoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H29', html_entity_decode($sResult[0]['gtAgeTwentytoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J29:M29');
     $sheet->mergeCells('B30:F30');
     $sheet->setCellValue('B30', html_entity_decode('15-24', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G30:G30');
     $sheet->mergeCells('H30:I30');
-    $sheet->setCellValue('G30', html_entity_decode($sResult[0]['ltAgeFifteentoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H30', html_entity_decode($sResult[0]['gtAgeFifteentoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G30', html_entity_decode($sResult[0]['ltAgeFifteentoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H30', html_entity_decode($sResult[0]['gtAgeFifteentoTwentyFour1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J30:M30');
     $sheet->mergeCells('B31:F31');
     $sheet->setCellValue('B31', html_entity_decode('25+', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G31:G31');
     $sheet->mergeCells('H31:I31');
-    $sheet->setCellValue('G31', html_entity_decode($sResult[0]['ltAgetwentyFive1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H31', html_entity_decode($sResult[0]['gtAgetwentyFive1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G31', html_entity_decode($sResult[0]['ltAgetwentyFive1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H31', html_entity_decode($sResult[0]['gtAgetwentyFive1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J31:M31');
 
     $sheet->mergeCells('B32:F32');
     $sheet->setCellValue('B32', html_entity_decode('Not Specified', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G32:G32');
     $sheet->mergeCells('H32:I32');
-    $sheet->setCellValue('G32', html_entity_decode($sResult[0]['ltAgeNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H32', html_entity_decode($sResult[0]['gtAgeNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G32', html_entity_decode($sResult[0]['ltAgeNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H32', html_entity_decode($sResult[0]['gtAgeNotSpecified1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J32:M32');
 
     $sheet->mergeCells('B33:F33');
     $sheet->setCellValue('B33', html_entity_decode('Total', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G33:G33');
     $sheet->mergeCells('H33:I33');
-    $sheet->setCellValue('G33', html_entity_decode($sResult[0]['ltAgeTotal1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H33', html_entity_decode($sResult[0]['gtAgeTotal1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G33', html_entity_decode($sResult[0]['ltAgeTotal1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H33', html_entity_decode($sResult[0]['gtAgeTotal1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J33:M33');
     $sheet->mergeCells('A34:A34');
     $sheet->setCellValue('A34', html_entity_decode('Q1.4', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
@@ -536,8 +537,8 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->setCellValue('B34', html_entity_decode('Pregnant Women', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G34:G34');
     $sheet->mergeCells('H34:I34');
-    $sheet->setCellValue('G34', html_entity_decode($sResult[0]['ltPatientPregnant1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H34', html_entity_decode($sResult[0]['gtPatientPregnant1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G34', html_entity_decode($sResult[0]['ltPatientPregnant1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H34', html_entity_decode($sResult[0]['gtPatientPregnant1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J34:M34');
     $sheet->mergeCells('A35:A35');
     $sheet->setCellValue('A35', html_entity_decode('Q1.5', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
@@ -545,8 +546,8 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->setCellValue('B35', html_entity_decode('Women that are breastfeeding', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G35:G35');
     $sheet->mergeCells('H35:I35');
-    $sheet->setCellValue('G35', html_entity_decode($sResult[0]['ltPatientBreastFeeding1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-    $sheet->setCellValue('H35', html_entity_decode($sResult[0]['gtPatientBreastFeeding1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G35', html_entity_decode($sResult[0]['ltPatientBreastFeeding1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
+    $sheet->setCellValue('H35', html_entity_decode($sResult[0]['gtPatientBreastFeeding1000'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J35:M35');
     $sheet->getStyle('A13:F37')->applyFromArray($questionStyle);
     $sheet->getStyle('B18')->applyFromArray($genderquestionStyle);
@@ -560,7 +561,7 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->mergeCells('B36:F37');
     $sheet->setCellValue('B36', html_entity_decode('Is there a backlog for viral load testing? (greater than 1 month testing volume) Choose from list', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G36:I37');
-    $sheet->setCellValue('G36', html_entity_decode(count($checkEmptyResult), ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G36', html_entity_decode(count($checkEmptyResult), ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J36:M37');
     $sheet->setCellValue('J36', html_entity_decode('Reasons:', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $s = 38;
@@ -581,7 +582,7 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
                 $sheet->setCellValue('B' . $c, html_entity_decode('If yes,how many samples?', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                 $sheet->mergeCells('G' . $c . ':I' . $cc);
                 $sheet->mergeCells('J' . $c . ':M' . $cc);
-                $sheet->setCellValue('G' . $c, html_entity_decode($checkEmptySampleResult[$sampleName['sample_name']][0]['total'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->setCellValue('G' . $c, html_entity_decode($checkEmptySampleResult[$sampleName['sample_name']][0]['total'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
                 $s = $c + 1;
                 $ss = $cc + 2;
             }
@@ -601,7 +602,7 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $sheet->mergeCells('B' . $q3 . ':F' . $q33);
     $sheet->setCellValue('B' . $q3, html_entity_decode('What is the average monthly/quarterly TAT? (sample collection to lab result release)', ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
     $sheet->mergeCells('G' . $q3 . ':I' . $q33);
-    $sheet->setCellValue('G' . $q3, html_entity_decode($totalAvg, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+    $sheet->setCellValue('G' . $q3, html_entity_decode($totalAvg, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
     $sheet->mergeCells('J' . $q3 . ':M' . $q33);
     $sheet->getStyle('A' . $q3 . ':M' . $q33)->getBorders()->getBottom()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
@@ -728,7 +729,7 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
             }
             $invalidResult[$dFormat] = $db->rawQuery($invalidResultQuery);
 
-            $sheet->setCellValue('G' . $q7, html_entity_decode($dFormat, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('G' . $q7, html_entity_decode($dFormat, ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);
             $sheet->mergeCells('H' . $q7 . ':I' . $q7);
             $sheet->setCellValue('H' . $q7, html_entity_decode($invalidResult[$dFormat][0]['invalidTotal'], ENT_QUOTES, 'UTF-8'), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $sheet->mergeCells('J' . $q7 . ':M' . $q7);

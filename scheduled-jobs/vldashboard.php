@@ -2,7 +2,7 @@
 
 require(__DIR__ . "/../includes/MysqliDb.php");
 require(__DIR__ . "/../General.php");
-require(__DIR__ . "/../vendor/autoload.php');
+require(__DIR__ . "/../vendor/autoload.php");
 
 $general=new General();
 
@@ -236,9 +236,9 @@ try {
            $colNo++;
          }
         }
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xls');
         $currentDate = date("Y-m-d-H-i-s");
-        $filename = 'export-vl-result-'.$currentDate.'.xlsx';
+        $filename = 'export-vl-result-'.$currentDate.'.xls';
         $writer->save(__DIR__ . "/../temporary". DIRECTORY_SEPARATOR . $filename);
      
         //echo $filename;
