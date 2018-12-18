@@ -50,7 +50,7 @@ if(isset($_SESSION['vlStatisticsFemaleQuery']) && trim($_SESSION['vlStatisticsFe
       $nameValue .= str_replace("_"," ",$key)." : ".$value.",&nbsp;&nbsp;";
     }
  }
- $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($nameValue), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+ $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode(ucwords($nameValue)), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
  
  foreach ($headings as $field => $value) {
     $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
