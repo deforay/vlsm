@@ -143,7 +143,7 @@ $cResult = $db->rawQuery($cQuery);
   }
   function exportInexcel() {
     $.blockUI();
-    $.post("exportSampleRejectionReport.php",{sample_collection_date:$("#sampleCollectionDate").val(),lab_name:$("#labName").val(),clinic_name:$("#clinicName").val(),sample_type:$("#sampleType").val()},
+    $.post("exportSampleRejectionReport.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),lab_name:$("#labName").val(),clinic_name:$("#clinicName").val(),sample_type:$("#sampleType").val()},
     function(data){
 	  if(data == "" || data == null || data == undefined){
 			$.unblockUI();

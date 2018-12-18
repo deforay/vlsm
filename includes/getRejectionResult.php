@@ -1,115 +1,92 @@
 <?php
 ob_start();
-include('MysqliDb.php');
-include('../General.php');
-$general=new General();
-$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+include 'MysqliDb.php';
+include '../General.php';
+$general = new General();
+$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
-//date
-$start_date = '';
-$end_date = '';
-$sWhere ='';
-if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
-   //print_r($s_c_date);die;
-   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-     $start_date = $general->dateFormat(trim($s_c_date[0]));
-   }
-   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-     $end_date = $general->dateFormat(trim($s_c_date[1]));
-   }
-   //get value by rejection reason id
-   $vlQuery = "select vl.reason_for_sample_rejection,sr.rejection_reason_name,sr.rejection_type,sr.rejection_reason_code,fd.facility_name from vl_request_form as vl inner join r_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection inner join facility_details as fd ON fd.facility_id=vl.facility_id";
-   $sWhere.= ' where DATE(vl.sample_collection_date) <= "'.$end_date.'" AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" AND reason_for_sample_rejection!="" AND reason_for_sample_rejection IS NOT NULL';
-   $vlQuery = $vlQuery.$sWhere." group by reason_for_sample_rejection";
-   $vlResult = $db->rawQuery($vlQuery);
-   $rejectionType = array();
-   foreach($vlResult as $rejectedResult){
-	  $tQuery="select COUNT(vl_sample_id) as total,vl.sample_collection_date,fd.facility_name FROM vl_request_form as vl INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type inner join facility_details as fd ON fd.facility_id=vl.facility_id where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND vl.reason_for_sample_rejection=".$rejectedResult['reason_for_sample_rejection'];
-	  //filter
-	  $sWhere = '';
-	  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-	    $sWhere.= ' AND DATE(vl.sample_collection_date) <= "'.$end_date.' 23:59:00" AND DATE(vl.sample_collection_date) >= "'.$start_date.' 00:00:00"';
-	  }
-	  if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
-	    $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
-	  }
-	  if(isset($_POST['labName']) && trim($_POST['labName'])!= ''){
-	    $sWhere.= ' AND vl.lab_id = "'.$_POST['labName'].'"';
-	  }
-	  if(isset($_POST['clinicName']) && is_array($_POST['clinicName']) && count($_POST['clinicName']) > 0){
-	    $sWhere.= " AND vl.facility_id IN (".implode(',',$_POST['clinicName']).")";
-	  }
-	  $tQuery = $tQuery.' '.$sWhere;
-	  $tResult[$rejectedResult['rejection_reason_code']] = $db->rawQuery($tQuery);
-	  $tResult[$rejectedResult['rejection_reason_code']][0]['rejection_reason_name'] = $rejectedResult['rejection_reason_name']; 
-	  $tableResult[$rejectedResult['rejection_reason_code']] = $db->rawQuery($tQuery);
-	  if($tableResult[$rejectedResult['rejection_reason_code']][0]['total']==0){
-		 unset($tableResult[$rejectedResult['rejection_reason_code']]);
-	  }else{
-		$tableResult[$rejectedResult['rejection_reason_code']][0]['rejection_type'] = $rejectedResult['rejection_type'];
-		 $tableResult[$rejectedResult['rejection_reason_code']][0]['rejection_reason_name'] = $rejectedResult['rejection_reason_name']; 
-	  }
-	  $rejectionType[] = $rejectedResult['rejection_type'];
-   }
-   //get value by rejection type
-   $rejType = array_unique($rejectionType);
-   foreach($rejType as $type){
-   $rjQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl INNER JOIN 	r_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type where vl.vlsm_country_id='".$configFormResult[0]['value']."' AND sr.rejection_type='".$type."'";
-   $sWhere = '';
-	  if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-	    $sWhere.= ' AND DATE(vl.sample_collection_date) <= "'.$end_date.' 23:59:00" AND DATE(vl.sample_collection_date) >= "'.$start_date.' 00:00:00"';
-	  }
-	  if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
-	    $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
-	  }
-	  if(isset($_POST['labName']) && trim($_POST['labName'])!= ''){
-	    $sWhere.= ' AND vl.lab_id = "'.$_POST['labName'].'"';
-	  }
-	  if(isset($_POST['clinicName']) && is_array($_POST['clinicName']) && count($_POST['clinicName']) > 0){
-	    $sWhere.= " AND vl.facility_id IN (".implode(',',$_POST['clinicName']).")";
-	  }
-	  $rjQuery = $rjQuery.' '.$sWhere;
-	  $rjResult[$type] = $db->rawQuery($rjQuery);
-   }
+
+$tResult = array();
+//$rjResult = array();
+if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
+    $start_date = '';
+    $end_date = '';
+    $sWhere = '';
+    $s_c_date = explode("to", $_POST['sampleCollectionDate']);
+    //print_r($s_c_date);die;
+    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+        $start_date = $general->dateFormat(trim($s_c_date[0]));
+    }
+    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+        $end_date = $general->dateFormat(trim($s_c_date[1]));
+    }
+    //get value by rejection reason id
+    $vlQuery = "select count(*) as `total`, vl.reason_for_sample_rejection,sr.rejection_reason_name,sr.rejection_type,sr.rejection_reason_code,fd.facility_name, lab.facility_name as `labname`
+                FROM vl_request_form as vl
+                INNER JOIN r_sample_rejection_reasons as sr ON sr.rejection_reason_id=vl.reason_for_sample_rejection
+                INNER JOIN facility_details as fd ON fd.facility_id=vl.facility_id
+                INNER JOIN facility_details as lab ON lab.facility_id=vl.lab_id";
+    $sWhere .= ' where DATE(vl.sample_collection_date) <= "' . $end_date . '" AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" AND reason_for_sample_rejection!="" AND reason_for_sample_rejection IS NOT NULL';
+
+    if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
+        $sWhere .= ' AND s.sample_id = "' . $_POST['sampleType'] . '"';
+    }
+    if (isset($_POST['labName']) && trim($_POST['labName']) != '') {
+        $sWhere .= ' AND vl.lab_id = "' . $_POST['labName'] . '"';
+    }
+    if (isset($_POST['clinicName']) && is_array($_POST['clinicName']) && count($_POST['clinicName']) > 0) {
+        $sWhere .= " AND vl.facility_id IN (" . implode(',', $_POST['clinicName']) . ")";
+    }
+
+    $vlQuery = $vlQuery . $sWhere . " group by vl.reason_for_sample_rejection,vl.lab_id,vl.facility_id";
+
+    $tableResult = $db->rawQuery($vlQuery);
+
+    foreach ($tableResult as $tableRow) {
+        $tResult[$tableRow['rejection_reason_name']]['total'] += $tableRow['total'];
+        $tResult[$tableRow['rejection_reason_name']]['category'] = $tableRow['rejection_type'];
+
+        //$rjResult[$tableRow['rejection_type']]  += $tableRow['total'];
+    }
+
 }
-if(isset($tResult) && count($tResult)>0){
-?>
-<div id="container" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;"></div>
-<!--<div id="rejectedType" style="min-width: 410px; height: 400px; max-width: 600px; margin: 0 auto;float:right;"></div>-->
+
+if (isset($tResult) && count($tResult) > 0) {
+    ?>
+<div id="container" style="width: 100%; height: 500px; margin: 20px auto;"></div>
+<!-- <div id="rejectedType" style="width: 100%; height: 400px; margin: 20px auto;margin-top:50px;"></div> -->
 <?php }
-if(isset($tableResult) && count($tableResult)>0){ ?>
+if (isset($tableResult) && count($tableResult) > 0) {?>
 <div class="pull-right">
 <button class="btn btn-success" type="button" onclick="exportInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</button>
 </div>
-<?php } ?>
-<table id="vlRequestDataTable" class="table table-bordered table-striped">
+<?php }?>
+<table id="vlRequestDataTable" class="table table-bordered table-striped table-hover">
    <thead>
       <tr>
-         <th>Sample Collection Date</th>
+         <th>Lab Name</th>
          <th>Facility Name</th>
          <th>Rejection Reason</th>
-         <th>Reason Type</th>
-         <th>No. Of Records</th>
+         <th>Reason Category</th>
+         <th>No. of Samples</th>
       </tr>
    </thead>
    <tbody>
 		 <?php
-		 if(isset($tableResult) && count($tableResult)>0){
-			foreach($tableResult as $key=>$rejectedData){
-			   ?>
-			   <tr>
-				  <td><?php $dateExp = explode(" ",$rejectedData[0]['sample_collection_date']);
-				  echo $general->humanDateFormat($dateExp[0]);?></td>
-                  <td><?php echo ucwords($rejectedData[0]['facility_name']);?></td>
-				  <td><?php echo ucwords($rejectedData[0]['rejection_reason_name']);?></td>
-				  <td><?php echo strtoupper($rejectedData[0]['rejection_type']);?></td>
-				  <td><?php echo $rejectedData[0]['total'];?></td>
-			   </tr>
-			   <?php
-			}
-		 }
-		 ?>
+if (isset($tableResult) && count($tableResult) > 0) {
+    foreach ($tableResult as $tableRow) {
+        ?>
+                    <tr>
+                        <td><?php echo ucwords($tableRow['labname']); ?></td>
+                        <td><?php echo ucwords($tableRow['facility_name']); ?></td>
+                        <td><?php echo ucwords($tableRow['rejection_reason_name']); ?></td>
+                        <td><?php echo strtoupper($tableRow['rejection_type']); ?></td>
+                        <td><?php echo $tableRow['total']; ?></td>
+                    </tr>
+                    <?php
+}
+}
+?>
    </tbody>
 </table>
 <script>
@@ -117,7 +94,7 @@ if(isset($tableResult) && count($tableResult)>0){ ?>
 	  $("#vlRequestDataTable").DataTable();
 	});
     <?php
-    if(isset($tResult) && count($tResult)>0){ ?>
+if (isset($tResult) && count($tResult) > 0) {?>
       $('#container').highcharts({
                 chart: {
                     plotBackgroundColor: null,
@@ -126,7 +103,7 @@ if(isset($tableResult) && count($tableResult)>0){ ?>
                     type: 'pie'
                 },
                 title: {
-                    text: 'Sample Rejection Reason'
+                    text: 'Sample Rejection Reasons'
                 },
                 credits: {
                   enabled: false
@@ -160,18 +137,18 @@ if(isset($tableResult) && count($tableResult)>0){ ?>
 	    },
             data: [
             <?php
-            foreach($tResult as $key=>$total){
-                ?>
-                {name:'<?php echo ucwords($key);?>',y:<?php echo ucwords($total[0]['total']);?>,number:'<?php echo ucwords($total[0]['rejection_reason_name']);?>'},
+foreach ($tResult as $reasonName => $values) {
+    ?>
+                {name:'<?php echo $reasonName; ?>',y:<?php echo ucwords($values['total']); ?>,number:'<?php echo ucwords($values['category']); ?>'},
                 <?php
-            }
-            ?>
+}
+    ?>
             ]
         }]
       });
     <?php }
-	
-    if(isset($rjResult) && count($rjResult)>0){ ?>
+
+if (isset($rjResult) && count($rjResult) > 0) {?>
       $('#rejectedType').highcharts({
                 chart: {
                     plotBackgroundColor: null,
@@ -180,7 +157,7 @@ if(isset($tableResult) && count($tableResult)>0){ ?>
                     type: 'pie'
                 },
                 title: {
-                    text: 'Sample Rejection Reason Type'
+                    text: 'Sample Rejection by Categories'
                 },
                 credits: {
                   enabled: false
@@ -214,14 +191,14 @@ if(isset($tableResult) && count($tableResult)>0){ ?>
 	    },
             data: [
             <?php
-            foreach($rjResult as $key=>$total){
-                ?>
-                {name:'<?php echo ucwords($key);?>',y:<?php echo ucwords($total[0]['total']);?>},
+foreach ($rjResult as $key => $total) {
+    ?>
+                {name:'<?php echo ucwords($key); ?>',y:<?php echo ($total); ?>},
                 <?php
-            }
-            ?>
+}
+    ?>
             ]
         }]
       });
-    <?php } ?>
+    <?php }?>
 </script>
