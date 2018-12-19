@@ -362,7 +362,7 @@ $facilityName = ucwords($qResult[0]['instance_facility_name']);
        $pathFront=realpath('../temporary');
        $file_to_attach = $pathFront. DIRECTORY_SEPARATOR. $filename;
        $mail->AddAttachment($file_to_attach);
-       $message ='Hi Manager,<br>Please find the attached viral load weekly report '.$reportedDateRange;
+       $message ='Please find attached viral load weekly report '.$reportedDateRange;
        $message = nl2br($message);
        $mail->msgHTML($message);
        $mail->SMTPOptions = array(
