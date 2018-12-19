@@ -50,7 +50,7 @@ if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
    $pathFront=realpath('../uploads/');
    $file_to_attach = $pathFront. DIRECTORY_SEPARATOR. $reportFilename;
    $mail->AddAttachment($file_to_attach);
-   $message ='Hi Manager,<br>Please find the attached viral load weekly report '.$_POST['reportedDate'];
+   $message ='Please find attached viral load weekly report '.$_POST['reportedDate'];
    $message = nl2br($message);
    $mail->msgHTML($message);
    $mail->SMTPOptions = array(
