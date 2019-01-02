@@ -117,7 +117,7 @@ $sWhere = '';
       $sWhere.= ' AND b.batch_code = "'.$_POST['batchCode'].'"';
    }
    if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-      $sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+      //$sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
    }
    if(isset($_POST['sampleType']) && trim($_POST['sampleType'])!= ''){
       $sWhere.= ' AND s.sample_id = "'.$_POST['sampleType'].'"';
