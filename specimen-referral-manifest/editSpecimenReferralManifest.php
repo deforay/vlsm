@@ -8,16 +8,27 @@ $pResult = $db->rawQuery($pQuery);
 if($pResult[0]['package_status']=='dispatch'){
   header("location:packageList.php");
 }
-$query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id,vl.sample_package_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=".$id.") AND vl.vlsm_country_id = ".$global['vl_form'];
+if($sarr['user_type']=='remoteuser'){
+  $sCode = 'remote_sample_code';
+  $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='".$_SESSION['userId']."'";
+  $vlfmResult = $db->rawQuery($vlfmQuery);
+}else if($sarr['user_type']=='vluser' || $sarr['user_type']=='standalone'){
+  $sCode = 'sample_code';
+}
 
+$query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id,vl.sample_package_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=".$id.") AND vl.vlsm_country_id = ".$global['vl_form'];
+if(isset($vlfmResult[0]['facilityId']))
+{
+  $query = $query." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
+}
 $query = $query." ORDER BY vl.request_created_datetime ASC";
 
 $result = $db->rawQuery($query);
-if($sarr['user_type']=='remoteuser'){
-  $sCode = 'remote_sample_code';
-}else if($sarr['user_type']=='vluser'){
-  $sCode = 'sample_code';
-}
+// if($sarr['user_type']=='remoteuser'){
+//   $sCode = 'remote_sample_code';
+// }else if($sarr['user_type']=='vluser'){
+//   $sCode = 'sample_code';
+// }
 ?>
 <link href="../assets/css/multi-select.css" rel="stylesheet" />
 <style>
