@@ -90,6 +90,7 @@ try {
         'qc_date'=>$_POST['qcDate'],
         'clinic_date'=>$_POST['clinicDate'],
         'report_date'=>$_POST['reportDate'],
+        'data_sync'=>0
         );
         //print_r($vldata);die;
         if(isset($_POST['status']) && trim($_POST['status'])!= ''){

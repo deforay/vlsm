@@ -151,6 +151,7 @@ try {
                 $data['serial_no']=$rResult[0]['sample_code'];
                 if(count($vlResult)>0){
                     $data['vlsm_country_id']=$arr['vl_form'];
+                    $data['data_sync']=0; 
                     $db=$db->where('sample_code',$rResult[0]['sample_code']);
                     $result=$db->update($tableName1,$data);
                 }else{
@@ -220,6 +221,7 @@ try {
                         $batchResult = $db->insert('batch_details',array('batch_code'=>$accResult[$i]['batch_code'],'batch_code_key'=>$accResult[$i]['batch_code_key'],'sent_mail'=>'no','request_created_datetime'=>$general->getDateTime()));
                         $data['sample_batch_id'] = $db->getInsertId();
                     }
+                    $data['data_sync']=0;
                     $db=$db->where('sample_code',$accResult[$i]['sample_code']);
                     $result=$db->update($tableName1,$data);
                     $printSampleCode[] = "'".$accResult[$i]['sample_code']."'";
