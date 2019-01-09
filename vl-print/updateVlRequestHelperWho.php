@@ -52,7 +52,8 @@ try {
           'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
           'reason_for_vl_result_changes'=>(isset($_POST['reasonForResultChanges']) && $_POST['reasonForResultChanges']!='') ? $_POST['reasonForResultChanges'] :  NULL ,
           'last_modified_datetime'=>$general->getDateTime(),
-          'manual_result_entry'=>'yes'
+          'manual_result_entry'=>'yes',
+          'data_sync'=>0
         );
           $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
           $id=$db->update($tableName,$vldata);

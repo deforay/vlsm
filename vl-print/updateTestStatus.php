@@ -8,7 +8,8 @@ try {
     $id= explode(",",$_POST['id']);
     for($i=0;$i<count($id);$i++){
         $status=array(
-            'result_status'=>$_POST['status']
+            'result_status'=>$_POST['status'],
+            'data_sync'=>0
         );
         $db=$db->where('vl_sample_id',$id[$i]);
         $db->update($tableName,$status);

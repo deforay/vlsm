@@ -82,6 +82,7 @@ try {
           //'result_printed_datetime'=>$_POST['sampleTestingDateAtLab'],
           'last_modified_datetime'=>$general->getDateTime(),
           'lab_id'=>(isset($_POST['labId']) && $_POST['labId']!='' ? $_POST['labId'] :  NULL),
+          'data_sync'=>0
         );
         if(isset($_POST['status']) && trim($_POST['status'])!= ''){
             $vldata['result_status'] = $_POST['status'];
