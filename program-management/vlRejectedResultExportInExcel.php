@@ -88,7 +88,7 @@ if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralL
           $row[] = $aRow['patient_art_no'];
           $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);
           $row[] = $sampleCollectionDate;
-          $row[] = $aRow['result'];
+          $row[] = $aRow['labName'];
           $row[] = $aRow['rejection_reason_name'];
           $output[] = $row;
      }
