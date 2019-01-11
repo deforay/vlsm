@@ -5,7 +5,7 @@ require_once(__DIR__.'/config.production.php');
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vlrbc';
+$DBNAME = 'vl_lab_request';
 $PORT = 3306;
 
 
@@ -21,4 +21,4 @@ $PORT = 3306;
 
 // Linux : default for Ubuntu 16.04, may be different for your distribution
 $MYSQLDUMP = '/usr/bin/mysqldump';
-$REMOTEURL = 'https://vlsms.rbc.gov.rw/';
+$REMOTEURL = '';

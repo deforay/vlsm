@@ -112,7 +112,7 @@ $cResult = $db->rawQuery($cQuery);
     $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
-            startDate: moment().subtract('days', 29),
+            startDate: moment().subtract('days', 365),
             endDate: moment(),
             maxDate: moment(),
             ranges: {
