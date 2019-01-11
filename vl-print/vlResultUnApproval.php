@@ -27,6 +27,11 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
     overflow-y: visible !important;
     padding: 15px 0 !important;
     }
+
+    .sampleType select{
+      max-width:100px;
+      width:100px !important
+    }
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -78,7 +83,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
                   <th style="width: 10%;">General Lot No.</th>
                   <th style="width: 10%;">General Expiry Date</th>
                   <th style="width: 10%;">Reason</th>
-                  <th style="width: 9%;">Sample Type</th>
+                  <th style="max-width: 9%;">Sample Type</th>
                   <th style="width: 9%;">Result</th>
                   <th style="width: 9%;">Status</th>
                 </tr>
@@ -171,9 +176,9 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center","bSortable":false},
+                {"sClass":"center sampleType","bSortable":false},
                 {"sClass":"center","bSortable":false},
-                {"sClass":"center","bSortable":false},
-                {"sClass":"center","bSortable":false},
+                {"sClass":"center sampleType","bSortable":false},
             ],
 	    "iDisplayLength": 100,
             //"aaSorting": [[ 1, "desc" ]],
