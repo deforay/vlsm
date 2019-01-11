@@ -1,9 +1,9 @@
 <?php
 ob_start();
 $title = "VLSM | Add New Specimen Referral Manifest";
-include('../header.php');
-include('../General.php');
-$general=new General();
+include '../header.php';
+include '../General.php';
+$general = new General();
 $packageNo = $general->generateRandomString(8);
 ?>
 <link href="../assets/css/multi-select.css" rel="stylesheet" />
@@ -44,7 +44,7 @@ $packageNo = $general->generateRandomString(8);
                     <div class="form-group">
                         <label for="packageCode" class="col-lg-4 control-label">Manifest Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
-                        <input type="text" class="form-control isRequired" id="packageCode" name="packageCode" placeholder="Manifest Code" title="Please enter manifest code" readonly value="<?php echo strtoupper($packageNo);?>" />
+                        <input type="text" class="form-control isRequired" id="packageCode" name="packageCode" placeholder="Manifest Code" title="Please enter manifest code" readonly value="<?php echo strtoupper($packageNo); ?>" />
                         </div>
                     </div>
                   </div>
@@ -106,7 +106,7 @@ $packageNo = $general->generateRandomString(8);
 	     $selectionSearch = that.$selectionUl.prev(),
 	     selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
 	     selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
-     
+
 	 that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
 	 .on('keydown', function(e){
 	   if (e.which === 40){
@@ -114,7 +114,7 @@ $packageNo = $general->generateRandomString(8);
 	     return false;
 	   }
 	 });
-     
+
 	 that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
 	 .on('keydown', function(e){
 	   if (e.which == 40){
@@ -160,7 +160,7 @@ $packageNo = $general->generateRandomString(8);
 	  this.qs2.cache();
        }
      });
-      
+
       $('#select-all-samplecode').click(function(){
        $('#sampleCode').multiSelect('select_all');
        return false;
@@ -172,7 +172,7 @@ $packageNo = $general->generateRandomString(8);
        return false;
      });
    });
-   
+
    function checkNameValidation(tableName,fieldName,obj,fnct,alrt,callback){
         var removeDots=obj.value.replace(/\./g,"");
         var removeDots=removeDots.replace(/\,/g,"");
@@ -188,7 +188,7 @@ $packageNo = $general->generateRandomString(8);
             }
         });
     }
-    
+
     function getSampleCodeDetails(){
       $.blockUI();
       $.post("getSpecimenReferralManifestSampleCodeDetails.php",
@@ -203,5 +203,5 @@ $packageNo = $general->generateRandomString(8);
     }
   </script>
  <?php
- include('../footer.php');
- ?>
+include '../footer.php';
+?>

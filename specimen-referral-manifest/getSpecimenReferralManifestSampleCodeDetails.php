@@ -30,10 +30,11 @@ $query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id FROM vl_requ
 // if(isset($rpResult[0]['sampleId'])){
 //     $query = $query." AND vl_sample_id NOT IN(".$rpResult[0]['sampleId'].")";
 // }
-if(isset($vlfmResult[0]['facilityId']))
-{
+if(isset($vlfmResult[0]['facilityId'])){
   $query = $query." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
 }
+
+$query = $query. " ";
 
 $query = $query." ORDER BY vl.request_created_datetime ASC";
 $result = $db->rawQuery($query);
