@@ -222,13 +222,16 @@ try {
           $eventType = 'add-vl-request-zm';
           $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
           $resource = 'vl-request-zm';
-          $data=array(
-               'event_type'=>$eventType,
-               'action'=>$action,
-               'resource'=>$resource,
-               'date_time'=>$general->getDateTime()
-          );
-          $db->insert($tableName1,$data);
+
+          $general->activityLog($eventType,$action,$resource);
+          
+        //   $data=array(
+        //        'event_type'=>$eventType,
+        //        'action'=>$action,
+        //        'resource'=>$resource,
+        //        'date_time'=>$general->getDateTime()
+        //   );
+        //   $db->insert($tableName1,$data);
           if(isset($_POST['saveNext']) && $_POST['saveNext']=='next'){
                $_SESSION['treamentId'] = $id;
                header("location:addVlRequest.php");

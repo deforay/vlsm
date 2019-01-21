@@ -97,13 +97,16 @@ try {
         $eventType = 'update-vl-result-drc';
         $action = ucwords($_SESSION['userName']).' updated a result data with the patient code '.$_POST['dubPatientArtNo'];
         $resource = 'vl-result-drc';
-         $data=array(
-        'event_type'=>$eventType,
-        'action'=>$action,
-        'resource'=>$resource,
-        'date_time'=>$general->getDateTime()
-        );
-        $db->insert($tableName1,$data);
+
+        $general->activityLog($eventType,$action,$resource);
+        
+        //  $data=array(
+        // 'event_type'=>$eventType,
+        // 'action'=>$action,
+        // 'resource'=>$resource,
+        // 'date_time'=>$general->getDateTime()
+        // );
+        // $db->insert($tableName1,$data);
         //Add update result log
         $data=array(
         'user_id'=>$_SESSION['userId'],
@@ -112,6 +115,7 @@ try {
         );
         $db->insert($tableName2,$data);
         header("location:vlTestResult.php");
+
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

@@ -154,13 +154,16 @@ try {
           $eventType = 'update-vl-request-zm';
           $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['serialNo'];
           $resource = 'vl-request-zm';
-          $data=array(
-               'event_type'=>$eventType,
-               'action'=>$action,
-               'resource'=>$resource,
-               'date_time'=>$general->getDateTime()
-          );
-          $db->insert($tableName1,$data);
+
+          $general->activityLog($eventType,$action,$resource);
+
+        //   $data=array(
+        //        'event_type'=>$eventType,
+        //        'action'=>$action,
+        //        'resource'=>$resource,
+        //        'date_time'=>$general->getDateTime()
+        //   );
+        //   $db->insert($tableName1,$data);
      }else{
           $_SESSION['alertMsg']="Please try again later";
      }
