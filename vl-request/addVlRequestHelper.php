@@ -303,16 +303,20 @@ try {
         if($id>0){
              $_SESSION['alertMsg']="VL request added successfully";
              //Add event log
+
              $eventType = 'add-vl-request-sudan';
              $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
              $resource = 'vl-request-ss';
-             $data=array(
-             'event_type'=>$eventType,
-             'action'=>$action,
-             'resource'=>$resource,
-             'date_time'=>$general->getDateTime()
-             );
-             $db->insert($tableName1,$data);
+
+             $general->activityLog($eventType,$action,$resource);
+  
+             //  $data=array(
+            //  'event_type'=>$eventType,
+            //  'action'=>$action,
+            //  'resource'=>$resource,
+            //  'date_time'=>$general->getDateTime()
+            //  );
+            //  $db->insert($tableName1,$data);
 
              $barcode = "";
             if(isset($_POST['printBarCode']) && $_POST['printBarCode'] =='on'){

@@ -338,13 +338,16 @@ try {
              $eventType = 'update-vl-request-rwd';
              $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
              $resource = 'vl-request-rwd';
-             $data=array(
-             'event_type'=>$eventType,
-             'action'=>$action,
-             'resource'=>$resource,
-             'date_time'=>$general->getDateTime()
-             );
-             $db->insert($tableName1,$data);
+           
+             $general->activityLog($eventType,$action,$resource);
+             
+            //  $data=array(
+            //  'event_type'=>$eventType,
+            //  'action'=>$action,
+            //  'resource'=>$resource,
+            //  'date_time'=>$general->getDateTime()
+            //  );
+            //  $db->insert($tableName1,$data);
              header("location:vlRequest.php");
         }else{
              $_SESSION['alertMsg']="Please try again later";

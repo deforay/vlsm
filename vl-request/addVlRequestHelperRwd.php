@@ -294,13 +294,17 @@ try {
              $eventType = 'add-vl-request-rwd';
              $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
              $resource = 'vl-request-rwd';
-             $data=array(
-             'event_type'=>$eventType,
-             'action'=>$action,
-             'resource'=>$resource,
-             'date_time'=>$general->getDateTime()
-             );
-             $db->insert($tableName1,$data);
+     
+             $general->activityLog($eventType,$action,$resource);
+             
+            //  $data=array(
+            //  'event_type'=>$eventType,
+            //  'action'=>$action,
+            //  'resource'=>$resource,
+            //  'date_time'=>$general->getDateTime()
+            //  );
+            //  $db->insert($tableName1,$data);
+
              $barcode = "";
             if(isset($_POST['printBarCode']) && $_POST['printBarCode'] =='on'){
                   $s = $_POST['sampleCode'];

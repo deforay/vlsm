@@ -99,13 +99,15 @@ if(isset($result[0]['result_reviewed_datetime']) && trim($result[0]['result_revi
 $eventType = 'view-vl-request';
 $action = ucwords($_SESSION['userName']).' viewed a request data with the sample code '.$result[0]['sample_code'];
 $resource = 'vl-request';
-$data=array(
-'event_type'=>$eventType,
-'action'=>$action,
-'resource'=>$resource,
-'date_time'=>$general->getDateTime()
-);
-$db->insert($tableName1,$data);
+$general->activityLog($eventType,$action,$resource);
+
+// $data=array(
+// 'event_type'=>$eventType,
+// 'action'=>$action,
+// 'resource'=>$resource,
+// 'date_time'=>$general->getDateTime()
+// );
+// $db->insert($tableName1,$data);
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

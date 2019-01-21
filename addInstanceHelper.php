@@ -91,13 +91,17 @@ try {
             $eventType = 'add-instance';
             $action = ucwords($_SESSION['userName']).' added instance id';
             $resource = 'instance-details';
-            $data=array(
-                'event_type'=>$eventType,
-                'action'=>$action,
-                'resource'=>$resource,
-                'date_time'=>$general->getDateTime()
-            );
-            $db->insert('activity_log',$data);
+
+            $general->activityLog($eventType,$action,$resource);
+            
+            // $data=array(
+            //     'event_type'=>$eventType,
+            //     'action'=>$action,
+            //     'resource'=>$resource,
+            //     'date_time'=>$general->getDateTime()
+            // );
+            // $db->insert('activity_log',$data);
+            
             $_SESSION['alertMsg']="Instance details added successfully";
             $_SESSION['success']="success";
         }else{
