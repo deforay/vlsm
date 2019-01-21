@@ -1533,3 +1533,6 @@ ALTER TABLE `facility_details` ADD `header_text` VARCHAR(255) NULL DEFAULT NULL 
 -- Version 3.9.8 ---------- Amit 11-Dec-2018
 
 -- Version 3.9.9 ---------- Amit 11-Jan-2018
+
+-- saravanan 21-jan-2019
+ALTER TABLE `activity_log` ADD `ip_address` VARCHAR(255) NULL DEFAULT NULL AFTER `date_time`;
