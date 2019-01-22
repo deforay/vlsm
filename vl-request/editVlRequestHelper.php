@@ -283,9 +283,9 @@ try {
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log
       
-          $eventType = 'update-vl-request-rwd';
+          $eventType = 'update-vl-request-sudan';
           $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
-          $resource = 'vl-request-rwd';
+          $resource = 'vl-request-ss';
 
              $general->activityLog($eventType,$action,$resource);
           
