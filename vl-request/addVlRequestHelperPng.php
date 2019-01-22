@@ -219,9 +219,9 @@ try {
      if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
-          $eventType = 'add-vl-request-zm';
+          $eventType = 'add-vl-request-png';
           $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['sampleCode'];
-          $resource = 'vl-request-zm';
+          $resource = 'vl-request-png';
 
           $general->activityLog($eventType,$action,$resource);
           

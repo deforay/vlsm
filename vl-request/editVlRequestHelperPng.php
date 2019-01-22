@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
