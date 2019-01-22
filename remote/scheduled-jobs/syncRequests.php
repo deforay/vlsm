@@ -66,8 +66,8 @@ if(count($result)>0){
             'sample_tested_datetime',
             'sample_received_at_vl_lab_datetime',
             'result_dispatched_datetime',
-            //'is_sample_rejected',
-            //'reason_for_sample_rejection',
+            'is_sample_rejected',
+            'reason_for_sample_rejection',
             'result_approved_by');
         foreach($removeKeys as $keys){
             unset($lab[$keys]);
