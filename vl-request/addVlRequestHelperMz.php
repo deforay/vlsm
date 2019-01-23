@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
@@ -122,9 +122,9 @@ try {
           if($id>0){
           $_SESSION['alertMsg']="VL request added successfully";
           //Add event log
-          $eventType = 'add-vl-request-zm';
+          $eventType = 'add-vl-request-mz';
           $action = ucwords($_SESSION['userName']).' added a new request data with the sample code '.$_POST['orderNo'];
-          $resource = 'vl-request-zm';
+          $resource = 'vl-request-mz';
 
           $general->activityLog($eventType,$action,$resource);
           

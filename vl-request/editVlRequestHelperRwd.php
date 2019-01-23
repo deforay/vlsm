@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
@@ -348,10 +348,12 @@ try {
             //  'date_time'=>$general->getDateTime()
             //  );
             //  $db->insert($tableName1,$data);
-             header("location:vlRequest.php");
+             
         }else{
              $_SESSION['alertMsg']="Please try again later";
         }
+        header("location:vlRequest.php");
+        
 
 } catch (Exception $exc) {
     error_log($exc->getMessage());
