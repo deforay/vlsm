@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
 $vlTestReasonTable="r_vl_test_reasons";
@@ -283,9 +283,9 @@ try {
           $_SESSION['alertMsg']="VL request updated successfully";
           //Add event log
       
-          $eventType = 'update-vl-request-rwd';
+          $eventType = 'update-vl-request-sudan';
           $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['sampleCode'];
-          $resource = 'vl-request-rwd';
+          $resource = 'vl-request-ss';
 
              $general->activityLog($eventType,$action,$resource);
           
