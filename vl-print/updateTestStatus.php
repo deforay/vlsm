@@ -11,6 +11,18 @@ try {
             'result_status'=>$_POST['status'],
             'data_sync'=>0
         );
+        if($_POST['status']=='4')
+        {
+            $status['result_value_log'] = '';
+            $status['result_value_absolute'] = '';
+            $status['result_value_text'] = '';
+            $status['result_value_absolute_decimal'] = '';
+            $status['result'] = '';
+            $status['is_sample_rejected'] = 'yes';
+            $status['reason_for_sample_rejection'] = $_POST['rejectedReason'];
+        }else{
+            $status['is_sample_rejected'] = 'no';
+        }
         $db=$db->where('vl_sample_id',$id[$i]);
         $db->update($tableName,$status);
         $result = $id[$i];
