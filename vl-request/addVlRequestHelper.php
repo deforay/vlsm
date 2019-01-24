@@ -313,6 +313,7 @@ try {
              'date_time'=>$general->getDateTime()
              );
              $db->insert($tableName1,$data);
+             
 
              $barcode = "";
             if(isset($_POST['printBarCode']) && $_POST['printBarCode'] =='on'){

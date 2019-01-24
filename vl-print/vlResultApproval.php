@@ -10,11 +10,49 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
+
+$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+//sample rejection reason
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
+$rejectionReason = '<option value="">-- Select sample rejection reason --</option>';
+        foreach($rejectionTypeResult as $type) { 
+          $rejectionReason .= '<optgroup label="'.ucwords($type['rejection_type']).'">';
+          foreach($rejectionResult as $reject){
+            if($type['rejection_type'] == $reject['rejection_type']){
+              $rejectionReason .= '<option value="'.$reject['rejection_reason_id'].'">'.ucwords($reject['rejection_reason_name']).'</option>';
+            }
+          }
+          $rejectionReason .= '</optgroup>';
+        }
 ?>
   <style>
     .select2-selection__choice{
       color:black !important;
     }
+    #rejectReasonDiv {
+      border: 1px solid #ecf0f5;
+      box-shadow: 3px 3px 15px #000;
+      background-color:#ecf0f5;
+      width:50%;
+      display:none;
+      padding:10px;
+      border-radius:10px;
+    }
+    .arrow-right {
+      width: 0;
+      height: 0; 
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left: 15px solid #ecf0f5;
+      position:absolute;
+      left:100%;
+      top:24px;
+    }
+
   </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -27,6 +65,16 @@ $batResult = $db->rawQuery($batQuery);
       </ol>
     </section>
 
+<!-- for sample rejection -->
+<div id="rejectReasonDiv">
+<div class="arrow-right"></div>
+<input type="hidden" name="statusDropDownId" id="statusDropDownId"/>
+<h3 style="color:red;">Choose Rejected Reason</h3>
+    <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="updateRejectionReasonStatus(this);">
+        <?php echo $rejectionReason;?>
+    </select>
+                              
+</div>
      <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -91,11 +139,16 @@ $batResult = $db->rawQuery($batQuery);
             <div class="box-header with-border">
 		<div class="col-md-5 col-sm-5">
 		    <input type="hidden" name="checkedTests" id="checkedTests"/>
-		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled="disabled">
+		    <select style="" class="form-control" id="status" name="status" title="Please select test status" disabled="disabled" onchange="showSampleRejectionReason()">
 		      <option value="">-- Select at least one sample to apply bulk action --</option>
 		      <option value="7">Accepted</option>
 		      <option value="4">Rejected</option>
 		      <option value="2">Lost</option>
+		    </select>
+		</div>
+    <div style="display:none;"  class="col-md-5 col-sm-5 bulkRejectionReason">
+		    <select class="form-control" id="bulkRejectionReason" name="bulkRejectionReason" title="Please select test status">
+          <?php echo $rejectionReason;?>
 		    </select>
 		</div>
 		<div class="col-md-2 col-sm-2"><input type="button" onclick="submitTestStatus();" value="Apply" class="btn btn-success btn-sm"></div>
@@ -310,7 +363,7 @@ $batResult = $db->rawQuery($batQuery);
     if(stValue!='' && testIds!=''){
       conf=confirm("Do you wish to change the test status ?");
       if (conf) {
-    $.post("updateTestStatus.php", { status : stValue,id:testIds},
+    $.post("updateTestStatus.php", { status : stValue,id:testIds,rejectedReason:$("#bulkRejectionReason").val()},
       function(data){
 	  if(data != ""){
 	    $("#checkedTests").val('');
@@ -319,6 +372,8 @@ $batResult = $db->rawQuery($batQuery);
 	    $("#checkTestsData").attr("checked",false);
 	    $("#status").val('');
 	    $("#status").prop('disabled', true);
+      $("#bulkRejectionReason").val('');
+      $(".bulkRejectionReason").hide();
 	    oTable.fnDraw();
 	    alert('Updated successfully.');
 	  }
@@ -330,24 +385,71 @@ $batResult = $db->rawQuery($batQuery);
    }
   function updateStatus(obj)
   {
-   if(obj.value!=''){
+    if(obj.value=='4'){
+      var pos = $("#"+obj.id).offset();
+      $("#rejectReasonDiv").show();
+      $("#rejectReasonDiv").css({top: Math.round(pos.top) - 30, position:'absolute','z-index':1,right:'15%'});
+      $("#statusDropDownId").val(obj.id);
+      return false;
+    }else{
+      $("#rejectReasonDiv").hide();
+    }
+    if(obj.value!=''){
      conf=confirm("Do you wish to change the status ?");
-     if (conf) {
-   $.post("updateTestStatus.php", { status : obj.value,id:obj.id},
-     function(data){
-       if(data != ""){
-	 $("#checkedTests").val('');
-	   selectedTests = [];
-	   selectedTestsId = [];
-	   $("#checkTestsData").attr("checked",false);
-	   $("#status").val('');
-	   $("#status").prop('disabled', true);
-	   oTable.fnDraw();
-	   alert('Updated successfully.');
-       }
-     });
-   }
+      if (conf) {
+          $.post("updateTestStatus.php", { status : obj.value,id:obj.id},
+          function(data){
+            if(data != ""){
+              $("#checkedTests").val('');
+              selectedTests = [];
+              selectedTestsId = [];
+              $("#checkTestsData").attr("checked",false);
+              $("#status").val('');
+              $("#status").prop('disabled', true);
+              oTable.fnDraw();
+              alert('Updated successfully.');
+            }
+        });
+      }else{
+        $("#rejectReasonDiv").hide();
+      }
+    }
   }
+
+  function updateRejectionReasonStatus(obj)
+  {
+    if(obj.value!=''){
+     conf=confirm("Do you wish to change the status ?");
+      if (conf) {
+          $.post("updateTestStatus.php", { status : '4',id:$("#statusDropDownId").val(),rejectedReason:obj.value},
+          function(data){
+            if(data != ""){
+              $("#checkedTests").val('');
+              selectedTests = [];
+              selectedTestsId = [];
+              $("#checkTestsData").attr("checked",false);
+              $("#status").val('');
+              $("#status").prop('disabled', true);
+              $("#rejectReasonDiv").hide();
+              $("#statusDropDownId").val('');
+              $("#rejectionReason").val('');
+              oTable.fnDraw();
+              alert('Updated successfully.');
+            }
+        });
+      }else{
+        $("#rejectReasonDiv").hide();
+      }
+    }
+  }
+  function showSampleRejectionReason()
+  {
+    if($("#status").val()=='4'){
+      $(".bulkRejectionReason").show();
+    }else{
+      $("#bulkRejectionReason").val('');
+      $(".bulkRejectionReason").hide();
+    }
   }
 //  
 //  function printBarcode(tId) {
