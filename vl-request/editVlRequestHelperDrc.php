@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
@@ -320,20 +320,28 @@ try {
             $eventType = 'update-vl-result-drc';
             $action = ucwords($_SESSION['userName']).' updated a result data with the patient code '.$_POST['patientArtNo'];
             $resource = 'vl-result-drc';
+
+          $general->activityLog($eventType,$action,$resource);
+            
         }else{
             $_SESSION['alertMsg']="VL request updated successfully";
             //Add event log
             $eventType = 'edit-vl-request-drc';
             $action = ucwords($_SESSION['userName']).' updated a request data with the patient code '.$_POST['patientArtNo'];
             $resource = 'vl-request-drc'; 
+
+            $general->activityLog($eventType,$action,$resource);
+            
         }
-        $data=array(
-        'event_type'=>$eventType,
-        'action'=>$action,
-        'resource'=>$resource,
-        'date_time'=>$general->getDateTime()
-        );
-        $db->insert($tableName1,$data);
+      
+        // $data=array(
+        // 'event_type'=>$eventType,
+        // 'action'=>$action,
+        // 'resource'=>$resource,
+        // 'date_time'=>$general->getDateTime()
+        // );
+        // $db->insert($tableName1,$data);
+
     }else{
         $_SESSION['alertMsg']="Please try again later";
     }

@@ -56,13 +56,16 @@ if(isset($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']) && trim($vlQuery
 $eventType = 'view-vl-request-zm';
 $action = ucwords($_SESSION['userName']).' viewed a request data with the sample code '.$vlQueryInfo[0]['sample_code'];
 $resource = 'vl-request-zm';
-$data=array(
-'event_type'=>$eventType,
-'action'=>$action,
-'resource'=>$resource,
-'date_time'=>$general->getDateTime()
-);
-$db->insert($tableName1,$data);
+
+$general->activityLog($eventType,$action,$resource);
+
+// $data=array(
+// 'event_type'=>$eventType,
+// 'action'=>$action,
+// 'resource'=>$resource,
+// 'date_time'=>$general->getDateTime()
+// );
+// $db->insert($tableName1,$data);
 
 ?>
 <style>

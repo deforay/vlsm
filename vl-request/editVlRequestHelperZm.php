@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
@@ -154,13 +154,16 @@ try {
           $eventType = 'update-vl-request-zm';
           $action = ucwords($_SESSION['userName']).' updated a request data with the sample code '.$_POST['serialNo'];
           $resource = 'vl-request-zm';
-          $data=array(
-               'event_type'=>$eventType,
-               'action'=>$action,
-               'resource'=>$resource,
-               'date_time'=>$general->getDateTime()
-          );
-          $db->insert($tableName1,$data);
+
+          $general->activityLog($eventType,$action,$resource);
+
+        //   $data=array(
+        //        'event_type'=>$eventType,
+        //        'action'=>$action,
+        //        'resource'=>$resource,
+        //        'date_time'=>$general->getDateTime()
+        //   );
+        //   $db->insert($tableName1,$data);
      }else{
           $_SESSION['alertMsg']="Please try again later";
      }
