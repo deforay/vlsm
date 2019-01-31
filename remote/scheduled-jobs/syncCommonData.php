@@ -72,7 +72,7 @@ if(count($result['sampleType'])>0){
     // this way any additional rows in local that are not on remote
     // become inactive.
 
-    $db->update('r_sample_type',array('status'=>'inactive'));    
+    //$db->update('r_sample_type',array('status'=>'inactive'));    
 
     foreach($result['sampleType'] as $type){
         $sTypeQuery = "select * from r_sample_type where sample_id=".$type['sample_id'];
@@ -96,7 +96,7 @@ if(count($result['artCode'])>0){
     // this way any additional rows in local that are not on remote
     // become inactive.
 
-    $db->update('r_art_code_details',array('art_status'=>'inactive'));    
+    //$db->update('r_art_code_details',array('art_status'=>'inactive'));    
 
     foreach($result['artCode'] as $artCode){
         $artCodeQuery = "select * from r_art_code_details where art_id=".$artCode['art_id'];
@@ -123,7 +123,7 @@ if(count($result['rejectReason'])>0){
     // this way any additional rows in local that are not on remote
     // become inactive.
 
-    $db->update('r_sample_rejection_reasons',array('rejection_reason_status'=>'inactive'));    
+    //$db->update('r_sample_rejection_reasons',array('rejection_reason_status'=>'inactive'));    
 
     foreach($result['rejectReason'] as $reason){
         $rejectQuery = "select * from r_sample_rejection_reasons where rejection_reason_id=".$reason['rejection_reason_id'];
@@ -171,7 +171,7 @@ if(count($result['facilityResult'])>0){
     // this way any additional rows in local that are not on remote
     // become inactive.
 
-    $db->update('facility_details',array('status'=>'inactive'));
+    //$db->update('facility_details',array('status'=>'inactive'));
 
     foreach($result['facilityResult'] as $facility){
         $facilityQuery = "select * from facility_details where facility_id=".$facility['facility_id'];

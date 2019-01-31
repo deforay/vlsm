@@ -69,7 +69,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
 <div id="rejectReasonDiv">
 <div class="arrow-right"></div>
 <input type="hidden" name="statusDropDownId" id="statusDropDownId"/>
-<h3 style="color:red;">Choose Rejected Reason</h3>
+<h3 style="color:red;">Choose Rejection Reason</h3>
     <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="updateRejectionReasonStatus(this);">
         <?php echo $rejectionReason;?>
     </select>
