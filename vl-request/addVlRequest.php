@@ -248,7 +248,7 @@ if($arr['vl_form']==1){
                                                                                                                         $("#sampleCodeValue").html('').hide();
                                                                                                                         <?php }  } else { ?>
                                                                                                                              data = data.split("##");
-                                                                                                                           //  document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
+                                                                                                                             document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
                                                                                                                              <?php } ?>
                                                                                                                         }
                                                                                                                    });
