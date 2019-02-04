@@ -125,17 +125,18 @@ $sWhere = '';
    if(isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) >0){
       $sWhere.= ' AND f.facility_id IN ('.implode(",",$_POST['facilityName']).')';
    }
-   $tatSampleQuery = $tatSampleQuery." ".$sWhere;
+    $tatSampleQuery = $tatSampleQuery." ".$sWhere;
    $tatResult = $db->rawQuery($tatSampleQuery);
    $j=0;
    foreach($tatResult as $sRow){
        if($sRow["monthDate"] == null) continue;
-       $result['sampleTestedDiff'][$j] = (isset($sRow["AvgTestedDiff"]) && $sRow["AvgTestedDiff"] > 0 && $sRow["AvgTestedDiff"] != NULL) ? round($sRow["AvgTestedDiff"],2) : null;
-       $result['sampleReceivedDiff'][$j] = (isset($sRow["AvgReceivedDiff"]) && $sRow["AvgReceivedDiff"] > 0 && $sRow["AvgReceivedDiff"] != NULL) ? round($sRow["AvgReceivedDiff"],2) : null;
-       $result['samplePrintedDiff'][$j] = (isset($sRow["AvgPrintedDiff"]) && $sRow["AvgPrintedDiff"] > 0 && $sRow["AvgPrintedDiff"] != NULL) ? round($sRow["AvgPrintedDiff"],2) : null;
+       $result['sampleTestedDiff'][$j] = (isset($sRow["AvgTestedDiff"]) && $sRow["AvgTestedDiff"] > 0 && $sRow["AvgTestedDiff"] != NULL) ? round($sRow["AvgTestedDiff"],2) : 0;
+       $result['sampleReceivedDiff'][$j] = (isset($sRow["AvgReceivedDiff"]) && $sRow["AvgReceivedDiff"] > 0 && $sRow["AvgReceivedDiff"] != NULL) ? round($sRow["AvgReceivedDiff"],2) : 0;
+       $result['samplePrintedDiff'][$j] = (isset($sRow["AvgPrintedDiff"]) && $sRow["AvgPrintedDiff"] > 0 && $sRow["AvgPrintedDiff"] != NULL) ? round($sRow["AvgPrintedDiff"],2) : 0;
        $result['date'][$j] = $sRow["monthDate"];
        $j++;
    }
+
 ?>
 <div class="col-xs-12">
     <div class="box">
