@@ -67,6 +67,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
 
 <!-- for sample rejection -->
 <div id="rejectReasonDiv">
+<a href="javascript:void(0)" style="float:right;color:red;" onclick="hideReasonDiv('rejectReasonDiv')"><i class="fa fa-close"></i></a>
 <div class="arrow-right"></div>
 <input type="hidden" name="statusDropDownId" id="statusDropDownId"/>
 <h3 style="color:red;">Choose Rejection Reason</h3>
@@ -383,14 +384,20 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
       alert("Please be checked atleast one checkbox.");
     }
    }
-  function updateStatus(obj)
+  function updateStatus(obj,optVal)
   {
     if(obj.value=='4'){
-      var pos = $("#"+obj.id).offset();
-      $("#rejectReasonDiv").show();
-      $("#rejectReasonDiv").css({top: Math.round(pos.top) - 30, position:'absolute','z-index':1,right:'15%'});
-      $("#statusDropDownId").val(obj.id);
-      return false;
+      var confrm = confirm("Do you wish to overwrite this result?");
+      if(confrm){
+        var pos = $("#"+obj.id).offset();
+        $("#rejectReasonDiv").show();
+        $("#rejectReasonDiv").css({top: Math.round(pos.top) - 30, position:'absolute','z-index':1,right:'15%'});
+        $("#statusDropDownId").val(obj.id);
+        return false;
+      }else{
+        $("#"+obj.id).val(optVal);
+        return false;
+      }
     }else{
       $("#rejectReasonDiv").hide();
     }
@@ -450,6 +457,11 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
       $("#bulkRejectionReason").val('');
       $(".bulkRejectionReason").hide();
     }
+  }
+
+  function hideReasonDiv(id)
+  {
+    $("#"+id).hide();
   }
 //  
 //  function printBarcode(tId) {

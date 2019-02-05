@@ -219,9 +219,11 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           // print_r($rResult);
           /* Data set length after filtering */
 
-          $aResultFilterTotal =$db->rawQuery($sQuery);
+          $aResultFilterTotal =$db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id  $sWhere order by $sOrder");
           $iFilteredTotal = count($aResultFilterTotal);
-          $iTotal = $iFilteredTotal;
+
+          $aResultTotal = $db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
+          $iTotal = count($aResultTotal);
 
           /*
           * Output
@@ -254,7 +256,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow['patient_art_no']));
 
 
-               $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['vl_sample_id'].'" title="Please select status" onchange="updateStatus(this)">
+               $status = '<select class="form-control" style="" name="status[]" id="'.$aRow['vl_sample_id'].'" title="Please select status" onchange="updateStatus(this,'.$aRow['status_id'].')">
                <option value="">-- Select --</option>
                <option value="7" '.($aRow['status_id']=="7" ? "selected=selected" : "").'>Accepted</option>
                <option value="4" '.($aRow['status_id']=="4"  ? "selected=selected" : "").'>Rejected</option>
