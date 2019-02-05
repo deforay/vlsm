@@ -24,9 +24,13 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
+        $aColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name');
+        $orderColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.sample_collection_date','fd.facility_name','rsrr.rejection_reason_name');
         
-        $aColumns = array('f.facility_name','vl.patient_art_no','vl.patient_first_name',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name');
-        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.sample_collection_date','fd.facility_name','rsrr.rejection_reason_name');
+        if($sarr['user_type']=='standalone') {
+        $aColumns = array('vl.sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'fd.facility_name','rsrr.rejection_reason_name');
+        $orderColumns = array('vl.sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.sample_collection_date','fd.facility_name','rsrr.rejection_reason_name');
+        }
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -203,6 +207,10 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
                 $patientMname = $general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]);
                 $patientLname = $general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]);
             $row = array();
+            $row[] = $aRow['sample_code'];
+            if($sarr['user_type']!='standalone'){
+                    $row[] = $aRow['remote_sample_code'];
+            }
             $row[] = ($aRow['facility_name']);
             $row[] = $aRow['patient_art_no'];
             $row[] = ($patientFname." ".$patientMname." ".$patientLname);

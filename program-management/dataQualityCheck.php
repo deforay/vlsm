@@ -17,14 +17,6 @@ $sarr = array();
 for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
-//system config
-$systemConfigQuery ="SELECT * from system_config";
-$systemConfigResult=$db->query($systemConfigQuery);
-$sarr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
-}
 
 $general=new General();
 $tableName="vl_request_form";
@@ -33,8 +25,12 @@ $primaryKey="vl_sample_id";
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
-$aColumns = array('vl.serial_no',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
-$orderColumns = array('vl.serial_no','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+$aColumns = array('vl.sample_code','vl.remote_sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+$orderColumns = array('vl.sample_code','vl.remote_sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+if($sarr['user_type']=='standalone') {
+$aColumns = array('vl.sample_code',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')",'b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+$orderColumns = array('vl.sample_code','vl.sample_collection_date','b.batch_code','vl.patient_art_no','vl.patient_first_name','f.facility_name','f.facility_state','f.facility_district','s.sample_name','vl.result','ts.status_name');
+}
 
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = $primaryKey;
@@ -246,7 +242,10 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                                                        $patientMname = ucwords($general->crypto('decrypt',$aRow['patient_middle_name'],$aRow['patient_art_no']));
                                                        $patientLname = ucwords($general->crypto('decrypt',$aRow['patient_last_name'],$aRow['patient_art_no']));
                                                        $row = array();
-                                                       $row[] = $aRow['serial_no'];
+                                                       $row[] = $aRow['sample_code'];
+                                                       if($sarr['user_type']!='standalone'){
+                                                        $row[] = $aRow['remote_sample_code'];
+                                                }
                                                        $row[] = $aRow['sample_collection_date'];
                                                        $row[] = $aRow['batch_code'];
                                                        $row[] = $aRow['patient_art_no'];

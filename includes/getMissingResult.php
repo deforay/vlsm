@@ -336,7 +336,7 @@ $sWhere = '';
             showInLegend: true,
             name: 'Collected - Received at Lab',
             data: [<?php echo implode(",",$result['sampleReceivedDiff']);?>],
-            color : '#9c9393',
+            color : '#333333',
         },
         <?php
         }
@@ -346,7 +346,7 @@ $sWhere = '';
                 showInLegend: true,
                 name: 'Collected - Result Printed',
                 data: [<?php echo implode(",",$result['samplePrintedDiff']);?>],
-                color : '#6a4545',
+                color : '#FF4500',
             },
         <?php
         }
