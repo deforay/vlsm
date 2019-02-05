@@ -147,6 +147,10 @@ $batResult = $db->rawQuery($batQuery);
 											<table id="highViralLoadReportTable" class="table table-bordered table-striped">
 													<thead>
 															<tr>
+															<th>Sample Code</th>
+			<?php if($sarr['user_type']!='standalone'){ ?>
+		  <th>Remote Sample <br/>Code</th>
+			<?php } ?>
 																	<th>Facility Name</th>
 																	<th>Patient ART no.</th>                               
 																	<th>Patient's Name</th> 																	
@@ -251,6 +255,10 @@ $batResult = $db->rawQuery($batQuery);
 													<table id="sampleRjtReportTable" class="table table-bordered table-striped">
 															<thead>
 																	<tr>
+																	<th>Sample Code</th>
+			<?php if($sarr['user_type']!='standalone'){ ?>
+		  <th>Remote Sample <br/>Code</th>
+			<?php } ?>
 																			<th>Facility Name</th>
 																			<th>Patient ART no.</th> 
 																			<th>Patient Name</th> 
@@ -352,6 +360,10 @@ $batResult = $db->rawQuery($batQuery);
 													<table id="notAvailReportTable" class="table table-bordered table-striped">
 															<thead>
 																	<tr>
+																	<th>Sample Code</th>
+			<?php if($sarr['user_type']!='standalone'){ ?>
+		  <th>Remote Sample <br/>Code</th>
+			<?php } ?>
 																			<th>Facility Name</th>
 																			<th>Patient ART no.</th> 
 																			<th>Patient Name</th> 
@@ -403,6 +415,9 @@ $batResult = $db->rawQuery($batQuery);
 															<thead>
 																	<tr>															
 																		<th>Sample Code</th>
+																		<?php if($sarr['user_type']!='standalone'){ ?>
+		  <th>Remote Sample <br/>Code</th>
+			<?php } ?>
 																		<th>Sample Collection Date</th>
 																		<th>Batch Code</th>
 																		<th>Unique ART No</th>
@@ -482,6 +497,10 @@ $batResult = $db->rawQuery($batQuery);
             //"bStateSave" : true,
             "bRetrieve": true,
             "aoColumns": [
+				{"sClass":"center"},
+		<?php if($sarr['user_type']!='standalone'){ ?>
+                {"sClass":"center"},
+		<?php } ?>
                 {"sClass":"center"},
 				{"sClass":"center"},
                 {"sClass":"center"},
@@ -492,7 +511,12 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
             ],
-            aaSorting: [[ 4, "desc" ]],
+			<?php if($sarr['user_type']!='standalone'){ ?>
+                "aaSorting": [[ 6, "desc" ]],
+	      <?php }else { ?>
+		"aaSorting": [[ 5, "desc" ]],
+	      <?php } ?>
+            //aaSorting: [[ 4, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getHighVlResultDetails.php",
@@ -529,6 +553,10 @@ $batResult = $db->rawQuery($batQuery);
             //"bStateSave" : true,
             "bRetrieve": true,
             "aoColumns": [
+				{"sClass":"center"},
+		<?php if($sarr['user_type']!='standalone'){ ?>
+                {"sClass":"center"},
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -536,7 +564,12 @@ $batResult = $db->rawQuery($batQuery);
                 {"sClass":"center"},
                 {"sClass":"center"},
             ],
-            "aaSorting": [[ 3, "desc" ]],
+			<?php if($sarr['user_type']!='standalone'){ ?>
+                "aaSorting": [[ 5, "desc" ]],
+	      <?php }else { ?>
+		"aaSorting": [[ 4, "desc" ]],
+	      <?php } ?>
+            //"aaSorting": [[ 3, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getSampleRejectionReport.php",
@@ -572,13 +605,22 @@ $batResult = $db->rawQuery($batQuery);
             //"bStateSave" : true,
             "bRetrieve": true,
             "aoColumns": [
+				{"sClass":"center"},
+		<?php if($sarr['user_type']!='standalone'){ ?>
+                {"sClass":"center"},
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
 				{"sClass":"center"}
             ],
-            "aaSorting": [[ 3, "desc" ]],
+			<?php if($sarr['user_type']!='standalone'){ ?>
+                "aaSorting": [[ 5, "desc" ]],
+	      <?php }else { ?>
+		"aaSorting": [[ 4, "desc" ]],
+	      <?php } ?>
+            //"aaSorting": [[ 3, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getResultNotAvailable.php",
@@ -615,6 +657,9 @@ function incompleteForm(){
             "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
+				<?php if($sarr['user_type']!='standalone'){ ?>
+                {"sClass":"center"},
+		<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
@@ -626,7 +671,12 @@ function incompleteForm(){
                 {"sClass":"center"},
                 {"sClass":"center"},
             ],
-            "aaSorting": [[ 1, "desc" ]],
+			<?php if($sarr['user_type']!='standalone'){ ?>
+                "aaSorting": [[ 2, "desc" ]],
+	      <?php }else { ?>
+		"aaSorting": [[ 1, "desc" ]],
+	      <?php } ?>
+            //"aaSorting": [[ 1, "desc" ]],
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "dataQualityCheck.php",

@@ -26,9 +26,15 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */
-        
-        $aColumns = array('f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
-        $orderColumns = array('f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
+        $sampleCode = 'sample_code';
+        $aColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
+        $orderColumns = array('vl.sample_code','vl.remote_sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
+        if($sarr['user_type']=='remoteuser'){
+            $sampleCode = 'remote_sample_code';
+       }else if($sarr['user_type']=='standalone') {
+        $aColumns = array('vl.sample_code','f.facility_name','vl.patient_first_name','vl.patient_art_no','vl.patient_mobile_number',"DATE_FORMAT(vl.sample_collection_date,'%d-%b-%Y')","DATE_FORMAT(vl.sample_tested_datetime,'%d-%b-%Y')",'fd.facility_name','vl.result');
+        $orderColumns = array('vl.sample_code','f.facility_name','vl.patient_art_no','vl.patient_first_name','vl.patient_mobile_number','vl.sample_collection_date','vl.sample_tested_datetime','fd.facility_name','vl.result');
+       }
         
         /* Indexed column (used for fast and accurate table cardinality) */
         $sIndexColumn = $primaryKey;
@@ -221,6 +227,10 @@ $thresholdLimit = $arr['viral_load_threshold_limit'];
 				$patientMname = $general->crypto('decrypt',$aRow['patient_middle_name'],$aRow[$decrypt]);
 				$patientLname = $general->crypto('decrypt',$aRow['patient_last_name'],$aRow[$decrypt]);
             $row = array();
+            $row[] = $aRow['sample_code'];
+            if($sarr['user_type']!='standalone'){
+                    $row[] = $aRow['remote_sample_code'];
+            }
             $row[] = ucwords($aRow['facility_name']);
             $row[] = $aRow['patient_art_no'];
             $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);

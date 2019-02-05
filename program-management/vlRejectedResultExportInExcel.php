@@ -6,14 +6,26 @@ include('../General.php');
 include ('../vendor/autoload.php');
 $general=new General();
 
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+
+
 if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralLoadResult'])!=""){
      $rResult = $db->rawQuery($_SESSION['rejectedViralLoadResult']);
 
      $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
      $output = array();
      $sheet = $excel->getActiveSheet();
-
-     $headings = array("Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name","Rejection Reason");
+     $headings = array('Sample Code','Remote Sample Code',"Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name","Rejection Reason");
+     if($sarr['user_type']=='standalone') {
+     $headings = array('Sample Code',"Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name","Rejection Reason");
+     }
 
      $colNo = 1;
 
@@ -57,7 +69,7 @@ if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralL
           $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
           $colNo++;
      }
-     $sheet->getStyle('A3:E3')->applyFromArray($styleArray);
+     $sheet->getStyle('A3:H3')->applyFromArray($styleArray);
 
      foreach ($rResult as $aRow) {
           $row = array();
@@ -83,7 +95,10 @@ if(isset($_SESSION['rejectedViralLoadResult']) && trim($_SESSION['rejectedViralL
           }else{
                $patientLname = '';
           }
-
+          $row[] = $aRow['sample_code'];
+          if($sarr['user_type']!='standalone'){
+           $row[] = $aRow['remote_sample_code'];
+            }
           $row[] = ucwords($aRow['facility_name']);
           $row[] = $aRow['patient_art_no'];
           $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);

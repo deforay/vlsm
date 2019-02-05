@@ -6,14 +6,26 @@ include('../General.php');
 include ('../vendor/autoload.php');
 $general=new General();
 
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
+
+
 if(isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable'])!=""){
      $rResult = $db->rawQuery($_SESSION['resultNotAvailable']);
 
      $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
      $output = array();
      $sheet = $excel->getActiveSheet();
-
+     $headings = array('Sample Code','Remote Sample Code',"Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name");
+     if($sarr['user_type']=='standalone') {
      $headings = array("Facility Name","Patient ART no.","Patient Name","Sample Collection Date","Lab Name");
+     }
 
      $colNo = 1;
 
@@ -62,6 +74,10 @@ if(isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable'
      $sheet->getStyle('C3:C3')->applyFromArray($styleArray);
      $sheet->getStyle('D3:D3')->applyFromArray($styleArray);
      $sheet->getStyle('E3:E3')->applyFromArray($styleArray);
+     $sheet->getStyle('F3:F3')->applyFromArray($styleArray);
+     if($sarr['user_type']!='standalone') {
+     $sheet->getStyle('G3:G3')->applyFromArray($styleArray);
+     }
 
      foreach ($rResult as $aRow) {
           $row = array();
@@ -92,7 +108,10 @@ if(isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable'
           }else{
                $patientLname = '';
           }
-
+          $row[] = $aRow['sample_code'];
+          if($sarr['user_type']!='standalone'){
+           $row[] = $aRow['remote_sample_code'];
+            }
           $row[] = ucwords($aRow['facility_name']);
           $row[] = $aRow['patient_art_no'];
           $row[] = ucwords($patientFname." ".$patientMname." ".$patientLname);

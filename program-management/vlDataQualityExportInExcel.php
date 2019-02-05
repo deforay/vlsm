@@ -5,6 +5,14 @@ include('../includes/MysqliDb.php');
 include('../General.php');
 include ('../vendor/autoload.php');
 $general=new General();
+//system config
+$systemConfigQuery ="SELECT * from system_config";
+$systemConfigResult=$db->query($systemConfigQuery);
+$sarr = array();
+// now we create an associative array so that we can easily create view variables
+for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
+     $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+}
 
 if(isset($_SESSION['vlIncompleteForm']) && trim($_SESSION['vlIncompleteForm'])!=""){
      $rResult = $db->rawQuery($_SESSION['vlIncompleteForm']);
@@ -13,7 +21,10 @@ if(isset($_SESSION['vlIncompleteForm']) && trim($_SESSION['vlIncompleteForm'])!=
      $output = array();
      $sheet = $excel->getActiveSheet();
 
+     $headings = array('Sample Code','Remote Sample Code',"Sample Collection Date","Batch Code","Unique ART No.","Patient's Name","Facility Name","Province/State","District/County","Sample Type","Result","Status");
+     if($sarr['user_type']=='standalone') {
      $headings = array("Sample Code","Sample Collection Date","Batch Code","Unique ART No.","Patient's Name","Facility Name","Province/State","District/County","Sample Type","Result","Status");
+     }
 
      $colNo = 1;
 
@@ -57,7 +68,7 @@ if(isset($_SESSION['vlIncompleteForm']) && trim($_SESSION['vlIncompleteForm'])!=
           $sheet->getCellByColumnAndRow($colNo, 3)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
           $colNo++;
      }
-     $sheet->getStyle('A3:K3')->applyFromArray($styleArray);
+     $sheet->getStyle('A3:M3')->applyFromArray($styleArray);
 
      foreach ($rResult as $aRow) {
           $row = array();
@@ -91,7 +102,10 @@ if(isset($_SESSION['vlIncompleteForm']) && trim($_SESSION['vlIncompleteForm'])!=
                $patientLname = '';
           }
 
-          $row[] = $aRow['serial_no'];
+          $row[] = $aRow['sample_code'];
+          if($sarr['user_type']!='standalone'){
+            $row[] = $aRow['remote_sample_code'];
+             }
           $row[] = $sampleCollectionDate;
           $row[] = $aRow['batch_code'];
           $row[] = $aRow['patient_art_no'];
