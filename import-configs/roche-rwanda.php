@@ -237,7 +237,7 @@ try {
                 }
             }
             
-            $query    = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
+            $query    = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal,result_status from vl_request_form where sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
             //insert sample controls
             $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='".trim($d['sampleType'])."'";
@@ -250,7 +250,11 @@ try {
                 if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
                     $data['sample_details'] = 'Result already exists';
                 } else {
-                    $data['result_status'] = '7';
+                    if($vlResult[0]['result_status']!=''){
+                        $data['result_status'] = $vlResult[0]['result_status'];
+                    }else{
+                        $data['result_status'] = '7';
+                    }
                 }
                 $data['facility_id'] = $vlResult[0]['facility_id'];
             } else {

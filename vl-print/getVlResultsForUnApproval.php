@@ -24,6 +24,13 @@ if(count($sampleResultResult)>0){}else{
 
 }
 
+$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+//sample rejection reason
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $scQuery = "select r_sample_control_name from r_sample_controls ORDER BY r_sample_control_name DESC";
@@ -224,7 +231,8 @@ if(isset($tsrResult[0]['count']) && $tsrResult[0]['count'] > 0){
 		   }else{
 		     $controlName = '<select class="form-control" style="" name="controlName[]" id="controlName'.$aRow['temp_sample_id'].'" title="Please select control" onchange="sampleToControl(this,'.$controlCode.','.$aRow['temp_sample_id'].')"><option value="">-- Select --</option>';
 		   }
-		}
+        }
+        
 		foreach($scResult as $control){
 			if(trim($control['r_sample_control_name'])!= ''){
 			   $controlName .= '<option value="'.$control['r_sample_control_name'].'" '.($aRow['sample_type']==$control['r_sample_control_name'] || $aRow['sample_type'] == ucwords($control['r_sample_control_name']) ? "selected=selected" : "").'>'.ucwords($control['r_sample_control_name']).'</option>';
@@ -238,10 +246,12 @@ if(isset($tsrResult[0]['count']) && $tsrResult[0]['count'] > 0){
 		$row[] = '<input style="width:90%;" type="text" name="batchCode" id="batchCode'.$aRow['temp_sample_id'].'" value="'.$aRow['batch_code'].'" onchange="updateBatchCode(this,'.$batchCode.','.$aRow['temp_sample_id'].');"/>';
 		$row[] = $aRow['lot_number'];
 		$row[] = $general->humanDateFormat($aRow['lot_expiration_date']);
-		$row[] = $aRow['rejection_reason_name'];
+        $row[] = '<span id="rejectReasonName'.$aRow['temp_sample_id'].'"><input type="hidden" id="rejectedReasonId'.$aRow['temp_sample_id'].'" name="rejectedReasonId[]"/>'
+                .$aRow['rejection_reason_name'].
+                '</span>';
 		$row[] = $controlName;
 		$row[] = $aRow['result'];
-		$row[] = $status;
+        $row[] = $status;
 		$output['aaData'][] = $row;
         }
         
