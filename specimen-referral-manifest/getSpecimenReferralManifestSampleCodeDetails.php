@@ -2,7 +2,7 @@
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 //system config
 $systemConfigQuery ="SELECT * from system_config";
 $systemConfigResult=$db->query($systemConfigQuery);

@@ -5,7 +5,7 @@ include('../includes/MysqliDb.php');
 include ('../includes/tcpdf/tcpdf.php');
 include('../General.php');
 //define('UPLOAD_PATH','../uploads');
-$general=new General();
+$general=new General($db);
 $id=base64_decode($_POST['id']);
 if($id >0){
     if (!file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . "barcode") && !is_dir(UPLOAD_PATH. DIRECTORY_SEPARATOR."barcode")) {

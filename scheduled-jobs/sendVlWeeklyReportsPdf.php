@@ -1,7 +1,7 @@
 <?php
 include('../General.php');
 require '../includes/mail/PHPMailerAutoload.php';
-$general=new General();
+$general=new General($db);
 $reportFilename = '';
 $postdata = $_POST;
 $end_date = date('Y-m-d');

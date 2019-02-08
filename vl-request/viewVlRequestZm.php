@@ -3,7 +3,7 @@ ob_start();
 include('../header.php');
 //include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName1="activity_log";
 $id=base64_decode($_GET['id']);
 $vlQuery="SELECT * from vl_request_form where vl_sample_id=$id";

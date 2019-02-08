@@ -6,7 +6,7 @@ include ('../includes/tcpdf/tcpdf.php');
 include ('../includes/fpdi/fpdi.php');
 include('../General.php');
 define('UPLOAD_PATH','../uploads');
-$general=new General();
+$general=new General($db);
 $sampleArray = array();
 if(is_array($_POST['id'])){
   $sampleArray = $_POST['id'];

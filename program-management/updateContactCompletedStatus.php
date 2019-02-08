@@ -2,7 +2,7 @@
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 try {
     $id = $_POST['id'];

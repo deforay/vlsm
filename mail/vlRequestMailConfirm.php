@@ -3,7 +3,7 @@ ob_start();
 include('../header.php');
 include ('../vendor/autoload.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 //get other config details
 $geQuery="SELECT * FROM other_config WHERE type = 'request'";
 $geResult = $db->rawQuery($geQuery);

@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 //include('../header.php');
 $tableName="user_details";
 $tableName2="vl_user_facility_map";

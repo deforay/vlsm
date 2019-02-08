@@ -4,7 +4,7 @@ require(__DIR__ . "/../includes/MysqliDb.php");
 require(__DIR__ . "/../General.php");
 require(__DIR__ . "/../vendor/autoload.php");
 
-$general=new General();
+$general=new General($db);
 
 try {
     $instanceQuery="SELECT * FROM s_vlsm_instance";

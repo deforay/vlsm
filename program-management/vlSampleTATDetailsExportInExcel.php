@@ -4,7 +4,7 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 include ('../vendor/autoload.php');
-$general=new General();
+$general=new General($db);
 
 if(isset($_SESSION['vlTATDetails']) && trim($_SESSION['vlTATDetails'])!=""){
  

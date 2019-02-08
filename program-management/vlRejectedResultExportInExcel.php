@@ -4,7 +4,7 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 include ('../vendor/autoload.php');
-$general=new General();
+$general=new General($db);
 
 //system config
 $systemConfigQuery ="SELECT * from system_config";

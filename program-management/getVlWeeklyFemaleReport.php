@@ -2,7 +2,7 @@
 session_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
 $configQuery ="SELECT * from global_config where name='vl_form'";

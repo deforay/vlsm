@@ -11,7 +11,7 @@ $labFieldDisabled = '';
 if($sarr['user_type']=='remoteuser'){
      $labFieldDisabled = 'disabled="disabled"';
 }
-$general=new General();
+$general=new General($db);
 $id = base64_decode($_GET['id']);
 $sCode = '';
 if(isset($_GET['c'])){

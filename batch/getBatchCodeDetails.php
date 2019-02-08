@@ -6,7 +6,7 @@ $tableName="batch_details";
 $primaryKey="batch_id";
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
-$general=new General();
+$general=new General($db);
         /* Array of database columns which should be read and sent back to DataTables. Use a space where
          * you want to insert a non-database field (for example a counter or static image)
         */

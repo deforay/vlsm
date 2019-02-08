@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configResult = $db->rawQuery($configQuery);
 $formId = 0;
