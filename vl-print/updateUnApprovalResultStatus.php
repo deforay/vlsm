@@ -7,7 +7,6 @@ $general=new General($db);
 $tableName="temp_sample_import";
 $tableName1="vl_request_form";
 $tableName2="hold_sample_import";
-//print_r($_POST);die;
 try {
     $cSampleQuery="SELECT * FROM global_config";
     $cSampleResult=$db->query($cSampleQuery);
@@ -23,6 +22,7 @@ try {
     $result ='';
     $id= explode(",",$_POST['value']);
     $status= explode(",",$_POST['status']);
+    $rejectedReasonId= explode(",",$_POST['rejectReasonId']);
     if($_POST['value']!=''){
         for($i=0;$i<count($id);$i++){
             $sQuery="SELECT * FROM temp_sample_import where temp_sample_id='".$id[$i]."'";
@@ -62,6 +62,12 @@ try {
                               );
                 if($status[$i]==4){
                     $data['is_sample_rejected'] = 'yes';
+                    $data['reason_for_sample_rejection']=$rejectedReasonId[$i];
+                    $data['result_value_log']=NULL;
+                    $data['result_value_absolute']=NULL;
+                    $data['result_value_text']=NULL;
+                    $data['result_value_absolute_decimal']=NULL;
+                    $data['result']=NULL;
                 }else{
                     $data['is_sample_rejected'] = 'no';
                 }
@@ -127,14 +133,25 @@ try {
                 $data['result_approved_by']=$_POST['appBy'];
                 $data['result_approved_datetime']=$general->getDateTime();
                 $sampleVal = $rResult[0]['sample_code'];
-                if($rResult[0]['result_value_absolute']!=''){
-                    $data['result'] = $rResult[0]['result_value_absolute'];
-                }else if($rResult[0]['result_value_log']!=''){
-                    $data['result'] = $rResult[0]['result_value_log'];
-                }else if($rResult[0]['result_value_text']!=''){
-                    $data['result'] = $rResult[0]['result_value_text'];
+
+                if($status[$i]=='4'){
+                    $data['is_sample_rejected'] = 'yes';
+                    $data['reason_for_sample_rejection']=$rejectedReasonId[$i];
+                    $data['result_value_log']=NULL;
+                    $data['result_value_absolute']=NULL;
+                    $data['result_value_text']=NULL;
+                    $data['result_value_absolute_decimal']=NULL;
+                    $data['result']=NULL;
+                }else{
+
+                    if($rResult[0]['result_value_absolute']!=''){
+                        $data['result'] = $rResult[0]['result_value_absolute'];
+                    }else if($rResult[0]['result_value_log']!=''){
+                        $data['result'] = $rResult[0]['result_value_log'];
+                    }else if($rResult[0]['result_value_text']!=''){
+                        $data['result'] = $rResult[0]['result_value_text'];
+                    }
                 }
-                
                 //get bacth code
                 $bquery="select * from batch_details where batch_code='".$rResult[0]['batch_code']."'";
                 $bvlResult=$db->rawQuery($bquery);
@@ -148,15 +165,12 @@ try {
                 $query="select vl_sample_id,result from vl_request_form where sample_code='".$sampleVal."'";
                 $vlResult=$db->rawQuery($query);
                 $data['result_status']=$status[$i];
+                
                 $data['serial_no']=$rResult[0]['sample_code'];
                 if(count($vlResult)>0){
                     $data['vlsm_country_id']=$arr['vl_form'];
                     $data['data_sync']=0;
-                    if($data['result']!='' && $data['result']!=NULL)
-                    {
-                        $data['is_sample_rejected'] = 'no';
-                        $data['reason_for_sample_rejection'] = NULL;
-                    }
+                    
                     $db=$db->where('sample_code',$rResult[0]['sample_code']);
                     $result=$db->update($tableName1,$data);
                 }else{
@@ -206,17 +220,29 @@ try {
                             'result_approved_datetime'=>$general->getDateTime(),
                             'import_machine_file_name'=>$accResult[$i]['import_machine_file_name'],
                             'manual_result_entry'=>'no',
-                            'result_status'=>'7',
+                            //'result_status'=>'7',
                             'vl_test_platform'=>$accResult[$i]['vl_test_platform'],
                             'import_machine_name'=>$accResult[$i]['import_machine_name'],
                         );
-                    if($accResult[$i]['result_value_absolute']!=''){
-                        $data['result'] = $accResult[$i]['result_value_absolute'];
-                    }else if($accResult[$i]['result_value_log']!=''){
-                        $data['result'] = $accResult[$i]['result_value_log'];
-                    }else if($accResult[$i]['result_value_text']!=''){
-                        $data['result'] = $accResult[$i]['result_value_text'];
-                    }
+
+                        if($accResult[$i]['result_status']=='4'){
+                            $data['is_sample_rejected'] = 'yes';
+                            $data['reason_for_sample_rejection']=$rejectedReasonId[$i];
+                            $data['result_value_log']=NULL;
+                            $data['result_value_absolute']=NULL;
+                            $data['result_value_text']=NULL;
+                            $data['result_value_absolute_decimal']=NULL;
+                            $data['result']=NULL;
+                        }else{
+                            $data['result_status']=$status[$i];
+                            if($accResult[$i]['result_value_absolute']!=''){
+                                $data['result'] = $accResult[$i]['result_value_absolute'];
+                            }else if($accResult[$i]['result_value_log']!=''){
+                                $data['result'] = $accResult[$i]['result_value_log'];
+                            }else if($accResult[$i]['result_value_text']!=''){
+                                $data['result'] = $accResult[$i]['result_value_text'];
+                            }
+                        }
                 //get bacth code
                     $bquery="select * from batch_details where batch_code='".$accResult[$i]['batch_code']."'";
                     $bvlResult=$db->rawQuery($bquery);
@@ -227,11 +253,6 @@ try {
                         $data['sample_batch_id'] = $db->getInsertId();
                     }
                     $data['data_sync']=0;
-                    if($data['result']!='' && $data['result']!=NULL)
-                    {
-                        $data['is_sample_rejected'] = 'no';
-                        $data['reason_for_sample_rejection'] = NULL;
-                    }
                     $db=$db->where('sample_code',$accResult[$i]['sample_code']);
                     $result=$db->update($tableName1,$data);
                     $printSampleCode[] = "'".$accResult[$i]['sample_code']."'";

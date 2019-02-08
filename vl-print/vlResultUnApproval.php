@@ -18,6 +18,25 @@ $arr = array();
 for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
+
+$rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+//sample rejection reason
+$rejectionQuery="SELECT * FROM r_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
+$rejectionReason = '<option value="">-- Select sample rejection reason --</option>';
+        foreach($rejectionTypeResult as $type) { 
+          $rejectionReason .= '<optgroup label="'.ucwords($type['rejection_type']).'">';
+          foreach($rejectionResult as $reject){
+            if($type['rejection_type'] == $reject['rejection_type']){
+              $rejectionReason .= '<option value="'.$reject['rejection_reason_id'].'">'.ucwords($reject['rejection_reason_name']).'</option>';
+            }
+          }
+          $rejectionReason .= '</optgroup>';
+        }
+
 ?>
 <style>
     .dataTables_wrapper{
@@ -32,6 +51,26 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
       max-width:100px;
       width:100px !important
     }
+    #rejectReasonDiv {
+      border: 1px solid #ecf0f5;
+      box-shadow: 3px 3px 15px #000;
+      background-color:#ecf0f5;
+      width:50%;
+      display:none;
+      padding:10px;
+      border-radius:10px;
+      
+    }
+    .arrow-right {
+      width: 0;
+      height: 0; 
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      border-left: 15px solid #ecf0f5;
+      position:absolute;
+      left:100%;
+      top:24px;
+    }
 </style>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -43,7 +82,17 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
         <li class="active">Test Request</li>
       </ol>
     </section>
-
+<!-- for sample rejection -->
+<div id="rejectReasonDiv">
+<a href="javascript:void(0)" style="float:right;color:red;" title="close" onclick="hideReasonDiv('rejectReasonDiv')"><i class="fa fa-close"></i></a>
+<div class="arrow-right"></div>
+<input type="hidden" name="statusDropDownId" id="statusDropDownId"/>
+<h3 style="color:red;">Choose Rejection Reason</h3>
+    <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="updateRejectionReasonStatus(this);">
+        <?php echo $rejectionReason;?>
+    </select>
+                              
+</div>
      <!-- Main content -->
     <section class="content">
       <div class="row">
@@ -212,22 +261,69 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
      $.unblockUI();
   }
   function toggleTest(obj,sampleCode){
-	if (sampleCode=='') {
-        alert("Please enter sample code");
-		$("#"+obj.id).val('');
-		return false;
+	  if (sampleCode=='') {
+      alert("Please enter sample code");
+		  $("#"+obj.id).val('');
+		  return false;
     }
-    var dValue = obj.value;
-    var dId = obj.id;
-    if($.inArray(obj.id, selectedTests) == -1){
-    selectedTests.push(obj.id);
-    selectedTestsIdValue.push(obj.value);
+    if(obj.value=='4'){
+      var confrm = confirm("Do you wish to overwrite this result?");
+      if(confrm){
+        var pos = $("#"+obj.id).offset();
+        $("#rejectReasonDiv").show();
+        $("#rejectReasonDiv").css({top: Math.round(pos.top) - 30, position:'absolute','z-index':1,right:'15%'});
+        $("#statusDropDownId").val(obj.id);
+        $(".content").css('pointer-events', 'none');
+        //return false;
+      }else{
+        $("#"+obj.id).val('');
+        return false;
+      }
     }else{
-      var indexValue = selectedTests.indexOf(obj.id);
-      selectedTestsIdValue[indexValue]=obj.value;  
+      $("#rejectReasonName"+obj.id).html('');
+      $("#rejectReasonDiv").hide();
     }
-    $("#checkedTests").val(selectedTests.join());
-    $("#checkedTestsIdValue").val(selectedTestsIdValue.join());
+
+    // var dValue = obj.value;
+    // var dId = obj.id;
+    // if($.inArray(obj.id, selectedTests) == -1){
+    //   selectedTests.push(obj.id);
+    //   selectedTestsIdValue.push(obj.value);
+    // }else{
+    //   var indexValue = selectedTests.indexOf(obj.id);
+    //   selectedTestsIdValue[indexValue]=obj.value;  
+    // }
+    // $("#checkedTests").val(selectedTests.join());
+    // $("#checkedTestsIdValue").val(selectedTestsIdValue.join());
+  }
+
+  function updateRejectionReasonStatus(obj)
+  {
+    var rejectDropDown = $("#statusDropDownId").val();
+    //var indexValue = selectedTests.indexOf(rejectDropDown);
+    if(obj.value!=''){
+      //var result = {statusId:selectedTestsIdValue[indexValue],reasonId:obj.value};
+      //selectedTestsIdValue[indexValue] = result;
+      $("#rejectReasonName"+rejectDropDown).html(
+        $("#"+obj.id+" option:selected").text()
+        +
+        '<input type="hidden" id="rejectedReasonId'+rejectDropDown+'" name="rejectedReasonId[]" value="'+obj.value+'"/><a href="javascript:void(0)" style="float:right;color:red;" title="cancel" onclick="showRejectedReasonList('+rejectDropDown+');"><i class="fa fa-close"></i></a>'
+        );
+    }else{
+      $("#rejectedReasonId"+rejectDropDown).val('');
+      //selectedTestsIdValue[indexValue] = $("#"+$("#statusDropDownId").val()).val();
+    }
+    //$("#checkedTests").val(selectedTests.join());
+    //$("#checkedTestsIdValue").val(selectedTestsIdValue.join());
+  }
+
+  function showRejectedReasonList(postionId)
+  {
+    var pos = $("#"+postionId).offset();
+    $("#rejectReasonDiv").show();
+    $("#rejectReasonDiv").css({top: Math.round(pos.top) - 30, position:'absolute','z-index':1,right:'15%'});
+    $("#statusDropDownId").val(postionId);
+    $(".content").css('pointer-events', 'none');
   }
 
 
@@ -235,7 +331,9 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 
     var idArray = [];
     var statusArray= [];
+    var rejectReasonArray= [];
     var somethingmissing = false;
+    
     $('[name="status[]"]').each(function(){
       
       if($(this).val() == null || $(this).val() == ''){
@@ -244,6 +342,8 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 
       idArray.push($(this).attr('id'));
       statusArray.push($(this).val());
+      rejectReasonArray.push($("#rejectedReasonId"+$(this).attr('id')).val());
+
 
 
       
@@ -251,6 +351,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 
     id = idArray.join();
     status = statusArray.join();
+    rejectReasonId = rejectReasonArray.join();
     comments = $("#comments").val();
     appBy = $("#approvedBy").val();
     reviewedBy = $("#reviewedBy").val();
@@ -277,7 +378,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
 		conf=confirm("Are you sure you want to continue ?");
 		if(conf){
 			$.blockUI();
-			$.post("updateUnApprovalResultStatus.php", { value : id,status:status,comments:comments,appBy:appBy, reviewedBy : reviewedBy, format: "html"},
+			$.post("updateUnApprovalResultStatus.php", { rejectReasonId:rejectReasonId,value : id,status:status,comments:comments,appBy:appBy, reviewedBy : reviewedBy, format: "html"},
 			function(data){
 			  if($("#print").val()=='print')
 			  {
@@ -400,6 +501,14 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   function sampleToControlAlert(number) {
     alert("Max number of controls as per the config is "+number);
     oTable.fnDraw();
+  }
+  function hideReasonDiv(id)
+  {
+    $("#"+id).hide();
+    $(".content").css('pointer-events', 'auto');
+    if($("#rejectionReason").val()==''){
+      $("#"+$("#statusDropDownId").val()).val('');
+    }
   }
 </script>
  <?php
