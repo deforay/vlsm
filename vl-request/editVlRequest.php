@@ -15,7 +15,7 @@ $general=new General($db);
 $id = base64_decode($_GET['id']);
 $sCode = '';
 if(isset($_GET['c'])){
-     $sCode = $_GET['c'];
+    $sCode = $_GET['c'];
 }
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);

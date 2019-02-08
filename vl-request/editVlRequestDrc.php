@@ -172,7 +172,13 @@ if($vlQueryInfo[0]['sample_code']!='')
                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" value="<?php echo (isset($sCode) && $sCode!='') ? $sCode : $vlQueryInfo[0][$sampleCode]; ?>" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode;?>',this.id,'<?php echo "vl_sample_id##".$vlQueryInfo[0]["vl_sample_id"];?>','The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
                               <?php } ?>
-                                <td></td><td></td><td></td><td></td>
+
+                              <td style=" display:<?php echo ($sCode=='')?'none':''; ?>"><label for="">Date de réception de léchantillon </label></td>
+                                <td style=" display:<?php echo ($sCode=='')?'none':''; ?>">
+                                  <input type="text" class="form-control dateTime" id="sampleReceivedDate<?php echo ($sCode=='')?'Lab':''; ?>" name="sampleReceivedDate<?php echo ($sCode=='')?'Lab':''; ?>" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo ($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!=NULL)?$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']:date('d-M-Y H:i:s'); ?>" style="width:100%;"/>
+                                </td>
+
+                                <td></td><td></td>
                             </tr>
                             <tr>
                                 <td><label for="province">Province </label><span class="mandatory">*</span></td>
@@ -490,10 +496,10 @@ if($vlQueryInfo[0]['sample_code']!='')
                             <h3 class="box-title">2. Réservé au Laboratoire de biologie moléculaire </h3>
                         </div>
                         <table class="table" style="width:100%">
-                            <tr>
+                            <tr style="display:<?php echo ($sCode!='')?'none':'block'; ?>">
                                 <td style="width:25%;"><label for="">Date de réception de léchantillon </label></td>
                                 <td style="width:25%;">
-                                  <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>" style="width:100%;"/>
+                                  <input type="text" class="form-control dateTime" id="sampleReceivedDate<?php echo ($sCode!='')?'Lab':''; ?>" name="sampleReceivedDate<?php echo ($sCode!='')?'Lab':''; ?>" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>" style="width:100%;"/>
                                 </td>
                                 <td style="width:25%;"></td><td style="width:25%;"></td>
                             </tr>
