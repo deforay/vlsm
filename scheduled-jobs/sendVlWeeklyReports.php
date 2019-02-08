@@ -6,7 +6,7 @@ require(__DIR__ . "/../includes/mail/PHPMailerAutoload.php");
 require(__DIR__ . "/../General.php");
 require(__DIR__ . "/../vendor/autoload.php");
 
-$general=new General();
+$general=new General($db);
 $configQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($configQuery);
 $country = $configResult[0]['value'];

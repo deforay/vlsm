@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $start_date = '';
 $end_date = '';
 $urgent = $_POST['urgent'];

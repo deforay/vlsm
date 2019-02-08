@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 
 $lName = $_POST['lName'];
 $pName = $_POST['pName'];

@@ -17,7 +17,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
     for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
       $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
     }
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
 

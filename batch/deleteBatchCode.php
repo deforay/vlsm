@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 
 $tableName1="batch_details";
 $tableName2="vl_request_form";

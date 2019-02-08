@@ -14,7 +14,7 @@ ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
 $id=base64_decode($_GET['id']);
-$general=new General();
+$general=new General($db);
 $contactInfo="SELECT * from contact_notes_details where treament_contact_id=$id";
 $contact=$db->query($contactInfo);
 //get patient info
@@ -27,7 +27,7 @@ if(isset($vlResult[0]['sample_collection_date']) && trim($vlResult[0]['sample_co
     }else{
         $vlResult[0]['sample_collection_date'] = '';
     }
-$general=new General();
+$general=new General($db);
 ?>
 <div class="content-wrapper" style="padding: 20px;">
     <!-- Content Header (Page header) -->

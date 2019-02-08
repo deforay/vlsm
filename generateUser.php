@@ -1,7 +1,7 @@
 <?php
 include('./includes/MysqliDb.php');
 include('General.php');
-$general=new General();
+$general=new General($db);
 $uQuery = "SELECT * FROM user_details";
 $uResult=$db->query($uQuery);
 if($uResult){

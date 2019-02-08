@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('MysqliDb.php');
 include('General.php');
-$general=new General();
+$general=new General($db);
 $tableName="vl_request_form";
 //system config
 $id = '';

@@ -9,7 +9,7 @@ require(__DIR__ . "/../vendor/autoload.php");
 
 
 
-$general=new General();
+$general=new General($db);
 
 $query ="SELECT * from s_vlsm_instance";
 $qResult=$db->query($query);

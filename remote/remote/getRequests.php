@@ -6,7 +6,7 @@ include(dirname(__FILE__) . "/../../General.php");
 
 $labId = $data['labName'];
 
-//$general=new General();
+//$general=new General($db);
 //global config
 $cQuery="SELECT * FROM global_config";
 $cResult=$db->query($cQuery);

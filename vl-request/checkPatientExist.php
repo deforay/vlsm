@@ -1,7 +1,7 @@
 <?php
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general=new General();
+$general=new General($db);
 $artNo=$_POST['artPatientNo'];
 //global config
 $cQuery="SELECT * FROM global_config";

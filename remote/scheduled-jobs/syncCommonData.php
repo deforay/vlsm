@@ -6,7 +6,7 @@ if(!isset($REMOTEURL) || $REMOTEURL==''){
     echo "Please check your remote url";
     die;
 }
-$general=new General();
+$general=new General($db);
 $globalConfigQuery ="SELECT * from system_config";
 $configResult=$db->query($globalConfigQuery);
 $arr = array();
