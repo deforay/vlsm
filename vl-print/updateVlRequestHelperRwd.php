@@ -86,6 +86,11 @@ try {
     }else if(trim($reasonForChanges)!= ''){
        $allChange =  $reasonForChanges;
     }
+    if(isset($_POST['noResult']) && $_POST['noResult']=='yes'){
+        $sampleStatus = 4;
+    }else{
+        $sampleStatus = 7;
+    }
     //echo $reasonForChanges;die;
     $vldata=array(
           'vlsm_instance_id'=>$instanceId,
@@ -104,7 +109,7 @@ try {
           'result'=>(isset($_POST['result']) && $_POST['result']!='') ? $_POST['result'] :  NULL,
           'result_approved_by'=>(isset($_POST['approvedBy']) && $_POST['approvedBy']!='') ? $_POST['approvedBy'] :  NULL,
           'approver_comments'=>(isset($_POST['labComments']) && trim($_POST['labComments'])!='') ? trim($_POST['labComments']) :  NULL,
-          'result_status'=>(isset($_POST['status']) && $_POST['status']!='') ? $_POST['status'] :  NULL,
+          'result_status'=>$sampleStatus,
           'reason_for_vl_result_changes'=>$allChange,
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),

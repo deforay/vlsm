@@ -514,7 +514,7 @@ $disable = "disabled = 'disabled'";
                         <div class="col-md-4">
                             <label class="col-lg-5 control-label" for="emailHf">Email for HF </label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control isEmail" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $facilityResult[0]['facility_emails'];?>" <?php echo $disable;?>/>
+                                <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf" value="<?php echo $facilityResult[0]['facility_emails'];?>" <?php echo $disable;?>/>
                             </div>
                         </div>
                      </div>
@@ -626,8 +626,8 @@ $disable = "disabled = 'disabled'";
                             <div class="col-lg-7">
                               <input type="text" class="<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'no' && $vlQueryInfo[0]['result'] != 'Target Not Detected' && $vlQueryInfo[0]['result'] == 'Below Detection Level')?'isRequired':''; ?> vlResult checkNum form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
 
-                              <input type="checkbox" class="labSection" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
-                              <input type="checkbox" class="labSection" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
+                              <input type="checkbox" class="labSection specialResults" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
+                              <input type="checkbox" class="labSection specialResults" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
                             </div>
                         </div>
                         <div class="col-md-4 vlResult" style="visibility:<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'yes')?'hidden':'visible'; ?>;">
@@ -661,7 +661,7 @@ $disable = "disabled = 'disabled'";
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-md-4" style="<?php echo (($sarr['user_type']=='remoteuser')) ? 'display:none;':''; ?>">
+                        <!-- <div class="col-md-4" style="<?php echo (($sarr['user_type']=='remoteuser')) ? 'display:none;':''; ?>">
                             <label class="col-lg-5 control-label" for="status">Status <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
                               <select class="form-control labSection  <?php echo (($sarr['user_type']!='remoteuser')) ? 'isRequired':''; ?>" id="status" name="status" title="Please select test status">
@@ -673,7 +673,7 @@ $disable = "disabled = 'disabled'";
                                 <?php } ?>
                               </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-8 reasonForResultChanges" style="visibility:hidden;">
                             <label class="col-lg-2 control-label" for="reasonForResultChanges">Reason For Changes in Result <span class="mandatory">*</span></label>
                             <div class="col-lg-10">
@@ -738,44 +738,33 @@ $disable = "disabled = 'disabled'";
         $('#rejectionReason').val('');
         $("#status").val('');
         $('#vlResult').addClass('isRequired');
-        if($('#tnd').is(':checked') || $('#bdl').is(':checked')){
-          $('#vlResult').removeClass('isRequired');
+        // if any of the special results like tnd,bld are selected then remove isRequired from vlResult
+        if($('.specialResults:checkbox:checked').length){
+            $('#vlResult').removeClass('isRequired');
         }
       }
     });
 
-    $('#tnd').change(function() {
-      if($('#tnd').is(':checked')){
-        $('#vlResult,#vlLog').attr('readonly',true);
-        $("#vlResult").removeClass("isRequired");
-        $('#bdl').attr('disabled',true);
-      }else{
-        $('#vlResult,#vlLog').attr('readonly',false);
-        $("#vlResult").addClass("isRequired");
-        $('#bdl').attr('disabled',false);
-      }
-    });
-
-    $('#bdl').change(function() {
-      if($('#bdl').is(':checked')){
-        $('#vlResult,#vlLog').attr('readonly',true);
-        $("#vlResult").removeClass("isRequired");
-        $('#tnd').attr('disabled',true);
-      }else{
-        $('#vlResult,#vlLog').attr('readonly',false);
-        $("#vlResult").addClass("isRequired");
-        $('#tnd').attr('disabled',false);
-      }
+    $('.specialResults').change(function() {
+        if($(this).is(':checked')){
+          $('#vlResult,#vlLog').attr('readonly',true);
+          $('#vlResult').removeClass('isRequired');
+          $(".specialResults").not(this).attr('disabled',true);
+        }else{
+            $('#vlResult,#vlLog').attr('readonly',false);
+            $(".specialResults").not(this).attr('disabled',false);
+            if($('#noResultNo').is(':checked')){
+              $('#vlResult').addClass('isRequired');
+            }
+        }
     });
 
     $('#vlResult,#vlLog').on('input',function(e){
-      if(this.value != ''){
-        $('#tnd').attr('disabled',true);
-        $('#bdl').attr('disabled',true);
-      }else{
-        $('#tnd').attr('disabled',false);
-        $('#bdl').attr('disabled',false);
-      }
+        if(this.value != ''){
+            $(".specialResults").not(this).attr('disabled',true);
+        }else{
+            $(".specialResults").not(this).attr('disabled',false);
+        }
     });
 
     $("#vlRequestFormRwd .labSection").on("change", function() {
@@ -833,12 +822,12 @@ $disable = "disabled = 'disabled'";
           ($(this).val() == '') ? $(this).css('background-color', '#FFFF99') : $(this).css('background-color', '#FFFFFF')
         });
         if(flag){
-          if($('#noResultYes').is(':checked')){
-            if($("#status").val()!=4){
-              alert("Status should be Rejected.Because you have chosen Sample Rejection");
-              return false;
-            }
-          }
+          // if($('#noResultYes').is(':checked')){
+          //   if($("#status").val()!=4){
+          //     alert("Status should be Rejected.Because you have chosen Sample Rejection");
+          //     return false;
+          //   }
+          // }
           $.blockUI();
           document.getElementById('vlRequestFormRwd').submit();
         }
