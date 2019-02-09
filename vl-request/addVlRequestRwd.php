@@ -139,7 +139,7 @@ $sKey = ''; $sFormat = '';
                                              <div class="col-xs-3 col-md-3">
                                                   <div class="">
                                                        <label for="province">Province <span class="mandatory">*</span></label>
-                                                       <select class="form-control isRequired" name="province" id="province" title="Please choose province" style="width:100%;" onchange="getProvinceDistricts(this);">
+                                                       <select class="form-control isRequired" name="province" id="province" title="Please choose a province" style="width:100%;" onchange="getProvinceDistricts(this);">
                                                             <?php echo $province;?>
                                                        </select>
                                                   </div>
@@ -147,7 +147,7 @@ $sKey = ''; $sFormat = '';
                                              <div class="col-xs-3 col-md-3">
                                                   <div class="">
                                                        <label for="district">District  <span class="mandatory">*</span></label>
-                                                       <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getFacilities(this);">
+                                                       <select class="form-control isRequired" name="district" id="district" title="Please choose a district" style="width:100%;" onchange="getFacilities(this);">
                                                             <option value=""> -- Select -- </option>
                                                        </select>
                                                   </div>
@@ -155,7 +155,7 @@ $sKey = ''; $sFormat = '';
                                              <div class="col-xs-3 col-md-3">
                                                   <div class="">
                                                        <label for="fName">Clinic/Health Center <span class="mandatory">*</span></label>
-                                                       <select class="form-control isRequired" id="fName" name="fName" title="Please select clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
+                                                       <select class="form-control isRequired" id="fName" name="fName" title="Please select a clinic/health center name" style="width:100%;" onchange="fillFacilityDetails();">
                                                             <?php echo $facility;  ?>
                                                        </select>
                                                   </div>
@@ -180,7 +180,7 @@ $sKey = ''; $sFormat = '';
                                                   <div class="col-xs-3 col-md-3">
                                                        <div class="">
                                                             <label for="labId">VL Testing Hub <span class="mandatory">*</span></label>
-                                                            <select name="labId" id="labId" class="form-control isRequired" title="Please choose VL testing hub" style="width:100%;">
+                                                            <select name="labId" id="labId" class="form-control isRequired" title="Please choose a VL testing hub" style="width:100%;">
                                                                  <option value="">-- Select --</option>
                                                                  <?php foreach($lResult as $labName){ ?>
                                                                       <option value="<?php echo $labName['facility_id'];?>"><?php echo ucwords($labName['facility_name']);?></option>
@@ -214,14 +214,14 @@ $sKey = ''; $sFormat = '';
                                              </div>
                                              <div class="col-xs-3 col-md-3">
                                                   <div class="form-group">
-                                                       <label for="ageInYears">If DOB unknown, Age in Years </label>
-                                                       <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year" title="Enter age in years"/>
+                                                       <label for="ageInYears">If DOB unknown, Age in Year(s) </label>
+                                                       <input type="text" name="ageInYears" id="ageInYears" class="form-control checkNum" maxlength="2" placeholder="Age in Year(s)" title="Enter age in years"/>
                                                   </div>
                                              </div>
                                              <div class="col-xs-3 col-md-3">
                                                   <div class="form-group">
-                                                       <label for="ageInMonths">If Age < 1, Age in Months </label>
-                                                       <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month" title="Enter age in months"/>
+                                                       <label for="ageInMonths">If Age < 1, Age in Month(s) </label>
+                                                       <input type="text" name="ageInMonths" id="ageInMonths" class="form-control checkNum" maxlength="2" placeholder="Age in Month(s)" title="Enter age in months"/>
                                                   </div>
                                              </div>
                                         </div>
@@ -236,10 +236,10 @@ $sKey = ''; $sFormat = '';
                                                   <div class="form-group">
                                                        <label for="gender">Gender <span class="mandatory">*</span></label><br>
                                                        <label class="radio-inline" style="margin-left:0px;">
-                                                            <input type="radio" class="isRequired" id="genderMale" name="gender" value="male" title="Please check gender">Male
+                                                            <input type="radio" class="isRequired" id="genderMale" name="gender" value="male" title="Please choose gender">Male
                                                        </label>&nbsp;&nbsp;
                                                        <label class="radio-inline" style="margin-left:0px;">
-                                                            <input type="radio" id="genderFemale" name="gender" value="female" title="Please check gender">Female
+                                                            <input type="radio" id="genderFemale" name="gender" value="female" title="Please choose gender">Female
                                                        </label>&nbsp;&nbsp;
                                                        <!--<label class="radio-inline" style="margin-left:0px;">
                                                        <input type="radio" class="" id="genderNotRecorded" name="gender" value="not_recorded" title="Please check gender">Not Recorded
@@ -288,13 +288,13 @@ $sKey = ''; $sFormat = '';
                                                   <div class="col-xs-3 col-md-3">
                                                        <div class="form-group">
                                                             <label for="">Date of Treatment Initiation</label>
-                                                            <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date Of Treatment Initiated" title="Date Of treatment initiated" style="width:100%;" onchange="checkARTInitiationDate();">
+                                                            <input type="text" class="form-control date" name="dateOfArtInitiation" id="dateOfArtInitiation" placeholder="Date of Treatment Initiation" title="Date of treatment initiation" style="width:100%;" onchange="checkARTInitiationDate();">
                                                        </div>
                                                   </div>
                                                   <div class="col-xs-3 col-md-3">
                                                        <div class="form-group">
                                                             <label for="artRegimen">Current Regimen <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
-                                                            <select class="form-control  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="artRegimen" name="artRegimen" title="Please choose ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
+                                                            <select class="form-control  <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="artRegimen" name="artRegimen" title="Please choose an ART Regimen" style="width:100%;" onchange="checkARTRegimenValue();">
                                                                  <option value="">-- Select --</option>
                                                                  <?php foreach($artRegimenResult as $heading) { ?>
                                                                       <optgroup label="<?php echo ucwords($heading['headings']); ?>">
@@ -308,7 +308,7 @@ $sKey = ''; $sFormat = '';
                                                                            <!-- <option value="other">Other</option> -->
                                                                       <?php } ?>
                                                                  </select>
-                                                                 <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter art regimen" style="width:100%;display:none;margin-top:2px;" >
+                                                                 <input type="text" class="form-control newArtRegimen" name="newArtRegimen" id="newArtRegimen" placeholder="ART Regimen" title="Please enter ART Regimen" style="width:100%;display:none;margin-top:2px;" >
                                                             </div>
                                                        </div>
                                                        <div class="col-xs-3 col-md-3">
@@ -450,7 +450,7 @@ $sKey = ''; $sFormat = '';
                                                             <div class="col-md-4">
                                                                  <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <?php echo ($sarr['user_type']== 'remoteuser')?"<span class='mandatory'>*</span>":''; ?></label>
                                                                  <div class="col-lg-7">
-                                                                      <input type="text" class="form-control <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="reqClinician" name="reqClinician" placeholder="Request Clinician" title="Please enter request clinician" />
+                                                                      <input type="text" class="form-control <?php echo ($sarr['user_type']== 'remoteuser')?"isRequired":''; ?>" id="reqClinician" name="reqClinician" placeholder="Request Clinician name" title="Please enter request clinician" />
                                                                  </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -482,7 +482,7 @@ $sKey = ''; $sFormat = '';
                                                             <div class="col-md-4">
                                                                  <label class="col-lg-5 control-label" for="emailHf">Email for HF</label>
                                                                  <div class="col-lg-7">
-                                                                      <input type="text" class="form-control" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf"/>
+                                                                      <input type="text" class="form-control isEmail" id="emailHf" name="emailHf" placeholder="Email for HF" title="Please enter email for hf"/>
                                                                  </div>
                                                             </div>
                                                        </div>
@@ -574,8 +574,8 @@ $sKey = ''; $sFormat = '';
                                                                            <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                                                                            <div class="col-lg-7">
                                                                                 <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" <?php echo $labFieldDisabled; ?> style="width:100%;" onchange="calculateLogValue(this)"/>
-                                                                                <input type="checkbox" class="" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
-                                                                                <input type="checkbox" class="" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
+                                                                                <input type="checkbox" class="specialResults" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
+                                                                                <input type="checkbox" class="specialResults" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
                                                                            </div>
                                                                       </div>
                                                                       <div class="col-md-4 vlResult">
@@ -823,33 +823,21 @@ $sKey = ''; $sFormat = '';
                                         }
                                    });
 
-                                   $('#tnd').change(function() {
-                                        if($('#tnd').is(':checked')){
+                                    $('.specialResults').change(function() {
+                                        if($(this).is(':checked')){
                                              $('#vlResult,#vlLog').attr('readonly',true);
-                                             $('#bdl').attr('disabled',true);
+                                             $(".specialResults").not(this).attr('disabled',true);
                                         }else{
                                              $('#vlResult,#vlLog').attr('readonly',false);
-                                             $('#bdl').attr('disabled',false);
+                                             $(".specialResults").not(this).attr('disabled',false);
                                         }
-                                   });
-
-                                   $('#bdl').change(function() {
-                                        if($('#bdl').is(':checked')){
-                                             $('#vlResult,#vlLog').attr('readonly',true);
-                                             $('#tnd').attr('disabled',true);
-                                        }else{
-                                             $('#vlResult,#vlLog').attr('readonly',false);
-                                             $('#tnd').attr('disabled',false);
-                                        }
-                                   });
+                                    });
 
                                    $('#vlResult,#vlLog').on('input',function(e){
                                         if(this.value != ''){
-                                             $('#tnd').attr('disabled',true);
-                                             $('#bdl').attr('disabled',true);
+                                            $(".specialResults").not(this).attr('disabled',true);
                                         }else{
-                                             $('#tnd').attr('disabled',false);
-                                             $('#bdl').attr('disabled',false);
+                                            $(".specialResults").not(this).attr('disabled',false);
                                         }
                                    });
 
