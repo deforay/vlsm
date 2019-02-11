@@ -1536,3 +1536,5 @@ ALTER TABLE `facility_details` ADD `header_text` VARCHAR(255) NULL DEFAULT NULL 
 
 -- saravanan 21-jan-2019
 ALTER TABLE `activity_log` ADD `ip_address` VARCHAR(255) NULL DEFAULT NULL AFTER `date_time`;
+
+-- Version 3.10 ---------- Amit 11-Feb-2018
