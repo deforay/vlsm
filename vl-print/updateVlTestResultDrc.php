@@ -508,10 +508,11 @@
                             <tr>
                                 <td class="vlResult"><label for="vlResult">Résultat <span class="mandatory">*</span></label></td>
                                 <td class="vlResult">
-                                  <input type="text" class="vlResult form-control isRequired" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:100%;"/>
-                                  <input type="checkbox" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 20' || $vlQueryInfo[0]['result'] == '<20') ? 'checked="checked"':''; ?>> < 20<br>
-                                  <input type="checkbox" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 40' || $vlQueryInfo[0]['result'] == '<40') ? 'checked="checked"':''; ?>> < 40<br>
-                                  <input type="checkbox" id="vlTND" name="vlTND" value="yes" title="Please check VL value" <?php echo in_array(strtolower($vlQueryInfo[0]['result']), array('target not detected','non détecté', 'non détecté', 'non detecte', 'non detectee', 'tnd', 'bdl', 'below detection level')) ? 'checked="checked"':''; ?> > Target Not Detected / Non Détecté                                  
+                                  <input type="text" class="vlResult form-control isRequired checkNum" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:100%;"/>
+                                  <input type="checkbox" class="specialResults" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 20' || $vlQueryInfo[0]['result'] == '<20') ? 'checked="checked"':''; ?>> < 20<br>
+                                  <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 40' || $vlQueryInfo[0]['result'] == '<40') ? 'checked="checked"':''; ?>> < 40<br>
+                                  <input type="checkbox" class="specialResults" id="vlLt400" name="vlLt400" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 400' || $vlQueryInfo[0]['result'] == '<400') ? 'checked="checked"':''; ?>> < 400<br>
+                                  <input type="checkbox" class="specialResults" id="vlTND" name="vlTND" value="yes" title="Please check VL value" <?php echo in_array(strtolower($vlQueryInfo[0]['result']), array('target not detected','non détecté', 'non détecté', 'non detecte', 'non detectee', 'tnd', 'bdl', 'below detection level')) ? 'checked="checked"':''; ?> > Target Not Detected / Non Détecté                                  
                                 </td>
                                 <td class="vlLog" style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td class="vlLog">
@@ -597,8 +598,7 @@
      function checkTestStatus(){
       var status = $("#status").val();
       if(status == 4){
-        $('#vlLt20').prop('checked', false).removeAttr('checked');
-        $('#vlTND').prop('checked', false).removeAttr('checked');  
+        $('.specialResults').prop('checked', false).removeAttr('checked');
         $('#vlResult').attr('disabled',false);
         $('#vlLog').attr('disabled',false);           
         $(".rejectionReason").show();
@@ -700,6 +700,8 @@
         absValue = $("#vlResult").val();
         if(absValue!='' && absValue!=0){
           $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+        }else{
+          $("#vlLog").val('');
         }
       }
       if(obj.id=="vlLog") {
@@ -730,117 +732,41 @@
 
 $(document).ready(function(){
     
-  $('#vlResult').on('input',function(e){
+    $('#vlResult, #vlLog').on('input',function(e){
       if(this.value != ''){
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlTND').attr('disabled',true);
+        $('.specialResults').attr('disabled',true);
       }else{
-        $('#vlLt20').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-        $('#vlTND').attr('disabled',false);
-      }
-    });
-    
-    $('#vlLt20').change(function() {
-      if($('#vlLt20').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlResult').removeClass('isRequired');
-        $('#vlLog').removeClass('isRequired');
-        $('#vlLog').val('');        
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlResult').addClass('isRequired');
-        $('#vlLog').addClass('isRequired');        
-        $('#vlTND').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-      }
-    });
-    
-    $('#vlTND').change(function() {
-      if($('#vlTND').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');        
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlResult').removeClass('isRequired');
-        $('#vlLog').removeClass('isRequired');        
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlLt20').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-        $('#vlResult').addClass('isRequired');
-        $('#vlLog').addClass('isRequired');        
+        $('.specialResults').attr('disabled',false);
       }
     });
 
-    $('#vlLt40').change(function() {
-      if($('#vlLt40').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');        
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt20').attr('disabled',true);
-        $('#vlResult').removeClass('isRequired');
-        $('#vlLog').removeClass('isRequired');        
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlTND').attr('disabled',false);
-        $('#vlLt20').attr('disabled',false);
-        $('#vlResult').addClass('isRequired');
-        $('#vlLog').addClass('isRequired');        
-      }
-    });
+    $('.specialResults').change(function() {
+        if($(this).is(':checked')){
+          $('#vlResult, #vlLog').val('');          
+          $('#vlResult,#vlLog').attr('readonly',true);
+          $('#vlResult, #vlLog').removeClass('isRequired');
+          $(".specialResults").not(this).attr('disabled',true);
+          $('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+        }else{
+          $('#vlResult,#vlLog').attr('readonly',false);
+          $('#vlResult').addClass('isRequired');
+          $(".specialResults").not(this).attr('disabled',false);
+        }
+    });    
 
+   
 
-
-      if($('#vlLt20').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlResult').removeClass('isRequired');
-        $('#vlLog').removeClass('isRequired');          
-      }
-      if($('#vlLt40').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt20').attr('disabled',true);
-        $('#vlResult').removeClass('isRequired');
-        $('#vlLog').removeClass('isRequired');          
-      }
-      if($('#vlResult').val() != ''){
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlResult').addClass('isRequired');
-        $('#vlLog').addClass('isRequired');          
-      }
-      if($('#vlTND').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlResult').removeClass('isRequired');
-        $('#vlLog').removeClass('isRequired');          
-      }   
+    if($(".specialResults").is(':checked')){
+      $('#vlResult, #vlLog').val('');
+      $('#vlResult,#vlLog').attr('readonly',true);
+      $('#vlResult, #vlLog').removeClass('isRequired');
+      //$(".specialResults").not(this).attr('disabled',true);
+      //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+    }  
+    if($('#vlResult, #vlLog').val() != ''){
+      $(".specialResults").attr('disabled',true);  
+      $('#vlResult').addClass('isRequired');     
+    }     
 
   });
 

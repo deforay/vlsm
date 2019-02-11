@@ -505,9 +505,10 @@
                                 <td class="vlResult"><label for="vlResult">Résultat </label></td>
                                 <td>
                                     <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>
-                                    <input type="checkbox" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value"> < 20<br>
-                                    <input type="checkbox" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value"> < 40<br>
-                                    <input type="checkbox" id="vlTND" name="vlTND" value="yes" title="Please check VL value"> Target Not Detected / Non Détecté
+                                    <input type="checkbox" class="specialResults" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value"> < 20<br>
+                                    <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value"> < 40<br>
+                                    <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt400" value="yes" title="Please check VL value"> < 400<br>
+                                    <input type="checkbox" class="specialResults" id="vlTND" name="vlTND" value="yes" title="Please check VL value"> Target Not Detected / Non Détecté
                                 </td>
                                 <td style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td>
@@ -711,8 +712,8 @@
       $("#rejectionReason").addClass('isRequired');
       $("#vlResult").val('').css('pointer-events','none');
       $("#vlLog").val('').css('pointer-events','none');
-      $('#vlLt20').prop('checked', false).removeAttr('checked');
-      $('#vlTND').prop('checked', false).removeAttr('checked');
+      $('.specialResults').prop('checked', false).removeAttr('checked');
+
     }else{
       $(".resultSection").show();
       $(".rejectionReason").hide();
@@ -804,65 +805,27 @@
 
   $(document).ready(function(){
     
-    $('#vlResult').on('input',function(e){
+    $('#vlResult, #vlLog').on('input',function(e){
       if(this.value != ''){
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlTND').attr('disabled',true);
+        $('.specialResults').attr('disabled',true);
       }else{
-        $('#vlLt20').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-        $('#vlTND').attr('disabled',false);
+        $('.specialResults').attr('disabled',false);
       }
     });
     
-    $('#vlLt20').change(function() {
-      if($('#vlLt20').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');        
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlTND').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-      }
+    $('.specialResults').change(function() {
+        if($(this).is(':checked')){
+          $('#vlResult, #vlLog').val('');          
+          $('#vlResult,#vlLog').attr('readonly',true);
+          $(".specialResults").not(this).attr('disabled',true);
+          //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+        }else{
+          $('#vlResult,#vlLog').attr('readonly',false);
+          $(".specialResults").not(this).attr('disabled',false);
+        }
     });
 
-    $('#vlLt40').change(function() {
-      if($('#vlLt40').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');        
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt20').attr('disabled',true);
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlTND').attr('disabled',false);
-        $('#vlLt20').attr('disabled',false);
-      }
-    });
     
-    $('#vlTND').change(function() {
-      if($('#vlTND').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');        
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlLt20').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-      }
-    });
     $('#clinicName').select2({placeholder:"Select Clinic/Health Center"});
     $('#district').select2({placeholder:"District"});
     $('#province').select2({placeholder:"Province"});

@@ -825,6 +825,7 @@ $sKey = ''; $sFormat = '';
 
                                     $('.specialResults').change(function() {
                                         if($(this).is(':checked')){
+                                             $('#vlResult, #vlLog').val(''); 
                                              $('#vlResult,#vlLog').attr('readonly',true);
                                              $(".specialResults").not(this).attr('disabled',true);
                                         }else{

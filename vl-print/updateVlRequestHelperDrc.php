@@ -67,6 +67,10 @@ try {
         $textResult = $_POST['vlResult'] = '< 40';
         $_POST['vlLog'] = '';
     }
+    if(isset($_POST['vlLt400']) && $_POST['vlLt400'] =='yes' && $_POST['rejectionReason'] == NULL){
+        $textResult = $_POST['vlResult'] = '< 400';
+        $_POST['vlLog'] = '';
+    }    
 
     //echo "<pre>";var_dump($_POST);die;
     

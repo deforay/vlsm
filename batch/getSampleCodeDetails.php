@@ -53,6 +53,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 }
 //$query = $query." ORDER BY f.facility_name ASC";
 $query = $query." ORDER BY vl.last_modified_datetime ASC";
+//echo $query;die;
 $result = $db->rawQuery($query);
 ?>
 <div class="col-md-8">
@@ -128,10 +129,10 @@ $result = $db->rawQuery($query);
          //button disabled/enabled
           if(this.qs2.cache().matchedResultsCount == 0){
             $("#batchSubmit").attr("disabled",true);
-	    $("#batchSubmit").css("pointer-events","none");
+	          $("#batchSubmit").css("pointer-events","none");
           }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
-	     alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
-	     $("#batchSubmit").attr("disabled",false);
+              alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+              $("#batchSubmit").attr("disabled",false);
              $("#batchSubmit").css("pointer-events","auto");
 	  }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
 	    $("#batchSubmit").attr("disabled",false);
