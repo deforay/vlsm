@@ -575,9 +575,10 @@ if($vlQueryInfo[0]['sample_code']!='')
                                 <td class="vlResult">
 
                                   <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" <?php echo $labFieldDisabled; ?> value="<?php echo $vlQueryInfo[0]['result']; ?>" onchange="calculateLogValue(this)" style="width:100%;"/>
-                                  <input type="checkbox" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 20' || $vlQueryInfo[0]['result'] == '<20') ? 'checked="checked"':''; ?>> < 20<br>
-                                  <input type="checkbox" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 40' || $vlQueryInfo[0]['result'] == '<40') ? 'checked="checked"':''; ?>> < 40<br>
-                                  <input type="checkbox" id="vlTND" name="vlTND" value="yes" title="Please check VL value" <?php echo in_array(strtolower($vlQueryInfo[0]['result']), array('target not detected','non détecté', 'non détecté', 'non detecte', 'non detectee', 'tnd', 'bdl', 'below detection level')) ? 'checked="checked"':''; ?> > Target Not Detected / Non Détecté
+                                  <input type="checkbox" class="specialResults" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 20' || $vlQueryInfo[0]['result'] == '<20') ? 'checked="checked"':''; ?>> < 20<br>
+                                  <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 40' || $vlQueryInfo[0]['result'] == '<40') ? 'checked="checked"':''; ?>> < 40<br>
+                                  <input type="checkbox" class="specialResults" id="vlLt400" name="vlLt400" value="yes" title="Please check VL value" <?php echo ($vlQueryInfo[0]['result'] == '< 400' || $vlQueryInfo[0]['result'] == '<400') ? 'checked="checked"':''; ?>> < 400<br>
+                                  <input type="checkbox" class="specialResults" id="vlTND" name="vlTND" value="yes" title="Please check VL value" <?php echo in_array(strtolower($vlQueryInfo[0]['result']), array('target not detected','non détecté', 'non détecté', 'non detecte', 'non detectee', 'tnd', 'bdl', 'below detection level')) ? 'checked="checked"':''; ?> > Target Not Detected / Non Détecté
                                 </td>
                                 <td class="vlLog" style="text-align:center;"><label for="vlLog">Log </label></td>
                                 <td class="vlLog">
@@ -720,8 +721,7 @@ if($vlQueryInfo[0]['sample_code']!='')
     function checkTestStatus(){
       var status = $("#status").val();
       if(status == 4){
-        $('#vlLt20').prop('checked', false).removeAttr('checked');
-        $('#vlTND').prop('checked', false).removeAttr('checked');
+        $('.specialResults').prop('checked', false).removeAttr('checked');
         $('#vlResult').attr('disabled',false);
         $('#vlLog').attr('disabled',false);
         $(".rejectionReason").show();
@@ -768,6 +768,8 @@ if($vlQueryInfo[0]['sample_code']!='')
         absValue = $("#vlResult").val();
         if(absValue!='' && absValue!=0){
           $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
+        }else{
+          $("#vlLog").val('');
         }
       }
       if(obj.id=="vlLog") {
@@ -775,7 +777,7 @@ if($vlQueryInfo[0]['sample_code']!='')
         if(logValue!='' && logValue!=0){
           var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
           if(absVal!='Infinity'){
-          $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
+            $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
           }else{
             $("#vlResult").val('');
           }
@@ -797,101 +799,28 @@ if($vlQueryInfo[0]['sample_code']!='')
 
 $(document).ready(function(){
 
-  $('#vlResult').on('input',function(e){
+    $('#vlResult, #vlLog').on('input',function(e){
       if(this.value != ''){
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlTND').attr('disabled',true);
+        $('.specialResults').attr('disabled',true);
       }else{
-        $('#vlLt20').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-        $('#vlTND').attr('disabled',false);
+        $('.specialResults').attr('disabled',false);
       }
     });
-
-    $('#vlLt20').change(function() {
-      if($('#vlLt20').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlTND').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-      }
-    });
-
-    $('#vlLt40').change(function() {
-      if($('#vlLt40').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt20').attr('disabled',true);
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlTND').attr('disabled',false);
-        $('#vlLt20').attr('disabled',false);
-      }
+    
+    $('.specialResults').change(function() {
+        if($(this).is(':checked')){
+          $('#vlResult, #vlLog').val('');          
+          $('#vlResult,#vlLog').attr('readonly',true);
+          $(".specialResults").not(this).attr('disabled',true);
+          //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+        }else{
+          $('#vlResult,#vlLog').attr('readonly',false);
+          $(".specialResults").not(this).attr('disabled',false);
+        }
     });
 
 
-
-    $('#vlTND').change(function() {
-      if($('#vlTND').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-      }else{
-        $('#vlResult').attr('readonly',false);
-        $('#vlLog').attr('readonly',false);
-        $('#vlLt20').attr('disabled',false);
-        $('#vlLt40').attr('disabled',false);
-      }
-    });
-
-
-
-
-      if($('#vlLt20').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-      }
-      if($('#vlLt40').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlTND').attr('disabled',true);
-        $('#vlLt20').attr('disabled',true);
-      }
-      if($('#vlResult').val() != ''){
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-        $('#vlTND').attr('disabled',true);
-      }
-      if($('#vlTND').is(':checked')){
-        $('#vlResult').val('');
-        $('#vlLog').val('');
-        $('#vlResult').attr('readonly',true);
-        $('#vlLog').attr('readonly',true);
-        $('#vlLt20').attr('disabled',true);
-        $('#vlLt40').attr('disabled',true);
-      }
-      $('#clinicName').select2({placeholder:"Select Clinic/Health Center"});
+    $('#clinicName').select2({placeholder:"Select Clinic/Health Center"});
     $('#district').select2({placeholder:"District"});
     $('#province').select2({placeholder:"Province"});
   });

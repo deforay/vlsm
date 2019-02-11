@@ -740,7 +740,7 @@ $disable = "disabled = 'disabled'";
         $('#vlResult').addClass('isRequired');
         // if any of the special results like tnd,bld are selected then remove isRequired from vlResult
         if($('.specialResults:checkbox:checked').length){
-            $('#vlResult').removeClass('isRequired');
+          $('#vlResult').removeClass('isRequired');
         }
       }
     });
@@ -750,14 +750,29 @@ $disable = "disabled = 'disabled'";
           $('#vlResult,#vlLog').attr('readonly',true);
           $('#vlResult').removeClass('isRequired');
           $(".specialResults").not(this).attr('disabled',true);
+          $('.specialResults').not(this).prop('checked', false).removeAttr('checked');
         }else{
-            $('#vlResult,#vlLog').attr('readonly',false);
-            $(".specialResults").not(this).attr('disabled',false);
-            if($('#noResultNo').is(':checked')){
-              $('#vlResult').addClass('isRequired');
-            }
+          $('#vlResult,#vlLog').attr('readonly',false);
+          $(".specialResults").not(this).attr('disabled',false);
+          if($('#noResultNo').is(':checked')){
+            $('#vlResult').addClass('isRequired');
+          }
         }
     });
+
+   
+
+    if($(".specialResults").is(':checked')){
+      $('#vlResult, #vlLog').val('');
+      $('#vlResult,#vlLog').attr('readonly',true);
+      $('#vlResult, #vlLog').removeClass('isRequired');
+      //$(".specialResults").not(this).attr('disabled',true);
+      //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
+    }  
+    if($('#vlResult, #vlLog').val() != ''){
+      $(".specialResults").attr('disabled',true);  
+      $('#vlResult').addClass('isRequired');
+    }      
 
     $('#vlResult,#vlLog').on('input',function(e){
         if(this.value != ''){
