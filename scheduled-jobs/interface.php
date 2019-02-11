@@ -6,7 +6,7 @@ require(__DIR__ . "/../General.php");
 $general=new General($db);
 //get the value from interfacing DB
 
-$interfaceQuery="SELECT * from orders where result_status = 1";
+$interfaceQuery="SELECT * from orders where result_status = 1 and lims_sync_status=0";
 $interfaceInfo=$interfacedb->query($interfaceQuery);
 if(count($interfaceInfo)>0)
 {
