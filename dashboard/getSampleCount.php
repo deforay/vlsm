@@ -86,7 +86,7 @@ $sQuery="SELECT
       <tr>
          <th >Facility Name</th>
          <th class="sum">Samples Registered at HFs</th>
-         <th class="sum">Sample Reordered</th>
+         <th class="sum">Samples Reordered</th>
          <!-- <th class="sum">Samples Received/ Sent To Lab</th> -->
          <th class="sum">Samples Rejected</th>
          <th class="sum">Samples Received at Lab</th>
