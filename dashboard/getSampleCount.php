@@ -90,9 +90,9 @@ $sQuery="SELECT
          <th >Facility Name</th>
          <th class="sum">Samples Registered at HFs</th>
          <th class="sum">Sample Reordered</th>
-         <th class="sum">Samples Received/ Sent To Lab</th>
+         <!-- <th class="sum">Samples Received/ Sent To Lab</th> -->
          <th class="sum">Samples Rejected</th>
-         <th class="sum">Samples Pending</th>
+         <th class="sum">Samples Received at Lab</th>
          <th class="sum">Samples with Invalid or Failed Results</th>
          <th class="sum">Samples with Accepted Results</th>
          <th class="sum">Results Printed</th>
@@ -107,7 +107,7 @@ if (isset($tableResult) && count($tableResult) > 0) {
                         <td><?php echo ucwords($tableRow['facility_name']); ?></td>
                         <td><?php echo $tableRow['registerCount']; ?></td>
                         <td><?php echo $tableRow['reorderCount']; ?></td>
-                        <td><?php echo $tableRow['sentToLabCount']; ?></td>
+                        <!-- <td>< ?php echo $tableRow['sentToLabCount']; ?></td> -->
                         <td><?php echo $tableRow['rejectCount']; ?></td>
                         <td><?php echo $tableRow['pendingCount']; ?></td>
                         <td><?php echo $tableRow['invalidCount']; ?></td>
@@ -121,7 +121,8 @@ if (isset($tableResult) && count($tableResult) > 0) {
    </tbody>
    <tfoot>
     <tr>
-        <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+        <!-- <th></th> -->
+        <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
     </tr>
     </tfoot>
 </table>
