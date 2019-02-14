@@ -5,7 +5,7 @@ require_once(__DIR__.'/config.production.php');
 $HOST = 'localhost';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vlrbc';
+$DBNAME = 'nygvlsm';
 $PORT = 3306;
 
 $iHOST = 'localhost';
