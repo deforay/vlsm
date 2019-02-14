@@ -47,7 +47,7 @@ $batResult = $db->rawQuery($batQuery);
 											<ul id="myTab" class="nav nav-tabs">
 												<li class="active"><a href="#highViralLoadReport" data-toggle="tab">High Viral Load Report</a></li>
 												<li><a href="#sampleRjtReport" data-toggle="tab">Sample Rejection Report</a></li>
-												<li><a href="#notAvailReport" data-toggle="tab">Results not Available Report</a></li>
+												<li><a href="#notAvailReport" data-toggle="tab">Results Not Available Report</a></li>
 												<li><a href="#incompleteFormReport" data-toggle="tab">Data Quality Check</a></li>
 											</ul>
 											<div id="myTabContent" class="tab-content" >
