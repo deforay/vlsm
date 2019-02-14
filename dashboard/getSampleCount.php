@@ -40,10 +40,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 
 $sQuery="SELECT
 	vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
-	SUM(CASE
-		WHEN (result_status=9) THEN 1
-			ELSE 0
-		END) AS registerCount,
+	COUNT(*) AS registerCount,
     SUM(CASE
 		WHEN (sample_reordered='yes') THEN 1
 			ELSE 0

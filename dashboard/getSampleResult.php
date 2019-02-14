@@ -37,12 +37,7 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
    }
 }
 $sWhere = '';
-$vlQuery = "select DISTINCT YEAR(sample_collection_date), MONTH(sample_collection_date), DAY(sample_collection_date)  from vl_request_form as vl ";
-$sWhere.= ' where '.$whereCondition.' DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
-$vlQuery = $vlQuery.$sWhere;
 
-
-$vlResult = $db->rawQuery($vlQuery);
 
 $waitingTotal = 0;
 $rejectedTotal = 0;
@@ -64,76 +59,34 @@ if($waitingResult[$i][0]['total']!= 0){
   unset($waitingResult[$i]);
 }
 
-foreach($vlResult as $vlData){
-   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
-   $date = $vlData['YEAR(sample_collection_date)']."-".$vlData['MONTH(sample_collection_date)']."-".$vlData['DAY(sample_collection_date)'];
-   $dFormat = date("d M", strtotime($date));
-   //filter
-   $sWhere = '';
-   
-   $rejectedWhere = '';
-   if(isset($cDate) && trim($cDate)!= ''){
-      $sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$date.' 00:00:00" AND DATE(vl.sample_collection_date) <= "'.$date.' 23:59:59"';
-   }
 
-    
-   //get rejected data
-    $rejectedWhere.= " AND vl.is_sample_rejected='yes'";
-    $rejectedQuery = $tQuery.' '.$sWhere.$rejectedWhere;
-    $rejectedResult[$i] = $db->rawQuery($rejectedQuery);//rejected result
-    if($rejectedResult[$i][0]['total']!= 0){
-      $rejectedTotal = $rejectedTotal + $rejectedResult[$i][0]['total'];
-      $rejectedResult[$i]['date'] = $dFormat;
-      $rejectedDate = $dFormat;
-    }else{
-      unset($rejectedResult[$i]);
-    }
-   
-    $tQuery = $tQuery.' '.$sWhere;
-    $tResult[$i] = $db->rawQuery($tQuery);//overall result
-    if($tResult[$i][0]['total']!= 0){
-      $receivedTotal = $receivedTotal + $tResult[$i][0]['total'];
-      $tResult[$i]['date'] = $dFormat;
-    }else{
-      unset($tResult[$i]);
-    }
-   $i++;
+// Samples Accession
+$accessionQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where '.$whereCondition.' DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" group by `collection_date` order by `collection_date`';
+$tRes = $db->rawQuery($accessionQuery);//overall result
+$tResult = array();
+foreach($tRes as $tRow){
+    $receivedTotal += $tRow['count'];
+    $tResult[] = array('total' => $tRow['count'], 'date' => $tRow['collection_date']);
 }
 
-//for sample tested
-$stWhere = '';
-$stVlQuery = "select DISTINCT YEAR(sample_tested_datetime), MONTH(sample_tested_datetime), DAY(sample_tested_datetime) from vl_request_form as vl";
-$stWhere.= ' where '.$whereCondition.' DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'"';
-$stVlQuery = $stVlQuery.$stWhere;
-$stVlResult = $db->rawQuery($stVlQuery);
-
-$j=0;
-$acceptedTotal = 0;
-$acceptedDate = '';
-foreach($stVlResult as $vlData){
-   $tQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."'";
-   $date = $vlData['YEAR(sample_tested_datetime)']."-".$vlData['MONTH(sample_tested_datetime)']."-".$vlData['DAY(sample_tested_datetime)'];
-   $dFormat = date("d M", strtotime($date));
-
-   //filter
-   $sWhere = '';
-   if(isset($cDate) && trim($cDate)!= ''){
-      $sWhere.= ' AND DATE(vl.sample_tested_datetime) >= "'.$date.' 00:00:00" AND DATE(vl.sample_tested_datetime) <= "'.$date.' 23:59:59"';
-   }
-   $acceptedQuery = $tQuery.' '.$sWhere;
-
-   //echo ($acceptedQuery); die;
-
-   $acceptedResult[$j] = $db->rawQuery($acceptedQuery);
-   if($acceptedResult[$j][0]['total']!= 0){
-     $acceptedTotal = $acceptedTotal + $acceptedResult[$j][0]['total'];
-     $acceptedResult[$j]['date'] = $dFormat;
-     $acceptedDate = $dFormat;
-   }else{
-     unset($acceptedResult[$j]);
-   }
-  $j++;
+//Samples Tested
+$sampleTestedQuery = 'SELECT DATE(vl.sample_tested_datetime) as `test_date`, COUNT(vl_sample_id) as `count` FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where '.$whereCondition.' DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" group by `test_date` order by `test_date`';
+$tRes = $db->rawQuery($sampleTestedQuery);//overall result
+$acceptedResult = array();
+foreach($tRes as $tRow){
+    $acceptedTotal += $tRow['count'];
+    $acceptedResult[] = array('total' => $tRow['count'], 'date' => $tRow['test_date']);
 }
+
+//Rejected Samples
+$sampleRejectedQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where '.$whereCondition.' vl.is_sample_rejected="yes" AND DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" group by `collection_date` order by `collection_date`';
+$tRes = $db->rawQuery($sampleRejectedQuery);//overall result
+$rejectedResult = array();
+foreach($tRes as $tRow){
+    $rejectedTotal += $tRow['count'];
+    $rejectedResult[] = array('total' => $tRow['count'], 'date' => $tRow['collection_date']);
+}
+
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
     <div class="dashboard-stat2 bluebox" style="cursor:pointer;" >
@@ -144,7 +97,6 @@ foreach($stVlResult as $vlData){
                 </h3>
                 <small class="font-green-sharp">SAMPLES ACCESSION</small><br>
                 <small class="font-green-sharp" style="font-size:0.75em;">in selected range</small>
-                <!--<small class="font-green-sharp"><?php echo $dFormat;?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
@@ -233,8 +185,8 @@ foreach($stVlResult as $vlData){
         xAxis: {
             categories: [
             <?php
-            foreach($tResult as $total){
-                echo '"'.ucwords($total['date']).'",';
+            foreach($tResult as $tRow){
+                echo '"'.ucwords($tRow['date']).'",';
             }
             ?>],
             crosshair: true,          
@@ -274,8 +226,8 @@ foreach($stVlResult as $vlData){
             showInLegend: false,  
             name: 'Samples',
             data: [<?php
-            foreach($tResult as $total){
-                echo ucwords($total[0]['total']).",";
+            foreach($tResult as $tRow){
+                echo ucwords($tRow['total']).",";
             }
             ?>]
 
@@ -363,8 +315,8 @@ $('#samplesTestedChart').highcharts({
          },
         xAxis: {
             categories: [<?php
-            foreach($acceptedResult as $total){
-                echo "'".ucwords($total['date'])."',";
+            foreach($acceptedResult as $tRow){
+                echo "'".ucwords($tRow['date'])."',";
             }
             ?>],
             crosshair: true,
@@ -397,8 +349,8 @@ $('#samplesTestedChart').highcharts({
             showInLegend: false,  
             name: 'Samples',
             data: [<?php
-            foreach($acceptedResult as $total){
-                echo ucwords($total[0]['total']).",";
+            foreach($acceptedResult as $tRow){
+                echo ucwords($tRow['total']).",";
             }
             ?>]
 
@@ -426,8 +378,8 @@ $('#samplesRejectedChart').highcharts({
          },
         xAxis: {
             categories: [<?php
-            foreach($rejectedResult as $total){
-                echo "'".ucwords($total['date'])."',";
+            foreach($rejectedResult as $tRow){
+                echo "'".ucwords($tRow['date'])."',";
             }
             ?>],
             crosshair: true,
@@ -460,8 +412,8 @@ $('#samplesRejectedChart').highcharts({
             showInLegend: false,  
             name: 'Samples',
             data: [<?php
-            foreach($rejectedResult as $total){
-                echo ucwords($total[0]['total']).",";
+            foreach($rejectedResult as $tRow){
+                echo ucwords($tRow['total']).",";
             }
             ?>]
 
