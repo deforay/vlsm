@@ -91,10 +91,12 @@ include('../header.php');
             <a href="vlRequest.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>-->
-        
+        <div class="box-body" id="noOfSampleCount">
+            </div>
             <div id="pieChartDiv">
             </div>
-          
+
+            
       </div>
       
       <!-- /.row -->
@@ -145,6 +147,18 @@ include('../header.php');
       function(data){
         if(data!=''){
           $("#sampleResultDetails").html(data);
+        }
+      });
+      $.unblockUI();
+      getNoOfSampleCount();
+    }
+
+    function getNoOfSampleCount(){
+      $.blockUI();
+      $.post("getSampleCount.php",{sampleCollectionDate:$("#sampleCollectionDate").val()},
+      function(data){
+        if(data!=''){
+          $("#noOfSampleCount").html(data);
         }
       });
       $.unblockUI();
