@@ -54,7 +54,7 @@ include('../header.php');
 		<tr>
 		    <td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
 		    <td>
-		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;"/>
+		      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;"/>
 		    </td>
 		    <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData();"><span>Reset</span></button>
@@ -111,13 +111,7 @@ include('../header.php');
   <script src="../assets/js/highcharts.js"></script>
   <script>
     $(function () {
-    $.post("../includes/getMissingResult.php",{sampleCollectionDate:'',batchCode:'',facilityName:'',sampleType:''},
-      function(data){
-        if($.trim(data)!=''){
-          $("#pieChartDiv").html(data);
-          $(".labAverageTatDiv").css("display","none");
-        }
-      });
+    
     
     $('#sampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
@@ -151,6 +145,7 @@ include('../header.php');
       });
       $.unblockUI();
       getNoOfSampleCount();
+      getSamplesOverview();
     }
 
     function getNoOfSampleCount(){
@@ -163,6 +158,18 @@ include('../header.php');
       });
       $.unblockUI();
     }
+
+function getSamplesOverview(){
+      $.blockUI();
+      $.post("../includes/getMissingResult.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),batchCode:'',facilityName:'',sampleType:''},
+      function(data){
+        if($.trim(data)!=''){
+          $("#pieChartDiv").html(data);
+          $(".labAverageTatDiv").css("display","none");
+        }
+      });
+      $.unblockUI();
+    }    
     
     function resetSearchVlRequestData(){
       $('#sampleCollectionDate').daterangepicker({

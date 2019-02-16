@@ -40,11 +40,15 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
 
 $sQuery="SELECT
 	vl.facility_id,f.facility_code,f.facility_state,f.facility_district,f.facility_name,
-	COUNT(*) AS registerCount,
+	COUNT(*) AS totalCount,
     SUM(CASE
 		WHEN (sample_reordered='yes') THEN 1
 			ELSE 0
 		END) AS reorderCount,
+    SUM(CASE
+		WHEN (result_status=9) THEN 1
+			ELSE 0
+		END) AS registerCount,
     SUM(CASE
 		WHEN (result_status=8) THEN 1
 			ELSE 0
@@ -85,13 +89,14 @@ $sQuery="SELECT
    <thead>
       <tr>
          <th >Facility Name</th>
-         <th class="sum">Samples Registered at HFs</th>
-         <th class="sum">Samples Reordered</th>
+         <th class="sum">Total Samples Registered</th>
+         <th class="sum">Samples Currently Registered at HC</th>
          <!-- <th class="sum">Samples Received/ Sent To Lab</th> -->
          <th class="sum">Samples Rejected</th>
-         <th class="sum">Samples Received at Lab</th>
+         <th class="sum">Samples Received at VL Lab</th>
          <th class="sum">Samples with Invalid or Failed Results</th>
          <th class="sum">Samples with Accepted Results</th>
+         <th class="sum">Samples Reordered</th>         
          <th class="sum">Results Printed</th>
       </tr>
    </thead>
@@ -102,13 +107,13 @@ if (isset($tableResult) && count($tableResult) > 0) {
         ?>
                     <tr>
                         <td><?php echo ucwords($tableRow['facility_name']); ?></td>
+                        <td><?php echo $tableRow['totalCount']; ?></td>
                         <td><?php echo $tableRow['registerCount']; ?></td>
-                        <td><?php echo $tableRow['reorderCount']; ?></td>
-                        <!-- <td>< ?php echo $tableRow['sentToLabCount']; ?></td> -->
                         <td><?php echo $tableRow['rejectCount']; ?></td>
                         <td><?php echo $tableRow['pendingCount']; ?></td>
                         <td><?php echo $tableRow['invalidCount']; ?></td>
                         <td><?php echo $tableRow['acceptCount']; ?></td>
+                        <td><?php echo $tableRow['reorderCount']; ?></td>
                         <td><?php echo $tableRow['printCount']; ?></td>
                     </tr>
                     <?php
@@ -119,7 +124,7 @@ if (isset($tableResult) && count($tableResult) > 0) {
    <tfoot>
     <tr>
         <!-- <th></th> -->
-        <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
+        <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
     </tr>
     </tfoot>
 </table>
