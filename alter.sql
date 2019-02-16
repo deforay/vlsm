@@ -1540,3 +1540,5 @@ ALTER TABLE `activity_log` ADD `ip_address` VARCHAR(255) NULL DEFAULT NULL AFTER
 -- Version 3.10 ---------- Amit 11-Feb-2018
 
 -- Version 3.10.1 ---------- Saravanan 14-Feb-2018
+
+-- Version 3.10.2 ---------- Saravanan 16-Feb-2018
