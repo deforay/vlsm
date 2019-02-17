@@ -82,6 +82,12 @@ $sQuery="SELECT
     $tableResult = $db->rawQuery($sQuery);
     
     ?>
+
+<style>
+#vlRequestCountDataTable thead th{
+    vertical-align:middle;
+}
+</style>    
     <div class="col-xs-12">
     <div class="box">
         <div class="box-body" >
@@ -92,10 +98,11 @@ $sQuery="SELECT
          <th class="sum">Total Samples Registered</th>
          <th class="sum">Samples Currently Registered at HC</th>
          <!-- <th class="sum">Samples Received/ Sent To Lab</th> -->
+         <th class="sum">Samples Currently Registered at VL Lab<br>(Results not yet available)</th>         
+         <th class="sum">Samples with Accepted Results</th>         
+
          <th class="sum">Samples Rejected</th>
-         <th class="sum">Samples Received at VL Lab</th>
          <th class="sum">Samples with Invalid or Failed Results</th>
-         <th class="sum">Samples with Accepted Results</th>
          <th class="sum">Samples Reordered</th>         
          <th class="sum">Results Printed</th>
       </tr>
@@ -109,10 +116,10 @@ if (isset($tableResult) && count($tableResult) > 0) {
                         <td><?php echo ucwords($tableRow['facility_name']); ?></td>
                         <td><?php echo $tableRow['totalCount']; ?></td>
                         <td><?php echo $tableRow['registerCount']; ?></td>
-                        <td><?php echo $tableRow['rejectCount']; ?></td>
                         <td><?php echo $tableRow['pendingCount']; ?></td>
+                        <td><?php echo $tableRow['acceptCount']; ?></td>                        
+                        <td><?php echo $tableRow['rejectCount']; ?></td>
                         <td><?php echo $tableRow['invalidCount']; ?></td>
-                        <td><?php echo $tableRow['acceptCount']; ?></td>
                         <td><?php echo $tableRow['reorderCount']; ?></td>
                         <td><?php echo $tableRow['printCount']; ?></td>
                     </tr>
