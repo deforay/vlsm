@@ -48,7 +48,7 @@ $rejectedDate = '';
 $i = 0;
 
 //get waiting data
-$waitingQuery="select COUNT(vl_sample_id) as total FROM vl_request_form as vl where $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (vl.result is null or vl.result = '')";
+$waitingQuery="SELECT COUNT(vl_sample_id) as total FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
 
 $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
 if($waitingResult[$i][0]['total']!= 0){

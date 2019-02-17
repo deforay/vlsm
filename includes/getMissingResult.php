@@ -6,25 +6,42 @@ include_once '../General.php';
 
 $general = new General($db); // passing $db which is coming from MysqliDb.php
 
-$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormQuery = "SELECT * FROM global_config WHERE `name` ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 
 $userType = $general->getSystemConfig('user_type');
 
 if ($userType != 'remoteuser') {
     $whereCondition = " AND vl.result_status!=9";
-    $tsQuery = "select * from r_sample_status where status_id!=9";
+    $tsQuery = "SELECT * FROM r_sample_status WHERE status_id!=9 ORDER BY status_id";
 } else {
     $whereCondition = '';
-    $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
+    $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT `facility_id` ORDER BY `facility_id` SEPARATOR ',') as `facility_id` FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
         $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
     }
-    $tsQuery = "select * from r_sample_status";
+    $tsQuery = "SELECT * FROM `r_sample_status` ORDER BY `status_id`";
 }
 
 $tsResult = $db->rawQuery($tsQuery);
+// $sampleStatusArray = array();
+// foreach($tsResult as $tsRow){
+//     $sampleStatusArray = $tsRow['status_name'];
+// }
+
+$sampleStatusColors = array();
+
+$sampleStatusColors[1] = "#dda41b"; // HOLD
+$sampleStatusColors[2] = "#9a1c64"; // LOST
+$sampleStatusColors[3] = "grey"; // Sample Reordered
+$sampleStatusColors[4] = "#d8424d"; // Rejected
+$sampleStatusColors[5] = "black"; // Invalid
+$sampleStatusColors[6] = "#e2d44b"; // Sample Received at lab
+$sampleStatusColors[7] = "#639e11"; // Accepted
+$sampleStatusColors[8] = "#7f22e8"; // Sent to Lab
+$sampleStatusColors[9] = "#4BC0D9"; // Sample Registered at Health Center
+
 //date
 $start_date = '';
 $end_date = '';
@@ -39,7 +56,13 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
     }
 }
 
-$tQuery = "select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
+$tQuery = "SELECT COUNT(vl_sample_id) as total,status_id,status_name 
+                FROM vl_request_form as vl 
+                JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+                JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+                LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+                WHERE vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
 
 //filter
 $sWhere = '';
@@ -57,17 +80,31 @@ if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($
 }
 $tQuery .= " " . $sWhere;
 
-$tQuery .= " GROUP BY vl.result_status";
+$tQuery .= " " . "GROUP BY vl.result_status ORDER BY status_id";
 
 //echo $tQuery;die;
 
 $tResult = $db->rawQuery($tQuery);
 
+
 //HVL and LVL Samples
-$hvlQuery = '';
-$lvlQuery = '';
-$vlSampleQuery = "select COUNT(vl_sample_id) as total,status_id,status_name FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
-$sWhere = '';
+
+$vlSuppressionQuery = "SELECT   COUNT(vl_sample_id) as total,
+                                SUM(CASE
+                                        WHEN (vl.result > 1000) THEN 1
+                                            ELSE 0
+                                        END) AS highVL,
+                                (SUM(CASE
+                                        WHEN (vl.result <= 1000 OR vl.result REGEXP '^[^0-9]+$') THEN 1
+                                            ELSE 0
+                                        END)) AS lowVL,                                        
+                                status_id,
+                                status_name 
+                                
+                                FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
+
+$sWhere = " AND (vl.result!='' and vl.result is not null) ";
+
 if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
     $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
 }
@@ -80,10 +117,9 @@ if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
 if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
     $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
 }
-$hvlQuery = $vlSampleQuery . ' ' . $sWhere . " AND vl.result > 1000 AND vl.result!=''";
-$lvlQuery = $vlSampleQuery . ' ' . $sWhere . " AND vl.result <= 1000 AND vl.result!='' AND vl.result_status != '4'";
-$vlSampleResult['hvl'] = $db->rawQuery($hvlQuery);
-$vlSampleResult['lvl'] = $db->rawQuery($lvlQuery);
+$vlSuppressionQuery = $vlSuppressionQuery . ' ' . $sWhere;
+
+$vlSuppressionResult = $db->rawQueryOne($vlSuppressionQuery);
 
 //get LAB TAT
 if ($start_date == '' && $end_date == '') {
@@ -148,11 +184,11 @@ foreach ($tatResult as $sRow) {
 </div>
 </div>
 <div class="col-xs-12 labAverageTatDiv">
-          <div class="box">
-<div class="box-body" >
-    <div id="labAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
-</div>
-</div>
+    <div class="box">
+    <div class="box-body" >
+        <div id="labAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
+    </div>
+    </div>
 </div>
 <script>
     <?php
@@ -194,30 +230,35 @@ if (isset($tResult) && count($tResult) > 0) {?>
                     }
                 },
         series: [{
-            colorByPoint: true,
+            colorByPoint: false,
             point: {
-		events: {
-                     click: function(e) {
-                        //console.log(e.point.url);
-                        window.open(e.point.url, '_blank');
-                        e.preventDefault();
-                     }
-		}
-	    },
+                events: {
+                            click: function(e) {
+                                //console.log(e.point.url);
+                                window.open(e.point.url, '_blank');
+                                e.preventDefault();
+                            }
+                }
+	        },
             data: [
             <?php
-foreach ($tResult as $tRow) {
-    ?>
-                {name:'<?php echo ucwords($tRow['status_name']); ?>',y:<?php echo ucwords($tRow['total']); ?>,url:'../dashboard/vlTestResultStatus.php?id=<?php echo base64_encode($total[0]['status_id']); ?>'},
-                <?php
-}
-    ?>
+                foreach ($tResult as $tRow) {
+            ?>
+                    {
+                        name : '<?php echo ($tRow['status_name']); ?>',
+                        y    : <?php echo ($tRow['total']); ?>,
+                        color : '<?php echo $sampleStatusColors[$tRow['status_id']]; ?>',
+                        url  : '../dashboard/vlTestResultStatus.php?id=<?php echo base64_encode($tRow['status_id']); ?>'
+                    },
+            <?php
+                }
+            ?>
             ]
         }]
       });
 	  Highcharts.setOptions({
-     colors: ['#FF0000', '#50B432']
-    });
+        colors: ['#FF0000', '#50B432']
+        });
       $('#samplesVlOverview').highcharts({
                 chart: {
                     plotBackgroundColor: null,
@@ -226,7 +267,7 @@ foreach ($tResult as $tRow) {
                     type: 'pie'
                 },
                 title: {
-                    text: 'Samples VL Overview'
+                    text: 'VL Suppression'
                 },
                 credits: {
                   enabled: false
@@ -254,8 +295,8 @@ foreach ($tResult as $tRow) {
         series: [{
             colorByPoint: true,
             data: [
-			   {name:'High Viral Load',y:<?php echo ucwords($vlSampleResult['hvl'][0]['total']); ?>},
-			   {name:'Low Viral Load',y:<?php echo ucwords($vlSampleResult['lvl'][0]['total']); ?>},
+			   {name:'High Viral Load',y:<?php echo ucwords($vlSuppressionResult['highVL']); ?>},
+			   {name:'Low Viral Load',y:<?php echo ucwords($vlSuppressionResult['lowVL']); ?>},
             ]
         }]
       });
@@ -280,11 +321,11 @@ foreach ($tResult as $tRow) {
         xAxis: {
             //categories: ["21 Mar", "22 Mar", "23 Mar", "24 Mar", "25 Mar", "26 Mar", "27 Mar"]
             categories: [<?php
-if (isset($result['date']) && count($result['date']) > 0) {
-    foreach ($result['date'] as $date) {
-        echo "'" . $date . "',";
-    }
-}
+                    if (isset($result['date']) && count($result['date']) > 0) {
+                        foreach ($result['date'] as $date) {
+                            echo "'" . $date . "',";
+                        }
+                    }
     ?>]
         },
         yAxis: {
