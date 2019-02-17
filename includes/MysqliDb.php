@@ -2295,4 +2295,3 @@ defined('APPLICATION_ENV')
 require_once(realpath(__DIR__."/../configs/config.".APPLICATION_ENV.".php"));
 
 $db = new MysqliDb($HOST, $USER, $PASSWORD, $DBNAME, $PORT);
-$interfacedb = new MysqliDb($iHOST, $iUSER, $iPASSWORD, $iDBNAME, $iPORT);

@@ -3,6 +3,8 @@
 require(__DIR__ . "/../includes/MysqliDb.php");
 require(__DIR__ . "/../General.php");
 
+$interfacedb = new MysqliDb($iHOST, $iUSER, $iPASSWORD, $iDBNAME, $iPORT);
+
 $general=new General($db);
 //get the value from interfacing DB
 
