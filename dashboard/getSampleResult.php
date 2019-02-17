@@ -95,7 +95,7 @@ foreach($tRes as $tRow){
                 <h3 class="font-green-sharp">
                     <span data-counter="counterup" data-value="<?php echo $receivedTotal; ?>"><?php echo $receivedTotal; ?></span>
                 </h3>
-                <small class="font-green-sharp">SAMPLES ACCESSION</small><br>
+                <small class="font-green-sharp">SAMPLES REGISTERED</small><br>
                 <small class="font-green-sharp" style="font-size:0.75em;">in selected range</small>
             </div>
             <div class="icon">
@@ -150,7 +150,7 @@ foreach($tRes as $tRow){
                 <h3 class="font-purple-soft">
                     <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
                 </h3>
-                <small class="font-purple-soft">SAMPLES WAITING</small><br>
+                <small class="font-purple-soft">SAMPLES WITH NO RESULTS</small><br>
                 <small class="font-purple-soft"  style="font-size:0.75em;">As of today</small>
                 <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
             </div>
