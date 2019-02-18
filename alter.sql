@@ -1544,3 +1544,5 @@ UPDATE `r_sample_status` SET `status_name` = 'Sample Registered at VL Lab' WHERE
 -- Version 3.10.1 ---------- Saravanan 14-Feb-2018
 
 -- Version 3.10.2 ---------- Saravanan 16-Feb-2018
+
+-- Version 3.10.3 ---------- Amit 18-Feb-2018
