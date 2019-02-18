@@ -91,8 +91,6 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     $sWhere .= ")";
                }
                //$sWhere .= $sWhereSub;
-          }else{
-               //$sWhere = "vl.result_status = 6";
           }
 
           /* Individual column filtering */

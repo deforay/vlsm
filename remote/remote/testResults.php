@@ -13,7 +13,7 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
     $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
 }
 
-$general = new General();
+$general = new General($db);
 
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
 $allColResult = $db->rawQuery($allColumns);

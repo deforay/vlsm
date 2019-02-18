@@ -48,13 +48,8 @@ try {
             $eventType = 'login';
             $action = ucwords($admin[0]['user_name']).' logged in';
             $resource = 'user-login';
-            $data=array(
-                'event_type'=>$eventType,
-                'action'=>$action,
-                'resource'=>$resource,
-                'date_time'=>$general->getDateTime()
-            );
-            $db->insert('activity_log',$data);
+
+            $general->activityLog($eventType,$action,$resource);            
     
             $_SESSION['userId']=$admin[0]['user_id'];
             $_SESSION['userName']=ucwords($admin[0]['user_name']);

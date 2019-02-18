@@ -12,8 +12,10 @@ $configFormResult = $db->rawQuery($configFormQuery);
 $userType = $general->getSystemConfig('user_type');
 
 if ($userType != 'remoteuser') {
-    $whereCondition = " AND vl.result_status!=9";
-    $tsQuery = "SELECT * FROM r_sample_status WHERE status_id!=9 ORDER BY status_id";
+    // $whereCondition = " AND vl.result_status!=9";
+    // $tsQuery = "SELECT * FROM r_sample_status WHERE status_id!=9 ORDER BY status_id";
+
+    $tsQuery = "SELECT * FROM `r_sample_status` ORDER BY `status_id`";
 } else {
     $whereCondition = '';
     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT `facility_id` ORDER BY `facility_id` SEPARATOR ',') as `facility_id` FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
@@ -192,7 +194,8 @@ foreach ($tatResult as $sRow) {
 </div>
 <script>
     <?php
-if (isset($tResult) && count($tResult) > 0) {?>
+if (isset($tResult) && count($tResult) > 0) {
+    ?>
       $('#sampleStatusOverviewContainer').highcharts({
                 chart: {
                     plotBackgroundColor: null,
@@ -256,6 +259,14 @@ if (isset($tResult) && count($tResult) > 0) {?>
             ]
         }]
       });
+
+ <?php 
+ 
+    } 
+ 
+    if(isset($vlSuppressionResult) && (isset($vlSuppressionResult['highVL']) || isset($vlSuppressionResult['lowVL']))  ){     
+     
+     ?>
 	  Highcharts.setOptions({
         colors: ['#FF0000', '#50B432']
         });
@@ -295,12 +306,14 @@ if (isset($tResult) && count($tResult) > 0) {?>
         series: [{
             colorByPoint: true,
             data: [
-			   {name:'High Viral Load',y:<?php echo ucwords($vlSuppressionResult['highVL']); ?>},
-			   {name:'Low Viral Load',y:<?php echo ucwords($vlSuppressionResult['lowVL']); ?>},
+			   {name:'High Viral Load',y:<?php echo (isset($vlSuppressionResult['highVL']) && $vlSuppressionResult['highVL'] > 0) > 0 ? $vlSuppressionResult['highVL'] : 0; ?>},
+			   {name:'Low Viral Load',y:<?php echo (isset($vlSuppressionResult['lowVL']) && $vlSuppressionResult['lowVL'] > 0) > 0 ? $vlSuppressionResult['lowVL'] : 0; ?>},
             ]
         }]
       });
-    <?php }if (isset($result) && count($result) > 0) {?>
+    <?php 
+        }  if (isset($result) && count($result) > 0) {
+    ?>
     $('#labAverageTat').highcharts({
         chart: {
             type: 'line'

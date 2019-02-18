@@ -2,7 +2,7 @@
 //this file is get the value from remote and update in lab db
 include dirname(__FILE__) . "/../../includes/MysqliDb.php";
 include dirname(__FILE__) . "/../../General.php";
-$general = new General();
+$general = new General($db);
 if (!isset($REMOTEURL) || $REMOTEURL == '') {
     echo "Please check your Remote URL";
     die;

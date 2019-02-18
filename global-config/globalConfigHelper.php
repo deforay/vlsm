@@ -5,7 +5,7 @@ include('../includes/MysqliDb.php');
 include('../General.php');
 include('../includes/ImageResize.php');
 //define('UPLOAD_PATH','../uploads');
-$general = new General();
+$general = new General($db);
 $tableName="global_config";
 $instanceTableName="s_vlsm_instance";
 try {
@@ -58,13 +58,7 @@ try {
             $eventType = 'update-instance';
             $action = ucwords($_SESSION['userName']).' update instance id';
             $resource = 'instance-details';
-            $data=array(
-                'event_type'=>$eventType,
-                'action'=>$action,
-                'resource'=>$resource,
-                'date_time'=>$general->getDateTime()
-            );
-            $db->insert('activity_log',$data);
+            $general->activityLog($eventType,$action,$resource);   
 		}
     if(isset($_FILES['logo']['name']) && $_FILES['logo']['name'] != ""){
        if(!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "logo")) {

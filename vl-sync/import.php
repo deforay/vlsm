@@ -2,7 +2,7 @@
 ob_start();
 include('../includes/MysqliDb.php');
 include('../General.php');
-$general = new General();
+$general = new General($db);
 $tableName = "vl_request_form";
 $secret_key = "25c6c7ff35b9979b151f2136cd13b0ff";
 $secret_iv = "po43pokdfgpo3k4y";
