@@ -13,6 +13,6 @@ for($i = 0; $i < sizeof($configResult); $i++) {
     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 
-$general = new General();
+$general = new General($db);
 
 include("../import-configs".DIRECTORY_SEPARATOR.$confFileName);

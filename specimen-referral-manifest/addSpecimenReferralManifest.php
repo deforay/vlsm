@@ -3,7 +3,7 @@ ob_start();
 $title = "VLSM | Add New Specimen Referral Manifest";
 include '../header.php';
 include '../General.php';
-$general = new General();
+$general = new General($db);
 $packageNo = $general->generateRandomString(8);
 ?>
 <link href="../assets/css/multi-select.css" rel="stylesheet" />

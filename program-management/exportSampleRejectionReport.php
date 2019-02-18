@@ -4,7 +4,7 @@ ob_start();
 include '../includes/MysqliDb.php';
 include '../General.php';
 include '../vendor/autoload.php';
-$general = new General();
+$general = new General($db);
 
 $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
 $output = array();
@@ -55,7 +55,7 @@ foreach ($headings as $field => $value) {
     $colNo++;
 }
 $sheet->getStyle('A3:E3')->applyFromArray($styleArray);
-$general = new General();
+$general = new General($db);
 $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 //date

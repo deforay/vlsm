@@ -58,7 +58,7 @@ try {
 
         // echo $sQuery;die;
 
-        $sQuery .= " LIMIT 1000";
+        //$sQuery .= " LIMIT 1000";
         
         $rResult = $db->rawQuery($sQuery);
         

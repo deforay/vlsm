@@ -275,13 +275,7 @@ try {
     $eventType            = 'import';
     $action               = ucwords($_SESSION['userName']) . ' imported a new test result with the sample code ' . $sampleCode;
     $resource             = 'import-result';
-    $data                 = array(
-        'event_type' => $eventType,
-        'action' => $action,
-        'resource' => $resource,
-        'date_time' => $general->getDateTime()
-    );
-    $db->insert("activity_log", $data);
+    $general->activityLog($eventType,$action,$resource);   
     
     //new log for update in result
     if(isset($id) && $id > 0){

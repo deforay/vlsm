@@ -5,7 +5,7 @@ include '../includes/MysqliDb.php';
 include '../General.php';
 include '../vendor/autoload.php';
 
-$general = new General();
+$general = new General($db);
 $configQuery = "SELECT * from global_config where name='vl_form'";
 $configResult = $db->query($configQuery);
 $country = $configResult[0]['value'];
