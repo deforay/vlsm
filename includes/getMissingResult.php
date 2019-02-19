@@ -164,9 +164,9 @@ foreach ($tatResult as $sRow) {
         continue;
     }
 
-    $result['sampleTestedDiff'][$j] = (isset($sRow["AvgTestedDiff"]) && $sRow["AvgTestedDiff"] > 0 && $sRow["AvgTestedDiff"] != null) ? round($sRow["AvgTestedDiff"], 2) : 0;
-    $result['sampleReceivedDiff'][$j] = (isset($sRow["AvgReceivedDiff"]) && $sRow["AvgReceivedDiff"] > 0 && $sRow["AvgReceivedDiff"] != null) ? round($sRow["AvgReceivedDiff"], 2) : 0;
-    $result['samplePrintedDiff'][$j] = (isset($sRow["AvgPrintedDiff"]) && $sRow["AvgPrintedDiff"] > 0 && $sRow["AvgPrintedDiff"] != null) ? round($sRow["AvgPrintedDiff"], 2) : 0;
+    $result['sampleTestedDiff'][$j] = (isset($sRow["AvgTestedDiff"]) && $sRow["AvgTestedDiff"] > 0 && $sRow["AvgTestedDiff"] != null) ? round($sRow["AvgTestedDiff"], 2) : 'null';
+    $result['sampleReceivedDiff'][$j] = (isset($sRow["AvgReceivedDiff"]) && $sRow["AvgReceivedDiff"] > 0 && $sRow["AvgReceivedDiff"] != null) ? round($sRow["AvgReceivedDiff"], 2) : 'null';
+    $result['samplePrintedDiff'][$j] = (isset($sRow["AvgPrintedDiff"]) && $sRow["AvgPrintedDiff"] > 0 && $sRow["AvgPrintedDiff"] != null) ? round($sRow["AvgPrintedDiff"], 2) : 'null';
     $result['date'][$j] = $sRow["monthDate"];
     $j++;
 }
@@ -370,37 +370,40 @@ if (isset($tResult) && count($tResult) > 0) {
 
         series: [
             <?php
-if (isset($result['sampleTestedDiff'])) {
-        ?>
-            {
-            showInLegend: true,
-            name: 'Collected - Tested',
-            data: [<?php echo implode(",", $result['sampleTestedDiff']); ?>],
-            color : '#1B325F',
-        },
-        <?php
-}
-    if (isset($result['sampleReceivedDiff'])) {
-        ?>
-         {
-            showInLegend: true,
-            name: 'Collected - Received at Lab',
-            data: [<?php echo implode(",", $result['sampleReceivedDiff']); ?>],
-            color : '#333333',
-        },
-        <?php
-}
-    if (isset($result['samplePrintedDiff'])) {
-        ?>
-            {
-                showInLegend: true,
-                name: 'Collected - Result Printed',
-                data: [<?php echo implode(",", $result['samplePrintedDiff']); ?>],
-                color : '#FF4500',
-            },
-        <?php
-}
-    ?>
+            if (isset($result['sampleTestedDiff'])) {
+                ?>
+                {
+                    connectNulls : false,
+                    showInLegend: true,
+                    name: 'Collected - Tested',
+                    data: [<?php echo implode(",", $result['sampleTestedDiff']); ?>],
+                    color : '#000',
+                },
+            <?php
+            }
+            if (isset($result['sampleReceivedDiff'])) {
+            ?>
+                {
+                    connectNulls : false,
+                    showInLegend: true,
+                    name: 'Collected - Received at Lab',
+                    data: [<?php echo implode(",", $result['sampleReceivedDiff']); ?>],
+                    color : '#4BC0D9',
+                },
+            <?php
+            }
+            if (isset($result['samplePrintedDiff'])) {
+            ?>
+                {
+                    connectNulls : false,
+                    showInLegend: true,
+                    name: 'Collected - Result Printed',
+                    data: [<?php echo implode(",", $result['samplePrintedDiff']); ?>],
+                    color : '#FF4500',
+                },
+            <?php
+            }
+            ?>
         ],
     });
     <?php }?>
