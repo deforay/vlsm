@@ -117,7 +117,7 @@ if($sarr['user_type']=='remoteuser'){
         </div>
     </div>
     <div style="padding:1% 2%;width:100%;position:absolute;bottom:1.5%;color:#fff;background:rgba(0,0,0,0);">
-        <span>
+        <!-- <span>
         <a id="download-form" href="#" style="color:#fff;text-decoration:underline;">Download VL Form</a>
         <select id="country" name="country" class="form-control" style="width:200px;display:none;">
             <option value=""> -- Select Country -- </option>
@@ -127,7 +127,7 @@ if($sarr['user_type']=='remoteuser'){
             <option value="4">Zambia</option>
         </select>
         <a id="download" href="#" style="color:#fff;text-decoration:underline;display:none;"><h5>Click here to Download</h5></a>
-        </span>
+        </span> -->
         <span class="pull-right" style="font-weight:bold;">v <?php echo VERSION; ?></span>
     </div>
     <script src="assets/js/deforayValidation.js"></script>
