@@ -15,7 +15,7 @@ $fTypeResult = $db->rawQuery($fType);
    <!-- DataTables -->
   <link rel="stylesheet" href="assets/plugins/datatables/dataTables.bootstrap.css">
   <link href="assets/css/deforayModal.css" rel="stylesheet" />
-  <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <script src="assets/js/deforayModal.js"></script>
   <script type="text/javascript" src="assets/js/jasny-bootstrap.js"></script>
   <script src="assets/js/deforayValidation.js"></script>

@@ -9,12 +9,6 @@ $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
 $PORT = 3306;
 
-
-$iHOST = '127.0.0.1';
-$iUSER = 'root';
-$iPASSWORD = 'zaq12345';
-$iDBNAME = 'interfacing';
-$iPORT = 3306;
 //Please use only GMAIL ID AND PASSWORD
 $emailUserName='';
 $emailPassword='';

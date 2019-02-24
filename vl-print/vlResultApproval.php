@@ -243,7 +243,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
             "iDisplayLength": 100,            
             "bRetrieve": true,                        
             "aoColumns": [
-		{"sClass":"center","bSortable":false},
+		            {"sClass":"center","bSortable":false},
                 {"sClass":"center"},
 								<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},

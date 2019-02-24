@@ -1536,8 +1536,8 @@ ALTER TABLE `facility_details` ADD `header_text` VARCHAR(255) NULL DEFAULT NULL 
 
 -- saravanan 21-jan-2019
 ALTER TABLE `activity_log` ADD `ip_address` VARCHAR(255) NULL DEFAULT NULL AFTER `date_time`;
-UPDATE vl_request_form SET result_status = 7 WHERE result_status=6 AND (result is NOT null AND result != '')
-UPDATE `r_sample_status` SET `status_name` = 'Sample Registered at VL Lab' WHERE `status_id` = 6;
+UPDATE vl_request_form SET result_status = 7 WHERE result_status=6 AND (result is NOT null AND result != '');
+
 
 -- Version 3.10 ---------- Amit 11-Feb-2018
 
@@ -1546,3 +1546,8 @@ UPDATE `r_sample_status` SET `status_name` = 'Sample Registered at VL Lab' WHERE
 -- Version 3.10.2 ---------- Saravanan 16-Feb-2018
 
 -- Version 3.10.3 ---------- Amit 18-Feb-2018
+
+UPDATE `r_sample_status` SET `status_name` = 'Sample Registered at VL Lab' WHERE `status_id` = 6;
+UPDATE `r_sample_status` SET `status_name` = 'Awaiting Approval' WHERE `r_sample_status`.`status_id` = 8;
+
+

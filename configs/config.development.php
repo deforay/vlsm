@@ -8,12 +8,6 @@ $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
 $PORT = 3306;
 
-$iHOST = 'localhost';
-$iUSER = 'root';
-$iPASSWORD = 'zaq12345';
-$iDBNAME = 'interfacing';
-$iPORT = 3306;
-
 // If using WAMP default settings, then uncomment the following 2 lines
 //$PASSWORD = '';
 //$PORT = 3306;
