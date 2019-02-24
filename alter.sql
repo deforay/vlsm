@@ -1550,4 +1550,4 @@ UPDATE vl_request_form SET result_status = 7 WHERE result_status=6 AND (result i
 UPDATE `r_sample_status` SET `status_name` = 'Sample Registered at VL Lab' WHERE `status_id` = 6;
 UPDATE `r_sample_status` SET `status_name` = 'Awaiting Approval' WHERE `r_sample_status`.`status_id` = 8;
 
-
+-- Version 3.10.4 ---------- Amit 24-Feb-2018
