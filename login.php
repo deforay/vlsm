@@ -52,7 +52,7 @@ if($sarr['user_type']=='remoteuser'){
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-  <script type="text/javascript" src="assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
 </head>
 <body class="">
     <div class="container-fluid">

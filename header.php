@@ -147,7 +147,7 @@ $formConfigResult=$db->query($formConfigQuery);
   <![endif]-->
   <!-- jQuery 2.2.3 -->
 
-<script type="text/javascript" src="../assets/js/jquery.min.2.0.2.js"></script>
+<script type="text/javascript" src="../assets/js/jquery.min.js"></script>
 
  <!-- Latest compiled and minified JavaScript -->
     

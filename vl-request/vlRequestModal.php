@@ -21,7 +21,7 @@ $batResult = $db->rawQuery($batQuery);
     }
 	.center{text-align:center;}
    </style> 
-  <script type="text/javascript" src="../assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
   <script type="text/javascript" src="../assets/js/jquery-ui.1.11.0.js"></script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

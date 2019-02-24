@@ -6,7 +6,7 @@
    <!-- DataTables -->
   <link rel="stylesheet" href=".././assets/plugins/datatables/dataTables.bootstrap.css">
   <link href="../assets/css/deforayModal.css" rel="stylesheet" />
-  <script type="text/javascript" src="../assets/js/jquery.min.2.0.2.js"></script>
+  <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
   <script type="text/javascript" src="../assets/js/jquery-ui.1.11.0.js"></script>
   <script src="../assets/js/deforayModal.js"></script>
 <?php
