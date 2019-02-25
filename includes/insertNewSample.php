@@ -99,6 +99,7 @@ $id = '';
     }
     $vldata = array(
                     'vlsm_country_id'=>$_POST['countryId'],
+                    'sample_collection_date'=>$_POST['sampleCollectionDate'],
                     'vlsm_instance_id'=>$_SESSION['instanceId'],
                     'request_created_by'=>$_SESSION['userId'],
                     'request_created_datetime'=>$general->getDateTime(),
@@ -118,7 +119,7 @@ $id = '';
         $vldata['sample_code_key'] = (isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='') ? $_POST['sampleCodeKey'] :  NULL;
     }
     if(isset($_POST['sampleCode']) && $_POST['sampleCode']!='' && $_POST['sampleCollectionDate']!=NULL && $_POST['sampleCollectionDate']!=''){
-    $id=$db->insert($tableName,$vldata);
+        $id=$db->insert($tableName,$vldata);
     }
     if($id>0){
         echo $id;
