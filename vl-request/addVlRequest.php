@@ -267,8 +267,9 @@ if($arr['vl_form']==1){
                                                                                                                     document.getElementById(formId).submit();
                                                                                                                 }else{
                                                                                                                     $.unblockUI();
-                                                                                                                    $("#sampleCollectionDate").val('');
-                                                                                                                    alert("Something went wrong!");
+                                                                                                                    //$("#sampleCollectionDate").val('');
+                                                                                                                    sampleCodeGeneration();
+                                                                                                                    alert("We could not save this form. Please try saving again.");
                                                                                                                 }
                                                                                                                    });
                                                                                                          }
