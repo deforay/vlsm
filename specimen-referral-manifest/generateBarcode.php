@@ -67,7 +67,7 @@ if(trim($id)!= ''){
 
 
 
-    $sQuery="SELECT remote_sample_code,fd.facility_name as clinic_name,fd.facility_district,patient_first_name,patient_middle_name,patient_last_name,patient_dob,patient_age_in_years,sample_name,sample_collection_date,patient_gender,patient_art_no, l.facility_name as lab_name from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join facility_details as l ON l.facility_id=vl.lab_id Join r_sample_type as st ON st.sample_id=vl.sample_type where pd.package_id IN($id)";
+    $sQuery="SELECT remote_sample_code,fd.facility_name as clinic_name,fd.facility_district,patient_first_name,patient_middle_name,patient_last_name,patient_dob,patient_age_in_years,sample_name,sample_collection_date,patient_gender,patient_art_no,pd.package_code, l.facility_name as lab_name from package_details as pd Join vl_request_form as vl ON vl.sample_package_id=pd.package_id Join facility_details as fd ON fd.facility_id=vl.facility_id Join facility_details as l ON l.facility_id=vl.lab_id Join r_sample_type as st ON st.sample_id=vl.sample_type where pd.package_id IN($id)";
     $result=$db->query($sQuery);
 
 
@@ -133,8 +133,9 @@ if(trim($id)!= ''){
         $pdf->setPageOrientation('L');
         // add a page
         $pdf->AddPage();
-    
-    $tbl = '<table style="width:100%;border:1px solid #333;">
+        $tbl = '';
+        $tbl .= '<h2> '.$result[0]['package_code'].'</h2>';
+    $tbl .= '<table style="width:100%;border:1px solid #333;">
             
                 <tr nobr="true">
                     <td align="center" style="font-size:11px;width:2%;border:1px solid #333;" ><strong><i>S/N</i></strong></td>
@@ -155,6 +156,7 @@ if(trim($id)!= ''){
         $sampleCounter = 1;
 
         foreach($result as $sample){
+            error_log($sample['package_code']);
             //var_dump($sample);die;
             $collectionDate = '';
             if(isset($sample['sample_collection_date']) && $sample['sample_collection_date'] != '' && $sample['sample_collection_date']!= NULL && $sample['sample_collection_date'] != '0000-00-00 00:00:00'){
