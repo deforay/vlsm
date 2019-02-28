@@ -129,6 +129,15 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
 		      </select>
 		    </td>
 		</tr>
+    <tr>
+    <td>&nbsp;<b>Show Samples that are &nbsp;:</b></td>
+		    <td>
+		      <select class="form-control" id="statusFilter" name="statusFilter" title="Please choose a status" style="width:220px;">
+		      <option value="notApprovedOrRejected"> Not Approved/Rejected </option>
+		      <option value="approvedOrRejected"> Already Approved/Rejected </option>
+		      </select>
+		    </td>
+    </tr>
 		<tr>
 		  <td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
 		    &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
@@ -168,7 +177,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
                   <th>Batch Code</th>
                   <th>Unique ART No</th>
                   <th>Patient's Name</th>
-		  <th>Facility Name</th>
+		              <th>Facility Name</th>
                   <th>Sample Type</th>
                   <th>Result</th>
                   <th>Last Modified on</th>
@@ -265,22 +274,23 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
 								"aaSorting": [[ 9, "desc" ]],
 						<?php } ?>
 	    "fnDrawCallback": function() {
-		var checkBoxes=document.getElementsByName("chk[]");
-                len = checkBoxes.length;
-                for(c=0;c<len;c++){
-                    if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1 ){
-			checkBoxes[c].setAttribute("checked",true);
-                    }
-                }
-	    },
+            var checkBoxes=document.getElementsByName("chk[]");
+                        len = checkBoxes.length;
+                        for(c=0;c<len;c++){
+                            if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1 ){
+                              checkBoxes[c].setAttribute("checked",true);
+                            }
+                        }
+              },
             "bProcessing": true,
             "bServerSide": true,
             "sAjaxSource": "getVlResultsForApproval.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-	      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-	      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-	      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+                aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+                aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+                aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+                aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+                aoData.push({"name": "statusFilter", "value": $("#statusFilter").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",

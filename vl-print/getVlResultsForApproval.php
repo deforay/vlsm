@@ -127,7 +127,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           }
 
           if (isset($sWhere) && $sWhere != "") {
-               $sWhere=' where '.$sWhere;
+               $sWhere=' WHERE '.$sWhere;
                //$sQuery = $sQuery.' '.$sWhere;
                if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
                     $sWhere = $sWhere.' AND b.batch_code LIKE "%'.$_POST['batchCode'].'%"';
@@ -145,10 +145,17 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                if(isset($_POST['facilityName']) && $_POST['facilityName']!=''){
                     $sWhere = $sWhere.' AND f.facility_id IN ('.$_POST['facilityName'].')';
                }
+               if(isset($_POST['statusFilter']) && $_POST['statusFilter']!=''){
+                    if($_POST['statusFilter'] == 'approvedOrRejected'){
+                        $sWhere = $sWhere.' AND vl.result_status IN (4,7)';
+                    }else if($_POST['statusFilter'] == 'notApprovedOrRejected'){
+                        $sWhere = $sWhere.' AND vl.result_status = 4 NOT IN (4,7)';
+                    }
+               }
           }else{
                if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!= ''){
-                    $setWhr = 'where';
-                    $sWhere=' where '.$sWhere;
+                    $setWhr = 'WHERE';
+                    $sWhere=' WHERE '.$sWhere;
                     $sWhere = $sWhere.' b.batch_code = "'.$_POST['batchCode'].'"';
                }
                if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
@@ -162,8 +169,8 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                               }
                          }
                     }else{
-                         $setWhr = 'where';
-                         $sWhere=' where '.$sWhere;
+                         $setWhr = 'WHERE';
+                         $sWhere=' WHERE '.$sWhere;
                          $sWhere = $sWhere.' DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
                     }
                }
@@ -184,11 +191,30 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                          $sWhere = $sWhere.' f.facility_id IN ('.$_POST['facilityName'].')';
                     }
                }
+               if(isset($_POST['statusFilter']) && trim($_POST['statusFilter'])!= ''){
+                    if(isset($setWhr)){
+                        if($_POST['statusFilter'] == 'approvedOrRejected'){
+                            $sWhere = $sWhere.' AND vl.result_status IN (4,7)';
+                        }else if($_POST['statusFilter'] == 'notApprovedOrRejected'){
+                            $sWhere = $sWhere.' AND vl.result_status NOT IN (4,7)';
+                        }
+                    }else{
+                        $sWhere=' where '.$sWhere;
+                        if($_POST['statusFilter'] == 'approvedOrRejected'){
+                            $sWhere = $sWhere.' vl.result_status IN (4,7)';
+                        }else if($_POST['statusFilter'] == 'notApprovedOrRejected'){
+                            $sWhere = $sWhere.' vl.result_status NOT IN (4,7)';
+                        }
+                    }
+                }               
+               if(isset($_POST['statusFilter']) && $_POST['statusFilter']!=''){
+
+               }               
           }
           if($sWhere!=''){
-               $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
+               $sWhere = $sWhere.' AND vl.vlsm_country_id="'.$arr['vl_form'].'"';
           }else{
-               $sWhere = $sWhere.' where vl.vlsm_country_id="'.$arr['vl_form'].'" AND vl.result_status!=9';
+               $sWhere = $sWhere.' WHERE vl.vlsm_country_id="'.$arr['vl_form'].'"';
           }
           if($sarr['user_type']=='remoteuser'){
                //$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
