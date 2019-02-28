@@ -1551,3 +1551,9 @@ UPDATE `r_sample_status` SET `status_name` = 'Sample Registered at VL Lab' WHERE
 UPDATE `r_sample_status` SET `status_name` = 'Awaiting Approval' WHERE `r_sample_status`.`status_id` = 8;
 
 -- Version 3.10.4 ---------- Amit 24-Feb-2018
+
+
+ALTER TABLE `vl_request_form` ADD INDEX(`sample_collection_date`);
+ALTER TABLE `vl_request_form` ADD INDEX(`sample_tested_datetime`);
+ALTER TABLE `vl_request_form` ADD INDEX(`lab_id`);
+ALTER TABLE `vl_request_form` ADD INDEX(`result_status`);
