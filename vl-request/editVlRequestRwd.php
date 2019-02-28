@@ -204,8 +204,8 @@ if(isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['re
 
                                                     <div class="col-xs-3 col-md-3" style="display:<?php echo ($sCode!='')?'block':'none'; ?>">
                                                         <div class="">
-                                                            <label class="" for="sampleReceivedDate">Date Sample Received at Testing Lab </label><br/>
-                                                            <input type="text" class="form-control labSection dateTime" id="sampleReceivedDate<?php echo ($sCode=='')?'Lab':''; ?>" name="sampleReceivedDate<?php echo ($sCode=='')?'Lab':''; ?>" placeholder="Sample Received Date" title="Please select sample received date" value="<?php echo ($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!=NULL)?$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']:date('d-M-Y H:i:s'); ?>" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();"/>
+                                                            <label class="" for="sampleReceivedDate">Date Sample Received at Testing Lab  <span class="mandatory">*</span></label><br/>
+                                                            <input type="text" class="form-control labSection dateTime isRequired" id="sampleReceivedDate<?php echo ($sCode=='')?'Lab':''; ?>" name="sampleReceivedDate<?php echo ($sCode=='')?'Lab':''; ?>" placeholder="Sample Received Date" title="Please select sample received date" value="<?php echo ($vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!='' && $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']!=NULL)?$vlQueryInfo[0]['sample_received_at_vl_lab_datetime']:date('d-M-Y H:i:s'); ?>" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();"/>
                                                         </div>
                                                     </div>
 

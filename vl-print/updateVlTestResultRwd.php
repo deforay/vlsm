@@ -568,13 +568,13 @@ $disable = "disabled = 'disabled'";
                       </div>
                       <div class="row">
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="sampleReceivedOn">Date Sample Received at Testing Lab </label>
+                            <label class="col-lg-5 control-label" for="sampleReceivedOn">Date Sample Received at Testing Lab  <span class="mandatory">*</span></label>
                             <div class="col-lg-7">
-                                <input type="text" class="form-control labSection" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received Date" title="Please select sample received date" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>"/>
+                                <input type="text" class="form-control labSection isRequired" id="sampleReceivedOn" name="sampleReceivedOn" placeholder="Sample Received Date" title="Please select sample received date" value="<?php echo $vlQueryInfo[0]['sample_received_at_vl_lab_datetime']; ?>"/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date<span class="mandatory">*</span> </label>
+                            <label class="col-lg-5 control-label" for="sampleTestingDateAtLab">Sample Testing Date <span class="mandatory">*</span> </label>
                             <div class="col-lg-7">
                                 <input type="text" class="isRequired form-control labSection" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="Sample Testing Date" title="Please select sample testing date" value="<?php echo $vlQueryInfo[0]['sample_tested_datetime']; ?>"/>
                             </div>
