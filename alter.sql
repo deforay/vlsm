@@ -1557,3 +1557,6 @@ ALTER TABLE `vl_request_form` ADD INDEX(`sample_collection_date`);
 ALTER TABLE `vl_request_form` ADD INDEX(`sample_tested_datetime`);
 ALTER TABLE `vl_request_form` ADD INDEX(`lab_id`);
 ALTER TABLE `vl_request_form` ADD INDEX(`result_status`);
+
+
+-- Version 3.10.5 ---------- Amit 28-Feb-2018
