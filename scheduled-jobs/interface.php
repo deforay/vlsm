@@ -41,6 +41,19 @@ if (count($interfaceInfo) > 0) {
                     $multiplier = pow($exponentArray[0], $exponentArray[1]);
                     $vlResult = $vlResult * $multiplier;
                     $unit = $unitArray[1];
+                }
+                
+                if (strpos($vlResult, 'E') !== false) {
+                    if (strpos($vlResult, '< 2.00E+1') !== false) {
+                        $vlResult = "< 20";
+                    }else{
+                        $vlResultArray = explode("(", $vlResult);
+                        $exponentArray = explode("E", $vlResultArray[0]);
+                        $multiplier = pow(10, $exponentArray[1]);
+                        $vlResult = $exponentArray[0] * $multiplier;
+                        $absDecimalVal = (float) trim($vlResult);
+                        $logVal = round(log10($absDecimalVal),2);                        
+                    }
                 }                
 
                 if (is_numeric($vlResult)) {
