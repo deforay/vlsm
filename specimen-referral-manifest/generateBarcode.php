@@ -156,7 +156,6 @@ if(trim($id)!= ''){
         $sampleCounter = 1;
 
         foreach($result as $sample){
-            error_log($sample['package_code']);
             //var_dump($sample);die;
             $collectionDate = '';
             if(isset($sample['sample_collection_date']) && $sample['sample_collection_date'] != '' && $sample['sample_collection_date']!= NULL && $sample['sample_collection_date'] != '0000-00-00 00:00:00'){
