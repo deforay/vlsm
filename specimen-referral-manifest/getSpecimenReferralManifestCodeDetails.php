@@ -162,7 +162,13 @@ $general=new General($db);
 	  $row[] = $aRow['sample_code'];
 	  $row[] = $humanDate;
 	  if($package){
-	    $row[] = '<a href="editSpecimenReferralManifest.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" '.$disable.' style="margin-right: 2px;'.$pointerEvent.'" title="Edit"><i class="fa fa-pencil"> Edit</i></a>&nbsp;&nbsp;'.$printBarcode;
+            if($_SESSION['roleCode']=='AD' || $_SESSION['roleCode']=='ad')
+            {
+                $editBtn = '<a href="editSpecimenReferralManifest.php?id=' . base64_encode($aRow['package_id']) . '" class="btn btn-primary btn-xs" '.$disable.' style="margin-right: 2px;'.$pointerEvent.'" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+            }else{
+                $editBtn = '';
+            }
+	    $row[] = $editBtn.'&nbsp;&nbsp;'.$printBarcode;
 	  }
         $output['aaData'][] = $row;
         }

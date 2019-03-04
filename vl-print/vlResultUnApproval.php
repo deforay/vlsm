@@ -120,6 +120,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            <div class="col-md-2 col-sm-2"><input type="button" onclick="acceptAllSamples();" value="Accept All Samples" class="btn btn-success btn-sm"></div>
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -509,6 +510,21 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
     if($("#rejectionReason").val()==''){
       $("#"+$("#statusDropDownId").val()).val('');
     }
+  }
+
+  function acceptAllSamples()
+  {
+      conf=confirm("Do you wish to change the status as Accepted ?");
+      if(conf){
+		    $.blockUI();
+		    $.post("updateAllSampleStatus.php", { },
+	        function(data){
+            oTable.fnDraw();
+	        });
+		    $.unblockUI();
+      }else{
+        oTable.fnDraw();
+      }
   }
 </script>
  <?php

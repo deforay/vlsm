@@ -258,6 +258,7 @@ try {
                 }
                 $data['facility_id'] = $vlResult[0]['facility_id'];
             } else {
+                $data['result_status'] = '7';
                 $data['sample_details'] = 'New Sample';
             }
             //echo "<pre>";var_dump($data);echo "</pre>";continue; 
