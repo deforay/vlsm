@@ -1561,3 +1561,4 @@ ALTER TABLE `vl_request_form` ADD INDEX(`result_status`);
 
 -- Version 3.10.5 ---------- Amit 28-Feb-2018
 -- Version 3.10.6 ---------- Amit 04-Mar-2019
+ALTER TABLE `vl_request_form` ADD `sample_registered_at_lab` DATETIME NULL AFTER `lab_phone_number`;
