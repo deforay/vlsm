@@ -1562,3 +1562,5 @@ ALTER TABLE `vl_request_form` ADD INDEX(`result_status`);
 -- Version 3.10.5 ---------- Amit 28-Feb-2018
 -- Version 3.10.6 ---------- Amit 04-Mar-2019
 ALTER TABLE `vl_request_form` ADD `sample_registered_at_lab` DATETIME NULL AFTER `lab_phone_number`;
+UPDATE `vl_request_form` set sample_registered_at_lab = request_created_datetime where sample_registered_at_lab is NULL;
+UPDATE `vl_request_form` set sample_received_at_vl_lab_datetime = request_created_datetime where sample_received_at_vl_lab_datetime is NULL;
