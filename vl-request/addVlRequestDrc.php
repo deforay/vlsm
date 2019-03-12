@@ -427,9 +427,9 @@
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:25%;"><label for="">Date de réception de léchantillon </label></td>
+                                <td style="width:25%;"><label for="">Date de réception de léchantillon <span class="mandatory">*</span> </label></td>
                                 <td style="width:25%;">
-                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" style="width:100%;"/>
+                                    <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" style="width:100%;"/>
                                 </td>
                                 <td style="width:25%;"></td><td style="width:25%;"></td>
                             </tr>
