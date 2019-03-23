@@ -1253,7 +1253,7 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Data Sync
 ALTER TABLE `vl_request_form` ADD `data_sync` VARCHAR(10) NOT NULL DEFAULT '0' AFTER `vl_service_sector`;
 
 -- saravanna 15-nov-2017
-ALTER TABLE `user_details` ADD `user_alpnum_id` VARCHAR(255) NOT NULL AFTER `user_id`;
+ALTER TABLE `user_details` ADD `user_alpnum_id` VARCHAR(255) NULL AFTER `user_id`;
 UPDATE vl_request_form
 SET last_vl_date_routine = NULL
 WHERE last_vl_date_routine = 0000-00-00;
@@ -1564,3 +1564,38 @@ ALTER TABLE `vl_request_form` ADD INDEX(`result_status`);
 ALTER TABLE `vl_request_form` ADD `sample_registered_at_lab` DATETIME NULL AFTER `lab_phone_number`;
 UPDATE `vl_request_form` set sample_registered_at_lab = request_created_datetime where sample_registered_at_lab is NULL;
 UPDATE `vl_request_form` set sample_received_at_vl_lab_datetime = request_created_datetime where sample_received_at_vl_lab_datetime is NULL;
+
+
+CREATE TABLE `move_samples` (
+  `move_sample_id` int(11) NOT NULL,
+  `moved_from_lab_id` int(11) NOT NULL,
+  `moved_to_lab_id` int(11) NOT NULL,
+  `moved_on` date DEFAULT NULL,
+  `moved_by` varchar(255) DEFAULT NULL,
+  `reason_for_moving` text,
+  `move_approved_by` varchar(255) DEFAULT NULL,
+  `list_request_created_datetime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `move_samples_map` (
+  `sample_map_id` int(11) NOT NULL,
+  `move_sample_id` int(11) NOT NULL,
+  `vl_sample_id` int(11) NOT NULL,
+  `move_sync_status` varchar(255) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `move_samples`
+  ADD PRIMARY KEY (`move_sample_id`);
+
+ALTER TABLE `move_samples_map`
+  ADD PRIMARY KEY (`sample_map_id`);
+
+ALTER TABLE `move_samples`
+  MODIFY `move_sample_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `move_samples_map`
+  MODIFY `sample_map_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+
+

@@ -376,7 +376,9 @@ try {
             if(isset($userResult[0]['user_id'])){
               $data['result_reviewed_by'] = $userResult[0]['user_id'];
             }else{
+              $userId= $general->generateUserID();
               $userData = array(
+                'user_id'=>$userId,
                 'user_name'=>(string)$xml->sample_result->sample_result_reviewed_by,
                 'email'=>NULL,
                 'phone_number'=>NULL,
@@ -385,8 +387,8 @@ try {
                 'role_id'=>2,
                 'status'=>NULL
                 );
-              $id = $db->insert('user_details',$userData);
-              $data['result_reviewed_by'] = $id;
+              $db->insert('user_details',$userData);
+              $data['result_reviewed_by'] = $userId;
             }
           }
           $data['result_reviewed_datetime'] = (isset($xml->sample_result->sample_result_reviewed_datetime) && (string)$xml->sample_result->sample_result_reviewed_datetime !='' && (string)$xml->sample_result->sample_result_reviewed_datetime !='0000-00-00 00:00:00')?(string)$xml->sample_result->sample_result_reviewed_datetime:null;
@@ -396,7 +398,9 @@ try {
             if(isset($userResult[0]['user_id'])){
               $data['result_approved_by'] = $userResult[0]['user_id'];
             }else{
+              $userId= $general->generateUserID();
               $userData = array(
+                'user_id'=>$userId,
                 'user_name'=>(string)$xml->sample_result->sample_result_approved_by,
                 'email'=>NULL,
                 'phone_number'=>NULL,
@@ -405,8 +409,8 @@ try {
                 'role_id'=>2,
                 'status'=>NULL
                 );
-              $id = $db->insert('user_details',$userData);
-              $data['result_approved_by'] = $id;
+              $db->insert('user_details',$userData);
+              $data['result_approved_by'] = $userId;
             }
           }
           $data['result_approved_datetime'] = (isset($xml->sample_result->sample_result_approved_datetime) && (string)$xml->sample_result->sample_result_approved_datetime !='' && (string)$xml->sample_result->sample_result_approved_datetime !='0000-00-00 00:00:00')?(string)$xml->sample_result->sample_result_approved_datetime:null;
@@ -441,7 +445,9 @@ try {
             if(isset($userResult[0]['user_id'])){
               $data['request_created_by'] = $userResult[0]['user_id'];
             }else{
+              $userId= $general->generateUserID();
               $userData = array(
+                'user_id'=>$userId,
                 'user_name'=>(string)$xml->general->general_request_created_by,
                 'email'=>NULL,
                 'phone_number'=>NULL,
@@ -450,8 +456,8 @@ try {
                 'role_id'=>2,
                 'status'=>NULL
                 );
-              $id = $db->insert('user_details',$userData);
-              $data['request_created_by'] = $id;
+              $db->insert('user_details',$userData);
+              $data['request_created_by'] = $userId;
             }
           }
           $data['request_created_datetime'] = (isset($xml->general->general_request_created_datetime))?(string)$xml->general->general_request_created_datetime:null;
@@ -461,7 +467,9 @@ try {
             if(isset($userResult[0]['user_id'])){
               $data['last_modified_by'] = $userResult[0]['user_id'];
             }else{
+              $userId= $general->generateUserID();
               $userData = array(
+                'user_id'=>$userId,
                 'user_name'=>(string)$xml->general->general_last_modified_by,
                 'email'=>NULL,
                 'phone_number'=>NULL,
@@ -470,8 +478,8 @@ try {
                 'role_id'=>2,
                 'status'=>NULL
                 );
-              $id = $db->insert('user_details',$userData);
-              $data['last_modified_by'] = $id;
+              $db->insert('user_details',$userData);
+              $data['last_modified_by'] = $userId;
             }
           }
           $data['last_modified_datetime'] = (isset($xml->general->general_last_modified_datetime))?(string)$xml->general->general_last_modified_datetime:null;

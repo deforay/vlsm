@@ -5,7 +5,7 @@ include_once 'MysqliDb.php';
 include_once '../General.php';
 
 $general = new General($db); // passing $db which is coming from MysqliDb.php
-
+$whereCondition = '';
 $configFormQuery = "SELECT * FROM global_config WHERE `name` ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 
@@ -47,6 +47,7 @@ $sampleStatusColors[9] = "#4BC0D9"; // Sample Registered at Health Center
 //date
 $start_date = '';
 $end_date = '';
+
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
     $s_c_date = explode("to", $_POST['sampleCollectionDate']);
     //print_r($s_c_date);die;

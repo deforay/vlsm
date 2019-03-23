@@ -41,6 +41,15 @@ class General {
         return $str;
     }
 
+    public function generateUserID(){
+        $idOne = $this->generateRandomString(8);
+        $idTwo = $this->generateRandomString(4);
+        $idThree = $this->generateRandomString(4);
+        $idFour = $this->generateRandomString(4);
+        $idFive = $this->generateRandomString(12);  
+        return $idOne."-".$idTwo."-".$idThree."-".$idFour."-".$idFive;      
+    }    
+
     /**
      * Used to format date from dd-mmm-yyyy to yyyy-mm-dd for storing in database
      *

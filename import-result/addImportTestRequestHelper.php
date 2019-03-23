@@ -139,13 +139,15 @@ try {
                                 if(isset($userResult[0]['user_id'])){
                                    $data['result_reviewed_by'] = $userResult[0]['user_id'];
                                 }else{
+                                    $userId= $general->generateUserID();
                                     $userData = array(
+                                                    'user_id'=>$userId,
                                                     'user_name'=>$data_value,
                                                     'role_id'=>4,
                                                     'status'=>'active'
                                             );
-                                    $id = $db->insert('user_details',$userData);
-                                    $data['result_reviewed_by'] = $id;
+                                    $db->insert('user_details',$userData);
+                                    $data['result_reviewed_by'] = $userId;
                                 }
                              }
                            }else if($data_heading == 'Approved By'){
@@ -156,13 +158,15 @@ try {
                                 if(isset($userResult[0]['user_id'])){
                                    $data['result_approved_by'] = $userResult[0]['user_id'];
                                 }else{
+                                    $userId= $general->generateUserID();
                                     $userData = array(
+                                                    'user_id'=>$userId,
                                                     'user_name'=>$data_value,
                                                     'role_id'=>4,
                                                     'status'=>'active'
                                             );
-                                    $id = $db->insert('user_details',$userData);
-                                    $data['result_approved_by'] = $id;
+                                    $db->insert('user_details',$userData);
+                                    $data['result_approved_by'] = $userId;
                                 }
                              }
                            }else if($data_heading == 'Laboratory Scientist Comments'){

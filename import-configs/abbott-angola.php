@@ -225,13 +225,15 @@ try {
                 if($uResult){
                     $data['sample_review_by'] = $uResult[0]['user_id'];
                 }else{
-                    $userdata=array(
-                    'user_name'=>$d['reviewBy'],
-                    'role_id'=>'3',
-                    'status'=>'active'
-                    );
+                    $userId = $general->generateUserID();
+                    $userdata = array(
+                                    'user_id' => $userId,
+                                    'user_name'=>$d['reviewBy'],
+                                    'role_id'=>'3',
+                                    'status'=>'active'
+                                    );
                     $db->insert('user_details',$userdata);
-                    $data['sample_review_by'] = $db->getInsertId();
+                    $data['sample_review_by'] = $userId;
                 }
             }
             
