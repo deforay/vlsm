@@ -58,7 +58,7 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
     $where = "lab_id =" . $sarr['lab_name'];
 }
 
-$vlQuery = "SELECT * FROM vl_request_form WHERE remote_sample_code !='' AND  remote_sample_code is not null AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+$vlQuery = "SELECT vl.*, a.user_name as 'approved_by_name' FROM `vl_request_form` AS vl LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id WHERE remote_sample_code !='' AND remote_sample_code is not null AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
 $vlLabResult = $db->rawQuery($vlQuery);
 
