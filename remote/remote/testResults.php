@@ -41,9 +41,9 @@ if (count($data['result']) > 0) {
             if ($sResult) {
                 //$lab['result_printed_datetime'] = null;
 
-                if(isset($lab['result_approved_by']) && isset($lab['approved_by_name']) && $lab['approved_by_name'] != ''){
+                if(isset($remoteData['approved_by_name']) && $remoteData['approved_by_name'] != ''){
                     
-                    $userQuery = 'select user_id from user_details where user_name = "'.$lab['approved_by_name'].'" or user_name = "'.strtolower($lab['approved_by_name']).'"';
+                    $userQuery = 'select user_id from user_details where user_name = "'.$remoteData['approved_by_name'].'" or user_name = "'.strtolower($remoteData['approved_by_name']).'"';
                     $userResult = $db->rawQuery($userQuery);
                     if(isset($userResult[0]['user_id'])){
                         // NO NEED TO DO ANYTHING SINCE $lab['result_approved_by'] is already there
@@ -52,7 +52,7 @@ if (count($data['result']) > 0) {
                         $userId = $general->generateUserID();
                         $userData = array(
                                         'user_id' => $userId,
-                                        'user_name' => $lab['approved_by_name'],
+                                        'user_name' => $remoteData['approved_by_name'],
                                         'role_id' => 4,
                                         'status' => 'inactive'
                                 );
