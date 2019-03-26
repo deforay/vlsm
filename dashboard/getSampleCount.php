@@ -70,14 +70,16 @@ $sQuery="SELECT
 			ELSE 0
 		END) AS acceptCount,
     SUM(CASE
-		WHEN (result_printed_datetime!='' AND result_printed_datetime!=NULL AND result_printed_datetime!='0000-00-00 00:00:00') THEN 1
+		WHEN (result_printed_datetime != '' AND result_printed_datetime is not NULL AND result_printed_datetime != '0000-00-00 00:00:00') THEN 1
 			ELSE 0
 		END) AS printCount
 	FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id
     where  vl.vlsm_country_id =".$country;
     
     $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
-	$sQuery = $sQuery.' GROUP BY vl.facility_id';
+    $sQuery = $sQuery.' GROUP BY vl.facility_id';
+    
+    //echo $sQuery; die;
 	
     $tableResult = $db->rawQuery($sQuery);
     
