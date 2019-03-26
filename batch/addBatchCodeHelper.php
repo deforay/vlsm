@@ -5,6 +5,8 @@ include('../includes/MysqliDb.php');
 //include('../header.php');
 include('../General.php');
 $general=new General($db);
+
+
 $tableName1="batch_details";
 $tableName2="vl_request_form";
 try {
@@ -15,8 +17,10 @@ try {
                             'batch_code_key'=>$_POST['batchCodeKey'],
                             'request_created_datetime'=>$general->getDateTime()
                             );
+                            
                 $db->insert($tableName1,$data);
                 $lastId = $db->getInsertId();
+                
                 if($lastId > 0){  
                     for($j=0;$j<count($_POST['sampleCode']);$j++){
                         $vlSampleId = $_POST['sampleCode'][$j];
@@ -30,6 +34,7 @@ try {
                 header("location:batchcode.php");
         }
 } catch (Exception $exc) {
+    echo ($exc->getMessage());
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
 }

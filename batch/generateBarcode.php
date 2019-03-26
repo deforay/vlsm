@@ -188,7 +188,7 @@ if($id >0){
             $noOfInHouseControls = $bResult[0]['number_of_in_house_controls'];
             for($i=1;$i<=$bResult[0]['number_of_in_house_controls'];$i++){
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
-                     <tr nobr="true">
+                    <tr nobr="true">
                     <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$i.'.</td>
                     <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">In-House Controls '. $i.'</td>
                     <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
