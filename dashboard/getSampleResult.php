@@ -48,7 +48,7 @@ $rejectedDate = '';
 $i = 0;
 
 //get waiting data
-$waitingQuery="SELECT COUNT(vl_sample_id) as total FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
+$waitingQuery="SELECT COUNT(vl_sample_id) as total FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
 
 $waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
 if($waitingResult[$i][0]['total']!= 0){
@@ -151,7 +151,7 @@ foreach($tRes as $tRow){
                     <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
                 </h3>
                 <small class="font-purple-soft">SAMPLES WITH NO RESULTS</small><br>
-                <small class="font-purple-soft"  style="font-size:0.75em;">As of today</small>
+                <small class="font-purple-soft"  style="font-size:0.75em;">(LAST 6 MONTHS)</small>
                 <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
             </div>
             <div class="icon">
