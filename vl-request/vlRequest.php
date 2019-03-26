@@ -112,7 +112,8 @@ $batResult = $db->rawQuery($batQuery);
 		      <?php }
 		      ?>
 		      &nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
-		    &nbsp;<a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
+		    &nbsp;
+				<!-- <a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a> -->
 		  </td>
 		</tr>
 	    </table>

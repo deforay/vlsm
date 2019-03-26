@@ -60,7 +60,7 @@ if (count($data['result']) > 0) {
                         $lab['result_approved_by'] = $userId;
                     }
                     // we dont need this now
-                    unset($lab['approved_by_name']);
+                    //unset($remoteData['approved_by_name']);
                 }
 
                 $lab['data_sync'] = 1; //data_sync = 1 means data sync done. data_sync = 0 means sync is not yet done.
