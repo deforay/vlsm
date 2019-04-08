@@ -158,6 +158,7 @@ if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($
     $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
 }
 $tatSampleQuery = $tatSampleQuery . " " . $sWhere;
+//$tatSampleQuery .= " HAVING TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date) < 120 ";
 $tatResult = $db->rawQuery($tatSampleQuery);
 $j = 0;
 foreach ($tatResult as $sRow) {

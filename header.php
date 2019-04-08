@@ -343,7 +343,7 @@ $formConfigResult=$db->query($formConfigQuery);
             </a>
             <ul class="treeview-menu">
               <?php if(isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu importResultMenu"><a href="../import-result/addImportResult.php"><i class="fa fa-circle-o"></i> Import Result</a></li>
+                <li class="allMenu importResultMenu"><a href="../import-result/addImportResult.php"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
               <?php }  if(isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])){ ?>
                 <li class="allMenu vlTestResultMenu"><a href="../vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
               <?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
