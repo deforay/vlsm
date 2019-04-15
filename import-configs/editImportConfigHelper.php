@@ -18,6 +18,7 @@ try {
     'number_of_in_house_controls'=>$_POST['noOfInHouseControls'],
     'number_of_manufacturer_controls'=>$_POST['noOfManufacturerControls'],
     'number_of_calibrators'=>$_POST['numberOfCalibrators'],
+    'low_vl_result_text'=>$_POST['lowVlResultText'],
     'status'=>$_POST['status']
     );
     //print_r($importConfigData);die;

@@ -111,6 +111,16 @@ $configMachineInfo=$db->query($configMachineQuery);
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="lowVlResultText" class="col-lg-2 control-label">Low VL Result Text </label>
+                      <div class="col-lg-7">
+                        <textarea class="form-control" id="lowVlResultText" name="lowVlResultText" placeholder="Comma separated Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40" title="Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40"><?php echo $sInfo[0]['low_vl_result_text']; ?></textarea>
+                      </div>
+                    </div>
+                   </div>
+                </div>                  
 		            <div class="row">
                    <div class="col-md-6" style="padding-top:20px;">
                     <div class="form-group">

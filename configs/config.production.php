@@ -18,13 +18,24 @@ $emailPassword='';
 //$PORT = 3306;
 
 // Portable Uniform Server : following is the path in the portable Uniform Server
-$MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
+//$MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
 
 // Windows : Change it to the mysqldump.exe path for your computer for eg.
 // $MYSQLDUMP = 'C:\wamp\mysql\bin\mysqldump.exe';
 
 // Linux : default for Ubuntu 16.04, may be different for your distribution
-//$MYSQLDUMP = '/usr/bin/mysqldump';
+$MYSQLDUMP = '/usr/bin/mysqldump';
 
 
 $REMOTEURL = '';
+
+
+$interfacing = false;
+
+if($interfacing){
+    $interfaceHost = '127.0.0.1';
+    $interfaceUser = 'root';
+    $interfacePassword = 'zaq12345';
+    $interfaceDb = 'interfacing';
+    $interfacePort = 3306;
+}

@@ -3,24 +3,22 @@
 require __DIR__ . "/../includes/MysqliDb.php";
 require __DIR__ . "/../General.php";
 
-$iHOST = '127.0.0.1';
-$iUSER = 'root';
-$iPASSWORD = 'zaq12345';
-$iDBNAME = 'interfacing';
-$iPORT = 3306;
+if($interfacing == false){  
+    error_log('Interfacing is not enabled.');
+    exit;
+}
 
-$interfacedb = new MysqliDb($iHOST, $iUSER, $iPASSWORD, $iDBNAME, $iPORT);
+$interfacedb = new MysqliDb($interfaceHost, $interfaceUser, $interfacePassword, $interfaceDb, $interfacePort);
 
 $general = new General($db);
-//get the value from interfacing DB
 
-$interfaceQuery = "SELECT * from orders where result_status = 1 and lims_sync_status=0";
+//get the value from interfacing DB
+$interfaceQuery = "SELECT * FROM orders WHERE result_status = 1 AND lims_sync_status=0";
 
 $interfaceInfo = $interfacedb->query($interfaceQuery);
-
 if (count($interfaceInfo) > 0) {
     foreach ($interfaceInfo as $key => $result) {
-        $vlQuery = "SELECT vl_sample_id from vl_request_form where sample_code = '" . $result['test_id'] . "'";
+        $vlQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code = '" . $result['test_id'] . "'";
         
         $vlInfo = $db->rawQueryOne($vlQuery);
 
