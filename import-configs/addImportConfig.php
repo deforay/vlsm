@@ -106,6 +106,16 @@ include('../header.php');
                     </div>
                    </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="lowVlResultText" class="col-lg-2 control-label">Low VL Result Text </label>
+                      <div class="col-lg-7">
+                        <textarea class="form-control" id="lowVlResultText" name="lowVlResultText" placeholder="Comma separated Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40" title="Low Viral Load Result Text for eg. Target Not Detected, TND, < 20, < 40"></textarea>
+                      </div>
+                    </div>
+                   </div>
+                </div>                
                 <div class="box-header">
                   <h3 class="box-title ">Machine Names</h3>
                 </div>
