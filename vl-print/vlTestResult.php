@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | Enter VL Result";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
@@ -404,5 +404,5 @@ if($lastUrl1!='' || $lastUrl2!=''){
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

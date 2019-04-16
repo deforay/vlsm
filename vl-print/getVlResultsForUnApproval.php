@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $tableName="temp_sample_import";
 $primaryKey="temp_sample_id";

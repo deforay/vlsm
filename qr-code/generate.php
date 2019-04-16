@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | Generate QR Code";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $sQuery="SELECT serial_no,vl_sample_id FROM vl_request_form where vlsm_country_id=".$global['vl_form'];
 $sResult = $db->rawQuery($sQuery);
 ?>
@@ -144,5 +144,5 @@ $sResult = $db->rawQuery($sQuery);
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

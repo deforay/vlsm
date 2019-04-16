@@ -1,8 +1,8 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $tableName1="activity_log";
 $id=base64_decode($_GET['id']);
@@ -319,5 +319,5 @@ $general->activityLog($eventType,$action,$resource);
   </div>
   
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

@@ -1,8 +1,8 @@
 <?php
 ob_start();
-$title = "VLSM | Import Result File";
-include('../header.php');
-include('../General.php');
+$title = "VLSM | Import VL Results From File";
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $query="SELECT config_id,machine_name,import_machine_file_name FROM import_config where status='active'";
 $iResult = $db->rawQuery($query);
@@ -17,7 +17,7 @@ $lastResult = $db->rawQuery($lastQuery);
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1><i class="fa fa-edit"></i> Import Result</h1>
+      <h1><i class="fa fa-edit"></i> Import VL Results From File</h1>
       <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active">Import Result</li>
@@ -171,5 +171,5 @@ $lastResult = $db->rawQuery($lastQuery);
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

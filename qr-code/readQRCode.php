@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VLSM | Read QR Code";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
 <div class="content-wrapper" style="min-height: 347px;">
     <section class="content-header">
@@ -32,5 +32,5 @@ include('../header.php');
     }
 </script>
 <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
 ?>

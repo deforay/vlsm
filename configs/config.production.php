@@ -39,3 +39,5 @@ if($interfacing){
     $interfaceDb = 'interfacing';
     $interfacePort = 3306;
 }
+
+$eid = false;

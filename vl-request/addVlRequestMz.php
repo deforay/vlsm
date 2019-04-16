@@ -580,5 +580,5 @@ $province.="<option value=''> -- Select -- </option>";
 </script>
   
  <?php
- //include('../footer.php');
+ //include(APPLICATION_PATH.'/footer.php');
  ?>

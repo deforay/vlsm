@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VLSM | Email VL Test Results";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $configQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configResult = $db->rawQuery($configQuery);
 $formId=0;
@@ -466,5 +466,5 @@ $batchResult = $db->rawQuery($batchQuery);
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

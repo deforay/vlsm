@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 include ('../vendor/autoload.php');
 $general=new General($db);
 //system config

@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include('../includes/MysqliDb.php');
 include ('../vendor/autoload.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($formConfigQuery);

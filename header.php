@@ -1,7 +1,7 @@
 <?php
-session_start();
 
-include_once('../includes/MysqliDb.php');
+include_once(APPLICATION_PATH. '/includes/MysqliDb.php');
+
 $gQuery = "SELECT * FROM global_config";
 $gResult=$db->query($gQuery);
 $global = array();
@@ -46,7 +46,7 @@ if(isset($global['instance_type']) && $global['instance_type']!=''){
     //}
 }
 if(!isset($_SESSION['userId'])){
-    header("location:../login.php");
+    header("location:".DOMAIN."/login.php");
 }
 
 
@@ -56,7 +56,7 @@ $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/',$link);
 if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='editProfile.php' && end($link_array)!='importedStatistics.php' && end($link_array)!='vlExportField.php'){
   if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
-    header("location:../error/error.php");
+    header("location:".DOMAIN."/error/error.php");
   }
 }
 if(isset($_SERVER['HTTP_REFERER'])){
@@ -290,7 +290,13 @@ $formConfigResult=$db->query($formConfigQuery);
           <?php } ?>
 	      </ul>
 	    </li>
-	<?php } if($requestMenuAccess == true){ ?>
+      
+
+	<?php } ?> 
+
+  <li class="header">VIRAL LOAD</li>
+  
+  <?php if($requestMenuAccess == true){ ?>
         <li class="treeview request" style="<?php echo $hideRequest;?>">
             <a href="#">
                 <i class="fa fa-edit"></i>
@@ -409,6 +415,24 @@ $formConfigResult=$db->query($formConfigQuery);
             </ul>
           </li>
         <?php } ?>
+<?php if(isset($eid) && $eid == true) {  ?>
+        <li class="header">EARLY INFANT DIAGNOSIS (EID)</li>
+        <li class="treeview request" style="<?php echo $hideRequest;?>">
+            <a href="#">
+                <i class="fa fa-edit"></i>
+                <span>Request Management</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+              <li class="allMenu vlRequestMenu">
+                    <a href="../eid/requests/eid-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+                  </li>            
+            </ul>
+        </li>
+
+<?php } // EID END  ?>        
         <!---->
       </ul>
     </section>

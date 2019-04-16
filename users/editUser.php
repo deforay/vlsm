@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VLSM | Edit user";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 $userQuery="SELECT * from user_details where user_id='".$id."'";
 $userInfo=$db->query($userQuery);
@@ -372,5 +372,5 @@ function getFacility()
 }
 </script>
 <?php
-include('../footer.php');
+include(APPLICATION_PATH.'/footer.php');
 ?>

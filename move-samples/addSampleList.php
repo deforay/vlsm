@@ -1,8 +1,8 @@
 <?php
 ob_start();
 $title = "VLSM | Add Sample List";
-include('../header.php');
-include('../General.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 
 
@@ -339,5 +339,5 @@ $province = "";
 
   </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

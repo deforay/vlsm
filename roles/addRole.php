@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $resourcesQuery="SELECT * from resources";
 $rInfo=$db->query($resourcesQuery);
 ?>
@@ -178,5 +178,5 @@ $rInfo=$db->query($resourcesQuery);
 </script>
   
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

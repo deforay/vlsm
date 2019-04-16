@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //include('../includes/MysqliDb.php');
 $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
@@ -311,5 +311,5 @@ $pResult = $db->rawQuery($pQuery);
   </script>
   
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

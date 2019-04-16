@@ -1,5 +1,5 @@
 <?php
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $userQuery="SELECT * FROM user_details where status='active'";
@@ -528,5 +528,5 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

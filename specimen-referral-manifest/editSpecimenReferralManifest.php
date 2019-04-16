@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VLSM | Edit Specimen Referral Manifest";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 $pQuery = "Select * from package_details where package_id=".$id;
 $pResult = $db->rawQuery($pQuery);
@@ -242,5 +242,5 @@ $result = $db->rawQuery($query);
     }
   </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

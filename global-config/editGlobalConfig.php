@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VLSM | Edit Configuration";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //include('../includes/MysqliDb.php');
 //define('UPLOAD_PATH','../uploads');
 $instanceQuery ="SELECT * from s_vlsm_instance where vlsm_instance_id='".$_SESSION['instanceId']."'";
@@ -702,5 +702,5 @@ function getNewInstanceImage(img){
   });
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

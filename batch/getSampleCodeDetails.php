@@ -1,6 +1,6 @@
 <?php
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $start_date = '';
 $end_date = '';

@@ -1,5 +1,5 @@
 <?php
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 $tsQuery = "SELECT status_name FROM r_sample_status WHERE status_id = '".$id."'";
 $tsResult = $db->rawQuery($tsQuery);
@@ -264,5 +264,5 @@ $batResult = $db->rawQuery($batQuery);
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general = new General($db);
 include('../includes/ImageResize.php');
 $tableName="facility_details";

@@ -1,5 +1,5 @@
 <?php
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
 <script type="text/javascript">
     $(document).ready(function() {

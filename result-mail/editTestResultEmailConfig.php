@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $otherConfigQuery ="SELECT * from other_config WHERE type='result'";
 $otherConfigResult=$db->query($otherConfigQuery);
 $arr = array();
@@ -208,5 +208,5 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
 </script>
   
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

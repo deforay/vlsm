@@ -1,5 +1,5 @@
    <?php
-   include('../header.php');
+   include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
    
    $facilityQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
    
@@ -385,5 +385,5 @@
     }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>
