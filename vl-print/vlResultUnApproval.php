@@ -514,7 +514,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
 
   function acceptAllSamples()
   {
-      conf=confirm("Do you wish to change the status as Accepted ?");
+      conf=confirm("Are you sure you want to mark all samples as 'Accepted' ?");
       if(conf){
 		    $.blockUI();
 		    $.post("updateAllSampleStatus.php", { },

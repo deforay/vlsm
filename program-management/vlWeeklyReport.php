@@ -207,17 +207,17 @@
         $('#sampleTestDate,#sampleCollectionDate,#femaleSampleTestDate,#femaleSampleCollectionDate').daterangepicker({
             format: 'DD-MMM-YYYY',
 	    separator: ' to ',
-            startDate: moment().subtract('days', 6),
+            startDate: moment().subtract(6,'days'),
             endDate: moment(),
             maxDate: moment(),
             ranges: {
                 'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                'Last 7 Days': [moment().subtract('days', 6), moment()],
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'Yesterday': [moment().subtract(1,'days'), moment().subtract(1,'days')],
+                'Last 7 Days': [moment().subtract(6,'days'), moment()],
+                'Last 30 Days': [moment().subtract(29,'days'), moment()],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')],
-                'Last 12 Months': [moment().subtract('month', 12).startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1,'month').startOf('month'), moment().subtract(1,'month').endOf('month')],
+                'Last 12 Months': [moment().subtract(12,'month').startOf('month'), moment().endOf('month')],
                 'Last 18 Months': [moment().subtract('month', 18).startOf('month'), moment().endOf('month')],
                 'Last 24 Months': [moment().subtract('month', 24).startOf('month'), moment().endOf('month')]
             }
