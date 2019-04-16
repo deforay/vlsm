@@ -1612,3 +1612,4 @@ ALTER TABLE `resources` ADD `module` VARCHAR(255) NOT NULL AFTER `resource_id`;
 UPDATE `resources` set `module` = 'vl'
 
 
+-- Version 3.10.8 ---------- Amit 17-Apr-2019
