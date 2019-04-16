@@ -38,3 +38,8 @@ defined('UPLOAD_PATH')
     
 defined('TEMP_PATH')
     || define('TEMP_PATH', realpath(dirname(__FILE__) . '/temporary'));     
+
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? 
+                                  getenv('APPLICATION_ENV') : 
+                                  'production'));    

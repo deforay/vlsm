@@ -1,9 +1,8 @@
 <?php
 ob_start();
-include('MysqliDb.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/General.php');
-include ('tcpdf/tcpdf.php');
-define('UPLOAD_PATH','../uploads');
+include_once(APPLICATION_PATH.'/tcpdf/tcpdf.php');
 
 $pathFront=realpath('../uploads');
 $configQuery="SELECT * from global_config";

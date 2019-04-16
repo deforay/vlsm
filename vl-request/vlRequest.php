@@ -1,7 +1,7 @@
 <?php
 $title = "VLSM | View All Requests";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-//include('../includes/MysqliDb.php');
+//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";

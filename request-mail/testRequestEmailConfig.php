@@ -1,6 +1,7 @@
 <?php
 $title = "VLSM | Request Email & SMS Config";
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
