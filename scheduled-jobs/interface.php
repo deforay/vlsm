@@ -8,9 +8,16 @@ if($interfacing == false){
     exit;
 }
 
+
+
 $interfacedb = new MysqliDb($interfaceHost, $interfaceUser, $interfacePassword, $interfaceDb, $interfacePort);
 
-$general = new General($db);
+$vlsmDb  = $db; // putting this to avoid confusion below
+
+$general = new General($vlsmDb);
+$lowVlResults = $general->getLowVLResultTextFromImportConfigs();
+
+
 
 //get the value from interfacing DB
 $interfaceQuery = "SELECT * FROM orders WHERE result_status = 1 AND lims_sync_status=0";
@@ -44,6 +51,7 @@ if (count($interfaceInfo) > 0) {
                 if (strpos($vlResult, 'E') !== false) {
                     if (strpos($vlResult, '< 2.00E+1') !== false) {
                         $vlResult = "< 20";
+                        //$vlResultCategory = 'Suppressed';
                     }else{
                         $vlResultArray = explode("(", $vlResult);
                         $exponentArray = explode("E", $vlResultArray[0]);
@@ -84,7 +92,7 @@ if (count($interfaceInfo) > 0) {
                 'result_value_absolute_decimal' => $absDecimalVal,
                 'result_value_text' => $txtVal,
                 'result' => $vlResult,
-                'result_status' => 8
+                'result_status' => 7
             );
 
             $db = $db->where('vl_sample_id', $vlInfo['vl_sample_id']);

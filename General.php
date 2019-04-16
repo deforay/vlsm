@@ -5,15 +5,18 @@
  * @author Amit
  */
 
-class General {
+class General
+{
 
     protected $db = null;
 
-    public function __construct($db = null){
+    public function __construct($db = null)
+    {
         $this->db = $db;
     }
 
-    public static function generateRandomString($length = 8, $seeds = 'alphanum') {
+    public static function generateRandomString($length = 8, $seeds = 'alphanum')
+    {
         // Possible seeds
         $seedings['alpha'] = 'abcdefghijklmnopqrstuvwqyz';
         $seedings['numeric'] = '0123456789';
@@ -41,25 +44,27 @@ class General {
         return $str;
     }
 
-    public function generateUserID(){
+    public function generateUserID()
+    {
         $idOne = $this->generateRandomString(8);
         $idTwo = $this->generateRandomString(4);
         $idThree = $this->generateRandomString(4);
         $idFour = $this->generateRandomString(4);
-        $idFive = $this->generateRandomString(12);  
-        return $idOne."-".$idTwo."-".$idThree."-".$idFour."-".$idFive;      
-    }    
+        $idFive = $this->generateRandomString(12);
+        return $idOne . "-" . $idTwo . "-" . $idThree . "-" . $idFour . "-" . $idFive;
+    }
 
     /**
      * Used to format date from dd-mmm-yyyy to yyyy-mm-dd for storing in database
      *
-    */
-    public function dateFormat($date) {
+     */
+    public function dateFormat($date)
+    {
         if (!isset($date) || $date == null || $date == "" || $date == "0000-00-00") {
             return "0000-00-00";
         } else {
             $dateArray = explode('-', $date);
-            if(sizeof($dateArray) == 0 ){
+            if (sizeof($dateArray) == 0) {
                 return;
             }
             $newDate = $dateArray[2] . "-";
@@ -75,7 +80,8 @@ class General {
         }
     }
 
-    public function humanDateFormat($date) {
+    public function humanDateFormat($date)
+    {
 
         if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
             return "";
@@ -90,7 +96,8 @@ class General {
         }
     }
 
-    public function getZendDateFormat($date) {
+    public function getZendDateFormat($date)
+    {
 
         if ($date == null || $date == "" || $date == "0000-00-00") {
             return "";
@@ -103,12 +110,14 @@ class General {
         }
     }
 
-    public static function getDateTime() {
+    public static function getDateTime()
+    {
         $date = new DateTime(date('Y-m-d H:i:s'));
         return $date->format('Y-m-d H:i:s');
     }
 
-    function removeDirectory($dirname) {
+    public function removeDirectory($dirname)
+    {
         // Sanity check
         if (!file_exists($dirname)) {
             return false;
@@ -137,80 +146,89 @@ class General {
     }
 
     // get data from the system_config table from database
-    public function getSystemConfig($name = null){
-        if($this->db == null) return false;
-
-        if($name == null){
-            $systemConfigQuery ="SELECT * from system_config";
-        }else{
-            $systemConfigQuery ="SELECT * from system_config WHERE `name` = '$name'";
+    public function getSystemConfig($name = null)
+    {
+        if ($this->db == null) {
+            return false;
         }
 
-        $systemConfigResult=$this->db->query($systemConfigQuery);
+        if ($name == null) {
+            $systemConfigQuery = "SELECT * from system_config";
+        } else {
+            $systemConfigQuery = "SELECT * from system_config WHERE `name` = '$name'";
+        }
+
+        $systemConfigResult = $this->db->query($systemConfigQuery);
         $sarr = array();
         // now we create an associative array so that we can easily create view variables
         for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
-          $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
+            $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
         }
 
-        if($name == null){
+        if ($name == null) {
             return $sarr;
-        }else{
-            if(isset($sarr[$name])){
+        } else {
+            if (isset($sarr[$name])) {
                 return $sarr[$name];
-            }else{
+            } else {
                 return null;
             }
         }
     }
 
     // get data from the global_config table from database
-    public function getGlobalConfig($name = null){
+    public function getGlobalConfig($name = null)
+    {
 
-        if($this->db == null) return false;
-
-        if($name == null){
-            $globalConfigQuery ="SELECT * from global_config";
-        }else{
-            $globalConfigQuery ="SELECT * from global_config WHERE `name` = '$name'";
+        if ($this->db == null) {
+            return false;
         }
 
-        $globalConfigResult=$this->db->query($globalConfigQuery);
+        if ($name == null) {
+            $globalConfigQuery = "SELECT * from global_config";
+        } else {
+            $globalConfigQuery = "SELECT * from global_config WHERE `name` = '$name'";
+        }
+
+        $globalConfigResult = $this->db->query($globalConfigQuery);
         $garr = array();
         // now we create an associative array so that we can easily create view variables
         for ($i = 0; $i < sizeof($globalConfigResult); $i++) {
             $garr[$globalConfigResult[$i]['name']] = $globalConfigResult[$i]['value'];
         }
 
-        if($name == null){
+        if ($name == null) {
             return $garr;
-        }else{
-            if(isset($garr[$name])){
+        } else {
+            if (isset($garr[$name])) {
                 return $garr[$name];
-            }else{
+            } else {
                 return null;
             }
         }
     }
 
-    public function fetchDataFromTable($tableName=null,$condition=null,$fieldName=NULL)
+    public function fetchDataFromTable($tableName = null, $condition = null, $fieldName = null)
     {
-        if($this->db == null || $tableName==null) return false;
-        $fieldName = ($fieldName!=null)?$fieldName:'*';
-        if($condition==null){
-            $configQuery ="SELECT $fieldName from $tableName";
-        }else{
-            $configQuery ="SELECT $fieldName from $tableName WHERE $condition";
+        if ($this->db == null || $tableName == null) {
+            return false;
         }
-        $configResult=$this->db->query($configQuery);
+
+        $fieldName = ($fieldName != null) ? $fieldName : '*';
+        if ($condition == null) {
+            $configQuery = "SELECT $fieldName from $tableName";
+        } else {
+            $configQuery = "SELECT $fieldName from $tableName WHERE $condition";
+        }
+        $configResult = $this->db->query($configQuery);
         return $configResult;
     }
 
-
     // checking if the provided field list has any empty or null values
-    public function checkMandatoryFields($field){
-        foreach($field as $chkField){
-            if(empty(trim($chkField))){
+    public function checkMandatoryFields($field)
+    {
+        foreach ($field as $chkField) {
+            if (empty(trim($chkField))) {
                 return true;
             }
         }
@@ -218,12 +236,15 @@ class General {
         return false;
     }
 
-    public function crypto($action, $inputString, $secretIv) {
+    public function crypto($action, $inputString, $secretIv)
+    {
 
         return $inputString;
- 
-        if (empty($inputString)) return "";
-     
+
+        if (empty($inputString)) {
+            return "";
+        }
+
         $output = false;
         $encrypt_method = "AES-256-CBC";
         $secret_key = 'rXBCNkAzkHXGBKEReqrTfPhGDqhzxgDRQ7Q0XqN6BVvuJjh1OBVvuHXGBKEReqrTfPhGDqhzxgDJjh1OB4QcIGAGaml';
@@ -231,49 +252,75 @@ class General {
         // hash
         $key = hash('sha256', $secret_key);
 
-          if(empty($secretIv)){
-               $secretIv = 'sd893urijsdf8w9eurj';
-          }
+        if (empty($secretIv)) {
+            $secretIv = 'sd893urijsdf8w9eurj';
+        }
         // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secretIv), 0, 16);
 
-        if ( $action == 'encrypt' ) {
+        if ($action == 'encrypt') {
             $output = openssl_encrypt($inputString, $encrypt_method, $key, 0, $iv);
             $output = base64_encode($output);
-        } else if( $action == 'decrypt' ) {
+        } else if ($action == 'decrypt') {
             $output = openssl_decrypt(base64_decode($inputString), $encrypt_method, $key, 0, $iv);
 
         }
         return $output;
     }
 
-
-    public function activityLog($eventType,$action,$resource){
+    public function activityLog($eventType, $action, $resource)
+    {
 
         $ipaddress = '';
-    if (isset($_SERVER['HTTP_CLIENT_IP']))
-        $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-    else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-        $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    else if(isset($_SERVER['HTTP_X_FORWARDED']))
-        $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-    else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
-        $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-    else if(isset($_SERVER['HTTP_FORWARDED']))
-        $ipaddress = $_SERVER['HTTP_FORWARDED'];
-    else if(isset($_SERVER['REMOTE_ADDR']))
-        $ipaddress = $_SERVER['REMOTE_ADDR'];
-    else
-        $ipaddress = 'UNKNOWN';
-        $data=array(
-            'event_type'=>$eventType,
-            'action'=>$action,
-            'resource'=>$resource,
-            'date_time'=>$this->getDateTime(),
-            'ip_address'=>$ipaddress
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else if (isset($_SERVER['HTTP_X_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        } else if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        } else if (isset($_SERVER['HTTP_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        } else if (isset($_SERVER['REMOTE_ADDR'])) {
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ipaddress = 'UNKNOWN';
+        }
+
+        $data = array(
+            'event_type' => $eventType,
+            'action' => $action,
+            'resource' => $resource,
+            'date_time' => $this->getDateTime(),
+            'ip_address' => $ipaddress,
         );
 
-        $this->db->insert('activity_log',$data);        
+        $this->db->insert('activity_log', $data);
+    }
+
+    public function getLowVLResultTextFromImportConfigs($machineFile = null){
+        if ($this->db == null) {
+            return false;
+        }
+
+        if ($machineFile == null) {
+            $importConfigQuery = "SELECT low_vl_result_text from import_config";
+        } else {
+            $importConfigQuery = "SELECT low_vl_result_text from import_config WHERE `import_machine_file_name` = '$machineFile'";
+        }  
+        
+        $importConfigResult = $this->db->query($importConfigQuery);
+        $lowVlResults = array();
+        foreach($importConfigResult as $row){
+            if($row['low_vl_result_text'] != ""){
+                $lowVlResults[] = $row['low_vl_result_text'];
+            }
+        }
+
+        return implode(", ",$lowVlResults);
+        
+        
     }
 
 }
