@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $tableName="batch_details";
 $primaryKey="batch_id";
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";

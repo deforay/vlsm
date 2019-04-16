@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | Specimen Referral Manifest";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
 <style>
   .center{
@@ -173,5 +173,5 @@ include('../header.php');
   count_elem.parentNode.insertBefore(div, count_elem);
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

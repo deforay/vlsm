@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 if($global['edit_profile']=='no'){
     header("location:../dashboard/index.php");
 }
@@ -143,5 +143,5 @@ $result = $db->rawQuery($query);
     }
  </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

@@ -1,8 +1,8 @@
 <?php
 ob_start();
 $title = "VLSM | Add New Request";
-include('../header.php');
-include('../General.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once(APPLICATION_PATH.'/General.php');
 $labFieldDisabled = '';
 
 // if($sarr['user_type']=='vluser'){
@@ -315,4 +315,4 @@ if($arr['vl_form']==1){
                                                                                                               return splitDate[2]+'-'+fMonth+'-'+splitDate[0];
                                                                                                          }
                                                                                                          </script>
-                                                                                                         <?php include('../footer.php');?>
+                                                                                                         <?php include(APPLICATION_PATH.'/footer.php');?>

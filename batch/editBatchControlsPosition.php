@@ -3,7 +3,7 @@ ob_start();
 
 $title = "VLSM | Edit Batch Position";
 
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 if(!isset($id) || trim($id)== ''){
     header("location:batchcode.php");
@@ -158,5 +158,5 @@ if(isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order'])!= '
    }
 </script>
 <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

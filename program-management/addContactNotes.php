@@ -12,7 +12,7 @@
 <?php
 ob_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $id=base64_decode($_GET['id']);
 $general=new General($db);
 $contactInfo="SELECT * from contact_notes_details where treament_contact_id=$id";

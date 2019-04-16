@@ -2,8 +2,8 @@
 ob_start();
 session_start();
 include('../includes/MysqliDb.php');
-//include('../header.php');
-include('../General.php');
+//include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 
 

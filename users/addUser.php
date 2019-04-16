@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 $fResult = array();
@@ -345,5 +345,5 @@ function getFacility()
 }
 </script>
 <?php
-include('../footer.php');
+include(APPLICATION_PATH.'/footer.php');
 ?>

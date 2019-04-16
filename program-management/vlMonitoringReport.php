@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | VL Quarterly Monitoring Report";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $startYear=date("Y", strtotime("-2 month"));
 $startMonth = date('m', strtotime('-2 month'));
 $endYear = date('Y');
@@ -662,5 +662,5 @@ function paintMonths(){
   
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

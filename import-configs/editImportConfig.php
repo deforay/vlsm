@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //include('./includes/MysqliDb.php');
 $id=base64_decode($_GET['id']);
 $sQuery="SELECT * from import_config where config_id=$id";
@@ -254,5 +254,5 @@ $configMachineInfo=$db->query($configMachineQuery);
 </script>
   
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

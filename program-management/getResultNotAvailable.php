@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";

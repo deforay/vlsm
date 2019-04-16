@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //global config
 $cSampleQuery="SELECT * FROM global_config";
 $cSampleResult=$db->query($cSampleQuery);
@@ -119,5 +119,5 @@ $_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
   }
   </script>
    <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

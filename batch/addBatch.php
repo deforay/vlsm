@@ -1,7 +1,8 @@
 <?php
 ob_start();
 $title = "VLSM | Add New Batch";
-include('../header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 //global config
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
@@ -414,5 +415,5 @@ foreach($importConfigResult as $machine) {
     });
   </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

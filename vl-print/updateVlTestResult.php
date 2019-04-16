@@ -1,8 +1,8 @@
 <?php
 ob_start();
 $title = "VLSM | Enter VL Result";
-include('../header.php');
-include('../General.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general = new General($db);
 $id = base64_decode($_GET['id']);
 $configQuery="SELECT * from global_config";
@@ -218,5 +218,5 @@ if($vlQueryInfo[0]['patient_last_name']!=''){
     }else if($arr['vl_form']==8){
      include('updateVlTestResultAng.php');
     }
-include('../footer.php');
+include(APPLICATION_PATH.'/footer.php');
  ?>

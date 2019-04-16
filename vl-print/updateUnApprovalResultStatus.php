@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $tableName="temp_sample_import";
 $tableName1="vl_request_form";

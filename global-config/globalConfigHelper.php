@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 include('../includes/MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 include('../includes/ImageResize.php');
 //define('UPLOAD_PATH','../uploads');
 $general = new General($db);

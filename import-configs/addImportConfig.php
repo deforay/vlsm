@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -253,5 +253,5 @@ tableRowId = 2;
 </script>
   
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

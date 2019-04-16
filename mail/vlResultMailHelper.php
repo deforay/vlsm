@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include('../includes/MysqliDb.php');
 require '../includes/mail/PHPMailerAutoload.php';
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $tableName="vl_request_form";
 $configSyncQuery ="SELECT value FROM global_config where name='sync_path'";

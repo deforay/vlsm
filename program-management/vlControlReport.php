@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | VL Control Report";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $sQuery="SELECT * FROM r_sample_controls where r_sample_control_name!='s'";
 $sResult = $db->rawQuery($sQuery);
 ?>
@@ -111,5 +111,5 @@ $sResult = $db->rawQuery($sQuery);
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

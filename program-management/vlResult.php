@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | Export Data";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //include('../includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
@@ -477,5 +477,5 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

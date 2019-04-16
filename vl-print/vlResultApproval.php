@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | Manage Result Status";
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //include('../includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
@@ -486,5 +486,5 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
 //  }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

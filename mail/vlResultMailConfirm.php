@@ -1,8 +1,8 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 include ('../includes/tcpdf/tcpdf.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $tableName="vl_request_form";
 //get other config values
@@ -323,5 +323,5 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
     }
 </script>
 <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
 ?>

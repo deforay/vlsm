@@ -773,5 +773,5 @@ $(document).ready(function(){
 
   </script>
  <?php
- //include('../footer.php');
+ //include(APPLICATION_PATH.'/footer.php');
  ?>

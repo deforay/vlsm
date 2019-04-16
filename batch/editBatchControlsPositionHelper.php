@@ -2,7 +2,7 @@
 ob_start();
 session_start();
 include('../includes/MysqliDb.php');
-//include('../header.php');
+//include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $tableName="batch_details";
 try {
     $labelOrder = '';

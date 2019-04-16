@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include('MysqliDb.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 include ('tcpdf/tcpdf.php');
 define('UPLOAD_PATH','../uploads');
 

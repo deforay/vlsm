@@ -2,7 +2,8 @@
 
 $title = "VLSM | Dashboard";
 
-include('../header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 
 
 /* Total data set length */
@@ -197,5 +198,5 @@ function getSamplesOverview(){
     }
   </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

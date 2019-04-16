@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 //include('../includes/MysqliDb.php');
 $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.vl_lab_id SEPARATOR ',') as vlLabId FROM vl_facility_map as vlfm";
 $vlfmResult = $db->rawQuery($vlfmQuery);
@@ -142,5 +142,5 @@ $hcResult = $db->rawQuery($hcQuery);
   }
   </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 $facilityQuery="SELECT * from facility_details where facility_id=$id";
 $facilityInfo=$db->query($facilityQuery);
@@ -430,5 +430,5 @@ $selectedResult = $db->rawQuery($selectedQuery);
   }
 </script>
  <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
  ?>

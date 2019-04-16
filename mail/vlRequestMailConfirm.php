@@ -1,8 +1,8 @@
 <?php
 ob_start();
-include('../header.php');
+include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 include ('../vendor/autoload.php');
-include('../General.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 //get other config details
 $geQuery="SELECT * FROM other_config WHERE type = 'request'";
@@ -290,5 +290,5 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
     }
 </script>
 <?php
- include('../footer.php');
+ include(APPLICATION_PATH.'/footer.php');
 ?>
