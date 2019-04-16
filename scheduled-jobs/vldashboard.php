@@ -1,8 +1,9 @@
 <?php
 
-require(__DIR__ . "/../includes/MysqliDb.php");
-require(__DIR__ . "/../General.php");
-require(__DIR__ . "/../vendor/autoload.php");
+include_once(__DIR__ . "/../startup.php");
+include_once(APPLICATION_PATH."/includes/MysqliDb.php");
+include_once(APPLICATION_PATH."/General.php");
+include_once(APPLICATION_PATH."/vendor/autoload.php");
 
 $general=new General($db);
 

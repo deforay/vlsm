@@ -1,7 +1,8 @@
 <?php
 //get data from remote db send to lab db
-include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
-include(dirname(__FILE__) . "/../../General.php");
+include(dirname(__FILE__) . "/../../startup.php");  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH."/General.php");
 $data = json_decode(file_get_contents('php://input'), true);
 if($data['Key']=='vlsm-get-remote'){
     //r_sample_type

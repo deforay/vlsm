@@ -1,7 +1,8 @@
 <?php
 ob_start();
-include 'MysqliDb.php';
-include '../General.php';
+include_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/General.php');
 $general = new General($db);
 $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);

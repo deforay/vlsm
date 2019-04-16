@@ -1,7 +1,9 @@
 <?php
 //update common table from remote to lab db
-include(dirname(__FILE__) . "/../../includes/MysqliDb.php");
-include(dirname(__FILE__) . "/../../General.php");
+include(dirname(__FILE__) . "/../../startup.php");  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH."/General.php");
+
 if(!isset($REMOTEURL) || $REMOTEURL==''){
     echo "Please check your remote url";
     die;

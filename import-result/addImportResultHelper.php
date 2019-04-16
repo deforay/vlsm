@@ -1,9 +1,9 @@
 <?php
 ob_start();
 session_start();
-include('../includes/MysqliDb.php');
-//include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-include ('../vendor/autoload.php');
+include_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/vendor/autoload.php');
 include_once(APPLICATION_PATH.'/General.php');
 $confFileName = base64_decode($_POST['machineName']);
 $globalConfigQuery = "SELECT * from global_config";
@@ -15,4 +15,4 @@ for($i = 0; $i < sizeof($configResult); $i++) {
 
 $general = new General($db);
 
-include("../import-configs".DIRECTORY_SEPARATOR.$confFileName);
+include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR.$confFileName);

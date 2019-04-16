@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-include('../includes/MysqliDb.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 
 $tableName1="roles";
 $tableName2="roles_privileges_map";

@@ -1,6 +1,7 @@
 <?php
+include_once('../startup.php');
 include_once(APPLICATION_PATH.'/General.php');
-require '../includes/mail/PHPMailerAutoload.php';
+include_once(APPLICATION_PATH.'/includes/mail/PHPMailerAutoload.php');
 $general=new General($db);
 $reportFilename = '';
 $postdata = $_POST;

@@ -1,6 +1,7 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 $otherConfigQuery ="SELECT * from other_config WHERE type='request'";
 $otherConfigResult=$db->query($otherConfigQuery);
 $arr = array();

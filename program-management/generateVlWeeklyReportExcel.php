@@ -1,9 +1,9 @@
 <?php
 session_start();
 ob_start();
-include '../includes/MysqliDb.php';
-include '../General.php';
-include '../vendor/autoload.php';
+include_once('../startup.php');   include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH.'/vendor/autoload.php');
 
 $general = new General($db);
 $configQuery = "SELECT * from global_config where name='vl_form'";

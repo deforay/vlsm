@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-include ('../includes/tcpdf/tcpdf.php');
+include_once(APPLICATION_PATH.'/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $tableName="vl_request_form";

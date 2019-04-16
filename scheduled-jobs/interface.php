@@ -1,7 +1,8 @@
 <?php
 
-require __DIR__ . "/../includes/MysqliDb.php";
-require __DIR__ . "/../General.php";
+include_once(__DIR__ . "/../startup.php");
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH."/General.php");
 
 if($interfacing == false){  
     error_log('Interfacing is not enabled.');

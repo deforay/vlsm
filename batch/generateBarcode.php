@@ -1,10 +1,10 @@
 <?php
 ob_start();
 session_start();
-include('../includes/MysqliDb.php');
-include ('../includes/tcpdf/tcpdf.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH.'/General.php');
-//define('UPLOAD_PATH','../uploads');
+
 $general=new General($db);
 $id=base64_decode($_POST['id']);
 if($id >0){

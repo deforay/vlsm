@@ -1,8 +1,9 @@
 <?php
 session_start();
 ob_start();
-include_once 'MysqliDb.php';
-include_once '../General.php';
+include_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/General.php');
 
 $general = new General($db); // passing $db which is coming from MysqliDb.php
 $whereCondition = '';

@@ -1,8 +1,8 @@
 <?php
 session_start();
 ob_start();
-include('./includes/MysqliDb.php');
-include('General.php');
+include_once('startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/General.php');
 
 $general=new General($db);
 

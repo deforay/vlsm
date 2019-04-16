@@ -1,6 +1,9 @@
 <?php
 //this fille is get the data from lab db and update in remote db
-include dirname(__FILE__) . "/../../includes/MysqliDb.php";
+
+include(dirname(__FILE__) . "/../../startup.php");  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 if (!isset($REMOTEURL) || $REMOTEURL == '') {
     echo "Please check your remote url";
     die;

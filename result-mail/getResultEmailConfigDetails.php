@@ -1,5 +1,5 @@
 <?php
-include('../includes/MysqliDb.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tableName="other_config";
 
         /* Array of database columns which should be read and sent back to DataTables. Use a space where

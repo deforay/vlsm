@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-include ('../vendor/autoload.php');
+ include_once(APPLICATION_PATH.'/vendor/autoload.php');
 include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 //get other config details

@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-include('../includes/MysqliDb.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tableName="other_config";
 
 try {

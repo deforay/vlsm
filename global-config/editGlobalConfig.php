@@ -2,8 +2,8 @@
 ob_start();
 $title = "VLSM | Edit Configuration";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-//include('../includes/MysqliDb.php');
-//define('UPLOAD_PATH','../uploads');
+//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 $instanceQuery ="SELECT * from s_vlsm_instance where vlsm_instance_id='".$_SESSION['instanceId']."'";
 $instanceResult=$db->query($instanceQuery);
 $fType="SELECT * FROM facility_type";

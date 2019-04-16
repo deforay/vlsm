@@ -1,10 +1,13 @@
 <?php
 ob_start();
 session_start();
-include_once(dirname(__FILE__) . '/../includes/MysqliDb.php');
-include_once(dirname(__FILE__) . '/../includes/tcpdf/tcpdf.php');
-include_once(dirname(__FILE__) . '/../General.php');
-//define('UPLOAD_PATH','../uploads');
+
+include_once(__DIR__ . "/../startup.php");
+include_once(APPLICATION_PATH."/includes/MysqliDb.php");
+include_once(APPLICATION_PATH."/includes/tcpdf/tcpdf.php");
+include_once(APPLICATION_PATH."/General.php");
+include_once(APPLICATION_PATH."/vendor/autoload.php");
+
 $general = new General($db);
 $id = base64_decode($_POST['id']);
 if(isset($_POST['frmSrc']) && trim($_POST['frmSrc']) == 'pk2'){

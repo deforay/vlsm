@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/MysqliDb.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/General.php');
 $tableName="batch_details";
 $primaryKey="batch_id";

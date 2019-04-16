@@ -1,5 +1,5 @@
 <?php
-include('../includes/MysqliDb.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tableName="import_config";
 $primaryKey="config_id";
 

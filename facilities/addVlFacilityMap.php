@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-//include('../includes/MysqliDb.php');
+//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.vl_lab_id SEPARATOR ',') as vlLabId FROM vl_facility_map as vlfm";
 $vlfmResult = $db->rawQuery($vlfmQuery);
 $fQuery="SELECT * FROM facility_details where facility_type=2";

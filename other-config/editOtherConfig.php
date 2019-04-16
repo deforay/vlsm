@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-//include('../includes/MysqliDb.php');
+//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $otherConfigQuery ="SELECT * from other_config";
 $otherConfigResult=$db->query($otherConfigQuery);
 $arr = array();

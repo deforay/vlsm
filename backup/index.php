@@ -11,7 +11,7 @@ if($_SESSION['roleId'] != 1){
 }
 
 
-include('../includes/MysqliDb.php');
+include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 
 
 $filename = 'vlsm-bkp-' . date("dmYHis") .'-'. rand(). '.sql';
