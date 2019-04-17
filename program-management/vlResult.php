@@ -287,7 +287,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 		    <?php 
 			    if($_SESSION['roleCode']=='ad' || $_SESSION['roleCode']=='AD'){
 			    ?>
-		   			 &nbsp;<button class="btn btn-success pull-right" type="button" onclick="exportInexcel('vlResultAllFieldExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Data for Dashboard</button>
+		   			 <!-- &nbsp;<button class="btn btn-success pull-right" type="button" onclick="exportInexcel('vlResultAllFieldExportInExcel.php')"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Data for Dashboard</button> -->
 		    <?php } ?>
 
             </div>
@@ -313,7 +313,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
      $("#facilityName").select2({placeholder:"Select Facilities"});
      $('#sampleCollectionDate,#sampleTestDate,#printDate').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+	    			separator: ' to ',
             startDate: moment().subtract(29,'days'),
             endDate: moment(),
             maxDate: moment(),
@@ -381,18 +381,18 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
             "bRetrieve": true,
             "aoColumns": [
                 {"sClass":"center"},
-		<?php if($sarr['user_type']!='standalone'){ ?>
+						<?php if($sarr['user_type']!='standalone'){ ?>
                 {"sClass":"center"},
-		<?php } ?>
-                {"sClass":"center"},
-                {"sClass":"center"},
+						<?php } ?>
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
                 {"sClass":"center"},
-		{"sClass":"center"},
-		{"sClass":"center"},
+                {"sClass":"center"},
+                {"sClass":"center"},
+								{"sClass":"center"},
+								{"sClass":"center"},
                 {"sClass":"center","bSortable":false},
             ],
             "aaSorting": [[ 0, "asc" ]],
@@ -400,28 +400,28 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
             "bServerSide": true,
             "sAjaxSource": "getVlResultDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-		  aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-		  aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-		  aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
-		  aoData.push({"name": "printDate", "value": $("#printDate").val()});
-		  aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-		  aoData.push({"name": "vlLab", "value": $("#vlLab").val()});
-		  aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
-		  aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
-		  aoData.push({"name": "status", "value": $("#status").val()});
-		  aoData.push({"name": "gender", "value": $("#gender").val()});
-		  aoData.push({"name": "showReordSample", "value": $("#showReordSample").val()});
-		  aoData.push({"name": "patientPregnant", "value": $("#patientPregnant").val()});
-		  aoData.push({"name": "breastFeeding", "value": $("#breastFeeding").val()});
-		  aoData.push({"name": "fundingSource", "value": $("#fundingSource").val()});
-		  aoData.push({"name": "implementingPartner", "value": $("#implementingPartner").val()});
-              $.ajax({
-                  "dataType": 'json',
-                  "type": "POST",
-                  "url": sSource,
-                  "data": aoData,
-                  "success": fnCallback
-              });
+										aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+										aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+										aoData.push({"name": "sampleTestDate", "value": $("#sampleTestDate").val()});
+										aoData.push({"name": "printDate", "value": $("#printDate").val()});
+										aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+										aoData.push({"name": "vlLab", "value": $("#vlLab").val()});
+										aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+										aoData.push({"name": "vLoad", "value": $("#vLoad").val()});
+										aoData.push({"name": "status", "value": $("#status").val()});
+										aoData.push({"name": "gender", "value": $("#gender").val()});
+										aoData.push({"name": "showReordSample", "value": $("#showReordSample").val()});
+										aoData.push({"name": "patientPregnant", "value": $("#patientPregnant").val()});
+										aoData.push({"name": "breastFeeding", "value": $("#breastFeeding").val()});
+										aoData.push({"name": "fundingSource", "value": $("#fundingSource").val()});
+										aoData.push({"name": "implementingPartner", "value": $("#implementingPartner").val()});
+										$.ajax({
+												"dataType": 'json',
+												"type": "POST",
+												"url": sSource,
+												"data": aoData,
+												"success": fnCallback
+										});
             }
         });
      $.unblockUI();
