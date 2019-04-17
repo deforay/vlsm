@@ -216,7 +216,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           $sQuery = $sQuery.' '.$sWhere;
           //echo $sQuery;die;
           $_SESSION['vlMonitoringResultQuery']=$sQuery;
-          //echo $_SESSION['vlResultQuery'];die;
+
           if (isset($sOrder) && $sOrder != "") {
                $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
                $sQuery = $sQuery.' order by '.$sOrder;

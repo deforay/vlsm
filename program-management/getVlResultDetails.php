@@ -107,7 +107,65 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           * Get data to display
           */
           $aWhere = '';
-          $sQuery="SELECT vl.*,s.sample_name,b.*,ts.*,f_d.form_name,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name,r_f_s.funding_source_name,r_i_p.i_partner_name FROM vl_request_form as vl INNER JOIN form_details as f_d ON f_d.vlsm_country_id = vl.vlsm_country_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
+          $sQuery="SELECT vl.sample_code,
+                        vl.remote_sample_code,
+                        vl.patient_art_no,
+                        vl.patient_first_name,
+                        vl.patient_middle_name,
+                        vl.patient_last_name,
+                        vl.patient_dob,
+                        vl.patient_gender,
+                        vl.patient_age_in_years,
+                        vl.sample_collection_date,
+                        vl.treatment_initiated_date,
+                        vl.date_of_initiation_of_current_regimen,
+                        vl.test_requested_on,
+                        vl.sample_tested_datetime,
+                        vl.arv_adherance_percentage,
+                        vl.is_sample_rejected,
+                        vl.is_sample_rejected,
+                        vl.result_value_log,
+                        vl.result_value_absolute,
+                        vl.result,
+                        vl.current_regimen,
+                        vl.is_patient_pregnant,
+                        vl.is_patient_breastfeeding,
+                        vl.request_clinician_name,
+                        vl.approver_comments,
+                        s.sample_name,
+                        b.batch_code,
+                        ts.status_name,
+                        f.facility_name,
+                        l_f.facility_name as labName,
+                        f.facility_code,
+                        f.facility_state,
+                        f.facility_district,
+                        rst.sample_name as routineSampleName,
+                        fst.sample_name as failureSampleName,
+                        sst.sample_name as suspectedSampleName,
+                        u_d.user_name as reviewedBy,
+                        a_u_d.user_name as approvedBy,
+                        rs.rejection_reason_name,
+                        tr.test_reason_name,
+                        r_f_s.funding_source_name,
+                        r_i_p.i_partner_name 
+                        
+                        FROM vl_request_form as vl 
+                        
+                        LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                        LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
+                        LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+                        INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+                        LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine 
+                        LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  
+                        LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure 
+                        LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+                        LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
+                        LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
+                        LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+                        LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing 
+                        LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
+                        LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner";
           //echo $sQuery;die;
           $start_date = '';
           $end_date = '';
@@ -377,13 +435,15 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           }
           $sQuery = $sQuery.' '.$sWhere;
           //echo $sQuery;die;
-          $_SESSION['vlResultQuery']=$sQuery;
-          //echo $_SESSION['vlResultQuery'];die;
+          
+          
           if (isset($sOrder) && $sOrder != "") {
                $sOrder = preg_replace('/(\v|\s)+/', ' ', $sOrder);
                $sQuery = $sQuery.' order by '.$sOrder;
           }
-
+          
+          $_SESSION['vlResultQuery']=$sQuery;
+          
           if (isset($sLimit) && isset($sOffset)) {
                $sQuery = $sQuery.' LIMIT '.$sOffset.','. $sLimit;
           }
@@ -391,11 +451,31 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           $rResult = $db->rawQuery($sQuery);
           /* Data set length after filtering */
 
-          $aResultFilterTotal =$db->rawQuery("SELECT vl.*,s.sample_name,b.*,ts.*,f_d.form_name,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy,rs.rejection_reason_name,tr.test_reason_name,r_f_s.funding_source_name,r_i_p.i_partner_name FROM vl_request_form as vl INNER JOIN form_details as f_d ON f_d.vlsm_country_id = vl.vlsm_country_id LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner $sWhere order by $sOrder");
+          $aResultFilterTotal =$db->rawQuery("SELECT vl.vl_sample_id 
+          
+          FROM vl_request_form as vl 
+                        
+          LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+          LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
+          LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+          INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+          LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine 
+          LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac  
+          LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure 
+          LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+          LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
+          LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
+          LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+          LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing 
+          LEFT JOIN r_funding_sources as r_f_s ON r_f_s.funding_source_id=vl.funding_source 
+          LEFT JOIN r_implementation_partners as r_i_p ON r_i_p.i_partner_id=vl.implementing_partner 
+          
+          $sWhere");
+          
           $iFilteredTotal = count($aResultFilterTotal);
 
           /* Total data set length */
-          $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where vlsm_country_id='".$arr['vl_form']."' AND result_status!=9 $cWhere");
+          $aResultTotal =  $db->rawQuery("select COUNT(vl_sample_id) as total FROM vl_request_form as vl where result_status!=9 $cWhere");
           // $aResultTotal = $countResult->fetch_row();
           $iTotal = $aResultTotal[0]['total'];
 

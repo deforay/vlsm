@@ -90,7 +90,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }else if($aRow['patient_gender'] == 'female'){
     $gender = 'F';
   }else if($aRow['patient_gender'] == 'not_recorded'){
-   $gender = 'N/R';
+   $gender = 'Unreported';
   }
   //sample collecion date
   $sampleCollectionDate = '';
