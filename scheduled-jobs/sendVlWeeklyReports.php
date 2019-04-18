@@ -361,7 +361,7 @@ $facilityName = ucwords($qResult[0]['instance_facility_name']);
        for($to=0;$to<count($xplodAddress);$to++){
           $mail->addAddress($xplodAddress[$to]);
        }
-       $pathFront=realpath('../temporary');
+       $pathFront=realpath(TEMP_PATH);
        $file_to_attach = $pathFront. DIRECTORY_SEPARATOR. $filename;
        $mail->AddAttachment($file_to_attach);
        $message ='Please find attached viral load weekly report '.$reportedDateRange;

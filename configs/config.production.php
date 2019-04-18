@@ -1,7 +1,8 @@
 <?php
 require_once(__DIR__.'/../system/system.php'); 
 
-// These settings are for the portable Uniform Server distribution
+
+$systemConfig = array();
 
 $HOST = '127.0.0.1';
 $USER = 'root';
@@ -27,17 +28,17 @@ $emailPassword='';
 $MYSQLDUMP = '/usr/bin/mysqldump';
 
 
+// VLSTS URL
 $REMOTEURL = '';
 
 
-$interfacing = true;
+// Enable/Disable Interfacing
+$interfaceConfig['enabled'] = true;
+$interfaceConfig['dbHost'] = '127.0.0.1';
+$interfaceConfig['dbUser'] = 'root';
+$interfaceConfig['dbPassword'] = 'zaq12345';
+$interfaceConfig['dbName'] = 'interfacing';
+$interfaceConfig['dbPort'] = 3306;
 
-if($interfacing){
-    $interfaceHost = '127.0.0.1';
-    $interfaceUser = 'root';
-    $interfacePassword = 'zaq12345';
-    $interfaceDb = 'interfacing';
-    $interfacePort = 3306;
-}
-
-$eid = false;
+// Enable/Disable EID 
+$eidConfig['enabled'] = true;

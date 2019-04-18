@@ -196,7 +196,7 @@ if(isset($mailconf['rq_field']) && trim($mailconf['rq_field'])!= ''){
      $filename = '';
      $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
      $filename = 'VLSM-Test-Requests-' . date('d-M-Y-H-i-s') . '.xlsx';
-     $pathFront=realpath('../temporary');
+     $pathFront=realpath(TEMP_PATH);
      $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
     echo $filename;
 }else{

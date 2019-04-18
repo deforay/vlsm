@@ -19,11 +19,11 @@ try {
         $fileName = str_replace(" ", "-", $fileName);
         $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
         if(in_array($extension, $allowedExtensions)) {
-            if(!file_exists('../temporary') && !is_dir('../temporary')) {
-                mkdir('../temporary');
+            if(!file_exists(TEMP_PATH) && !is_dir(TEMP_PATH)) {
+                mkdir(TEMP_PATH);
             }
-            if(move_uploaded_file($_FILES['requestFile']['tmp_name'], '../temporary' . DIRECTORY_SEPARATOR . $fileName)) {
-                $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load('../temporary' . DIRECTORY_SEPARATOR . $fileName);
+            if(move_uploaded_file($_FILES['requestFile']['tmp_name'], TEMP_PATH . DIRECTORY_SEPARATOR . $fileName)) {
+                $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load(TEMP_PATH . DIRECTORY_SEPARATOR . $fileName);
                 $sheet = $objPHPExcel->getActiveSheet();
                 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
                 $count = count($sheetData);

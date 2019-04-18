@@ -415,7 +415,7 @@ $formConfigResult=$db->query($formConfigQuery);
             </ul>
           </li>
         <?php } ?>
-<?php if(isset($eid) && $eid == true) {  ?>
+<?php if(isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
         <li class="header">EARLY INFANT DIAGNOSIS (EID)</li>
         <li class="treeview request" style="<?php echo $hideRequest;?>">
             <a href="#">
