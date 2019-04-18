@@ -1613,3 +1613,14 @@ UPDATE `resources` set `module` = 'vl'
 
 
 -- Version 3.10.8 ---------- Amit 17-Apr-2019
+
+
+CREATE TABLE `result_import_stats` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `imported_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ `no_of_results_imported` int(11) DEFAULT NULL,
+ `imported_by` varchar(1000) DEFAULT NULL,
+ `import_mode` varchar(500) DEFAULT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

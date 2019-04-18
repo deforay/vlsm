@@ -8,10 +8,6 @@ $PASSWORD = 'zaq12345';
 $DBNAME = 'vl_lab_request';
 $PORT = 3306;
 
-// If using WAMP default settings, then uncomment the following 2 lines
-//$PASSWORD = '';
-//$PORT = 3306;
-
 // Portable Uniform Server : following is the path in the portable Uniform Server
 //$MYSQLDUMP = __DIR__.'\..\..\core\mysql\bin\mysqldump.exe';
 
@@ -20,18 +16,18 @@ $PORT = 3306;
 
 // Linux : default for Ubuntu 16.04, may be different for your distribution
 $MYSQLDUMP = '/usr/bin/mysqldump';
+
+// VLSTS URL
 $REMOTEURL = '';
 
 
+// Enable/Disable Interfacing
+$interfaceConfig['enabled'] = true;
+$interfaceConfig['dbHost'] = '127.0.0.1';
+$interfaceConfig['dbUser'] = 'root';
+$interfaceConfig['dbPassword'] = 'zaq12345';
+$interfaceConfig['dbName'] = 'interfacing';
+$interfaceConfig['dbPort'] = 3306;
 
-$interfacing = true;
-
-if($interfacing){
-    $interfaceHost = '127.0.0.1';
-    $interfaceUser = 'root';
-    $interfacePassword = 'zaq12345';
-    $interfaceDb = 'interfacing';
-    $interfacePort = 3306;
-}
-
-$eid = false;
+// Enable/Disable EID 
+$eidConfig['enabled'] = true;

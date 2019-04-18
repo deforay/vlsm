@@ -1,7 +1,8 @@
 <?php
 ob_start();
 session_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH.'/General.php');
 
@@ -145,7 +146,7 @@ if($id >0){
                 $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date,patient_art_no from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
                 $sampleResult=$db->query($sampleQuery);
                 
-                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], 'C39', '', '','' ,15, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], 'C39', '', '','' ,15, 1,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
                 $lotDetails = '';
                 $lotExpirationDate = '';
                 if(isset($sampleResult[0]['lot_expiration_date']) && $sampleResult[0]['lot_expiration_date'] != '' && $sampleResult[0]['lot_expiration_date']!= NULL && $sampleResult[0]['lot_expiration_date'] != '0000-00-00'){
@@ -263,7 +264,7 @@ if($id >0){
     }
     $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
     $filename = trim($bResult[0]['batch_code']).'.pdf';
-    $pdf->Output('.././uploads'. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
+    $pdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
     echo $filename;
   }
 }

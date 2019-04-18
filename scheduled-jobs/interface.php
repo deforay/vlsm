@@ -4,19 +4,24 @@ include_once(__DIR__ . "/../startup.php");
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH."/General.php");
 
-if($interfacing == false){  
-    error_log('Interfacing is not enabled.');
+if(!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false){  
+    error_log('Interfacing is not enabled. Please enable it in configuration.');
     exit;
 }
 
+$vlsmDb  = $db; // assigning to another variable to avoid confusion
+
+$interfacedb = new MysqliDb($interfaceConfig['dbHost'], 
+                            $interfaceConfig['dbUser'], 
+                            $interfaceConfig['dbPassword'],  
+                            $interfaceConfig['dbName'], 
+                            $interfaceConfig['dbPort']);
 
 
-$interfacedb = new MysqliDb($interfaceHost, $interfaceUser, $interfacePassword, $interfaceDb, $interfacePort);
-
-$vlsmDb  = $db; // putting this to avoid confusion below
 
 $general = new General($vlsmDb);
-$lowVlResults = $general->getLowVLResultTextFromImportConfigs();
+
+//$lowVlResults = $general->getLowVLResultTextFromImportConfigs();
 
 
 
@@ -24,6 +29,7 @@ $lowVlResults = $general->getLowVLResultTextFromImportConfigs();
 $interfaceQuery = "SELECT * FROM orders WHERE result_status = 1 AND lims_sync_status=0";
 
 $interfaceInfo = $interfacedb->query($interfaceQuery);
+$numberOfResults = 0;
 if (count($interfaceInfo) > 0) {
     foreach ($interfaceInfo as $key => $result) {
         $vlQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code = '" . $result['test_id'] . "'";
@@ -98,6 +104,7 @@ if (count($interfaceInfo) > 0) {
 
             $db = $db->where('vl_sample_id', $vlInfo['vl_sample_id']);
             $vlUpdateId = $db->update('vl_request_form', $data);
+            $numberOfResults++;
             if ($vlUpdateId) {
                 $interfaceData = array(
                     'lims_sync_status' => 1,
@@ -108,4 +115,10 @@ if (count($interfaceInfo) > 0) {
             }
         }
     }
+
+    if($numberOfResults > 0){
+        $importedBy = isset($_SESSION['userId']) ? $_SESSION['userId'] : 'AUTO';
+        $general->resultImportStats($numberOfResults, 'interface' , $importedBy);
+    }
+
 }

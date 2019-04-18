@@ -170,7 +170,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
      $filename = '';
      $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
      $filename = 'VLSM-Test-Results-' . date('d-M-Y-H-i-s') . '.xlsx';
-     $pathFront=realpath('../temporary');
+     $pathFront=realpath(TEMP_PATH);
      $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
     echo $filename;
 }else{

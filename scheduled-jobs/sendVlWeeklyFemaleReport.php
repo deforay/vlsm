@@ -204,7 +204,7 @@ $sQuery="SELECT
 		   for($to=0;$to<count($xplodAddress);$to++){
 			  $mail->addAddress($xplodAddress[$to]);
 		   }
-		   $pathFront=realpath('../temporary');
+		   $pathFront=realpath(TEMP_PATH);
 		   $file_to_attach = $pathFront. DIRECTORY_SEPARATOR. $filename;
 		   $mail->AddAttachment($file_to_attach);
 		   $message ='Hi Manager,<br>Please find the attached viral load female weekly report '.$dateRange;

@@ -206,7 +206,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
          }
          $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
          $filename = 'VLSM-requests-' . date('d-M-Y-H-i-s') . '.xlsx';
-         $pathFront=realpath('../temporary');
+         $pathFront=realpath(TEMP_PATH);
          $writer->save($pathFront. DIRECTORY_SEPARATOR . $filename);
          $downloadFile = '../temporary/' . $filename;
      }else{

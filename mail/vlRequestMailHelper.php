@@ -63,7 +63,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                  $mail->AddCC($xplodCc[$cc]);
               }
           }
-          $pathFront=realpath('../temporary');
+          $pathFront=realpath(TEMP_PATH);
           $file_to_attach = $pathFront. DIRECTORY_SEPARATOR. $_POST['fileName'];
           $mail->AddAttachment($file_to_attach);
           $message='';

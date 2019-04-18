@@ -268,8 +268,7 @@ class General
         return $output;
     }
 
-    public function activityLog($eventType, $action, $resource)
-    {
+    public function activityLog($eventType, $action, $resource) {
 
         $ipaddress = '';
         if (isset($_SERVER['HTTP_CLIENT_IP'])) {
@@ -297,6 +296,18 @@ class General
         );
 
         $this->db->insert('activity_log', $data);
+    }
+
+    public function resultImportStats($numberOfResults, $importMode, $importedBy) {
+
+        $data = array(
+            'no_of_results_imported' => $numberOfResults,
+            'imported_on' => $this->getDateTime(),
+            'import_mode' => $importMode,
+            'imported_by' => $importedBy,
+        );
+
+        $this->db->insert('result_import_stats', $data);
     }
 
     public function getLowVLResultTextFromImportConfigs($machineFile = null){
