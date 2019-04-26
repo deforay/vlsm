@@ -156,7 +156,7 @@ $general=new General($db);
 	    $noOfSampleHighTested = "select count(vl.sample_code) as no_of_sample_high_tested from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."' AND vl.result > 1000";
 	    $noOfSampleHighResultCount = $db->rawQuery($noOfSampleHighTested);
 	    //get no. of sample tested high level.
-	    $noOfSampleLastDateTested = "select max(vl.sample_testing_date) as last_tested_date from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."'";
+	    $noOfSampleLastDateTested = "select max(vl.sample_tested_datetime) as last_tested_date from vl_request_form as  vl where vl.sample_batch_id='".$aRow['batch_id']."'";
 	    $noOfSampleLastDateTested = $db->rawQuery($noOfSampleLastDateTested);
 	    
            $row = array();

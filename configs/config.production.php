@@ -33,7 +33,7 @@ $REMOTEURL = '';
 
 
 // Enable/Disable Interfacing
-$interfaceConfig['enabled'] = true;
+$interfaceConfig['enabled'] = false;
 $interfaceConfig['dbHost'] = '127.0.0.1';
 $interfaceConfig['dbUser'] = 'root';
 $interfaceConfig['dbPassword'] = 'zaq12345';
@@ -41,4 +41,4 @@ $interfaceConfig['dbName'] = 'interfacing';
 $interfaceConfig['dbPort'] = 3306;
 
 // Enable/Disable EID 
-$eidConfig['enabled'] = true;
+$eidConfig['enabled'] = false;

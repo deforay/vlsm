@@ -14,19 +14,7 @@ include_once(APPLICATION_PATH.'/header.php');
   
   $facilityTotal =  $db->rawQuery("select COUNT(facility_id) as total FROM facility_details");
   $facilityCount = $facilityTotal[0]['total'];
-//  //Update Query
-//  $uQ = "select * FROM vl_request_form";
-//  $uResult = $db->rawQuery($uQ);
-//  foreach($uResult as $rlt){
-//    if(isset($rlt['sample_testing_date']) && trim($rlt['sample_testing_date'])!= '' && trim($rlt['sample_testing_date'])!= "0000-00-00 00:00:00"){
-//      $db=$db->where('vl_sample_id',$rlt['vl_sample_id']);
-//      //print_r($data);die;
-//      $data = array(
-//		    'sample_tested_datetime'=>$rlt['sample_testing_date'],
-//		  );
-//      $db->update("vl_request_form",$data);
-//    }
-//  }
+
 ?>
 <link rel="stylesheet" href="../assets/css/components-rounded.min.css">
 <style>

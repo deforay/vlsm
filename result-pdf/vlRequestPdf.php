@@ -312,7 +312,7 @@ $rejectionrResult = $db->rawQuery($rejectionrQuery);
         $html.='<table style="padding:5px;border:2px solid #333;">';
         $html.='<tr><td>How long has this patient been on treatment ?</td><td>:&nbsp;'.$result[0]['treatment_initiation'].'</td><td>Treatment Initiated On</td><td>:&nbsp;'.$result[0]['treatment_initiated_date'].'</td></tr>';
         $html.='<tr><td>Current Regimen</td><td>:&nbsp;'.$aResult[0]['art_code'].'</td><td>Current Regimen Initiated On</td><td>:&nbsp;'.$result[0]['date_of_initiation_of_current_regimen'].'</td></tr>';
-        $html.='<tr><td>Which line of treatment is Patient on ?</td><td colspan="3">:&nbsp;'.$result[0]['treatment_details'].'</td></tr>';
+        $html.='<tr><td>Which line of treatment is Patient on ?</td><td colspan="3">:&nbsp;'.$result[0]['line_of_treatment'].'</td></tr>';
         $html.='<tr><td>Is Patient Pregnant ?</td><td>'.$prg.'</td><td>If Pregnant, ARC No.</td><td>:&nbsp;'.$result[0]['patient_anc_no'].'</td></tr>';
         //$html.='<tr><td>Is Patient Breastfeeding?</td>'.$breast.'<td>ARV Adherence</td><td>:&nbsp;'.$result[0]['arv_adherance_percentage'].'</td></tr>';
         $html.='<tr><td>Is Patient Breastfeeding?</td><td colspan="3">'.$breast.'</td></tr>';

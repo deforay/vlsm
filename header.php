@@ -198,7 +198,7 @@ $formConfigResult=$db->query($formConfigQuery);
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="../assets/img/default-user.png" class="user-image" alt="User Image">
+              <img src="<?php echo DOMAIN; ?>/assets/img/default-user.png" class="user-image" alt="User Image">
               <span class="hidden-xs"><?php if(isset($_SESSION['userName'])){ echo $_SESSION['userName']; } ?></span>
             </a>
             <ul class="dropdown-menu">
@@ -415,7 +415,7 @@ $formConfigResult=$db->query($formConfigQuery);
             </ul>
           </li>
         <?php } ?>
-<?php if(isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
+        <?php if(isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
         <li class="header">EARLY INFANT DIAGNOSIS (EID)</li>
         <li class="treeview request" style="<?php echo $hideRequest;?>">
             <a href="#">
