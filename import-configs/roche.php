@@ -85,6 +85,12 @@ try {
           
           $batchCode = $row[$batchCodeCol];
           $resultFlag = $row[$flagCol];
+
+
+
+            
+          if ($sampleCode == "")
+              continue;          
           
           /*$d=explode(" ",$row[$testingDateCol]);
           //$testingDate=str_replace("/","-",$d[0],$checked);
@@ -101,23 +107,40 @@ try {
           
           $testingDate = date('Y-m-d H:i', strtotime($row[$testingDateCol]));
           
-          if(trim($row[$absValCol])!=""){
-              $resVal=(float)$row[$absValCol];
-              if($resVal > 0){
-                  $absVal=trim($row[$absValCol]);
-                  $absDecimalVal = $resVal;
-                  $logVal=round(log10($absDecimalVal),4);
-                  $txtVal="";
-              }else{
-                  $absDecimalVal = $absVal="";
-                  $logVal="";                       
-                  $txtVal=trim($row[$absValCol]);
-              }
+          $vlResult = trim($row[$absValCol]);
+
+          if(!empty($vlResult)){
+            if (strpos($vlResult, 'E') !== false) {
+                if (strpos($vlResult, '< 2.00E+1') !== false) {
+                    $vlResult = "< 20";
+                    $txtVal = $absVal = trim($vlResult);
+                    $logVal = "";
+                }else{
+                    $resInNumberFormat = number_format($vlResult,0,'','');
+                    if($resInNumberFormat > 0){
+                        $absVal = $resInNumberFormat;
+                        $absDecimalVal = (float) trim($resInNumberFormat);
+                        $logVal = round(log10($absDecimalVal), 2);
+                        $txtVal = "";
+                    }else{
+                        $absVal = $txtVal = trim($vlResult);
+                        $absDecimalVal = $logVal = "";
+                    }
+                }
+            }else{
+                $vlResult = (float)$row[$absValCol];
+                if($vlResult > 0){
+                    $absVal=trim($row[$absValCol]);
+                    $absDecimalVal = $vlResult;
+                    $logVal=round(log10($absDecimalVal),4);
+                    $txtVal="";
+                }else{
+                    $logVal= $absDecimalVal = $absVal="";                  
+                    $txtVal=trim($row[$absValCol]);
+                }
+            }
           }
             
-            
-          if ($sampleCode == "")
-              continue;
             
 
           $infoFromFile[$sampleCode] = array(
@@ -149,7 +172,7 @@ try {
                 'result_value_text' => $d['txtVal'],
                 'result_value_absolute_decimal' => $d['absDecimalVal'],
                 'sample_tested_datetime' => $testingDate,
-                'result_status' => '6',
+                'result_status' => 6,
                 'import_machine_file_name' => $fileName,
                 'approver_comments' => $d['resultFlag']
             );

@@ -223,7 +223,7 @@ try {
           'is_patient_breastfeeding'=>(isset($_POST['breastfeeding']) && $_POST['breastfeeding']!='') ? $_POST['breastfeeding'] :  NULL,
           'patient_art_no'=>(isset($_POST['artNo']) && $_POST['artNo']!='') ? $_POST['artNo'] :  NULL,
           'treatment_initiated_date'=>$_POST['dateOfArtInitiation'],
-          //'treatment_initiation'=>(isset($_POST['treatPeriod']) && $_POST['treatPeriod']!='') ? $_POST['treatPeriod'] :  NULL,
+          
           'current_regimen'=>(isset($_POST['artRegimen']) && $_POST['artRegimen']!='') ? $_POST['artRegimen'] :  NULL,
           'date_of_initiation_of_current_regimen'=>$_POST['regimenInitiatedOn'],
           'patient_mobile_number'=>(isset($_POST['patientPhoneNumber']) && $_POST['patientPhoneNumber']!='') ? $_POST['patientPhoneNumber'] :  NULL,

@@ -1,9 +1,9 @@
 <?php
 ob_start();
 $title = "VLSM | Add New Specimen Referral Manifest";
-include_once('../startup.php'); 
-include_once(APPLICATION_PATH.'/header.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once '../startup.php';
+include_once APPLICATION_PATH . '/header.php';
+include_once APPLICATION_PATH . '/General.php';
 $general = new General($db);
 $packageNo = $general->generateRandomString(8);
 ?>
@@ -64,7 +64,7 @@ $packageNo = $general->generateRandomString(8);
                       </div>
                     </div>
                 </div>
-		<div class="row" id="alertText" style="font-size:18px;"></div>
+		            <div class="row" id="alertText" style="font-size:18px;"></div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -127,16 +127,16 @@ $packageNo = $general->generateRandomString(8);
        afterSelect: function(){
             //button disabled/enabled
 	     if(this.qs2.cache().matchedResultsCount == noOfSamples){
-		alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
-		$("#packageSubmit").attr("disabled",false);
-		$("#packageSubmit").css("pointer-events","auto");
+          alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+          $("#packageSubmit").attr("disabled",false);
+          $("#packageSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
-	       $("#packageSubmit").attr("disabled",false);
-	       $("#packageSubmit").css("pointer-events","auto");
+          $("#packageSubmit").attr("disabled",false);
+          $("#packageSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
-	       alert("You have already selected Maximum no. of sample "+noOfSamples);
-	       $("#packageSubmit").attr("disabled",true);
-	       $("#packageSubmit").css("pointer-events","none");
+          alert("You have already selected Maximum no. of sample "+noOfSamples);
+          $("#packageSubmit").attr("disabled",true);
+          $("#packageSubmit").css("pointer-events","none");
 	     }
 	     this.qs1.cache();
 	     this.qs2.cache();
@@ -144,9 +144,9 @@ $packageNo = $general->generateRandomString(8);
        afterDeselect: function(){
          //button disabled/enabled
 	  if(this.qs2.cache().matchedResultsCount == 0){
-            $("#packageSubmit").attr("disabled",true);
+      $("#packageSubmit").attr("disabled",true);
 	    $("#packageSubmit").css("pointer-events","none");
-          }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
+    }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
 	     alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 	     $("#packageSubmit").attr("disabled",false);
 	     $("#packageSubmit").css("pointer-events","auto");
@@ -194,15 +194,15 @@ $packageNo = $general->generateRandomString(8);
       $.blockUI();
       $.post("getSpecimenReferralManifestSampleCodeDetails.php",
       function(data){
-	  if(data != ""){
-	    $("#sampleDetails").html(data);
-	    $("#packageSubmit").attr("disabled",true);
-	    $("#packageSubmit").css("pointer-events","none");
-	  }
+        if(data != ""){
+          $("#sampleDetails").html(data);
+          $("#packageSubmit").attr("disabled",true);
+          $("#packageSubmit").css("pointer-events","none");
+        }
       });
       $.unblockUI();
     }
   </script>
  <?php
-include '../footer.php';
+include(APPLICATION_PATH.'/footer.php');
 ?>

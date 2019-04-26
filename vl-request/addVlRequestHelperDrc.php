@@ -19,16 +19,18 @@ try {
     if(isset($_SESSION['instanceId'])){
         $instanceId = $_SESSION['instanceId'];
     }
-     //Set Lab no
-     $start_date = date('Y-m-01');
-     $end_date = date('Y-m-31');
-     $labVlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
-     $labVlResult = $db->rawQuery($labVlQuery);
-     if(isset($labVlResult) && trim($labVlResult[0]['MAX(lab_code)'])!='' && $labVlResult[0]['MAX(lab_code)']!=NULL){
-        $_POST['labNo'] = $labVlResult[0]['MAX(lab_code)']+1;
-     }else{
-        $_POST['labNo'] = 1;
-     }
+
+    //  //Set Lab no
+    //  $start_date = date('Y-m-01');
+    //  $end_date = date('Y-m-31');
+    //  $labVlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="3" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
+    //  $labVlResult = $db->rawQuery($labVlQuery);
+    //  if(isset($labVlResult) && trim($labVlResult[0]['MAX(lab_code)'])!='' && $labVlResult[0]['MAX(lab_code)']!=NULL){
+    //     $_POST['labNo'] = $labVlResult[0]['MAX(lab_code)']+1;
+    //  }else{
+    //     $_POST['labNo'] = 1;
+    //  }
+    
     //Set Date of demand
     if(isset($_POST['dateOfDemand']) && trim($_POST['dateOfDemand'])!=""){
         $_POST['dateOfDemand']=$general->dateFormat($_POST['dateOfDemand']);  
