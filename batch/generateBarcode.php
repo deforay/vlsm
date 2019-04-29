@@ -8,6 +8,11 @@ include_once(APPLICATION_PATH.'/General.php');
 
 $general=new General($db);
 $id=base64_decode($_POST['id']);
+
+$barcodeFormat = $general->getGlobalConfig('barcode_format');
+
+$barcodeFormat = isset($barcodeFormat) && $barcodeFormat != null ? $barcodeFormat : 'C39+';
+
 if($id >0){
     if (!file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . "barcode") && !is_dir(UPLOAD_PATH. DIRECTORY_SEPARATOR."barcode")) {
         mkdir(UPLOAD_PATH. DIRECTORY_SEPARATOR."barcode");
@@ -146,7 +151,7 @@ if($id >0){
                 $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date,patient_art_no from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
                 $sampleResult=$db->query($sampleQuery);
                 
-                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], 'C39', '', '','' ,15, 1,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], $barcodeFormat, '', '','' ,15, 1,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
                 $lotDetails = '';
                 $lotExpirationDate = '';
                 if(isset($sampleResult[0]['lot_expiration_date']) && $sampleResult[0]['lot_expiration_date'] != '' && $sampleResult[0]['lot_expiration_date']!= NULL && $sampleResult[0]['lot_expiration_date'] != '0000-00-00'){
@@ -238,7 +243,7 @@ if($id >0){
             if($pdf->getY()>=250){
               $pdf->AddPage();
             }
-            $params = $pdf->serializeTCPDFtagParameters(array($sample['sample_code'], 'C39', '', '','' ,7, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+            $params = $pdf->serializeTCPDFtagParameters(array($sample['sample_code'], $barcodeFormat, '', '','' ,7, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
             $lotDetails = '';
             $lotExpirationDate = '';
             if(isset($sample['lot_expiration_date']) && $sample['lot_expiration_date'] != '' && $sample['lot_expiration_date']!= NULL && $sample['lot_expiration_date'] != '0000-00-00'){
