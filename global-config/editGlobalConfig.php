@@ -303,6 +303,23 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                     </div>
                    </div>
                 </div>
+
+
+                <div class="row">
+                  <div class="col-md-7" style="height:38px;">
+                    <div class="form-group" style="height:38px;">
+                      <label for="barcode_format" class="col-lg-4 control-label">Barcode Format</label>
+                      <div class="col-lg-8">
+                        <select class="form-control isRequired" name="barcode_format" id="barcode_format" title="Please select the Barcode type">
+                            <option value="C39" <?php echo ('C39'==$arr['barcode_format'])?"selected='selected'":""?>>C39</option>
+                            <option value="C39+" <?php echo ('C39+'==$arr['barcode_format'])?"selected='selected'":""?>>C39+</option>
+                            <option value="C128" <?php echo ('C128'==$arr['barcode_format'])?"selected='selected'":""?>>C128</option>
+                        </select>                      
+                      </div>
+                    </div>
+                   </div>
+                </div>
+
                 <div class="row" style="margin-top:10px;">
                   <div class="col-md-7">
                     <div class="form-group">
