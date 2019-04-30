@@ -234,7 +234,7 @@ $formConfigResult=$db->query($formConfigQuery);
       <?php if(isset($global['logo']) && trim($global['logo'])!="" && file_exists('uploads'. DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $global['logo'])){ ?>
       <div class="user-panel">
         <div align="center">
-          <img src="../uploads/logo/<?php echo $global['logo']; ?>"  alt="Logo Image" style="max-width:120px;" >
+          <img src="/uploads/logo/<?php echo $global['logo']; ?>"  alt="Logo Image" style="max-width:120px;" >
         </div>
       </div>
       <?php } ?>

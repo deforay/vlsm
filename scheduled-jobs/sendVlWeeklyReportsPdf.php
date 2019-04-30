@@ -48,7 +48,7 @@ if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
    for($to=0;$to<count($xplodAddress);$to++){
       $mail->addAddress($xplodAddress[$to]);
    }
-   $pathFront=realpath('../uploads/');
+   $pathFront=realpath(UPLOAD_PATH);
    $file_to_attach = $pathFront. DIRECTORY_SEPARATOR. $reportFilename;
    $mail->AddAttachment($file_to_attach);
    $message ='Please find attached viral load weekly report '.$_POST['reportedDate'];

@@ -796,6 +796,6 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xls');
     $filename = 'VLSM-Quarterly-Monitoring-Report-' . date('d-M-Y-H-i-s') . '.xls';
     ob_end_clean();
-    $writer->save("../temporary" . DIRECTORY_SEPARATOR . $filename);
+    $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
     echo $filename;
 }

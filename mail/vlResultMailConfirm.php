@@ -37,8 +37,8 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
         //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
         if(trim($this->logo)!=''){
-            if (file_exists('../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-              $image_file = '../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+            if (file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+              $image_file = UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
               $this->Image($image_file,20, 13, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
@@ -232,11 +232,11 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
           $pdfContent .= '</div>';
           $pdf->writeHTML($pdfContent);
           $pdf->lastPage();
-          $pathFront=realpath('../uploads');
+          $pathFront=realpath(UPLOAD_PATH);
           $filename = 'vlsm-result-' . date('d-M-Y-H-i-s') . '.pdf';
           $pdf->Output($pathFront . DIRECTORY_SEPARATOR . $filename,"F");
-          $downloadFile1 = '../uploads/' . $_POST['pdfFile'];
-          $downloadFile2 = '../uploads/' . $filename;
+          $downloadFile1 = UPLOAD_PATH. $_POST['pdfFile'];
+          $downloadFile2 = UPLOAD_PATH. $filename;
      }else{
         $_SESSION['alertMsg']='Unable to generate test result pdf. Please check the result fields.';
         header('location:vlResultMail.php');

@@ -71,7 +71,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 // set font
 $pdf->SetFont('helvetica', '', 10);
 
-$pathFront=realpath('../uploads');
+$pathFront=realpath(UPLOAD_PATH);
 //$pdf = new TCPDF();
 $pdf->AddPage();
 $general=new General($db);

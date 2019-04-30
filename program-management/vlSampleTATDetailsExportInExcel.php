@@ -121,7 +121,7 @@ if(isset($_SESSION['vlTATDetails']) && trim($_SESSION['vlTATDetails'])!=""){
  }
  $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
  $filename = 'VLSM-TAT-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
- $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
+ $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
  echo $filename;
 }
 ?>

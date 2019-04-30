@@ -5,7 +5,7 @@ if(sizeof($requestResult)> 0){
      if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
           mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
      }
-     $pathFront = realpath('../uploads/'.$_SESSION['rVal'].'/');
+     $pathFront = realpath(UPLOAD_PATH. DIRECTORY_SEPARATOR .$_SESSION['rVal'].'/');
      $pages = array();
      $page = 1;
      foreach($requestResult as $result){

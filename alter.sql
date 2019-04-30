@@ -1609,7 +1609,7 @@ ALTER TABLE `import_config` ADD `low_vl_result_text` TEXT NULL DEFAULT NULL AFTE
 
 
 ALTER TABLE `resources` ADD `module` VARCHAR(255) NOT NULL AFTER `resource_id`;
-UPDATE `resources` set `module` = 'vl'
+UPDATE `resources` set `module` = 'vl';
 
 
 -- Version 3.10.8 ---------- Amit 17-Apr-2019

@@ -159,7 +159,7 @@ if(isset($_SESSION['highViralResult']) && trim($_SESSION['highViralResult'])!=""
      }
      $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
      $filename = 'VLSM-High-Viral-Load-Report' . date('d-M-Y-H-i-s') . '.xlsx';
-     $writer->save("../temporary". DIRECTORY_SEPARATOR . $filename);
+     $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
      echo $filename;
 
 }

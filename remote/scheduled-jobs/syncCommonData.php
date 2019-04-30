@@ -8,9 +8,11 @@ if(!isset($REMOTEURL) || $REMOTEURL==''){
     echo "Please check your remote url";
     die;
 }
+
 $general=new General($db);
 $globalConfigQuery ="SELECT * from system_config";
 $configResult=$db->query($globalConfigQuery);
+
 $arr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($configResult); $i++) {
@@ -178,14 +180,25 @@ if(count($result['facilityResult'])>0){
     foreach($result['facilityResult'] as $facility){
         $facilityQuery = "select * from facility_details where facility_id=".$facility['facility_id'];
         $facilityLocalResult = $db->query($facilityQuery);
-        $facilityData = array('vlsm_instance_id'=>$instanceResult[0]['vlsm_instance_id'],'facility_name'=>$facility['facility_name'],'facility_code'=>$facility['facility_code'],
-                              'other_id'=>$facility['other_id'],'facility_emails'=>$facility['facility_emails'],
-                              'report_email'=>$facility['report_email'],'contact_person'=>$facility['contact_person'],
-                              'facility_mobile_numbers'=>$facility['facility_mobile_numbers'],'address'=>$facility['address'],
-                              'country'=>$facility['country'],'facility_state'=>$facility['facility_state'],
-                              'facility_district'=>$facility['facility_district'],'facility_hub_name'=>$facility['facility_hub_name'],
-                              'latitude'=>$facility['latitude'],'longitude'=>$facility['longitude'],'facility_type'=>$facility['facility_type'],
-                              'status'=>$facility['status'],'data_sync'=>1,'updated_datetime'=>$facility['updated_datetime']);
+        $facilityData = array('vlsm_instance_id'=>$instanceResult[0]['vlsm_instance_id'],
+                              'facility_name'=>$facility['facility_name'],
+                              'facility_code'=>$facility['facility_code'],
+                              'other_id'=>$facility['other_id'],
+                              'facility_emails'=>$facility['facility_emails'],
+                              'report_email'=>$facility['report_email'],
+                              'contact_person'=>$facility['contact_person'],
+                              'facility_mobile_numbers'=>$facility['facility_mobile_numbers'],
+                              'address'=>$facility['address'],
+                              'country'=>$facility['country'],
+                              'facility_state'=>$facility['facility_state'],
+                              'facility_district'=>$facility['facility_district'],
+                              'facility_hub_name'=>$facility['facility_hub_name'],
+                              'latitude'=>$facility['latitude'],
+                              'longitude'=>$facility['longitude'],
+                              'facility_type'=>$facility['facility_type'],
+                              'status'=>$facility['status'],
+                              'data_sync'=>1,
+                              'updated_datetime'=>$facility['updated_datetime']);
         $lastId = 0;
         if($facilityLocalResult){
             $db = $db->where('facility_id',$facility['facility_id']);
@@ -197,4 +210,3 @@ if(count($result['facilityResult'])>0){
         }
     }
 }
-?>

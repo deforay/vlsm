@@ -367,7 +367,7 @@ if ($c > 0) {
     $instance = isset($_SESSION['instanceFname']) ? $_SESSION['instanceFname'] : $_SESSION['instanceId'];
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
     $filename = 'VLSM-VL-Lab-Weekly-Report-' . date('d-M-Y-H-i-s') . "-" . $instance . '.xlsx';
-    $writer->save("../temporary" . DIRECTORY_SEPARATOR . $filename);
+    $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
     echo $filename;
 } else {
     echo '';

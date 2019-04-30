@@ -75,7 +75,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
           }
       }
       //Pdf file attach
-      $pathFront=realpath('../uploads');
+      $pathFront=realpath(UPLOAD_PATH);
       $file_to_attach = $pathFront. DIRECTORY_SEPARATOR .$_POST['pdfFile1'];
       $mail->AddAttachment($file_to_attach);
       $result_file_to_attach = $pathFront. DIRECTORY_SEPARATOR .$_POST['pdfFile2'];
