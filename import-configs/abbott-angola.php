@@ -72,7 +72,7 @@ try {
                   $skip = 23;
                   
                    $row = 1;
-                   if (($handle = fopen(dirname(__FILE__) . "/../temporary". DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== FALSE) {
+                   if (($handle = fopen(TEMP_PATH. DIRECTORY_SEPARATOR ."import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== FALSE) {
                        while (($sheetData = fgetcsv($handle, 1000, "\t")) !== FALSE) {
                          $num = count($sheetData);
                          $row++;

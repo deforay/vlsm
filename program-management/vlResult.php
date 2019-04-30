@@ -443,7 +443,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate download');
 	  }else{
-	      window.open('../uploads/'+data,'_blank');
+	      window.open('/uploads/'+data,'_blank');
 	  }
       });
   }
@@ -459,7 +459,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 				alert('Unable to generate excel.');
 			}else{
 				$.unblockUI();
-				location.href = '../temporary/'+data;
+				location.href = '/temporary/'+data;
 			}
     });
   }

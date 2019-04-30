@@ -4,7 +4,7 @@ include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/Mysqli
 include_once(APPLICATION_PATH.'/General.php');
 include_once(APPLICATION_PATH.'/tcpdf/tcpdf.php');
 
-$pathFront=realpath('../uploads');
+$pathFront=realpath(UPLOAD_PATH);
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);
 $arr = array();

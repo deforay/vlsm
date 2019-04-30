@@ -2,7 +2,7 @@
 
 session_start();
 
-chdir(dirname(__DIR__));
+// chdir(dirname(__DIR__));
 
 
 if(php_sapi_name() !== 'cli'){

@@ -136,7 +136,7 @@ if (isset($_SESSION['resultNotAvailable']) && trim($_SESSION['resultNotAvailable
     }
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xlsx');
     $filename = 'VLSM-Results-Not-Available-Report-' . date('d-M-Y-H-i-s') . '.xlsx';
-    $writer->save("../temporary" . DIRECTORY_SEPARATOR . $filename);
+    $writer->save(TEMP_PATH . DIRECTORY_SEPARATOR . $filename);
     echo $filename;
 
 }

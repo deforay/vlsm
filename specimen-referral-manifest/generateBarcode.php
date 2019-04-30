@@ -28,8 +28,8 @@ class MYPDF extends TCPDF {
         //$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
         if(trim($this->logo)!=""){
-            if (file_exists(dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-                $image_file = dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+            if (file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+                $image_file = UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
                 $this->Image($image_file,15, 10, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
@@ -41,8 +41,8 @@ class MYPDF extends TCPDF {
         $this->writeHTMLCell(0,0,0,20,$this->labname, 0, 0, 0, true, 'C', true);
         
         if(trim($this->logo)!=""){
-            if (file_exists(dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
-                $image_file = dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
+            if (file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo)) {
+                $image_file = UPLOAD_PATH. DIRECTORY_SEPARATOR . 'logo'. DIRECTORY_SEPARATOR.$this->logo;
                 $this->Image($image_file,262, 10, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
             }
         }
@@ -201,7 +201,7 @@ if(trim($id)!= ''){
     //$tbl.='<br/><br/><b style="text-align:left;">Printed On:  </b>'.date('d/m/Y H:i:s');
     $pdf->writeHTMLCell('', '', 11,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
     $filename = trim($bResult[0]['package_code']).'.pdf';
-    $pdf->Output(dirname(__FILE__) . '/../uploads'. DIRECTORY_SEPARATOR.'package_barcode'. DIRECTORY_SEPARATOR.$filename, "F");
+    $pdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR.'package_barcode'. DIRECTORY_SEPARATOR.$filename, "F");
     echo $filename;
   }
 }
