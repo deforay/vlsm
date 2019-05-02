@@ -60,6 +60,11 @@ try {
         $_POST['vlLog'] = '';
     }
     
+
+    if(isset($_POST['lt20']) && $_POST['lt20'] =='yes' && $isRejection == false){
+        $_POST['vlResult'] = '<20';
+        $_POST['vlLog'] = '';
+    }    
     if(isset($_POST['tnd']) && $_POST['tnd'] =='yes' && $isRejection == false){
         $_POST['vlResult'] = $textValue = 'Target Not Detected';
         $_POST['vlLog'] = '';

@@ -12,21 +12,17 @@ $configFormResult = $db->rawQuery($configFormQuery);
 
 $userType = $general->getSystemConfig('user_type');
 
-if ($userType != 'remoteuser') {
-    // $whereCondition = " AND vl.result_status!=9";
-    // $tsQuery = "SELECT * FROM r_sample_status WHERE status_id!=9 ORDER BY status_id";
+$whereCondition = '';
 
-    $tsQuery = "SELECT * FROM `r_sample_status` ORDER BY `status_id`";
-} else {
-    $whereCondition = '';
+if ($userType == 'remoteuser') {    
     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT `facility_id` ORDER BY `facility_id` SEPARATOR ',') as `facility_id` FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
         $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
     }
-    $tsQuery = "SELECT * FROM `r_sample_status` ORDER BY `status_id`";
 }
 
+$tsQuery = "SELECT * FROM `r_sample_status` ORDER BY `status_id`";
 $tsResult = $db->rawQuery($tsQuery);
 // $sampleStatusArray = array();
 // foreach($tsResult as $tsRow){
