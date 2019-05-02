@@ -1,14 +1,23 @@
 <?php
+session_start();
 $title = "VLSM | Sample Status Report";
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
+
+include_once(APPLICATION_PATH.'/General.php');
+
+$general = new General($db); // passing $db which is coming from MysqliDb.php
+
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 $sQuery="SELECT * FROM r_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
-$fQuery="SELECT * FROM facility_details where status='active'";
-$fResult = $db->rawQuery($fQuery);
+
+// FETCHING FACILITIES
+$fResult = $general->getFacilitiesByUser($_SESSION['userId']);
+
 $batQuery="SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 ?>
@@ -104,7 +113,7 @@ $batResult = $db->rawQuery($batQuery);
               <table id="vlRequestDataTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-									<th>Sample Id</th>
+									<th>Sample ID</th>
 									<th>Sample Collection Date</th>
                   <th>Sample Received Date in Lab</th>
                   <th>Sample Test Date</th>

@@ -625,7 +625,8 @@ $disable = "disabled = 'disabled'";
                             <label class="col-lg-5 control-label" for="vlResult">Viral Load Result<span class="mandatory">*</span> (copiesl/ml) </label>
                             <div class="col-lg-7">
                               <input type="text" class="<?php echo($vlQueryInfo[0]['is_sample_rejected'] == 'no' && $vlQueryInfo[0]['result'] != 'Target Not Detected' && $vlQueryInfo[0]['result'] == 'Below Detection Level')?'isRequired':''; ?> vlResult checkNum form-control labSection" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" value="<?php echo $vlQueryInfo[0]['result_value_absolute'];?>" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected' || $vlQueryInfo[0]['result'] == 'Below Detection Level')?'readonly="readonly"':''; ?> style="width:100%;" onchange="calculateLogValue(this);"/>
-
+                              
+                              <input type="checkbox" class="labSection specialResults" id="lt20" name="lt20" value="yes" <?php echo($vlQueryInfo[0]['result'] == '<20')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == '<20' || $vlQueryInfo[0]['result'] == '< 20')?'disabled="disabled"':'' ?>  title="Please check <20"> <20<br>
                               <input type="checkbox" class="labSection specialResults" id="tnd" name="tnd" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'checked="checked"':''; echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'disabled="disabled"':'' ?> title="Please check tnd"> Target Not Detected<br>
                               <input type="checkbox" class="labSection specialResults" id="bdl" name="bdl" value="yes" <?php echo($vlQueryInfo[0]['result'] == 'Below Detection Level')?'checked="checked"':'';  echo($vlQueryInfo[0]['result'] == 'Target Not Detected')?'disabled="disabled"':'' ?> title="Please check bdl"> Below Detection Level
                             </div>
@@ -703,6 +704,15 @@ $disable = "disabled = 'disabled'";
   </div>
   <script>
     $(document).ready(function() {
+        $("#vlResult").on('keyup keypress blur change paste', function(){
+            if($('#vlResult').val() != ''){
+                if ($('#vlResult').val() != $('#vlResult').val().replace(/[^\d\.]/g,"")) { 
+                    $('#vlResult').val('');
+                    alert('Please enter only numeric values for Viral Load Result')
+                }
+            }
+        });
+
         $('#sampleReceivedOn,#sampleTestingDateAtLab,#resultDispatchedOn').datetimepicker({
             changeMonth: true,
             changeYear: true,

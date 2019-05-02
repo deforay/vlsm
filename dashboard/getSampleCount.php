@@ -17,14 +17,14 @@ $start_date = date('Y-m-d', strtotime('-7 days'));
 $u = $general->getSystemConfig('user_type');
 
 if($u != 'remoteuser'){
-    $whereCondition = "result_status!=9 AND ";
+    $whereCondition = " vl.result_status != 9 AND ";
 }else{
     $whereCondition = "";
     //get user facility map ids
     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
     if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
-        $whereCondition = "facility_id IN (".$userfacilityMapresult[0]['facility_id'].")  AND remote_sample='yes' AND";
+        $whereCondition = " AND vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")  AND vl.remote_sample='yes' ";
     }
 }
 
@@ -78,6 +78,7 @@ $sQuery="SELECT
     where  vl.vlsm_country_id =".$country;
     
     $sQuery = $sQuery.' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
+    $sQuery = $sQuery . $whereCondition;
     $sQuery = $sQuery.' GROUP BY vl.facility_id';
     
     //echo $sQuery; die;

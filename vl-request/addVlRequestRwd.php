@@ -574,6 +574,7 @@ $sKey = ''; $sFormat = '';
                                                                            <label class="col-lg-5 control-label" for="vlResult">Viral Load Result (copiesl/ml) </label>
                                                                            <div class="col-lg-7">
                                                                                 <input type="text" class="form-control" id="vlResult" name="vlResult" placeholder="Viral Load Result" title="Please enter viral load result" <?php echo $labFieldDisabled; ?> style="width:100%;" onchange="calculateLogValue(this)"/>
+                                                                                <input type="checkbox" class="specialResults" id="lt20" name="lt20" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> < 20<br>
                                                                                 <input type="checkbox" class="specialResults" id="tnd" name="tnd" value="yes" title="Please check tnd" <?php echo $labFieldDisabled; ?>> Target Not Detected<br>
                                                                                 <input type="checkbox" class="specialResults" id="bdl" name="bdl" value="yes" title="Please check bdl" <?php echo $labFieldDisabled; ?>> Below Detection Level
                                                                            </div>
@@ -673,6 +674,16 @@ $sKey = ''; $sFormat = '';
                               }
                               ?>
                               // BARCODESTUFF END
+
+                                $("#vlResult").on('keyup keypress blur change paste', function(){
+                                    if($('#vlResult').val() != ''){
+                                        if ($('#vlResult').val() != $('#vlResult').val().replace(/[^\d\.]/g,"")) { 
+                                            $('#vlResult').val('');
+                                            alert('Please enter only numeric values for Viral Load Result')
+                                        }
+                                    }
+
+                                });
                          });
                          function showTesting(chosenClass){
                               $(".viralTestData").val('');
@@ -828,17 +839,20 @@ $sKey = ''; $sFormat = '';
                                              $('#vlResult, #vlLog').val(''); 
                                              $('#vlResult,#vlLog').attr('readonly',true);
                                              $(".specialResults").not(this).attr('disabled',true);
+                                             $("#sampleTestingDateAtLab").addClass('isRequired');
                                         }else{
                                              $('#vlResult,#vlLog').attr('readonly',false);
                                              $(".specialResults").not(this).attr('disabled',false);
                                         }
                                     });
 
-                                   $('#vlResult,#vlLog').on('input',function(e){
+                                   $('#vlResult,#vlLog').on('keyup keypress blur change paste input',function(e){
                                         if(this.value != ''){
                                             $(".specialResults").not(this).attr('disabled',true);
+                                            $("#sampleTestingDateAtLab").addClass('isRequired');
                                         }else{
                                             $(".specialResults").not(this).attr('disabled',false);
+                                            $("#sampleTestingDateAtLab").removeClass('isRequired');
                                         }
                                    });
 
