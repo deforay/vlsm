@@ -119,8 +119,17 @@ try {
                     }
 
                     $sampleType = $sheetData[$sampleTypeCol];
+
                     if ($sampleType == 'Patient') {
                         $sampleType = 'S';
+                    } else if ($sampleType == 'Control') {
+                        if($sampleType == 'HIV_HIPOS'){
+                            $sampleType = 'HPC';
+                        } else if($sampleType == 'HIV_LOPOS'){
+                            $sampleType = 'LPC';
+                        } else if($sampleType == 'HIV_NEG'){
+                            $sampleType = 'NC';
+                        }
                     }
 
                     $batchCode = "";
