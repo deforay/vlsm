@@ -125,8 +125,8 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
                 <thead>
                 <tr>
 		  <!--<th style="width: 1%;"><input type="checkbox" id="checkTestsData" onclick="toggleAllVisible()"/></th>-->
-		  <th style="width: 23%;">Form Serial No.</th>
-		  <th style="width: 11%;">Sample Collection Date</th>
+                  <th style="width: 23%;">Form Serial No.</th>
+                  <th style="width: 11%;">Sample Collection Date</th>
                   <th style="width: 10%;">Sample Test Date</th>
                   <th style="width: 10%;">Clinic Name</th>
                   <th style="width: 10%;">Batch Code</th>
@@ -360,7 +360,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
     if(appBy==reviewedBy && (reviewedBy!='' && appBy!='') && globalValue=='yes'){
       conf = confirm("Same person is reviewing and approving result!");
       if(conf){}else{
-	return false;
+	    return false;
       }
     }else if(appBy==reviewedBy && (reviewedBy!='' && appBy!='') && globalValue=='no'){
       alert("Same person is reviewing and approving result!");
@@ -395,7 +395,7 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
 				$("#checkedTestsIdValue").val('');
 				$("#comments").val('');
 			});
-			$.unblockUI();
+			//$.unblockUI();
 		}else{
 			oTable.fnDraw();
 		}

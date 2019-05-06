@@ -1,7 +1,8 @@
 <?php
 ob_start();
 session_start();
-include_once '../startup.php';include_once APPLICATION_PATH . '/includes/MysqliDb.php';
+include_once '../startup.php';
+include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once APPLICATION_PATH . '/General.php';
 $general = new General($db);
 $tableName = "temp_sample_import";
@@ -18,7 +19,9 @@ try {
     for ($i = 0; $i < sizeof($cSampleResult); $i++) {
         $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
     }
-    $import_decided = (isset($arr['import_non_matching_sample']) && $arr['import_non_matching_sample'] == 'no') ? 'INNER JOIN' : 'LEFT JOIN';
+
+    $importNonMatching = (isset($arr['import_non_matching_sample']) && $arr['import_non_matching_sample'] == 'no') ? false : true;
+    
     $instanceQuery = "SELECT * FROM s_vlsm_instance";
     $instanceResult = $db->query($instanceQuery);
     $result = '';
@@ -40,7 +43,7 @@ try {
                 $comments = $_POST['comments'];
             }
 
-            if ($rResult[0]['sample_type'] != 'S' && $rResult[0]['sample_type'] != 's' && $status[$i] != '1') {
+            if ($rResult[0]['sample_type'] != 'S' && $rResult[0]['sample_type'] != 's') {
                 $data = array('control_code' => $rResult[0]['sample_code'],
                     'lab_id' => $rResult[0]['lab_id'],
                     'control_type' => $rResult[0]['sample_type'],
@@ -74,7 +77,8 @@ try {
                 } else {
                     $data['is_sample_rejected'] = 'no';
                 }
-                //get bacth code
+                $data['status'] = $status[$i];
+                
                 $bquery = "select * from batch_details where batch_code='" . $rResult[0]['batch_code'] . "'";
                 $bvlResult = $db->rawQuery($bquery);
                 if ($bvlResult) {
@@ -83,16 +87,26 @@ try {
                     $batchResult = $db->insert('batch_details', array('batch_code' => $rResult[0]['batch_code'], 'batch_code_key' => $rResult[0]['batch_code_key'], 'sent_mail' => 'no', 'request_created_datetime' => $general->getDateTime()));
                     $data['batch_id'] = $db->getInsertId();
                 }
-                $query = "select control_id,result from vl_imported_controls where control_code='" . $rResult[0]['sample_code'] . "'";
-                $vlResult = $db->rawQuery($query);
-                $data['status'] = $status[$i];
-                if (count($vlResult) > 0) {
-                    $db = $db->where('control_code', $rResult[0]['sample_code']);
-                    $result = $db->update('vl_imported_controls', $data);
-                } else {
-                    $db->insert('vl_imported_controls', $data);
-                }
+
+                $db->insert('vl_imported_controls', $data);
+
+                //die;
+
+                // echo "<pre>";var_dump($data);
+                // var_dump($db->insert('vl_imported_controls', $data));die;
+                // $query = "select control_id,result from vl_imported_controls where control_code='" . $rResult[0]['sample_code'] . "'";
+                // $vlResult = $db->rawQuery($query);
+                // $data['status'] = $status[$i];
+                // if (count($vlResult) > 0) {
+                //     $db = $db->where('control_code', $rResult[0]['sample_code']);
+                //     $result = $db->update('vl_imported_controls', $data);
+                // } else {
+                //     $db->insert('vl_imported_controls', $data);
+                // }
+
+
             } else {
+
                 $data = array(
                     'lab_name' => $rResult[0]['lab_name'],
                     'lab_contact_person' => $rResult[0]['lab_contact_person'],
@@ -177,6 +191,7 @@ try {
                         $db = $db->where('sample_code', $rResult[0]['sample_code']);
                         $result = $db->update($tableName1, $data);
                     } else {
+                        if($importNonMatching == false) continue;
                         $data['sample_code'] = $rResult[0]['sample_code'];
                         $data['vlsm_country_id'] = $arr['vl_form'];
                         $data['vlsm_instance_id'] = $instanceResult[0]['vlsm_instance_id'];
@@ -193,7 +208,7 @@ try {
         }
     }
     //get all accepted data result
-    $accQuery = "SELECT * FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code where tsr.result_status='7'";
+    $accQuery = "SELECT * FROM temp_sample_import as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code where tsr.result_status='7'";
     $accResult = $db->rawQuery($accQuery);
     if ($accResult) {
         for ($i = 0; $i < count($accResult); $i++) {
@@ -273,7 +288,7 @@ try {
     $samplePrintQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
     $samplePrintQuery .= ' where vl.sample_code IN ( ' . $sCode . ')'; // Append to condition
     $_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
-    $stQuery = "SELECT * FROM temp_sample_import as tsr $import_decided vl_request_form as vl ON vl.sample_code=tsr.sample_code where tsr.sample_type='s'";
+    $stQuery = "SELECT * FROM temp_sample_import as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code where tsr.sample_type='s'";
     $stResult = $db->rawQuery($stQuery);
 
     if($numberOfResults > 0){
@@ -281,7 +296,7 @@ try {
         $general->resultImportStats($numberOfResults, $fileName , $importedBy);
     }
 
-
+die;
     if (!$stResult) {
         $result = "importedStatistics.php";
     }

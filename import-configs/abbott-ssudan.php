@@ -64,7 +64,7 @@ try {
 
             $row = 1;
             if (($handle = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== false) {
-                while (($sheetData = fgetcsv($handle, 1000, "\t")) !== false) {
+                while (($sheetData = fgetcsv($handle, 10000, "\t")) !== false) {
                     $num = count($sheetData);
                     $row++;
                     if ($row < $skip) {
@@ -93,10 +93,17 @@ try {
                     $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
 
                     if (strpos($sheetData[$resultCol], 'Copies / mL') !== false) {
-                        $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
-                        $absVal = str_replace(",", "", $sheetData[$resultCol]);
-                        preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                        $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
+                        if(strpos($sheetData[$resultCol], '< 839') !== false){
+                            $txtVal = "Below Detection Limit";
+                            $resultFlag = "";
+                            $absVal = "";
+                            $logVal = "";
+                        }else{
+                            $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
+                            $absVal = str_replace(",", "", $sheetData[$resultCol]);
+                            preg_match_all('!\d+!', $absVal, $absDecimalVal);
+                            $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
+                        }
                     } else if (strpos($sheetData[$resultCol], 'Log (IU/mL)') !== false) {
                         $logVal = str_replace("Log (IU/mL)", "", $sheetData[$resultCol]);
                         $logVal = str_replace(",", ".", $logVal);
@@ -118,19 +125,33 @@ try {
                         }
                     }
 
-                    $sampleType = $sheetData[$sampleTypeCol];
-                    if ($sampleType == 'Patient') {
-                        $sampleType = 'S';
-                    }
-
-                    $batchCode = "";
 
                     $lotNumberVal = $sheetData[$lotNumberCol];
                     if (trim($sheetData[$lotExpirationDateCol]) != '') {
                         //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
                         //$sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
                         $lotExpirationDateVal = date('Y-m-d', strtotime($sheetData[$lotExpirationDateCol]));
+                    }                    
+
+                    $sampleType = $sheetData[$sampleTypeCol];
+                    if ($sampleType == 'Patient') {
+                        $sampleType = 'S';
+                    } else if ($sampleType == 'Control') {
+                        
+                        if($sampleCode == 'HIV_HIPOS'){
+                            $sampleType = 'HPC';
+                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
+                        } else if($sampleCode == 'HIV_LOPOS'){
+                            $sampleType = 'LPC';
+                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
+                        } else if($sampleCode == 'HIV_NEG'){
+                            $sampleType = 'NC';
+                            $sampleCode = $sampleCode.'-'.$lotNumberVal;
+                        }
                     }
+
+                    $batchCode = "";
+
 
                     if ($sampleCode == "") {
                         $sampleCode = $sampleType . $m;
