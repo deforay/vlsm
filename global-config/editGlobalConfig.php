@@ -391,7 +391,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
         </div>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">VLSM Connect</h3>
+    <h3 class="panel-title">Connect</h3>
   </div>
   <div class="panel-body">
                 <!-- <div class="row">
@@ -410,7 +410,7 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                   </div>
                 </div><br/> -->
                 
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
                       <label for="data_sync_interval" class="col-lg-4 control-label">VLSTS Data Sync Interval (in Days) <span class="mandatory">*</span> </label>
@@ -419,8 +419,9 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                       </div>
                     </div>
                    </div>
-                </div>                
-                <div class="row">
+                </div>                 -->
+                
+                <!-- <div class="row">
                   <div class="col-md-7">
                     <div class="form-group">
                       <label for="enable_qr_mechanism" class="col-lg-4 control-label">Enable QR Code </label>
@@ -430,7 +431,8 @@ if(isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields'])!= ''){
                       </div>
                     </div>
                   </div>
-                </div>    
+                </div>   -->
+
                 <div class="row">
                   <div class="col-md-7" style="height:38px;">
                     <div class="form-group" style="height:38px;">

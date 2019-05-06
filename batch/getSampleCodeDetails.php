@@ -24,6 +24,16 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
      $end_date = $general->dateFormat(trim($s_c_date[1]));
    }
 }
+if(isset($_POST['sampleReceivedAtLab']) && trim($_POST['sampleReceivedAtLab'])!= ''){
+   $s_c_date = explode("to", $_POST['sampleReceivedAtLab']);
+   //print_r($s_c_date);die;
+   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+     $sampleReceivedStartDate = $general->dateFormat(trim($s_c_date[0]));
+   }
+   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+    $sampleReceivedEndDate = $general->dateFormat(trim($s_c_date[1]));
+   }
+}
 
 $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vlsm_country_id = $country  AND vl.sample_code!=''";
 if(isset($_POST['batchId'])){
@@ -49,6 +59,14 @@ if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])
      $query = $query.' AND DATE(sample_collection_date) = "'.$start_date.'"';
    }else{
      $query = $query.' AND DATE(sample_collection_date) >= "'.$start_date.'" AND DATE(sample_collection_date) <= "'.$end_date.'"';
+   }
+}
+
+if(isset($_POST['sampleReceivedAtLab']) && trim($_POST['sampleReceivedAtLab'])!= ''){
+   if(trim($sampleReceivedStartDate) == trim($sampleReceivedEndDate)) {
+     $query = $query.' AND DATE(sample_received_at_vl_lab_datetime) = "'.$sampleReceivedStartDate.'"';
+   }else{
+     $query = $query.' AND DATE(sample_received_at_vl_lab_datetime) >= "'.$sampleReceivedStartDate.'" AND DATE(sample_received_at_vl_lab_datetime) <= "'.$sampleReceivedEndDate.'"';
    }
 }
 //$query = $query." ORDER BY f.facility_name ASC";

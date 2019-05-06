@@ -83,37 +83,43 @@ foreach($importConfigResult as $machine) {
         <div class="box-header with-border">
           <div class="pull-right" style="font-size:15px;"><span class="mandatory">*</span> indicates required field &nbsp;</div>
         </div>
-      <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 80%;">
-              <tr style="display:<?php echo($showUrgency == true)?'':'none'; ?>">
-	       <td><b>Urgency&nbsp;:</b></td>
-		      <td colspan="3">
-			      <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="normal"/>&nbsp;&nbsp;Normal
-			      <input type="radio" name="urgency" title="Please choose urgency type" class="urgent" id="urgentYes" value="urgent"/>&nbsp;&nbsp;Urgent
-		      </td>
+      <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 100%;">
+          <tr>
+          <th>Testing Platform&nbsp;<span class="mandatory">*</span> </th>
+          <td>
+          <select name="machine" id="machine" class="form-control isRequired" title="Please choose machine" style="width:280px;">
+				   <option value=""> -- Select -- </option>
+				   <?php
+				   foreach($importConfigResult as $machine) {
+				       $labelOrder = $machinesLabelOrder[$machine['config_id']];
+				   ?>
+				     <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
+				   <?php } ?>
+			   </select>
+         </td>          
+              <th>Sample Type</th>
+			        <td>
+                <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type" style="width:150px;">
+                <option value=""> -- Select -- </option>
+                  <?php
+                  foreach($sResult as $type){
+                  ?>
+                  <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
+                  <?php
+                  }
+                  ?>
+                </select>
+			        </td>
 	      </tr>
 	      <tr>
-		      <td>&nbsp;<b>Sample Collection Date&nbsp;:</b></td>
+		      <th>Sample Collection Date</th>
 		      <td>
-				      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
+				      <input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control daterange" placeholder="Select Collection Date" readonly style="width:275px;background:#fff;"/>
 			      </td>
-			      <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
-			      <td>
-				      <select class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-		      <option value=""> -- Select -- </option>
-			      <?php
-			      foreach($sResult as $type){
-			       ?>
-			       <option value="<?php echo $type['sample_id'];?>"><?php echo ucwords($type['sample_name']);?></option>
-			       <?php
-			      }
-			      ?>
-		      </select>
-			      </td>
-	      </tr>
-	      <tr>
-		       <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
-			      <td>
-				      <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
+            <th>Facility</th>
+            
+		      <td>
+          <select style="width: 275px;" class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple">
 			      <!--<option value="">-- Select --</option>-->
 				      <?php
 				      foreach($fResult as $name){
@@ -123,10 +129,18 @@ foreach($importConfigResult as $machine) {
 				      }
 				      ?>
 				      </select>
-			      </td>
-			      <td><b>Gender&nbsp;:</b></td>
+				      
+			      </td>            
+			      
+	      </tr>
+	      <tr>
+        <th>Date Sample Receieved at Lab</th>
 			      <td>
-				      <select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enableFemaleSection(this);">
+            <input type="text" id="sampleReceivedAtLab" name="sampleReceivedAtLab" class="form-control daterange" placeholder="Select Received at Lab Date" readonly style="width:275px;background:#fff;"/>
+			      </td>
+			      <th>Patient Gender</th>
+			      <td>
+				      <select name="gender" id="gender" class="form-control" title="Please choose gender" onchange="enableFemaleSection(this);"  style="width:150px;">
 					      <option value=""> -- Select -- </option>
 					      <option value="male">Male</option>
 					      <option value="female">Female</option>
@@ -147,8 +161,8 @@ foreach($importConfigResult as $machine) {
 		      </td>
 	      </tr>
 	      <tr>
-		      <td colspan="4">&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Search" class="btn btn-success btn-sm">
-			      &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>
+		      <td colspan="4">&nbsp;<input type="button" onclick="getSampleCodeDetails();" value="Filter Samples" class="btn btn-success btn-sm">
+			      &nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset Filters</span></button>
 			      </td>
 	      </tr>
 	  </table>
@@ -168,24 +182,7 @@ foreach($importConfigResult as $machine) {
                     </div>
                   </div>
                 </div>
-		<div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="machine" class="col-lg-4 control-label">Choose Machine <span class="mandatory">*</span></label>
-                        <div class="col-lg-7" style="margin-left:3%;">
-			   <select name="machine" id="machine" class="form-control isRequired" title="Please choose machine">
-				   <option value=""> -- Select -- </option>
-				   <?php
-				   foreach($importConfigResult as $machine) {
-				       $labelOrder = $machinesLabelOrder[$machine['config_id']];
-				   ?>
-				     <option value="<?php echo $machine['config_id']; ?>" data-no-of-samples="<?php echo $machine['max_no_of_samples_in_a_batch']; ?>"><?php echo ucwords($machine['machine_name']); ?></option>
-				   <?php } ?>
-			   </select>
-                        </div>
-                    </div>
-                  </div>
-                </div>
+		
 		<div class="row" id="sampleDetails">
 		   <div class="col-md-8">
 			    <div class="form-group">
@@ -200,7 +197,7 @@ foreach($importConfigResult as $machine) {
 			    </div>
 		    </div>
 		</div>
-		<div class="row" id="alertText" style="font-size:18px;"></div>
+		<div class="row col-md-12" id="alertText" style="font-size:20px;"></div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -228,10 +225,12 @@ foreach($importConfigResult as $machine) {
   noOfSamples = 0;
   sortedTitle = [];
   $(document).ready(function() {
+     
      $("#facilityName").select2({placeholder:"Select Facilities"});
-     $('#sampleCollectionDate').daterangepicker({
+
+     $('.daterange').daterangepicker({
             format: 'DD-MMM-YYYY',
-	    separator: ' to ',
+	          separator: ' to ',
             startDate: moment().subtract(29,'days'),
             endDate: moment(),
             maxDate: moment(),
@@ -248,7 +247,7 @@ foreach($importConfigResult as $machine) {
             startDate = start.format('YYYY-MM-DD');
             endDate = end.format('YYYY-MM-DD');
       });
-     $('#sampleCollectionDate').val("");
+     $('.daterange').val("");
   } );
 	
   function validateNow(){
@@ -357,12 +356,13 @@ foreach($importConfigResult as $machine) {
     }
     
     function getSampleCodeDetails(){
-      $.blockUI();
-      var urgent = $("input:radio[name=urgency]");
-      if((urgent[0].checked==false && urgent[1].checked==false) || urgent == 'undefined'){
-	      urgent = '';
-      }else{
-	      urgent = $('input[name=urgency]:checked').val();
+      
+      var urgent = null;
+      var machine = $("#machine").val();
+      if(machine == null || machine == ''){
+        $.unblockUI();
+        alert('You have to choose a testing platform to proceed');
+        return false;
       }
       var fName = $("#facilityName").val();
       var sName = $("#sampleType").val();
@@ -379,7 +379,8 @@ foreach($importConfigResult as $machine) {
       }else{
 	      breastfeeding = $('input[name=breastfeeding]:checked').val();
       }
-      $.post("getSampleCodeDetails.php", {urgent:urgent,sampleCollectionDate:$("#sampleCollectionDate").val(),fName:fName,sName:sName,gender:gender,pregnant:pregnant,breastfeeding:breastfeeding},
+      $.blockUI();
+      $.post("getSampleCodeDetails.php", {urgent:urgent,sampleCollectionDate:$("#sampleCollectionDate").val(),sampleReceivedAtLab:$("#sampleReceivedAtLab").val(), fName:fName,sName:sName,gender:gender,pregnant:pregnant,breastfeeding:breastfeeding},
       function(data){
 	  if(data != ""){
 	    $("#sampleDetails").html(data);
@@ -392,22 +393,22 @@ foreach($importConfigResult as $machine) {
     
     function enableFemaleSection(obj){
       if(obj.value=="female"){
-	 $(".showFemaleSection").show();
-	 $(".pregnant,.breastfeeding").prop("disabled",false);
-	 }else{
-	 $(".showFemaleSection").hide();
-	 $(".pregnant,.breastfeeding").prop("checked",false);
-	 $(".pregnant,.breastfeeding").attr("disabled",true);
+	      $(".showFemaleSection").show();
+	      $(".pregnant,.breastfeeding").prop("disabled",false);
+	    }else{
+	      $(".showFemaleSection").hide();
+	      $(".pregnant,.breastfeeding").prop("checked",false);
+	      $(".pregnant,.breastfeeding").attr("disabled",true);
       }
     }
     
     $("#machine").change(function(){
       var self = this.value;
       if(self!= ''){
-      	getSampleCodeDetails();
+      	//getSampleCodeDetails();
 	      var selected = $(this).find('option:selected');
         noOfSamples = selected.data('no-of-samples');
-	      $('#alertText').html('You have picked '+$("#machine option:selected").text()+' and it has limit of maximum '+noOfSamples+' samples to make it a batch');
+	      $('#alertText').html('You have picked '+$("#machine option:selected").text()+' testing platform and it has limit of maximum '+noOfSamples+' samples per batch');
       }else{
 	      $('.ms-list').html('');
     	  $('#alertText').html('');

@@ -1,7 +1,8 @@
 <?php
 ob_start();
 $title = "VLSM | Add New Request";
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/General.php');
 $labFieldDisabled = '';
 

@@ -40,7 +40,7 @@ include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 
             <div class="box-header with-border">
 	      <?php if(isset($_SESSION['privileges']) && in_array("addBatch.php", $_SESSION['privileges'])){ ?>
-              <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Batch</a>
+              <a href="addBatch.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Create New Batch</a>
 	      <?php } ?>
 	      <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
             </div>

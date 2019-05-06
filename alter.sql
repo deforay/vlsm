@@ -1624,6 +1624,88 @@ CREATE TABLE `result_import_stats` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- 
+--
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Barcode Format', 'barcode_format', 'C39+');
+
+-- 
+
+-- DROP TABLE IF EXISTS `eid_form`;
+		
+CREATE TABLE `eid_form` (
+  `eid_id` INTEGER NOT NULL AUTO_INCREMENT,
+  `vlsm_instance_id` VARCHAR(255) NULL DEFAULT NULL,
+  `vlsm_country_id` INTEGER NOT NULL,
+  `sample_code_key` INTEGER NOT NULL,
+  `sample_code_format` VARCHAR(255) NULL DEFAULT NULL,
+  `sample_code` VARCHAR(255) NULL DEFAULT NULL,
+  `remote_sample` VARCHAR(255) NOT NULL DEFAULT 'no',
+  `remote_sample_code_key` INTEGER NULL DEFAULT NULL,
+  `remote_sample_code_format` VARCHAR(255) NULL DEFAULT NULL,
+  `remote_sample_code` VARCHAR(255) NULL DEFAULT NULL,
+  `sample_collection_date` DATETIME NOT NULL,
+  `sample_received_at_hub_datetime` DATETIME NOT NULL,
+  `sample_received_at_vl_lab_datetime` DATETIME NOT NULL,
+  `sample_tested_datetime` DATETIME NULL DEFAULT NULL,
+  `funding_source` INTEGER NULL DEFAULT NULL,
+  `implementation_partner` INTEGER NULL DEFAULT NULL,
+  `is_sample_rejected` VARCHAR(255) NOT NULL DEFAULT 'no',
+  `sample_rejection_reason` INTEGER NOT NULL,
+  `facility_id` INTEGER NOT NULL,
+  `mother_id` VARCHAR(255) NULL DEFAULT NULL,
+  `mother_name` VARCHAR(500) NULL DEFAULT NULL,
+  `caretaker_phone_number` VARCHAR(255) NULL DEFAULT NULL,
+  `caretaker_address` VARCHAR(1000) NULL DEFAULT NULL,
+  `mother_dob` DATE NULL DEFAULT NULL,
+  `mother_age_in_years` VARCHAR(255) NULL DEFAULT NULL,
+  `mother_marital_status` VARCHAR(255) NULL DEFAULT NULL,
+  `child_id` VARCHAR(255) NULL DEFAULT NULL,
+  `child_name` VARCHAR(255) NULL DEFAULT NULL,
+  `child_dob` DATE NULL DEFAULT NULL,
+  `child_age` VARCHAR(255) NULL DEFAULT NULL,
+  `child_gender` VARCHAR(255) NULL DEFAULT NULL,
+  `mother_hiv_status` VARCHAR(255) NULL DEFAULT NULL,
+  `mother_treatment` VARCHAR(255) NULL DEFAULT NULL,
+  `mother_cd4` VARCHAR(255) NULL DEFAULT NULL,
+  `mother_cd4_test_date` DATE NULL DEFAULT NULL,
+  `mother_vl_result` VARCHAR(255) NULL DEFAULT NULL,
+  `mother_vl_test_date` VARCHAR(255) NULL DEFAULT NULL,
+  `child_treatment` VARCHAR(255) NULL DEFAULT NULL,
+  `is_infant_receiving_treatment` VARCHAR(255) NULL DEFAULT NULL,
+  `has_infant_stopped_breastfeeding` VARCHAR(255) NULL DEFAULT NULL,
+  `age_breastfeeding_stopped_in_months` VARCHAR(255) NULL DEFAULT NULL,
+  `choice_of_feeding` VARCHAR(255) NULL DEFAULT NULL,
+  `is_cotrimoxazole_being_administered_to_the_infant` VARCHAR(255) NULL DEFAULT NULL,
+  `sample_requestor_name` VARCHAR(255) NULL DEFAULT NULL,
+  `sample_requestor_phone` VARCHAR(255) NULL DEFAULT NULL,
+  `specimen_quality` VARCHAR(255) NULL DEFAULT NULL,
+  `specimen_type` VARCHAR(255) NULL DEFAULT NULL,
+  `last_pcr_id` VARCHAR(255) NULL DEFAULT NULL,
+  `last_pcr_date` DATE NULL DEFAULT NULL,
+  `reason_for_pcr` INTEGER NULL DEFAULT NULL,
+  `rapid_test_performed` VARCHAR(255) NULL DEFAULT NULL,
+  `rapid_test_date` DATE NULL DEFAULT NULL,
+  `rapid_test_result` VARCHAR(255) NULL DEFAULT NULL,
+  `lab_id` INTEGER NULL DEFAULT NULL,
+  `lab_technician` VARCHAR(255) NULL DEFAULT NULL,
+  `result_status` INTEGER NULL DEFAULT NULL,
+  `result` VARCHAR(255) NOT NULL,
+  `sample_printed_datetime` DATETIME NULL DEFAULT NULL,
+  `created_on` DATETIME NULL DEFAULT NULL,
+  `created_by` VARCHAR(255) NOT NULL,
+  `last_modified_datetime` DATETIME NOT NULL,
+  `last_modified_by` VARCHAR(255) NOT NULL,
+  `data_sync` INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (`eid_id`)
+);
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+
+-- ---
+-- Table Properties
+-- ---
+
+-- ALTER TABLE `eid_form` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
