@@ -1713,3 +1713,8 @@ CREATE TABLE `eid_form` (
 
 
 ALTER TABLE `vl_imported_controls` CHANGE `result_reviewed_by` `result_reviewed_by` VARCHAR(1000) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+
+
+
+-- Version 3.10.9 ---------- Amit 6-May-2019
