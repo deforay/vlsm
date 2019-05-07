@@ -1,5 +1,14 @@
 <?php
 $resultFilename = '';
+
+$userRes = $users->getUserInfo($_SESSION['userId'],'user_signature');
+$userSignaturePath = null;
+
+if(!empty($userRes['user_signature'])){
+  $userSignaturePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $userRes['user_signature'];
+}
+
+
 if(sizeof($requestResult)> 0){
      $_SESSION['rVal'] = $general->generateRandomString(6);
      $pathFront = (UPLOAD_PATH . DIRECTORY_SEPARATOR .  $_SESSION['rVal']);
@@ -430,7 +439,12 @@ if(sizeof($requestResult)> 0){
           $html .='</tr>';
           $html .='<tr>';
           $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$resultApprovedBy.'</td>';
-          $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+          if(!empty($userSignaturePath) && file_exists($userSignaturePath)){
+            $html .='<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$userSignaturePath.'" style="width:100px;" /></td>';
+          }else{
+            $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+          }
+          
           $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
           $html .='</tr>';
 

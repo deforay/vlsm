@@ -4,6 +4,7 @@ ob_start();
 include_once('../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH.'/models/Users.php');
 include_once(APPLICATION_PATH.'/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH.'/includes/fpdi/fpdi.php');
 include_once(APPLICATION_PATH.'/includes/fpdf/fpdf.php');
@@ -11,6 +12,7 @@ include_once(APPLICATION_PATH.'/includes/fpdf/fpdf.php');
 $tableName1="activity_log";
 $tableName2="vl_request_form";
 $general=new General($db);
+$users=new Users($db);
 
 $configQuery="SELECT * from global_config";
 $configResult=$db->query($configQuery);
