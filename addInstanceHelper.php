@@ -79,9 +79,9 @@ try {
                 $string = $general->generateRandomString(6).".";
                 $imageName = "logo".$string.$extension;
                 if (move_uploaded_file($_FILES["logo"]["tmp_name"], UPLOAD_PATH . DIRECTORY_SEPARATOR . "instance-logo" . DIRECTORY_SEPARATOR . $imageName)) {
-                    $resizeObj = new Deforay_Image_Resize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."instance-logo". DIRECTORY_SEPARATOR .$imageName);
-                      $resizeObj->resizeImage(80, 80, 'auto');
-                $resizeObj->saveImage(UPLOAD_PATH . DIRECTORY_SEPARATOR ."instance-logo". DIRECTORY_SEPARATOR. $imageName, 100);
+                    $resizeObj = new ImageResize(UPLOAD_PATH . DIRECTORY_SEPARATOR ."instance-logo". DIRECTORY_SEPARATOR .$imageName);
+                    $resizeObj->resizeImage(80, 80, 'auto');
+                    $resizeObj->saveImage(UPLOAD_PATH . DIRECTORY_SEPARATOR ."instance-logo". DIRECTORY_SEPARATOR. $imageName, 100);
                     $image=array('instance_facility_logo'=>$imageName);
                     $db=$db->where('vlsm_instance_id',$instanceId);
                     $db->update($tableName,$image);

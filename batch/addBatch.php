@@ -171,13 +171,14 @@ foreach($importConfigResult as $machine) {
           <!-- form start -->
             <form class="form-horizontal" method="post" name="addBatchForm" id="addBatchForm" autocomplete="off" action="addBatchCodeHelper.php">
               <div class="box-body">
-	        <div class="row">
+	              <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
                         <label for="batchCode" class="col-lg-4 control-label">Batch Code <span class="mandatory">*</span></label>
                         <div class="col-lg-7" style="margin-left:3%;">
-                        <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo date('Ymd').$maxId;?>" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already exists.Try another batch code',null)" />
-			   <input type="hidden" name="batchCodeKey" id="batchCodeKey" value="<?php echo $maxId;?>"/>
+                          <input type="text" class="form-control isRequired" id="batchCode" name="batchCode" placeholder="Batch Code" title="Please enter batch code" value="<?php echo date('Ymd').$maxId;?>" onblur="checkNameValidation('batch_details','batch_code',this,null,'This batch code already exists.Try another batch code',null)" />
+                          <input type="hidden" name="batchCodeKey" id="batchCodeKey" value="<?php echo $maxId;?>"/>
+                          <input type="hidden" name="platform" id="platform" value=""/>
                         </div>
                     </div>
                   </div>
@@ -406,6 +407,7 @@ foreach($importConfigResult as $machine) {
       var self = this.value;
       if(self!= ''){
       	//getSampleCodeDetails();
+        $("#platform").val($("#machine").val());
 	      var selected = $(this).find('option:selected');
         noOfSamples = selected.data('no-of-samples');
 	      $('#alertText').html('You have picked '+$("#machine option:selected").text()+' testing platform and it has limit of maximum '+noOfSamples+' samples per batch');

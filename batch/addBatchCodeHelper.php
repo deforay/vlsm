@@ -10,9 +10,11 @@ $general=new General($db);
 $tableName1="batch_details";
 $tableName2="vl_request_form";
 try {
+
+    
         if(isset($_POST['batchCode']) && trim($_POST['batchCode'])!=""){
                 $data=array(
-                            'machine'=>$_POST['machine'],
+                            'machine'=>$_POST['platform'],
                             'batch_code'=>$_POST['batchCode'],
                             'batch_code_key'=>$_POST['batchCodeKey'],
                             'request_created_datetime'=>$general->getDateTime()

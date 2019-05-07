@@ -28,6 +28,7 @@ $fQuery="SELECT * FROM facility_type where facility_type_id IN(1,4)";
 $ftResult = $db->rawQuery($fQuery);
 
 ?>
+<link href="/assets/css/jasny-bootstrap.min.css" rel="stylesheet" />
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
      <!-- Content Header (Page header) -->
@@ -49,7 +50,7 @@ $ftResult = $db->rawQuery($fQuery);
                <!-- /.box-header -->
                <div class="box-body">
                     <!-- form start -->
-                    <form class="form-horizontal" method='post'  name='userForm' id='userForm' autocomplete="off" action="addUserHelper.php">
+                    <form class="form-horizontal" method='post'  name='userForm' id='userForm' autocomplete="off" action="addUserHelper.php"  enctype="multipart/form-data">
                          <div class="box-body">
                               <div class="row">
                                    <div class="col-md-6">
@@ -98,6 +99,32 @@ $ftResult = $db->rawQuery($fQuery);
                               </div>
 
                               <div class="row">
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-lg-4 control-label">Signature <br>(Used to embed in Result PDF)</label>
+                                        <div class="col-lg-8">
+                                        <div class="fileinput fileinput-new userSignature" data-provides="fileinput">
+                                        <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width:200px; height:150px;">
+                                            
+                                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=No image">
+                                            
+                                        </div>
+                                        <div>
+                                            <span class="btn btn-default btn-file"><span class="fileinput-new">Select Signature Image</span><span class="fileinput-exists">Change</span>
+                                            <input type="file" id="userSignature" name="userSignature" title="Please select user signature" onchange="">
+                                            </span>
+                                            
+                                            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                        </div>
+                                        </div>
+                                        <div class="box-body">
+                                            Image Size : <code>100px x 100px</code>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>                              
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label for="loginId" class="col-lg-4 control-label">Login ID <span class="mandatory">*</span></label>
@@ -228,6 +255,7 @@ $ftResult = $db->rawQuery($fQuery);
      <!-- /.content -->
 </div>
 <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+<script type="text/javascript" src="/assets/js/jasny-bootstrap.js"></script>
 <script type="text/javascript">
 
 provinceName = true;

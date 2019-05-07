@@ -4,12 +4,31 @@ session_start();
 include_once '../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once APPLICATION_PATH . '/General.php';
+include_once APPLICATION_PATH .'/includes/ImageResize.php';
+
+
 $general = new General($db);
 //include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $tableName = "user_details";
 $tableName2 = "vl_user_facility_map";
 try {
     if (trim($_POST['userName']) != '' && trim($_POST['loginId']) != '' && ($_POST['role']) != '' && ($_POST['password']) != '') {
+
+        if (isset($_FILES['userSignature']['name']) && $_FILES['userSignature']['name'] != "") {
+            if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature") && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature")) {
+                mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature");
+            }
+            $extension = strtolower(pathinfo(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_FILES['userSignature']['name'], PATHINFO_EXTENSION));
+            $string = $general->generateRandomString(10) . ".";
+            $imageName = "usign-" . $string . $extension;
+            $signatureImagePath = UPLOAD_PATH . DIRECTORY_SEPARATOR . "users-signature" . DIRECTORY_SEPARATOR . $imageName;
+            if (move_uploaded_file($_FILES["userSignature"]["tmp_name"], $signatureImagePath)) {
+                $resizeObj = new ImageResize($signatureImagePath);
+                $resizeObj->resizeImage(100, 100, 'auto');
+                $resizeObj->saveImage($signatureImagePath, 100);
+                $data['user_signature'] = $imageName;
+            }
+        }        
 
         $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
         $password = sha1($_POST['password'] . $passwordSalt);

@@ -1,6 +1,6 @@
 <?php
 
-class Deforay_Image_Resize {
+class ImageResize {
 
     private $image;
     private $width;
