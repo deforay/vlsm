@@ -10,13 +10,11 @@ class General
 
     protected $db = null;
 
-    public function __construct($db = null)
-    {
+    public function __construct($db = null) {
         $this->db = $db;
     }
 
-    public static function generateRandomString($length = 8, $seeds = 'alphanum')
-    {
+    public static function generateRandomString($length = 8, $seeds = 'alphanum') {
         // Possible seeds
         $seedings['alpha'] = 'abcdefghijklmnopqrstuvwqyz';
         $seedings['numeric'] = '0123456789';
@@ -44,8 +42,7 @@ class General
         return $str;
     }
 
-    public function generateUserID()
-    {
+    public function generateUserID() {
         $idOne = $this->generateRandomString(8);
         $idTwo = $this->generateRandomString(4);
         $idThree = $this->generateRandomString(4);
@@ -58,8 +55,7 @@ class General
      * Used to format date from dd-mmm-yyyy to yyyy-mm-dd for storing in database
      *
      */
-    public function dateFormat($date)
-    {
+    public function dateFormat($date) {
         if (!isset($date) || $date == null || $date == "" || $date == "0000-00-00") {
             return "0000-00-00";
         } else {
@@ -80,8 +76,7 @@ class General
         }
     }
 
-    public function humanDateFormat($date)
-    {
+    public function humanDateFormat($date) {
 
         if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
             return "";
@@ -96,8 +91,7 @@ class General
         }
     }
 
-    public function getZendDateFormat($date)
-    {
+    public function getZendDateFormat($date) {
 
         if ($date == null || $date == "" || $date == "0000-00-00") {
             return "";
@@ -110,14 +104,12 @@ class General
         }
     }
 
-    public static function getDateTime()
-    {
+    public static function getDateTime() {
         $date = new DateTime(date('Y-m-d H:i:s'));
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function removeDirectory($dirname)
-    {
+    public function removeDirectory($dirname) {
         // Sanity check
         if (!file_exists($dirname)) {
             return false;
@@ -146,8 +138,7 @@ class General
     }
 
     // get data from the system_config table from database
-    public function getSystemConfig($name = null)
-    {
+    public function getSystemConfig($name = null) {
         if ($this->db == null) {
             return false;
         }
@@ -177,8 +168,7 @@ class General
     }
 
     // get data from the global_config table from database
-    public function getGlobalConfig($name = null)
-    {
+    public function getGlobalConfig($name = null) {
 
         if ($this->db == null) {
             return false;
@@ -208,8 +198,7 @@ class General
         }
     }
 
-    public function fetchDataFromTable($tableName = null, $condition = null, $fieldName = null)
-    {
+    public function fetchDataFromTable($tableName = null, $condition = null, $fieldName = null) {
         if ($this->db == null || $tableName == null) {
             return false;
         }
