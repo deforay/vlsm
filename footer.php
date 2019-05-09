@@ -14,22 +14,22 @@
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 
 
-<script type="text/javascript" src="../assets/js/jquery-ui-timepicker-addon.js"></script>
-<script type="text/javascript" src="../assets/js/js.cookie.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="/assets/js/js.cookie.js"></script>
 
-<script src="../assets/js/select2.js"></script>
+<script src="/assets/js/select2.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="../assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
 <!-- DataTables -->
-<script src=".././assets/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src=".././assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/assets/plugins/datatables/dataTables.bootstrap.min.js"></script>
 
 <!-- AdminLTE App -->
-<script src="../dist/js/app.min.js"></script>
-<script src="../assets/js/deforayValidation.js"></script>
-<script src="../assets/js/jquery.maskedinput.js"></script>
-<script src="../assets/js/jquery.blockUI.js"></script>
-<script src="../assets/js/moment.min.js"></script>
+<script src="/dist/js/app.min.js"></script>
+<script src="/assets/js/deforayValidation.js"></script>
+<script src="/assets/js/jquery.maskedinput.js"></script>
+<script src="/assets/js/jquery.blockUI.js"></script>
+<script src="/assets/js/moment.min.js"></script>
 
 <script type="text/javascript">
 
@@ -54,7 +54,7 @@ function syncVLDashboard(){
   // if(vldashSync && vldashUrl != null && vldashUrl != ''){
   //   $.blockUI({ message: '<h3>Trying to do VL Dashboard sync. Please wait...</h3>' });
   //   var jqxhr = $.ajax({
-  //                   url : "../scheduled-jobs/vldashboard.php",
+  //                   url : "/scheduled-jobs/vldashboard.php",
   //                 })
   //                 .done(function(data) {
   //                   //console.log(data);
@@ -110,7 +110,7 @@ function syncRemoteData(){
   if(remoteSync && remoteUrl != null && remoteUrl != ''){
     $.blockUI({ message: '<h3>Preparing for VLSTS Remote sync.<br>Please wait...</h3>' });
     var jqxhr = $.ajax({
-                    url : "../remote/scheduled-jobs/syncCommonData.php",
+                    url : "/remote/scheduled-jobs/syncCommonData.php",
                   })
                   .done(function(data) {
                     //console.log(data);
@@ -133,7 +133,7 @@ function syncRequests(){
   
   if(remoteSync && remoteUrl != null && remoteUrl != ''){
     var jqxhr = $.ajax({
-                    url : "../remote/scheduled-jobs/syncRequests.php",
+                    url : "/remote/scheduled-jobs/syncRequests.php",
                   })
                   .done(function(data) {
                     //console.log(data);
@@ -157,7 +157,7 @@ function syncResults(){
   
   if(remoteSync && remoteUrl != null && remoteUrl != ''){
     var jqxhr = $.ajax({
-                    url : "../remote/scheduled-jobs/syncResults.php",
+                    url : "/remote/scheduled-jobs/syncResults.php",
                   })
                   .done(function(data) {
                     //console.log(data);
@@ -208,7 +208,7 @@ if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $
   if(isset($_SESSION['instanceFname']) && $_SESSION['instanceFname']=='')
   {
     ?>
-    showModal('../addInstanceDetails.php',900,420);
+    showModal('/addInstanceDetails.php',900,420);
     <?php
   }
   ?>

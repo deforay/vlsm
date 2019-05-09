@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "VLSM | EID | Add EID Request";
-include('../../startup.php');
+include_once('../../startup.php');
 include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/General.php');
 
@@ -13,6 +13,8 @@ include_once(APPLICATION_PATH.'/General.php');
 //     $vlfmResult = $db->rawQuery($vlfmQuery);
 // }
 
+$general=new General($db);
+$arr = $general->getGlobalConfig();
 
 if($arr['vl_form']==1){
     include('eid-add-southsudan.php');
@@ -31,4 +33,6 @@ if($arr['vl_form']==1){
 }else if($arr['vl_form']==8){
     include('eid-add-angola.php');
 }
-?>
+
+
+include_once(APPLICATION_PATH.'/footer.php');
