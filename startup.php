@@ -1,6 +1,7 @@
 <?php
-
 session_start();
+
+
 
 // chdir(dirname(__DIR__));
 
@@ -45,3 +46,4 @@ defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? 
                                   getenv('APPLICATION_ENV') : 
                                   'production'));    
+

@@ -15,8 +15,8 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
 }
 $skin = "skin-blue";
 
-$logoName = "<img src='../assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
-$smallLogoName = "<img src='../assets/img/flask.png'>";
+$logoName = "<img src='/assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
+$smallLogoName = "<img src='/assets/img/flask.png'>";
 $systemType = "Viral Load Sample Management";
 $shortName = "VLSM";
 if($sarr['user_type']=='remoteuser'){
@@ -110,33 +110,33 @@ $formConfigResult=$db->query($formConfigQuery);
   <title><?php echo (isset($title) && $title != null && $title != "") ? $title : "$shortName | Viral Load LIS" ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" media="all" type="text/css" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="/assets/css/fonts.css" />
 
-  <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui.1.11.0.css" />
-  <link rel="stylesheet" media="all" type="text/css" href="../assets/css/jquery-ui-timepicker-addon.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="/assets/css/jquery-ui.1.11.0.css" />
+  <link rel="stylesheet" media="all" type="text/css" href="/assets/css/jquery-ui-timepicker-addon.css" />
 
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../assets/css/font-awesome.min.4.5.0.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.4.5.0.css">
   
   <!-- Ionicons -->
   <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">-->
   <!-- DataTables -->
-  <link rel="stylesheet" href=".././assets/plugins/datatables/dataTables.bootstrap.css">
+  <link rel="stylesheet" href="/assets/plugins/datatables/dataTables.bootstrap.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="/dist/css/skins/_all-skins.min.css">
   <!-- iCheck -->
   
-  <link href="../assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+  <link href="/assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
   
-  <link href="../assets/css/select2.min.css" rel="stylesheet" />
-  <link href="../assets/css/style.css" rel="stylesheet" />
-  <link href="../assets/css/deforayModal.css" rel="stylesheet" />
-  <link href="../assets/css/jquery.fastconfirm.css" rel="stylesheet" />
+  <link href="/assets/css/select2.min.css" rel="stylesheet" />
+  <link href="/assets/css/style.css" rel="stylesheet" />
+  <link href="/assets/css/deforayModal.css" rel="stylesheet" />
+  <link href="/assets/css/jquery.fastconfirm.css" rel="stylesheet" />
 
  
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -147,13 +147,13 @@ $formConfigResult=$db->query($formConfigQuery);
   <![endif]-->
   <!-- jQuery 2.2.3 -->
 
-<script type="text/javascript" src="../assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 
  <!-- Latest compiled and minified JavaScript -->
     
-<script type="text/javascript" src="../assets/js/jquery-ui.1.11.0.js"></script>
-<script src="../assets/js/deforayModal.js"></script>
-<script src="../assets/js/jquery.fastconfirm.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-ui.1.11.0.js"></script>
+<script src="/assets/js/deforayModal.js"></script>
+<script src="/assets/js/jquery.fastconfirm.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
 <style>
   .dataTables_wrapper{
@@ -177,7 +177,7 @@ $formConfigResult=$db->query($formConfigQuery);
 <div class="wrapper">
   <header class="main-header">
     <!-- Logo -->
-    <a href="<?php echo($dashBoardMenuAccess == true)?'../dashboard/index.php':'#'; ?>" class="logo">
+    <a href="<?php echo($dashBoardMenuAccess == true)?'/dashboard/index.php':'#'; ?>" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b><?php echo $smallLogoName; ?></b></span>
       <!-- logo for regular state and mobile devices -->
@@ -213,10 +213,10 @@ $formConfigResult=$db->query($formConfigQuery);
               } ?>
 
               <li class="user-footer" <?php echo $showProfileBtn;?>>
-                  <a href="../users/editProfile.php" class="">Edit Profile</a>
+                  <a href="/users/editProfile.php" class="">Edit Profile</a>
               </li>              
               <li class="user-footer <?php echo $alignRight;?>">
-                  <a href="../logout.php" class="">Sign out</a>
+                  <a href="/logout.php" class="">Sign out</a>
               </li>
               
             </ul>
@@ -241,7 +241,7 @@ $formConfigResult=$db->query($formConfigQuery);
       <ul class="sidebar-menu">
       <?php if($dashBoardMenuAccess == true){ ?>
 	    <li class="allMenu dashboardMenu active">
-	      <a href="../dashboard/index.php">
+	      <a href="/dashboard/index.php">
       <i class="fa fa-dashboard"></i> <span>Dashboard</span>
 	      </a>
 	    </li>
@@ -257,35 +257,35 @@ $formConfigResult=$db->query($formConfigQuery);
 	      <ul class="treeview-menu">
           <?php if(isset($_SESSION['privileges']) && in_array("roles.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu roleMenu">
-              <a href="../roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a>
+              <a href="/roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a>
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu userMenu">
-              <a href="../users/users.php"><i class="fa fa-circle-o"></i> Users</a>
+              <a href="/users/users.php"><i class="fa fa-circle-o"></i> Users</a>
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu facilityMenu">
-              <a href="../facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a>
+              <a href="/facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a>
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("facilityMap.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
             <li class="allMenu facilityMapMenu">
-              <a href="../facilities/facilityMap.php"><i class="fa fa-circle-o"></i>Facility Map</a>
+              <a href="/facilities/facilityMap.php"><i class="fa fa-circle-o"></i>Facility Map</a>
             </li>
           <?php }  if(isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu globalConfigMenu">
-              <a href="../global-config/globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
+              <a href="/global-config/globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu importConfigMenu">
-              <a href="../import-configs/importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a>
+              <a href="/import-configs/importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a>
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu requestEmailConfigMenu">
-              <a href="../request-mail/testRequestEmailConfig.php"><i class="fa fa-circle-o"></i>Test Request Email/SMS <br>Configuration</a>
+              <a href="/request-mail/testRequestEmailConfig.php"><i class="fa fa-circle-o"></i>Test Request Email/SMS <br>Configuration</a>
             </li>
           <?php } if(isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])){ ?>
             <li class="allMenu resultEmailConfigMenu">
-              <a href="../result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
+              <a href="/result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
             </li>
           <?php } ?>
 	      </ul>
@@ -309,31 +309,31 @@ $formConfigResult=$db->query($formConfigQuery);
               <?php
                if(isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu vlRequestMenu">
-                    <a href="../vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+                    <a href="/vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
                   </li>
               <?php }  if(isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu addVlRequestMenu">
-                    <a href="../vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+                    <a href="/vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
                   </li>
               <?php }  if(isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu batchCodeMenu">
-                    <a href="../batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+                    <a href="/batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
                   </li>
               <?php } if(isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])){ ?>
                   <li class="allMenu vlRequestMailMenu">
-                    <a href="../mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
+                    <a href="/mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
                   </li>
               <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestResult.php", $_SESSION['privileges'])){ ?>
                   <!--<li class="allMenu importTestResultMenu">
-                    <a href="../vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
+                    <a href="/vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
                   </li>-->
               <?php } if(isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
                   <li class="allMenu specimenReferralManifestListMenu">
-                    <a href="../specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Specimen Manifest</a>
+                    <a href="/specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Specimen Manifest</a>
                   </li>
               <?php } if(isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type']=='remoteuser')){ ?>
                   <!-- <li class="allMenu sampleListMenu">
-                    <a href="../move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
+                    <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
                   </li> -->
               <?php } ?>
             </ul>
@@ -349,15 +349,15 @@ $formConfigResult=$db->query($formConfigQuery);
             </a>
             <ul class="treeview-menu">
               <?php if(isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu importResultMenu"><a href="../import-result/addImportResult.php"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+                <li class="allMenu importResultMenu"><a href="/import-result/addImportResult.php"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
               <?php }  if(isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlTestResultMenu"><a href="../vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
+                <li class="allMenu vlTestResultMenu"><a href="/vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
               <?php } if(isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlResultApprovalMenu"><a href="../vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+                <li class="allMenu vlResultApprovalMenu"><a href="/vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
               <?php }  if(isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu vlResultMailMenu"><a href="../mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+                <li class="allMenu vlResultMailMenu"><a href="/mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
               <?php } if(isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])){ ?>
-                <!--<li class="allMenu importTestRequestMenu"><a href="../import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>-->
+                <!--<li class="allMenu importTestRequestMenu"><a href="/import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>-->
               <?php }?>
             </ul>
         </li>
@@ -372,26 +372,26 @@ $formConfigResult=$db->query($formConfigQuery);
                 </a>
                 <ul class="treeview-menu">
                     <?php if(isset($_SESSION['privileges']) && in_array("missingResult.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu missingResultMenu"><a href="../program-management/missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+                    <li class="allMenu missingResultMenu"><a href="/program-management/missingResult.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
                     <?php } if(isset($_SESSION['privileges']) && in_array("vlControlReport.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu vlControlReport"><a href="../program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
+                    <li class="allMenu vlControlReport"><a href="/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
                       <?php } ?>
                     <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
                     <?php if(isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu vlResultMenu"><a href="../program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+                    <li class="allMenu vlResultMenu"><a href="/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
                     <?php } if(isset($_SESSION['privileges']) && in_array("vlPrintResult.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu vlPrintResultMenu"><a href="../vl-print/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+                    <li class="allMenu vlPrintResultMenu"><a href="/vl-print/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
                     <?php } if(isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu vlHighMenu"><a href="../program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>
+                    <li class="allMenu vlHighMenu"><a href="/program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>
                     <?php }  if(isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])){ ?>
                     <!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
                     <?php } if(isset($_SESSION['privileges']) && in_array("vlWeeklyReport.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu vlWeeklyReport"><a href="../program-management/vlWeeklyReport.php"><i class="fa fa-circle-o"></i> VL Lab Weekly Report</a></li>
+                    <li class="allMenu vlWeeklyReport"><a href="/program-management/vlWeeklyReport.php"><i class="fa fa-circle-o"></i> VL Lab Weekly Report</a></li>
                     <?php } if(isset($_SESSION['privileges']) && in_array("sampleRejectionReport.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu sampleRejectionReport"><a href="../program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+                    <li class="allMenu sampleRejectionReport"><a href="/program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
                     <?php } if(isset($_SESSION['privileges']) && in_array("vlMonitoringReport.php", $_SESSION['privileges'])){ ?>
-                    <li class="allMenu vlMonitoringReport"><a href="../program-management/vlMonitoringReport.php"><i class="fa fa-circle-o"></i> Sample Monitoring Report</a></li>
+                    <li class="allMenu vlMonitoringReport"><a href="/program-management/vlMonitoringReport.php"><i class="fa fa-circle-o"></i> Sample Monitoring Report</a></li>
                     <?php } ?>
                 </ul>
             </li>
@@ -408,9 +408,9 @@ $formConfigResult=$db->query($formConfigQuery);
             </a>
             <ul class="treeview-menu">
               <?php if(isset($_SESSION['privileges']) && in_array("generate.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu generateQRCode"><a href="../qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
+                <li class="allMenu generateQRCode"><a href="/qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
               <?php } if(isset($_SESSION['privileges']) && in_array("readQRCode.php", $_SESSION['privileges'])){ ?>
-                <li class="allMenu readQRCode"><a href="../qr-code/readQRCode.php"><i class="fa fa-circle-o"></i> Read QR Code</a></li>
+                <li class="allMenu readQRCode"><a href="/qr-code/readQRCode.php"><i class="fa fa-circle-o"></i> Read QR Code</a></li>
               <?php } ?>
             </ul>
           </li>
@@ -426,9 +426,9 @@ $formConfigResult=$db->query($formConfigQuery);
                 </span>
             </a>
             <ul class="treeview-menu">
-              <li class="allMenu vlRequestMenu">
-                    <a href="../eid/requests/eid-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
-                  </li>            
+              <li class="allMenu eidRequestMenu">
+                <a href="/eid/requests/eid-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+              </li>            
             </ul>
         </li>
 
