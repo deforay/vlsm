@@ -119,8 +119,8 @@ foreach ($fResult as $fDetails) {
                                   <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
                                       <?php
-                                        foreach ($implementingPartnerList as $implementingPartner) {
-                                      ?>
+foreach ($implementingPartnerList as $implementingPartner) {
+    ?>
                                         <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                       <?php }?>
                                    </select>
@@ -130,8 +130,8 @@ foreach ($fResult as $fDetails) {
                                     <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose source de financement" style="width:100%;">
                                       <option value=""> -- Sélectionner -- </option>
                                         <?php
-                                            foreach ($fundingSourceList as $fundingSource) {
-                                        ?>
+foreach ($fundingSourceList as $fundingSource) {
+    ?>
                                         <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                         <?php }?>
                                     </select>
@@ -179,7 +179,7 @@ foreach ($fResult as $fDetails) {
                                     <option value='single'> Single </option>
                                     <option value='married'> Married </option>
                                     <option value='cohabitating'> Cohabitating </option>
-                                    
+
                                     </select>
                                </td>
                             </tr>
@@ -206,10 +206,10 @@ foreach ($fResult as $fDetails) {
                                     <option value=''> -- Sélectionner -- </option>
                                     <option value='male'> Male </option>
                                     <option value='female'> Female </option>
-                                    
+
                                     </select>
                                </td>
-                            </tr>   
+                            </tr>
                             <tr>
                                         <th>Age</th>
                                         <td><input type="number" max=9 maxlength="1" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;"  onchange=""/></td>
@@ -221,7 +221,7 @@ foreach ($fResult as $fDetails) {
                                         <td></td>
                                         <th></th>
                                         <td></td>
-                            </tr>                         
+                            </tr>
 
                         </table>
 
@@ -230,13 +230,198 @@ foreach ($fResult as $fDetails) {
                         <br><br>
                         <table class="table" style="width:100%">
                             <tr>
-                               <th colspan=8><h4>2. Management de la mère</h4></th>
-                            </tr>   
+                               <th colspan=6><h4>2. Management de la mère</h4></th>
+                            </tr>
                             <tr>
-                              <th>ARV donnés à la maman pendant la grossesse:</th>
+                              <th colspan=2>ARV donnés à la maman pendant la grossesse:</th>
+                              <td colspan=4>
+                                  <input type="checkbox" name="motherTreatment" value="Nothing" /> Rien <br>
+                                  <input type="checkbox" name="motherTreatment" value="ARV Initiated during Pregnancy" /> ARV débutés durant la grossesse <br>
+                                  <input type="checkbox" name="motherTreatment" value="ARV Initiated prior to Pregnancy"  /> ARV débutés avant la grossesse <br>
+                                  <input type="checkbox" name="motherTreatment" value="ARV at Child Birth"  /> ARV à l’accouchement <br>
+                                  <input type="checkbox" name="motherTreatment" value="Option B plus"  /> Option B plus <br>
+                                  <input type="checkbox" name="motherTreatment" value="AZT/3TC/NVP" /> AZT/3TC/NVP <br>
+                                  <input type="checkbox" name="motherTreatment" value="TDF/3TC/EFV" /> TDF/3TC/EFV <br>
+                                  <input type="checkbox" name="motherTreatment" value="Other" onclick="$('#motherTreatmentOther').prop('disabled', function(i, v) { return !v; });"  /> Autres (à préciser): <input class="form-control" style="max-width:200px;display:inline;" disabled="disabled" placeholder="Autres" type="text" name="motherTreatmentOther" id="motherTreatmentOther" /> <br>
+                                  <input type="checkbox" name="motherTreatment"  value="Unknown" /> Inconnu
+                              </td>
+                            </tr>
+                            <tr>
+                              <th style="vertical-align:middle;">CD4</th>
+                              <td style="vertical-align:middle;">
+                                <div class="input-group">
+                                  <input type="text" class="form-control " id="mothercd4" name="mothercd4" placeholder="CD4" title="CD4" style="width:100%;"  onchange=""/>
+                                  <div class="input-group-addon">/mm3</div>
+                                </div>
+                              </td>
+                              <th style="vertical-align:middle;">Viral Load</th>
+                              <td style="vertical-align:middle;">
+                                <div class="input-group">
+                                  <input type="number" class="form-control " id="motherViralLoadCopiesPerMl" name="motherViralLoadCopiesPerMl" placeholder="Viral Load in copies/mL" title="Viral Load" style="width:100%;"  onchange=""/>
+                                  <div class="input-group-addon">copies/mL</div>
+                                </div>
+                              </td>
+                              <td style="vertical-align:middle;">- OR -</td>
+                              <td style="vertical-align:middle;">
+                              <select class="form-control " name="motherViralLoadText" id="motherViralLoadText">
+                                    <option value=''> -- Sélectionner -- </option>
+                                    <option value='tnd'> Target Not Detected </option>
+                                    <option value='bdl'> Below Detection Limit </option>
+                                    <option value='< 20'> < 20 </option>
+                                    <option value='< 40'> < 40 </option>
+                                    <option value='invalid'> Invalid </option>
+
+                                    </select>
+                              </td>
+                            </tr>
+
+                        </table>
+
+
+
+
+
+
+                        <br><br>
+                        <table class="table" style="width:70%">
+                            <tr>
+                               <th colspan=2><h4>3. Mangement de l’enfant</h4></th>
+                            </tr>
+                            <tr>
+                              <th>Bébé a reçu:<br>(Cocher tout ce qui est reçu, Rien, ou inconnu)</th>
                               <td>
-                            </tr>  
-                        </table>                   
+                                        <input type="checkbox" name="childTreatment" value="Nothing" />&nbsp;Rien &nbsp; &nbsp;&nbsp;&nbsp;
+                                        <input type="checkbox" name="childTreatment" value="AZT"  />&nbsp;AZT &nbsp; &nbsp;&nbsp;&nbsp;
+                                        <input type="checkbox" name="childTreatment" value="NVP"  />&nbsp;NVP &nbsp; &nbsp;&nbsp;&nbsp;
+                                        <input type="checkbox" name="childTreatment" value="Unknown"  />&nbsp;Inconnu &nbsp; &nbsp;&nbsp;&nbsp;
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Bébé a arrêté allaitement maternel ?</th>
+                              <td>
+                                  <select class="form-control" name="hasInfantStoppedBreastfeeding" id="hasInfantStoppedBreastfeeding">
+                                    <option value=''> -- Sélectionner -- </option>
+                                    <option value="yes"> Oui </option>
+                                    <option value="no" /> Non </option>
+                                    <option value="unknown" /> Inconnu </option>
+                                  </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Age (mois) arrêt allaitement :</th>
+                              <td colspan="4">
+                              <input type="number" class="form-control" style="max-width:200px;display:inline;" placeholder="Age (mois) arrêt allaitement" type="text" name="ageBreastfeedingStopped" id="ageBreastfeedingStopped" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Bébé encore allaité?</th>
+                              <td>
+                                  <select class="form-control" name="isInfantStillBeingBreastfed" id="isInfantStillBeingBreastfed">
+                                    <option value=''> -- Sélectionner -- </option>
+                                    <option value="yes"> Oui </option>
+                                    <option value="no" /> Non </option>
+                                    <option value="unknown" /> Inconnu </option>
+                                  </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Choix d’allaitement de bébé :</th>
+                              <td>
+                                        <select class="form-control" name="choiceOfFeeding" id="choiceOfFeeding">
+                                          <option value=''> -- Sélectionner -- </option>
+                                          <option value="Breastfeeding only"> Allaitement seul </option>
+                                          <option value="Milk substitute" /> Substitut de lait </option>
+                                          <option value="Combination" /> Mixte </option>
+                                          <option value="Other" /> Autre </option>
+                                        </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Cotrimoxazole donné au bébé?</th>
+                              <td>
+                                      <select class="form-control" name="choiceOfFeeding" id="choiceOfFeeding">
+                                            <option value=''> -- Sélectionner -- </option>
+                                            <option value="no"> Non </option>
+                                            <option value="Yes, takes CTX everyday" /> Oui, prend CTX chaque jour </option>
+                                            <option value="Starting on CTX today" /> Commence CTX aujourd’hui </option>
+                                          </select>                              
+                                        
+                              </td>
+                            </tr>
+                        </table>
+
+
+
+
+
+
+                        <br><br>
+                        <table class="table" style="width:70%">
+                            <tr>
+                               <th colspan=2><h4>4. Information sur l’échantillon</h4></th>
+                            </tr>
+                            <tr>
+                              <th>Date de collecte</th>
+                              <td>
+                                  <input class="form-control" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de collecte"/>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Tel. du préleveur</th>
+                              <td>
+                                  <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" placeholder="Tel. du préleveur" />
+                              </td>
+                            </tr>
+                            </tr>
+                            <tr>
+                              <th>Nom du demandeur</th>
+                              <td>
+                                  <input class="form-control" type="text" name="sampleRequestorName" id="sampleRequestorName" placeholder="Nom du demandeur" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Raison de la PCR (cocher une):</th>
+                              <td>
+                                  <input type="radio" name="reasonForPCR" value="Nothing" /> Rien <br>
+                                  <input type="radio" name="reasonForPCR" value="First Test for exposed baby" /> 1st test pour bébé exposé <br>
+                                  <input type="radio" name="reasonForPCR" value="First test for sick baby" /> 1st test pour bébé malade <br>
+                                  <input type="radio" name="reasonForPCR" value="Repeat due ti problem with first test" /> Répéter car problème avec 1er test <br>
+                                  <input type="radio" name="reasonForPCR" value="Repeat to confirm the first result" /> Répéter pour confirmer 1er résultat <br>
+                                  <input type="radio" name="reasonForPCR" value="Repeat test once breastfeeding is stopped" /> Répéter test après arrêt allaitement maternel (6 semaines au moins après arrêt allaitement) <br>
+                              </td>
+                            </tr>
+                            <tr>
+                                        <th colspan=2><strong>Pour enfant de 9 mois ou plus</strong></th>
+                            </tr>
+                            <tr>
+                              <th>Test rapide effectué?</th>
+                              <td>
+                                  <select class="form-control" name="rapidTestPerformed" id="rapidTestPerformed">
+                                    <option value=''> -- Sélectionner -- </option>
+                                    <option value="yes"> Oui </option>
+                                    <option value="no" /> Non </option>
+                                  </select>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Si oui, date :</th>
+                              <td>
+                                <input class="form-control" type="text" name="rapidtestDate" id="rapidtestDate" placeholder="Si oui, date" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Résultat test rapide</th>
+                              <td>
+                              <select class="form-control" name="rapidTestResult" id="rapidTestResult">
+                                <option value=''> -- Sélectionner -- </option>
+                                <option value="positive"> Positif </option>
+                                <option value="negative" /> Négatif </option>
+                                <option value="indeterminate" /> Indéterminé </option>
+                              </select>
+                              </td>
+                            </tr>
+                        </table>
+
 
                     </div>
                 </div>
@@ -244,116 +429,61 @@ foreach ($fResult as $fDetails) {
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="box-header with-border">
-                            <h3 class="box-title">B. Réservé au Laboratoire de biologie moléculaire </h3>
+                            <h3 class="box-title">B. Réservé au laboratoire d’analyse </h3>
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <td style="width:25%;"><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></td>
-                                <td style="width:25%;">
-                                    <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" style="width:100%;"/>
-                                </td>
-                                <td style="width:25%;"></td><td style="width:25%;"></td>
-                            </tr>
-                            <?php if (isset($arr['testing_status']) && trim($arr['testing_status']) == "enabled" && $_SESSION['userType'] == '') {?>
-                              <tr>
-                                <td><label for="">Décision prise </label></td>
+                                <th><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></th>
                                 <td>
-                                    <select class="form-control" id="status" name="status" title="Please select décision prise" <?php echo $labFieldDisabled; ?> onchange="checkTestStatus();" style="width:100%;">
-                                    <option value=""> -- Sélectionner -- </option>
-                                      <option value="6"> En attente d'approbation Clinique </option>
-                                      <option value="7">Echantillon accepté</option>
-                                      <option value="4">Echantillon rejeté</option>
-                                    </select>
+                                    <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"/>
                                 </td>
-                                <td></td><td></td>
+                                <td></td>
+                              <td></td>
+                            <tr>
+                              <th>Is Sample Rejected ?</th>
+                              <td>
+                              <select class="form-control" name="result" id="result">
+                                <option value=''> -- Sélectionner -- </option>
+                                <option value="yes"> Oui </option>
+                                <option value="no" /> Non </option>
+                              </select>
+                              </td>
+                            
+                              <th>Reason for Rejection</th>
+                              <td>
+                              <select class="form-control" name="result" id="result">
+                                <option value=''> -- Sélectionner -- </option>
+                                <option value="Technical Problem"> Problème technique </option>
+                                <option value="Poor numbering" /> Mauvaise numérotation </option>
+                                <option value="Insufficient sample" /> Echantillon insuffisant </option>
+                                <option value="Degraded sample or clot" /> Echantillon dégradé ou caillot </option>
+                                <option value="Poor packaging" /> Mauvais empaquetage </option>
+                              </select>
+                              </td>
                               </tr>
-                            <?php }?>
-                            <tr class="rejectionReason" style="display:none;">
-                                <td><label for="rejectionReason">Motifs de rejet <span class="mandatory">*</span></label></td>
-                                <td>
-                                    <select class="form-control" id="rejectionReason" name="rejectionReason" title="Please select motifs de rejet" <?php echo $labFieldDisabled; ?> onchange="checkRejectionReason();" style="width:100%;">
-                                      <option value=""> -- Sélectionner -- </option>
-                                      <?php foreach ($rejectionResult as $rjctReason) {?>
-                                       <option value="<?php echo $rjctReason['rejection_reason_id']; ?>"><?php echo ucwords($rjctReason['rejection_reason_name']); ?></option>
-                                      <?php }if ($sarr['user_type'] != 'vluser') {?>
-                                       <option value="other">Autre</option>
-                                       <?php }?>
-                                    </select>
-                                </td>
-                                <td style="text-align:center;"><label for="newRejectionReason" class="newRejectionReason" style="display:none;">Autre, à préciser <span class="mandatory">*</span></label></td>
-                                <td><input type="text" class="form-control newRejectionReason" id="newRejectionReason" name="newRejectionReason" placeholder="Motifs de rejet" title="Please enter motifs de rejet" <?php echo $labFieldDisabled; ?> style="width:100%;display:none;"/></td>
-                            </tr>
-                            <!-- <tr>
-                                <td><label for="sampleCode">Code Labo </label> <span class="mandatory">*</span></td>
-                                <td>
-                                    <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Code Labo" title="Please enter code labo" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','< ?php echo $sampleCode;?>',this.id,null,'The sample number that you entered already exists. Please try another number',null)"/>
-                                </td>
-                               <td></td><td></td>
-                            </tr> -->
                             <tr>
-                                  <td><label for="labId">Nom du laboratoire </label> </td>
-                                  <td>
-                                      <select name="labId" id="labId" class="form-control" title="Please choose laboratoire" style="width:100%;">
-                                      <option value=""> -- Sélectionner -- </option>
-                                      <?php foreach ($lResult as $labName) {?>
-                                        <option value="<?php echo $labName['facility_id']; ?>" ><?php echo ucwords($labName['facility_name']); ?></option>
-                                        <?php }?>
-                                    </select>
-                                  </td>
-                                  <td></td><td></td>
-                            </tr>
-                            <tr><td colspan="4" style="height:30px;border:none;"></td></tr>
-                            <tr>
-                                <td><label for="">Date de réalisation de la charge virale </label></td>
-                                <td>
-                                    <input type="text" class="form-control dateTime" id="dateOfCompletionOfViralLoad" name="dateOfCompletionOfViralLoad" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réalisation de la charge virale" <?php echo $labFieldDisabled; ?> style="width:100%;"/>
+                                <td style="width:25%;"><label for="">Test effectué le <span class="mandatory">*</span> </label></td>
+                                <td style="width:25%;">
+                                    <input type="text" class="form-control dateTime isRequired" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"/>
                                 </td>
-                                <td></td><td></td>
-                            </tr>
-                            <tr>
-                                <td><label for="testingPlatform">Technique utilisée </label></td>
-                                <td>
-                                    <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" <?php echo $labFieldDisabled; ?> style="width:100%;">
-                                      <option value="">-- Sélectionner --</option>
-                                      <?php foreach ($importResult as $mName) {?>
-                                        <option value="<?php echo $mName['machine_name'] . '##' . $mName['lower_limit'] . '##' . $mName['higher_limit']; ?>"><?php echo $mName['machine_name']; ?></option>
-                                        <?php }?>
-                                    </select>
-                                </td>
-                                <td></td><td></td>
-                            </tr>
-                            <tr class="resultSection">
-                                <td class="vlResult"><label for="vlResult">Résultat </label></td>
-                                <td>
-                                    <input type="text" class="vlResult form-control checkNum" id="vlResult" name="vlResult" placeholder="Résultat (copies/ml)" title="Please enter résultat" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>
-                                    <input type="checkbox" class="specialResults" id="vlLt20" name="vlLt20" value="yes" title="Please check VL value"> < 20<br>
-                                    <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt40" value="yes" title="Please check VL value"> < 40<br>
-                                    <input type="checkbox" class="specialResults" id="vlLt40" name="vlLt400" value="yes" title="Please check VL value"> < 400<br>
-                                    <input type="checkbox" class="specialResults" id="vlTND" name="vlTND" value="yes" title="Please check VL value"> Target Not Detected / Non Détecté
-                                </td>
-                                <td style="text-align:center;"><label for="vlLog">Log </label></td>
-                                <td>
-                                    <input type="text" class="vlLog form-control checkNum" id="vlLog" name="vlLog" placeholder="Log" title="Please enter log" <?php echo $labFieldDisabled; ?> onchange="calculateLogValue(this)" style="width:100%;"/>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td colspan="4"><label class="radio-inline" style="margin:0;padding:0;">A remplir par le service effectuant la charge virale </label></td>
-                            </tr>
-                            <!--<tr><td colspan="4" style="height:30px;border:none;"></td></tr>
-                            <tr>
-                                <td><label for="">Date de remise du résultat </label></td>
-                                <td>
-                                    <input type="text" class="form-control dateTime" id="sampleTestingDateAtLab" name="sampleTestingDateAtLab" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de remise du résultat" < ?php echo $labFieldDisabled; ?> onchange="checkSampleTestingDate();" style="width:100%;"/>
-                                </td>
-                                <td></td><td></td>
-                            </tr>-->
+                                
+                            
+                              <th>Résultat</th>
+                              <td>
+                              <select class="form-control" name="result" id="result">
+                                <option value=''> -- Sélectionner -- </option>
+                                <option value="positive"> Positif </option>
+                                <option value="negative" /> Négatif </option>
+                                <option value="indeterminate" /> Indéterminé </option>
+                              </select>
+                              </td>
+                            </tr>                            
+                            
                         </table>
                     </div>
                 </div>
                 <?php }?>
-                <div class="box-header with-border">
-                  <label class="radio-inline" style="margin:0;padding:0;">1. Biffer la mention inutile <br>2. Sélectionner un seul régime de traitement </label>
-                </div>
+                
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -630,7 +760,7 @@ foreach ($fResult as $fDetails) {
   $(document).ready(function(){
 
 
-      
+
 
     $('#vlResult, #vlLog').on('input',function(e){
       if(this.value != ''){
