@@ -123,8 +123,8 @@ if(sizeof($requestResult)> 0){
           }
           $sampleDisbatchDate='';
           $sampleDisbatchTime='';
-          if(isset($result['result_disbatched_datetime']) && trim($result['result_disbatched_datetime'])!='' && $result['result_disbatched_datetime']!='0000-00-00 00:00:00'){
-               $expStr=explode(" ",$result['result_disbatched_datetime']);
+          if(isset($result['result_dispatched_datetime']) && trim($result['result_dispatched_datetime'])!='' && $result['result_dispatched_datetime']!='0000-00-00 00:00:00'){
+               $expStr=explode(" ",$result['result_dispatched_datetime']);
                $sampleDisbatchDate=$general->humanDateFormat($expStr[0]);
                $sampleDisbatchTime =$expStr[1];
           }
