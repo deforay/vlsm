@@ -113,7 +113,13 @@ try {
                         preg_match_all('!\d+!', $absVal, $absDecimalVal);
                         $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
                     } else {
-                        if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
+                        if(strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false){
+                            $txtVal = "Below Detection Limit";
+                            $resultFlag = "";
+                            $absVal = "";
+                            $logVal = "";
+                        }
+                        else if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
                             //$txtVal =  $sheetData[$flagCol];
                             $txtVal = "Failed";
                             $resultFlag = $sheetData[$flagCol];

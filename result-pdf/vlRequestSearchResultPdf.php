@@ -46,8 +46,11 @@ if(isset($_POST['newData']) && $_POST['newData']!=''){
 }
 if(isset($_POST['id']) && trim($_POST['id'])!=''){
   if(isset($_POST['resultMail'])){
-    $searchQuery="SELECT vl.*,f.*,rst.*,l.facility_name as labName,l.facility_logo as facilityLogo,rsrr.rejection_reason_name 
+    $searchQuery="SELECT vl.*,f.*,rst.*,vltr.test_reason_name,l.facility_name as labName,
+                  l.facility_logo as facilityLogo,
+                  rsrr.rejection_reason_name 
                   FROM vl_request_form as vl 
+                  LEFT JOIN r_vl_test_reasons as vltr ON vl.reason_for_vl_testing = vltr.test_reason_id 
                   LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                   LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.sample_type 
                   LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
@@ -59,7 +62,7 @@ if(isset($_POST['id']) && trim($_POST['id'])!=''){
 }else{
   $searchQuery = $allQuery;
 }
-//error_log($searchQuery);
+//echo($searchQuery);die;
 $requestResult=$db->query($searchQuery);
 $_SESSION['nbPages'] = sizeof($requestResult);
 $_SESSION['aliasPage'] = 1;
@@ -246,4 +249,3 @@ if($arr['vl_form']==1){
  }else if($arr['vl_form']==8){
    include('resultPdfAng.php');
  }
-?>
