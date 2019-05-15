@@ -113,13 +113,6 @@ try {
     }else{
         $_POST['sampleReceivedDate'] = NULL;
     }
-
-    if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!=""){
-        $sampleReceivedDateLab = explode(" ",$_POST['sampleReceivedDate']);
-        $_POST['sampleReceivedDate']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];
-    }else{
-        $_POST['sampleReceivedDate'] = NULL;
-    }
     if(isset($_POST['sampleTestingDateAtLab']) && trim($_POST['sampleTestingDateAtLab'])!=""){
         $sampleReceivedDateLab = explode(" ",$_POST['sampleTestingDateAtLab']);
         $_POST['sampleTestingDateAtLab']=$general->dateFormat($sampleReceivedDateLab[0])." ".$sampleReceivedDateLab[1];

@@ -1,6 +1,7 @@
 <?php
 $title = "VLSM | Print VL Results";
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 //include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
@@ -648,7 +649,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
       $.blockUI();
       <?php
       $path = '';
-      $path = '../result-pdf/vlRequestSearchResultPdf.php';
+      $path = '/result-pdf/vlRequestSearchResultPdf.php';
       ?>
       $.post("<?php echo $path; ?>", { source:'print', id : id,newData:newData},
       function(data){

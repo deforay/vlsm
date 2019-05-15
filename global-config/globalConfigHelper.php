@@ -170,6 +170,13 @@ try {
         }
     }
     $_SESSION['alertMsg'] = "Global Config values updated successfully";
+
+    //Add event log
+    $eventType = 'general-config-update';
+    $action = ucwords($_SESSION['userName']).' updated general config';
+    $resource = 'general-config';
+
+    $general->activityLog($eventType,$action,$resource);    
     header("location:globalConfig.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());

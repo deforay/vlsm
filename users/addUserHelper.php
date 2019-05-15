@@ -67,6 +67,14 @@ try {
 
         $_SESSION['alertMsg'] = "User details added successfully";
     }
+
+    //Add event log
+    $eventType = 'user-add';
+    $action = ucwords($_SESSION['userName']).' added user '. $_POST['userName'];
+    $resource = 'user';
+
+    $general->activityLog($eventType,$action,$resource);
+
     header("location:users.php");
 
 } catch (Exception $exc) {
