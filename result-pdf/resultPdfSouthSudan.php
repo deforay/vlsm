@@ -361,6 +361,11 @@ if(sizeof($requestResult)> 0){
           if($result['reason_for_sample_rejection']!=''){
                $html .='<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">&nbsp;&nbsp;Rejection Reason&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;'.$result['rejection_reason_name'].'</td></tr>';
           }
+          if(strtolower($result['vl_test_platform']) == 'abbott'){
+            $html .='<tr>';
+            $html .='<td colspan="3" style="line-height:8px;font-size:10px;padding-top:10px;">Abbott Linear Detection range: 839 copies/ml - 10 million copies/ml</td>';
+            $html .='</tr>';
+          }          
           $html .='<tr><td colspan="3"></td></tr>';
           $html .='</table>';
           $html .='</td>';
@@ -396,23 +401,25 @@ if(sizeof($requestResult)> 0){
           $html .='<td colspan="3" style="line-height:14px;"></td>';
           $html .='</tr>';
           $html .='<tr>';
-          $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">TEST PLATFORM&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.ucwords($result['vl_test_platform']).'</span></td>';
+          $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">TEST PLATFORM &nbsp;&nbsp;:&nbsp;&nbsp; <span style="font-weight:normal;">'.ucwords($result['vl_test_platform']).'</span></td>';
           $html .='</tr>';
           $html .='<tr>';
           $html .='<td colspan="3" style="line-height:8px;"></td>';
           $html .='</tr>';
-          $html .='<tr>';
-          $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">PREVIOUS RESULTS</td>';
-          $html .='</tr>';
-          $html .='<tr>';
-          $html .='<td colspan="3" style="line-height:8px;"></td>';
-          $html .='</tr>';
-          $html .='<tr>';
-          $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Date of Last Viral Load Test&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_date'].'</span></td>';
-          $html .='</tr>';
-          $html .='<tr>';
-          $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Result of previous viral load(copies/ml)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_result'].'</span></td>';
-          $html .='</tr>';
+          if(isset($result['last_viral_load_result']) && $result['last_viral_load_result'] != null){          
+            $html .='<tr>';
+            $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">PREVIOUS RESULTS</td>';
+            $html .='</tr>';
+            $html .='<tr>';
+            $html .='<td colspan="3" style="line-height:8px;"></td>';
+            $html .='</tr>';
+            $html .='<tr>';
+            $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Date of Last Viral Load Test&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_date'].'</span></td>';
+            $html .='</tr>';
+            $html .='<tr>';
+            $html .='<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Result of previous viral load(copies/ml)&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">'.$result['last_viral_load_result'].'</span></td>';
+            $html .='</tr>';
+          }
           $html .='<tr>';
           $html .='<td colspan="3" style="line-height:8px;border-bottom:2px solid #d3d3d3;"></td>';
           $html .='</tr>';
