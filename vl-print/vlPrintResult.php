@@ -669,7 +669,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
     $.blockUI();
     <?php
     $path = '';
-    $path = '../result-pdf/vlRequestSearchResultPdf.php';
+    $path = '/result-pdf/vlRequestSearchResultPdf.php';
     ?>
 		if(newData==null)
 		{

@@ -45,7 +45,7 @@ if(isset($_POST['newData']) && $_POST['newData']!=''){
   $allQuery = $_SESSION['vlRequestSearchResultQuery'];
 }
 if(isset($_POST['id']) && trim($_POST['id'])!=''){
-  if(isset($_POST['resultMail'])){
+  //if(isset($_POST['resultMail'])){
     $searchQuery="SELECT vl.*,f.*,rst.*,vltr.test_reason_name,l.facility_name as labName,
                   l.facility_logo as facilityLogo,
                   rsrr.rejection_reason_name 
@@ -56,9 +56,9 @@ if(isset($_POST['id']) && trim($_POST['id'])!=''){
                   LEFT JOIN facility_details as l ON l.facility_id=vl.lab_id 
                   LEFT JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection 
                   WHERE vl.vl_sample_id IN(".$_POST['id'].")";
-  }else{
-    $searchQuery = $query." and vl.vl_sample_id IN(".$_POST['id'].")";
-  }
+  //}else{
+  //  $searchQuery = $query." and vl.vl_sample_id IN(".$_POST['id'].")";
+  //}
 }else{
   $searchQuery = $allQuery;
 }

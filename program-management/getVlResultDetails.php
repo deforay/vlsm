@@ -107,7 +107,9 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           * Get data to display
           */
           $aWhere = '';
-          $sQuery="SELECT vl.sample_code,
+          $sQuery="SELECT 
+                        vl.vl_sample_id,
+                        vl.sample_code,
                         vl.remote_sample_code,
                         vl.patient_art_no,
                         vl.patient_first_name,

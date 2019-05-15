@@ -102,7 +102,7 @@ $_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
     $.blockUI();
     <?php
     $path = '';
-    $path = '../result-pdf/vlRequestSearchResultPdf.php';
+    $path = '/result-pdf/vlRequestSearchResultPdf.php';
     ?>
     $.post("<?php echo $path; ?>", { source:'print',id : ''},
       function(data){
