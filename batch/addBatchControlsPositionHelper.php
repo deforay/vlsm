@@ -1,8 +1,8 @@
 <?php
 ob_start();
 session_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-//include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tableName="batch_details";
 try {
     $labelOrder = '';
@@ -16,7 +16,7 @@ try {
         $data=array('label_order'=>$labelOrder);
         $db=$db->where('batch_id',$_POST['batchId']);
         $db->update($tableName,$data);
-        $_SESSION['alertMsg']="Batch Controls Position added successfully";
+        $_SESSION['alertMsg']="Batch Position saved successfully";
         header("location:batchcode.php");
     }else{
         header("location:batchcode.php");

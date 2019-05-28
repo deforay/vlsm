@@ -1322,6 +1322,7 @@ class MysqliDb
 
         $this->_query = $operation . " " . implode(' ', $this->_queryOptions) . " INTO " . self::$prefix . $tableName;
         $stmt = $this->_buildQuery(null, $insertData);
+        
         $status = $stmt->execute();
         $this->_stmtError = $stmt->error;
         $this->_stmtErrno = $stmt->errno;

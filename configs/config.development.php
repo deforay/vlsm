@@ -30,4 +30,4 @@ $interfaceConfig['dbName'] = 'interfacing';
 $interfaceConfig['dbPort'] = 3306;
 
 // Enable/Disable EID 
-$eidConfig['enabled'] = false;
+$eidConfig['enabled'] = true;

@@ -54,19 +54,37 @@ if(!isset($_SESSION['userId'])){
 
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/',$link);
-if(end($link_array)!='error.php' && end($link_array)!='vlResultUnApproval.php' && end($link_array)!='editProfile.php' && end($link_array)!='importedStatistics.php' && end($link_array)!='vlExportField.php'){
-  if(isset($_SESSION['privileges']) && !in_array(end($link_array), $_SESSION['privileges'])){
-    header("location:".DOMAIN."/error/error.php");
+
+$currentFileName = end($link_array);
+
+// These files don't need privileges because they are common or intermediary files
+$skipPrivilegeCheckFiles = array('error.php', 
+                                 'vlResultUnApproval.php', 
+                                 'editProfile.php', 
+                                 'importedStatistics.php', 
+                                 'vlExportField.php');
+
+$sharedPrivileges = array(
+                        'eid-add-batch-position.php' => 'eid-add-batch.php',
+                        'eid-edit-batch-position.php' => 'eid-edit-batch.php',
+                      );
+
+// Does the current file share privileges with another privilege ?
+$currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
+
+if(!in_array($currentFileName, $skipPrivilegeCheckFiles)){
+  if(isset($_SESSION['privileges']) && !in_array($currentFileName, $_SESSION['privileges'])){
+    header("location:/error/error.php");
   }
 }
-if(isset($_SERVER['HTTP_REFERER'])){
-  $previousUrl = $_SERVER['HTTP_REFERER'];
-  $urlLast = explode('/',$previousUrl);
-  if(end($urlLast)=='importedStatistics.php'){
-      $db->delete('temp_sample_import');
-      unset($_SESSION['controllertrack']);
-  }
-}
+// if(isset($_SERVER['HTTP_REFERER'])){
+//   $previousUrl = $_SERVER['HTTP_REFERER'];
+//   $urlLast = explode('/',$previousUrl);
+//   if(end($urlLast)=='importedStatistics.php'){
+//       $db->delete('temp_sample_import');
+//       unset($_SESSION['controllertrack']);
+//   }
+// }
 if(isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('roles.php', 'users.php','facilities.php','globalConfig.php','importConfig.php','otherConfig.php'))) {
   $allAdminMenuAccess = true;
 }else{
@@ -198,7 +216,7 @@ $formConfigResult=$db->query($formConfigQuery);
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="<?php echo DOMAIN; ?>/assets/img/default-user.png" class="user-image" alt="User Image">
+              <img src="/assets/img/default-user.png" class="user-image" alt="User Image">
               <span class="hidden-xs"><?php if(isset($_SESSION['userName'])){ echo $_SESSION['userName']; } ?></span>
             </a>
             <ul class="dropdown-menu">
@@ -417,7 +435,7 @@ $formConfigResult=$db->query($formConfigQuery);
         <?php } ?>
         <?php if(isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
         <li class="header">EARLY INFANT DIAGNOSIS (EID)</li>
-        <li class="treeview request" style="<?php echo $hideRequest;?>">
+        <li class="treeview eidRequest" style="<?php echo $hideRequest;?>">
             <a href="#">
                 <i class="fa fa-edit"></i>
                 <span>Request Management</span>
@@ -428,7 +446,13 @@ $formConfigResult=$db->query($formConfigQuery);
             <ul class="treeview-menu">
               <li class="allMenu eidRequestMenu">
                 <a href="/eid/requests/eid-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
-              </li>            
+              </li>
+              <li class="allMenu addEidRequestMenu">
+                <a href="/eid/requests/eid-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+              </li>
+              <li class="allMenu eidBatchCodeMenu">
+                    <a href="/eid/batch/eid-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+              </li>              
             </ul>
         </li>
 

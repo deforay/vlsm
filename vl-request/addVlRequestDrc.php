@@ -650,7 +650,7 @@
         provinceName = false;
       }
     if(cName!='' && facilityName){
-      $.post("../includes/getFacilityForClinic.php", { cName : cName},
+      $.post("/includes/getFacilityForClinic.php", { cName : cName},
       function(data){
           if(data != ""){
             details = data.split("###");
@@ -776,7 +776,7 @@
     if(flag){
       $.blockUI();
       <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-      insertSampleCode('addVlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
+      insertSampleCode('addEIDRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
       <?php }else{ ?>
           document.getElementById('addVlRequestForm').submit();
       <?php } ?>

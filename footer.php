@@ -339,11 +339,29 @@ if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $
     $(".qr").addClass('active');
     $(".allMenu").removeClass('active');
     $(".generateQRCode").addClass('active');
-  }else if (splitsUrl=='readQRCode.php' || splitsUrl=='vlRequestRwdForm.php') {
+  }
+  else if (splitsUrl=='readQRCode.php' || splitsUrl=='vlRequestRwdForm.php') {
     $(".qr").addClass('active');
     $(".allMenu").removeClass('active');
     $(".readQRCode").addClass('active');
-  }else{
+  }
+  else if (splitsUrl=='eid-requests.php') {
+    $(".allMenu").removeClass('active');
+    $(".eidRequest").addClass('active');
+    $(".eidRequestMenu").addClass('active');
+  }
+  else if (splitsUrl=='eid-add-request.php') {
+    $(".allMenu").removeClass('active');
+    $(".eidRequest").addClass('active');
+    $(".addEidRequestMenu").addClass('active');
+  }
+  else if (splitsUrl=='eid-batches.php' || splitsUrl=='eid-add-batch.php' || splitsUrl=='eid-edit-batch.php' || splitsUrl == 'eid-add-batch-position.php' || splitsUrl == 'eid-edit-batch-position.php') {
+    $(".allMenu").removeClass('active');
+    $(".eidRequest").addClass('active');
+    $(".eidBatchCodeMenu").addClass('active');
+  }
+  
+  else{
     $(".allMenu").removeClass('active');
     $(".dashboardMenu").addClass('active');
   }

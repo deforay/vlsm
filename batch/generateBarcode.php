@@ -9,6 +9,18 @@ include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 $id=base64_decode($_POST['id']);
 
+
+if (isset($_POST['type']) && $_POST['type'] == 'vl') {
+    $refTable = "vl_request_form";
+    $refPrimaryColumn = "vl_sample_id";
+    $patientIdColumn = 'patient_art_no';
+} else if (isset($_POST['type']) && $_POST['type'] == 'eid') {
+    $refTable = "eid_form";
+    $refPrimaryColumn = "eid_id";
+    $patientIdColumn = 'child_id';
+}
+
+
 $barcodeFormat = $general->getGlobalConfig('barcode_format');
 
 $barcodeFormat = isset($barcodeFormat) && $barcodeFormat != null ? $barcodeFormat : 'C39+';
@@ -26,7 +38,7 @@ if($id >0){
     $bQuery="SELECT * from batch_details as b_d INNER JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
     $bResult=$db->query($bQuery);
     
-    $dateQuery="SELECT sample_tested_datetime,result_reviewed_datetime from vl_request_form where sample_batch_id='".$id."' AND (sample_tested_datetime IS NOT NULL AND sample_tested_datetime!= '' AND sample_tested_datetime!= '00000-00-00 00:00:00') LIMIT 1";
+    $dateQuery="SELECT sample_tested_datetime,result_reviewed_datetime from $refTable where sample_batch_id='".$id."' AND (sample_tested_datetime IS NOT NULL AND sample_tested_datetime!= '' AND sample_tested_datetime!= '00000-00-00 00:00:00') LIMIT 1";
     $dateResult=$db->query($dateQuery);
     $resulted = '';
     $reviewed = '';
@@ -134,8 +146,8 @@ if($id >0){
                     <td align="center" width="20%"><strong>Sample ID</strong></td>
                     <td align="center" width="35%"><strong>Barcode</strong></td>
                     <td align="center" width="13%"><strong>Patient Code</strong></td>
-                    <td align="center" width="13%"><strong>LOT NO <br>DATE</strong></td>
-                    <td align="center" width="13%"><strong>VL Result</strong></td>
+                    <td align="center" width="13%"><strong>Lot No. / <br>Expiration Date</strong></td>
+                    <td align="center" width="13%"><strong>Test Result</strong></td>
                 </tr>
             </thead>';
     $tbl.='</table>';
@@ -148,7 +160,7 @@ if($id >0){
             }
             $xplodJsonToArray = explode("_",$jsonToArray[$j]);
             if(count($xplodJsonToArray)>1 && $xplodJsonToArray[0] == "s"){
-                $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date,patient_art_no from vl_request_form where vl_sample_id=$xplodJsonToArray[1]";
+                $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date,$patientIdColumn from $refTable where $refPrimaryColumn =$xplodJsonToArray[1]";
                 $sampleResult=$db->query($sampleQuery);
                 
                 $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], $barcodeFormat, '', '','' ,15, 1,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
@@ -166,7 +178,7 @@ if($id >0){
                 $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
                 $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
                 $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['patient_art_no'].'</td>';
+                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0][$patientIdColumn].'</td>';
                 $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
                 $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['result'].'</td>';
                 $tbl.='</tr>';
@@ -237,7 +249,7 @@ if($id >0){
             }
         }
         $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
-        $sQuery="SELECT sample_code,lot_number,lot_expiration_date,result,patient_art_no from vl_request_form where sample_batch_id=$id";
+        $sQuery="SELECT sample_code,lot_number,lot_expiration_date,result,$patientIdColumn from $refTable where sample_batch_id=$id";
         $result=$db->query($sQuery);
         foreach($result as $sample){
             if($pdf->getY()>=250){
@@ -259,7 +271,7 @@ if($id >0){
             $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
             $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['sample_code'].'</td>';
             $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['patient_art_no'].'</td>';
+            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample[$patientIdColumn].'</td>';
             $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
             $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['result'].'</td>';
             $tbl.='</tr>';
