@@ -10,11 +10,13 @@ class General
 
     protected $db = null;
 
-    public function __construct($db = null) {
+    public function __construct($db = null)
+    {
         $this->db = $db;
     }
 
-    public static function generateRandomString($length = 8, $seeds = 'alphanum') {
+    public static function generateRandomString($length = 8, $seeds = 'alphanum')
+    {
         // Possible seeds
         $seedings['alpha'] = 'abcdefghijklmnopqrstuvwqyz';
         $seedings['numeric'] = '0123456789';
@@ -28,7 +30,7 @@ class General
 
         // Seed generator
         list($usec, $sec) = explode(' ', microtime());
-        $seed = (float) $sec + ((float) $usec * 100000);
+        $seed = (float)$sec + ((float)$usec * 100000);
         mt_srand($seed);
 
         // Generate
@@ -36,13 +38,15 @@ class General
         $seeds_count = strlen($seeds);
 
         for ($i = 0; $length > $i; $i++) {
-            $str .= $seeds{mt_rand(0, $seeds_count - 1)};
+            $str .= $seeds{
+            mt_rand(0, $seeds_count - 1)};
         }
 
         return $str;
     }
 
-    public function generateUserID() {
+    public function generateUserID()
+    {
         $idOne = $this->generateRandomString(8);
         $idTwo = $this->generateRandomString(4);
         $idThree = $this->generateRandomString(4);
@@ -55,7 +59,9 @@ class General
      * Used to format date from dd-mmm-yyyy to yyyy-mm-dd for storing in database
      *
      */
-    public function dateFormat($date) {
+    public function dateFormat($date)
+    {
+        $date = trim($date);
         if (!isset($date) || $date == null || $date == "" || $date == "0000-00-00") {
             return "0000-00-00";
         } else {
@@ -76,40 +82,59 @@ class General
         }
     }
 
-    public function humanDateFormat($date) {
-
+    public function humanDateFormat($date)
+    {
+        $date = trim($date);
         if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
             return "";
         } else {
-            $dateArray = explode('-', $date);
+
+            $dateTimeArray = explode(' ', $date);
+
+            $dateArray = explode('-', $dateTimeArray[0]);
             $newDate = $dateArray[2] . "-";
 
             $monthsArray = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
             $mon = $monthsArray[$dateArray[1] - 1];
 
-            return $newDate .= $mon . "-" . $dateArray[0];
-        }
-    }
+            $newDate .= $mon . "-" . $dateArray[0];
 
-    public function getZendDateFormat($date) {
-
-        if ($date == null || $date == "" || $date == "0000-00-00") {
-            return "";
-        } else {
-            $dateArray = explode('-', $date);
-
-            $newDate = new Zend_date(array('year' => $dateArray[0], 'month' => $dateArray[1], 'day' => $dateArray[2]));
+            if (isset($dateTimeArray[1]) && $dateTimeArray[1] != '') {
+                $newDate .= " " . $dateTimeArray[1];
+            }
 
             return $newDate;
         }
     }
 
-    public static function getDateTime() {
+    public function getDbDateFormat($date) {
+
+        if ($date == null || $date == "" || $date == "0000-00-00" || substr($date, 0, strlen("0000-00-00")) === "0000-00-00") {
+            return "";
+        } else {
+
+            $dateTimeArray = explode(' ', $date);
+
+            $dateArray = explode('-', $dateTimeArray[0]);
+
+            $newDate = new Zend_date(array('year' => $dateArray[0], 'month' => $dateArray[1], 'day' => $dateArray[2]));
+
+            if (isset($dateTimeArray[1]) && $dateTimeArray[1] != '') {
+                $newDate .= " " . $dateTimeArray[1];
+            }
+
+            return $newDate;
+        }
+    }
+
+    public static function getDateTime()
+    {
         $date = new DateTime(date('Y-m-d H:i:s'));
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function removeDirectory($dirname) {
+    public function removeDirectory($dirname)
+    {
         // Sanity check
         if (!file_exists($dirname)) {
             return false;
@@ -138,7 +163,8 @@ class General
     }
 
     // get data from the system_config table from database
-    public function getSystemConfig($name = null) {
+    public function getSystemConfig($name = null)
+    {
         if ($this->db == null) {
             return false;
         }
@@ -168,7 +194,8 @@ class General
     }
 
     // get data from the global_config table from database
-    public function getGlobalConfig($name = null) {
+    public function getGlobalConfig($name = null)
+    {
 
         if ($this->db == null) {
             return false;
@@ -198,7 +225,8 @@ class General
         }
     }
 
-    public function fetchDataFromTable($tableName = null, $condition = null, $fieldName = null) {
+    public function fetchDataFromTable($tableName = null, $condition = null, $fieldName = null)
+    {
         if ($this->db == null || $tableName == null) {
             return false;
         }
@@ -252,12 +280,12 @@ class General
             $output = base64_encode($output);
         } else if ($action == 'decrypt') {
             $output = openssl_decrypt(base64_decode($inputString), $encrypt_method, $key, 0, $iv);
-
         }
         return $output;
     }
 
-    public function activityLog($eventType, $action, $resource) {
+    public function activityLog($eventType, $action, $resource)
+    {
 
         $ipaddress = '';
         if (isset($_SERVER['HTTP_CLIENT_IP'])) {
@@ -287,7 +315,8 @@ class General
         $this->db->insert('activity_log', $data);
     }
 
-    public function resultImportStats($numberOfResults, $importMode, $importedBy) {
+    public function resultImportStats($numberOfResults, $importMode, $importedBy)
+    {
 
         $data = array(
             'no_of_results_imported' => $numberOfResults,
@@ -299,7 +328,8 @@ class General
         $this->db->insert('result_import_stats', $data);
     }
 
-    public function getLowVLResultTextFromImportConfigs($machineFile = null){
+    public function getLowVLResultTextFromImportConfigs($machineFile = null)
+    {
         if ($this->db == null) {
             return false;
         }
@@ -308,37 +338,34 @@ class General
             $importConfigQuery = "SELECT low_vl_result_text from import_config";
         } else {
             $importConfigQuery = "SELECT low_vl_result_text from import_config WHERE `import_machine_file_name` = '$machineFile'";
-        }  
-        
+        }
+
         $importConfigResult = $this->db->query($importConfigQuery);
         $lowVlResults = array();
-        foreach($importConfigResult as $row){
-            if($row['low_vl_result_text'] != ""){
+        foreach ($importConfigResult as $row) {
+            if ($row['low_vl_result_text'] != "") {
                 $lowVlResults[] = $row['low_vl_result_text'];
             }
         }
 
-        return implode(", ",$lowVlResults);
-        
-        
+        return implode(", ", $lowVlResults);
     }
 
-    public function getFacilitiesByUser($userId = null){
-        
-        $fQuery="SELECT * FROM facility_details where status='active'";
+    public function getFacilitiesByUser($userId = null)
+    {
+
+        $fQuery = "SELECT * FROM facility_details where status='active'";
 
         $facilityWhereCondition = '';
 
-        if(!empty($userId)){    
+        if (!empty($userId)) {
             $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT `facility_id` ORDER BY `facility_id` SEPARATOR ',') as `facility_id` FROM vl_user_facility_map WHERE user_id='" . $userId . "'";
             $userfacilityMapresult = $this->db->rawQuery($userfacilityMapQuery);
             if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-              $facilityWhereCondition = " AND facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") ";
+                $facilityWhereCondition = " AND facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ") ";
             }
         }
 
-        return $this->db->rawQuery($fQuery . $facilityWhereCondition . " ORDER BY facility_name ASC"); 
-
+        return $this->db->rawQuery($fQuery . $facilityWhereCondition . " ORDER BY facility_name ASC");
     }
-
 }

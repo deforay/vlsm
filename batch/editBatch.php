@@ -3,7 +3,8 @@ ob_start();
 
 $title = "VLSM | Edit Batch";
 
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 //global config
 $configQuery="SELECT value FROM global_config WHERE name ='vl_form'";

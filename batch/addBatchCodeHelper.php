@@ -1,8 +1,8 @@
 <?php
 ob_start();
 session_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-//include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/General.php');
 $general=new General($db);
 
@@ -17,6 +17,7 @@ try {
                             'machine'=>$_POST['platform'],
                             'batch_code'=>$_POST['batchCode'],
                             'batch_code_key'=>$_POST['batchCodeKey'],
+                            'test_type'=>'vl',
                             'request_created_datetime'=>$general->getDateTime()
                             );
                             

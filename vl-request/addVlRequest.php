@@ -235,31 +235,31 @@ if ($arr['vl_form'] == 1) {
                                                     }
                                                 }
 
-                                                function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt){
-                                                    if($.trim($("#"+id).val())!=''){
-                                                        $.blockUI();
-                                                        $.post("../includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
-                                                        function(data){
-                                                                if(data!= 0){
-                                                                    <?php if ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'standalone') {?>
-                                                                        alert(alrt);
-                                                                        $("#"+id).val('');
-                                                                        <?php if ($arr['vl_form'] == '3') {?>
-                                                                            $("#sampleCodeValue").html('').hide();
-                                                                            <?php }} else {?>
-                                                                                    data = data.split("##");
-                                                                                    document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
-                                                                                    <?php }?>
-                                                                            }
-                                                                        });
-                                                                        $.unblockUI();
-                                                                    }
-                                                                }
+    function checkSampleNameValidation(tableName,fieldName,id,fnct,alrt){
+        if($.trim($("#"+id).val())!=''){
+            $.blockUI();
+            $.post("/includes/checkSampleDuplicate.php", { tableName: tableName,fieldName : fieldName ,value : $("#"+id).val(),fnct : fnct, format: "html"},
+            function(data){
+                    if(data!= 0){
+                        <?php if ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'standalone') {?>
+                            alert(alrt);
+                            $("#"+id).val('');
+                            <?php if ($arr['vl_form'] == '3') {?>
+                                $("#sampleCodeValue").html('').hide();
+                                <?php }} else {?>
+                                        data = data.split("##");
+                                        document.location.href = "editVlRequest.php?id="+data[0]+"&c="+data[1];
+                                        <?php }?>
+                                }
+                            });
+                            $.unblockUI();
+                        }
+    }
 
                                                                 function insertSampleCode(formId,vlSampleId,sampleCode,sampleCodeKey,sampleCodeFormat,countryId,sampleCollectionDate,provinceCode=null,provinceId=null)
                                                                 {
                                                                 $.blockUI();
-                                                                $.post("../includes/insertNewSample.php", { sampleCode : $("#"+sampleCode).val(),sampleCodeKey: $("#"+sampleCodeKey).val(),sampleCodeFormat: $("#"+sampleCodeFormat).val(),countryId:countryId,sampleCollectionDate:$("#"+sampleCollectionDate).val(),provinceCode:provinceCode,provinceId:provinceId},
+                                                                $.post("/includes/insertNewSample.php", { sampleCode : $("#"+sampleCode).val(),sampleCodeKey: $("#"+sampleCodeKey).val(),sampleCodeFormat: $("#"+sampleCodeFormat).val(),countryId:countryId,sampleCollectionDate:$("#"+sampleCollectionDate).val(),provinceCode:provinceCode,provinceId:provinceId},
                                                                 function(data){
                                                                     if(data>0){
                                                                         $.unblockUI();

@@ -447,7 +447,7 @@ if(sizeof($requestResult)> 0){
           $html .='<tr>';
           $html .='<td style="line-height:11px;font-size:11px;text-align:left;">'.$resultApprovedBy.'</td>';
           if(!empty($userSignaturePath) && file_exists($userSignaturePath)){
-            $html .='<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$userSignaturePath.'" style="width:100px;" /></td>';
+            $html .='<td style="line-height:11px;font-size:11px;text-align:left;"><img src="'.$userSignaturePath.'" style="width:70px;" /></td>';
           }else{
             $html .='<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
           }

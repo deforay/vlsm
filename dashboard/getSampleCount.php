@@ -17,7 +17,7 @@ $start_date = date('Y-m-d', strtotime('-7 days'));
 $u = $general->getSystemConfig('user_type');
 
 if($u != 'remoteuser'){
-    $whereCondition = " vl.result_status != 9 AND ";
+    $whereCondition = " AND vl.result_status != 9 ";
 }else{
     $whereCondition = "";
     //get user facility map ids

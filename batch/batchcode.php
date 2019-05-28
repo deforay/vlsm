@@ -2,7 +2,8 @@
 
 $title = "VLSM | Manage Batch";
 
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+include_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -109,6 +110,7 @@ include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
             "bServerSide": true,
             "sAjaxSource": "getBatchCodeDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
+              aoData.push({"name": "type", "value": "vl"});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -122,12 +124,12 @@ include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
   } );
   
   function generateBarcode(bId){
-    $.post("generateBarcode.php",{id:bId},
+    $.post("/batch/generateBarcode.php",{id:bId,type:'vl'},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate barcode');
 	  }else{
-	      window.open('.././uploads/barcode/'+data,'_blank');
+	      window.open('/uploads/barcode/'+data,'_blank');
 	  }
 	  
       });
@@ -162,10 +164,10 @@ include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
   {
     var conf = confirm("Are you sure you want to delete Batch : "+batchCode+"?\nThis action cannot be undone.");
     if(conf){
-    $.post("deleteBatchCode.php",{id:bId},
+    $.post("/batch/deleteBatchCode.php",{id:bId, type: 'vl'},
       function(data){
         if(data==1){
-          alert("Batch deleted successfully!");
+          alert("Batch deleted");
         }else{
           alert("Something went wrong. Please try again!");
         }

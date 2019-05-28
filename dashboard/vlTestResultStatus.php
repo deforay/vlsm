@@ -240,11 +240,11 @@ $batResult = $db->rawQuery($batQuery);
             "bServerSide": true,
             "sAjaxSource": "getVLTestResultStatusDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-	      aoData.push({"name": "status", "value": "<?php echo $id; ?>"});
-	      aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
-	      aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
-	      aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
-	      aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
+              aoData.push({"name": "status", "value": "<?php echo $id; ?>"});
+              aoData.push({"name": "batchCode", "value": $("#batchCode").val()});
+              aoData.push({"name": "sampleCollectionDate", "value": $("#sampleCollectionDate").val()});
+              aoData.push({"name": "facilityName", "value": $("#facilityName").val()});
+              aoData.push({"name": "sampleType", "value": $("#sampleType").val()});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",

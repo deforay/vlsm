@@ -11,6 +11,12 @@ $fundingSourceList = $db->query($fundingSourceQry);
 $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
+
+// $configQuery = "SELECT * from global_config";
+// $configResult = $db->query($configQuery);
+// $arr = array();
+// $prefix = $arr['sample_code_prefix'];
+
 // Getting the list of Provinces, Districts and Facilities
 
 $rKey = '';
@@ -72,10 +78,7 @@ foreach ($fResult as $fDetails) {
                         </div>
                         <div class="box-header with-border">
                             <h3 class="box-title">Information sur la structure de soins</h3>
-
                         </div>
-                        <!-- <h4>exemple de code</h4> -->
-                        <!--<h4 style="display:none;" id="sampleCodeValue"></h4>-->
                         <table class="table" style="width:100%">
                             <tr>
                               <?php if ($sarr['user_type'] == 'remoteuser') {?>
@@ -87,7 +90,7 @@ foreach ($fResult as $fDetails) {
                               <?php } else {?>
                                 <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span></td>
                                 <td>
-                                  <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon id" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
+                                  <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
                               <?php }?>
                                 <td></td><td></td><td></td><td></td>
@@ -105,9 +108,9 @@ foreach ($fResult as $fDetails) {
                                       <option value=""> -- Sélectionner -- </option>
                                     </select>
                                 </td>
-                                <td><label for="clinicName">Nom de l'installation </label><span class="mandatory">*</span></td>
+                                <td><label for="facilityId">Nom de l'installation </label><span class="mandatory">*</span></td>
                                 <td>
-                                    <select class="form-control isRequired " name="clinicName" id="clinicName" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
+                                    <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                       <?php echo $facility; ?>
                                     </select>
                                 </td>
@@ -121,7 +124,7 @@ foreach ($fResult as $fDetails) {
                                       <?php
 foreach ($implementingPartnerList as $implementingPartner) {
     ?>
-                                        <option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
+                                        <option value="<?php echo ($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
                                       <?php }?>
                                    </select>
                                 </td>
@@ -132,7 +135,7 @@ foreach ($implementingPartnerList as $implementingPartner) {
                                         <?php
 foreach ($fundingSourceList as $fundingSource) {
     ?>
-                                        <option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
+                                        <option value="<?php echo ($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
                                         <?php }?>
                                     </select>
                                 </td>
@@ -170,7 +173,7 @@ foreach ($fundingSourceList as $fundingSource) {
                                </td>
                                <th><label for="mothersDob">Date de naissance </label></th>
                                <td>
-                                    <input type="text" class="form-control " id="mothersDob" name="mothersDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;"  onchange=""/>
+                                    <input type="text" class="form-control date" id="mothersDob" name="mothersDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;"  onchange=""/>
                                </td>
                                <th><label for="mothersMaritalStatus">Etat civil </label></th>
                                <td>
@@ -190,15 +193,15 @@ foreach ($fundingSourceList as $fundingSource) {
                             <tr>
                                <th><label for="childId">Code de l’enfant (Patient) </label></th>
                                <td>
-                                    <input type="text" class="form-control " id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code du mère" style="width:100%;"  onchange=""/>
+                                    <input type="text" class="form-control " id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code" style="width:100%;"  onchange=""/>
                                </td>
                                <th><label for="childName">Nom </label></th>
                                <td>
-                                    <input type="text" class="form-control " id="childName" name="childName" placeholder="Nom" title="Please enter nom du mère" style="width:100%;"  onchange=""/>
+                                    <input type="text" class="form-control " id="childName" name="childName" placeholder="Nom" title="Please enter nom" style="width:100%;"  onchange=""/>
                                </td>
                                <th><label for="childDob">Date de naissance </label></th>
                                <td>
-                                    <input type="text" class="form-control " id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;"  onchange=""/>
+                                    <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;"  onchange=""/>
                                </td>
                                <th><label for="childGender">Gender </label></th>
                                <td>
@@ -235,15 +238,15 @@ foreach ($fundingSourceList as $fundingSource) {
                             <tr>
                               <th colspan=2>ARV donnés à la maman pendant la grossesse:</th>
                               <td colspan=4>
-                                  <input type="checkbox" name="motherTreatment" value="Nothing" /> Rien <br>
-                                  <input type="checkbox" name="motherTreatment" value="ARV Initiated during Pregnancy" /> ARV débutés durant la grossesse <br>
-                                  <input type="checkbox" name="motherTreatment" value="ARV Initiated prior to Pregnancy"  /> ARV débutés avant la grossesse <br>
-                                  <input type="checkbox" name="motherTreatment" value="ARV at Child Birth"  /> ARV à l’accouchement <br>
-                                  <input type="checkbox" name="motherTreatment" value="Option B plus"  /> Option B plus <br>
-                                  <input type="checkbox" name="motherTreatment" value="AZT/3TC/NVP" /> AZT/3TC/NVP <br>
-                                  <input type="checkbox" name="motherTreatment" value="TDF/3TC/EFV" /> TDF/3TC/EFV <br>
-                                  <input type="checkbox" name="motherTreatment" value="Other" onclick="$('#motherTreatmentOther').prop('disabled', function(i, v) { return !v; });"  /> Autres (à préciser): <input class="form-control" style="max-width:200px;display:inline;" disabled="disabled" placeholder="Autres" type="text" name="motherTreatmentOther" id="motherTreatmentOther" /> <br>
-                                  <input type="checkbox" name="motherTreatment"  value="Unknown" /> Inconnu
+                                  <input type="checkbox" name="motherTreatment[]" value="Nothing" /> Rien <br>
+                                  <input type="checkbox" name="motherTreatment[]" value="ARV Initiated during Pregnancy" /> ARV débutés durant la grossesse <br>
+                                  <input type="checkbox" name="motherTreatment[]" value="ARV Initiated prior to Pregnancy"  /> ARV débutés avant la grossesse <br>
+                                  <input type="checkbox" name="motherTreatment[]" value="ARV at Child Birth"  /> ARV à l’accouchement <br>
+                                  <input type="checkbox" name="motherTreatment[]" value="Option B plus"  /> Option B plus <br>
+                                  <input type="checkbox" name="motherTreatment[]" value="AZT/3TC/NVP" /> AZT/3TC/NVP <br>
+                                  <input type="checkbox" name="motherTreatment[]" value="TDF/3TC/EFV" /> TDF/3TC/EFV <br>
+                                  <input type="checkbox" name="motherTreatment[]" value="Other" onclick="$('#motherTreatmentOther').prop('disabled', function(i, v) { return !v; });"  /> Autres (à préciser): <input class="form-control" style="max-width:200px;display:inline;" disabled="disabled" placeholder="Autres" type="text" name="motherTreatmentOther" id="motherTreatmentOther" /> <br>
+                                  <input type="checkbox" name="motherTreatment[]"  value="Unknown" /> Inconnu
                               </td>
                             </tr>
                             <tr>
@@ -263,7 +266,7 @@ foreach ($fundingSourceList as $fundingSource) {
                               </td>
                               <td style="vertical-align:middle;">- OR -</td>
                               <td style="vertical-align:middle;">
-                              <select class="form-control " name="motherViralLoadText" id="motherViralLoadText">
+                              <select class="form-control " name="motherViralLoadText" id="motherViralLoadText" onchange="updateMotherViralLoad()">
                                     <option value=''> -- Sélectionner -- </option>
                                     <option value='tnd'> Target Not Detected </option>
                                     <option value='bdl'> Below Detection Limit </option>
@@ -313,7 +316,7 @@ foreach ($fundingSourceList as $fundingSource) {
                               <input type="number" class="form-control" style="max-width:200px;display:inline;" placeholder="Age (mois) arrêt allaitement" type="text" name="ageBreastfeedingStopped" id="ageBreastfeedingStopped" />
                               </td>
                             </tr>
-                            <tr>
+                            <!-- <tr>
                               <th>Bébé encore allaité?</th>
                               <td>
                                   <select class="form-control" name="isInfantStillBeingBreastfed" id="isInfantStillBeingBreastfed">
@@ -323,7 +326,7 @@ foreach ($fundingSourceList as $fundingSource) {
                                     <option value="unknown" /> Inconnu </option>
                                   </select>
                               </td>
-                            </tr>
+                            </tr> -->
                             <tr>
                               <th>Choix d’allaitement de bébé :</th>
                               <td>
@@ -339,13 +342,13 @@ foreach ($fundingSourceList as $fundingSource) {
                             <tr>
                               <th>Cotrimoxazole donné au bébé?</th>
                               <td>
-                                      <select class="form-control" name="choiceOfFeeding" id="choiceOfFeeding">
+                                      <select class="form-control" name="isCotrimoxazoleBeingAdministered" id="choiceOfFeeding">
                                             <option value=''> -- Sélectionner -- </option>
                                             <option value="no"> Non </option>
                                             <option value="Yes, takes CTX everyday" /> Oui, prend CTX chaque jour </option>
                                             <option value="Starting on CTX today" /> Commence CTX aujourd’hui </option>
-                                          </select>                              
-                                        
+                                          </select>
+
                               </td>
                             </tr>
                         </table>
@@ -361,9 +364,9 @@ foreach ($fundingSourceList as $fundingSource) {
                                <th colspan=2><h4>4. Information sur l’échantillon</h4></th>
                             </tr>
                             <tr>
-                              <th>Date de collecte</th>
+                              <th>Date de collecte <span class="mandatory">*</span> </th>
                               <td>
-                                  <input class="form-control" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de collecte"/>
+                                  <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de collecte" onchange="sampleCodeGeneration();"/>
                               </td>
                             </tr>
                             <tr>
@@ -382,12 +385,15 @@ foreach ($fundingSourceList as $fundingSource) {
                             <tr>
                               <th>Raison de la PCR (cocher une):</th>
                               <td>
-                                  <input type="radio" name="reasonForPCR" value="Nothing" /> Rien <br>
-                                  <input type="radio" name="reasonForPCR" value="First Test for exposed baby" /> 1st test pour bébé exposé <br>
-                                  <input type="radio" name="reasonForPCR" value="First test for sick baby" /> 1st test pour bébé malade <br>
-                                  <input type="radio" name="reasonForPCR" value="Repeat due ti problem with first test" /> Répéter car problème avec 1er test <br>
-                                  <input type="radio" name="reasonForPCR" value="Repeat to confirm the first result" /> Répéter pour confirmer 1er résultat <br>
-                                  <input type="radio" name="reasonForPCR" value="Repeat test once breastfeeding is stopped" /> Répéter test après arrêt allaitement maternel (6 semaines au moins après arrêt allaitement) <br>
+                                  <select class="form-control" name="reasonForPCR" id="reasonForPCR">
+                                        <option value=''> -- Sélectionner -- </option>
+                                        <option value="Nothing"> Rien</option>
+                                        <option value="First Test for exposed baby"> 1st test pour bébé exposé</option>
+                                        <option value="First test for sick baby"> 1st test pour bébé malade</option>
+                                        <option value="Repeat due to problem with first test"> Répéter car problème avec 1er test</option>
+                                        <option value="Repeat to confirm the first result"> Répéter pour confirmer 1er résultat</option>
+                                        <option value="Repeat test once breastfeeding is stopped"> Répéter test après arrêt allaitement maternel (6 semaines au moins après arrêt allaitement)</option>
+                                    </select>
                               </td>
                             </tr>
                             <tr>
@@ -433,25 +439,25 @@ foreach ($fundingSourceList as $fundingSource) {
                         </div>
                         <table class="table" style="width:100%">
                             <tr>
-                                <th><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></th>
+                                <th><label for="">Date de réception de l'échantillon </label></th>
                                 <td>
-                                    <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"/>
                                 </td>
                                 <td></td>
                               <td></td>
                             <tr>
                               <th>Is Sample Rejected ?</th>
                               <td>
-                              <select class="form-control" name="result" id="result">
+                              <select class="form-control" name="isSampleRejected" id="isSampleRejected">
                                 <option value=''> -- Sélectionner -- </option>
                                 <option value="yes"> Oui </option>
                                 <option value="no" /> Non </option>
                               </select>
                               </td>
-                            
+
                               <th>Reason for Rejection</th>
                               <td>
-                              <select class="form-control" name="result" id="result">
+                              <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                 <option value=''> -- Sélectionner -- </option>
                                 <option value="Technical Problem"> Problème technique </option>
                                 <option value="Poor numbering" /> Mauvaise numérotation </option>
@@ -462,12 +468,12 @@ foreach ($fundingSourceList as $fundingSource) {
                               </td>
                               </tr>
                             <tr>
-                                <td style="width:25%;"><label for="">Test effectué le <span class="mandatory">*</span> </label></td>
+                                <td style="width:25%;"><label for="">Test effectué le </label></td>
                                 <td style="width:25%;">
-                                    <input type="text" class="form-control dateTime isRequired" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"/>
+                                    <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;"/>
                                 </td>
-                                
-                            
+
+
                               <th>Résultat</th>
                               <td>
                               <select class="form-control" name="result" id="result">
@@ -477,13 +483,13 @@ foreach ($fundingSourceList as $fundingSource) {
                                 <option value="indeterminate" /> Indéterminé </option>
                               </select>
                               </td>
-                            </tr>                            
-                            
+                            </tr>
+
                         </table>
                     </div>
                 </div>
                 <?php }?>
-                
+
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
@@ -493,9 +499,9 @@ foreach ($fundingSourceList as $fundingSource) {
                 <?php }?>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="formId" id="formId" value="3"/>
-                <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
+                <input type="hidden" name="eidSampleId" id="eidSampleId" value=""/>
                 <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>"/>
-                <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
+                <a href="/eid/requests/eid-add-request.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
             </form>
@@ -517,7 +523,7 @@ foreach ($fundingSourceList as $fundingSource) {
   machineName = true;
   function getfacilityDetails(obj){
     $.blockUI();
-    var cName = $("#clinicName").val();
+    var cName = $("#facilityId").val();
     var pName = $("#province").val();
     if(pName!='' && provinceName && facilityName){
       facilityName = false;
@@ -528,7 +534,7 @@ foreach ($fundingSourceList as $fundingSource) {
           function(data){
               if(data!= ""){
                 details = data.split("###");
-                $("#clinicName").html(details[0]);
+                $("#facilityId").html(details[0]);
                 $("#district").html(details[1]);
                 $("#clinicianName").val(details[2]);
               }
@@ -539,7 +545,7 @@ foreach ($fundingSourceList as $fundingSource) {
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province; ?>");
-      $("#clinicName").html("<?php echo $facility; ?>");
+      $("#facilityId").html("<?php echo $facility; ?>");
     }else{
       $("#district").html("<option value=''> -- Sélectionner -- </option>");
     }
@@ -553,22 +559,21 @@ foreach ($fundingSourceList as $fundingSource) {
       $.post("/eid/requests/generateSampleCode.php", { sDate : sDate, pName : pName},
       function(data){
         var sCodeKey = JSON.parse(data);
-        <?php if ($arr['sample_code'] == 'auto') {?>
-          pNameVal = pName.split("##");
-          sCode = sCodeKey.auto;
-          $("#sampleCode").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId);
-          $("#sampleCodeInText").html('<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId);
-          //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId).css('display','block');
-          $("#sampleCodeFormat").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode);
-          $("#sampleCodeKey").val(sCodeKey.maxId);
-          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null);
+        <?php if ($arr['sample_code'] == 'auto') { ?>
+              pNameVal = pName.split("##");
+              sCode = sCodeKey.auto;
+              $("#sampleCode").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+              $("#sampleCodeInText").html('<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId);
+              $("#sampleCodeFormat").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode);
+              $("#sampleCodeKey").val(sCodeKey.maxId);
+              //checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null);
           <?php } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') {?>
-          $("#sampleCode").val('<?php echo $rKey . $prefix; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
-          $("#sampleCodeInText").html('<?php echo $rKey . $prefix; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
-          //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey . $prefix; ?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
-          $("#sampleCodeFormat").val('<?php echo $rKey . $prefix; ?>'+sCodeKey.mnthYr);
-          $("#sampleCodeKey").val(sCodeKey.maxId);
-          checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null)
+              $("#sampleCode").val('<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+              $("#sampleCodeInText").html('<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+              //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
+              $("#sampleCodeFormat").val('<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr);
+              $("#sampleCodeKey").val(sCodeKey.maxId);
+              //checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null)
         <?php }?>
       });
     }
@@ -577,25 +582,24 @@ foreach ($fundingSourceList as $fundingSource) {
   function getfacilityDistrictwise(obj){
     $.blockUI();
     var dName = $("#district").val();
-    var cName = $("#clinicName").val();
+    var cName = $("#facilityId").val();
     if(dName!=''){
       $.post("/includes/getFacilityForClinic.php", {dName:dName,cliName:cName},
       function(data){
           if(data != ""){
             details = data.split("###");
-            $("#clinicName").html(details[0]);
+            $("#facilityId").html(details[0]);
           }
       });
     }else{
-       $("#clinicName").html("<option value=''> -- Sélectionner -- </option>");
+       $("#facilityId").html("<option value=''> -- Sélectionner -- </option>");
     }
     $.unblockUI();
   }
-  function getfacilityProvinceDetails(obj)
-  {
+  function getfacilityProvinceDetails(obj){
     $.blockUI();
      //check facility name
-      var cName = $("#clinicName").val();
+      var cName = $("#facilityId").val();
       var pName = $("#province").val();
       if(cName!='' && provinceName && facilityName){
         provinceName = false;
@@ -614,178 +618,48 @@ foreach ($fundingSourceList as $fundingSource) {
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province; ?>");
-      $("#clinicName").html("<?php echo $facility; ?>");
+      $("#facilityId").html("<?php echo $facility; ?>");
     }
     $.unblockUI();
   }
-  $("input:radio[name=isPatientNew]").click(function() {
-    if($(this).val() == 'yes'){
-      $(".du").css("visibility","visible");
-    }else if($(this).val() == 'no'){
-      $(".du").css("visibility","hidden");
-    }
-  });
-  $("input:radio[name=gender]").click(function() {
-    if($(this).val() == 'female'){
-       $("#femaleElements").show();
-    }else if($(this).val() == 'male'){
-      $("#femaleElements").hide();
-    }
-  });
-  $("input:radio[name=hasChangedRegimen]").click(function() {
-    if($(this).val() == 'yes'){
-      $(".arvChangedElement").show();
-    }else if($(this).val() == 'no'){
-      $(".arvChangedElement").hide();
-    }
-  });
-  function checkVLTestReason(){
-    var vlTestReason = $("#vlTestReason").val();
-    if(vlTestReason == "other"){
-      $(".newVlTestReason").show();
-      $("#newVlTestReason").addClass("isRequired");
-    }else{
-      $(".newVlTestReason").hide();
-      $("#newVlTestReason").removeClass("isRequired");
-    }
-  }
-  function checkSpecimenType(){
-    var specimenType = $("#specimenType").val();
-    if(specimenType == 2){
-      $(".plasmaElement").show();
-    }else{
-      $(".plasmaElement").hide();
-    }
-  }
+  
 
-  function checkTestStatus(){
-    var status = $("#status").val();
-    if(status == 4){
-      $(".rejectionReason").show();
-      $(".resultSection").hide();
-      $("#rejectionReason").addClass('isRequired');
-      $("#vlResult").val('').css('pointer-events','none');
-      $("#vlLog").val('').css('pointer-events','none');
-      $('.specialResults').prop('checked', false).removeAttr('checked');
-
-    }else{
-      $(".resultSection").show();
-      $(".rejectionReason").hide();
-      $("#rejectionReason").removeClass('isRequired');
-      $("#vlResult").css('pointer-events','auto');
-      $("#vlLog").css('pointer-events','auto');
-
-    }
-  }
-
-  function checkRejectionReason(){
-    var rejectionReason = $("#rejectionReason").val();
-    if(rejectionReason == "other"){
-      $(".newRejectionReason").show();
-      $("#newRejectionReason").addClass('isRequired');
-    }else{
-      $(".newRejectionReason").hide();
-      $("#newRejectionReason").removeClass('isRequired');
-    }
-  }
-
-  function checkLastVLTestDate(){
-    var artInitiationDate = $("#dateOfArtInitiation").val();
-    var dateOfLastVLTest = $("#lastViralLoadTestDate").val();
-    if($.trim(artInitiationDate)!= '' && $.trim(dateOfLastVLTest)!= '') {
-      if(moment(artInitiationDate).isAfter(dateOfLastVLTest)) {
-        alert("Dernier test de charge virale Les données ne peuvent pas être antérieures à la date d'initiation de l'ARV!");
-        $("#lastViralLoadTestDate").val("");
-      }
-    }
-  }
-  function calculateLogValue(obj){
-    if(obj.id=="vlResult") {
-      absValue = $("#vlResult").val();
-      if(absValue!='' && absValue!=0){
-        $("#vlLog").val(Math.round(Math.log10(absValue) * 100) / 100);
-      }else{
-        $("#vlLog").val("");
-      }
-    }
-    if(obj.id=="vlLog") {
-      logValue = $("#vlLog").val();
-      if(logValue!='' && logValue!=0){
-        var absVal = Math.round(Math.pow(10,logValue) * 100) / 100;
-        if(absVal!='Infinity'){
-        $("#vlResult").val(Math.round(Math.pow(10,logValue) * 100) / 100);
-        }else{
-          $("#vlResult").val('');
-        }
-      }
-    }
-  }
   function validateNow(){
     flag = deforayValidator.init({
-      formId: 'addVlRequestForm'
+      formId: 'addEIDRequestForm'
     });
     if(flag){
-      $.blockUI();
+      //$.blockUI();
       <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') {?>
-      insertSampleCode('addVlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
+              insertSampleCode('addEIDRequestForm','eidSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
       <?php } else {?>
-          document.getElementById('addVlRequestForm').submit();
+              document.getElementById('addEIDRequestForm').submit();
       <?php }?>
     }
   }
 
-  function setPatientDetails(pDetails){
-    patientArray = pDetails.split("##");
-    if($.trim(patientArray[3])!=''){
-      $("#dob").val(patientArray[3]);
-      getAge();
-    }else if($.trim(patientArray[4])!='' && $.trim(patientArray[4]) != 0){
-      $("#ageInYears").val(patientArray[4]);
-    }else if($.trim(patientArray[5])!=''){
-      $("#ageInMonths").val(patientArray[5]);
-    }
-    if($.trim(patientArray[2])!=''){
-      if(patientArray[2] == 'male'){
-      $("#genderMale").prop('checked', true);
-      }else if(patientArray[2] == 'female'){
-        $("#genderFemale").prop('checked', true);
-      }
-    }
-    if($.trim(patientArray[15])!=''){
-      $("#patientArtNo").val($.trim(patientArray[15]));
+  function updateMotherViralLoad(){
+    //var motherVl = $("#motherViralLoadCopiesPerMl").val();
+    var motherVlText = $("#motherViralLoadText").val();
+    if(motherVlText != ''){
+      $("#motherViralLoadCopiesPerMl").val(''); 
     }
   }
 
-
   $(document).ready(function(){
 
-
-
-
-    $('#vlResult, #vlLog').on('input',function(e){
-      if(this.value != ''){
-        $('.specialResults').attr('disabled',true);
-      }else{
-        $('.specialResults').attr('disabled',false);
-      }
-    });
-
-    $('.specialResults').change(function() {
-        if($(this).is(':checked')){
-          $('#vlResult, #vlLog').val('');
-          $('#vlResult,#vlLog').attr('readonly',true);
-          $(".specialResults").not(this).attr('disabled',true);
-          //$('.specialResults').not(this).prop('checked', false).removeAttr('checked');
-        }else{
-          $('#vlResult,#vlLog').attr('readonly',false);
-          $(".specialResults").not(this).attr('disabled',false);
-        }
-    });
-
-
-    $('#clinicName').select2({placeholder:"Select Clinic/Health Center"});
+    $('#facilityId').select2({placeholder:"Select Clinic/Health Center"});
     $('#district').select2({placeholder:"District"});
     $('#province').select2({placeholder:"Province"});
+    $("#motherViralLoadCopiesPerMl").on("change keyup paste", function(){
+      var motherVl = $("#motherViralLoadCopiesPerMl").val();
+      //var motherVlText = $("#motherViralLoadText").val();
+      if(motherVl != ''){
+        $("#motherViralLoadText").val(''); 
+      }      
+    });
+
+
   });
 
   </script>
