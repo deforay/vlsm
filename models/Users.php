@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-include_once '../../startup.php';
+require_once(dirname(__FILE__) . "/../startup.php"); 
+
 
 /**
  * General functions
