@@ -1,8 +1,8 @@
 <?php
 //update common table from remote to lab db
-include(dirname(__FILE__) . "/../../startup.php");  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH."/General.php");
+require_once(dirname(__FILE__) . "/../../startup.php");  
+require_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once(APPLICATION_PATH."/General.php");
 
 if(!isset($REMOTEURL) || $REMOTEURL==''){
     echo "Please check your remote url";
@@ -71,7 +71,7 @@ $curl_response = curl_exec($ch);
 curl_close($ch);
 $result = json_decode($curl_response, true);
 //update or insert sample type
-if(count($result['sampleType'])>0){
+if(!empty($result['sampleType']) && count($result['sampleType'])>0){
     // making all local rows inactive 
     // this way any additional rows in local that are not on remote
     // become inactive.
@@ -95,7 +95,7 @@ if(count($result['sampleType'])>0){
 }
 
 //update or insert art code deatils
-if(count($result['artCode'])>0){
+if(!empty($result['artCode']) && count($result['artCode'])>0){
     // making all local rows inactive 
     // this way any additional rows in local that are not on remote
     // become inactive.
@@ -121,7 +121,7 @@ if(count($result['artCode'])>0){
 }
 
 //update or insert rejected reason
-if(count($result['rejectReason'])>0){
+if(!empty($result['rejectReason']) && count($result['rejectReason'])>0){
     
     // making all local rows inactive 
     // this way any additional rows in local that are not on remote
@@ -148,7 +148,7 @@ if(count($result['rejectReason'])>0){
 }
 
 //update or insert province
-if(count($result['province'])>0){
+if(!empty($result['province']) && count($result['province'])>0){
 
     foreach($result['province'] as $province){
         $provinceQuery = "select * from province_details where province_id=".$province['province_id'];
@@ -169,7 +169,7 @@ if(count($result['province'])>0){
 //update or insert facility data
 $instanceQuery = "select vlsm_instance_id from s_vlsm_instance";
 $instanceResult = $db->query($instanceQuery);
-if(count($result['facilityResult'])>0){
+if(!empty($result['facilityResult']) && count($result['facilityResult'])>0){
     
     // making all local rows inactive 
     // this way any additional rows in local that are not on remote
