@@ -68,9 +68,15 @@ try {
                     $num = count($sheetData);
                     $row++;
                     if ($row < $skip) {
+                        if($row == 8){                           
+                            $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1])->getTimestamp();
+                            $testingDate = date('Y-m-d H:i', ($timestamp));
+                        }
+                        
                         continue;
+                        
+                        
                     }
-
                     $sampleCode = "";
                     $batchCode = "";
                     $sampleType = "";
@@ -79,7 +85,7 @@ try {
                     $logVal = "";
                     $txtVal = "";
                     $resultFlag = "";
-                    $testingDate = "";
+                    
 
                     $sampleCode = $sheetData[$sampleIdCol];
                     $sampleType = $sheetData[$sampleTypeCol];
@@ -88,12 +94,12 @@ try {
                     $resultFlag = $sheetData[$flagCol];
                     //$reviewBy = $sheetData[$reviewByCol];
 
-                    //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
-                    $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
+                    // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
+                    // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
+                    // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
 
                     if (strpos($sheetData[$resultCol], 'Copies / mL') !== false) {
-                        if(strpos($sheetData[$resultCol], '< 839') !== false){
+                        if(strpos($sheetData[$resultCol], '< 839') !== false || $sheetData[$resultCol] == '839 Copies / mL'){
                             $txtVal = "Below Detection Limit";
                             $resultFlag = "";
                             $absVal = "";
@@ -113,13 +119,12 @@ try {
                         preg_match_all('!\d+!', $absVal, $absDecimalVal);
                         $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
                     } else {
-                        if(strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false){
+                        if(strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false || strtolower($sheetData[$resultCol]) == 'target not detected'){
                             $txtVal = "Below Detection Limit";
                             $resultFlag = "";
                             $absVal = "";
                             $logVal = "";
-                        }
-                        else if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
+                        } else if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
                             //$txtVal =  $sheetData[$flagCol];
                             $txtVal = "Failed";
                             $resultFlag = $sheetData[$flagCol];
@@ -134,9 +139,8 @@ try {
 
                     $lotNumberVal = $sheetData[$lotNumberCol];
                     if (trim($sheetData[$lotExpirationDateCol]) != '') {
-                        //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                        //$sheetData[$lotExpirationDateCol] = str_replace("/", "-", $sheetData[$lotExpirationDateCol]);
-                        $lotExpirationDateVal = date('Y-m-d', strtotime($sheetData[$lotExpirationDateCol]));
+                        $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol])->getTimestamp();
+                        $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
                     }                    
 
                     $sampleType = $sheetData[$sampleTypeCol];

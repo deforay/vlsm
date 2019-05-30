@@ -130,8 +130,8 @@ $rejectionReason = '<option value="">-- Select sample rejection reason --</optio
                   <th style="width: 10%;">Sample Test Date</th>
                   <th style="width: 10%;">Clinic Name</th>
                   <th style="width: 10%;">Batch Code</th>
-                  <th style="width: 10%;">General Lot No.</th>
-                  <th style="width: 10%;">General Expiry Date</th>
+                  <th style="width: 10%;">Lot No.</th>
+                  <th style="width: 10%;">Lot Expiry Date</th>
                   <th style="width: 10%;">Reason</th>
                   <th style="max-width: 9%;">Sample Type</th>
                   <th style="width: 9%;">Result</th>
