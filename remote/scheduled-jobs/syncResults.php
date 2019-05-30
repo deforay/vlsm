@@ -86,7 +86,7 @@ $curl_response = curl_exec($ch);
 curl_close($ch);
 $result = json_decode($curl_response, true);
 
-if (count($result) > 0) {
+if (!empty($result) && count($result) > 0) {
     foreach ($result as $code) {
         $db = $db->where('sample_code', $code);
         $id = $db->update('vl_request_form', array('data_sync' => 1));

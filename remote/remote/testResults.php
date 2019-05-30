@@ -2,9 +2,9 @@
 //this file is receive lab data value and update in remote db
 $data = json_decode(file_get_contents('php://input'), true);
 
-include(dirname(__FILE__) . "/../../startup.php");  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH."/General.php");
+require_once(dirname(__FILE__) . "/../../startup.php");  
+require_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once(APPLICATION_PATH."/General.php");
 
 $cQuery = "SELECT * FROM global_config";
 $cResult = $db->query($cQuery);
