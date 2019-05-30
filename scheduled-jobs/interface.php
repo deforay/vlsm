@@ -1,8 +1,9 @@
 <?php
 
-include_once(__DIR__ . "/../startup.php");
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH."/General.php");
+require_once(__DIR__ . "/../startup.php");
+
+require_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once(APPLICATION_PATH."/General.php");
 
 if(!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false){  
     error_log('Interfacing is not enabled. Please enable it in configuration.');
@@ -19,7 +20,7 @@ $interfacedb = new MysqliDb($interfaceConfig['dbHost'],
 
 
 
-$general = new General($vlsmDb);
+//$general = new General($vlsmDb);
 
 //$lowVlResults = $general->getLowVLResultTextFromImportConfigs();
 
@@ -99,7 +100,8 @@ if (count($interfaceInfo) > 0) {
                 'result_value_absolute_decimal' => $absDecimalVal,
                 'result_value_text' => $txtVal,
                 'result' => $vlResult,
-                'result_status' => 7
+                'result_status' => 7,
+                'data_sync' => 0
             );
 
             $db = $db->where('vl_sample_id', $vlInfo['vl_sample_id']);
@@ -113,11 +115,19 @@ if (count($interfaceInfo) > 0) {
                 $interfacedb = $interfacedb->where('id', $result['id']);
                 $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);
             }
+        }else{
+            $interfaceData = array(
+                'lims_sync_status' => 2,
+                'lims_sync_date_time' => date('Y-m-d H:i:s'),
+            );
+            $interfacedb = $interfacedb->where('id', $result['id']);
+            $interfaceUpdateId = $interfacedb->update('orders', $interfaceData);            
         }
     }
 
     if($numberOfResults > 0){
         $importedBy = isset($_SESSION['userId']) ? $_SESSION['userId'] : 'AUTO';
+        $general = new General($vlsmDb);
         $general->resultImportStats($numberOfResults, 'interface' , $importedBy);
     }
 
