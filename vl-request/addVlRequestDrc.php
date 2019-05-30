@@ -776,7 +776,7 @@
     if(flag){
       $.blockUI();
       <?php if($arr['sample_code']=='auto' || $arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){ ?>
-      insertSampleCode('addEIDRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
+      insertSampleCode('addVlRequestForm','vlSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
       <?php }else{ ?>
           document.getElementById('addVlRequestForm').submit();
       <?php } ?>
