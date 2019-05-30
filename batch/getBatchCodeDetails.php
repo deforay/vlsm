@@ -12,12 +12,12 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
     $refTable = "vl_request_form";
     $refPrimaryColumn = "vl_sample_id";
     $editFileName = 'editBatch.php';
-    $editPosition = 'editBatchControlsPosition.php';
+    $editPositionFileName = 'editBatchControlsPosition.php';
 } else if (isset($_POST['type']) && $_POST['type'] == 'eid') {
     $refTable = "eid_form";
     $refPrimaryColumn = "eid_id";
     $editFileName = 'eid-edit-batch.php';
-    $editPosition = 'eid-edit-batch-position.php';
+    $editPositionFileName = 'eid-edit-batch-position.php';
 }
 
 
@@ -177,7 +177,8 @@ foreach ($rResult as $aRow) {
     $row = array();
     $printBarcode = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print bar code" onclick="generateBarcode(\'' . base64_encode($aRow['batch_id']) . '\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
     $printQrcode = '<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="Print qr code" onclick="generateQRcode(\'' . base64_encode($aRow['batch_id']) . '\');"><i class="fa fa-qrcode"> Print QR code</i></a>';
-    $editPosition = '<a href="'.$editPosition.'?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
+    $editPosition = '<a href="'.$editPositionFileName.'?id=' . base64_encode($aRow['batch_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;margin-top:6px;" title="Edit Position"><i class="fa fa-sort-numeric-desc"> Edit Position</i></a>';
+
     $deleteBatch = '';
     if ($aRow['sample_code'] == 0 || $noOfSampleHaveResultCount[0]['no_of_sample_have_result'] == 0) {
         $deleteBatch = '<a href="javascript:void(0);" class="btn btn-danger btn-xs" style="margin-right: 2px;margin-top:6px;" title="" onclick="deleteBatchCode(\'' . base64_encode($aRow['batch_id']) . '\',\'' . $aRow['batch_code'] . '\');"><i class="fa fa-times"> Delete</i></a>';
