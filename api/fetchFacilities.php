@@ -21,6 +21,6 @@ if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
 session_start();
 include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 
-$systemConfigQuery ="SELECT * from facility_details";
-$systemConfigResult=$db->query($systemConfigQuery);
-echo json_encode($systemConfigResult,true);
+$facilityQuery ="SELECT facility_id,facility_name,facility_type from facility_details";
+$facilityResult=$db->query($facilityQuery);
+echo json_encode($facilityResult,true);
