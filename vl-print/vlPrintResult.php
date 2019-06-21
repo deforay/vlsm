@@ -120,27 +120,31 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 														<td>
 															<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
 														</td>
-														<td><b>Funding Sources&nbsp;:</b></td>
 														<td>
-															<select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
+															<!-- <b>Funding Sources&nbsp;:</b> -->
+														</td>
+														<td>
+															<!-- <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
 															<option value=""> -- Select -- </option>
 															<?php
 															foreach($fundingSourceList as $fundingSource){
 															?>
 															<option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
 															<?php } ?>
-															</select>
+															</select> -->
 														</td>
-														<td><b>Implementing Partners&nbsp;:</b></td>
 														<td>
-															<select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
+															<!-- <b>Implementing Partners&nbsp;:</b> -->
+														</td>
+														<td>
+															<!-- <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose implementing partner">
 															<option value=""> -- Select -- </option>
 															<?php
 															foreach($implementingPartnerList as $implementingPartner){
 															?>
 															<option value="<?php echo base64_encode($implementingPartner['i_partner_id']); ?>"><?php echo ucwords($implementingPartner['i_partner_name']); ?></option>
 															<?php } ?>
-															</select>
+															</select> -->
 														</td>
 												</tr>
 												<tr>
@@ -292,20 +296,22 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 														<td>
 															<input type="text" id="sampleTestDate" name="sampleTestDate" class="form-control" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;"/>
 														</td>
-														<td><b>Funding Sources&nbsp;:</b></td>
 														<td>
-															<select class="form-control" name="fundingSource" id="printFundingSource" title="Please choose funding source">
+															<!-- <b>Funding Sources&nbsp;:</b> -->
+														</td>
+														<td>
+															<!-- <select class="form-control" name="fundingSource" id="printFundingSource" title="Please choose funding source">
 															<option value=""> -- Select -- </option>
 															<?php
 															foreach($fundingSourceList as $fundingSource){
 															?>
 															<option value="<?php echo base64_encode($fundingSource['funding_source_id']); ?>"><?php echo ucwords($fundingSource['funding_source_name']); ?></option>
 															<?php } ?>
-															</select>
+															</select> -->
 														</td>
 														
 												</tr>
-												<tr>
+												<!-- <tr>
 														<td><b>Implementing Partners&nbsp;:</b></td>
 														<td>
 															<select class="form-control" name="implementingPartner" id="printImplementingPartner" title="Please choose implementing partner">
@@ -317,7 +323,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 															<?php } ?>
 															</select>
 														</td>
-												</tr>
+												</tr> -->
 												<tr>
 													<td colspan="6">&nbsp;<input type="button" onclick="searchPrintedVlRequestData();" value="Search" class="btn btn-success btn-sm">
 														&nbsp;<button class="btn btn-danger btn-sm" onclick="document.location.href = document.location"><span>Reset</span></button>

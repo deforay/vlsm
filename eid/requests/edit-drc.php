@@ -1,5 +1,6 @@
 <?php
-// imported in eid-add-request.php based on country in global config
+
+// imported in eid-edit-request.php based on country in global config
 
 ob_start();
 
@@ -10,6 +11,10 @@ $fundingSourceList = $db->query($fundingSourceQry);
 //Implementing partner list
 $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partner_status='active' ORDER BY i_partner_name ASC";
 $implementingPartnerList = $db->query($implementingPartnerQry);
+
+
+$eidResults = $general->getEidResults();
+
 
 // Getting the list of Provinces, Districts and Facilities
 
@@ -410,9 +415,9 @@ foreach ($fundingSourceList as $fundingSource) {
                               <td>
                               <select class="form-control" name="rapidTestResult" id="rapidTestResult">
                                 <option value=''> -- Sélectionner -- </option>
-                                <option value="positive" <?php echo ($eidInfo['rapid_test_result'] == 'positive') ? "selected='selected'" : ""; ?>  > Positif </option>
-                                <option value="negative" <?php echo ($eidInfo['rapid_test_result'] == 'negative') ? "selected='selected'" : ""; ?>  > Négatif </option>
-                                <option value="indeterminate" <?php echo ($eidInfo['rapid_test_result'] == 'indeterminate') ? "selected='selected'" : ""; ?> > Indéterminé </option>
+                                <?php foreach($eidResults as $eidResultKey => $eidResultValue){ ?>
+                                  <option value="<?php echo $eidResultKey; ?>"  <?php echo ($eidInfo['rapid_test_result'] == $eidResultKey) ? "selected='selected'" : ""; ?>  > <?php echo $eidResultValue; ?> </option>
+                                <?php } ?>
                               </select>
                               </td>
                             </tr>
@@ -449,11 +454,11 @@ foreach ($fundingSourceList as $fundingSource) {
                               <td>
                               <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                 <option value=''> -- Sélectionner -- </option>
-                                <option value="Technical Problem" <?php echo ($eidInfo['sample_rejection_reason'] == 'Technical Problem') ? "selected='selected'" : ""; ?>> Problème technique </option>
-                                <option value="Poor numbering" <?php echo ($eidInfo['sample_rejection_reason'] == 'Poor numbering') ? "selected='selected'" : ""; ?> > Mauvaise numérotation </option>
-                                <option value="Insufficient sample" <?php echo ($eidInfo['sample_rejection_reason'] == 'Insufficient sample') ? "selected='selected'" : ""; ?> > Echantillon insuffisant </option>
-                                <option value="Degraded sample or clot" <?php echo ($eidInfo['sample_rejection_reason'] == 'Degraded sample or clot') ? "selected='selected'" : ""; ?> > Echantillon dégradé ou caillot </option>
-                                <option value="Poor packaging" <?php echo ($eidInfo['sample_rejection_reason'] == 'Poor packaging') ? "selected='selected'" : ""; ?> > Mauvais empaquetage </option>
+                                <option value="Technical Problem" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Technical Problem') ? "selected='selected'" : ""; ?>> Problème technique </option>
+                                <option value="Poor numbering" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Poor numbering') ? "selected='selected'" : ""; ?> > Mauvaise numérotation </option>
+                                <option value="Insufficient sample" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Insufficient sample') ? "selected='selected'" : ""; ?> > Echantillon insuffisant </option>
+                                <option value="Degraded sample or clot" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Degraded sample or clot') ? "selected='selected'" : ""; ?> > Echantillon dégradé ou caillot </option>
+                                <option value="Poor packaging" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Poor packaging') ? "selected='selected'" : ""; ?> > Mauvais empaquetage </option>
                               </select>
                               </td>
                               </tr>
@@ -468,9 +473,10 @@ foreach ($fundingSourceList as $fundingSource) {
                               <td>
                               <select class="form-control" name="result" id="result">
                                 <option value=''> -- Sélectionner -- </option>
-                                <option value="positive"  <?php echo ($eidInfo['result'] == 'positive') ? "selected='selected'" : ""; ?>> Positif </option>
-                                <option value="negative"  <?php echo ($eidInfo['result'] == 'negative') ? "selected='selected'" : ""; ?>> Négatif </option>
-                                <option value="indeterminate"  <?php echo ($eidInfo['result'] == 'indeterminate') ? "selected='selected'" : ""; ?>> Indéterminé </option>
+                                <?php foreach($eidResults as $eidResultKey => $eidResultValue){ ?>
+                                  <option value="<?php echo $eidResultKey; ?>"  <?php echo ($eidInfo['result'] == $eidResultKey) ? "selected='selected'" : ""; ?>  > <?php echo $eidResultValue; ?> </option>
+                                <?php } ?>                                
+                                
                               </select>
                               </td>
                             </tr>

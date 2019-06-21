@@ -1,5 +1,10 @@
 <?php
+
+
+
 try {
+
+    $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
     $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_import";
@@ -85,62 +90,51 @@ try {
           
           $batchCode = $row[$batchCodeCol];
           $resultFlag = $row[$flagCol];
+        
 
-
-
-            
-          if ($sampleCode == "")
-              continue;          
-          
-          /*$d=explode(" ",$row[$testingDateCol]);
-          //$testingDate=str_replace("/","-",$d[0],$checked);
-          //$testingDate = date("Y-m-d H:i:s", \PhpOffice\PhpSpreadsheet\Shared\Date::excelToTimestamp($testingDate));
-          $dt=explode("/",$d[0]);
-          if(count($dt) > 1){
-            // Date time in the provided Roche Sample file is in this format : 2016/09/20 12:22:03
-            $testingDate = DateTime::createFromFormat('Y/m/d H:i:s', $row[$testingDateCol])->format('Y-m-d H:i');
-          }else{
-            // Date time in the provided Roche Sample file is in this format : 20-09-16 12:22
-            $testingDate = DateTime::createFromFormat('d-m-y H:i', $row[$testingDateCol])->format('Y-m-d H:i');
-          }  */
-          
+          // Date time in the provided Roche Sample file is in this format : 9/9/16 12:22
+          //$testingDate = DateTime::createFromFormat('m/d/y h:i:s A', $row[$testingDateCol])->format('Y-m-d H:i');
           
           $testingDate = date('Y-m-d H:i', strtotime($row[$testingDateCol]));
           
-          $vlResult = trim($row[$absValCol]);
-
-          if(!empty($vlResult)){
-            if (strpos($vlResult, 'E') !== false) {
-                if (strpos($vlResult, '< 2.00E+1') !== false) {
-                    $vlResult = "< 20";
-                    $txtVal = $absVal = trim($vlResult);
-                    $logVal = "";
+          
+          
+          if(trim($row[$absValCol])!=""){
+              $resVal=(int)$row[$absValCol];
+              if($resVal > 0){
+                  $absDecimalVal = $absVal=trim($row[$absValCol]);
+                  
+                  $logVal=round(log10($absVal),4);
+                  $txtVal="";
+              }else{
+                  $absDecimalVal = $absVal="";
+                  $logVal="";                       
+                  $txtVal=trim($row[$absValCol]);
+              }
+          }
+          
+          if(trim($row[$absValCol])!=""){
+                $resVal=explode("(",$row[$absValCol]);
+                if(count($resVal)==2){
+                    $absVal=trim($resVal[0]);
+                    
+                    $expAbsVal=explode("E",$absVal);
+                    if(count($expAbsVal)==2){
+                         $multipleVal=substr($expAbsVal[1],1);
+                         $absDecimalVal=$expAbsVal[0]*pow(10,$multipleVal);
+                    }
+                    $logVal=substr(trim($resVal[1]),0,-1);
                 }else{
-                    $resInNumberFormat = number_format($vlResult,0,'','');
-                    if($resInNumberFormat > 0){
-                        $absVal = $resInNumberFormat;
-                        $absDecimalVal = (float) trim($resInNumberFormat);
-                        $logVal = round(log10($absDecimalVal), 2);
-                        $txtVal = "";
-                    }else{
-                        $absVal = $txtVal = trim($vlResult);
-                        $absDecimalVal = $logVal = "";
+                    $txtVal=trim($row[$absValCol]);
+                    if($txtVal=='Invalid'){
+                        $resultFlag=trim($txtVal);
                     }
                 }
-            }else{
-                $vlResult = (float)$row[$absValCol];
-                if($vlResult > 0){
-                    $absVal=trim($row[$absValCol]);
-                    $absDecimalVal = $vlResult;
-                    $logVal=round(log10($absDecimalVal),4);
-                    $txtVal="";
-                }else{
-                    $logVal= $absDecimalVal = $absVal="";                  
-                    $txtVal=trim($row[$absValCol]);
-                }
-            }
-          }
+            }          
             
+            
+          if ($sampleCode == "")
+              continue;
             
 
           $infoFromFile[$sampleCode] = array(
@@ -159,9 +153,11 @@ try {
             $m++;
         }
         
+        
         foreach ($infoFromFile as $sampleCode => $d) {
             
             $data = array(
+                'module' => 'vl',
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
                 'result_reviewed_by' => $_SESSION['userId'],
@@ -172,7 +168,7 @@ try {
                 'result_value_text' => $d['txtVal'],
                 'result_value_absolute_decimal' => $d['absDecimalVal'],
                 'sample_tested_datetime' => $testingDate,
-                'result_status' => 6,
+                'result_status' => '6',
                 'import_machine_file_name' => $fileName,
                 'approver_comments' => $d['resultFlag']
             );
@@ -210,6 +206,7 @@ try {
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
+                $data['imported_by'] = $_SESSION['userId'];
                 $id = $db->insert("temp_sample_import", $data);
             }
         }
@@ -220,13 +217,7 @@ try {
     $eventType            = 'import';
     $action               = ucwords($_SESSION['userName']) . ' imported a new test result with the sample code ' . $sampleCode;
     $resource             = 'import-result';
-    $data                 = array(
-        'event_type' => $eventType,
-        'action' => $action,
-        'resource' => $resource,
-        'date_time' => $general->getDateTime()
-    );
-    $db->insert("activity_log", $data);
+    $general->activityLog($eventType,$action,$resource);   
     
     //new log for update in result
     $data = array(
@@ -236,7 +227,7 @@ try {
     );
     $db->insert("log_result_updates", $data);
     
-    header("location:../vl-print/vlResultUnApproval.php");
+    header("location:/import-result/imported-results.php");
     
 }
 catch (Exception $exc) {

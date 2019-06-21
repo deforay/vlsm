@@ -2,7 +2,7 @@
 //update common table from remote to lab db
 require_once(dirname(__FILE__) . "/../../startup.php");  
 require_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-require_once(APPLICATION_PATH."/General.php");
+require_once(APPLICATION_PATH. '/models/General.php');
 
 if(!isset($REMOTEURL) || $REMOTEURL==''){
     echo "Please check your remote url";

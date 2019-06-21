@@ -3,7 +3,7 @@
 require_once(__DIR__ . "/../startup.php");
 
 require_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-require_once(APPLICATION_PATH."/General.php");
+require_once(APPLICATION_PATH. '/models/General.php');
 
 if(!isset($interfaceConfig['enabled']) || $interfaceConfig['enabled'] === false){  
     error_log('Interfacing is not enabled. Please enable it in configuration.');

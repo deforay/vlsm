@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once APPLICATION_PATH . '/General.php';
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $tableName = "eid_form";
 //system config
@@ -100,7 +100,7 @@ $vldata = array(
     'sample_collection_date' => $_POST['sampleCollectionDate'],
     'vlsm_instance_id' => $_SESSION['instanceId'],
     'request_created_by' => $_SESSION['userId'],
-    'request_created_on' => $general->getDateTime(),
+    'request_created_datetime' => $general->getDateTime(),
     'last_modified_by' => $_SESSION['userId'],
     'last_modified_datetime' => $general->getDateTime(),
     //'manual_result_entry' => 'yes',

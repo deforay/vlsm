@@ -68,8 +68,8 @@ $batResult = $db->rawQuery($batQuery);
 									<option value="result">Sample With Result</option>
 									<option value="noresult">Sample Without Result</option>
 								</select>
-							</td>							
-							
+							</td>
+
 						</tr>
 						<tr>
 							<td><b>Facility Name :</b></td>
@@ -95,7 +95,7 @@ $batResult = $db->rawQuery($batQuery);
 							</td>
 						</tr>
 						<tr>
-							
+
 						</tr>
 						<tr>
 							<td colspan="2"><input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-default btn-sm">
@@ -272,7 +272,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		$("#showhide").hover(function() {}, function() {
 			$(this).fadeOut('slow')
 		});
-		
+
 	});
 
 	function fnShowHide(iCol) {
@@ -292,23 +292,48 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"bScrollCollapse": true,
 			//"bStateSave" : true,
 			"bRetrieve": true,
-			"aoColumns": [
-				{"sClass": "center"},
-				<?php if ($sarr['user_type'] != 'standalone') { ?> 
-					{"sClass": "center"},
-				<?php } ?> 
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
-				{"sClass": "center"},
+			"aoColumns": [{
+					"sClass": "center"
+				},
+				<?php if ($sarr['user_type'] != 'standalone') { ?> {
+						"sClass": "center"
+					},
+				<?php } ?> {
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
+				{
+					"sClass": "center"
+				},
 				<?php if (isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center",
 						"bSortable": false

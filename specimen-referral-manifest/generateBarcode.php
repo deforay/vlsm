@@ -5,7 +5,7 @@ session_start();
 include_once(__DIR__ . "/../startup.php");
 include_once(APPLICATION_PATH."/includes/MysqliDb.php");
 include_once(APPLICATION_PATH."/includes/tcpdf/tcpdf.php");
-include_once(APPLICATION_PATH."/General.php");
+include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH."/vendor/autoload.php");
 
 $general = new General($db);

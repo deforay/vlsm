@@ -3,7 +3,7 @@
 
 include(dirname(__FILE__) . "/../../startup.php");  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH."/General.php");
+include_once(APPLICATION_PATH . '/models/General.php');
 
 
 $general = new General($db);
@@ -102,7 +102,7 @@ if (count($result) > 0) {
                     $lab['request_created_by'] = 0;
                     $lab['last_modified_by'] = 0;
                     $lab['request_created_datetime'] = $general->getDateTime();
-                    $lab['sample_registered_at_lab'] = $general->getDateTime();
+                    //$lab['sample_registered_at_lab'] = $general->getDateTime();
                     $lab['last_modified_datetime'] = $general->getDateTime();
                     //$lab['result_status'] = 6;
                     $lab['data_sync'] = 1; //column data_sync value is 1 equal to data_sync done.value 0 is not done.

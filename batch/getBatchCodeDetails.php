@@ -2,7 +2,7 @@
 session_start();
 include_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH . '/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $tableName = "batch_details";
 $primaryKey = "batch_id";
 $configQuery = "SELECT value FROM global_config WHERE name ='vl_form'";

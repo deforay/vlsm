@@ -19,6 +19,9 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 
 // Getting the list of Provinces, Districts and Facilities
 
+$eidResults = $general->getEidResults();
+
+
 $rKey = '';
 $pdQuery = "SELECT * from province_details";
 if ($sarr['user_type'] == 'remoteuser') {
@@ -420,9 +423,10 @@ foreach ($fundingSourceList as $fundingSource) {
                               <td>
                               <select class="form-control" name="rapidTestResult" id="rapidTestResult">
                                 <option value=''> -- Sélectionner -- </option>
-                                <option value="positive"> Positif </option>
-                                <option value="negative" /> Négatif </option>
-                                <option value="indeterminate" /> Indéterminé </option>
+                                <?php foreach($eidResults as $eidResultKey => $eidResultValue){ ?>
+                                  <option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
+                                <?php } ?>
+                                
                               </select>
                               </td>
                             </tr>
@@ -478,9 +482,9 @@ foreach ($fundingSourceList as $fundingSource) {
                               <td>
                               <select class="form-control" name="result" id="result">
                                 <option value=''> -- Sélectionner -- </option>
-                                <option value="positive"> Positif </option>
-                                <option value="negative" /> Négatif </option>
-                                <option value="indeterminate" /> Indéterminé </option>
+                                  <?php foreach($eidResults as $eidResultKey => $eidResultValue){ ?>
+                                    <option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
+                                  <?php } ?>
                               </select>
                               </td>
                             </tr>

@@ -1,7 +1,10 @@
 <?php
 
+// File included in addImportResultHelper.php
+
 try {
 
+    $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
     $cQuery = "select MAX(import_batch_tracking) FROM hold_sample_import";
@@ -69,13 +72,15 @@ try {
                     $row++;
                     if ($row < $skip) {
                         if($row == 8){                           
-                            $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1])->getTimestamp();
-                            $testingDate = date('Y-m-d H:i', ($timestamp));
+                            $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1]);
+                            if(!empty($timestamp)){
+                                $timestamp = $timestamp->getTimestamp();
+                                $testingDate = date('Y-m-d H:i', ($timestamp));
+                            }else{
+                                $testingDate = null;
+                            }                            
                         }
-                        
                         continue;
-                        
-                        
                     }
                     $sampleCode = "";
                     $batchCode = "";
@@ -85,9 +90,13 @@ try {
                     $logVal = "";
                     $txtVal = "";
                     $resultFlag = "";
-                    
 
                     $sampleCode = $sheetData[$sampleIdCol];
+                    
+                    if($sampleCode == "SAMPLE ID" || $sampleCode == ""){
+                        continue;
+                    }
+
                     $sampleType = $sheetData[$sampleTypeCol];
 
                     $batchCode = $sheetData[$batchCodeCol];
@@ -97,50 +106,26 @@ try {
                     // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
                     // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
                     // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
-
-                    if (strpos($sheetData[$resultCol], 'Copies / mL') !== false) {
-                        if(strpos($sheetData[$resultCol], '< 839') !== false || $sheetData[$resultCol] == '839 Copies / mL'){
-                            $txtVal = "Below Detection Limit";
-                            $resultFlag = "";
-                            $absVal = "";
-                            $logVal = "";
-                        }else{
-                            $absVal = str_replace("Copies / mL", "", $sheetData[$resultCol]);
-                            $absVal = str_replace(",", "", $sheetData[$resultCol]);
-                            preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                            $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
-                        }
-                    } else if (strpos($sheetData[$resultCol], 'Log (IU/mL)') !== false) {
-                        $logVal = str_replace("Log (IU/mL)", "", $sheetData[$resultCol]);
-                        $logVal = str_replace(",", ".", $logVal);
-                    } else if (strpos($sheetData[$resultCol], 'IU/mL') !== false) {
-                        $absVal = str_replace("IU/mL", "", $sheetData[$resultCol]);
-                        $absVal = str_replace(" ", "", $sheetData[$resultCol]);
-                        preg_match_all('!\d+!', $absVal, $absDecimalVal);
-                        $absVal = $absDecimalVal = implode("", $absDecimalVal[0]);
-                    } else {
-                        if(strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false || strtolower($sheetData[$resultCol]) == 'target not detected'){
-                            $txtVal = "Below Detection Limit";
-                            $resultFlag = "";
-                            $absVal = "";
-                            $logVal = "";
-                        } else if ($sheetData[$resultCol] == "" || $sheetData[$resultCol] == null) {
-                            //$txtVal =  $sheetData[$flagCol];
-                            $txtVal = "Failed";
-                            $resultFlag = $sheetData[$flagCol];
-                        } else {
-                            $txtVal = $sheetData[$resultCol + 1];
-                            $resultFlag = "";
-                            $absVal = "";
-                            $logVal = "";
-                        }
+                    $result = $absVal = $logVal = $absDecimalVal = $txtVal = '';
+                    
+                    if(strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
+                        $result = 'negative';
+                    } else if ((strpos(strtolower($sheetData[$resultCol]), 'detected') !== false) || (strpos(strtolower($sheetData[$resultCol]), 'passed') !== false)) {
+                        $result = 'positive';
+                    } else{
+                        $result = 'indeterminate';
                     }
-
+                    
 
                     $lotNumberVal = $sheetData[$lotNumberCol];
                     if (trim($sheetData[$lotExpirationDateCol]) != '') {
-                        $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol])->getTimestamp();
-                        $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
+                        $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol]);
+                        if(!empty($timestamp)){
+                            $timestamp = $timestamp->getTimestamp();
+                            $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
+                        }else{
+                            $lotExpirationDateVal = null;
+                        }
                     }                    
 
                     $sampleType = $sheetData[$sampleTypeCol];
@@ -170,7 +155,7 @@ try {
                     if (!isset($infoFromFile[$sampleCode])) {
                         $infoFromFile[$sampleCode] = array(
                             "sampleCode" => $sampleCode,
-                            "logVal" => trim($logVal),
+                            "logVal" => ($logVal),
                             "absVal" => $absVal,
                             "absDecimalVal" => $absDecimalVal,
                             "txtVal" => $txtVal,
@@ -179,6 +164,7 @@ try {
                             "sampleType" => $sampleType,
                             "batchCode" => $batchCode,
                             "lotNumber" => $lotNumberVal,
+                            "result" => $result,
                             "lotExpirationDate" => $lotExpirationDateVal,
                         );
                     } else {
@@ -199,6 +185,7 @@ try {
                 $d['sampleCode'] = '';
             }
             $data = array(
+                'module' => 'eid',
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
                 'import_machine_name' => $_POST['configMachineName'],
@@ -215,18 +202,8 @@ try {
                 'approver_comments' => $d['resultFlag'],
                 'lot_number' => $d['lotNumber'],
                 'lot_expiration_date' => $d['lotExpirationDate'],
+                'result' => $d['result'],
             );
-
-            //echo "<pre>";var_dump($data);continue;
-            if ($d['absVal'] != "") {
-                $data['result'] = $d['absVal'];
-            } else if ($d['logVal'] != "") {
-                $data['result'] = $d['logVal'];
-            } else if ($d['txtVal'] != "") {
-                $data['result'] = $d['txtVal'];
-            } else {
-                $data['result'] = "";
-            }
 
             if ($batchCode == '') {
                 $data['batch_code'] = $newBatchCode;
@@ -275,6 +252,7 @@ try {
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
+                $data['imported_by'] = $_SESSION['userId'];
                 $id = $db->insert("temp_sample_import", $data);
             }
             $inc++;
@@ -297,7 +275,7 @@ try {
         );
         $db->insert("log_result_updates", $data);
     }
-    header("location:../vl-print/vlResultUnApproval.php");
+    header("location:/import-result/imported-results.php");
 
 } catch (Exception $exc) {
     error_log($exc->getMessage());

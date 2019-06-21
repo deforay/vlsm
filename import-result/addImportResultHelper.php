@@ -4,7 +4,7 @@ session_start();
 include_once('../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/vendor/autoload.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $confFileName = base64_decode($_POST['machineName']);
 $globalConfigQuery = "SELECT * from global_config";
 $configResult = $db->query($globalConfigQuery);
@@ -15,4 +15,15 @@ for($i = 0; $i < sizeof($configResult); $i++) {
 
 $general = new General($db);
 
-include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR.$confFileName);
+
+
+
+$type = $_POST['type'];
+
+if($type == 'vl'){
+    include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."vl".DIRECTORY_SEPARATOR.$confFileName);
+}else if($type == 'eid'){
+    include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."eid".DIRECTORY_SEPARATOR.$confFileName);
+}
+
+
