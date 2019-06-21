@@ -368,4 +368,14 @@ class General
 
         return $this->db->rawQuery($fQuery . $facilityWhereCondition . " ORDER BY facility_name ASC");
     }
+
+    public function getEidResults()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_eid_results where status='active' ORDER BY result_id DESC");
+        $response = array();
+        foreach($results as $row){
+            $response[$row['result_id']] = $row['result'];
+        }
+        return $response;
+    }
 }

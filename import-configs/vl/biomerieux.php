@@ -1,6 +1,8 @@
 <?php
 
 try {
+    
+    $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
     $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_import";
@@ -34,10 +36,6 @@ try {
         $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName);
         $sheetData   = $objPHPExcel->getActiveSheet();
         
-        
-        
-        
-        
         $bquery    = "select MAX(batch_code_key) from batch_details";
         $bvlResult = $db->rawQuery($bquery);
         if ($bvlResult[0]['MAX(batch_code_key)'] != '' && $bvlResult[0]['MAX(batch_code_key)'] != NULL) {
@@ -49,41 +47,30 @@ try {
         
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
         
-          $sheetData = $sheetData->toArray(null, true, true, true);
-          
-          //echo "<pre>";var_dump($sheetData);echo "</pre>";
-          
-          $m = 0;
-          $skipTillRow = 2;
+        $sheetData   = $sheetData->toArray(null, true, true, true);
         
-          $sampleIdCol='B';
-          $sampleIdRow='2';
-          $logValCol='F';
-          $logValRow='2';
-          $absValCol='E';
-          $absValRow='2';
-          $txtValCol='G';
-          $txtValRow='2';
-          $testingDateCol='D';
-          $testingDateRow='2';
-          $logAndAbsoluteValInSameCol='no';
-          $sampleTypeCol = '';
-          $batchCodeCol = '';
-          $flagCol = '';
-          $lotNumberCol = '';
-          $reviewByCol = 'H';
-          $lotExpirationDateCol = '';
-          
-          $testingPlatformCol = 'I';
-          
+        
+        $m           = 0;
+        $skipTillRow = 19;
+     
+      
+        $sampleIdCol='B';
+        $sampleIdRow='19';
+        $logValCol='';
+        $logValRow='';
+        $absValCol='G';
+        $absValRow='19';
+        $txtValCol='';
+        $txtValRow='';
+        $testingDateCol='C';
+        $testingDateRow='4';
+        $sampleTypeCol = '';
+        $batchCodeCol = 'I';        
         
         foreach ($sheetData as $rowIndex => $row) {
+            
           if ($rowIndex < $skipTillRow)
-            continue;
-          
-          if (strpos(strtolower($row[$testingPlatformCol]), 'viral') === false)
-            continue;
-          
+              continue;
           
           $sampleCode    = "";
           $batchCode     = "";
@@ -94,42 +81,41 @@ try {
           $txtVal        = "";
           $resultFlag    = "";
           $testingDate   = "";
-          $lotNumberVal = "";
-          $reviewBy = "";
-          $lotExpirationDateVal = null;
-         
+          
+          
           $sampleCode = $row[$sampleIdCol];
-          $sampleType = "S";
-          $batchCode = "";
-          $resultFlag = "";
-          $reviewBy = $row[$reviewByCol];
+            
+          if (strpos(strtolower($sampleCode), 'control') == false && (int)$sampleCode > 0 ) {
+           $sampleType = "S";
+          } else{
+            $sampleType = $sampleCode;
+          }              
+            
           
-          $testingDate = date('Y-m-d H:i', strtotime($row[$testingDateCol]));
+            if(trim($row[$absValCol]) == "<"){
+                $absDecimalVal=$absVal="";
+                $logVal="";                    
+                $txtVal="< 100";
+            }else if((int)$row[$absValCol] > 0){
+                $absDecimalVal=$absVal=(int)$row[$absValCol];
+                $logVal=round(log10($absVal),4);
+                $txtVal="";
+            }else{
+                $absDecimalVal=$absVal="";
+                $logVal="";
+                $txtVal="";
+            }
           
-          if(trim($row[$absValCol])!=""){
-              $resVal=(float)$row[$absValCol];
-              if($resVal > 0){
-                  $absVal= $resVal;
-                  $absDecimalVal = $resVal;
-                  if($row[$logValCol] != null && trim($row[$logValCol]) != ""){
-                    $logVal=(float)$row[$logValCol];
-                  }else{
-                    $logVal=round(log10($absDecimalVal),4);
-                  }
-                  $txtVal="";
-              }else{
-                  $absDecimalVal = $absVal="";
-                  $logVal="";                       
-                  $txtVal=trim($row[$absValCol]);
-              }
-          }
           
-        
-        
-          if($sampleCode == ""){
-            $sampleCode = $sampleType.$m;
-          }
-           //   continue;
+          //$absDecimalVal=$absVal=$row[$absValCol];           
+          $batchCode = $row[$batchCodeCol];
+          
+          // Date time in the provided Biomerieux Sample file is in this format : 05-23-16 12:52:33
+          $testingDate = $sheetData[6]['C']." ".$sheetData[7]['C'];
+          $testingDate = DateTime::createFromFormat('m-d-y H:i:s', $testingDate)->format('Y-m-d H:i:s');
+          
+          if ($sampleCode == "")
+            break;          
             
           $infoFromFile[$sampleCode] = array(
               "sampleCode" => $sampleCode,
@@ -140,27 +126,16 @@ try {
               "resultFlag" => $resultFlag,
               "testingDate" => $testingDate,
               "sampleType" => $sampleType,
-              "batchCode" => $batchCode,
-              "lotNumber" => $lotNumberVal,
-              "lotExpirationDate" => $lotExpirationDateVal,
-              "reviewBy"=>$reviewBy
+              "batchCode" => $batchCode
           );
             
             $m++;
         }
         
         
-        //echo "<pre>";var_dump($infoFromFile);echo "</pre>";die;
-        $inc = 0;
-        $refno = 0;
         foreach ($infoFromFile as $sampleCode => $d) {
-            if($d['sampleCode'] == $d['sampleType'].$inc){
-               $d['sampleCode'] = ''; 
-            }
-            if($d['sampleType'] =='S' || $d['sampleType'] =='s'){
-              $refno+=1;  
-            }
             $data = array(
+                'module' => 'vl',
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
                 'import_machine_name' => $_POST['configMachineName'],
@@ -174,12 +149,10 @@ try {
                 'sample_tested_datetime' => $testingDate,
                 'result_status' => '6',
                 'import_machine_file_name' => $fileName,
-                'approver_comments' => $d['resultFlag'],
-                'lot_number' => $d['lotNumber'],
-                'lot_expiration_date' => $d['lotExpirationDate']
+                'approver_comments' => $d['resultFlag']
             );
             
-            //echo "<pre>";var_dump($data);continue;
+            
             if ($d['absVal'] != "") {
                 $data['result'] = $d['absVal'];
             } else if ($d['logVal'] != "") {
@@ -196,34 +169,9 @@ try {
             } else {
                 $data['batch_code'] = $batchCode;
             }
-            //get user name
-            if($d['reviewBy']!=''){
-                $uQuery = "select user_name,user_id from user_details where user_name='".$d['reviewBy']."'";
-                $uResult = $db->rawQuery($uQuery);
-                if($uResult){
-                    $data['sample_review_by'] = $uResult[0]['user_id'];
-                }else{
-                    $userId= $general->generateUserID();
-                    $userdata=array(
-                    'user_id'=>$userId,
-                    'user_name'=>$d['reviewBy'],
-                    'role_id'=>'3',
-                    'status'=>'active'
-                    );
-                    $db->insert('user_details',$userdata);
-                    $data['sample_review_by'] = $userId;
-                }
-            }
             
             $query    = "select facility_id,vl_sample_id,result,result_value_log,result_value_absolute,result_value_text,result_value_absolute_decimal from vl_request_form where sample_code='" . $sampleCode . "'";
             $vlResult = $db->rawQuery($query);
-            //insert sample controls
-            $scQuery = "select r_sample_control_name from r_sample_controls where r_sample_control_name='".trim($d['sampleType'])."'";
-            $scResult = $db->rawQuery($scQuery);
-            if($scResult==false){
-                $scData = array('r_sample_control_name'=>trim($d['sampleType']));
-                $scId = $db->insert("r_sample_controls", $scData);
-            }
             if ($vlResult && $sampleCode != '') {
                 if ($vlResult[0]['result_value_log'] != '' || $vlResult[0]['result_value_absolute'] != '' || $vlResult[0]['result_value_text'] != '' || $vlResult[0]['result_value_absolute_decimal'] != '') {
                     $data['sample_details'] = 'Result already exists';
@@ -237,11 +185,10 @@ try {
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
+                $data['imported_by'] = $_SESSION['userId'];
                 $id = $db->insert("temp_sample_import", $data);
             }
-            $inc++;
         }
-       setcookie('refno', $refno, time() + (86400 * 30), "/");
     }
 
     $_SESSION['alertMsg'] = "Results imported successfully";
@@ -249,24 +196,17 @@ try {
     $eventType            = 'import';
     $action               = ucwords($_SESSION['userName']) . ' imported a new test result with the sample code ' . $sampleCode;
     $resource             = 'import-result';
-    $data                 = array(
-        'event_type' => $eventType,
-        'action' => $action,
-        'resource' => $resource,
-        'date_time' => $general->getDateTime()
-    );
-    $db->insert("activity_log", $data);
+    $general->activityLog($eventType,$action,$resource);   
     
     //new log for update in result
-    if(isset($id) && $id > 0){
-        $data = array(
+    $data = array(
         'user_id' => $_SESSION['userId'],
         'vl_sample_id' => $id,
         'updated_on' => $general->getDateTime()
-        );
-        $db->insert("log_result_updates", $data);
-    }
-    header("location:../vl-print/vlResultUnApproval.php");
+    );
+    $db->insert("log_result_updates", $data);
+    
+    header("location:/import-result/imported-results.php");
     
 }
 catch (Exception $exc) {

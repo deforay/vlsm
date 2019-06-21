@@ -1,6 +1,6 @@
 <?php
 include_once('../startup.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH.'/includes/mail/PHPMailerAutoload.php');
 $general=new General($db);
 $reportFilename = '';

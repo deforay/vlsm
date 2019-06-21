@@ -3,7 +3,7 @@ ob_start();
 $title = "VLSM | EID | Edit Request";
 include_once('../../startup.php');
 include_once(APPLICATION_PATH.'/header.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 ?>
 <style>
     .ui_tpicker_second_label,
@@ -40,8 +40,8 @@ if (isset($vlfmResult[0]['facilityId'])) {
 $fResult = $general->fetchDataFromTable('facility_details', $condition);
 
 
-//$id = base64_decode($_GET['id']);
-$id = ($_GET['id']);
+$id = base64_decode($_GET['id']);
+//$id = ($_GET['id']);
 $eidQuery="SELECT * from eid_form where eid_id=$id";
 $eidInfo=$db->rawQueryOne($eidQuery);
 

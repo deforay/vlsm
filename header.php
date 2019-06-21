@@ -58,22 +58,26 @@ $link_array = explode('/', $link);
 
 $currentFileName = end($link_array);
 
-// These files don't need privileges because they are common or intermediary files
+// These files don't need privileges check
 $skipPrivilegeCheckFiles = array(
   'error.php',
-  'vlResultUnApproval.php',
   'editProfile.php',
-  'importedStatistics.php',
   'vlExportField.php'
 );
 
+// on the left put intermediate/inner file, on the right put the file
+// which has entry in privileges table.
 $sharedPrivileges = array(
-  'eid-add-batch-position.php' => 'eid-add-batch.php',
+  'eid-add-batch-position.php'  => 'eid-add-batch.php',
   'eid-edit-batch-position.php' => 'eid-edit-batch.php',
+  'eid-update-result.php'       => 'eid-manual-results.php',
+  'imported-results.php'        => 'addImportResult.php',
+  'importedStatistics.php'      => 'addImportResult.php',
 );
 
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
+
 
 if (!in_array($currentFileName, $skipPrivilegeCheckFiles)) {
   if (isset($_SESSION['privileges']) && !in_array($currentFileName, $_SESSION['privileges'])) {
@@ -84,6 +88,7 @@ if (!in_array($currentFileName, $skipPrivilegeCheckFiles)) {
 //   $previousUrl = $_SERVER['HTTP_REFERER'];
 //   $urlLast = explode('/',$previousUrl);
 //   if(end($urlLast)=='importedStatistics.php'){
+//       $db = $db->where('imported_by', $_SESSION['userId']);
 //       $db->delete('temp_sample_import');
 //       unset($_SESSION['controllertrack']);
 //   }
@@ -118,6 +123,11 @@ if (isset($_SESSION['privileges']) && in_array(('index.php'), $_SESSION['privile
 } else {
   $dashBoardMenuAccess = false;
 }
+
+
+// EID MENUS
+
+
 
 $formConfigQuery = "SELECT * from global_config where name='vl_form'";
 $formConfigResult = $db->query($formConfigQuery);
@@ -199,7 +209,7 @@ $formConfigResult = $db->query($formConfigQuery);
     .skin-blue .sidebar-menu>li.header {
       background: #ddd;
       color: #333;
-      font-weight:bold;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -368,11 +378,7 @@ $formConfigResult = $db->query($formConfigQuery);
                     <a href="/mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
                   </li>
                 <?php }
-              if (isset($_SESSION['privileges']) && in_array("addImportTestResult.php", $_SESSION['privileges'])) { ?>
-                  <!--<li class="allMenu importTestResultMenu">
-                        <a href="/vl-request/addImportTestResult.php"><i class="fa fa-circle-o"></i> Import Test Result</a>
-                      </li>-->
-                <?php }
+             
               if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <li class="allMenu specimenReferralManifestListMenu">
                     <a href="/specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Specimen Manifest</a>
@@ -380,8 +386,8 @@ $formConfigResult = $db->query($formConfigQuery);
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <!-- <li class="allMenu sampleListMenu">
-                        <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
-                      </li> -->
+                                <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
+                              </li> -->
                 <?php } ?>
               </ul>
             </li>
@@ -397,7 +403,7 @@ $formConfigResult = $db->query($formConfigQuery);
               </a>
               <ul class="treeview-menu">
                 <?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
-                  <li class="allMenu importResultMenu"><a href="/import-result/addImportResult.php"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+                  <li class="allMenu importResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu vlTestResultMenu"><a href="/vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
@@ -407,14 +413,13 @@ $formConfigResult = $db->query($formConfigQuery);
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu vlResultMailMenu"><a href="/mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
-                <?php }
-              if (isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])) { ?>
-                  <!--<li class="allMenu importTestRequestMenu"><a href="/import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>-->
-                <?php } ?>
+                <?php }  ?>
               </ul>
             </li>
-          <?php }
-        if ($managementMenuAccess == true) { ?>
+          <?php } ?>
+
+          <?php
+          if ($managementMenuAccess == true) { ?>
             <li class="treeview program">
               <a href="#">
                 <i class="fa fa-book"></i>
@@ -431,7 +436,7 @@ $formConfigResult = $db->query($formConfigQuery);
                   <li class="allMenu vlControlReport"><a href="/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
                 <?php } ?>
                 <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
-                      <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
+                          <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
                 <?php if (isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu vlResultMenu"><a href="/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
                 <?php }
@@ -499,8 +504,40 @@ $formConfigResult = $db->query($formConfigQuery);
               </ul>
             </li>
 
-          <?php } 
+          <?php }
         ?>
+
+
+          <?php
+          if ($testResultMenuAccess == true) { ?>
+            <li class="treeview test" style="<?php echo $hideResult; ?>">
+              <a href="#">
+                <i class="fa fa-tasks"></i>
+                <span>Test Result Management</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu importResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+                <?php }
+              if (isset($_SESSION['privileges']) && in_array("eid-manual-results.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu eidResultsMenu"><a href="/eid/results/eid-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
+                <?php }
+              if (isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu vlResultApprovalMenu"><a href="/vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+                <?php }
+              if (isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu vlResultMailMenu"><a href="/mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+                <?php }
+              if (isset($_SESSION['privileges']) && in_array("addImportTestRequest.php", $_SESSION['privileges'])) { ?>
+                  <!--<li class="allMenu importTestRequestMenu"><a href="/import-result/addImportTestRequest.php"><i class="fa fa-circle-o"></i> Import Test Request</a></li>-->
+                <?php } ?>
+              </ul>
+            </li>
+          <?php } ?>
+
           <!---->
         </ul>
       </section>

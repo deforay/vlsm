@@ -33,18 +33,26 @@ try {
         $_SESSION['alertMsg']="Result Import configuration initited for ".$_POST['configurationName'].". Please proceed to write the import logic in the file ".$_POST['configurationFile']." present in import-configs folder" ;
         
         $configDir = __DIR__;
-        $configFile = $configDir.DIRECTORY_SEPARATOR.$_POST['configurationFile'];
+        $configFileVL = $configDir.DIRECTORY_SEPARATOR."vl".DIRECTORY_SEPARATOR.$_POST['configurationFile'];
+        $configFileEID = $configDir.DIRECTORY_SEPARATOR."eid".DIRECTORY_SEPARATOR.$_POST['configurationFile'];
         
         
         if (!file_exists($configDir)) {
             mkdir($configDir, 0777, true);
         }
         
-        if (!file_exists($configFile)) {
-            $fp=fopen($configFile,'w');
+        if (!file_exists($configFileVL)) {
+            $fp=fopen($configFileVL,'w');
             fwrite($fp, '');
             fclose($fp);
         }
+
+        if (!file_exists($configFileEID)) {
+            $fp=fopen($configFileEID,'w');
+            fwrite($fp, '');
+            fclose($fp);
+        }
+        
     }
     header("location:importConfig.php");
   

@@ -1,6 +1,6 @@
 <?php
 include_once('startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general=new General($db);
 $uQuery = "SELECT * FROM user_details";
 $uResult=$db->query($uQuery);

@@ -279,7 +279,7 @@ if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlResultMailMenu").addClass('active');
-  }else if (splitsUrl=='addImportResult.php' || splitsUrl =='vlResultUnApproval.php' || splitsUrl =='importedStatistics.php') {
+  }else if (splitsUrl=='addImportResult.php' || splitsUrl =='imported-results.php' || splitsUrl =='importedStatistics.php') {
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".importResultMenu").addClass('active');
@@ -315,14 +315,6 @@ if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".patientList").addClass('active');
-  }else if (splitsUrl=='addImportTestResult.php') {
-    $(".request").addClass('active');
-    $(".allMenu").removeClass('active');
-    $(".importTestResultMenu").addClass('active');
-  }else if (splitsUrl=='addImportTestRequest.php') {
-    $(".test").addClass('active');
-    $(".allMenu").removeClass('active');
-    $(".importTestRequestMenu").addClass('active');
   }else if (splitsUrl=='vlWeeklyReport.php') {
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');

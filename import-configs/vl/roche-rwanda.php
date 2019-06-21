@@ -1,6 +1,8 @@
 <?php
 
 try {
+
+    $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
     $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_import";
@@ -185,6 +187,7 @@ try {
               $refno+=1;  
             }
             $data = array(
+                'module' => 'vl',
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
                 'import_machine_name' => $_POST['configMachineName'],
@@ -266,6 +269,7 @@ try {
             //echo "<pre>";var_dump($data);echo "</pre>";continue; 
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
+                $data['imported_by'] = $_SESSION['userId'];
                 $id = $db->insert("temp_sample_import", $data);
             }
             $inc++;
@@ -289,7 +293,7 @@ try {
         );
         $db->insert("log_result_updates", $data);
     }
-    header("location:../vl-print/vlResultUnApproval.php");
+    header("location:/import-result/imported-results.php");
     
 }
 catch (Exception $exc) {

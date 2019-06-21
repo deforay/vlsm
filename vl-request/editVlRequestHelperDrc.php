@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
@@ -262,6 +262,11 @@ try {
             $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
             $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
         }else{
+
+            //Since Sample Code does not exist, today is the date
+            //sample is being registered at the lab.
+            $vldata['sample_registered_at_lab'] = $general->getDateTime();
+                        
             //update sample code generation
             $sExpDT = explode(" ",$_POST['sampleCollectionDate']);
             $sExpDate = explode("-",$sExpDT[0]);

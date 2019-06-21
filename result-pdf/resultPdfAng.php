@@ -1,4 +1,7 @@
 <?php
+
+// This file is included in vlRequestSearchResultPdf.php
+
 ob_start();
 $tableName1="activity_log";
 $tableName2="vl_request_form";

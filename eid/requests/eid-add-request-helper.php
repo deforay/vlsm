@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once APPLICATION_PATH . '/General.php';
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 
 // echo "<pre>";
@@ -132,9 +132,10 @@ try {
                   'is_sample_rejected'=>$_POST['isSampleRejected'],
                   'result'=>$_POST['result'],
                   'result_status'=>6,
-                  'sample_rejection_reason'=>$_POST['sampleRejectionReason'],
+                  'reason_for_sample_rejection'=>$_POST['sampleRejectionReason'],
                   'request_created_by'=>$_SESSION['userId'],
-                  'request_created_on'=>$general->getDateTime(),
+                  'request_created_datetime'=>$general->getDateTime(),
+                  'sample_registered_at_lab'=>$general->getDateTime(),
                   'last_modified_by'=>$_SESSION['userId'],
                   'last_modified_datetime'=>$general->getDateTime()
                 );

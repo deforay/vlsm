@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include_once('../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 include_once(APPLICATION_PATH.'/models/Users.php');
 include_once(APPLICATION_PATH.'/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH.'/includes/fpdi/fpdi.php');
@@ -151,8 +151,7 @@ class MYPDF extends TCPDF {
         // Set font
         $this->SetFont('helvetica', '', 8);
         // Page number
-        //$this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');(this commentit out for drc form)
-        
+        $this->Cell(0, 10, 'Page'.$_SESSION['aliasPage'].'/'.$_SESSION['nbPages'], 0, false, 'C', 0, '', 0,false, 'T', 'M');
     }
 }
 

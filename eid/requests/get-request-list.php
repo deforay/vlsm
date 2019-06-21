@@ -2,7 +2,7 @@
 session_start();
 include_once('../../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $formConfigQuery ="SELECT * FROM global_config";
 $configResult=$db->query($formConfigQuery);
 $gconfig = array();
@@ -296,32 +296,33 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
 
                $row = array();
 
-               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['vl_sample_id'] . '"  value="' . $aRow['vl_sample_id'] . '" onclick="toggleTest(this);"  />';
+               //$row[]='<input type="checkbox" name="chk[]" class="checkTests" id="chk' . $aRow['eid_id'] . '"  value="' . $aRow['eid_id'] . '" onclick="toggleTest(this);"  />';
                $row[] = $aRow['sample_code'];
                if($sarr['user_type']!='standalone'){
                     $row[] = $aRow['remote_sample_code'];
                }
                $row[] = $aRow['sample_collection_date'];
                $row[] = $aRow['batch_code'];
+               $row[] = ucwords($aRow['facility_name']);
                $row[] = $aRow['child_id'];
                $row[] = $aRow['child_name'];
                $row[] = $aRow['mother_id'];
                $row[] = $aRow['mother_name'];
-               $row[] = ucwords($aRow['facility_name']);
+               
                $row[] = ucwords($aRow['facility_state']);
                $row[] = ucwords($aRow['facility_district']);
                $row[] = $aRow['result'];
                $row[] = $aRow['last_modified_datetime'];
                $row[] = ucwords($aRow['status_name']);
-               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['vl_sample_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
-               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['vl_sample_id']) . '\',900,520);"> Result</a>';
+               //$printBarcode='<a href="javascript:void(0);" class="btn btn-info btn-xs" style="margin-right: 2px;" title="View" onclick="printBarcode(\''.base64_encode($aRow['eid_id']).'\');"><i class="fa fa-barcode"> Print Barcode</i></a>';
+               //$enterResult='<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result" onclick="showModal(\'updateVlResult.php?id=' . base64_encode($aRow['eid_id']) . '\',900,520);"> Result</a>';
                
                if($editRequest){
-                    $edit='<a href="eid-edit-request.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
+                    $edit='<a href="eid-edit-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-primary btn-xs" style="margin-right: 2px;" title="Edit"><i class="fa fa-pencil"> Edit</i></a>';
                }
-               $pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['vl_sample_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
+               $pdf = '<a href="javascript:void(0);" class="btn btn-success btn-xs" style="margin-right: 2px;" title="View" onclick="convertPdf('.$aRow['eid_id'].');"><i class="fa fa-file-text"> PDF</i></a>';
                if($viewRequest){
-                    $view = '<a href="eid-view-request.php?id=' . base64_encode($aRow['vl_sample_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
+                    $view = '<a href="eid-view-request.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-default btn-xs" style="margin-right: 2px;" title="View"><i class="fa fa-eye"> View</i></a>';
                }
 
                if(isset($gconfig['bar_code_printing']) && $gconfig['bar_code_printing'] != "off"){

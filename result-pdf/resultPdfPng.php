@@ -1,4 +1,7 @@
 <?php
+
+// This file is included in vlRequestSearchResultPdf.php
+
 $resultFilename = '';
 if(sizeof($requestResult)> 0){
      $_SESSION['rVal'] = $general->generateRandomString(6);

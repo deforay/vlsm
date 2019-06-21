@@ -1626,7 +1626,7 @@ CREATE TABLE `result_import_stats` (
 
 --
 
-INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Barcode Format', 'barcode_format', 'C39+');
+INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Barcode Format', 'barcode_format', 'C39');
 
 -- 
 
@@ -1756,3 +1756,135 @@ ALTER TABLE `eid_form` ADD `result_approved_by` VARCHAR(255) NULL DEFAULT NULL A
 
 
 -- Version 3.11 ---------- Amit 28-May-2019
+
+INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) VALUES (27, 'eid', 'eid-results', 'EID Result Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '27', 'eid-manual-results.php', 'Enter Result Manually');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '27', 'eid-import-result.php', 'Import Result File');
+
+
+-- Amit 17 June 2019
+
+UPDATE `privileges` SET `privilege_name` = 'eid-manual-results.php' WHERE `privilege_name` = 'eid-results.php';
+UPDATE `resources` SET `display_name` = 'Import Result' WHERE `resource_id` = 8;
+UPDATE `privileges` SET `display_name` = 'Import Result from File' WHERE `privilege_id` = 19;
+delete from roles_privileges_map where privilege_id = 53; 
+delete from privileges where privilege_id = 53;
+
+delete from roles_privileges_map where privilege_id = 54; 
+delete from privileges where privilege_id = 54;
+
+
+ALTER TABLE `eid_form` ADD `import_machine_file_name` VARCHAR(255) NULL AFTER `result_approved_by`;
+ALTER TABLE `eid_form` ADD `sample_registered_at_lab` DATETIME NULL DEFAULT NULL AFTER `request_created_by`;
+ALTER TABLE `temp_sample_import` ADD `module` VARCHAR(255) NULL DEFAULT NULL AFTER `temp_sample_id`;
+ALTER TABLE `temp_sample_import` ADD `imported_by` VARCHAR(255) NOT NULL AFTER `sample_review_by`;
+
+
+-- Amit 21 Jun 2019
+
+
+DROP TABLE IF EXISTS `r_eid_sample_rejection_reasons`;
+CREATE TABLE `r_eid_sample_rejection_reasons` (
+  `rejection_reason_id` int(11) NOT NULL,
+  `rejection_reason_name` varchar(255) DEFAULT NULL,
+  `rejection_type` varchar(255) NOT NULL DEFAULT 'general',
+  `rejection_reason_status` varchar(255) DEFAULT NULL,
+  `rejection_reason_code` varchar(255) DEFAULT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `data_sync` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `r_eid_sample_rejection_reasons`
+--
+ALTER TABLE `r_eid_sample_rejection_reasons`
+  ADD PRIMARY KEY (`rejection_reason_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `r_eid_sample_rejection_reasons`
+--
+ALTER TABLE `r_eid_sample_rejection_reasons`
+  MODIFY `rejection_reason_id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+
+CREATE TABLE `eid_imported_controls` (
+ `control_id` int(11) NOT NULL AUTO_INCREMENT,
+ `control_code` varchar(255) NOT NULL,
+ `lab_id` int(11) DEFAULT NULL,
+ `batch_id` int(11) DEFAULT NULL,
+ `control_type` varchar(255) DEFAULT NULL,
+ `lot_number` varchar(255) DEFAULT NULL,
+ `lot_expiration_date` date DEFAULT NULL,
+ `sample_tested_datetime` datetime DEFAULT NULL,
+ `is_sample_rejected` varchar(255) DEFAULT NULL,
+ `reason_for_sample_rejection` varchar(255) DEFAULT NULL,
+ `result` varchar(255) DEFAULT NULL,
+ `approver_comments` varchar(255) DEFAULT NULL,
+ `result_approved_by` varchar(255) DEFAULT NULL,
+ `result_approved_datetime` datetime DEFAULT NULL,
+ `result_reviewed_by` varchar(1000) DEFAULT NULL,
+ `result_reviewed_datetime` datetime DEFAULT NULL,
+ `status` varchar(255) DEFAULT NULL,
+ `vlsm_country_id` varchar(10) DEFAULT NULL,
+ `file_name` varchar(255) DEFAULT NULL,
+ `imported_date_time` datetime DEFAULT NULL,
+ PRIMARY KEY (`control_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;  
+
+
+
+ALTER TABLE `eid_form` ADD `eid_test_platform` VARCHAR(255) NULL DEFAULT NULL AFTER `lab_technician`;
+ALTER TABLE `eid_form` ADD `result_dispatched_datetime` DATETIME NULL DEFAULT NULL AFTER `result_approved_by`;
+ALTER TABLE `eid_form` ADD `approver_comments` VARCHAR(1000) NULL DEFAULT NULL AFTER `result_approved_by`;
+ALTER TABLE `eid_form` ADD `import_machine_name` VARCHAR(255) NULL DEFAULT NULL AFTER `result_dispatched_datetime`;
+ALTER TABLE `eid_form` ADD `manual_result_entry` VARCHAR(255) NULL DEFAULT 'no' AFTER `result_dispatched_datetime`;
+ALTER TABLE `eid_form` CHANGE `request_created_on` `request_created_datetime` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `eid_form` CHANGE `sample_rejection_reason` `reason_for_sample_rejection` VARCHAR(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+
+
+INSERT INTO `global_config` (`display_name`,`name`, `value`) VALUES ('EID Positive','eid_positive', 'Positive');
+INSERT INTO `global_config` (`display_name`,`name`, `value`) VALUES ('EID Negative','eid_negative', 'Negative');
+INSERT INTO `global_config` (`display_name`,`name`, `value`) VALUES ('EID Indeterminate','eid_indeterminate', 'Indeterminate');
+
+ALTER TABLE `global_config` ADD `status` VARCHAR(255) NOT NULL DEFAULT 'active' AFTER `value`;
+UPDATE `global_config` SET `status` = 'inactive' WHERE `global_config`.`name` = 'auto_approval';
+UPDATE `global_config` SET `status` = 'inactive' WHERE `global_config`.`name` = 'enable_qr_mechanism';
+UPDATE `global_config` SET `status` = 'inactive' WHERE `global_config`.`name` = 'sync_path';
+
+--- 
+
+DROP TABLE IF EXISTS `r_eid_results`;
+CREATE TABLE `r_eid_results` (
+  `result_id` varchar(255) NOT NULL,
+  `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'active',
+  `data_sync` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `r_eid_results`
+--
+
+INSERT INTO `r_eid_results` (`result_id`, `result`, `status`, `data_sync`) VALUES
+('indeterminate', 'Indeterminate', 'active', 0),
+('negative', 'Negative', 'active', 0),
+('positive', 'Positive', 'active', 0);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `r_eid_results`
+--
+ALTER TABLE `r_eid_results`
+  ADD PRIMARY KEY (`result_id`);

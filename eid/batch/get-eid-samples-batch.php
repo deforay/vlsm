@@ -1,7 +1,7 @@
 <?php
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH . '/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $start_date = '';
 $end_date = '';
@@ -30,7 +30,7 @@ if (isset($_POST['sampleReceivedAtLab']) && trim($_POST['sampleReceivedAtLab']) 
     }
 }
 
-$query = "SELECT vl.sample_code,vl.eid_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM eid_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.sample_rejection_reason IS NULL OR vl.sample_rejection_reason ='' OR vl.sample_rejection_reason = 0) AND (vl.result is NULL or vl.result = '') AND vlsm_country_id = $country  AND vl.sample_code!=''";
+$query = "SELECT vl.sample_code,vl.eid_id,vl.facility_id,vl.result_status,f.facility_name,f.facility_code FROM eid_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id WHERE (vl.is_sample_rejected IS NULL OR vl.is_sample_rejected = '' OR vl.is_sample_rejected = 'no') AND (vl.reason_for_sample_rejection IS NULL OR vl.reason_for_sample_rejection ='' OR vl.reason_for_sample_rejection = 0) AND (vl.result is NULL or vl.result = '') AND vlsm_country_id = $country  AND vl.sample_code!=''";
 if (isset($_POST['batchId'])) {
     $query = $query . " AND (sample_batch_id = '" . $_POST['batchId'] . "' OR sample_batch_id IS NULL OR sample_batch_id = '')";
 } else {

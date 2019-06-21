@@ -1,7 +1,9 @@
 <?php
 
 try {
-    
+
+
+    $db = $db->where('imported_by', $_SESSION['userId']);
     $db->delete('temp_sample_import');
     //set session for controller track id in hold_sample_record table
     $cQuery  = "select MAX(import_batch_tracking) FROM hold_sample_import";
@@ -55,7 +57,7 @@ try {
       
         $sampleIdCol='B';
         $sampleIdRow='19';
-        $logValCol='';
+        $logValCol='I';
         $logValRow='';
         $absValCol='G';
         $absValRow='19';
@@ -94,10 +96,11 @@ try {
             if(trim($row[$absValCol]) == "<"){
                 $absDecimalVal=$absVal="";
                 $logVal="";                    
-                $txtVal="< 100";
+                $txtVal="< 20";
             }else if((int)$row[$absValCol] > 0){
                 $absDecimalVal=$absVal=(int)$row[$absValCol];
-                $logVal=round(log10($absVal),4);
+                $logVal=(float)$row[$logValCol];
+                //$logVal=round(log10($absVal),4);
                 $txtVal="";
             }else{
                 $absDecimalVal=$absVal="";
@@ -110,7 +113,9 @@ try {
           $batchCode = $row[$batchCodeCol];
           
           // Date time in the provided Biomerieux Sample file is in this format : 05-23-16 12:52:33
-          $testingDate = $sheetData[6]['C']." ".$sheetData[7]['C'];
+          $testingDate = $sheetData[5]['C']." ".$sheetData[6]['C'];
+
+          //var_dump($testingDate);die;
           $testingDate = DateTime::createFromFormat('m-d-y H:i:s', $testingDate)->format('Y-m-d H:i:s');
           
           if ($sampleCode == "")
@@ -134,6 +139,7 @@ try {
         
         foreach ($infoFromFile as $sampleCode => $d) {
             $data = array(
+                'module' => 'vl',
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
                 'import_machine_name' => $_POST['configMachineName'],
@@ -183,6 +189,7 @@ try {
             //echo "<pre>";var_dump($data);echo "</pre>";continue;
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
                 $data['result_imported_datetime'] = $general->getDateTime();
+                $data['imported_by'] = $_SESSION['userId'];
                 $id = $db->insert("temp_sample_import", $data);
             }
         }
@@ -203,7 +210,7 @@ try {
     );
     $db->insert("log_result_updates", $data);
     
-    header("location:../vl-print/vlResultUnApproval.php");
+    header("location:/import-result/imported-results.php");
     
 }
 catch (Exception $exc) {

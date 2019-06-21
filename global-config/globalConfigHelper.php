@@ -3,8 +3,8 @@ session_start();
 ob_start();
 include_once '../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once APPLICATION_PATH . '/General.php';
-include_once APPLICATION_PATH .'/includes/ImageResize.php';
+include_once(APPLICATION_PATH . '/models/General.php');
+include_once APPLICATION_PATH . '/includes/ImageResize.php';
 
 $general = new General($db);
 $tableName = "global_config";
@@ -107,76 +107,103 @@ try {
                 //request folder creation
                 if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "request")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "request");
-                }if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new")) {
+                }
+                if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "new");
-                }if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced")) {
+                }
+                if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "synced");
-                }if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "error")) {
+                }
+                if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "error")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "request" . DIRECTORY_SEPARATOR . "error");
                 }
                 //result folder creation
                 if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "result")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "result");
-                }if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new")) {
+                }
+                if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "new");
-                }if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "synced")) {
+                }
+                if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "synced")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "synced");
-                }if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "error")) {
+                }
+                if (!file_exists($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "error")) {
                     mkdir($fieldValue . DIRECTORY_SEPARATOR . "result" . DIRECTORY_SEPARATOR . "error");
                 }
             }
         }
     }
-    //update all sample code in database
-    if (isset($_POST['sample_code_prefix']) && trim($_POST['sample_code_prefix']) != '' && ($_POST['vl_form'] == 7 || $_POST['vl_form'] == 3 || $_POST['vl_form'] == 4)) {
-        if (($configResult[0]['value'] != $_POST['sample_code']) || ($_POST['vl_form'] != $configFormResult[0]['value'])) {
-            $prefix = trim($_POST['sample_code_prefix']);
-            $vlDistinctQuery = "SELECT DISTINCT DATE_FORMAT( request_created_datetime,'%Y-%m' ) as month FROM vl_request_form where vlsm_country_id=" . $_POST['vl_form'];
-            $distnictResult = $db->rawQuery($vlDistinctQuery);
-            if ($distnictResult) {
-                $increment = 1;
-                foreach ($distnictResult as $month) {
-                    $y = explode("-", $month['month']);
-                    if ($_POST['sample_code'] == 'YY') {
-                        $dtYr = substr($y[0], 2);
-                        $start_date = date('Y-01-01');
-                        $end_date = date('Y-12-31');
-                    } else if ($_POST['sample_code'] == 'MMYY') {
-                        $increment = 1;
-                        $dtYr = $y[1] . substr($y[0], 2);
-                        $start_date = date($month['month'] . '-01');
-                        $end_date = date($month['month'] . '-31');
-                    }
-                    if ($_POST['vl_form'] == 7) {
-                        $start_date = date('Y-01-01');
-                        $end_date = date('Y-12-31');
-                    }
-                    $vlQuery = 'select sample_code,vl_sample_id from vl_request_form as vl where vl.vlsm_country_id=' . $_POST['vl_form'] . ' AND DATE(vl.request_created_datetime) >= "' . $start_date . '" AND DATE(vl.request_created_datetime) <= "' . $end_date . '" order by vl_sample_id';
-                    $svlResult = $db->query($vlQuery);
 
-                    foreach ($svlResult as $sample) {
-                        $maxId = $increment;
-                        $strparam = strlen($maxId);
-                        $zeros = substr("000", $strparam);
-                        $maxId = $zeros . $maxId;
-                        $sampleCode = $prefix . $dtYr . $maxId;
-                        $vlData = array('serial_no' => $sampleCode, 'sample_code_title' => $_POST['sample_code'], 'sample_code' => $sampleCode, 'sample_code_format' => $prefix . $dtYr, 'sample_code_key' => $maxId);
-                        $db = $db->where('vl_sample_id', $sample['vl_sample_id']);
-                        $id = $db->update('vl_request_form', $vlData);
-                        $increment++;
-                    }
-                }
-            }
-        }
+    if (isset($_POST['eid_positive']) && trim($_POST['eid_positive']) != "") {
+        $data = array('result' => trim($_POST['eid_positive']));
+        $db = $db->where('result_id', 'positive');
+        $db->update('r_eid_results', $data);
     }
+
+    if (isset($_POST['eid_negative']) && trim($_POST['eid_negative']) != "") {
+        $data = array('result' => trim($_POST['eid_negative']));
+        $db = $db->where('result_id', 'negative');
+        $db->update('r_eid_results', $data);
+    }
+
+    if (isset($_POST['eid_indeterminate']) && trim($_POST['eid_indeterminate']) != "") {
+        $data = array('result' => trim($_POST['eid_indeterminate']));
+        $db = $db->where('result_id', 'indeterminate');
+        $db->update('r_eid_results', $data);
+    }
+
+
+
+    //update all sample code in database
+    // if (isset($_POST['sample_code_prefix']) && trim($_POST['sample_code_prefix']) != '' && ($_POST['vl_form'] == 7 || $_POST['vl_form'] == 3 || $_POST['vl_form'] == 4)) {
+    //     if (($configResult[0]['value'] != $_POST['sample_code']) || ($_POST['vl_form'] != $configFormResult[0]['value'])) {
+    //         $prefix = trim($_POST['sample_code_prefix']);
+    //         $vlDistinctQuery = "SELECT DISTINCT DATE_FORMAT( request_created_datetime,'%Y-%m' ) as month FROM vl_request_form where vlsm_country_id=" . $_POST['vl_form'];
+    //         $distnictResult = $db->rawQuery($vlDistinctQuery);
+    //         if ($distnictResult) {
+    //             $increment = 1;
+    //             foreach ($distnictResult as $month) {
+    //                 $y = explode("-", $month['month']);
+    //                 if ($_POST['sample_code'] == 'YY') {
+    //                     $dtYr = substr($y[0], 2);
+    //                     $start_date = date('Y-01-01');
+    //                     $end_date = date('Y-12-31');
+    //                 } else if ($_POST['sample_code'] == 'MMYY') {
+    //                     $increment = 1;
+    //                     $dtYr = $y[1] . substr($y[0], 2);
+    //                     $start_date = date($month['month'] . '-01');
+    //                     $end_date = date($month['month'] . '-31');
+    //                 }
+    //                 if ($_POST['vl_form'] == 7) {
+    //                     $start_date = date('Y-01-01');
+    //                     $end_date = date('Y-12-31');
+    //                 }
+    //                 $vlQuery = 'select sample_code,vl_sample_id from vl_request_form as vl where vl.vlsm_country_id=' . $_POST['vl_form'] . ' AND DATE(vl.request_created_datetime) >= "' . $start_date . '" AND DATE(vl.request_created_datetime) <= "' . $end_date . '" order by vl_sample_id';
+    //                 $svlResult = $db->query($vlQuery);
+
+    //                 foreach ($svlResult as $sample) {
+    //                     $maxId = $increment;
+    //                     $strparam = strlen($maxId);
+    //                     $zeros = substr("000", $strparam);
+    //                     $maxId = $zeros . $maxId;
+    //                     $sampleCode = $prefix . $dtYr . $maxId;
+    //                     $vlData = array('serial_no' => $sampleCode, 'sample_code_title' => $_POST['sample_code'], 'sample_code' => $sampleCode, 'sample_code_format' => $prefix . $dtYr, 'sample_code_key' => $maxId);
+    //                     $db = $db->where('vl_sample_id', $sample['vl_sample_id']);
+    //                     $id = $db->update('vl_request_form', $vlData);
+    //                     $increment++;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     $_SESSION['alertMsg'] = "Global Config values updated successfully";
 
     //Add event log
     $eventType = 'general-config-update';
-    $action = ucwords($_SESSION['userName']).' updated general config';
+    $action = ucwords($_SESSION['userName']) . ' updated general config';
     $resource = 'general-config';
 
-    $general->activityLog($eventType,$action,$resource);    
+    $general->activityLog($eventType, $action, $resource);
     header("location:globalConfig.php");
 } catch (Exception $exc) {
     error_log($exc->getMessage());
