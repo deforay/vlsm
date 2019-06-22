@@ -95,6 +95,7 @@ $rInfo=$db->query($resourcesQuery);
                           echo "<td><strong>" . ucwords($value['display_name']) . "</strong></td>";
                           $pQuery="SELECT * from privileges where resource_id='".$value['resource_id']."'";
                           $pInfo=$db->query($pQuery);
+                          echo "<td style='text-align:center;vertical-align:middle;'>";
                           foreach ($pInfo as $privilege) {
                             //if (in_array($privilege['privilege_id'], $priId)){
                             //  $allowChecked = " checked='' ";
@@ -103,17 +104,15 @@ $rInfo=$db->query($resourcesQuery);
                             //  $denyChecked = " checked='' ";
                             //  $allowChecked = "";
                             //  }
-                          echo "<td>"
-                          . "<label class='labelName'>" . ucwords($privilege['display_name']) . "</label>
-                            <label>
-                                    <input type='radio' class='cekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='allow' > <i class='fa fa-check'></i>
-                            </label>
-                            <label>
-                                    <input type='radio' class='unCekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='deny' >  <i class='fa fa-times'></i>
-                            </label>
-                            </td>";
+                          echo "<div class='col-lg-3' style='margin-top:5px;border:1px solid #eee;padding:10px;'>
+                                  <label class='labelName' style='white-space:nowrap'>" . ucwords($privilege['display_name']) . "</label>
+                                  <br>
+                                  <input type='radio' class='cekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='allow' > <i class='fa fa-check'></i>
+                                  <input type='radio' class='unCekAll layCek'  name='resource[" . $privilege['privilege_id'] . "]" . "' value='deny' >  <i class='fa fa-times'></i>
+                            
+                                </div>";
                             }
-                            echo "</tr>";
+                            echo "</td></tr>";
                             }
                             ?>	
                           </table>
