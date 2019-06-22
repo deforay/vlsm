@@ -3,7 +3,7 @@ ob_start();
 $title = "VLSM | Import Test Results From File";
 include_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $general = new General($db);
 $query = "SELECT config_id,machine_name,import_machine_file_name FROM import_config where status='active'";
 $iResult = $db->rawQuery($query);

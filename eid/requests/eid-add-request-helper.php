@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $general = new General($db);
 
 // echo "<pre>";
@@ -100,7 +100,7 @@ try {
                   'sample_code_key'=>$_POST['sampleCodeKey'],
                   'sample_code_format'=>$_POST['sampleCodeFormat'],
                   'facility_id'=>$_POST['facilityId'],
-                  'implementation_partner'=>$_POST['implementingPartner'],
+                  'implementing_partner'=>$_POST['implementingPartner'],
                   'funding_source'=>$_POST['fundingSource'],
                   'mother_id'=>$_POST['mothersId'],
                   'mother_name'=>$_POST['mothersName'],
