@@ -1,6 +1,6 @@
 <?php
 $title = "VLSM | Manage Result Status";
-include_once('../startup.php');
+include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 //include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $tsQuery = "SELECT * FROM r_sample_status";
@@ -12,11 +12,11 @@ $fResult = $db->rawQuery($fQuery);
 $batQuery = "SELECT batch_code FROM batch_details where batch_status='completed'";
 $batResult = $db->rawQuery($batQuery);
 
-$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
 //sample rejection reason
-$rejectionQuery = "SELECT * FROM r_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionQuery = "SELECT * FROM r_eid_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
 
 $rejectionReason = '<option value="">-- Select sample rejection reason --</option>';
@@ -104,19 +104,7 @@ foreach ($rejectionTypeResult as $type) {
               </td>
             </tr>
             <tr>
-              <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
-              <td>
-                <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($sResult as $type) {
-                    ?>
-                    <option value="<?php echo $type['sample_id']; ?>"><?php echo ucwords($type['sample_name']); ?></option>
-                  <?php
-                }
-                ?>
-                </select>
-              </td>
+             
               <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
               <td>
                 <select class="form-control" id="facilityName" name="facilityName" title="Please select facility name" multiple="multiple" style="width:220px;">
@@ -130,8 +118,6 @@ foreach ($rejectionTypeResult as $type) {
                 ?>
                 </select>
               </td>
-            </tr>
-            <tr>
               <td>&nbsp;<b>Show Samples that are &nbsp;:</b></td>
               <td>
                 <select class="form-control" id="statusFilter" name="statusFilter" title="Please choose a status" style="width:220px;">
@@ -177,10 +163,11 @@ foreach ($rejectionTypeResult as $type) {
                   <?php } ?>
                   <th>Sample Collection Date</th>
                   <th>Batch Code</th>
-                  <th>Unique ART No</th>
-                  <th>Patient's Name</th>
+                  <th>Child's ID</th>
+                  <th>Child's Name</th>
+                  <th>Mother's ID</th>
+                  <th>Mother's Name</th>
                   <th>Facility Name</th>
-                  <th>Sample Type</th>
                   <th>Result</th>
                   <th>Last Modified on</th>
                   <th>Status</th>
@@ -207,8 +194,8 @@ foreach ($rejectionTypeResult as $type) {
   </section>
   <!-- /.content -->
 </div>
-<script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
-<script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="/assets/plugins/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
   var startDate = "";
   var endDate = "";
@@ -293,6 +280,9 @@ foreach ($rejectionTypeResult as $type) {
         {
           "sClass": "center"
         },
+        {
+          "sClass": "center"
+        },
         //{"sClass":"center","bSortable":false},
       ],
       <?php if ($sarr['user_type'] != 'standalone') { ?> "aaSorting": [
@@ -312,7 +302,7 @@ foreach ($rejectionTypeResult as $type) {
       },
       "bProcessing": true,
       "bServerSide": true,
-      "sAjaxSource": "getVlResultsForApproval.php",
+      "sAjaxSource": "/eid/results/get-eid-result-status.php",
       "fnServerData": function(sSource, aoData, fnCallback) {
         aoData.push({
           "name": "batchCode",
@@ -353,7 +343,7 @@ foreach ($rejectionTypeResult as $type) {
   }
 
   function convertPdf(id) {
-    $.post("../result-pdf/vlRequestPdf.php", {
+    $.post("/result-pdf/vlRequestPdf.php", {
         id: id,
         format: "html"
       },
@@ -420,7 +410,7 @@ foreach ($rejectionTypeResult as $type) {
     if (stValue != '' && testIds != '') {
       conf = confirm("Do you wish to change the test status ?");
       if (conf) {
-        $.post("updateTestStatus.php", {
+        $.post("/eid/results/update-status.php", {
             status: stValue,
             id: testIds,
             rejectedReason: $("#bulkRejectionReason").val()
@@ -469,7 +459,7 @@ foreach ($rejectionTypeResult as $type) {
     if (obj.value != '') {
       conf = confirm("Do you wish to change the status ?");
       if (conf) {
-        $.post("updateTestStatus.php", {
+        $.post("/eid/results/update-status.php", {
             status: obj.value,
             id: obj.id
           },
@@ -495,7 +485,7 @@ foreach ($rejectionTypeResult as $type) {
     if (obj.value != '') {
       conf = confirm("Do you wish to change the status ?");
       if (conf) {
-        $.post("updateTestStatus.php", {
+        $.post("/eid/results/update-status.php", {
             status: '4',
             id: $("#statusDropDownId").val(),
             rejectedReason: obj.value

@@ -525,8 +525,8 @@ $formConfigResult = $db->query($formConfigQuery);
               if (isset($_SESSION['privileges']) && in_array("eid-manual-results.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu eidResultsMenu"><a href="/eid/results/eid-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result</a></li>
                 <?php }
-              if (isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])) { ?>
-                  <li class="allMenu vlResultApprovalMenu"><a href="/vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+              if (isset($_SESSION['privileges']) && in_array("eid-result-status.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu vlResultApprovalMenu"><a href="/eid/results/eid-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu vlResultMailMenu"><a href="/mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
