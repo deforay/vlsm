@@ -2,7 +2,7 @@
 ob_start();
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/includes/tcpdf/tcpdf.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
 $tableName="vl_request_form";
 //get other config values

@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $tableName="move_samples";
 $primaryKey="move_sample_id";
 

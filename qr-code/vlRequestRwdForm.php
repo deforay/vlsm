@@ -1,7 +1,7 @@
 <?php
 ob_start();
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
 $qrVal = explode(',',$_GET['q']);
 if(!isset($qrVal[56]) || $qrVal[56]== '' || $qrVal[56]== null){

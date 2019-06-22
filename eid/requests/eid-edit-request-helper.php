@@ -3,7 +3,7 @@ ob_start();
 session_start();
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $general = new General($db);
 
 // echo "<pre>";
@@ -91,20 +91,20 @@ try {
 
     $eidData=array(
                   'facility_id'=>$_POST['facilityId'],
-                  'implementation_partner'=>$_POST['implementingPartner'],
+                  'implementing_partner'=>$_POST['implementingPartner'],
                   'funding_source'=>$_POST['fundingSource'],
                   'mother_id'=>$_POST['mothersId'],
                   'mother_name'=>$_POST['mothersName'],
                   'mother_dob'=>$_POST['mothersDob'],
                   'mother_treatment'=>implode(",",$_POST['motherTreatment']),
-                  'mother_treatment_other'=>$_POST['motherTreatmentOther'],
+                  'mother_treatment_other'=>isset($_POST['motherTreatmentOther']) ? $_POST['motherTreatmentOther'] : null,
                   'mother_marital_status'=>$_POST['mothersMaritalStatus'],
                   'child_id'=>$_POST['childId'],
                   'child_name'=>$_POST['childName'],
                   'child_dob'=>$_POST['childDob'],
                   'child_gender'=>$_POST['childGender'],
                   'child_age'=>$_POST['childAge'],
-                  'child_treatment'=>implode(",",$_POST['childTreatment']),
+                  'child_treatment'=>isset($_POST['childTreatment']) ? implode(",",$_POST['childTreatment']) : null,
                   'mother_cd4'=>$_POST['mothercd4'],
                   'mother_vl_result'=>$motherVlResult,
                   'has_infant_stopped_breastfeeding'=>$_POST['hasInfantStoppedBreastfeeding'],

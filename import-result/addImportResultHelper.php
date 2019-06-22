@@ -4,7 +4,7 @@ session_start();
 include_once('../startup.php');  
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/vendor/autoload.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $confFileName = base64_decode($_POST['machineName']);
 $globalConfigQuery = "SELECT * from global_config";
 $configResult = $db->query($globalConfigQuery);

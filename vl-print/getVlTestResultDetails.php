@@ -1,7 +1,8 @@
 <?php
 session_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH . '/models/General.php');
+include_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/models/General.php');
 $formConfigQuery ="SELECT * from global_config where name='vl_form'";
 $configResult=$db->query($formConfigQuery);
 $arr = array();
@@ -432,4 +433,3 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
           }
 
           echo json_encode($output);
-          ?>
