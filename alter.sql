@@ -1897,3 +1897,7 @@ INSERT INTO `r_eid_results` (`result_id`, `result`, `status`, `data_sync`) VALUE
 --
 ALTER TABLE `r_eid_results`
   ADD PRIMARY KEY (`result_id`);
+
+--
+
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '27', 'eid-result-status.php', 'Manage Result Status');
