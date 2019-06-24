@@ -615,7 +615,7 @@ if($urgency==''){ $urgency= 'normal';}
     var pName = $("#province").val();
     var sDate = $("#sampleCollectionDate").val();
     if(pName!='' && sDate!=''){
-      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate},
+      $.post("/vl-request/sampleCodeGeneration.php", { sDate : sDate},
       function(data){
         var sCodeKey = JSON.parse(data);
         <?php if($arr['sample_code']=='auto'){ ?>

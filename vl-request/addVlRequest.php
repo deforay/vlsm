@@ -259,7 +259,7 @@ if ($arr['vl_form'] == 1) {
                                                                 function insertSampleCode(formId,vlSampleId,sampleCode,sampleCodeKey,sampleCodeFormat,countryId,sampleCollectionDate,provinceCode=null,provinceId=null)
                                                                 {
                                                                 $.blockUI();
-                                                                $.post("/includes/insertNewSample.php", { sampleCode : $("#"+sampleCode).val(),sampleCodeKey: $("#"+sampleCodeKey).val(),sampleCodeFormat: $("#"+sampleCodeFormat).val(),countryId:countryId,sampleCollectionDate:$("#"+sampleCollectionDate).val(),provinceCode:provinceCode,provinceId:provinceId},
+                                                                $.post("/vl-request/insertNewSample.php", { sampleCode : $("#"+sampleCode).val(),sampleCodeKey: $("#"+sampleCodeKey).val(),sampleCodeFormat: $("#"+sampleCodeFormat).val(),countryId:countryId,sampleCollectionDate:$("#"+sampleCollectionDate).val(),provinceCode:provinceCode,provinceId:provinceId},
                                                                 function(data){
                                                                     if(data>0){
                                                                         $.unblockUI();
