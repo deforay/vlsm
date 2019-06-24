@@ -32,7 +32,13 @@ foreach ($saResult as $sample) {
     }
 }
 $sCode = implode(', ', $sampleCode);
-$samplePrintQuery = "SELECT vl.*, b.*, ts.*, f.facility_name, l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district 
+$samplePrintQuery = "SELECT vl.*, b.*, ts.*, f.facility_name, l_f.facility_name as labName,
+                        f.facility_code,
+                        f.facility_state,
+                        f.facility_district,
+                        u_d.user_name as reviewedBy,
+                        a_u_d.user_name as approvedBy,
+                        rs.rejection_reason_name
                         FROM eid_form as vl 
                         LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                         LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
@@ -42,7 +48,7 @@ $samplePrintQuery = "SELECT vl.*, b.*, ts.*, f.facility_name, l_f.facility_name 
                         LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
                         LEFT JOIN r_eid_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
 $samplePrintQuery .= ' where vl.sample_code IN ( ' . $sCode . ')'; // Append to condition
-$_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
+$_SESSION['eidPrintSearchResultQuery'] = $samplePrintQuery;
 
 
 // We can clear the temp sample import table
@@ -93,10 +99,10 @@ unset($_SESSION['controllertrack']);
                             <td>
                                 <?php
                                 if (isset($tsResult[0]['totalCount']) && $tsResult[0]['totalCount'] > 0) { ?>
-                                    <input type="button" onclick="convertSearchResultToPdf();" value="Print all results" class="btn btn-success btn-sm">&nbsp;&nbsp;
-                                    <a href="/vl-print/vlPrintResult.php" class="btn btn-success btn-sm">Continue without printing results</a>
+                                    <input type="button" onclick="convertSearchResultToPdf();return false;" value="Print all results" class="btn btn-success btn-sm">&nbsp;&nbsp;
+                                    <a href="/eid/results/eid-print-results.php" class="btn btn-success btn-sm">Continue without printing results</a>
                                 <?php } else { ?>
-                                    <a href="/vl-print/vlPrintResult.php" class="btn btn-success btn-sm">Continue </a>
+                                    <a href="/eid/results/eid-print-results.php" class="btn btn-success btn-sm">Continue </a>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -117,7 +123,7 @@ unset($_SESSION['controllertrack']);
         $.blockUI();
         <?php
         $path = '';
-        $path = '/result-pdf/vlRequestSearchResultPdf.php';
+        $path = '/eid/results/generate-result-pdf.php';
         ?>
         $.post("<?php echo $path; ?>", {
                 source: 'print',
@@ -129,8 +135,8 @@ unset($_SESSION['controllertrack']);
                     alert('Unable to generate download');
                 } else {
                     $.unblockUI();
-                    window.location.href = "importedStatistics.php";
-                    window.open('../uploads/' + data, '_blank');
+                    window.open('/uploads/' + data, '_blank');
+                    window.location.href = "/eid/results/eid-print-results.php";
                 }
 
             });

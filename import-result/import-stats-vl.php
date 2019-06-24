@@ -78,7 +78,7 @@ unset($_SESSION['controllertrack']);
                             <td>
                                 <?php
                                 if (isset($tsResult[0]['totalCount']) && $tsResult[0]['totalCount'] > 0) { ?>
-                                    <input type="button" onclick="convertSearchResultToPdf();" value="Print all results" class="btn btn-success btn-sm">&nbsp;&nbsp;
+                                    <input type="button" onclick="convertSearchResultToPdf();return false;" value="Print all results" class="btn btn-success btn-sm">&nbsp;&nbsp;
                                     <a href="/vl-print/vlPrintResult.php" class="btn btn-success btn-sm">Continue without printing results</a>
                                 <?php } else { ?>
                                     <a href="/vl-print/vlPrintResult.php" class="btn btn-success btn-sm">Continue </a>
@@ -114,8 +114,8 @@ unset($_SESSION['controllertrack']);
                     alert('Unable to generate download');
                 } else {
                     $.unblockUI();
-                    window.location.href = "importedStatistics.php";
                     window.open('/uploads/' + data, '_blank');
+                    window.location.href = "/vl-print/vlPrintResult.php";
                 }
 
             });

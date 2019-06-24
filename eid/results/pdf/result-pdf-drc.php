@@ -110,7 +110,7 @@ if (sizeof($requestResult) > 0) {
             $difference = $todayDate - $dob;
             $seconds_per_year = 60 * 60 * 24 * 365;
             $age = round($difference / $seconds_per_year);
-        } elseif (isset($result['child_age']) && trim($result['child_age']) != '' && trim($result['patient_age_in_years']) > 0) {
+        } elseif (isset($result['child_age']) && trim($result['child_age']) != '' && trim($result['child_age']) > 0) {
             $age = $result['child_age'];
         }
 
@@ -155,39 +155,40 @@ if (sizeof($requestResult) > 0) {
         $smileyContent = '';
         $showMessage = '';
         $tndMessage = '';
+        $smileyShow = true;
         $messageTextSize = '12px';
         if ($result['result'] != NULL && trim($result['result']) != '') {
             $resultType = is_numeric($result['result']);
-            if (in_array(strtolower(trim($result['result'])), array("negative"))) {
+            if ($result['result'] == 'negative') {
                 $vlResult = $eidResults[$result['result']];
                 if (isset($smileyShow) && $smileyShow != '') {
                     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
                 }
                 $showMessage = "";
                 $tndMessage = '';
-            } else if (in_array(strtolower(trim($result['result'])), array("positive"))) {
+            } else if ($result['result'] == 'positive') {
                 $vlResult = $eidResults[$result['result']];
                 if (isset($smileyShow) && $smileyShow != '') {
                     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face"/>';
                 }
                 $showMessage = '';
                 $messageTextSize = '15px';
-            } else if (in_array(strtolower(trim($result['result'])), array("indeterminate"))) {
+            } else if ($result['result'] == 'indeterminate') {
                 $vlResult = $eidResults[$result['result']];
                 if (isset($smileyShow) && $smileyShow != '') {
-                    $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/cross.png" alt="frown_face"/>';
+                    //$smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/cross.png" alt="frown_face"/>';
                 }
                 $showMessage = '';
                 $messageTextSize = '15px';
-            }  
+            }
         }
-        
+
         $html = '';
         $html .= '<table style="padding:0px 2px 2px 2px;">';
         $html .= '<tr>';
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Échantillon id</td>';
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date du prélèvement</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code du patient</td>';
+        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Code de l’enfant (Patient)</td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_code'] . '</td>';
@@ -268,44 +269,40 @@ if (sizeof($requestResult) > 0) {
         $html .= '<tr>';
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de réception de léchantillon</td>';
         $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de remise du résultat</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Type déchantillon</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Technique utilisée</td>';
+        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de réalisation de la charge virale</td>';
+
+
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $sampleReceivedDate . " " . $sampleReceivedTime . '</td>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['result_printed_datetime'] . '</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['sample_name']) . '</td>';
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . ucwords($result['vl_test_platform']) . '</td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td colspan="4" style="line-height:16px;"></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Date de réalisation de la charge virale</td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
         $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">' . $result['sample_tested_datetime'] . '</td>';
         $html .= '</tr>';
 
         $html .= '<tr>';
-        $html .= '<td colspan="3"></td>';
-        $html .= '<td rowspan="3" style="text-align:left;">' . $smileyContent . '</td>';
+        $html .= '<td colspan="3" style="line-height:16px;"></td>';
         $html .= '</tr>';
-        $logValue = '<br/>';
-        
-        $html .= '<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Résultat&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $vlResult . $logValue . '</td></tr>';
-        $html .= '<tr><td colspan="3"></td></tr>';
+        $html .= '<tr>';
+        $html .= '<td colspan="3" style="line-height:16px;"></td>';
+        $html .= '</tr>';
+
+
+        $html .= '<tr><td colspan="2" style="line-height:70px;font-size:18px;text-align:left;background-color:#dbdbdb;">&nbsp;&nbsp;Résultat&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $vlResult . '</td>';
+        $html .= '<td colspan="1">' . $smileyContent . '</td></tr>';
         $html .= '</table>';
         $html .= '</td>';
         $html .= '</tr>';
-        if (trim($showMessage) != '') {
-            $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:13px;font-size:' . $messageTextSize . ';text-align:left;">' . $showMessage . '</td>';
-            $html .= '</tr>';
-            $html .= '<tr>';
-            $html .= '<td colspan="3" style="line-height:16px;"></td>';
-            $html .= '</tr>';
-        }
+
+        
+        $html .= '<tr>';
+        $html .= '<td colspan="3" style="line-height:16px;"></td>';
+        $html .= '</tr>';
+        
+        $html .= '<tr>';
+        $html .= '<td colspan="3" style="line-height:16px;"></td>';
+        $html .= '</tr>';
+
+
         $html .= '<tr>';
         $html .= '<td colspan="3" style="line-height:11px;font-size:11px;font-weight:bold;">Approuvé par&nbsp;&nbsp;:&nbsp;&nbsp;<span style="font-weight:normal;">' . $resultApprovedBy . '</span></td>';
         $html .= '</tr>';
@@ -336,11 +333,9 @@ if (sizeof($requestResult) > 0) {
         $html .= '<td colspan="3">';
         $html .= '<table>';
         $html .= '<tr>';
-        $html .= '<td style="font-size:10px;text-align:left;width:60%;"><img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face" style="width:10px;height:10px;"/> = VL < = 1000 copies/ml: Continue on current regimen</td>';
+        
         $html .= '<td style="font-size:10px;text-align:left;">Printed on : ' . $printDate . '&nbsp;&nbsp;' . $printDateTime . '</td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '<td colspan="2" style="font-size:10px;text-align:left;width:60%;"><img src="' . DOMAIN . '/assets/img/smiley_frown.png" alt="frown_face" style="width:10px;height:10px;"/> = VL > 1000 copies/ml: copies/ml: Clinical and counselling action required</td>';
+        $html .= '<td style="font-size:10px;text-align:left;width:60%;"></td>';
         $html .= '</tr>';
         $html .= '</table>';
         $html .= '</td>';
@@ -363,7 +358,7 @@ if (sizeof($requestResult) > 0) {
         if (isset($_POST['source']) && trim($_POST['source']) == 'print') {
             //Add event log
             $eventType = 'print-result';
-            $action = ucwords($_SESSION['userName']) . ' print the test result with patient code ' . $result['patient_art_no'];
+            $action = ucwords($_SESSION['userName']) . ' print the EID test result with patient code ' . $result['child_id'];
             $resource = 'print-test-result';
             $data = array(
                 'event_type' => $eventType,
@@ -388,7 +383,7 @@ if (sizeof($requestResult) > 0) {
         $resultPdf->setPrintHeader(false);
         $resultPdf->setPrintFooter(false);
         $resultPdf->concat();
-        $resultFilename = 'VLSM-Test-Result-' . date('d-M-Y-H-i-s') . '.pdf';
+        $resultFilename = 'VLSM-EID-Test-Result-' . date('d-M-Y-H-i-s') . '.pdf';
         $resultPdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . $resultFilename, "F");
         $general->removeDirectory($pathFront);
         unset($_SESSION['rVal']);
