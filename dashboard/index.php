@@ -152,7 +152,7 @@ include_once(APPLICATION_PATH.'/header.php');
 
 function getSamplesOverview(){
       $.blockUI();
-      $.post("../includes/getMissingResult.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),batchCode:'',facilityName:'',sampleType:''},
+      $.post("/program-management/getSampleStatus.php",{sampleCollectionDate:$("#sampleCollectionDate").val(),batchCode:'',facilityName:'',sampleType:''},
       function(data){
         if($.trim(data)!=''){
           $("#pieChartDiv").html(data);

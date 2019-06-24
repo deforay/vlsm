@@ -113,6 +113,12 @@ if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], a
 } else {
   $managementMenuAccess = false;
 }
+
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('eid-export-data.php', 'eid-sample-rejection-report.php', 'eid-sample-status.php', 'eid-print-results.php'))) {
+  $eidManagementMenuAccess = true;
+} else {
+  $eidManagementMenuAccess = false;
+}
 if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('readQRCode.php', 'generate.php'))) {
   $grCodeMenuAccess = true;
 } else {
@@ -378,7 +384,7 @@ $formConfigResult = $db->query($formConfigQuery);
                     <a href="/mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
                   </li>
                 <?php }
-             
+
               if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <li class="allMenu specimenReferralManifestListMenu">
                     <a href="/specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Specimen Manifest</a>
@@ -386,8 +392,8 @@ $formConfigResult = $db->query($formConfigQuery);
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <!-- <li class="allMenu sampleListMenu">
-                                <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
-                              </li> -->
+                                        <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
+                                      </li> -->
                 <?php } ?>
               </ul>
             </li>
@@ -436,7 +442,7 @@ $formConfigResult = $db->query($formConfigQuery);
                   <li class="allMenu vlControlReport"><a href="/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
                 <?php } ?>
                 <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
-                          <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
+                              <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
                 <?php if (isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu vlResultMenu"><a href="/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
                 <?php }
@@ -460,9 +466,11 @@ $formConfigResult = $db->query($formConfigQuery);
                 <?php } ?>
               </ul>
             </li>
+            <?php
+          } ?>
+
           <?php
-        }
-        if (isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true) { ?>
+          if (isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true) { ?>
             <li class="treeview qr">
               <a href="#">
                 <i class="fa fa-qrcode"></i>
@@ -537,6 +545,35 @@ $formConfigResult = $db->query($formConfigQuery);
               </ul>
             </li>
           <?php } ?>
+
+
+          <?php
+          if ($eidManagementMenuAccess == true) { ?>
+            <li class="treeview program">
+              <a href="#">
+                <i class="fa fa-book"></i>
+                <span>Management</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <?php if (isset($_SESSION['privileges']) && in_array("eid-sample-status.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu eidSampleStatus"><a href="/eid/management/eid-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+                <?php }
+              if (isset($_SESSION['privileges']) && in_array("eid-export-data.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu eidExportResult"><a href="/eid/management/eid-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+                <?php }
+              if (isset($_SESSION['privileges']) && in_array("eid-print-results.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu eidPrintResults"><a href="/eid/results/eid-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+                <?php }
+              if (isset($_SESSION['privileges']) && in_array("eid-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu eidSampleRejectionReport"><a href="/eid/management/eid-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+                <?php } ?>
+              </ul>
+            </li>
+            <?php
+          } ?>          
 
           <!---->
         </ul>
