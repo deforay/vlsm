@@ -128,12 +128,20 @@ $sQuery = 	 "SELECT eid_id,
 							vl.result,
 							vl.last_modified_datetime,
 							b.batch_code, 
-							ts.status_name 
+							ts.status_name,
+							imp.i_partner_name,
+							u_d.user_name as reviewedBy,
+            				a_u_d.user_name as approvedBy,
+            				rs.rejection_reason_name 
 							
 							FROM eid_form as vl 
 							LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id
                             INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status
-                            LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+                            LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id
+							LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
+            				LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
+            				LEFT JOIN r_eid_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+            				LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner";
 $start_date = '';
 $end_date = '';
 $t_start_date = '';
