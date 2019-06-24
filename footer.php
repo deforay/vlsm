@@ -295,7 +295,7 @@ if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $
     $(".test").addClass('active');
     $(".allMenu").removeClass('active');
     $(".vlResultApprovalMenu").addClass('active');
-  }else if (splitsUrl=='missingResult.php') {
+  }else if (splitsUrl=='vl-sample-status.php') {
     $(".program").addClass('active');
     $(".allMenu").removeClass('active');
     $(".missingResultMenu").addClass('active');
@@ -351,6 +351,26 @@ if(isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] !='' && $
     $(".allMenu").removeClass('active');
     $(".eidRequest").addClass('active');
     $(".eidBatchCodeMenu").addClass('active');
+  }
+  else if (splitsUrl=='eid-manual-results.php' || splitsUrl=='eid-update-result.php') {
+    $(".allMenu").removeClass('active');
+    $(".eidResults").addClass('active');
+    $(".eidResultsMenu").addClass('active');
+  }
+  else if (splitsUrl=='eid-result-status.php') {
+    $(".allMenu").removeClass('active');
+    $(".eidResults").addClass('active');
+    $(".eidResultStatus").addClass('active');
+  }
+  else if (splitsUrl=='eid-sample-status.php') {
+    $(".allMenu").removeClass('active');
+    $(".eidProgramMenu").addClass('active');
+    $(".eidSampleStatus").addClass('active');
+  }
+  else if (splitsUrl=='eid-print-results.php') {
+    $(".allMenu").removeClass('active');
+    $(".eidProgramMenu").addClass('active');
+    $(".eidPrintResults").addClass('active');
   }
   
   else{
