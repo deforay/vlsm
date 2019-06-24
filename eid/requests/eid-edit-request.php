@@ -40,6 +40,11 @@ if (isset($vlfmResult[0]['facilityId'])) {
 $fResult = $general->fetchDataFromTable('facility_details', $condition);
 
 
+//get lab facility details
+$condition = "facility_type='2' AND status='active'";
+$lResult = $general->fetchDataFromTable('facility_details', $condition);
+
+
 $id = base64_decode($_GET['id']);
 //$id = ($_GET['id']);
 $eidQuery="SELECT * from eid_form where eid_id=$id";
