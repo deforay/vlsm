@@ -730,7 +730,7 @@ foreach($fResult as $fDetails){
     var sDate = $("#collectionDate").val();
     if(pName!='' && sDate!=''){
       var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '')?$("#province").find(":selected").attr("data-name"):$("#province").find(":selected").attr("data-code");
-      $.post("../includes/sampleCodeGeneration.php", { sDate : sDate, autoTyp : 'auto2',provinceCode:provinceCode,'sampleFrom':'png','provinceId':$("#province").find(":selected").attr("data-province-id")},
+      $.post("/vl-request/sampleCodeGeneration.php", { sDate : sDate, autoTyp : 'auto2',provinceCode:provinceCode,'sampleFrom':'png','provinceId':$("#province").find(":selected").attr("data-province-id")},
       function(data){
 	  var sCodeKey = JSON.parse(data);
 	  <?php if($arr['sample_code']=='auto2'){ ?>
