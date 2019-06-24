@@ -39,6 +39,10 @@ if (isset($vlfmResult[0]['facilityId'])) {
 }
 $fResult = $general->fetchDataFromTable('facility_details', $condition);
 
+//get lab facility details
+$condition = "facility_type='2' AND status='active'";
+$lResult = $general->fetchDataFromTable('facility_details', $condition);
+
 
 $arr = $general->getGlobalConfig();
 

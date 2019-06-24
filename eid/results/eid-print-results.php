@@ -649,7 +649,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
         $.blockUI();
         <?php
         $path = '';
-        $path = '/eid/results/print-result-pdf.php';
+        $path = '/eid/results/generate-result-pdf.php';
         ?>
         if (newData == null) {
             var rowsLength = selectedRows.length;

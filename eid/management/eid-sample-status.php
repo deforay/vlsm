@@ -1,7 +1,7 @@
 <?php
 session_start();
 $title = "VLSM | Sample Status Report";
-include_once('../startup.php');
+include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
 include_once(APPLICATION_PATH . '/models/General.php');
@@ -12,8 +12,7 @@ $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
-$sQuery = "SELECT * FROM r_sample_type where status='active'";
-$sResult = $db->rawQuery($sQuery);
+
 
 // FETCHING FACILITIES
 $fResult = $general->getFacilitiesByUser($_SESSION['userId']);
@@ -63,19 +62,7 @@ $batResult = $db->rawQuery($batQuery);
               </td>
             </tr>
             <tr>
-              <td>&nbsp;<b>Sample Type&nbsp;:</b></td>
-              <td>
-                <select style="width:220px;" class="form-control" id="sampleType" name="sampleType" title="Please select sample type">
-                  <option value=""> -- Select -- </option>
-                  <?php
-                  foreach ($sResult as $type) {
-                    ?>
-                    <option value="<?php echo $type['sample_id']; ?>"><?php echo ucwords($type['sample_name']); ?></option>
-                  <?php
-                }
-                ?>
-                </select>
-              </td>
+
 
               <td>&nbsp;<b>Facility Name & Code&nbsp;:</b></td>
               <td>
@@ -90,6 +77,10 @@ $batResult = $db->rawQuery($batQuery);
                 ?>
                 </select>
               </td>
+
+              <td></td>
+              <td></td>
+
 
             </tr>
             <tr>
@@ -109,7 +100,7 @@ $batResult = $db->rawQuery($batQuery);
       <div class="col-xs-12">
         <div class="box">
           <div class="box-body">
-            <button class="btn btn-success pull-right" type="button" onclick="exportInexcel()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
+            <button class="btn btn-success pull-right" type="button" onclick="eidExportTAT()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
             <table id="vlRequestDataTable" class="table table-bordered table-striped">
               <thead>
                 <tr>
@@ -174,7 +165,7 @@ $batResult = $db->rawQuery($batQuery);
 
   function searchResultData() {
     $.blockUI();
-    $.post("/program-management/getSampleStatus.php", {
+    $.post("/eid/management/getSampleStatus.php", {
         sampleCollectionDate: $("#sampleCollectionDate").val(),
         batchCode: $("#batchCode").val(),
         facilityName: $("#facilityName").val(),
@@ -231,7 +222,7 @@ $batResult = $db->rawQuery($batQuery);
       ],
       "bProcessing": true,
       "bServerSide": true,
-      "sAjaxSource": "/program-management/getVlSampleTATDetails.php",
+      "sAjaxSource": "/eid/management/getEidSampleTATDetails.php",
       "fnServerData": function(sSource, aoData, fnCallback) {
         aoData.push({
           "name": "batchCode",
@@ -261,10 +252,10 @@ $batResult = $db->rawQuery($batQuery);
     $.unblockUI();
   }
 
-  function exportInexcel() {
+  function eidExportTAT() {
     $.blockUI();
     oTable.fnDraw();
-    $.post("/program-management/vlSampleTATDetailsExportInExcel.php", {
+    $.post("/eid/management/eidExportTAT.php", {
         Sample_Collection_Date: $("#sampleCollectionDate").val(),
         Batch_Code: $("#batchCode  option:selected").text(),
         Sample_Type: $("#sampleType  option:selected").text(),
