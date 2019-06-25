@@ -1916,3 +1916,6 @@ ALTER TABLE `eid_form` ADD `result_mail_datetime` DATETIME NULL DEFAULT NULL AFT
 
 UPDATE `resources` SET `module` = 'eid' WHERE `resource_name` = 'eid-requests';
 UPDATE `privileges` SET `privilege_name` = 'vl-sample-status.php' WHERE `privilege_name` = 'missingResult.php';
+
+
+-- Version 3.12 ---------- Amit 25-June-2019
