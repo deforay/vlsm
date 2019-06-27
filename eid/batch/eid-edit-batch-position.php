@@ -1,7 +1,7 @@
 <?php
 ob_start();
 
-$title = "VLSM | Edit Batch Position";
+$title = "Edit Batch Position";
 
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');

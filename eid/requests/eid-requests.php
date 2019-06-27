@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | EID | View All Requests";
+$title = "EID | View All Requests";
 include_once('../../startup.php');
 
 

@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Add New Batch";
+$title = "Add New Batch";
 include_once('../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 //global config

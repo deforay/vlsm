@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | EID | Add Batch";
+$title = "EID | Add Batch";
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');

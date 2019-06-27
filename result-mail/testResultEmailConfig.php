@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Result Email & SMS Config";
+$title = "Result Email & SMS Config";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->

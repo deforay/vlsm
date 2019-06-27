@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | VL Control Report";
+$title = "VL Control Report";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $sQuery="SELECT * FROM r_sample_controls where r_sample_control_name!='s'";
 $sResult = $db->rawQuery($sQuery);

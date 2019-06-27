@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Request Email & SMS Config";
+$title = "Request Email & SMS Config";
 include_once('../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 ?>

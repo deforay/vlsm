@@ -50,9 +50,6 @@ if (!isset($_SESSION['userId'])) {
   header("location:" . DOMAIN . "/login.php");
 }
 
-
-
-
 $link = $_SERVER['PHP_SELF'];
 $link_array = explode('/', $link);
 
@@ -144,7 +141,7 @@ $formConfigResult = $db->query($formConfigQuery);
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title><?php echo (isset($title) && $title != null && $title != "") ? $title : "$shortName | Viral Load LIS" ?></title>
+  <title><?php echo $shortName. " | " .((isset($title) && $title != null && $title != "") ? $title : "Viral Load LIS"); ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 

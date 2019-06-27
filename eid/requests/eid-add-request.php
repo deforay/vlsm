@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | EID | Add New Request";
+$title = "EID | Add New Request";
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
@@ -115,6 +115,7 @@ require_once($fileArray[$arr['vl_form']]);
 
 
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
+        
         if ($.trim($("#" + id).val()) != '') {
             $.blockUI();
             $.post("/eid/requests/check-sample-duplicate.php", {
@@ -132,7 +133,7 @@ require_once($fileArray[$arr['vl_form']]);
                             <?php if ($arr['vl_form'] == '3') { ?>
                                 $("#sampleCodeValue").html('').hide();
                             <?php }
-                    } else { ?>
+                                } else { ?>
                             data = data.split("##");
                             document.location.href = "/eid/requests/eid-edit-request.php?id=" + data[0] + "&c=" + data[1];
                         <?php } ?>

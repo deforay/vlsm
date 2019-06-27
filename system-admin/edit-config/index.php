@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Edit Configuration";
+$title = "Edit Configuration";
 include('../admin-header.php');
 $globalConfigQuery ="SELECT * from system_config";
 $configResult=$db->query($globalConfigQuery);

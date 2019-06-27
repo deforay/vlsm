@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Edit Sample List";
+$title = "Edit Sample List";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);

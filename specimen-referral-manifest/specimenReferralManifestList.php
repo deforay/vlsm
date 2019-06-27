@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Specimen Referral Manifest";
+$title = "Specimen Referral Manifest";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
 <style>
