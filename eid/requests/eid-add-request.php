@@ -34,6 +34,27 @@ if ($sarr['user_type'] == 'remoteuser') {
 $general = new General($db);
 
 
+
+
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+//sample rejection reason
+$rejectionQuery = "SELECT * FROM r_eid_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
+$rejectionReason = '<option value="">-- Select sample rejection reason --</option>';
+foreach ($rejectionTypeResult as $type) {
+  $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
+  foreach ($rejectionResult as $reject) {
+    if ($type['rejection_type'] == $reject['rejection_type']) {
+      $rejectionReason .= '<option value="' . $reject['rejection_reason_id'] . '">' . ucwords($reject['rejection_reason_name']) . '</option>';
+    }
+  }
+  $rejectionReason .= '</optgroup>';
+}
+
+$condition = "status = 'active'";
 if (isset($vlfmResult[0]['facilityId'])) {
     $condition = $condition . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
 }
@@ -47,14 +68,14 @@ $lResult = $general->fetchDataFromTable('facility_details', $condition);
 $arr = $general->getGlobalConfig();
 
 $fileArray = array(
-    1 => 'add-southsudan.php',
-    2 => 'add-zimbabwe.php',
-    3 => 'add-drc.php',
-    4 => 'add-zambia.php',
-    5 => 'add-png.php',
-    6 => 'add-who.php',
-    7 => 'add-rwanda.php',
-    8 => 'add-angola.php',
+    1 => 'forms/add-southsudan.php',
+    2 => 'forms/add-zimbabwe.php',
+    3 => 'forms/add-drc.php',
+    4 => 'forms/add-zambia.php',
+    5 => 'forms/add-png.php',
+    6 => 'forms/add-who.php',
+    7 => 'forms/add-rwanda.php',
+    8 => 'forms/add-angola.php',
 );
 
 require_once($fileArray[$arr['vl_form']]);
@@ -94,7 +115,31 @@ require_once($fileArray[$arr['vl_form']]);
 
 
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
-
+        if ($.trim($("#" + id).val()) != '') {
+            $.blockUI();
+            $.post("/eid/requests/check-sample-duplicate.php", {
+                    tableName: tableName,
+                    fieldName: fieldName,
+                    value: $("#" + id).val(),
+                    fnct: fnct,
+                    format: "html"
+                },
+                function(data) {
+                    if (data != 0) {
+                        <?php if ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'standalone') { ?>
+                            alert(alrt);
+                            $("#" + id).val('');
+                            <?php if ($arr['vl_form'] == '3') { ?>
+                                $("#sampleCodeValue").html('').hide();
+                            <?php }
+                    } else { ?>
+                            data = data.split("##");
+                            document.location.href = "/eid/requests/eid-edit-request.php?id=" + data[0] + "&c=" + data[1];
+                        <?php } ?>
+                    }
+                });
+            $.unblockUI();
+        }
     }
 
     function insertSampleCode(formId, eidSampleId, sampleCode, sampleCodeKey, sampleCodeFormat, countryId, sampleCollectionDate, provinceCode = null, provinceId = null) {

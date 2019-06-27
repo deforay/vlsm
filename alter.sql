@@ -1792,7 +1792,7 @@ ALTER TABLE `temp_sample_import` ADD `imported_by` VARCHAR(255) NOT NULL AFTER `
 -- Amit 21 Jun 2019
 
 
-DROP TABLE IF EXISTS `r_eid_sample_rejection_reasons`;
+-- DROP TABLE IF EXISTS `r_eid_sample_rejection_reasons`;
 CREATE TABLE `r_eid_sample_rejection_reasons` (
   `rejection_reason_id` int(11) NOT NULL,
   `rejection_reason_name` varchar(255) DEFAULT NULL,
@@ -1871,7 +1871,7 @@ UPDATE `global_config` SET `status` = 'inactive' WHERE `global_config`.`name` = 
 
 --- 
 
-DROP TABLE IF EXISTS `r_eid_results`;
+-- DROP TABLE IF EXISTS `r_eid_results`;
 CREATE TABLE `r_eid_results` (
   `result_id` varchar(255) NOT NULL,
   `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -1918,4 +1918,4 @@ UPDATE `resources` SET `module` = 'eid' WHERE `resource_name` = 'eid-requests';
 UPDATE `privileges` SET `privilege_name` = 'vl-sample-status.php' WHERE `privilege_name` = 'missingResult.php';
 
 
--- Version 3.12 ---------- Amit 25-June-2019
+-- Version 3.12 ---------- Amit 25-June-2019 

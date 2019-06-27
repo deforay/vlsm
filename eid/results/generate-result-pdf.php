@@ -102,7 +102,7 @@ class MYPDF extends TCPDF
         $this->writeHTMLCell(0, 0, 10, 26, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 18);
-      $this->writeHTMLCell(0, 0, 10, 30, 'VIRAL LOAD PATIENT REPORT', 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 10, 30, 'EARLY INFANT DIAGNOSIS PATIENT REPORT', 0, 0, 0, true, 'C', true);
 
       $this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
     } else {

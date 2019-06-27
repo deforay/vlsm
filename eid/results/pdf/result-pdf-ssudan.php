@@ -1,7 +1,7 @@
 <?php
 
 // this file is included in eid/results/generate-result-pdf.php
-
+$eidResults = $general->getEidResults();
 
 $resultFilename = '';
 
@@ -152,10 +152,10 @@ if (sizeof($requestResult) > 0) {
             $resultType = is_numeric($result['result']);
             if ($result['result'] == 'positive') {
                 $vlResult = $result['result'];
-                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
+                //$smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_frown.png" alt="smile_face"/>';
             } else if ($result['result'] == 'negative') {
                 $vlResult = $result['result'];
-                $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
+                //$smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
             } else if ($result['result'] == 'indeterminate') {
                 $vlResult = $result['result'];
                 $smileyContent = '';
@@ -265,8 +265,9 @@ if (sizeof($requestResult) > 0) {
         $html .= '<tr>';
         $html .= '<td colspan="3">';
         $html .= '<table style="padding:12px 2px 2px 2px;">';
-        $logValue = '';
-        $html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . ucfirst($result['result']) . '</td><td style="">' . $smileyContent . '</td></tr>';
+
+        $html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $eidResults[$result['result']] . '</td><td style="">' . $smileyContent . '</td></tr>';
+        //$html .= '<tr style="background-color:#dbdbdb;"><td colspan="2" style="line-height:70px;font-size:18px;font-weight:normal;">&nbsp;&nbsp;Result &nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . ucfirst($result['result']) . '</td><td style="">' . $smileyContent . '</td></tr>';
         if ($result['reason_for_sample_rejection'] != '') {
             $html .= '<tr><td colspan="3" style="line-height:26px;font-size:12px;font-weight:bold;text-align:left;">&nbsp;&nbsp;Rejection Reason&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;' . $result['rejection_reason_name'] . '</td></tr>';
         }
@@ -324,7 +325,7 @@ if (sizeof($requestResult) > 0) {
             $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
         }
 
-        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;"></td>';
+        $html .= '<td style="line-height:11px;font-size:11px;text-align:left;">'.$general->humanDateFormat($result['result_approved_datetime']).'</td>';
         $html .= '</tr>';
 
         $html .= '<tr>';
@@ -389,7 +390,7 @@ if (sizeof($requestResult) > 0) {
         $resultPdf->setPrintHeader(false);
         $resultPdf->setPrintFooter(false);
         $resultPdf->concat();
-        $resultFilename = 'VLSM-Test-result-' . date('d-M-Y-H-i-s') . '.pdf';
+        $resultFilename = 'VLSM-EID-Test-result-' . date('d-M-Y-H-i-s') . '.pdf';
         $resultPdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . $resultFilename, "F");
         $general->removeDirectory($pathFront);
         unset($_SESSION['rVal']);

@@ -34,10 +34,17 @@ try {
     'is_sample_rejected'=>$_POST['isSampleRejected'],
     'result'=>$_POST['result'],
     'result_status'=>6,
+    'data_sync' => 0,
     'reason_for_sample_rejection'=>$_POST['sampleRejectionReason'],
     'last_modified_by'=>$_SESSION['userId'],
     'last_modified_datetime'=>$general->getDateTime()
   );  
+
+
+  if(isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes'){
+    $eidData['result'] = null;
+    $eidData['result_status'] = 4;
+  }  
 
   $db=$db->where('eid_id',$_POST['eidSampleId']);
   $id=$db->update($tableName,$eidData);

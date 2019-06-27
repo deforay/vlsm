@@ -19,7 +19,7 @@ $logoName = "<img src='/assets/img/flask.png' style='margin-top:-5px;max-width:2
 $smallLogoName = "<img src='/assets/img/flask.png'>";
 $systemType = "Viral Load Sample Management";
 $shortName = "VLSM";
-if ($sarr['user_type'] == 'remoteuser') {
+if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') {
   $skin = "skin-red";
   $systemType = "VL Sample Tracking System";
   $logoName = "<i class='fa fa-medkit'></i> VLSTS";
@@ -147,6 +147,21 @@ $formConfigResult = $db->query($formConfigQuery);
   <title><?php echo (isset($title) && $title != null && $title != "") ? $title : "$shortName | Viral Load LIS" ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+
+<?php if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') { ?>
+  <link rel="apple-touch-icon" sizes="180x180" href="/vlsts-icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/vlsts-icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/vlsts-icons/favicon-16x16.png">
+  <link rel="manifest" href="/vlsts-icons/site.webmanifest">
+<?php } else { ?>
+  <link rel="apple-touch-icon" sizes="180x180" href="/vlsm-icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/vlsm-icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/vlsm-icons/favicon-16x16.png">
+  <link rel="manifest" href="/vlsm-icons/site.webmanifest">
+<?php } ?>
+
+
   <link rel="stylesheet" media="all" type="text/css" href="/assets/css/fonts.css" />
 
   <link rel="stylesheet" media="all" type="text/css" href="/assets/css/jquery-ui.1.11.0.css" />
@@ -392,8 +407,8 @@ $formConfigResult = $db->query($formConfigQuery);
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <!-- <li class="allMenu sampleListMenu">
-                                        <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
-                                      </li> -->
+                                            <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
+                                          </li> -->
                 <?php } ?>
               </ul>
             </li>
@@ -442,7 +457,7 @@ $formConfigResult = $db->query($formConfigQuery);
                   <li class="allMenu vlControlReport"><a href="/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
                 <?php } ?>
                 <!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
-                              <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
+                                <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
                 <?php if (isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu vlResultMenu"><a href="/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
                 <?php }
@@ -466,8 +481,8 @@ $formConfigResult = $db->query($formConfigQuery);
                 <?php } ?>
               </ul>
             </li>
-            <?php
-          } ?>
+          <?php
+        } ?>
 
           <?php
           if (isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true) { ?>
@@ -566,8 +581,8 @@ $formConfigResult = $db->query($formConfigQuery);
                 <?php } ?>
               </ul>
             </li>
-            <?php
-          } ?>          
+          <?php
+        } ?>
 
           <!---->
         </ul>
