@@ -155,7 +155,7 @@ if (sizeof($requestResult) > 0) {
         $smileyContent = '';
         $showMessage = '';
         $tndMessage = '';
-        $smileyShow = true;
+        $smileyShow = false;
         $messageTextSize = '12px';
         if ($result['result'] != NULL && trim($result['result']) != '') {
             $resultType = is_numeric($result['result']);

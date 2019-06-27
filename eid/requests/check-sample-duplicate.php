@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-include_once('../startup.php');
+include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 //system config
 $systemConfigQuery = "SELECT * from system_config";
@@ -22,14 +22,14 @@ if ($value != '') {
         $parameters = array($value);
         $result = $db->rawQuery($sQuery, $parameters);
         if ($result) {
-            $data = base64_encode($result[0]['vl_sample_id']) . "##" . $result[0][$fieldName];
+            $data = base64_encode($result[0]['eid_id']) . "##" . $result[0][$fieldName];
         } else {
             if ($sarr['user_type'] == 'vluser') {
                 $sQuery = "SELECT * from $tableName where remote_sample_code= ?";
                 $parameters = array($value);
                 $result = $db->rawQuery($sQuery, $parameters);
                 if ($result) {
-                    $data = base64_encode($result[0]['vl_sample_id']) . "##" . $result[0]['remote_sample_code'];
+                    $data = base64_encode($result[0]['eid_id']) . "##" . $result[0]['remote_sample_code'];
                 } else {
                     $data = 0;
                 }
@@ -44,14 +44,14 @@ if ($value != '') {
             $parameters = array($value, $table[1]);
             $result = $db->rawQuery($sQuery, $parameters);
             if ($result) {
-                $data = base64_encode($result[0]['vl_sample_id']) . "##" . $result[0][$fieldName];
+                $data = base64_encode($result[0]['eid_id']) . "##" . $result[0][$fieldName];
             } else {
                 if ($sarr['user_type'] == 'vluser') {
                     $sQuery = "SELECT * from $tableName where remote_sample_code= ? and $table[0]!= ?";
                     $parameters = array($value, $table[1]);
                     $result = $db->rawQuery($sQuery, $parameters);
                     if ($result) {
-                        $data = base64_encode($result[0]['vl_sample_id']) . "##" . $result[0]['remote_sample_code'];
+                        $data = base64_encode($result[0]['eid_id']) . "##" . $result[0]['remote_sample_code'];
                     } else {
                         $data = 0;
                     }

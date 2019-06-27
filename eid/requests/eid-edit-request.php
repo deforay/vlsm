@@ -2,17 +2,17 @@
 ob_start();
 $title = "VLSM | EID | Edit Request";
 include_once('../../startup.php');
-include_once(APPLICATION_PATH.'/header.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/header.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 ?>
 <style>
     .ui_tpicker_second_label,
     .ui_tpicker_second_slider,
-    .ui_tpicker_millisec_label, 
-    .ui_tpicker_millisec_slider, 
-    .ui_tpicker_microsec_label, 
-    .ui_tpicker_microsec_slider, 
-    .ui_tpicker_timezone_label, 
+    .ui_tpicker_millisec_label,
+    .ui_tpicker_millisec_slider,
+    .ui_tpicker_microsec_label,
+    .ui_tpicker_microsec_slider,
+    .ui_tpicker_timezone_label,
     .ui_tpicker_timezone {
         display: none !important;
     }
@@ -25,15 +25,28 @@ include_once(APPLICATION_PATH.'/models/General.php');
 
 
 <?php
-if($sarr['user_type']=='remoteuser'){
+
+
+$labFieldDisabled = '';
+
+if ($sarr['user_type'] == 'remoteuser') {
     $labFieldDisabled = 'disabled="disabled"';
-    $vlfmQuery="SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='".$_SESSION['userId']."'";
+    $vlfmQuery = "SELECT GROUP_CONCAT(DISTINCT vlfm.facility_id SEPARATOR ',') as facilityId FROM vl_user_facility_map as vlfm where vlfm.user_id='" . $_SESSION['userId'] . "'";
     $vlfmResult = $db->rawQuery($vlfmQuery);
 }
 
-$general=new General($db);
+$general = new General($db);
 
 
+
+$rejectionTypeQuery = "SELECT DISTINCT rejection_type FROM r_eid_sample_rejection_reasons WHERE rejection_reason_status ='active'";
+$rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
+
+//sample rejection reason
+$rejectionQuery = "SELECT * FROM r_eid_sample_rejection_reasons where rejection_reason_status = 'active'";
+$rejectionResult = $db->rawQuery($rejectionQuery);
+
+$condition = "status = 'active'";
 if (isset($vlfmResult[0]['facilityId'])) {
     $condition = $condition . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";
 }
@@ -47,8 +60,8 @@ $lResult = $general->fetchDataFromTable('facility_details', $condition);
 
 $id = base64_decode($_GET['id']);
 //$id = ($_GET['id']);
-$eidQuery="SELECT * from eid_form where eid_id=$id";
-$eidInfo=$db->rawQueryOne($eidQuery);
+$eidQuery = "SELECT * from eid_form where eid_id=$id";
+$eidInfo = $db->rawQueryOne($eidQuery);
 
 
 $arr = $general->getGlobalConfig();
@@ -56,14 +69,14 @@ $arr = $general->getGlobalConfig();
 
 
 $fileArray = array(
-    1 => 'edit-southsudan.php',
-    2 => 'edit-zimbabwe.php',
-    3 => 'edit-drc.php',
-    4 => 'edit-zambia.php',
-    5 => 'edit-png.php',
-    6 => 'edit-who.php',
-    7 => 'edit-rwanda.php',
-    8 => 'edit-angola.php',
+    1 => 'forms/edit-southsudan.php',
+    2 => 'forms/edit-zimbabwe.php',
+    3 => 'forms/edit-drc.php',
+    4 => 'forms/edit-zambia.php',
+    5 => 'forms/edit-png.php',
+    6 => 'forms/edit-who.php',
+    7 => 'forms/edit-rwanda.php',
+    8 => 'forms/edit-angola.php',
 );
 
 require_once($fileArray[$arr['vl_form']]);
@@ -71,8 +84,32 @@ require_once($fileArray[$arr['vl_form']]);
 ?>
 
 <script>
+    function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
+        if ($.trim($("#" + id).val()) != '') {
+            $.blockUI();
+            $.post("/eid/requests/check-sample-duplicate.php", {
+                    tableName: tableName,
+                    fieldName: fieldName,
+                    value: $("#" + id).val(),
+                    fnct: fnct,
+                    format: "html"
+                },
+                function(data) {
+                    if (data != 0) {
+                        <?php if (isset($sarr['user_type']) && ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'standalone')) { ?>
+                            alert(alrt);
+                            $("#" + id).val('');
+                        <?php } else { ?>
+                            data = data.split("##");
+                            document.location.href = " /eid/requests/eid-edit-request.php?id=" + data[0] + "&c=" + data[1];
+                        <?php } ?>
+                    }
+                });
+            $.unblockUI();
+        }
+    }
 
-$(document).ready(function() {
+    $(document).ready(function() {
         $('.date').datepicker({
             changeMonth: true,
             changeYear: true,
@@ -80,7 +117,7 @@ $(document).ready(function() {
             timeFormat: "hh:mm TT",
             maxDate: "Today",
             yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-        }).click(function(){
+        }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
         $('.dateTime').datetimepicker({
@@ -90,25 +127,21 @@ $(document).ready(function() {
             timeFormat: "HH:mm",
             maxDate: "Today",
             onChangeMonthYear: function(year, month, widget) {
-                    setTimeout(function() {
-                        $('.ui-datepicker-calendar').show();
-                    });
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
             },
             yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-        }).click(function(){
+        }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
         //$('.date').mask('99-aaa-9999');
         //$('.dateTime').mask('99-aaa-9999 99:99');
-});
-
-
-
-
+    });
 </script>
 
 
 
 <?php
 
-include_once(APPLICATION_PATH.'/footer.php');
+include_once(APPLICATION_PATH . '/footer.php');
