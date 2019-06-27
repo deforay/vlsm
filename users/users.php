@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Users";
+$title = "Users";
 include_once('../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 ?>

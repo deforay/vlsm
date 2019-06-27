@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Facility Map";
+$title = "Facility Map";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
   <!-- Content Wrapper. Contains page content -->

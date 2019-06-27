@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Facilities";
+$title = "Facilities";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 // if($sarr['user_type']=='vluser'){

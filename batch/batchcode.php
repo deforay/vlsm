@@ -1,6 +1,6 @@
 <?php
 
-$title = "VLSM | Manage Batch";
+$title = "Manage Batch";
 
 include_once('../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');

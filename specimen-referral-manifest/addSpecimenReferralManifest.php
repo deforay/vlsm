@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Add New Specimen Referral Manifest";
+$title = "Add New Specimen Referral Manifest";
 include_once '../startup.php';
 include_once APPLICATION_PATH . '/header.php';
 include_once(APPLICATION_PATH.'/models/General.php');

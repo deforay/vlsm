@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Edit Configuration";
+$title = "Edit Configuration";
 include_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 //include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');

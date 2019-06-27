@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Print VL Results";
+$title = "Print VL Results";
 include_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 $tsQuery = "SELECT * FROM r_sample_status";

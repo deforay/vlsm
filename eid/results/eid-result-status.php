@@ -1,5 +1,5 @@
 <?php
-$title = "VLSM | Manage Result Status";
+$title = "Manage Result Status";
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 //include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');

@@ -91,7 +91,7 @@ $eidInfo['child_treatment'] = explode(",",$eidInfo['child_treatment']);
                               <?php } else {?>
                                 <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span></td>
                                 <td>
-                                  <input type="text" readonly value="<?php echo $eidInfo['sample_code'] ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('vl_request_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
+                                  <input type="text" readonly value="<?php echo $eidInfo['sample_code'] ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
                               <?php }?>
                                 <td></td><td></td><td></td><td></td>

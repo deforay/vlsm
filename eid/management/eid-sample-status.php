@@ -1,6 +1,6 @@
 <?php
 session_start();
-$title = "VLSM | EID | Sample Status Report";
+$title = "EID | Sample Status Report";
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 

@@ -1,6 +1,6 @@
 <?php
 ob_start();
-$title = "VLSM | Edit Specimen Referral Manifest";
+$title = "Edit Specimen Referral Manifest";
 include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 $pQuery = "Select * from package_details where package_id=".$id;
