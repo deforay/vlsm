@@ -417,7 +417,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                         <input type="hidden" name="formId" id="formId" value="7" />
-                        <input type="hidden" name="eidSampleId" id="eidSampleId" value="" />
+                        <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>"/>
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
                         <a href="/eid/requests/eid-add-request.php" class="btn btn-default"> Cancel</a>
                     </div>

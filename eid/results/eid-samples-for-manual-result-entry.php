@@ -2,7 +2,7 @@
 session_start();
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $formConfigQuery = "SELECT * from global_config where name='vl_form'";
 $configResult = $db->query($formConfigQuery);
 $arr = array();
@@ -19,6 +19,9 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
      $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
 $general = new General($db);
+
+$eidResults = $general->getEidResults();
+
 $tableName = "eid_form";
 $primaryKey = "eid_id";
 
@@ -164,9 +167,9 @@ if (isset($sWhere) && $sWhere != "") {
      }
      if (isset($_POST['status']) && trim($_POST['status']) != '') {
           if ($_POST['status'] == 'no_result') {
-               $statusCondition = ' AND (vl.result is NULL OR vl.result ="")';
+               $statusCondition = ' AND (vl.result is NULL OR vl.result ="") AND vl.result_status != 4';
           } else if ($_POST['status'] == 'result') {
-               $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
+               $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="" AND vl.result_status != 4)';
           } else {
                $statusCondition = ' AND vl.result_status=4';
           }
@@ -214,9 +217,9 @@ if (isset($sWhere) && $sWhere != "") {
      if (isset($_POST['status']) && trim($_POST['status']) != '') {
           if (isset($setWhr)) {
                if ($_POST['status'] == 'no_result') {
-                    $statusCondition = ' AND  (vl.result is NULL OR vl.result ="")';
+                    $statusCondition = ' AND  (vl.result is NULL OR vl.result ="")  AND vl.result_status !=4 ';
                } else if ($_POST['status'] == 'result') {
-                    $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !="")';
+                    $statusCondition = ' AND (vl.result is NOT NULL AND vl.result !=""  AND vl.result_status !=4 )';
                } else {
                     $statusCondition = ' AND vl.result_status=4';
                }
@@ -225,9 +228,9 @@ if (isset($sWhere) && $sWhere != "") {
                $setWhr = 'where';
                $sWhere = ' where ' . $sWhere;
                if ($_POST['status'] == 'no_result') {
-                    $statusCondition = '  (vl.result is NULL OR vl.result ="")';
+                    $statusCondition = '  (vl.result is NULL OR vl.result ="")  AND vl.result_status !=4 ';
                } else if ($_POST['status'] == 'result') {
-                    $statusCondition = ' (vl.result is NOT NULL AND vl.result !="")';
+                    $statusCondition = ' (vl.result is NOT NULL AND vl.result !=""  AND vl.result_status !=4 )';
                } else {
                     $statusCondition = ' vl.result_status=4';
                }
@@ -296,8 +299,7 @@ $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
 if (isset($sLimit) && isset($sOffset)) {
      $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
-//echo ($sQuery);
-//die();
+//echo ($sQuery);die();
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 
@@ -342,7 +344,7 @@ foreach ($rResult as $aRow) {
      $row[] = $aRow['child_name'];
      $row[] = $aRow['mother_id'];
      $row[] = $aRow['mother_name'];
-     $row[] = $aRow['result'];
+     $row[] = $eidResults[$aRow['result']];
 
      if (isset($aRow['last_modified_datetime']) && trim($aRow['last_modified_datetime']) != '' && $aRow['last_modified_datetime'] != '0000-00-00 00:00:00') {
           $xplodDate = explode(" ", $aRow['last_modified_datetime']);
