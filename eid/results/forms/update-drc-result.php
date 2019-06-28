@@ -1,5 +1,5 @@
 <?php
-// imported in eid-add-request.php based on country in global config
+// imported in /eid/results/eid-update-result.php based on country in global config
 
 ob_start();
 

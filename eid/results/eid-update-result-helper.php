@@ -3,7 +3,7 @@ session_start();
 ob_start();
 include_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $tableName = "eid_form";
 $tableName1 = "activity_log";
@@ -25,29 +25,31 @@ try {
   } else {
     $_POST['sampleTestedDateTime'] = NULL;
   }
-  
 
 
-  $eidData=array(
-    'sample_received_at_vl_lab_datetime'=>$_POST['sampleReceivedDate'],
-    'sample_tested_datetime'=>$_POST['sampleTestedDateTime'],
-    'is_sample_rejected'=>$_POST['isSampleRejected'],
-    'result'=>$_POST['result'],
-    'result_status'=>6,
+
+  $eidData = array(
+    'sample_received_at_vl_lab_datetime' => $_POST['sampleReceivedDate'],
+    'sample_tested_datetime' => $_POST['sampleTestedDateTime'],
+    'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
+    'result' => isset($_POST['result']) ? $_POST['result'] : null,
+    'result_status' => 6,
     'data_sync' => 0,
-    'reason_for_sample_rejection'=>$_POST['sampleRejectionReason'],
-    'last_modified_by'=>$_SESSION['userId'],
-    'last_modified_datetime'=>$general->getDateTime()
-  );  
+    'reason_for_sample_rejection' => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
+    'last_modified_by' => $_SESSION['userId'],
+    'last_modified_datetime' => $general->getDateTime()
+  );
 
 
-  if(isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes'){
+  if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
     $eidData['result'] = null;
     $eidData['result_status'] = 4;
-  }  
+  }
 
-  $db=$db->where('eid_id',$_POST['eidSampleId']);
-  $id=$db->update($tableName,$eidData);
+  //var_dump($eidData);die;
+
+  $db = $db->where('eid_id', $_POST['eidSampleId']);
+  $id = $db->update($tableName, $eidData);
 
   $_SESSION['alertMsg'] = "EID result updated successfully";
   //Add event log

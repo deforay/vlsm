@@ -66,7 +66,7 @@ if (isset($_POST['provinceId']) && $_POST['provinceId'] != null && $_POST['provi
         } else {
             $maxId = '0001';
         }
-        $sCode = $rKey . "R" . date('y') . $_POST['provinceCode'] . "VL" . $maxId;
+        $sCode = $rKey . "R" . date('y') . $_POST['provinceCode'] . "EID" . $maxId;
         $j = 1;
         do {
             $sQuery = "select sample_code from eid_form as vl where sample_code='" . $sCode . "'";

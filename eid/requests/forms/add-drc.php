@@ -563,7 +563,7 @@ foreach ($fundingSourceList as $fundingSource) {
       $.post("/eid/requests/generateSampleCode.php", { sDate : sDate, pName : pName},
       function(data){
         var sCodeKey = JSON.parse(data);
-        <?php if ($arr['sample_code'] == 'auto') { ?>
+        <?php if ($arr['eid_sample_code'] == 'auto') { ?>
               pNameVal = pName.split("##");
               sCode = sCodeKey.auto;
               $("#sampleCode").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId);
@@ -571,11 +571,11 @@ foreach ($fundingSourceList as $fundingSource) {
               $("#sampleCodeFormat").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode);
               $("#sampleCodeKey").val(sCodeKey.maxId);
               //checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null);
-          <?php } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') {?>
-              $("#sampleCode").val('<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
-              $("#sampleCodeInText").html('<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+          <?php } else if ($arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {?>
+              $("#sampleCode").val('<?php echo $rKey . $arr['eid_sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
+              $("#sampleCodeInText").html('<?php echo $rKey . $arr['eid_sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
               //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
-              $("#sampleCodeFormat").val('<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr);
+              $("#sampleCodeFormat").val('<?php echo $rKey . $arr['eid_sample_code_prefix']; ?>'+sCodeKey.mnthYr);
               $("#sampleCodeKey").val(sCodeKey.maxId);
               //checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null)
         <?php }?>
@@ -634,7 +634,7 @@ foreach ($fundingSourceList as $fundingSource) {
     });
     if(flag){
       //$.blockUI();
-      <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') {?>
+      <?php if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {?>
               insertSampleCode('addEIDRequestForm','eidSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
       <?php } else {?>
               document.getElementById('addEIDRequestForm').submit();

@@ -37,9 +37,9 @@ $start_date = $sampleColDateArray[0] . '-01-01';
 $end_date = $sampleColDateArray[0] . '-12-31';
 $mnthYr = $samColDate[0];
 
-if ($arr['sample_code'] == 'MMYY') {
+if ($arr['eid_sample_code'] == 'MMYY') {
     $mnthYr = $sampleColDateArray[1] . $samColDate;
-} else if ($arr['sample_code'] == 'YY') {
+} else if ($arr['eid_sample_code'] == 'YY') {
     $mnthYr = $samColDate;
 }
 

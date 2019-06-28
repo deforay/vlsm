@@ -31,7 +31,7 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
     color: #000000 !important;
   }
 
-  .boxWidth {
+  .boxWidth, .eid_boxWidth {
     width: 10%;
   }
 </style>
@@ -452,6 +452,79 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
 
 
 
+
+
+                <div class="row">
+                  <div class="col-md-12" style="">
+                    <div class="form-group">
+                      <label for="eid_sample_code" class="col-lg-2 control-label">Sample Code<br>Format <span class="mandatory">*</span> </label>
+                      <div class="col-lg-10">
+                        <?php
+                        $sPrefixMMYY = 'EID';
+                        $sPrefixYY = '';
+                        $sPrefixMMYYDisplay = 'disabled="disabled"';
+                        $sPrefixYYDisplay = 'disabled="disabled"';
+                        if ($arr['eid_sample_code'] == 'MMYY') {
+                          $sPrefixMMYY = $arr['eid_sample_code_prefix'];
+                          $sPrefixMMYYDisplay = '';
+                        } else if ($arr['eid_sample_code'] == 'YY') {
+                          $sPrefixYY = $arr['eid_sample_code_prefix'];
+                          $sPrefixYYDisplay = '';
+                        }
+                        ?>
+                        <input type="radio" class="isRequired" id="eid_auto_generate_yy" name="eid_sample_code" value="YY" <?php echo ($arr['eid_sample_code'] == 'YY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixMMYY','prefixYY')">&nbsp;<input <?php echo $sPrefixYYDisplay; ?> type="text" class="eid_boxWidth eid_prefixYY" id="eid_prefixYY" name="eid_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixYY; ?>" /> YY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="isRequired" id="eid_auto_generate_mmyy" name="eid_sample_code" value="MMYY" <?php echo ($arr['eid_sample_code'] == 'MMYY') ? 'checked' : ''; ?> onclick="makeReadonly('prefixYY','prefixMMYY')">&nbsp;<input <?php echo $sPrefixMMYYDisplay; ?> type="text" class="eid_boxWidth eid_prefixMMYY" id="eid_prefixMMYY" name="eid_sample_code_prefix" title="Enter Prefix" value="<?php echo $sPrefixMMYY; ?>" /> MMYY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="isRequired" id="eid_auto_generate" name="eid_sample_code" value="auto" <?php echo ($arr['eid_sample_code'] == 'auto') ? 'checked' : ''; ?>><span id="eid_auto1"><?php echo ($arr['vl_form'] == 5) ? ' Auto 1' : ' Auto'; ?> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="isRequired" id="eid_auto_generate2" name="eid_sample_code" value="auto2" <?php echo ($arr['eid_sample_code'] == 'auto2') ? 'checked' : ''; ?> style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"><span id="eid_auto2" style="display:<?php echo ($arr['vl_form'] == 5) ? '' : 'none'; ?>"> Auto 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <input type="radio" class="isRequired" id="eid_numeric" name="eid_sample_code" value="numeric" <?php echo ($arr['eid_sample_code'] == 'numeric') ? 'checked' : ''; ?>> Numeric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" class="isRequired" id="eid_alpha_numeric" name="eid_sample_code" value="alphanumeric" <?php echo ($arr['eid_sample_code'] == 'alphanumeric') ? 'checked' : ''; ?>> Alpha Numeric
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="eid_auto-sample-eg" class="row" style="display:<?php echo ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'auto2' || 'MMYY' || 'YY') ? 'block' : 'none'; ?>;">
+                  <div class="col-md-12" style="text-align:center;">
+                    <code id="eid_auto-sample-code" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'block' : 'none'; ?>;">
+                      eg. Province Code+Year+Month+Date+Increment Counter
+                    </code>
+                    <code id="eid_auto-sample-code2" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'auto2') ? 'block' : 'none'; ?>;">
+                      eg. R+Year+Province Code+EID+Increment Counter (R18NCDEID0001)
+                    </code>
+                    <code id="eid_auto-sample-code-MMYY" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'MMYY') ? 'block' : 'none'; ?>;">
+                      eg. Prefix+Month+Year+Increment Counter (EID0517999)
+                    </code>
+                    <code id="eid_auto-sample-code-YY" class="eid_autoSample" style="display:<?php echo ($arr['eid_sample_code'] == 'YY') ? 'block' : 'none'; ?>;">
+                      eg. Prefix+Year+Increment Counter (EID17999)
+                    </code>
+                  </div>
+                </div><br />
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="eid_min_length" class="col-lg-2 control-label">Minimum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+                      <div class="col-lg-10">
+                        <input type="text" class="form-control checkNum isNumeric <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_min_length" name="eid_min_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Min" title="Please enter sample code min length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['min_length']; ?>" style="max-width:60px;" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="eid_max_length" class="col-lg-2 control-label">Maximum Sample Code Length <span class="mandatory " style="display:<?php echo ($arr['eid_sample_code'] == 'auto') ? 'none' : 'block'; ?>">*</span></label>
+                      <div class="col-lg-10">
+                        <input type="text" class="form-control checkNum isNumeric <?php echo ($arr['sample_code'] == 'auto' || 'MMYY' || 'YY') ? '' : 'isRequired'; ?>" id="eid_max_length" name="eid_max_length" <?php echo ($arr['eid_sample_code'] == 'auto' || 'MMYY' || 'YY') ? 'readonly' : ''; ?> placeholder="Max" title="Please enter sample code max length" value="<?php echo ($arr['eid_sample_code'] == 'auto') ? '' : $arr['max_length']; ?>" style="max-width:60px;" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+
               </div>
             </div>
             <div class="panel panel-default">
@@ -764,6 +837,61 @@ if (isset($arr['r_mandatory_fields']) && trim($arr['r_mandatory_fields']) != '')
       $('#max_length').addClass('isRequired');
       $('#max_length').prop('readonly', false);
       $('.boxWidth').removeClass('isRequired').attr('disabled', true).val('');
+    }
+  });
+
+  $("input:radio[name=eid_sample_code]").click(function() {
+    if (this.value == 'MMYY' || this.value == 'YY') {
+      $('#eid_auto-sample-eg').show();
+      $('.eid_autoSample').hide();
+      if (this.value == 'MMYY') {
+        $('#eid_auto-sample-code-MMYY').show();
+      } else {
+        $('#eid_auto-sample-code-YY').show();
+      }
+      $('#eid_min_length').val('');
+      $('.eid_minlth').hide();
+      $('#eid_min_length').removeClass('isRequired');
+      $('#eid_min_length').prop('readonly', true);
+      $('#eid_max_length').val('');
+      $('.eid_maxlth').hide();
+      $('#eid_max_length').removeClass('isRequired');
+      $('#eid_max_length').prop('readonly', true);
+    } else if (this.value == 'auto') {
+      $('.eid_autoSample').hide();
+      $('#eid_auto-sample-eg').show();
+      $('#eid_auto-sample-code').show();
+      $('#eid_min_length').val('');
+      $('.eid_minlth').hide();
+      $('#eid_min_length').removeClass('isRequired');
+      $('#min_length').prop('readonly', true);
+      $('#eid_max_length').val('');
+      $('.eid_maxlth').hide();
+      $('#eid_max_length').removeClass('isRequired');
+      $('#eid_max_length').prop('readonly', true);
+      $('.eid_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
+    } else if (this.value == 'auto2') {
+      $('.eid_autoSample').hide();
+      $('#eid_auto-sample-eg').show();
+      $('#eid_auto-sample-code2').show();
+      $('#eid_min_length').val('');
+      $('.eid_minlth').hide();
+      $('#eid_min_length').removeClass('isRequired');
+      $('#eid_min_length').prop('readonly', true);
+      $('#eid_max_length').val('');
+      $('.eid_maxlth').hide();
+      $('#eid_max_length').removeClass('isRequired');
+      $('#eid_max_length').prop('readonly', true);
+      $('.eid_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
+    } else {
+      $('#eid_auto-sample-eg').hide();
+      $('.eid_minlth').show();
+      $('#eid_min_length').addClass('isRequired');
+      $('#eid_min_length').prop('readonly', false);
+      $('.eid_maxlth').show();
+      $('#eid_max_length').addClass('isRequired');
+      $('#eid_max_length').prop('readonly', false);
+      $('.eid_boxWidth').removeClass('isRequired').attr('disabled', true).val('');
     }
   });
 
