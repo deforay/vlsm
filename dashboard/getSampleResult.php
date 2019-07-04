@@ -73,6 +73,7 @@ foreach($tRes as $tRow){
 $sampleTestedQuery = 'SELECT DATE(vl.sample_tested_datetime) as `test_date`, COUNT(vl_sample_id) as `count` FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where '.$whereCondition.' DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" group by `test_date` order by `test_date`';
 $tRes = $db->rawQuery($sampleTestedQuery);//overall result
 $acceptedResult = array();
+$acceptedTotal = 0;
 foreach($tRes as $tRow){
     $acceptedTotal += $tRow['count'];
     $acceptedResult[] = array('total' => $tRow['count'], 'date' => $tRow['test_date']);
@@ -114,7 +115,6 @@ foreach($tRes as $tRow){
                 </h3>
                 <small class="font-blue-sharp">SAMPLES TESTED</small><br>
                 <small class="font-blue-sharp"  style="font-size:0.75em;">In Selected Range</small>
-                <!--<small class="font-blue-sharp"><?php echo $acceptedDate;?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>

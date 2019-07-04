@@ -1,9 +1,9 @@
 <?php
 //this file is get the value from remote and update in lab db
 
-include(dirname(__FILE__) . "/../../startup.php");  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+require_once(dirname(__FILE__) . "/../../startup.php");
+include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 
 
 $general = new General($db);
@@ -11,6 +11,9 @@ if (!isset($REMOTEURL) || $REMOTEURL == '') {
     echo "Please check your Remote URL";
     die;
 }
+
+$REMOTEURL = rtrim($REMOTEURL, "/");
+
 //system config
 $systemConfigQuery = "SELECT * from system_config";
 $systemConfigResult = $db->query($systemConfigQuery);
@@ -31,6 +34,10 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 if (trim($sarr['lab_name']) == '') {
     $sarr['lab_name'] = "''";
 }
+
+
+// VIRAL LOAD REQUESTS
+
 $url = $REMOTEURL . '/remote/remote/getRequests.php';
 $data = array(
     'labName' => $sarr['lab_name'],
@@ -42,9 +49,13 @@ $json_data = json_encode($data);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Content-Type: application/json',
-    'Content-Length: ' . strlen($json_data))
+curl_setopt(
+    $ch,
+    CURLOPT_HTTPHEADER,
+    array(
+        'Content-Type: application/json',
+        'Content-Length: ' . strlen($json_data)
+    )
 );
 // execute post
 $curl_response = curl_exec($ch);
@@ -71,13 +82,14 @@ if (count($result) > 0) {
             'result_value_absolute',
             'result_value_absolute_decimal',
             'result_value_text',
-            'result_value',
+            'result',
             'sample_tested_datetime',
             'sample_received_at_vl_lab_datetime',
             'result_dispatched_datetime',
             'is_sample_rejected',
             'reason_for_sample_rejection',
-            'result_approved_by');
+            'result_approved_by'
+        );
         foreach ($removeKeys as $keys) {
             unset($lab[$keys]);
         }
@@ -86,7 +98,9 @@ if (count($result) > 0) {
             $sQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code='" . $lab['sample_code'] . "'";
             $sResult = $db->rawQuery($sQuery);
             $lab['data_sync'] = 1; //column data sync value is 1 equal to data sync done.value 0 is not done.
-            unset($lab['request_created_by']);unset($lab['last_modified_by']);unset($lab['request_created_datetime']);
+            unset($lab['request_created_by']);
+            unset($lab['last_modified_by']);
+            unset($lab['request_created_datetime']);
             $lab['last_modified_datetime'] = $general->getDateTime();
             $db = $db->where('vl_sample_id', $sResult[0]['vl_sample_id']);
             $id = $db->update('vl_request_form', $lab);
@@ -107,6 +121,100 @@ if (count($result) > 0) {
                     //$lab['result_status'] = 6;
                     $lab['data_sync'] = 1; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
                     $id = $db->insert('vl_request_form', $lab);
+                }
+            }
+        }
+    }
+}
+
+
+// EID TEST REQUESTS
+
+if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
+    $url = $REMOTEURL . '/remote/remote/eid-test-requests.php';
+    $data = array(
+        'labName' => $sarr['lab_name'],
+        "Key" => "vlsm-lab-Data--",
+    );
+    //open connection
+    $ch = curl_init($url);
+    $json_data = json_encode($data);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt(
+        $ch,
+        CURLOPT_HTTPHEADER,
+        array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($json_data)
+        )
+    );
+    // execute post
+    $curl_response = curl_exec($ch);
+
+    //close connection
+    curl_close($ch);
+    $result = json_decode($curl_response, true);
+
+    if (count($result) > 0) {
+        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='eid_form'";
+        $allColResult = $db->rawQuery($allColumns);
+        $oneDimensionalArray = array_map('current', $allColResult);
+        foreach ($result as $key => $remoteData) {
+            foreach ($oneDimensionalArray as $result) {
+                //$lab[$result] = $remoteData[$result];
+                if (isset($remoteData[$result])) {
+                    $lab[$result] = $remoteData[$result];
+                } else {
+                    $lab[$result] = null;
+                }
+            }
+            $removeKeys = array(
+                'eid_id',
+                'result',
+                'sample_tested_datetime',
+                'sample_received_at_vl_lab_datetime',
+                'result_dispatched_datetime',
+                'is_sample_rejected',
+                'reason_for_sample_rejection',
+                'result_approved_by'
+            );
+            foreach ($removeKeys as $keys) {
+                unset($lab[$keys]);
+            }
+            //check wheather sample code empty or not
+            if ($lab['sample_code'] != '' && $lab['sample_code'] != 0 && $lab['sample_code'] != null) {
+                $sQuery = "SELECT eid_id FROM eid_form WHERE sample_code='" . $lab['sample_code'] . "'";
+                $sResult = $db->rawQuery($sQuery);
+                $lab['data_sync'] = 1; //column data sync value is 1 equal to data sync done.value 0 is not done.
+
+                unset($lab['request_created_by']);
+                unset($lab['last_modified_by']);
+                unset($lab['request_created_datetime']);
+
+                $lab['last_modified_datetime'] = $general->getDateTime();
+
+                $db = $db->where('eid_id', $sResult[0]['eid_id']);
+                $id = $db->update('eid_form', $lab);
+                $samplePackageId = $lab['sample_package_id'];
+            } else {
+                //check exist remote
+                $exsvlQuery = "SELECT eid_id,sample_code FROM eid_form AS vl WHERE remote_sample_code='" . $lab['remote_sample_code'] . "'";
+                $exsvlResult = $db->query($exsvlQuery);
+                if ($exsvlResult) {
+                    // do nothing
+                } else {
+                    if ($lab['sample_collection_date'] != '' && $lab['sample_collection_date'] != null && $lab['sample_collection_date'] != '0000-00-00 00:00:00') {
+                        $lab['request_created_by'] = 0;
+                        $lab['last_modified_by'] = 0;
+                        $lab['request_created_datetime'] = $general->getDateTime();
+                        //$lab['sample_registered_at_lab'] = $general->getDateTime();
+                        $lab['last_modified_datetime'] = $general->getDateTime();
+                        //$lab['result_status'] = 6;
+                        $lab['data_sync'] = 1; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                        $id = $db->insert('eid_form', $lab);
+                    }
                 }
             }
         }

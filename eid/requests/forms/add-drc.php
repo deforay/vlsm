@@ -563,22 +563,10 @@ foreach ($fundingSourceList as $fundingSource) {
       $.post("/eid/requests/generateSampleCode.php", { sDate : sDate, pName : pName},
       function(data){
         var sCodeKey = JSON.parse(data);
-        <?php if ($arr['eid_sample_code'] == 'auto') { ?>
-              pNameVal = pName.split("##");
-              sCode = sCodeKey.auto;
-              $("#sampleCode").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId);
-              $("#sampleCodeInText").html('<?php echo $rKey; ?>'+pNameVal[1]+sCode+sCodeKey.maxId);
-              $("#sampleCodeFormat").val('<?php echo $rKey; ?>'+pNameVal[1]+sCode);
-              $("#sampleCodeKey").val(sCodeKey.maxId);
-              //checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null);
-          <?php } else if ($arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {?>
-              $("#sampleCode").val('<?php echo $rKey . $arr['eid_sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
-              $("#sampleCodeInText").html('<?php echo $rKey . $arr['eid_sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId);
-              //$("#sampleCodeValue").html('exemple de code:'+'<?php echo $rKey . $arr['sample_code_prefix']; ?>'+sCodeKey.mnthYr+sCodeKey.maxId).css('display','block');
-              $("#sampleCodeFormat").val('<?php echo $rKey . $arr['eid_sample_code_prefix']; ?>'+sCodeKey.mnthYr);
-              $("#sampleCodeKey").val(sCodeKey.maxId);
-              //checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>','sampleCode',null,'The sample number that you entered already exists. Please try another number',null)
-        <?php }?>
+        $("#sampleCode").val(sCodeKey.sampleCode);
+        $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
+        $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+        $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
       });
     }
   }
