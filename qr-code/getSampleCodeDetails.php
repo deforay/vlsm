@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";

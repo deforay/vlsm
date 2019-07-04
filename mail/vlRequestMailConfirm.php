@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
  include_once(APPLICATION_PATH.'/vendor/autoload.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
@@ -46,7 +46,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                    ),
                )
          );
-         $allField = array('Sample ID','Urgency','Province','District Name','Clinic Name','Clinician Name','Sample Collection Date','Sample Received Date','Collected by (Initials)','Gender','Date Of Birth','Age in years','Age in months','Is Patient Pregnant?','Is Patient Breastfeeding?','Patient OI/ART Number','Date Of ART Initiation','ART Regimen','Patient consent to SMS Notification?','Patient Mobile Number','Date Of Last Viral Load Test','Result Of Last Viral Load','Viral Load Log','Reason For VL Test','Lab Name','LAB No','VL Testing Platform','Specimen type','Sample Testing Date','Viral Load Result(copiesl/ml)','Log Value','If no result','Rejection Reason','Reviewed By','Approved By','Laboratory Scientist Comments','Status');
+         $allField = array('Sample ID','Urgency','Province','District Name','Clinic Name','Clinician Name','Sample Collection Date','Sample Received Date','Collected by (Initials)','Gender','Date Of Birth','Age in years','Age in months','Is Patient Pregnant?','Is Patient Breastfeeding?','Patient ID/ART/TRACNET','Date Of ART Initiation','ART Regimen','Patient consent to SMS Notification?','Patient Mobile Number','Date Of Last Viral Load Test','Result Of Last Viral Load','Viral Load Log','Reason For VL Test','Lab Name','Lab ID','VL Testing Platform','Specimen type','Sample Testing Date','Viral Load Result(copiesl/ml)','Log Value','Is Sample Rejected','Rejection Reason','Reviewed By','Approved By','Lab Tech. Comments','Status');
          $filedGroup = explode(",",$mailconf['rq_field']);
          //Set heading row
          $colNo = 1;
@@ -101,7 +101,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   $field = 'is_patient_pregnant';
                }elseif($allField[$f] == "Is Patient Breastfeeding?"){
                   $field = 'is_patient_breastfeeding';
-               }elseif($allField[$f] == "Patient OI/ART Number"){
+               }elseif($allField[$f] == "Patient ID/ART/TRACNET"){
                   $field = 'patient_art_no';
                }elseif($allField[$f] == "Date Of ART Initiation"){
                   $field = 'date_of_initiation_of_current_regimen';
@@ -121,7 +121,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   $field = 'reason_for_vl_testing';
                }elseif($allField[$f] == "Lab Name"){
                   $field = 'lab_id';
-               }elseif($allField[$f] == "LAB No"){
+               }elseif($allField[$f] == "Lab ID"){
                   $field = 'lab_code';
                }elseif($allField[$f] == "VL Testing Platform"){
                   $field = 'vl_test_platform';
@@ -133,7 +133,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   $field = 'result_value_absolute';
                }elseif($allField[$f] == "Log Value"){
                   $field = 'result_value_log';
-               }elseif($allField[$f] == "If no result"){
+               }elseif($allField[$f] == "Is Sample Rejected"){
                   $field = 'is_sample_rejected';
                }elseif($allField[$f] == "Rejection Reason"){
                   $field = 'rejection_reason_name';
@@ -141,7 +141,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!= '' && count($_POST['sam
                   $field = 'result_reviewed_by';
                }elseif($allField[$f] == "Approved By"){
                   $field = 'result_approved_by';
-               }elseif($allField[$f] == "Laboratory Scientist Comments"){
+               }elseif($allField[$f] == "Lab Tech. Comments"){
                   $field = 'approver_comments';
                }elseif($allField[$f] == "Status"){
                   $field = 'status_name';

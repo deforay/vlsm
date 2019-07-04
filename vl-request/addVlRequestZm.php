@@ -59,7 +59,7 @@ if($svlResult[0][$sampleCodeKey]!='' && $svlResult[0][$sampleCodeKey]!=NULL){
 }else{
  $maxId = '001';
 }
-//lab no increament
+//Lab ID increament
 $labvlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
 $labvlResult=$db->query($labvlQuery);
   if($labvlResult[0]['MAX(lab_code)']!='' && $labvlResult[0]['MAX(lab_code)']!=NULL){
@@ -316,9 +316,9 @@ if($urgency==''){ $urgency= 'normal';}
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="patientArtNo">Patient OI/ART Number</label></td>
+                        <td><label for="patientArtNo">Patient ID/ART/TRACNET</label></td>
                         <td>
-                          <input type="text" class="form-control" name="patientArtNo" id="patientArtNo" placeholder="Patient OI/ART Number" title="Enter Patient OI/ART Number" style="width:100%;"  onchange="checkPatientDetails('vl_request_form','patient_art_no',this,null)">
+                          <input type="text" class="form-control" name="patientArtNo" id="patientArtNo" placeholder="Patient ID/ART/TRACNET" title="Enter Patient ID/ART/TRACNET" style="width:100%;"  onchange="checkPatientDetails('vl_request_form','patient_art_no',this,null)">
                         </td>
                         <td><label for="dateOfArt">Date Of ART Initiation</label></td>
                         <td>
@@ -402,8 +402,8 @@ if($urgency==''){ $urgency= 'normal';}
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="labNo">LAB No</label></td>
-                        <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $maxLabId;?>"/></td>
+                        <td><label for="labNo">Lab ID</label></td>
+                        <td><input type="text" class="form-control checkNum" id="labNo" name="labNo" placeholder="Enter Lab ID." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $maxLabId;?>"/></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
                           <select name="testingPlatform" id="testingPlatform" class="form-control" title="Please choose VL Testing Platform" style="width: 100%">
@@ -434,7 +434,7 @@ if($urgency==''){ $urgency= 'normal';}
                         <td><input type="text" class="form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" onchange="calculateLogValue(this)"/></td>
                       </tr>
                       <tr class="noResult">
-                        <td><label>If no result</label></td>
+                        <td><label>Is Sample Rejected</label></td>
                         <td colspan="2">
                           <label class="radio-inline noResult">
                              <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" onclick="checkRejectedReason();"> Sample Rejected

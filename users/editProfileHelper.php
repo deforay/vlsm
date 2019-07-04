@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 
 $tableName="user_details";
 $userId=base64_decode($_POST['userId']);

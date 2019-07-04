@@ -377,6 +377,10 @@
       $(".allMenu").removeClass('active');
       $(".eidProgramMenu").addClass('active');
       $(".eidPrintResults").addClass('active');
+    } else if (splitsUrl == 'eid-sample-rejection-report.php') {
+      $(".allMenu").removeClass('active');
+      $(".eidProgramMenu").addClass('active');
+      $(".eidSampleRejectionReport").addClass('active');
     } else {
       $(".allMenu").removeClass('active');
       $(".dashboardMenu").addClass('active');

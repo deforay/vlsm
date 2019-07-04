@@ -18,8 +18,7 @@ if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
     exit(0);
 }
 try{
-    session_start();
-    include_once('../../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+    require_once('../../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
     include_once(APPLICATION_PATH.'/General.php');
 
     $general=new General($db);

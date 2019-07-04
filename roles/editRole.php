@@ -1,8 +1,8 @@
 <?php
 ob_start();
-include_once('../startup.php');
+require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 $id = base64_decode($_GET['id']);
 $roleQuery = "SELECT * from roles where role_id=$id";
 $roleInfo = $db->query($roleQuery);

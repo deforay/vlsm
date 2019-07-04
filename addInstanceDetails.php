@@ -1,5 +1,4 @@
 <?php
-session_start();
 ob_start();
 include_once('startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $fType="SELECT * FROM facility_type";

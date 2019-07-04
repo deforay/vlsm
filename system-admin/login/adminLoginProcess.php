@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-include_once('../../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
         $adminUsername = trim($_POST['username']);

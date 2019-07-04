@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
 $qrVal = explode(',',$_GET['q']);
@@ -719,7 +719,7 @@ $aCheckResult=$db->query($aCheckQuery);
                       <span><?php echo(isset($eapprovedUserResult[0]['user_name']))?ucwords($eapprovedUserResult[0]['user_name']):''; ?></span>
                   </div>
                   <div class="col-md-8">
-                      <label class="col-lg-2 control-label" for="">Laboratory Scientist Comments </label>
+                      <label class="col-lg-2 control-label" for="">Lab Tech. Comments </label>
                       <span><?php echo ucfirst($vlQueryInfo[0]['approver_comments']); ?> </span>
                   </div>
                 </div>
@@ -1281,7 +1281,7 @@ $aCheckResult=$db->query($aCheckQuery);
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <label class="col-lg-2 control-label" for="labComments">Laboratory Scientist Comments </label>
+                            <label class="col-lg-2 control-label" for="labComments">Lab Tech. Comments </label>
                             <div class="col-lg-10">
                               <textarea class="form-control labSection" name="labComments" id="labComments" placeholder="Lab comments" style="width:100%"><?php echo(isset($qrVal[78]) && trim($qrVal[78])!= '')?$qrVal[78]:''; ?></textarea>
                             </div>

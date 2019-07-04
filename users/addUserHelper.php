@@ -8,7 +8,7 @@ include_once APPLICATION_PATH .'/includes/ImageResize.php';
 
 
 $general = new General($db);
-//include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+//require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $tableName = "user_details";
 $tableName2 = "vl_user_facility_map";
 try {

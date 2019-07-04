@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $otherConfigQuery ="SELECT * from other_config WHERE type='result'";
 $otherConfigResult=$db->query($otherConfigQuery);
 $arr = array();
@@ -92,7 +92,7 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                                 <option value="Age in months" <?php echo(in_array("Age in months",$resultArr)?"selected='selected'":""); ?>>Age in months</option>
                                 <option value="Is Patient Pregnant?" <?php echo(in_array("Is Patient Pregnant?",$resultArr)?"selected='selected'":""); ?>>Is Patient Pregnant?</option>
                                 <option value="Is Patient Breastfeeding?" <?php echo(in_array("Is Patient Breastfeeding?",$resultArr)?"selected='selected'":""); ?>>Is Patient Breastfeeding?</option>
-                                <option value="Patient OI/ART Number" <?php echo(in_array("Patient OI/ART Number",$resultArr)?"selected='selected'":""); ?>>Patient OI/ART Number</option>
+                                <option value="Patient ID/ART/TRACNET" <?php echo(in_array("Patient ID/ART/TRACNET",$resultArr)?"selected='selected'":""); ?>>Patient ID/ART/TRACNET</option>
                                 <option value="Date Of ART Initiation" <?php echo(in_array("Date Of ART Initiation",$resultArr)?"selected='selected'":""); ?>>Date Of ART Initiation</option>
                                 <option value="ART Regimen" <?php echo(in_array("ART Regimen",$resultArr)?"selected='selected'":""); ?>>ART Regimen</option>
                                 <option value="Patient consent to SMS Notification?" <?php echo(in_array("Patient consent to SMS Notification?",$resultArr)?"selected='selected'":""); ?>>Patient consent to SMS Notification?</option>
@@ -102,17 +102,17 @@ if(isset($arr['rs_field']) && trim($arr['rs_field'])!= ''){
                                 <option value="Viral Load Log" <?php echo(in_array("Viral Load Log",$resultArr)?"selected='selected'":""); ?>>Viral Load Log</option>
                                 <option value="Reason For VL Test" <?php echo(in_array("Reason For VL Test",$resultArr)?"selected='selected'":""); ?>>Reason For VL Test</option>
                                 <option value="Lab Name" <?php echo(in_array("Lab Name",$resultArr)?"selected='selected'":""); ?>>Lab Name</option>
-                                <option value="LAB No" <?php echo(in_array("LAB No",$resultArr)?"selected='selected'":""); ?>>LAB No</option>
+                                <option value="Lab ID" <?php echo(in_array("Lab ID",$resultArr)?"selected='selected'":""); ?>>Lab ID</option>
                                 <option value="VL Testing Platform" <?php echo(in_array("VL Testing Platform",$resultArr)?"selected='selected'":""); ?>>VL Testing Platform</option>
                                 <option value="Specimen type" <?php echo(in_array("Specimen type",$resultArr)?"selected='selected'":""); ?>>Specimen type</option>
                                 <option value="Sample Testing Date" <?php echo(in_array("Sample Testing Date",$resultArr)?"selected='selected'":""); ?>>Sample Testing Date</option>
                                 <option value="Viral Load Result(copiesl/ml)" <?php echo(in_array("Viral Load Result(copiesl/ml)",$resultArr)?"selected='selected'":""); ?>>Viral Load Result(copiesl/ml)</option>
                                 <option value="Log Value" <?php echo(in_array("Log Value",$resultArr)?"selected='selected'":""); ?>>Log Value</option>
-                                <option value="If no result" <?php echo(in_array("If no result",$resultArr)?"selected='selected'":""); ?>>If no result</option>
+                                <option value="Is Sample Rejected" <?php echo(in_array("Is Sample Rejected",$resultArr)?"selected='selected'":""); ?>>Is Sample Rejected</option>
                                 <option value="Rejection Reason" <?php echo(in_array("Rejection Reason",$resultArr)?"selected='selected'":""); ?>>Rejection Reason</option>
                                 <option value="Reviewed By" <?php echo(in_array("Reviewed By",$resultArr)?"selected='selected'":""); ?>>Reviewed By</option>
                                 <option value="Approved By" <?php echo(in_array("Approved By",$resultArr)?"selected='selected'":""); ?>>Approved By</option>
-                                <option value="Laboratory Scientist Comments" <?php echo(in_array("Laboratory Scientist Comments",$resultArr)?"selected='selected'":""); ?>>Laboratory Scientist Comments</option>
+                                <option value="Lab Tech. Comments" <?php echo(in_array("Lab Tech. Comments",$resultArr)?"selected='selected'":""); ?>>Lab Tech. Comments</option>
                                 <option value="Status" <?php echo(in_array("Status",$resultArr)?"selected='selected'":""); ?>>Status</option>
                             </select>
                         </div>

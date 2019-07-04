@@ -1,7 +1,7 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
 $tableName1="activity_log";
@@ -215,7 +215,7 @@ $general->activityLog($eventType,$action,$resource);
                       </tr>
                       
                       <tr>
-                        <td><label for="patientArtNo">Patient OI/ART Number</label></td>
+                        <td><label for="patientArtNo">Patient ID/ART/TRACNET</label></td>
                         <td>
                           <input type="text" class="form-control" style="width: 100%;" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>" >
                         </td>
@@ -265,7 +265,7 @@ $general->activityLog($eventType,$action,$resource);
                     </div>
                     <table class="table">
                       <tr>
-                        <td><label for="labNo">LAB No</label></td>
+                        <td><label for="labNo">Lab ID</label></td>
                         <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_code'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform</label></td>
                         <td>
@@ -285,7 +285,7 @@ $general->activityLog($eventType,$action,$resource);
                         <td><input type="text" class="form-control" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" /></td>
                       </tr>
                       <tr>
-                        <td><label>If no result</label></td>
+                        <td><label>Is Sample Rejected</label></td>
                         <td colspan="3">
                           <input type="text" class="form-control" style="width:100%;" value="<?php echo str_replace('_', ' ',  ucwords($vlQueryInfo[0]['is_sample_rejected']));?>" />
                         </td>

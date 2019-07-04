@@ -1,9 +1,9 @@
 <?php
 ob_start();
 $title = "Edit Configuration";
-include_once('../startup.php');
+require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 
 $instanceQuery = "SELECT * from s_vlsm_instance where vlsm_instance_id='" . $_SESSION['instanceId'] . "'";
 $instanceResult = $db->query($instanceQuery);

@@ -1,8 +1,8 @@
 <?php
 try {
-    session_start();
     ob_start();
-    include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+    require_once('../startup.php');  
+    include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
     include_once(APPLICATION_PATH.'/General.php');
     $general=new General($db);
     // Define path to guzzle directory

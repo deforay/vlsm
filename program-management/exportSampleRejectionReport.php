@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 
-include_once('../startup.php');   
+require_once('../startup.php');   
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 include_once(APPLICATION_PATH.'/vendor/autoload.php');
@@ -103,7 +103,7 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
         $row[] = ($tableRow['labname']);
         $row[] = ($tableRow['facility_name']);
         $row[] = ($tableRow['rejection_reason_name']);
-        $row[] = ($tableRow['rejection_type']);
+        $row[] = strtoupper($tableRow['rejection_type']);
         $row[] = $tableRow['total'];
         $output[] = $row;
     }
@@ -117,7 +117,7 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
         foreach ($rowData as $field => $value) {
 
             $cellName = $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->getColumn();
-            $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+            $sheet->getStyle($cellName . $rowNo + 4)->applyFromArray($borderStyle);
 
             if ($colNo == 5) {
                 $sheet->getCellByColumnAndRow($colNo, $rowNo + 4)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC);

@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "Read QR Code";
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
 <div class="content-wrapper" style="min-height: 347px;">
     <section class="content-header">

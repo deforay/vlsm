@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 $facilityQuery="SELECT * from facility_details where facility_id=$id";
 $facilityInfo=$db->query($facilityQuery);

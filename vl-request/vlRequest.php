@@ -1,8 +1,8 @@
 <?php
 $title = "View All Requests";
-include_once('../startup.php');
+require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
@@ -114,7 +114,7 @@ $batResult = $db->rawQuery($batQuery);
 							?>
 								&nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
 								&nbsp;
-								<!-- <a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a> -->
+								<a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
 							</td>
 						</tr>
 					</table>
@@ -128,7 +128,7 @@ $batResult = $db->rawQuery($batQuery);
 								<?php }
 							?>
 								&nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>
-								<!-- &nbsp;<a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a> -->
+								&nbsp;<a class="btn btn-success btn-sm pull-right" style="margin-right:5px;" href="javascript:void(0);" onclick="exportAllPendingVlRequest();"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export Excel</a>
 								&nbsp;<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="hideAdvanceSearch('filter','advanceFilter');"><span>Show Advanced Search</span></button>
 							</td>
 						</tr>
@@ -464,7 +464,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	}
 
 	function convertPdf(id) {
-		$.post("../result-pdf/vlRequestPdf.php", {
+		$.post("/result-pdf/vlRequestPdf.php", {
 				id: id,
 				format: "html"
 			},
@@ -578,7 +578,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				if (data === "" || data === null || data === undefined) {
 					alert('Unable to generate excel..');
 				} else {
-					location.href = '../temporary/' + data;
+					location.href = '/temporary/' + data;
 				}
 			});
 	}

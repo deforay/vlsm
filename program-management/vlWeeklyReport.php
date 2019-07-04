@@ -1,5 +1,5 @@
    <?php
-   include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+   require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
    
    $facilityQuery="SELECT * FROM facility_details where facility_type = 2 AND status='active'";
    

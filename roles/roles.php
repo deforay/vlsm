@@ -1,6 +1,6 @@
 <?php
 $title = "Roles";
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 ?>
 
   <!-- Content Wrapper. Contains page content -->
