@@ -1,7 +1,7 @@
 <?php
 session_start();
 ob_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
  include_once(APPLICATION_PATH.'/vendor/autoload.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
@@ -14,15 +14,15 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
 }
 $filedGroup = array();
 if($arr['vl_form'] == 2){
-  $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+  $rs_field = 'Lab Name,Lab ID,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,Is Sample Rejected,Rejection Reason,Reviewed By,Approved By,Lab Tech. Comments,Status';
 }else if($arr['vl_form'] == 3){
-  $rs_field = 'Sample Received Date,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+  $rs_field = 'Sample Received Date,Lab ID,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Log Value,Is Sample Rejected,Rejection Reason,Reviewed By,Approved By,Lab Tech. Comments,Status';
 }else if($arr['vl_form'] == 4){
-  $rs_field = 'Lab Name,LAB No,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+  $rs_field = 'Lab Name,Lab ID,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Is Sample Rejected,Rejection Reason,Reviewed By,Approved By,Lab Tech. Comments,Status';
 }else if($arr['vl_form'] == 7){
-  $rs_field = 'Lab Name,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),If no result,Rejection Reason,Reviewed By,Approved By,Laboratory Scientist Comments,Status';
+  $rs_field = 'Lab Name,VL Testing Platform,Specimen Type,Sample Testing Date,Viral Load Result(copiesl/ml),Is Sample Rejected,Rejection Reason,Reviewed By,Approved By,Lab Tech. Comments,Status';
 }else{
-  $rs_field = 'Lab,LAB No,Lab Contact Person,Lab Phone No,Sample Received Date,Result Dispatched Date,Test Method,Sample Testing Date,Log Value,Absolute Value,Text Value,Viral Load Result(copiesl/ml),Reviewed By,Reviewed Date,Approved By,Laboratory Scientist Comments,Status';
+  $rs_field = 'Lab,Lab ID,Lab Contact Person,Lab Phone No,Sample Received Date,Result Dispatched Date,Test Method,Sample Testing Date,Log Value,Absolute Value,Text Value,Viral Load Result(copiesl/ml),Reviewed By,Reviewed Date,Approved By,Lab Tech. Comments,Status';
 }
 if(isset($rs_field) && trim($rs_field)!= ''){
      //Excel code start
@@ -77,7 +77,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
                  $field = 'lab_name';
             }elseif($filedGroup[$f] == "Lab Name"){
                  $field = 'lab_id';
-            }elseif($filedGroup[$f] == "LAB No"){
+            }elseif($filedGroup[$f] == "Lab ID"){
                  $field = 'lab_code';
             }elseif($filedGroup[$f] == "Lab Contact Person"){
                  $field = 'lab_contact_person';
@@ -103,7 +103,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
                  $field = 'result_value_text';
             }elseif($filedGroup[$f] == "Viral Load Result(copiesl/ml)"){
                  $field = 'result';
-            }elseif($filedGroup[$f] == "If no result"){
+            }elseif($filedGroup[$f] == "Is Sample Rejected"){
                  $field = 'is_sample_rejected';
             }elseif($filedGroup[$f] == "Rejection Reason"){
                  $field = 'rejection_reason_name';
@@ -113,7 +113,7 @@ if(isset($rs_field) && trim($rs_field)!= ''){
                  $field = 'result_reviewed_datetime';
             }elseif($filedGroup[$f] == "Approved By"){
                  $field = 'result_approved_by';
-            }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
+            }elseif($filedGroup[$f] == "Lab Tech. Comments"){
                  $field = 'approver_comments';
             }elseif($filedGroup[$f] == "Status"){
                  $field = 'status_name';

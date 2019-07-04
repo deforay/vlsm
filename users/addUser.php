@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 $query="SELECT * FROM roles where status='active'";
 $result = $db->rawQuery($query);
 $fResult = array();

@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-include_once('../../startup.php');
+require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 //system config
 $systemConfigQuery = "SELECT * from system_config";

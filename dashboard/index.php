@@ -2,7 +2,7 @@
 
 $title = "Dashboard";
 
-include_once('../startup.php'); 
+require_once('../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 
 

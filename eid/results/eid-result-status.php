@@ -1,8 +1,8 @@
 <?php
 $title = "Manage Result Status";
-include_once('../../startup.php');
+require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
 $sQuery = "SELECT * FROM r_sample_type";

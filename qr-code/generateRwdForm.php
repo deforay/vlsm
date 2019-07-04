@@ -310,7 +310,7 @@
   $html .='</tr>';
   $html .='<tr>';
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Approved By</td>';
-   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Laboratory Scientist Comments</td>';
+   $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Lab Tech. Comments</td>';
    $html .='<td style="line-height:11px;font-size:11px;font-weight:bold;text-align:left;">Status</td>';
   $html .='</tr>';
   $html .='<tr>';

@@ -1,5 +1,5 @@
 <?php
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 $importMachineTable="import_config_machines";
 $configId = base64_decode($_POST['configId']);
 $iQuery="SELECT config_id,machine_name,import_machine_file_name FROM import_config where import_machine_file_name='$configId'";

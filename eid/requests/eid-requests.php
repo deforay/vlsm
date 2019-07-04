@@ -1,6 +1,6 @@
 <?php
 $title = "EID | View All Requests";
-include_once('../../startup.php');
+require_once('../../startup.php');
 
 
 // echo "<pre>";

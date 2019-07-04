@@ -1,6 +1,5 @@
 <?php
-session_start();
-include_once('../startup.php');
+require_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $formConfigQuery = "SELECT * FROM global_config";
@@ -114,7 +113,14 @@ for ($i = 0; $i < count($aColumns); $i++) {
           */
 $aWhere = '';
 //$sQuery="SELECT vl.vl_sample_id,vl.facility_id,vl.patient_name,f.facility_name,f.facility_code,art.art_code,s.sample_name FROM vl_request_form as vl INNER JOIN facility_details as f ON vl.facility_id=f.facility_id  INNER JOIN r_art_code_details as art ON vl.current_regimen=art.art_id INNER JOIN r_sample_type as s ON s.sample_id=vl.sample_type";
-$sQuery = "SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
+$sQuery = "SELECT * FROM vl_request_form as vl    
+                    LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+                    LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+                    INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+                    LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id 
+                    LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+                    LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing 
+                    LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id";
 
 //echo $sQuery;die;
 $start_date = '';

@@ -1,5 +1,7 @@
 <?php
-session_start();
+require_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 
 if(!isset($_SESSION['userId'])){
     header("location:../login.php");
@@ -11,7 +13,7 @@ if($_SESSION['roleId'] != 1){
 }
 
 
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+
 
 
 $filename = 'vlsm-bkp-' . date("dmYHis") .'-'. rand(). '.sql';

@@ -202,9 +202,9 @@ $disable = "disabled = 'disabled'";
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="patientArtNo">Patient OI/ART Number</label></td>
+                        <td><label for="patientArtNo">Patient ID/ART/TRACNET</label></td>
                         <td>
-                          <input type="text" class="form-control" name="patientArtNo" id="patientArtNo" <?php echo $disable; ?> placeholder="Patient OI/ART Number" title="Enter Patient OI/ART Number" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>" >
+                          <input type="text" class="form-control" name="patientArtNo" id="patientArtNo" <?php echo $disable; ?> placeholder="Patient ID/ART/TRACNET" title="Enter Patient ID/ART/TRACNET" style="width:100%;" value="<?php echo $vlQueryInfo[0]['patient_art_no'];?>" >
                         </td>
                         <td><label for="dateOfArt">Date Of ART Initiation</label></td>
                         <td>
@@ -295,8 +295,8 @@ $disable = "disabled = 'disabled'";
                         </td>
                       </tr>
                       <tr>
-                        <td><label for="labNo">LAB No<span class="mandatory">*</span></label></td>
-                        <td><input type="text" class="isRequired form-control checkNum" id="labNo" name="labNo" placeholder="Enter LAB No." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_code'];?>" /></td>
+                        <td><label for="labNo">Lab ID<span class="mandatory">*</span></label></td>
+                        <td><input type="text" class="isRequired form-control checkNum" id="labNo" name="labNo" placeholder="Enter Lab ID." title="Please enter patient Phone No" style="width:100%;" value="<?php echo $vlQueryInfo[0]['lab_code'];?>" /></td>
                         <td><label for="testingPlatform">VL Testing Platform<span class="mandatory">*</span></label></td>
                         <td>
                           <select name="testingPlatform" id="testingPlatform" class="isRequired form-control" title="Please choose VL Testing Platform">
@@ -328,7 +328,7 @@ $disable = "disabled = 'disabled'";
                         <td><input type="text" class="vlLog form-control" id="vlLog" name="vlLog" placeholder="Enter Viral Load Log" title="Please enter viral load log" style="width:100%;" value="<?php echo $vlQueryInfo[0]['result_value_log'];?>" onchange="calculateLogValue(this)" /></td>
                       </tr>
                       <tr class="">
-                        <td><label class="noResult">If no result</label></td>
+                        <td><label class="noResult">Is Sample Rejected</label></td>
                         <td>
                           <label class="radio-inline noResult">
                              <input type="radio" class="" id="noResultRejected" name="noResult" value="sample_rejected" title="Choose result" <?php echo ($vlQueryInfo[0]['is_sample_rejected']=='sample_rejected')?"checked='checked'":""?> onclick='checkVlResult()'> Sample Rejected

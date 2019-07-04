@@ -1,7 +1,7 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+
 $fQuery="SELECT * FROM facility_type";
 $fResult = $db->rawQuery($fQuery);
 $pQuery="SELECT * FROM province_details";

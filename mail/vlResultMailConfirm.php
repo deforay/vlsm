@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 include_once(APPLICATION_PATH.'/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
@@ -143,7 +143,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                      $field = 'is_patient_pregnant';
                   }elseif($filedGroup[$f] == "Is Patient Breastfeeding?"){
                      $field = 'is_patient_breastfeeding';
-                  }elseif($filedGroup[$f] == "Patient OI/ART Number"){
+                  }elseif($filedGroup[$f] == "Patient ID/ART/TRACNET"){
                      $field = 'patient_art_no';
                   }elseif($filedGroup[$f] == "Date Of ART Initiation"){
                      $field = 'date_of_initiation_of_current_regimen';
@@ -163,7 +163,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                      $field = 'reason_for_vl_testing';
                   }elseif($filedGroup[$f] == "Lab Name"){
                      $field = 'lab_id';
-                  }elseif($filedGroup[$f] == "LAB No"){
+                  }elseif($filedGroup[$f] == "Lab ID"){
                      $field = 'lab_code';
                   }elseif($filedGroup[$f] == "VL Testing Platform"){
                      $field = 'vl_test_platform';
@@ -175,7 +175,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                      $field = 'result_value_absolute';
                   }elseif($filedGroup[$f] == "Log Value"){
                      $field = 'result_value_log';
-                  }elseif($filedGroup[$f] == "If no result"){
+                  }elseif($filedGroup[$f] == "Is Sample Rejected"){
                      $field = 'is_sample_rejected';
                   }elseif($filedGroup[$f] == "Rejection Reason"){
                      $field = 'rejection_reason_name';
@@ -183,7 +183,7 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!="" && count($_POST['samp
                      $field = 'result_reviewed_by';
                   }elseif($filedGroup[$f] == "Approved By"){
                      $field = 'result_approved_by';
-                  }elseif($filedGroup[$f] == "Laboratory Scientist Comments"){
+                  }elseif($filedGroup[$f] == "Lab Tech. Comments"){
                      $field = 'approver_comments';
                   }elseif($filedGroup[$f] == "Status"){
                      $field = 'status_name';

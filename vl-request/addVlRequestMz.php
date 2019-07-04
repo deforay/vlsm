@@ -94,7 +94,7 @@ $province.="<option value=''> -- Select -- </option>";
                       <div class="col-xs-3 col-md-3 col-sm-offset-2 col-md-offset-2" style="padding:10px;">
                         <div class="form-group">
                         <label for="labNumber">Lab Number&nbsp;&nbsp;&nbsp;&nbsp;<span class="mandatory">*</span></label>
-                        <input type="text" class="form-control isRequired" id="" name="labNumber" placeholder="Enter Form Lab No." title="Please enter lab number" style="width:100%;"/>
+                        <input type="text" class="form-control isRequired" id="" name="labNumber" placeholder="Enter Form Lab ID." title="Please enter lab number" style="width:100%;"/>
                         </div>
                       </div>
                     </div>

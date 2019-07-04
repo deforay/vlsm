@@ -1,8 +1,8 @@
 <?php
 //print_r($result);die;
 ob_start();
-include_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
-//include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
 $tableName1="activity_log";

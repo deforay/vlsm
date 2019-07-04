@@ -1,7 +1,7 @@
 <?php
 ob_start();
 $title = "Import Test Results From File";
-include_once('../startup.php');
+require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general = new General($db);

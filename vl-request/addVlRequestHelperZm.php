@@ -1,7 +1,7 @@
 <?php
-session_start();
 ob_start();
-include_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
 $tableName="vl_request_form";
@@ -22,7 +22,7 @@ try {
     if($sarr['user_type']=='remoteuser'){
         $status = 9;
     }
-     //set lab no
+     //set Lab ID
      $start_date = date('Y-m-01');
      $end_date = date('Y-m-31');
      $labvlQuery='select MAX(lab_code) FROM vl_request_form as vl where vl.vlsm_country_id="2" AND DATE(vl.request_created_datetime) >= "'.$start_date.'" AND DATE(vl.request_created_datetime) <= "'.$end_date.'"';
