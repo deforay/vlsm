@@ -67,6 +67,22 @@ $eidInfo = $db->rawQueryOne($eidQuery);
 $arr = $general->getGlobalConfig();
 
 
+if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'auto2' || $arr['eid_sample_code'] == 'alphanumeric') {
+    $sampleClass = '';
+    $maxLength = '';
+    if ($arr['eid_max_length'] != '' && $arr['eid_sample_code'] == 'alphanumeric') {
+         $maxLength = $arr['eid_max_length'];
+         $maxLength = "maxlength=" . $maxLength;
+    }
+} else {
+    $sampleClass = 'checkNum';
+    $maxLength = '';
+    if ($arr['eid_max_length'] != '') {
+         $maxLength = $arr['eid_max_length'];
+         $maxLength = "maxlength=" . $maxLength;
+    }
+}
+
 
 $fileArray = array(
     1 => 'forms/edit-southsudan.php',

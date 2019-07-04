@@ -80,6 +80,7 @@ if (trim($facilityResult[0]['facility_state']) != '') {
      $districtQuery = "SELECT DISTINCT facility_district from facility_details where facility_state='" . $facilityResult[0]['facility_state'] . "' AND status='active'";
      $districtResult = $db->query($districtQuery);
 }
+
 //suggest sample id when lab user add request sample
 $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';

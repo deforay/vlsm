@@ -18,7 +18,7 @@ $PORT = 3306;
 $MYSQLDUMP = '/usr/bin/mysqldump';
 
 // VLSTS URL
-$REMOTEURL = '';
+$REMOTEURL = 'https://drc-vlsm.deforay.in';
 
 
 // Enable/Disable Interfacing

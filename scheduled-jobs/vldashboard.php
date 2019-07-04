@@ -250,6 +250,7 @@ try {
         $configQuery="SELECT `value` FROM global_config WHERE name ='vldashboard_url'";
         $configResult=$db->query($configQuery);
         $vldashboardUrl = trim($configResult[0]['value']);
+        $vldashboardUrl = rtrim($vldashboardUrl, "/");
     
         //Base URL
         $apiUrl=$vldashboardUrl."/api/import-viral-load";

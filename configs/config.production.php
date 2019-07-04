@@ -7,7 +7,7 @@ $systemConfig = array();
 $HOST = '127.0.0.1';
 $USER = 'root';
 $PASSWORD = 'zaq12345';
-$DBNAME = 'vl_lab_request';
+$DBNAME = 'vlsm';
 $PORT = 3306;
 
 //Please use only GMAIL ID AND PASSWORD
@@ -29,7 +29,7 @@ $MYSQLDUMP = '/usr/bin/mysqldump';
 
 
 // VLSTS URL
-$REMOTEURL = '';
+$REMOTEURL = 'https://drc-vlsm.deforay.in/';
 
 
 // Enable/Disable Interfacing
@@ -41,4 +41,4 @@ $interfaceConfig['dbName'] = 'interfacing';
 $interfaceConfig['dbPort'] = 3306;
 
 // Enable/Disable EID 
-$eidConfig['enabled'] = false;
+$eidConfig['enabled'] = true;

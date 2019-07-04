@@ -1,4 +1,5 @@
 <?php
+
 ob_start();
 session_start();
 include_once '../../startup.php';
@@ -7,7 +8,8 @@ include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 
 // echo "<pre>";
-// var_dump($_POST);die;
+// var_dump($_POST);
+// die;
 
 
 $tableName = "eid_form";
@@ -138,6 +140,19 @@ try {
     'last_modified_by' => $_SESSION['userId'],
     'last_modified_datetime' => $general->getDateTime()
   );
+
+
+  if ($sarr['user_type'] == 'remoteuser') {
+    $eidData['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
+  } else {
+    if ($_POST['sampleCodeCol'] != '') {
+      $eidData['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
+    } else {
+      $sampleCodeKeysJson = $general->generateEIDSampleCode($_POST['province'], $_POST['sampleCollectionDate']);
+      $sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
+      $eidData['sample_code'] = $sampleCodeKeys['sampleCode'];
+    }
+  }
 
 
   if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {

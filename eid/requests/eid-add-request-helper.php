@@ -107,6 +107,7 @@ try {
     'sample_code_key' => isset($_POST['sampleCodeKey']) ? $_POST['sampleCodeKey'] : null,
     'sample_code_format' => isset($_POST['sampleCodeFormat']) ? $_POST['sampleCodeFormat'] : null,
     'facility_id' => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
+    'lab_id' => isset($_POST['labId']) ? $_POST['labId'] : null,
     'implementing_partner' => isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
     'funding_source' => isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
     'mother_id' => isset($_POST['mothersId']) ? $_POST['mothersId'] : null,
