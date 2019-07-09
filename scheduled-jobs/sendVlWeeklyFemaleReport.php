@@ -2,7 +2,7 @@
 session_start();
 ob_start();
 
-include_once(__DIR__ . "/../startup.php");
+require_once(__DIR__ . "/../startup.php");
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH."/includes/mail/PHPMailerAutoload.php");
 include_once(APPLICATION_PATH.'/models/General.php');
