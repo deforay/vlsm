@@ -24,7 +24,7 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
           <div class="box">
             <div class="box-header with-border">
               <?php if(isset($_SESSION['privileges']) && in_array("addSpecimenReferralManifest.php", $_SESSION['privileges'])){ ?>
-              <a href="addSpecimenReferralManifest.php" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Specimen Referral Manifest</a>
+              <a href="addSpecimenReferralManifest.php?t=<?php echo $_GET['t']; ?>" class="btn btn-primary pull-right"> <i class="fa fa-plus"></i> Add Specimen Referral Manifest</a>
 	            <?php } ?>
 	      <!--<button class="btn btn-primary pull-right" style="margin-right: 1%;" onclick="$('#showhide').fadeToggle();return false;"><span>Manage Columns</span></button>-->
             </div>
@@ -35,6 +35,7 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
                 <tr>
 		  <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="checkPackageData" onclick="checkAllPackageRows(this);"/></th>
                   <th>Manifest Code</th>
+                  <th>Type of Test</th>
                   <th>No. of Samples</th>
                   <th>Added On</th>
 		  <?php if(isset($_SESSION['privileges']) && in_array("editSpecimenReferralManifest.php", $_SESSION['privileges'])){ ?>
@@ -74,12 +75,13 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
             "bAutoWidth": false,
             "bInfo": true,
             "bScrollCollapse": true,
-	    "iDisplayLength": 100,
+	          "iDisplayLength": 100,
             //"bStateSave" : true,
             "bRetrieve": true,                        
             "aoColumns": [
-	        {"sClass":"center","bSortable":false},
+	              {"sClass":"center","bSortable":false},
                 {"sClass":""},
+                {"sClass":"center"},
                 {"sClass":"center","bSortable":false},
                 {"sClass":"center"},
 		<?php if(isset($_SESSION['privileges']) && in_array("editSpecimenReferralManifest.php", $_SESSION['privileges'])){ ?>
@@ -100,6 +102,7 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
             "bServerSide": true,
             "sAjaxSource": "getSpecimenReferralManifestCodeDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
+              aoData.push({"name": "module", "value": "<?php echo base64_decode($_GET['t']); ?>"});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -119,7 +122,7 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate barcode');
 	  }else{
-	      window.open('.././uploads/package_barcode/'+data,'_blank');
+	      window.open('/uploads/package_barcode/'+data,'_blank');
 	  }
 	  
       });
