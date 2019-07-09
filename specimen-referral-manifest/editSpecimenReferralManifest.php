@@ -16,7 +16,13 @@ if($sarr['user_type']=='remoteuser'){
   $sCode = 'sample_code';
 }
 
-$query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id,vl.sample_package_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=".$id.") AND vl.vlsm_country_id = ".$global['vl_form'];
+$module = isset($_GET['t']) ? base64_decode($_GET['t']) : 'vl';
+if($module == 'vl'){
+  $query="SELECT vl.sample_code,vl.remote_sample_code,vl.vl_sample_id,vl.sample_package_id FROM vl_request_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=".$id.") AND vl.vlsm_country_id = ".$global['vl_form'];
+} else if($module == 'eid'){
+  $query="SELECT vl.sample_code,vl.remote_sample_code,vl.eid_id,vl.sample_package_id FROM eid_form as vl where (vl.sample_code IS NOT NULL OR vl.remote_sample_code IS NOT NULL) AND (vl.sample_package_id is null OR vl.sample_package_id='' OR vl.sample_package_id=".$id.") AND vl.vlsm_country_id = ".$global['vl_form'];
+}
+
 if(isset($vlfmResult[0]['facilityId']))
 {
   $query = $query." AND facility_id IN(".$vlfmResult[0]['facilityId'].")";
@@ -29,8 +35,10 @@ $result = $db->rawQuery($query);
 // }else if($sarr['user_type']=='vluser'){
 //   $sCode = 'sample_code';
 // }
+
+
 ?>
-<link href="../assets/css/multi-select.css" rel="stylesheet" />
+<link href="/assets/css/multi-select.css" rel="stylesheet" />
 <style>
   .select2-selection__choice{  color:#000000 !important; }
   #ms-sampleCode{width: 110%;}
@@ -95,8 +103,14 @@ $result = $db->rawQuery($query);
                         <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search">
                           <?php foreach($result as $sample){ 
                             if($sample[$sCode]!=''){
+                              if($module == 'vl'){
+                                $sampleId  = $sample['vl_sample_id'];
+                              } else if($module == 'eid'){
+                                $sampleId  = $sample['eid_id'];
+                              }                              
                               ?>
-                                <option value="<?php echo $sample['vl_sample_id'];?>" <?php echo ($sample['sample_package_id']==$id) ? 'selected="selected"':''; ?>><?php  echo $sample[$sCode];?></option>
+                              
+                                <option value="<?php echo $sampleId; ?>" <?php echo ($sample['sample_package_id']==$id) ? 'selected="selected"':''; ?>><?php  echo $sample[$sCode];?></option>
                           <?php } } ?>
                         </select>
 				              </div>
@@ -108,6 +122,7 @@ $result = $db->rawQuery($query);
               <!-- /.box-body -->
               <div class="box-footer">
               <input type="hidden" name="packageId" value="<?php echo $pResult[0]['package_id'];?>"/>
+              <input type="hidden" class="form-control isRequired" id="module" name="module" placeholder="" title="" readonly value="<?php echo $module; ?>"/>
                 <a id="packageSubmit" class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
                 <a href="specimenReferralManifestList.php" class="btn btn-default"> Cancel</a>
               </div>
@@ -120,8 +135,8 @@ $result = $db->rawQuery($query);
     </section>
     <!-- /.content -->
   </div>
-  <script src="../assets/js/jquery.multi-select.js"></script>
-  <script src="../assets/js/jquery.quicksearch.js"></script>
+  <script src="/assets/js/jquery.multi-select.js"></script>
+  <script src="/assets/js/jquery.quicksearch.js"></script>
   <script type="text/javascript">
    noOfSamples = 100;
   $(document).ready(function() {
@@ -170,16 +185,16 @@ $result = $db->rawQuery($query);
        afterSelect: function(){
             //button disabled/enabled
 	     if(this.qs2.cache().matchedResultsCount == noOfSamples){
-		alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
-		$("#packageSubmit").attr("disabled",false);
-		$("#packageSubmit").css("pointer-events","auto");
+          alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
+          $("#packageSubmit").attr("disabled",false);
+          $("#packageSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount <= noOfSamples){
-	       $("#packageSubmit").attr("disabled",false);
-	       $("#packageSubmit").css("pointer-events","auto");
+          $("#packageSubmit").attr("disabled",false);
+          $("#packageSubmit").css("pointer-events","auto");
 	     }else if(this.qs2.cache().matchedResultsCount > noOfSamples){
-	       alert("You have already selected Maximum no. of sample "+noOfSamples);
-	       $("#packageSubmit").attr("disabled",true);
-	       $("#packageSubmit").css("pointer-events","none");
+          alert("You have already selected Maximum no. of sample "+noOfSamples);
+          $("#packageSubmit").attr("disabled",true);
+          $("#packageSubmit").css("pointer-events","none");
 	     }
 	     this.qs1.cache();
 	     this.qs2.cache();
@@ -187,9 +202,9 @@ $result = $db->rawQuery($query);
        afterDeselect: function(){
          //button disabled/enabled
 	  if(this.qs2.cache().matchedResultsCount == 0){
-            $("#packageSubmit").attr("disabled",true);
+      $("#packageSubmit").attr("disabled",true);
 	    $("#packageSubmit").css("pointer-events","none");
-          }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
+    }else if(this.qs2.cache().matchedResultsCount == noOfSamples){
 	     alert("You have selected Maximum no. of sample "+this.qs2.cache().matchedResultsCount);
 	     $("#packageSubmit").attr("disabled",false);
 	     $("#packageSubmit").css("pointer-events","auto");
@@ -228,18 +243,22 @@ $result = $db->rawQuery($query);
           }
       });
     }
-    function getSampleCodeDetails(){
-      $.blockUI();
-      $.post("getSpecimenReferralManifestSampleCodeDetails.php",
-      function(data){
-	      if(data != ""){
+
+    function getSampleCodeDetails() {
+    $.blockUI();
+
+    $.post("getSpecimenReferralManifestSampleCodeDetails.php", {
+        module: $("#module").val()
+      },
+      function(data) {
+        if (data != "") {
           $("#sampleDetails").html(data);
-          $("#packageSubmit").attr("disabled",true);
-          $("#packageSubmit").css("pointer-events","none");
-	      }
+          $("#packageSubmit").attr("disabled", true);
+          $("#packageSubmit").css("pointer-events", "none");
+        }
       });
-      $.unblockUI();
-    }
+    $.unblockUI();
+    }   
   </script>
  <?php
  include(APPLICATION_PATH.'/footer.php');

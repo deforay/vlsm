@@ -399,7 +399,7 @@ $formConfigResult = $db->query($formConfigQuery);
 
               if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <li class="allMenu specimenReferralManifestListMenu">
-                    <a href="/specimen-referral-manifest/specimenReferralManifestList.php"><i class="fa fa-circle-o"></i> Specimen Manifest</a>
+                    <a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> VL Specimen Manifest</a>
                   </li>
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
@@ -521,6 +521,12 @@ $formConfigResult = $db->query($formConfigQuery);
                 <li class="allMenu eidBatchCodeMenu">
                   <a href="/eid/batch/eid-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
                 </li>
+                <?php 
+                if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+                  <li class="allMenu specimenReferralManifestListMenu">
+                    <a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
+                  </li>
+                <?php } ?>                
               </ul>
             </li>
 

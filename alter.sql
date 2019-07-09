@@ -1927,3 +1927,9 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) VALUES (
 -- Amit 04 July 2019
 
 ALTER TABLE `eid_form` ADD `sample_package_id` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_batch_id`;
+
+
+-- Amit 09 July 2019
+
+ALTER TABLE `package_details` ADD `module` VARCHAR(255) NULL DEFAULT NULL AFTER `package_status`;
+UPDATE `package_details` SET module = 'vl' where module is NULL;
