@@ -1933,3 +1933,5 @@ ALTER TABLE `eid_form` ADD `sample_package_id` VARCHAR(255) NULL DEFAULT NULL AF
 
 ALTER TABLE `package_details` ADD `module` VARCHAR(255) NULL DEFAULT NULL AFTER `package_status`;
 UPDATE `package_details` SET module = 'vl' where module is NULL;
+
+-- Version 3.13 ---------- Amit 09 July 2019
