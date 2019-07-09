@@ -115,12 +115,18 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
        $.unblockUI();
 	} );
   
-  function generateBarcode(pId,frmSrc){
+  function generateManifestPDF(pId,frmSrc){
     var ids = $("#checkedPackages").val();
-    $.post("generateBarcode.php",{id:pId,ids:ids,frmSrc:frmSrc},
+    var module = '<?php echo base64_decode($_GET['t']); ?>';
+    if(module == 'vl'){
+      manifestFileName = "generateVLManifest.php";
+    }else if(module == 'eid'){
+      manifestFileName = "generateEIDManifest.php";
+    }
+    $.post(manifestFileName,{id:pId,ids:ids,frmSrc:frmSrc},
       function(data){
 	  if(data == "" || data == null || data == undefined){
-	      alert('Unable to generate barcode');
+	      alert('Unable to generate manifest PDF');
 	  }else{
 	      window.open('/uploads/package_barcode/'+data,'_blank');
 	  }
@@ -172,9 +178,8 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
    
   var count_elem = document.getElementById('specimenReferralManifestDataTable');
   var div = document.createElement('div');
-  div.innerHTML = '<span class="selectedRows" style="font-weight:bold;">0 Row(s) Selected</span>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-xs printBarcode" href="javascript:void(0);" onclick="generateBarcode(\' \',\'pk2\');" style="display:none;margin-bottom: 1vh;"><i class="fa fa-barcode"></i> Print Barcode</a>';
+  div.innerHTML = '<span class="selectedRows" style="font-weight:bold;">0 Row(s) Selected</span>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-info btn-xs printBarcode" href="javascript:void(0);" onclick="generateManifestPDF(\' \',\'pk2\');" style="display:none;margin-bottom: 1vh;"><i class="fa fa-barcode"></i> Print Barcode</a>';
   count_elem.parentNode.insertBefore(div, count_elem);
 </script>
  <?php
  include(APPLICATION_PATH.'/footer.php');
- ?>
