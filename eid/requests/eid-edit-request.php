@@ -154,6 +154,12 @@ require_once($fileArray[$arr['vl_form']]);
         //$('.date').mask('99-aaa-9999');
         //$('.dateTime').mask('99-aaa-9999 99:99');
     });
+
+
+    function calculateAgeInMonths(){
+        var dateOfBirth  = moment($("#childDob").val(), "DD-MMM-YYYY");
+        $("#childAge").val(moment().diff(dateOfBirth, 'months'));
+    }    
 </script>
 
 

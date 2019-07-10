@@ -167,6 +167,11 @@ require_once($fileArray[$arr['vl_form']]);
                 }
             });
     }
+
+    function calculateAgeInMonths(){
+        var dateOfBirth  = moment($("#childDob").val(), "DD-MMM-YYYY");
+        $("#childAge").val(moment().diff(dateOfBirth, 'months'));
+    }
 </script>
 
 

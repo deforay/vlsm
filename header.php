@@ -229,6 +229,12 @@ $formConfigResult = $db->query($formConfigQuery);
       color: #333;
       font-weight: bold;
     }
+
+    .skin-red .sidebar-menu>li.header {
+      background: #ddd;
+      color: #333;
+      font-weight: bold;
+    }
   </style>
 </head>
 
