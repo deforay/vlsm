@@ -263,9 +263,9 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                     </th>
                   </tr>
                   <tr>
-                    <th><label for="childId">Code de l’enfant (Patient) </label></th>
+                    <th><label for="childId">Code de l’enfant (Patient)  <span class="mandatory">*</span></label></th>
                     <td>
-                      <input type="text" class="form-control " id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code du enfant" style="width:100%;" value="<?php echo $eidInfo['child_id']; ?>" onchange="" />
+                      <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code du enfant" style="width:100%;" value="<?php echo $eidInfo['child_id']; ?>" onchange="" />
                     </td>
                     <th><label for="childName">Nom </label></th>
                     <td>
@@ -273,7 +273,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                     </td>
                     <th><label for="childDob">Date de naissance </label></th>
                     <td>
-                      <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>" onchange="" />
+                      <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>"   onchange="calculateAgeInMonths();"/>
                     </td>
                     <th><label for="childGender">Gender </label></th>
                     <td>
@@ -286,8 +286,8 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                     </td>
                   </tr>
                   <tr>
-                    <th>Age</th>
-                    <td><input type="number" value="<?php echo $eidInfo['child_age']; ?>" max=9 maxlength="1" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
+                    <th>Age en mois</th>
+                    <td><input type="number" value="<?php echo $eidInfo['child_age']; ?>" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age en mois" title="Age en mois" style="width:100%;" onchange="$('#childDob').val('')" /></td>
                     <th></th>
                     <td></td>
                     <th></th>

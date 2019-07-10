@@ -91,7 +91,7 @@ foreach ($fResult as $fDetails) {
                                   <input type="hidden" id="sampleCode" name="sampleCode"/>
                                 </td>
                               <?php } else {?>
-                                <td><label for="sampleCode">Échantillon ID </label><span class="mandatory">*</span></td>
+                                <td><label for="sampleCode">Échantillon ID </label></td>
                                 <td>
                                   <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>',this.id,null,'The échantillon id that you entered already exists. Please try another échantillon id',null)"/>
                                 </td>
@@ -194,9 +194,9 @@ foreach ($fundingSourceList as $fundingSource) {
                                 <th colspan=8><h5 style="font-weight:bold;font-size:1.1em;">ID de l'enfant</h5></th>
                             </tr>
                             <tr>
-                               <th><label for="childId">Code de l’enfant (Patient) </label></th>
+                               <th><label for="childId">Code de l’enfant (Patient) <span class="mandatory">*</span></label></th>
                                <td>
-                                    <input type="text" class="form-control " id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code" style="width:100%;"  onchange=""/>
+                                    <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code" style="width:100%;"  onchange=""/>
                                </td>
                                <th><label for="childName">Nom </label></th>
                                <td>
@@ -204,7 +204,7 @@ foreach ($fundingSourceList as $fundingSource) {
                                </td>
                                <th><label for="childDob">Date de naissance </label></th>
                                <td>
-                                    <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;"  onchange=""/>
+                                    <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;"  onchange="calculateAgeInMonths();"/>
                                </td>
                                <th><label for="childGender">Gender </label></th>
                                <td>
@@ -217,8 +217,8 @@ foreach ($fundingSourceList as $fundingSource) {
                                </td>
                             </tr>
                             <tr>
-                                        <th>Age</th>
-                                        <td><input type="number" max=9 maxlength="1" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;"  onchange=""/></td>
+                                        <th>Age en mois</th>
+                                        <td><input type="number" maxlength="3" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age en mois" title="Age en mois" style="width:100%;"  onchange="$('#childDob').val('')"/></td>
                                         <th></th>
                                         <td></td>
                                         <th></th>
