@@ -116,7 +116,7 @@ for ($i = 0; $i < count($aColumns); $i++) {
          * SQL queries
          * Get data to display
         */
-$sQuery = 	 "SELECT vl_sample_id,
+$sQuery = 	 "SELECT 		vl.vl_sample_id,
 							vl.sample_code,
 							vl.remote_sample,
 							vl.remote_sample_code,
@@ -335,8 +335,8 @@ if ($sarr['user_type'] == 'remoteuser') {
 	$userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
 	$userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
 	if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-		$sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
-		$dWhere = $dWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
+		$sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample like 'yes'";
+		$dWhere = $dWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample like 'yes'";
 	}
 }
 

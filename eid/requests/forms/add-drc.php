@@ -196,7 +196,7 @@ foreach ($fundingSourceList as $fundingSource) {
                             <tr>
                                <th><label for="childId">Code de l’enfant (Patient) <span class="mandatory">*</span></label></th>
                                <td>
-                                    <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code" style="width:100%;"  onchange=""/>
+                                    <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Code (Patient)" title="Please enter Code de l’enfant " style="width:100%;"  onchange=""/>
                                </td>
                                <th><label for="childName">Nom </label></th>
                                <td>

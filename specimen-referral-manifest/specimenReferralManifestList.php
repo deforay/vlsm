@@ -88,7 +88,7 @@ require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
                 {"sClass":"center","bSortable":false},
 		<?php } ?>
             ],
-            "aaSorting": [[ 1, "asc" ]],
+            "aaSorting": [[ 4, "desc" ]],
 	    "fnDrawCallback": function() {
 	      var checkBoxes = document.getElementsByName("chkPackage[]");
               len = checkBoxes.length;

@@ -441,7 +441,7 @@ foreach ($fundingSourceList as $fundingSource) {
                             <tr>
                               <th>Is Sample Rejected ?  <span class="mandatory">*</span></th>
                               <td>
-                              <select class="form-control isRequired" name="isSampleRejected" title="Please enter if Sample Rejected or not" id="isSampleRejected">
+                              <select class="form-control isRequired" name="isSampleRejected" title="Please enter if Sample Rejected or not" id="isSampleRejected" onchange="sampleRejection();">
                                 <option value=''> -- Sélectionner -- </option>
                                 <option value="yes"  <?php echo ($eidInfo['is_sample_rejected'] == 'yes') ? "selected='selected'" : ""; ?>  > Oui </option>
                                 <option value="no"  <?php echo ($eidInfo['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>  > Non </option>
@@ -450,7 +450,7 @@ foreach ($fundingSourceList as $fundingSource) {
 
                               <th>Reason for Rejection</th>
                               <td>
-                              <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
+                              <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Please select reason for sample rejection">
                                 <option value=''> -- Sélectionner -- </option>
                                 <option value="Technical Problem" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Technical Problem') ? "selected='selected'" : ""; ?>> Problème technique </option>
                                 <option value="Poor numbering" <?php echo ($eidInfo['reason_for_sample_rejection'] == 'Poor numbering') ? "selected='selected'" : ""; ?> > Mauvaise numérotation </option>
@@ -469,7 +469,7 @@ foreach ($fundingSourceList as $fundingSource) {
 
                               <th>Résultat  </label></th>
                               <td>
-                              <select class="form-control isRequired" name="result" id="result">
+                              <select class="form-control isRequired" name="result" id="result" title="Résultat">
                                 <option value=''> -- Sélectionner -- </option>
                                 <option value="positive"  <?php echo ($eidInfo['result'] == 'positive') ? "selected='selected'" : ""; ?>> Positif </option>
                                 <option value="negative"  <?php echo ($eidInfo['result'] == 'negative') ? "selected='selected'" : ""; ?>> Négatif </option>
@@ -631,5 +631,23 @@ foreach ($fundingSourceList as $fundingSource) {
     });
 
   });
+
+  function sampleRejection(){
+    if($("#isSampleRejected").val() == 'yes'){
+      $("#sampleRejectionReason").addClass('isRequired');
+      $("#sampleRejectionReason").prop('disabled', false);
+      $("#result").removeClass('isRequired');
+      $("#sampleTestedDateTime").removeClass('isRequired');
+      $("#result").prop('disabled', true);
+      $("#sampleTestedDateTime").prop('disabled', true);
+    }else{
+      $("#sampleRejectionReason").removeClass('isRequired');
+      $("#sampleRejectionReason").prop('disabled', true);
+      $("#result").addClass('isRequired');
+      $("#sampleTestedDateTime").addClass('isRequired');
+      $("#result").prop('disabled', false);      
+      $("#sampleTestedDateTime").prop('disabled', false);      
+    }
+  }
 
   </script>

@@ -115,22 +115,41 @@ for ($i = 0; $i < count($aColumns); $i++) {
           * SQL queries
           * Get data to display
           */
-$sQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,imp.*,vltr.test_reason_name,f.facility_name,l_f.facility_name as labName,l_f.facility_logo as facilityLogo,l_f.header_text as headerText,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name 
-          FROM vl_request_form as vl 
-          LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-          LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
-          LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
-          INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-          LEFT JOIN r_vl_test_reasons as vltr ON vl.reason_for_vl_testing = vltr.test_reason_id 
-          LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen 
-          LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine 
-          LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac 
-          LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure 
-          LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
-          LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
-          LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by 
-          LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
-          LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner";
+$sQuery = "SELECT 		vl.vl_sample_id,
+vl.sample_code,
+vl.remote_sample,
+vl.remote_sample_code,
+vl.sample_collection_date,
+vl.sample_tested_datetime,
+vl.patient_art_no,
+vl.patient_first_name,
+vl.patient_middle_name,
+vl.patient_last_name,
+f.facility_name, 
+s.sample_name, 
+vl.result,
+vl.last_modified_datetime,
+b.batch_code, 
+ts.status_name,
+imp.i_partner_name,
+u_d.user_name as reviewedBy,
+a_u_d.user_name as approvedBy,
+vl.result_dispatched_datetime,
+vl.result_approved_datetime,
+vl.result_reviewed_datetime,
+vl.result_dispatched_datetime,							
+rs.rejection_reason_name 
+
+FROM vl_request_form as vl 
+LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+LEFT JOIN r_vl_test_reasons as vltr ON vl.reason_for_vl_testing = vltr.test_reason_id 
+LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+LEFT JOIN r_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection 
+LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner
+LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
+LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by";
 $start_date = '';
 $end_date = '';
 $t_start_date = '';
@@ -355,8 +374,8 @@ if ($sarr['user_type'] == 'remoteuser') {
      $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
      $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
      if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
-          $sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
-          $dWhere = $dWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
+          $sWhere = $sWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample like 'yes'";
+          $dWhere = $dWhere . " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample like 'yes'";
      }
 }
 $sQuery = $sQuery . ' ' . $sWhere;
@@ -371,13 +390,21 @@ $_SESSION['vlRequestSearchResultQuery'] = $sQuery;
 if (isset($sLimit) && isset($sOffset)) {
      $sQuery = $sQuery . ' LIMIT ' . $sOffset . ',' . $sLimit;
 }
-//error_log($sQuery);
+//echo($sQuery);die;
 //die($sQuery);
 $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 
-$aResultFilterTotal = $db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
-$iFilteredTotal = count($aResultFilterTotal);
+$aResultFilterTotal = $db->rawQueryOne("SELECT count(vl_sample_id) as sampleCount FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
+																		LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+																		INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+																		LEFT JOIN r_vl_test_reasons as vltr ON vl.reason_for_vl_testing = vltr.test_reason_id 
+																		LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+																		LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by 
+																		LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by
+																		LEFT JOIN r_implementation_partners as imp ON imp.i_partner_id=vl.implementing_partner 
+																		$sWhere");
+$iFilteredTotal = ($aResultFilterTotal['sampleCount']);
 /* Total data set length */
 $aResultTotal =  $db->rawQuery("SELECT * FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id  LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id $sWhere order by $sOrder");
 $iTotal = count($aResultTotal);
