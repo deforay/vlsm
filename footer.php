@@ -174,9 +174,9 @@
             })
             .always(function() {
               $.unblockUI();
-              var in30Minutes = 1 / 48;
+              var in120Minutes = 1 / 12;
               Cookies.set('vlsts-sync-status', 'synced', {
-                expires: in30Minutes
+                expires: in120Minutes
               });
             });
         }

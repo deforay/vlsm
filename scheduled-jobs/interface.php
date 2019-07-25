@@ -48,6 +48,10 @@ if (count($interfaceInfo) > 0) {
                 $vlResult = $result['results'];
                 $unit = trim($result['test_unit']);
 
+                if (strpos($unit, 'Log (Copies / mL)') !== false) {
+                    $logVal = $vlResult;
+                    $vlResult = $absVal = $absDecimalVal = (float) round(pow(10, $logVal) * 100) / 100;
+                }
                 if (strpos($unit, '10') !== false) {
                     $unitArray = explode(".", $unit);
                     $exponentArray = explode("*", $unitArray[0]);

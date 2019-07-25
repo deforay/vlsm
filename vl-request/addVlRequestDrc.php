@@ -465,7 +465,7 @@ $sFormat = '';
                   </div>
                   <table class="table" style="width:100%">
                     <tr>
-                      <td style="width:25%;"><label for="">Date de réception de léchantillon <span class="mandatory">*</span> </label></td>
+                      <td style="width:25%;"><label for="">Date de réception de l'échantillon <span class="mandatory">*</span> </label></td>
                       <td style="width:25%;">
                         <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="checkSampleReceviedDate();" style="width:100%;" />
                       </td>
@@ -478,7 +478,7 @@ $sFormat = '';
                         <td>
                           <select class="form-control" id="status" name="status" title="Please select décision prise" <?php echo $labFieldDisabled; ?> onchange="checkTestStatus();" style="width:100%;">
                             <option value=""> -- Sélectionner -- </option>
-                            <option value="6"> En attente d'approbation Clinique </option>
+                            <!-- <option value="6"> En attente d'approbation Clinique </option> -->
                             <option value="7">Echantillon accepté</option>
                             <option value="4">Echantillon rejeté</option>
                           </select>

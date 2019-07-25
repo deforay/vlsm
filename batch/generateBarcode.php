@@ -22,7 +22,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
 
 $barcodeFormat = $general->getGlobalConfig('barcode_format');
 
-$barcodeFormat = isset($barcodeFormat) && $barcodeFormat != null ? $barcodeFormat : 'C39+';
+$barcodeFormat = isset($barcodeFormat) && $barcodeFormat != null ? $barcodeFormat : 'C39';
 
 if($id >0){
     if (!file_exists(UPLOAD_PATH. DIRECTORY_SEPARATOR . "barcode") && !is_dir(UPLOAD_PATH. DIRECTORY_SEPARATOR."barcode")) {
@@ -73,11 +73,11 @@ if($id >0){
                 $this->SetFont('helvetica', '', 7);
                 $this->writeHTMLCell(30,0,10,26,$this->text, 0, 0, 0, true, 'A', true);
                 $this->SetFont('helvetica', '', 13);
-                $this->writeHTMLCell(0,0,0,10,'Batch : '.$this->batch, 0, 0, 0, true, 'C', true);
-                $this->writeHTMLCell(0,0,0,20,'Batch Worksheet', 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0,0,0,10,'Batch Number/Code : '.$this->batch, 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0,0,0,20,'VLSM Batch Worksheet', 0, 0, 0, true, 'C', true);
                 $this->SetFont('helvetica', '', 9);
-                $this->writeHTMLCell(0,0,144,10,'Resulted : '.$this->resulted, 0, 0, 0, true, 'C', true);
-                $this->writeHTMLCell(0,0,144,16,'Reviewed : '.$this->reviewed, 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0,0,144,10,'Result On : '.$this->resulted, 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0,0,144,16,'Reviewed On : '.$this->reviewed, 0, 0, 0, true, 'C', true);
                 $html='<hr/>';
                 $this->writeHTMLCell(0, 0,10,32, $html, 0, 0, 0, true, 'J', true);
             }
@@ -100,10 +100,10 @@ if($id >0){
         
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Admin');
-        $pdf->SetTitle('Generate Barcode');
-        $pdf->SetSubject('Barcode');
-        $pdf->SetKeywords('Generate Barcode');
+        $pdf->SetAuthor('VLSM');
+        $pdf->SetTitle('VLSM BATCH');
+        $pdf->SetSubject('VLSM BATCH');
+        $pdf->SetKeywords('VLSM BATCH');
     
         // set default header data
         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -138,14 +138,14 @@ if($id >0){
         // add a page
         $pdf->AddPage();
     
-    $tbl = '<table cellspacing="0" cellpadding="3" style="width:100%;border-top:1px solid #333;border-bottom:1px solid #333;">
+    $tbl = '<table cellspacing="0" cellpadding="3" style="width:100%;border-bottom:1px solid #333;">
             <thead>
                 <tr nobr="true">
                     <td align="center" width="6%"><strong>Pos.</strong></td>
                     <td align="center" width="20%"><strong>Sample ID</strong></td>
-                    <td align="center" width="35%"><strong>Barcode</strong></td>
+                    <td align="center" width="35%"><strong>BARCODE</strong></td>
                     <td align="center" width="13%"><strong>Patient Code</strong></td>
-                    <td align="center" width="13%"><strong>Lot No. / <br>Expiration Date</strong></td>
+                    <td align="center" width="13%"><strong>Lot No. / <br>Exp. Date</strong></td>
                     <td align="center" width="13%"><strong>Test Result</strong></td>
                 </tr>
             </thead>';
@@ -162,7 +162,7 @@ if($id >0){
                 $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date,$patientIdColumn from $refTable where $refPrimaryColumn =$xplodJsonToArray[1]";
                 $sampleResult=$db->query($sampleQuery);
                 
-                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], $barcodeFormat, '', '','' ,15, 1,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], $barcodeFormat, '', '','' ,10, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
                 $lotDetails = '';
                 $lotExpirationDate = '';
                 if(isset($sampleResult[0]['lot_expiration_date']) && $sampleResult[0]['lot_expiration_date'] != '' && $sampleResult[0]['lot_expiration_date']!= NULL && $sampleResult[0]['lot_expiration_date'] != '0000-00-00'){
@@ -172,8 +172,8 @@ if($id >0){
                     $lotExpirationDate.= $general->humanDateFormat($sampleResult[0]['lot_expiration_date']);
                 }
                 $lotDetails = $sampleResult[0]['lot_number'].$lotExpirationDate;
-                $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
-                $tbl.='<tr>';
+                $tbl.='<table cellspacing="0" cellpadding="2" style="width:100%">';
+                $tbl.='<tr nobr="true">';
                 $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
                 $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
                 $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
@@ -187,7 +187,7 @@ if($id >0){
                 $label = str_replace("in house","In-House",$label);
                 $label = ucwords(str_replace("no of "," ",$label));
                 $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
-                $tbl.='<tr>';
+                $tbl.='<tr nobr="true">';
                 $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
                 $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$label.'</td>';
                 $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
@@ -266,7 +266,7 @@ if($id >0){
             $lotDetails = $sample['lot_number'].$lotExpirationDate;
             
             $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
-            $tbl.='<tr>';
+            $tbl.='<tr nobr="true">';
             $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
             $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['sample_code'].'</td>';
             $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
@@ -284,4 +284,3 @@ if($id >0){
     echo $filename;
   }
 }
-?>

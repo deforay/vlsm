@@ -39,7 +39,7 @@ class MYPDF extends TCPDF
         $this->SetFont('helvetica', '', 7);
         $this->writeHTMLCell(30, 0, 10, 26, $this->text, 0, 0, 0, true, 'A', true);
         $this->SetFont('helvetica', '', 13);
-        $this->writeHTMLCell(0, 0, 0, 10, 'SAMPLE REFERRAL MANIFEST ', 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0, 0, 0, 10, 'Viral Load Sample Referral Manifest ', 0, 0, 0, true, 'C', true);
         $this->SetFont('helvetica', '', 10);
         $this->writeHTMLCell(0, 0, 0, 20, $this->labname, 0, 0, 0, true, 'C', true);
 
@@ -139,23 +139,26 @@ if (trim($id) != '') {
         // add a page
         $pdf->AddPage();
         $tbl = '';
-        $tbl .= '<h2> ' . $result[0]['package_code'] . '</h2>';
+
+        $packageCodeBarCode = $pdf->serializeTCPDFtagParameters(array($result[0]['package_code'], 'C39', '', '', '', 9, 0.25, array('border' => false, 'align' => 'L', 'padding' => 0, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 10, 'stretchtext' => 2), 'N'));        
+        $tbl .= '<h1> ' . $result[0]['package_code'] .'</h1>';
+        //$tbl .= '<h1> ' . $result[0]['package_code'] . '<tcpdf method="write1DBarcode" params="' . $packageCodeBarCode . '" /> </h1>';
         $tbl .= '<table style="width:100%;border:1px solid #333;">
             
                 <tr nobr="true">
-                    <td align="center" style="font-size:11px;width:2%;border:1px solid #333;" ><strong><i>S/N</i></strong></td>
+                    <td align="center" style="font-size:11px;width:3%;border:1px solid #333;" ><strong><i>S/N</i></strong></td>
                     <td align="center" style="font-size:11px;width:11%;border:1px solid #333;"  ><strong><i>SAMPLE ID</i></strong></td>
-                    <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>District</i></strong></td>
-                    <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Health facility</i></strong></td>
+                    <!-- <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>District</i></strong></td> -->
+                    <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Health facility, District</i></strong></td>
                     <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Patient Full Name</i></strong></td>
-                    <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>TRACNET ID</i></strong></td>
+                    <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Patient (or) TRACNET ID</i></strong></td>
                     <td align="center" style="font-size:11px;width:3%;border:1px solid #333;"  ><strong><i>Age</i></strong></td>
                     <td align="center" style="font-size:11px;width:8%;border:1px solid #333;"  ><strong><i>Date of Birth</i></strong></td>
                     <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Gender</i></strong></td>
                     <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Specimen Type</i></strong></td>
                     <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Collection Date</i></strong></td>
                     <!-- <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Test Requested</i></strong></td> -->
-                    <td align="center" style="font-size:11px;width:18%;border:1px solid #333;"  ><strong><i>Sample Barcode</i></strong></td>
+                    <td align="center" style="font-size:11px;width:20%;border:1px solid #333;"  ><strong><i>Sample Barcode</i></strong></td>
                 </tr>';
 
         $sampleCounter = 1;
@@ -171,13 +174,13 @@ if (trim($id) != '') {
             if (isset($sample['patient_dob']) && $sample['patient_dob'] != '' && $sample['patient_dob'] != NULL && $sample['patient_dob'] != '0000-00-00') {
                 $patientDOB = $general->humanDateFormat($sample['patient_dob']);
             }
-            $params = $pdf->serializeTCPDFtagParameters(array($sample['remote_sample_code'], 'C39', '', '', '', 7, 0.25, array('border' => false, 'align' => 'C', 'padding' => 1, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 10, 'stretchtext' => 2), 'N'));
+            $params = $pdf->serializeTCPDFtagParameters(array($sample['remote_sample_code'], 'C39', '', '', '', 9, 0.25, array('border' => false, 'align' => 'C', 'padding' => 1, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 10, 'stretchtext' => 2), 'N'));
             //$tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
             $tbl .= '<tr style="border:1px solid #333;">';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sampleCounter . '.</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sample['remote_sample_code'] . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['facility_district']) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['clinic_name']) . '</td>';
+            // $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['facility_district']) . '</td>';
+            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'. ($sample['clinic_name']) .', ' .($sample['facility_district']) . '</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['patient_first_name'] . " " . $sample['patient_middle_name'] . " " . $sample['patient_last_name']) . '</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sample['patient_art_no'] . '</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['patient_age_in_years']) . '</td>';
@@ -186,7 +189,7 @@ if (trim($id) != '') {
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['sample_name']) . '</td>';
             $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $collectionDate . '</td>';
             // $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">VIRAL</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;"><br><tcpdf method="write1DBarcode" params="' . $params . '" /></td>';
+            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;"><br><br><tcpdf method="write1DBarcode" params="' . $params . '" /></td>';
             $tbl .= '</tr>';
             //$tbl .='</table>';
             $sampleCounter++;
@@ -202,7 +205,8 @@ if (trim($id) != '') {
         $tbl .= '</table>';
         //$tbl.='<br/><br/><b style="text-align:left;">Printed On:  </b>'.date('d/m/Y H:i:s');
         $pdf->writeHTMLCell('', '', 11, $pdf->getY(), $tbl, 0, 1, 0, true, 'C', true);
-        $filename = trim($bResult[0]['package_code']) . '.pdf';
+
+        $filename = trim($bResult[0]['package_code']) .'-'. date('d-M-Y'). '-Manifest.pdf';
         $pdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'package_barcode' . DIRECTORY_SEPARATOR . $filename, "F");
         echo $filename;
     }

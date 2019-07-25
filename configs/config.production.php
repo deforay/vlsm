@@ -29,7 +29,7 @@ $MYSQLDUMP = '/usr/bin/mysqldump';
 
 
 // VLSTS URL
-$REMOTEURL = 'https://drc-vlsm.deforay.in/';
+$REMOTEURL = '';
 
 
 // Enable/Disable Interfacing
