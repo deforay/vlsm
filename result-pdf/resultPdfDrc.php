@@ -167,12 +167,12 @@ if (sizeof($requestResult) > 0) {
     $messageTextSize = '12px';
     if ($result['result'] != NULL && trim($result['result']) != '') {
       $resultType = is_numeric($result['result']);
-      if (in_array(strtolower(trim($result['result'])), array("< 20", "< 40", "< 800", "< 400", "tnd", "target not detected"))) {
+      if (in_array(strtolower(trim($result['result'])), array("< 20", "< 40", "< 800", "< 400", "tnd", "target not detected", "not detected"))) {
         $vlResult = 'TND*';
         $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="' . DOMAIN . '/assets/img/smiley_smile.png" alt="smile_face"/>';
         $showMessage = ucfirst($arr['l_vl_msg']);
         $tndMessage = 'TND* - Target not Detected';
-      } else if (in_array(strtolower(trim($result['result'])), array("failed", "fail", "no_sample"))) {
+      } else if (in_array(strtolower(trim($result['result'])), array("failed", "fail", "no_sample","invalid"))) {
         $vlResult = $result['result'];
         $smileyContent = '';
         $showMessage = '';

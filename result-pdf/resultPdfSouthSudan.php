@@ -173,7 +173,7 @@ if(sizeof($requestResult)> 0){
                     }
                     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/assets/img/smiley_smile.png" alt="smile_face"/>';
                     $showMessage = ucfirst($arr['l_vl_msg']);
-               }else if(in_array(strtolower(trim($result['result'])),array("failed","fail","no_sample"))){
+               }else if(in_array(strtolower(trim($result['result'])),array("failed","fail","no_sample","invalid"))){
                     $vlResult = $result['result'];
                     $smileyContent = '';
                     $showMessage = '';

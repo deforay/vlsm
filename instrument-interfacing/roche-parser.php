@@ -61,11 +61,11 @@ function updateResult($db, $sampleId, $result, $dateTime){
         if(trim($result)!=""){
             $resVal=explode("(",$result);
             if(count($resVal)==2){
-                if (strpos("<", $resVal[0]) !== false) {
+                if (strpos($resVal[0],"<") !== false) {
                     $resVal[0] = str_replace("<","",$resVal[0]);
                     $absDecimalVal=(float) trim($resVal[0]);
                     $absVal= "< " . (float) trim($resVal[0]);
-                } else if (strpos(">", $resVal[0]) !== false) {
+                } else if (strpos($resVal[0],">") !== false) {
                     $resVal[0] = str_replace(">","",$resVal[0]);
                     $absDecimalVal=(float) trim($resVal[0]);
                     $absVal= "> " . (float) trim($resVal[0]);

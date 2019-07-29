@@ -104,6 +104,10 @@ if($id >0){
         $pdf->SetTitle('VLSM BATCH');
         $pdf->SetSubject('VLSM BATCH');
         $pdf->SetKeywords('VLSM BATCH');
+
+        $pdf->SetMargins(0, 0, 0);
+        $pdf->SetHeaderMargin(0);
+        $pdf->SetFooterMargin(0);
     
         // set default header data
         $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -138,31 +142,29 @@ if($id >0){
         // add a page
         $pdf->AddPage();
     
-    $tbl = '<table cellspacing="0" cellpadding="3" style="width:100%;border-bottom:1px solid #333;">
-            <thead>
-                <tr nobr="true">
-                    <td align="center" width="6%"><strong>Pos.</strong></td>
-                    <td align="center" width="20%"><strong>Sample ID</strong></td>
-                    <td align="center" width="35%"><strong>BARCODE</strong></td>
-                    <td align="center" width="13%"><strong>Patient Code</strong></td>
-                    <td align="center" width="13%"><strong>Lot No. / <br>Exp. Date</strong></td>
-                    <td align="center" width="13%"><strong>Test Result</strong></td>
-                </tr>
-            </thead>';
-    $tbl.='</table>';
+    $tbl = '<table nobr="true" cellspacing="0" cellpadding="2" style="width:100%;">
+                <tr style="border-bottom:1px solid #333 !important;">
+                    <th align="center" width="6%"><strong>Pos.</strong></th>
+                    <th align="center" width="20%"><strong>Sample ID</strong></th>
+                    <th align="center" width="35%"><strong>BARCODE</strong></th>
+                    <th align="center" width="13%"><strong>Patient Code</strong></th>
+                    <th align="center" width="13%"><strong>Lot No. / <br>Exp. Date</strong></th>
+                    <th align="center" width="13%"><strong>Test Result</strong></th>
+                </tr>';
+    //$tbl.='</table>';
     if(isset($bResult[0]['label_order']) && trim($bResult[0]['label_order'])!= ''){
         $jsonToArray = json_decode($bResult[0]['label_order'],true);
         $sampleCounter = 1;
         for($j=0;$j<count($jsonToArray);$j++){
-            if($pdf->getY()>=250){
-                $pdf->AddPage();
-            }
+            // if($pdf->getY()>=250){
+            //     $pdf->AddPage();
+            // }
             $xplodJsonToArray = explode("_",$jsonToArray[$j]);
             if(count($xplodJsonToArray)>1 && $xplodJsonToArray[0] == "s"){
                 $sampleQuery="SELECT sample_code,result,lot_number,lot_expiration_date,$patientIdColumn from $refTable where $refPrimaryColumn =$xplodJsonToArray[1]";
                 $sampleResult=$db->query($sampleQuery);
                 
-                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], $barcodeFormat, '', '','' ,10, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($sampleResult[0]['sample_code'], $barcodeFormat, '', '','' ,7, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
                 $lotDetails = '';
                 $lotExpirationDate = '';
                 if(isset($sampleResult[0]['lot_expiration_date']) && $sampleResult[0]['lot_expiration_date'] != '' && $sampleResult[0]['lot_expiration_date']!= NULL && $sampleResult[0]['lot_expiration_date'] != '0000-00-00'){
@@ -172,22 +174,22 @@ if($id >0){
                     $lotExpirationDate.= $general->humanDateFormat($sampleResult[0]['lot_expiration_date']);
                 }
                 $lotDetails = $sampleResult[0]['lot_number'].$lotExpirationDate;
-                $tbl.='<table cellspacing="0" cellpadding="2" style="width:100%">';
-                $tbl.='<tr nobr="true">';
-                $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
-                $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
-                $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0][$patientIdColumn].'</td>';
-                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
-                $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['result'].'</td>';
+                //$tbl.='<table cellspacing="0" cellpadding="2" style="width:100%">';
+                $tbl.='<tr style="border-bottom:1px solid #333;">';
+                $tbl.='<td  align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
+                $tbl.='<td  align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['sample_code'].'</td>';
+                $tbl.='<td  align="center" width="35%" style="vertical-align:middle !important;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+                $tbl.='<td  align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0][$patientIdColumn].'</td>';
+                $tbl.='<td  align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
+                $tbl.='<td  align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleResult[0]['result'].'</td>';
                 $tbl.='</tr>';
-                $tbl.='</table>';
+                //$tbl.='</table>';
             }else{
                 $label = str_replace("_"," ",$jsonToArray[$j]);
                 $label = str_replace("in house","In-House",$label);
                 $label = ucwords(str_replace("no of "," ",$label));
-                $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
-                $tbl.='<tr nobr="true">';
+                //$tbl.='<table cellspacing="0" cellpadding="2" style="width:100%">';
+                $tbl.='<tr style="border-bottom:1px solid #333;">';
                 $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
                 $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$label.'</td>';
                 $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
@@ -195,7 +197,7 @@ if($id >0){
                 $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
                 $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>';
                 $tbl.='</tr>';
-                $tbl.='</table>';
+                //$tbl.='</table>';
             }
          $sampleCounter++;
         } 
@@ -204,15 +206,16 @@ if($id >0){
         if(isset($bResult[0]['number_of_in_house_controls']) && $bResult[0]['number_of_in_house_controls'] !='' && $bResult[0]['number_of_in_house_controls']!=NULL){
             $noOfInHouseControls = $bResult[0]['number_of_in_house_controls'];
             for($i=1;$i<=$bResult[0]['number_of_in_house_controls'];$i++){
-                $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
-                    <tr nobr="true">
-                    <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$i.'.</td>
-                    <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">In-House Controls '. $i.'</td>
-                    <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                </tr></table>';
+                //$tbl.='<table cellspacing="0" cellpadding="2" style="width:100%">';
+                $tbl.='<tr style="border-bottom:1px solid #333;">
+                            <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333">'.$i.'.</td>
+                            <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333">In-House Controls '. $i.'</td>
+                            <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                            <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                            <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                            <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                        </tr>';
+               // $tbl.='</table>';
             }
         }
         $noOfManufacturerControls = 0;
@@ -220,15 +223,16 @@ if($id >0){
             $noOfManufacturerControls = $bResult[0]['number_of_manufacturer_controls'];
             for($i=1;$i<=$bResult[0]['number_of_manufacturer_controls'];$i++){
                 $sNo = $noOfInHouseControls+$i;
-                $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
-                    <tr nobr="true">
-                    <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sNo.'.</td>
-                    <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">Manufacturer Controls '. $i.'</td>
-                    <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                </tr></table>';
+                //$tbl.='<table  cellspacing="0" cellpadding="2" style="width:100%">';
+                $tbl.='<tr style="border-bottom:1px solid #333;">
+                    <td align="center" width="6%" style="vertical-align:middle;">'.$sNo.'.</td>
+                    <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333">Manfacturing Controls '. $i.'</td>
+                    <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333"></td>
+                    </tr>';
+            // $tbl.='</table>';
             }
         }
         $noOfCalibrators = 0;
@@ -236,25 +240,26 @@ if($id >0){
             $noOfCalibrators = $bResult[0]['number_of_calibrators'];
             for($i=1;$i<=$bResult[0]['number_of_calibrators'];$i++){
                 $sNo = $noOfInHouseControls+$noOfManufacturerControls+$i;
-                $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">
-                    <tr nobr="true">
-                    <td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sNo.'.</td>
-                    <td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">Calibrators '. $i.'</td>
-                    <td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                    <td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;"></td>
-                </tr></table>';
+                //$tbl.='<table  cellspacing="0" cellpadding="2" style="width:100%">';
+                $tbl.='<tr>
+                    <td align="center" width="6%" style="vertical-align:middle;">'.$sNo.'.</td>
+                    <td align="center" width="20%" style="vertical-align:middle;">Calibrators '. $i.'</td>
+                    <td align="center" width="35%" style="vertical-align:middle;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;"></td>
+                    <td align="center" width="13%" style="vertical-align:middle;"></td>
+                    </tr>';
+                    // $tbl.='</table>';
             }
         }
         $sampleCounter = ($noOfInHouseControls+$noOfManufacturerControls+$noOfCalibrators+1);
         $sQuery="SELECT sample_code,lot_number,lot_expiration_date,result,$patientIdColumn from $refTable where sample_batch_id=$id";
         $result=$db->query($sQuery);
         foreach($result as $sample){
-            if($pdf->getY()>=250){
-              $pdf->AddPage();
-            }
-            $params = $pdf->serializeTCPDFtagParameters(array($sample['sample_code'], $barcodeFormat, '', '','' ,7, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
+            // if($pdf->getY()>=250){
+            //   $pdf->AddPage();
+            // }
+            $params = $pdf->serializeTCPDFtagParameters(array($sample['sample_code'], $barcodeFormat, '', '','' ,10, 0.25,array('border'=>false,'align' => 'C','padding'=>1, 'fgcolor'=>array(0,0,0), 'bgcolor'=>array(255,255,255), 'text'=>false, 'font'=>'helvetica', 'fontsize'=>10, 'stretchtext'=>2),'N'));
             $lotDetails = '';
             $lotExpirationDate = '';
             if(isset($sample['lot_expiration_date']) && $sample['lot_expiration_date'] != '' && $sample['lot_expiration_date']!= NULL && $sample['lot_expiration_date'] != '0000-00-00'){
@@ -265,20 +270,23 @@ if($id >0){
             }
             $lotDetails = $sample['lot_number'].$lotExpirationDate;
             
-            $tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
-            $tbl.='<tr nobr="true">';
-            $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sampleCounter.'.</td>';
-            $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['sample_code'].'</td>';
-            $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
-            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample[$patientIdColumn].'</td>';
-            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$lotDetails.'</td>';
-            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333;">'.$sample['result'].'</td>';
+            //$tbl.='<table cellspacing="0" cellpadding="2" style="width:100%">';
+            $tbl.='<tr style="border-bottom:1px solid #333 !important;" nobr="true">';
+            $tbl.='<td align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333 !important;">'.$sampleCounter.'.</td>';
+            $tbl.='<td align="center" width="20%" style="vertical-align:middle;border-bottom:1px solid #333 !important;">'.$sample['sample_code'].'</td>';
+            $tbl.='<td align="center" width="35%" style="vertical-align:middle;border-bottom:1px solid #333 !important;"><tcpdf method="write1DBarcode" params="'.$params.'" /></td>';
+            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333 !important;">'.$sample[$patientIdColumn].'</td>';
+            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333 !important;">'.$lotDetails.'</td>';
+            $tbl.='<td align="center" width="13%" style="vertical-align:middle;border-bottom:1px solid #333 !important;>'.$sample['result'].'</td>';
             $tbl.='</tr>';
-            $tbl .='</table>';
+            
           $sampleCounter++;
        } 
     }
-    $pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
+    $tbl .='</table>';
+    $pdf->writeHTML($tbl, true, false, false, false, '');
+
+    //$pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
     $filename = trim($bResult[0]['batch_code']).'.pdf';
     $pdf->Output(UPLOAD_PATH. DIRECTORY_SEPARATOR.'barcode'. DIRECTORY_SEPARATOR.$filename, "F");
     echo $filename;
