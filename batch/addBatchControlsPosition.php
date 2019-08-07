@@ -1,6 +1,7 @@
 <?php
 ob_start();
-require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+require_once('../startup.php'); 
+include_once(APPLICATION_PATH.'/header.php');
 
 $id=base64_decode($_GET['id']);
 if(!isset($id) || trim($id)== ''){
@@ -11,6 +12,7 @@ $newContent = '';
 $displayOrder = array();
 $batchQuery="SELECT * from batch_details as b_d INNER JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
+
 if(!isset($batchInfo) || count($batchInfo) == 0){
 	header("location:batchcode.php");
 }
@@ -44,7 +46,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 	}
 	//Get display sample only
 	$displaySampleOrderArray = array();
-	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id";
+	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id ORDER BY sample_code ASC";
     $samplesInfo=$db->query($samplesQuery);
 	foreach($samplesInfo as $sample){
 		$displaySampleOrderArray[] = $sample['vl_sample_id'];
@@ -114,7 +116,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 		   $content.='<li class="ui-state-default" id="no_of_calibrators_'.($c+1).'">Calibrators '.($c+1).'</li>';
 		}
 	}
-	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id";
+	$samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id ORDER BY sample_code ASC";
         $samplesInfo=$db->query($samplesQuery);
 	foreach($samplesInfo as $sample){
 		$displayOrder[] = "s_".$sample['vl_sample_id'];

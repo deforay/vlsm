@@ -47,7 +47,7 @@ try {
       if (isset($batchInfo) && count($batchInfo) > 0) {
         if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) != '') {
           //Get display sample only
-          $samplesQuery = "SELECT eid_id,sample_code from eid_form where sample_batch_id=$id";
+          $samplesQuery = "SELECT eid_id,sample_code from eid_form where sample_batch_id=$id ORDER BY sample_code ASC";
           $samplesInfo = $db->query($samplesQuery);
           foreach ($samplesInfo as $sample) {
             $displaySampleOrderArray[] = $sample['eid_id'];
