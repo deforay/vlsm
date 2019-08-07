@@ -48,7 +48,7 @@ if(isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order'])!= '
            $content.='<li class="ui-state-default" id="no_of_calibrators_'.($c+1).'">Calibrators '.($c+1).'</li>';
         }
     }
-    $samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id";
+    $samplesQuery="SELECT vl_sample_id,sample_code from vl_request_form where sample_batch_id=$id ORDER BY sample_code ASC";
     $samplesInfo=$db->query($samplesQuery);
     foreach($samplesInfo as $sample){
         $displayOrder[] = "s_".$sample['vl_sample_id'];

@@ -16,7 +16,7 @@ include_once(APPLICATION_PATH.'/header.php');
   $facilityCount = $facilityTotal[0]['total'];
 
 ?>
-<link rel="stylesheet" href="../assets/css/components-rounded.min.css">
+<link rel="stylesheet" href="/assets/css/components-rounded.min.css">
 <style>
     .bluebox, .dashboard-stat2{
         border:1px solid #3598DC;
@@ -97,9 +97,9 @@ include_once(APPLICATION_PATH.'/header.php');
     </section>
     <!-- /.content -->
   </div>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/moment.min.js"></script>
-  <script type="text/javascript" src="../assets/plugins/daterangepicker/daterangepicker.js"></script>
-  <script src="../assets/js/highcharts.js"></script>
+  <script type="text/javascript" src="/assets/plugins/daterangepicker/moment.min.js"></script>
+  <script type="text/javascript" src="/assets/plugins/daterangepicker/daterangepicker.js"></script>
+  <script src="/assets/js/highcharts.js"></script>
   <script>
     $(function () {
     

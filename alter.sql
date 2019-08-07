@@ -1630,7 +1630,6 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Barcode F
 
 -- 
 
--- DROP TABLE IF EXISTS `eid_form`;
 		
 CREATE TABLE `eid_form` (
   `eid_id` INTEGER NOT NULL AUTO_INCREMENT,
