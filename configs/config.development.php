@@ -31,3 +31,7 @@ $interfaceConfig['dbPort'] = 3306;
 
 // Enable/Disable EID 
 $eidConfig['enabled'] = true;
+
+// Enable/Disable Recency Sync 
+$recencyConfig['enabled'] = true;
+$recencyConfig['url'] = "http://recency/";
