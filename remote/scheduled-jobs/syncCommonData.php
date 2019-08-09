@@ -9,6 +9,8 @@ if(!isset($REMOTEURL) || $REMOTEURL==''){
     die;
 }
 
+$REMOTEURL = rtrim($REMOTEURL, "/");
+
 $general=new General($db);
 $globalConfigQuery ="SELECT * from system_config";
 $configResult=$db->query($globalConfigQuery);
