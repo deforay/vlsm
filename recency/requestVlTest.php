@@ -18,15 +18,36 @@ if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
     exit(0);
 }
 try{
-    require_once('../../startup.php');  
+    require_once('../startup.php');  
     include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-    include_once(APPLICATION_PATH.'/General.php');
+    // include_once(APPLICATION_PATH.'/General.php');
+    include_once(APPLICATION_PATH.'/models/General.php');
 
     $general=new General($db);
     
     // Takes raw data from the request
     $json = file_get_contents('php://input');
+    
     $result = explode('&',$json);
+    
+    if($result[0]['sampleId'] == "s"){
+        $sam    = explode('=',$result[0]);
+        $pat    = explode('=',$result[1]);
+        $fac    = explode('=',$result[2]);
+        $scd    = str_replace("sCDate=","",$result[3]);
+        $lab    = explode('=',$result[4]);
+        $by     = explode('=',$result[5]);
+        
+        $result[0] = $sam[1];
+        $result[1] = $pat[1];
+        $result[2] = $fac[1];
+        $result[5] = $scd;
+        $result[7] = $lab[1];
+        $result[8] = $by[1];
+        $result[3] = null;
+        $result[4] = null;
+    }
+    
     $data = array();
     $vlReqFromTable="vl_request_form";
     if(isset($result) && count($result) > 0 && $result[0] != ""){
