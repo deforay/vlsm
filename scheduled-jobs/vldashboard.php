@@ -1,26 +1,26 @@
 <?php
 
 require_once(__DIR__ . "/../startup.php");
-include_once(APPLICATION_PATH."/includes/MysqliDb.php");
-include_once(APPLICATION_PATH.'/models/General.php');
-include_once(APPLICATION_PATH."/vendor/autoload.php");
+include_once(APPLICATION_PATH . "/includes/MysqliDb.php");
+include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH . "/vendor/autoload.php");
 
-$general=new General($db);
+$general = new General($db);
 
 try {
-    $instanceQuery="SELECT * FROM s_vlsm_instance";
-    $instanceResult=$db->query($instanceQuery);
-    if($instanceResult){
-        $vlsmInstanceId=$instanceResult[0]['vlsm_instance_id'];
-        if($instanceResult[0]['last_vldash_sync'] == '' || $instanceResult[0]['last_vldash_sync'] == null){
+    $instanceQuery = "SELECT * FROM s_vlsm_instance";
+    $instanceResult = $db->query($instanceQuery);
+    if ($instanceResult) {
+        $vlsmInstanceId = $instanceResult[0]['vlsm_instance_id'];
+        if ($instanceResult[0]['last_vldash_sync'] == '' || $instanceResult[0]['last_vldash_sync'] == null) {
             $instanceUpdateOn = "";
-        }else{
-            $expDate=explode(" ",$instanceResult[0]['last_vldash_sync']);
-            $instanceUpdateOn=$expDate[0];
+        } else {
+            $expDate = explode(" ", $instanceResult[0]['last_vldash_sync']);
+            $instanceUpdateOn = $expDate[0];
         }
 
-        
-        $sQuery="SELECT vl.*,s.sample_name,s.status as sample_type_status,
+
+        $sQuery = "SELECT vl.*,s.sample_name,s.status as sample_type_status,
                         ts.*,f.facility_name,l_f.facility_name as labName,
                         f.facility_code,f.facility_state,f.facility_district,
                         f.facility_mobile_numbers,f.address,f.facility_hub_name,
@@ -49,27 +49,29 @@ try {
 
 
 
-        $sQuery .= " WHERE sample_code is not null AND sample_code !='' ";     
+        $sQuery .= " WHERE sample_code is not null AND sample_code !='' ";
 
-        if($instanceUpdateOn != ""){
-            $sQuery .= " AND DATE(vl.last_modified_datetime) >= $instanceUpdateOn"; 
+        if ($instanceUpdateOn != "") {
+            $sQuery .= " AND DATE(vl.last_modified_datetime) >= $instanceUpdateOn";
         }
+
+        $sQuery .= " ORDER BY vl.last_modified_datetime ASC ";
 
         //echo $instanceUpdateOn;
 
         // echo $sQuery;die;
 
         //$sQuery .= " LIMIT 1000";
-        
+
         $rResult = $db->rawQuery($sQuery);
-        
+
         $excel = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $output = array();
         $sheet = $excel->getActiveSheet();
-        
-        $headings = array("Sample Code","Instance ID","Gender","Age In Years","Clinic Name","Clinic Code","Clinic State","Clinic District","Clinic Phone Number","Clinic Address","Clinic HUB Name","Clinic Contact Person","Clinic Report Mail","Clinic Country","Clinic Longitude","Clinic Latitude","Clinic Status","Clinic Type","Sample Type","Sample Type Status","Sample Collection Date","LAB Name","Lab Code","Lab State","Lab District","Lab Phone Number","Lab Address","Lab HUB Name","Lab Contact Person","Lab Report Mail","Lab Country","Lab Longitude","Lab Latitude","Lab Status","Lab Type","Lab Tested Date","Log Value","Absolute Value","Text Value","Absolute Decimal Value","Result","Testing Reason","Test Reason Status","Testing Status","Sample Received Datetime","Line Of Treatment","Sample Rejected","Rejection Reason Name","Rejection Reason Status","Pregnant","Breast Feeding","Art Code","Regimen Initiated Date","ARV Adherance Percentage","Is Adherance poor","Approved Datetime","DashVL_Abs","DashVL_AnalysisResult","Current Regimen","Sample Registered Datetime");
+
+        $headings = array("Sample Code", "Instance ID", "Gender", "Age In Years", "Clinic Name", "Clinic Code", "Clinic State", "Clinic District", "Clinic Phone Number", "Clinic Address", "Clinic HUB Name", "Clinic Contact Person", "Clinic Report Mail", "Clinic Country", "Clinic Longitude", "Clinic Latitude", "Clinic Status", "Clinic Type", "Sample Type", "Sample Type Status", "Sample Collection Date", "LAB Name", "Lab Code", "Lab State", "Lab District", "Lab Phone Number", "Lab Address", "Lab HUB Name", "Lab Contact Person", "Lab Report Mail", "Lab Country", "Lab Longitude", "Lab Latitude", "Lab Status", "Lab Type", "Lab Tested Date", "Log Value", "Absolute Value", "Text Value", "Absolute Decimal Value", "Result", "Testing Reason", "Test Reason Status", "Testing Status", "Sample Received Datetime", "Line Of Treatment", "Sample Rejected", "Rejection Reason Name", "Rejection Reason Status", "Pregnant", "Breast Feeding", "Art Code", "Regimen Initiated Date", "ARV Adherance Percentage", "Is Adherance poor", "Approved Datetime", "DashVL_Abs", "DashVL_AnalysisResult", "Current Regimen", "Sample Registered Datetime");
         $colNo = 1;
-    
+
         $styleArray = array(
             'font' => array(
                 'bold' => true,
@@ -85,7 +87,7 @@ try {
                 ),
             )
         );
-     
+
         $borderStyle = array(
             'alignment' => array(
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -96,26 +98,25 @@ try {
                 ),
             )
         );
-     
-     
+
+
         foreach ($headings as $field => $value) {
-         
-         $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-         $colNo++;
-         
+
+            $sheet->getCellByColumnAndRow($colNo, 1)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $colNo++;
         }
         $sheet->getStyle('A1:AN1')->applyFromArray($styleArray);
-     
+
         foreach ($rResult as $aRow) {
             $row = array();
-            if($aRow['sample_tested_datetime']=='0000-00-00 00:00:00'){
-             $aRow['sample_tested_datetime'] = '';
+            if ($aRow['sample_tested_datetime'] == '0000-00-00 00:00:00') {
+                $aRow['sample_tested_datetime'] = '';
             }
-            if($aRow['sample_collection_date']=='0000-00-00 00:00:00'){
-             $aRow['sample_collection_date'] = '';
+            if ($aRow['sample_collection_date'] == '0000-00-00 00:00:00') {
+                $aRow['sample_collection_date'] = '';
             }
-            if($aRow['sample_received_at_vl_lab_datetime']=='0000-00-00 00:00:00'){
-             $aRow['sample_received_at_vl_lab_datetime'] = '';
+            if ($aRow['sample_received_at_vl_lab_datetime'] == '0000-00-00 00:00:00') {
+                $aRow['sample_received_at_vl_lab_datetime'] = '';
             }
 
 
@@ -123,40 +124,32 @@ try {
             $VLAnalysisResult = $aRow['result_value_absolute'];
             if ($aRow['result_value_text'] == 'Target not Detected' || $aRow['result_value_text'] == 'Target Not Detected' || strtolower($aRow['result_value_text']) == 'tnd') {
                 $VLAnalysisResult = 20;
-            }
-            else if ($aRow['result_value_text'] == '< 20' || $aRow['result_value_text'] == '<20') {
+            } else if ($aRow['result_value_text'] == '< 20' || $aRow['result_value_text'] == '<20') {
                 $VLAnalysisResult = 20;
-            }
-            else if ($aRow['result_value_text'] == '< 40' || $aRow['result_value_text'] == '<40') {
+            } else if ($aRow['result_value_text'] == '< 40' || $aRow['result_value_text'] == '<40') {
                 $VLAnalysisResult = 40;
-            }
-            else if ($aRow['result_value_text'] == 'Nivel de detecÁao baixo' || $aRow['result_value_text'] == 'NÌvel de detecÁ„o baixo') {
+            } else if ($aRow['result_value_text'] == 'Nivel de detecÁao baixo' || $aRow['result_value_text'] == 'NÌvel de detecÁ„o baixo') {
                 $VLAnalysisResult = 20;
-            }
-            else if ($aRow['result_value_text'] == 'Suppressed') {
+            } else if ($aRow['result_value_text'] == 'Suppressed') {
                 $VLAnalysisResult = 500;
-            }
-            else if ($aRow['result_value_text'] == 'Not Suppressed') {
+            } else if ($aRow['result_value_text'] == 'Not Suppressed') {
                 $VLAnalysisResult = 1500;
-            }
-            else if ($aRow['result_value_text'] == 'Negative' || $aRow['result_value_text'] == 'NEGAT') {
+            } else if ($aRow['result_value_text'] == 'Negative' || $aRow['result_value_text'] == 'NEGAT') {
                 $VLAnalysisResult = 20;
-            }	
-            else if ($aRow['result_value_text'] == 'Positive') {
+            } else if ($aRow['result_value_text'] == 'Positive') {
                 $VLAnalysisResult = 1500;
-            }	
-            else if ($aRow['result_value_text'] == 'Indeterminado') {
+            } else if ($aRow['result_value_text'] == 'Indeterminado') {
                 $VLAnalysisResult = "";
-            }	
-        
-            if ($VLAnalysisResult == 'NULL' || $VLAnalysisResult == ''){
-                $DashVL_Abs = 0; 
-                $DashVL_AnalysisResult ='';
-            }else if ($VLAnalysisResult < 1000){
-                $DashVL_AnalysisResult ='Suppressed';
+            }
+
+            if ($VLAnalysisResult == 'NULL' || $VLAnalysisResult == '') {
+                $DashVL_Abs = 0;
+                $DashVL_AnalysisResult = '';
+            } else if ($VLAnalysisResult < 1000) {
+                $DashVL_AnalysisResult = 'Suppressed';
                 $DashVL_Abs = $VLAnalysisResult;
-            }else if ($VLAnalysisResult >= 1000){
-                $DashVL_AnalysisResult ='Not Suppressed';
+            } else if ($VLAnalysisResult >= 1000) {
+                $DashVL_AnalysisResult = 'Not Suppressed';
                 $DashVL_Abs = $VLAnalysisResult;
             }
 
@@ -216,74 +209,77 @@ try {
             $row[] = $aRow['arv_adherance_percentage'];
             $row[] = $aRow['is_adherance_poor'];
             $row[] = $aRow['result_approved_datetime'];
-            $row[] =   $DashVL_Abs;
-            $row[] =   $DashVL_AnalysisResult;
+            $row[] = $DashVL_Abs;
+            $row[] = $DashVL_AnalysisResult;
             $row[] = $aRow['current_regimen'];
             $row[] = $aRow['sample_registered_at_lab'];
             $output[] = $row;
         }
-    
+
         $start = (count($output));
         foreach ($output as $rowNo => $rowData) {
-         $colNo = 1;
-         foreach ($rowData as $field => $value) {
-           $rRowCount = $rowNo + 2;
-           $cellName = $sheet->getCellByColumnAndRow($colNo,$rRowCount)->getColumn();
-           $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
-           $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
-           $sheet->getDefaultRowDimension()->setRowHeight(18);
-           $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
-           $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-           $sheet->getStyleByColumnAndRow($colNo, $rowNo + 2)->getAlignment()->setWrapText(true);
-           $colNo++;
-         }
+            $colNo = 1;
+            foreach ($rowData as $field => $value) {
+                $rRowCount = $rowNo + 2;
+                $cellName = $sheet->getCellByColumnAndRow($colNo, $rRowCount)->getColumn();
+                $sheet->getStyle($cellName . $rRowCount)->applyFromArray($borderStyle);
+                $sheet->getStyle($cellName . $start)->applyFromArray($borderStyle);
+                $sheet->getDefaultRowDimension()->setRowHeight(18);
+                $sheet->getColumnDimensionByColumn($colNo)->setWidth(20);
+                $sheet->getCellByColumnAndRow($colNo, $rowNo + 2)->setValueExplicit(html_entity_decode($value), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                $sheet->getStyleByColumnAndRow($colNo, $rowNo + 2)->getAlignment()->setWrapText(true);
+                $colNo++;
+            }
         }
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($excel, 'Xls');
         $currentDate = date("Y-m-d-H-i-s");
-        $filename = 'export-vl-result-'.$currentDate.'.xls';
-        $writer->save(__DIR__ . "/../temporary". DIRECTORY_SEPARATOR . $filename);
-     
+        $filename = 'export-vl-result-' . $currentDate . '.xls';
+        $writer->save(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename);
+
         //echo $filename;
         //Excel send via API
-        
+
         //global config
-        $configQuery="SELECT `value` FROM global_config WHERE name ='vldashboard_url'";
-        $configResult=$db->query($configQuery);
+        $configQuery = "SELECT `value` FROM global_config WHERE name ='vldashboard_url'";
+        $configResult = $db->query($configQuery);
         $vldashboardUrl = trim($configResult[0]['value']);
         $vldashboardUrl = rtrim($vldashboardUrl, "/");
-    
+
         //Base URL
-        $apiUrl=$vldashboardUrl."/api/import-viral-load";
+        $apiUrl = $vldashboardUrl . "/api/import-viral-load";
         error_log($apiUrl);
         //$apiUrl.="/files";
         //$apiUrl.="?key_identity=XXX&key_credential=YYY";
-        
+
         $data = [];
-        $data['vlFile'] = new CURLFile(__DIR__ . "/../temporary". DIRECTORY_SEPARATOR .$filename,'application/vnd.ms-excel',$filename);
-        
-        $options=[
+        $data['vlFile'] = new CURLFile(__DIR__ . "/../temporary" . DIRECTORY_SEPARATOR . $filename, 'application/vnd.ms-excel', $filename);
+
+        $options = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POSTFIELDS => $data,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_HTTPHEADER => ['Content-Type: multipart/form-data']
         ];
-        
+
         $ch = curl_init($apiUrl);
         curl_setopt_array($ch, $options);
-        $result=curl_exec($ch);
+        $result = curl_exec($ch);
         curl_close($ch);
-        
+
         //var_dump($result);
-        $deResult=json_decode($result,true);
-        if(isset($deResult['status']) && trim($deResult['status'])=='success'){
-            $data=array(
-                  'last_vldash_sync'=>$general->getDateTime()
+        $deResult = json_decode($result, true);
+        if (isset($deResult['status']) && trim($deResult['status']) == 'success') {
+            $data = array(
+                'last_vldash_sync' => $general->getDateTime()
             );
-            $db=$db->where('vlsm_instance_id',$vlsmInstanceId);
-            $db->update('s_vlsm_instance',$data);
+            // $data = array(
+            //     'last_vldash_sync' => $rResult[count($rResult) -1]['last_modified_datetime']
+            // );
+            $db = $db->where('vlsm_instance_id', $vlsmInstanceId);
+            $db->update('s_vlsm_instance', $data);
         }
     }
-}catch (Exception $exc) {
+} catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
 }

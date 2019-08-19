@@ -541,7 +541,7 @@ $formConfigResult = $db->query($formConfigQuery);
 
 
           <?php
-          if ($testResultMenuAccess == true) { ?>
+          if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true && $testResultMenuAccess == true) { ?>
             <li class="treeview eidResults" style="<?php echo $hideResult; ?>">
               <a href="#">
                 <i class="fa fa-tasks"></i>
@@ -566,7 +566,7 @@ $formConfigResult = $db->query($formConfigQuery);
 
 
           <?php
-          if ($eidManagementMenuAccess == true) { ?>
+          if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true && $eidManagementMenuAccess == true) { ?>
             <li class="treeview eidProgramMenu">
               <a href="#">
                 <i class="fa fa-book"></i>

@@ -1485,13 +1485,15 @@ INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Edit Prof
 -- Version 3.7 ---------- Amit 24-Jul-2018
 
 -- saravanan 26-july-2018
+
 ALTER TABLE `vl_request_form` ADD `cphl_vl_result` VARCHAR(255) NULL DEFAULT NULL AFTER `vl_test_platform`; -- for png form
 
 ALTER TABLE `temp_sample_import` CHANGE `sample_review_by` `sample_review_by` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 
 
 -- saravanana 02-Aug-2018
-ALTER TABLE `vl_request_form` CHANGE `remote_sample_code_key` `remote_sample_code_key` INT NULL DEFAULT NULL, CHANGE `sample_code_key` `sample_code_key` INT NULL DEFAULT NULL;
+
+  ALTER TABLE `vl_request_form` CHANGE `remote_sample_code_key` `remote_sample_code_key` INT NULL DEFAULT NULL, CHANGE `sample_code_key` `sample_code_key` INT NULL DEFAULT NULL;
 
 -- saravanan 16-aug-2018
 ALTER TABLE `vl_request_form` ADD `province_id` VARCHAR(255) NULL DEFAULT NULL AFTER `facility_id`;
@@ -1624,12 +1626,7 @@ CREATE TABLE `result_import_stats` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
-
 INSERT INTO `global_config` (`display_name`, `name`, `value`) VALUES ('Barcode Format', 'barcode_format', 'C39');
-
--- 
-
 		
 CREATE TABLE `eid_form` (
   `eid_id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -1868,7 +1865,6 @@ UPDATE `global_config` SET `status` = 'inactive' WHERE `global_config`.`name` = 
 UPDATE `global_config` SET `status` = 'inactive' WHERE `global_config`.`name` = 'enable_qr_mechanism';
 UPDATE `global_config` SET `status` = 'inactive' WHERE `global_config`.`name` = 'sync_path';
 
---- 
 
 CREATE TABLE `r_eid_results` (
   `result_id` varchar(255) NOT NULL,

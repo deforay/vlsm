@@ -54,20 +54,11 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 						<tr>
 							<td><b>Sample Collection Date&nbsp;:</b></td>
 							<td>
-								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" readonly style="width:220px;background:#fff;" />
+								<input type="text" id="sampleCollectionDate" name="sampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
 							</td>
-							<td><b>Batch Code&nbsp;:</b></td>
+							<td><b>Sample Received at Lab Date&nbsp;:</b></td>
 							<td>
-								<select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
-									<option value=""> -- Select -- </option>
-									<?php
-									foreach ($batResult as $code) {
-										?>
-										<option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
-									<?php
-									}
-									?>
-								</select>
+							<input type="text" id="sampleReceivedDate" name="sampleReceivedDate" class="form-control" placeholder="Select Received Date" style="width:220px;background:#fff;" />
 							</td>
 
 							<td><b>Sample Type&nbsp;:</b></td>
@@ -180,6 +171,19 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 							</td>
 						</tr>
 						<tr>
+						<td><b>Batch Code&nbsp;:</b></td>
+							<td>
+								<select class="form-control" id="batchCode" name="batchCode" title="Please select batch code" style="width:220px;">
+									<option value=""> -- Select -- </option>
+									<?php
+									foreach ($batResult as $code) {
+										?>
+										<option value="<?php echo $code['batch_code']; ?>"><?php echo $code['batch_code']; ?></option>
+									<?php
+									}
+									?>
+								</select>
+							</td>							
 							<td><b>Funding Sources&nbsp;:</b></td>
 							<td>
 								<select class="form-control" name="fundingSource" id="fundingSource" title="Please choose funding source">
@@ -317,7 +321,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 		$("#facilityName").select2({
 			placeholder: "Select Facilities"
 		});
-		$('#sampleCollectionDate,#sampleTestDate,#printDate').daterangepicker({
+		$('#sampleCollectionDate,#sampleTestDate,#printDate, #sampleReceivedDate').daterangepicker({
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(29, 'days'),
@@ -344,6 +348,7 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 		$('#printDate').val("");
 		//$('#sampleCollectionDate').val("");
 		$('#sampleTestDate').val("");
+		$('#sampleReceivedDate').val("");
 		loadVlRequestData();
 
 		$(".showhideCheckBox").change(function() {
@@ -445,6 +450,10 @@ $implementingPartnerList = $db->query($implementingPartnerQry);
 				aoData.push({
 					"name": "sampleTestDate",
 					"value": $("#sampleTestDate").val()
+				});
+				aoData.push({
+					"name": "sampleReceivedDate",
+					"value": $("#sampleReceivedDate").val()
 				});
 				aoData.push({
 					"name": "printDate",
