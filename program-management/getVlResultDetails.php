@@ -204,6 +204,18 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     $ePrintDate = $general->dateFormat(trim($s_p_date[1]));
                }
           }
+          $sSampleReceivedDate = '';
+          $eSampleReceivedDate = '';
+          if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!= ''){
+               $s_p_date = explode("to", $_POST['sampleReceivedDate']);
+               if (isset($s_p_date[0]) && trim($s_p_date[0]) != "") {
+                    $sSampleReceivedDate = $general->dateFormat(trim($s_p_date[0]));
+               }
+               if (isset($s_p_date[1]) && trim($s_p_date[1]) != "") {
+                    $eSampleReceivedDate = $general->dateFormat(trim($s_p_date[1]));
+               }
+          }
+
 
 
           if (isset($sWhere) && $sWhere != "") {
@@ -231,6 +243,13 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                          $sWhere = $sWhere.' AND DATE(vl.result_printed_datetime) = "'.$sPrintDate.'"';
                     }else{
                          $sWhere = $sWhere.' AND DATE(vl.result_printed_datetime) >= "'.$sPrintDate.'" AND DATE(vl.result_printed_datetime) <= "'.$ePrintDate.'"';
+                    }
+               }
+               if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!= ''){
+                    if (trim($sSampleReceivedDate) == trim($eSampleReceivedDate)) {
+                         $sWhere = $sWhere.' AND DATE(vl.sample_received_at_vl_lab_datetime) = "'.$sSampleReceivedDate.'"';
+                    }else{
+                         $sWhere = $sWhere.' AND DATE(vl.sample_received_at_vl_lab_datetime) >= "'.$sSampleReceivedDate.'" AND DATE(vl.sample_received_at_vl_lab_datetime) <= "'.$eSampleReceivedDate.'"';
                     }
                }
                if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
@@ -330,6 +349,15 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                          $setWhr = 'where';
                          $sWhere=' where '.$sWhere;
                          $sWhere = $sWhere.' DATE(vl.result_printed_datetime) >= "'.$sPrintDate.'" AND DATE(vl.result_printed_datetime) <= "'.$ePrintDate.'"';
+                    }
+               }
+               if(isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate'])!= ''){
+                    if(isset($setWhr)){
+                         $sWhere = $sWhere.' AND DATE(vl.sample_received_at_vl_lab_datetime) >= "'.$sSampleReceivedDate.'" AND DATE(vl.sample_received_at_vl_lab_datetime) <= "'.$eSampleReceivedDate.'"';
+                    }else{
+                         $setWhr = 'where';
+                         $sWhere=' where '.$sWhere;
+                         $sWhere = $sWhere.' DATE(vl.sample_received_at_vl_lab_datetime) >= "'.$sSampleReceivedDate.'" AND DATE(vl.sample_received_at_vl_lab_datetime) <= "'.$eSampleReceivedDate.'"';
                     }
                }
                if(isset($_POST['vLoad']) && trim($_POST['vLoad'])!= ''){
