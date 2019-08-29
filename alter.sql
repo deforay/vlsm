@@ -1929,3 +1929,7 @@ ALTER TABLE `package_details` ADD `module` VARCHAR(255) NULL DEFAULT NULL AFTER 
 UPDATE `package_details` SET module = 'vl' where module is NULL;
 
 -- Version 3.13 ---------- Amit 09 July 2019
+
+
+-- Amit 19 August 2019
+ALTER TABLE `vl_request_form` ADD `vldash_sync` INT NOT NULL DEFAULT '0' AFTER `vl_result_category`;

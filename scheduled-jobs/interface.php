@@ -75,7 +75,7 @@ if (count($interfaceInfo) > 0) {
                     $unit = $unitArray[1];
                 }
 
-                if (strpos($vlResult, 'E') !== false) {
+                if (strpos($vlResult, 'E+') !== false || strpos($vlResult, 'E-') !== false) {
                     if (strpos($vlResult, '< 2.00E+1') !== false) {
                         $vlResult = "< 20";
                         //$vlResultCategory = 'Suppressed';
@@ -83,7 +83,7 @@ if (count($interfaceInfo) > 0) {
                         $vlResultArray = explode("(", $vlResult);
                         $exponentArray = explode("E", $vlResultArray[0]);
                         $multiplier = pow(10, $exponentArray[1]);
-                        $vlResult = $exponentArray[0] * $multiplier;
+                        $vlResult = round($exponentArray[0] * $multiplier , 2);
                         $absDecimalVal = (float) trim($vlResult);
                         $logVal = round(log10($absDecimalVal), 2);
                     }

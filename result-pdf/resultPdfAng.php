@@ -173,10 +173,11 @@ class Pdf_concatANG extends FPDI {
 $resultFilename = '';
 if(sizeof($requestResult)> 0){
      $_SESSION['rVal'] = $general->generateRandomString(6);
-     if (!file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']) && !is_dir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal'])) {
-          mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
+     $pathFront = (UPLOAD_PATH . DIRECTORY_SEPARATOR .  $_SESSION['rVal']);
+     if (!file_exists($pathFront) && !is_dir($pathFront)) {
+       mkdir(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
+       $pathFront = realpath(UPLOAD_PATH . DIRECTORY_SEPARATOR . $_SESSION['rVal']);
      }
-     $pathFront = realpath(UPLOAD_PATH.$_SESSION['rVal'].'/');
      $pages = array();
      $page = 1;
      foreach($requestResult as $result){

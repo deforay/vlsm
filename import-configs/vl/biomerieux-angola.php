@@ -52,7 +52,7 @@ try {
 
 
         $m           = 0;
-        $skipTillRow = 3;
+        $skipTillRow = 19;
 
 
         $sampleIdCol = 'B';
@@ -66,7 +66,8 @@ try {
         $testingDateCol = 'C';
         $testingDateRow = '4';
         $sampleTypeCol = '';
-        $batchCodeCol = 'I';
+        $lotNumberCol = 'I';
+        
 
         foreach ($sheetData as $rowIndex => $row) {
 
@@ -86,10 +87,10 @@ try {
 
             $sampleCode = $row[$sampleIdCol];
 
-            if (strpos(strtolower($sampleCode), 'control') == false && (int) $sampleCode > 0) {
+            if (strpos(strtolower($sampleCode), 'control') == false && !in_array($sampleCode,array('cn','cp'))) {
                 $sampleType = "S";
             } else {
-                $sampleType = $sampleCode;
+                $sampleType = 'Control';
             }
 
 
@@ -110,14 +111,15 @@ try {
 
 
             //$absDecimalVal=$absVal=$row[$absValCol];           
-            $batchCode = $row[$batchCodeCol];
+            echo $lotNumber = $row[$lotNumberCol];
 
             // Date time in the provided Biomerieux Sample file is in this format : 05-23-16 12:52:33
             $testingDate = $sheetData[5]['C'] . " " . $sheetData[6]['C'];
 
-            //var_dump($testingDate);die;
-            $testingDate = DateTime::createFromFormat('m-d-y H:i:s', $testingDate)->format('Y-m-d H:i:s');
 
+            //var_dump($testingDate);die;
+            $testingDate = DateTime::createFromFormat('H:i:s d/m/Y', $testingDate)->format('Y-m-d H:i:s');
+            
             if ($sampleCode == "")
                 break;
 
@@ -130,7 +132,7 @@ try {
                 "resultFlag" => $resultFlag,
                 "testingDate" => $testingDate,
                 "sampleType" => $sampleType,
-                "batchCode" => $batchCode
+                "lotNumber" => $lotNumber
             );
 
             $m++;
@@ -152,6 +154,7 @@ try {
                 'result_value_absolute_decimal' => $d['absDecimalVal'],
                 'sample_tested_datetime' => $testingDate,
                 'result_status' => '6',
+                'lot_number' => $d['lotNumber'],
                 'import_machine_file_name' => $fileName,
                 'approver_comments' => $d['resultFlag']
             );
@@ -186,10 +189,12 @@ try {
             } else {
                 $data['sample_details'] = 'New Sample';
             }
-            //echo "<pre>";var_dump($data);echo "</pre>";continue;
+            
             if ($sampleCode != '' || $batchCode != '' || $sampleType != '' || $logVal != '' || $absVal != '' || $absDecimalVal != '') {
+                
                 $data['result_imported_datetime'] = $general->getDateTime();
                 $data['imported_by'] = $_SESSION['userId'];
+                //echo "<pre>";var_dump($data);echo "</pre>";die;
                 $id = $db->insert("temp_sample_import", $data);
             }
         }
