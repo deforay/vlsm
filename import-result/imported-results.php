@@ -404,8 +404,9 @@ foreach ($rejectionTypeResult as $type) {
     var somethingmissing = false;
 
     $('[name="status[]"]').each(function() {
-
+      
       if ($(this).val() == null || $(this).val() == '') {
+        //console.log($(this));
         somethingmissing = true;
       }
 

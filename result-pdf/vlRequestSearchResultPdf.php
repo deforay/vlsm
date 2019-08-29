@@ -38,10 +38,10 @@ $printDate = $general->humanDateFormat($expStr[0]);
 $printDateTime = $expStr[1];
 //set query
 if (isset($_POST['newData']) && $_POST['newData'] != '') {
-  $query = $_SESSION['vlPrintResultQuery'];
+  //$query = $_SESSION['vlPrintResultQuery'];
   $allQuery = $_SESSION['vlPrintRequestSearchResultQuery'];
 } else {
-  $query = $_SESSION['vlResultQuery'];
+  //$query = isset($_SESSION['vlResultQuery']) ? $_SESSION['vlResultQuery'] : null;
   $allQuery = $_SESSION['vlRequestSearchResultQuery'];
 }
 if (isset($_POST['id']) && trim($_POST['id']) != '') {
