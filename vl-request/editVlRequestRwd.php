@@ -846,11 +846,13 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                          });
                //}
 
-          } else if (pName == '' && cName == '') {
+          } else if (pName == '') {
                provinceName = true;
                facilityName = true;
                $("#province").html("<?php echo $province; ?>");
-               $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+               $("#district").html("<option value=''> -- Select -- </option>");
+               $("#fName").html("<?php echo $facility; ?>");
+               $("#fName").select2("val", "");
           }
           $.unblockUI();
      }

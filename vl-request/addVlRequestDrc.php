@@ -633,12 +633,12 @@ $sFormat = '';
           });
       //}
       sampleCodeGeneration();
-    } else if (pName == '' && cName == '') {
+    } else if (pName == '') {
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province; ?>");
       $("#clinicName").html("<?php echo $facility; ?>");
-    } else {
+      $("#clinicName").select2("val", "");
       $("#district").html("<option value=''> -- Sélectionner -- </option>");
     }
     $.unblockUI();

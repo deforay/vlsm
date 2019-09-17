@@ -610,16 +610,16 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
               details = data.split("###");
               $("#facilityId").html(details[0]);
               $("#district").html(details[1]);
-              $("#clinicianName").val(details[2]);
+              //$("#clinicianName").val(details[2]);
             }
           });
       //}
-    } else if (pName == '' && cName == '') {
+    } else if (pName == '') {
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province; ?>");
       $("#facilityId").html("<?php echo $facility; ?>");
-    } else {
+      $("#facilityId").select2("val", "");
       $("#district").html("<option value=''> -- Sélectionner -- </option>");
     }
     $.unblockUI();
@@ -663,7 +663,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
             details = data.split("###");
             $("#province").html(details[0]);
             $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
+            //$("#clinicianName").val(details[2]);
           }
         });
     } else if (pName == '' && cName == '') {
