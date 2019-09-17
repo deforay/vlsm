@@ -45,7 +45,7 @@ $pdResult = $db->query($pdQuery);
 $province = "";
 $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
-    $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
+    $province .= "<option value='" . $provinceName['province_name'] . "##" . (isset($provinceName['province_code']) && !empty($provinceName['province_code']) ? $provinceName['province_code'] : $provinceName['province_name']) . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 //$facility = "";
 $facility = "<option value=''> -- Select -- </option>";
@@ -429,6 +429,7 @@ foreach ($fResult as $fDetails) {
     machineName = true;
 
     function getfacilityDetails(obj) {
+        
         $.blockUI();
         var cName = $("#facilityId").val();
         var pName = $("#province").val();
@@ -436,7 +437,7 @@ foreach ($fResult as $fDetails) {
             facilityName = false;
         }
         if ($.trim(pName) != '') {
-            if (provinceName) {
+            //if (provinceName) {
                 $.post("/includes/getFacilityForClinic.php", {
                         pName: pName
                     },
@@ -448,7 +449,7 @@ foreach ($fResult as $fDetails) {
                             $("#clinicianName").val(details[2]);
                         }
                     });
-            }
+            //}
             sampleCodeGeneration();
         } else if (pName == '' && cName == '') {
             provinceName = true;

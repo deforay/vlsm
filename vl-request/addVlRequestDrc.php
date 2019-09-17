@@ -619,7 +619,7 @@ $sFormat = '';
       facilityName = false;
     }
     if ($.trim(pName) != '') {
-      if (provinceName) {
+      //if (provinceName) {
         $.post("../includes/getFacilityForClinic.php", {
             pName: pName
           },
@@ -631,7 +631,7 @@ $sFormat = '';
               $("#clinicianName").val(details[2]);
             }
           });
-      }
+      //}
       sampleCodeGeneration();
     } else if (pName == '' && cName == '') {
       provinceName = true;
