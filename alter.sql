@@ -1933,3 +1933,5 @@ UPDATE `package_details` SET module = 'vl' where module is NULL;
 
 -- Amit 19 August 2019
 ALTER TABLE `vl_request_form` ADD `vldash_sync` INT NOT NULL DEFAULT '0' AFTER `vl_result_category`;
+
+-- Version 3.14
