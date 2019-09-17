@@ -13,11 +13,11 @@ try {
             $_SESSION['adminUserName']=ucwords($admin[0]['user_admin_name']);
             header("location:../edit-config/index.php");
         }else{
-            header("location:login.php");
+            header("location:/login.php");
             $_SESSION['alertMsg']="Please check login credential";
         }
     }else{
-        header("location:login.php");
+        header("location:/login.php");
     }
 } catch (Exception $exc) {
     error_log($exc->getMessage());

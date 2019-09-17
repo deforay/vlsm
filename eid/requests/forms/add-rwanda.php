@@ -536,17 +536,16 @@ foreach ($fResult as $fDetails) {
         });
         if (flag) {
             //$.blockUI();
-            <
-            ? php
+            <?php
             if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {
-                ? >
-                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate'); <
-                ? php
+            ?>
+                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate'); 
+            <?php
             } else {
-                ? >
-                document.getElementById('addEIDRequestForm').submit(); <
-                ? php
-            } ? >
+            ?>
+                document.getElementById('addEIDRequestForm').submit(); 
+            <?php
+            } ?>
         }
     }
 

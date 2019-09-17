@@ -34,16 +34,17 @@ if (isset($_POST['cName']) && !empty($_POST['cName'])) {
   $facilityInfo = $db->query($facilityQuery);
   if ($facilityInfo) {
     $provinceName = $facilityInfo[0]['facility_state'];
-    $pdQuery = "SELECT * from province_details where province_name='" . $provinceName . "'";
+    $pdQuery = "SELECT * from province_details"; // where province_name='" . $provinceName . "'";
     $pdResult = $db->query($pdQuery);
-    $state = '';
-    if ($facilityInfo[0]['facility_state'] != '') {
-      $state .= $option;
-      $state .= "<option value='" . $facilityInfo[0]['facility_state'] . "##" . $pdResult[0]['province_code'] . "##" . $facilityInfo[0]['facility_code'] . "' selected='selected'>" . ucwords($facilityInfo[0]['facility_state']) . "</option>";
-    } else {
-      $state .= $option;
+    $state = $option;
+    foreach($pdResult as $pdRow){
+      $selected = '';
+      if($facilityInfo[0]['facility_state'] == $pdRow['province_name'] ){
+        $selected = "selected='selected'";
+      }  
+      $state .= "<option value='" . $pdRow['province_name'] . "##" . (isset($pdRow['province_code']) && !empty($pdRow['province_code']) ? : $pdRow['province_name'] ) . "##" . $facilityInfo[0]['facility_code'] . "' $selected>" . ($pdRow['province_name']) . "</option>";
     }
-
+    
     $district = '';
     if ($facilityInfo[0]['facility_district'] != '') {
       $district .= $option;

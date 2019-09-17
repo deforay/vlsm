@@ -4,12 +4,12 @@ include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 
 
 if(!isset($_SESSION['userId'])){
-    header("location:../login.php");
+    header("location:/login.php");
 }
 
 
 if($_SESSION['roleId'] != 1){
-    header("location:../index.php");
+    header("location:/index.php");
 }
 
 

@@ -47,7 +47,7 @@ if (isset($global['instance_type']) && $global['instance_type'] != '') {
   //}
 }
 if (!isset($_SESSION['userId'])) {
-  header("location:" . DOMAIN . "/login.php");
+  header("location:/login.php");
 }
 
 $link = $_SERVER['PHP_SELF'];

@@ -6,7 +6,7 @@ $smallLogoName = "<img src='../../assets/img/flask.png'>";
 $systemType = "Viral Load Sample Management";
 $skin = "skin-blue";
 if(!isset($_SESSION['adminUserId'])){
-    header("location:../login/login.php");
+    header("location:/login/login.php");
 }
 ?>
 <!DOCTYPE html>
