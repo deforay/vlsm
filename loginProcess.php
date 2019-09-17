@@ -100,11 +100,11 @@ try {
             
             header("location:".$redirect);
         }else{
-            header("location:login.php");
+            header("location:/login.php");
             $_SESSION['alertMsg']="Please check login credential";
         }
     }else{
-        header("location:login.php");
+        header("location:/login.php");
     }
 } catch (Exception $exc) {
     error_log($exc->getMessage());

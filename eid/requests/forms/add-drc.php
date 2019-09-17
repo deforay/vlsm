@@ -602,8 +602,10 @@ foreach ($fundingSourceList as $fundingSource) {
           if(data != ""){
             details = data.split("###");
             $("#province").html(details[0]);
+            $("#province").select2();
             $("#district").html(details[1]);
-            $("#clinicianName").val(details[2]);
+            $("#district").select2();
+            //$("#clinicianName").val(details[2]);
           }
       });
     }else if(pName=='' && cName==''){
