@@ -601,7 +601,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
       facilityName = false;
     }
     if ($.trim(pName) != '') {
-      if (provinceName) {
+      //if (provinceName) {
         $.post("/includes/getFacilityForClinic.php", {
             pName: pName
           },
@@ -613,7 +613,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
               $("#clinicianName").val(details[2]);
             }
           });
-      }
+      //}
     } else if (pName == '' && cName == '') {
       provinceName = true;
       facilityName = true;

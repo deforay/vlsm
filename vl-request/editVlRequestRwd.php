@@ -829,7 +829,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                facilityName = false;
           }
           if (pName != '') {
-               if (provinceName) {
+               //if (provinceName) {
                     $.post("../includes/getFacilityForClinic.php", {
                               pName: pName
                          },
@@ -844,7 +844,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                    $(".facilityContactPerson").html('');
                               }
                          });
-               }
+               //}
 
           } else if (pName == '' && cName == '') {
                provinceName = true;

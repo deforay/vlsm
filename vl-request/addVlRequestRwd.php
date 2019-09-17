@@ -714,7 +714,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
                facilityName = false;
           }
           if (pName != '') {
-               if (provinceName) {
+               //if (provinceName) {
                     $.post("../includes/getFacilityForClinic.php", {
                               pName: pName
                          },
@@ -729,7 +729,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
                                    $(".facilityContactPerson").html('');
                               }
                          });
-               }
+               //}
                sampleCodeGeneration();
           } else if (pName == '' && cName == '') {
                provinceName = true;
