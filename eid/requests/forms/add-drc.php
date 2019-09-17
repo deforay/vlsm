@@ -545,12 +545,13 @@ foreach ($fundingSourceList as $fundingSource) {
           });
       }
       sampleCodeGeneration();
-    }else if(pName=='' && cName==''){
+    }else if(pName==''){
       provinceName = true;
       facilityName = true;
       $("#province").html("<?php echo $province; ?>");
       $("#facilityId").html("<?php echo $facility; ?>");
-    }else{
+      $("#facilityId").html("<?php echo $facility; ?>");
+      $("#facilityId").select2("val", "");
       $("#district").html("<option value=''> -- Sélectionner -- </option>");
     }
     $.unblockUI();
@@ -602,9 +603,8 @@ foreach ($fundingSourceList as $fundingSource) {
           if(data != ""){
             details = data.split("###");
             $("#province").html(details[0]);
-            $("#province").select2();
             $("#district").html(details[1]);
-            $("#district").select2();
+            
             //$("#clinicianName").val(details[2]);
           }
       });

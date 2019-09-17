@@ -446,18 +446,18 @@ foreach ($fResult as $fDetails) {
                             details = data.split("###");
                             $("#facilityId").html(details[0]);
                             $("#district").html(details[1]);
-                            $("#clinicianName").val(details[2]);
+                            //$("#clinicianName").val(details[2]);
                         }
                     });
             //}
             sampleCodeGeneration();
-        } else if (pName == '' && cName == '') {
+        } else if (pName == '') {
             provinceName = true;
             facilityName = true;
             $("#province").html("<?php echo $province; ?>");
             $("#facilityId").html("<?php echo $facility; ?>");
-        } else {
-            $("#district").html("<option value=''> -- Sélectionner -- </option>");
+            $("#facilityId").select2("val", "");
+            $("#district").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
     }
@@ -563,12 +563,12 @@ foreach ($fResult as $fDetails) {
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
         });
-        $('#district').select2({
-            placeholder: "District"
-        });
-        $('#province').select2({
-            placeholder: "Province"
-        });
+        // $('#district').select2({
+        //     placeholder: "District"
+        // });
+        // $('#province').select2({
+        //     placeholder: "Province"
+        // });
         $("#motherViralLoadCopiesPerMl").on("change keyup paste", function() {
             var motherVl = $("#motherViralLoadCopiesPerMl").val();
             //var motherVlText = $("#motherViralLoadText").val();

@@ -731,11 +731,13 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
                          });
                //}
                sampleCodeGeneration();
-          } else if (pName == '' && cName == '') {
+          } else if (pName == '') {
                provinceName = true;
                facilityName = true;
                $("#province").html("<?php echo $province; ?>");
+               $("#district").html("<option value=''> -- Select -- </option>");
                $("#fName").html("<?php echo $facility; ?>");
+               $("#fName").select2("val", "");
           }
           $.unblockUI();
      }

@@ -462,12 +462,12 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                         }
                     });
             //}
-        } else if (pName == '' && cName == '') {
+        } else if (pName == '') {
             provinceName = true;
             facilityName = true;
             $("#province").html("<?php echo $province; ?>");
             $("#facilityId").html("<?php echo $facility; ?>");
-        } else {
+            $("#facilityId").select2("val", "");
             $("#district").html("<option value=''> -- Sélectionner -- </option>");
         }
         $.unblockUI();
