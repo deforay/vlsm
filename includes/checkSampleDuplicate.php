@@ -4,7 +4,7 @@ session_start();
 require_once('../startup.php');
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 //system config
-$systemConfigQuery = "SELECT * from system_config";
+$systemConfigQuery = "SELECT * FROM system_config";
 $systemConfigResult = $db->query($systemConfigQuery);
 $sarr = array();
 // now we create an associative array so that we can easily create view variables
@@ -18,14 +18,14 @@ $fnct = $_POST['fnct'];
 $data = 0;
 if ($value != '') {
     if ($fnct == '' || $fnct == 'null') {
-        $sQuery = "SELECT * from $tableName where $fieldName= ?";
+        $sQuery = "SELECT * FROM $tableName WHERE $fieldName= ?";
         $parameters = array($value);
         $result = $db->rawQuery($sQuery, $parameters);
         if ($result) {
             $data = base64_encode($result[0]['vl_sample_id']) . "##" . $result[0][$fieldName];
         } else {
             if ($sarr['user_type'] == 'vluser') {
-                $sQuery = "SELECT * from $tableName where remote_sample_code= ?";
+                $sQuery = "SELECT * FROM $tableName WHERE remote_sample_code= ?";
                 $parameters = array($value);
                 $result = $db->rawQuery($sQuery, $parameters);
                 if ($result) {
@@ -40,7 +40,7 @@ if ($value != '') {
     } else {
         $table = explode("##", $fnct);
         try {
-            $sQuery = "SELECT * from $tableName where $fieldName= ? and $table[0]!= ?";
+            $sQuery = "SELECT * FROM $tableName WHERE $fieldName= ? AND $table[0]!= ?";
             $parameters = array($value, $table[1]);
             $result = $db->rawQuery($sQuery, $parameters);
             if ($result) {

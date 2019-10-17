@@ -140,67 +140,65 @@ if (trim($id) != '') {
         $pdf->AddPage();
         $tbl = '';
 
-        $packageCodeBarCode = $pdf->serializeTCPDFtagParameters(array($result[0]['package_code'], 'C39', '', '', '', 9, 0.25, array('border' => false, 'align' => 'L', 'padding' => 0, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 10, 'stretchtext' => 2), 'N'));        
+        $packageCodeBarCode = $pdf->serializeTCPDFtagParameters(array($result[0]['package_code'], 'C39', '', '', '', 10, 0.8, array('border' => false, 'align' => 'L', 'padding' => 0, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 10, 'stretchtext' => 2), 'N'));        
         $tbl .= '<h1> ' . $result[0]['package_code'] .'</h1>';
         //$tbl .= '<h1> ' . $result[0]['package_code'] . '<tcpdf method="write1DBarcode" params="' . $packageCodeBarCode . '" /> </h1>';
-        $tbl .= '<table style="width:100%;border:1px solid #333;">
+        $tbl .= '<table nobr="true" style="width:100%;" border="1" cellpadding="2">
             
                 <tr nobr="true">
-                    <td align="center" style="font-size:11px;width:3%;border:1px solid #333;" ><strong><i>S/N</i></strong></td>
-                    <td align="center" style="font-size:11px;width:11%;border:1px solid #333;"  ><strong><i>SAMPLE ID</i></strong></td>
-                    <!-- <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>District</i></strong></td> -->
-                    <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Health facility, District</i></strong></td>
-                    <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Patient Full Name</i></strong></td>
-                    <td align="center" style="font-size:11px;width:10%;border:1px solid #333;"  ><strong><i>Patient (or) TRACNET ID</i></strong></td>
-                    <td align="center" style="font-size:11px;width:3%;border:1px solid #333;"  ><strong><i>Age</i></strong></td>
-                    <td align="center" style="font-size:11px;width:8%;border:1px solid #333;"  ><strong><i>Date of Birth</i></strong></td>
-                    <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Gender</i></strong></td>
-                    <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Specimen Type</i></strong></td>
-                    <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Collection Date</i></strong></td>
-                    <!-- <td align="center" style="font-size:11px;width:7%;border:1px solid #333;"  ><strong><i>Test Requested</i></strong></td> -->
-                    <td align="center" style="font-size:11px;width:20%;border:1px solid #333;"  ><strong><i>Sample Barcode</i></strong></td>
+                    <td  style="font-size:11px;width:5%;"><strong>S/N</strong></td>
+                    <td  style="font-size:11px;width:12%;"><strong>SAMPLE ID</strong></td>
+                    <td  style="font-size:11px;width:15%;"><strong>HEALTH FACILITY, DISTRICT</strong></td>
+                    <td  style="font-size:11px;width:15%;"><strong>PATIENT NAME</strong><hr><strong>PATIENT (or) TRACNET ID</strong></td>
+                    <td  style="font-size:11px;width:5%;"><strong>AGE</strong></td>
+                    <td  style="font-size:11px;width:8%;"><strong>DATE OF BIRTH</strong></td>
+                    <td  style="font-size:11px;width:8%;"><strong>GENDER</strong></td>
+                    <td  style="font-size:11px;width:8%;"><strong>SPECIMEN TYPE</strong></td>
+                    <td  style="font-size:11px;width:8%;"><strong>COLLECTION DATE</strong></td>
+                    <td  style="font-size:11px;width:20%;"><strong>SAMPLE BARCODE</strong></td>
                 </tr>';
 
         $sampleCounter = 1;
+
+        $tbl .= '</table>';
 
         foreach ($result as $sample) {
             //var_dump($sample);die;
             $collectionDate = '';
             if (isset($sample['sample_collection_date']) && $sample['sample_collection_date'] != '' && $sample['sample_collection_date'] != NULL && $sample['sample_collection_date'] != '0000-00-00 00:00:00') {
                 $cDate = explode(" ", $sample['sample_collection_date']);
-                $collectionDate = $general->humanDateFormat($cDate[0]) . " " . $cDate[1];
+                //$collectionDate = $general->humanDateFormat($cDate[0]) . " " . $cDate[1];
+                $collectionDate = $general->humanDateFormat($cDate[0]);
             }
             $patientDOB = '';
             if (isset($sample['patient_dob']) && $sample['patient_dob'] != '' && $sample['patient_dob'] != NULL && $sample['patient_dob'] != '0000-00-00') {
                 $patientDOB = $general->humanDateFormat($sample['patient_dob']);
             }
-            $params = $pdf->serializeTCPDFtagParameters(array($sample['remote_sample_code'], 'C39', '', '', '', 9, 0.25, array('border' => false, 'align' => 'C', 'padding' => 1, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 10, 'stretchtext' => 2), 'N'));
-            //$tbl.='<table cellspacing="0" cellpadding="3" style="width:100%">';
-            $tbl .= '<tr style="border:1px solid #333;">';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sampleCounter . '.</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sample['remote_sample_code'] . '</td>';
-            // $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['facility_district']) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">'. ($sample['clinic_name']) .', ' .($sample['facility_district']) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['patient_first_name'] . " " . $sample['patient_middle_name'] . " " . $sample['patient_last_name']) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $sample['patient_art_no'] . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['patient_age_in_years']) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $patientDOB . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords(str_replace("_", " ", $sample['patient_gender'])) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . ucwords($sample['sample_name']) . '</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">' . $collectionDate . '</td>';
-            // $tbl.='<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;">VIRAL</td>';
-            $tbl .= '<td align="center"  style="vertical-align:middle;font-size:11px;border:1px solid #333;"><br><br><tcpdf method="write1DBarcode" params="' . $params . '" /></td>';
+            $params = $pdf->serializeTCPDFtagParameters(array($sample['remote_sample_code'], 'C39', '', '', 0,9, 0.25, array('border' => false, 'align' => 'L', 'padding' => 1, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 9, 'stretchtext' => 2), 'N'));
+            $tbl .= '<table nobr="true" style="width:100%;" border="1" cellpadding="2">';
+            $tbl .= '<tr nobr="true">';
+            $tbl .= '<td style="font-size:11px;width:5%;"><br><br>' . $sampleCounter . '.</td>';
+            $tbl .= '<td style="font-size:11px;width:12%;"><br><br>' . $sample['remote_sample_code'] . '</td>';
+            $tbl .= '<td style="font-size:11px;width:15%;">'. ($sample['clinic_name']) .', ' .($sample['facility_district']) . '</td>';
+            $tbl .= '<td style="font-size:11px;width:15%;">' . ucwords($sample['patient_first_name'] . " " . $sample['patient_middle_name'] . " " . $sample['patient_last_name']) . '<br>' . $sample['patient_art_no'] . '</td>';
+            $tbl .= '<td style="font-size:11px;width:5%;">' . ucwords($sample['patient_age_in_years']) . '</td>';
+            $tbl .= '<td style="font-size:11px;width:8%;">' . $patientDOB . '</td>';
+            $tbl .= '<td style="font-size:11px;width:8%;">' . ucwords(str_replace("_", " ", $sample['patient_gender'])) . '</td>';
+            $tbl .= '<td style="font-size:11px;width:8%;">' . ucwords($sample['sample_name']) . '</td>';
+            $tbl .= '<td style="font-size:11px;width:8%;"><br><br>' . $collectionDate . '</td>';
+            $tbl .= '<td style="font-size:11px;width:20%;"><br><br><tcpdf method="write1DBarcode" params="' . $params . '" /></td>';
             $tbl .= '</tr>';
-            //$tbl .='</table>';
+            $tbl.='</table>';
+            
             $sampleCounter++;
         }
-        $tbl .= '</table>';
+        
 
         $tbl .= '<br><br><br><br><table cellspacing="0" style="width:100%;">';
         $tbl .= '<tr style="">';
-        $tbl .= '<td align="right" style="vertical-align:middle;font-size:11px;width:15%;"><b>Generated By : </b></td><td align="left" style="width:18.33%;"><span style="font-size:12px;">' . $_SESSION['userName'] . '</span></td>';
-        $tbl .= '<td align="right" style="vertical-align:middle;font-size:11px;width:15%;"><b>Verified By :  </b></td><td style="width:18.33%;"></td>';
-        $tbl .= '<td align="right" style="vertical-align:middle;font-size:11px;width:15%;"><b>Received By : <br>(at Referral lab/NRL)</b></td><td style="width:18.33%;"></td>';
+        $tbl .= '<td align="right" style="font-size:10px;width:15%;"><b>Generated By : </b></td><td align="left" style="width:18.33%;"><span style="font-size:12px;">' . $_SESSION['userName'] . '</span></td>';
+        $tbl .= '<td align="right" style="font-size:10px;width:15%;"><b>Verified By :  </b></td><td style="width:18.33%;"></td>';
+        $tbl .= '<td align="right" style="font-size:10px;width:15%;"><b>Received By : <br>(at Referral lab/NRL)</b></td><td style="width:18.33%;"></td>';
         $tbl .= '</tr>';
         $tbl .= '</table>';
         //$tbl.='<br/><br/><b style="text-align:left;">Printed On:  </b>'.date('d/m/Y H:i:s');

@@ -189,7 +189,14 @@ try {
   } else {
     $_SESSION['alertMsg'] = "Please try again later";
   }
-  header("location:/eid/requests/eid-requests.php");
+  if(isset($_POST['saveNext']) && $_POST['saveNext'] == 'next'){
+    header("location:/eid/requests/eid-add-request.php");
+  }else{
+    header("location:/eid/requests/eid-requests.php");
+  }
+  
+
+
 } catch (Exception $exc) {
   error_log($exc->getMessage());
   error_log($exc->getTraceAsString());

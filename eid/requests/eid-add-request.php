@@ -94,6 +94,21 @@ require_once($fileArray[$arr['vl_form']]);
         }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
+
+        $("#childDob").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            minDate: "-48m",
+            maxDate: "Today",
+            onSelect: function(dateText, inst){
+                $("#sampleCollectionDate").datepicker("option","minDate",$("#childDob").datepicker("getDate"));
+            }            
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
+
         $('.dateTime').datetimepicker({
             changeMonth: true,
             changeYear: true,

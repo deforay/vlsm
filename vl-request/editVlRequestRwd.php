@@ -1107,7 +1107,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
           var userType = "<?php echo $sarr['user_type']; ?>";
           if (userType != 'remoteuser') {
                if ($.trim($("#dob").val()) == '' && $.trim($("#ageInYears").val()) == '' && $.trim($("#ageInMonths").val()) == '') {
-                    alert("Please make sure enter DOB or Age");
+                    alert("Please make sure to enter DOB or Age");
                     return false;
                }
           }
