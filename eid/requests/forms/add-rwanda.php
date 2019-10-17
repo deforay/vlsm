@@ -79,7 +79,7 @@ foreach ($fResult as $fDetails) {
                         <div class="box box-default">
                             <div class="box-body">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">A. CHILD and MOTHER INFORMATION</h3>
+                                    <h3 class="box-title">SITE INFORMATION</h3>
                                 </div>
                                 <div class="box-header with-border">
                                     <h3 class="box-title" style="font-size:1em;">To be filled by requesting Clinician/Nurse</h3>
@@ -113,7 +113,7 @@ foreach ($fResult as $fDetails) {
                                         <td><label for="district">District </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
-                                                <option value=""> -- Sélectionner -- </option>
+                                                <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
                                         <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
@@ -162,13 +162,17 @@ foreach ($fResult as $fDetails) {
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                <br><br>
+                                <br><hr style="border: 1px solid #ccc;">
+                                
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">CHILD and MOTHER INFORMATION</h3>
+                                </div>                                
                                 <table class="table" style="width:100%">
 
                                     <tr>
-                                        <th style="width:15% !important"><label for="childId">Exposed Infant Identification <span class="mandatory">*</span> </label></th>
+                                        <th style="width:15% !important"><label for="childId">Infant Code <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Exposed Infant Identification (Patient)" title="Please enter Exposed Infant Identification" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Infant Identification (Patient)" title="Please enter Exposed Infant Identification" style="width:100%;" onchange="" />
                                         </td>
                                         <th style="width:15% !important"><label for="childName">Infant name </label></th>
                                         <td style="width:35% !important">
@@ -176,13 +180,13 @@ foreach ($fResult as $fDetails) {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="childDob">Date of Birth </label></th>
+                                        <th><label for="childDob">Date of Birth <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInMonths();" />
                                         </td>
-                                        <th><label for="childGender">Gender </label></th>
+                                        <th><label for="childGender">Gender <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <select class="form-control " name="childGender" id="childGender">
+                                            <select class="form-control isRequired" name="childGender" id="childGender">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='male'> Male </option>
                                                 <option value='female'> Female </option>
@@ -192,7 +196,7 @@ foreach ($fResult as $fDetails) {
                                     </tr>
                                     <tr>
                                         <th>Infant Age (months)</th>
-                                        <td><input type="number" max=9 maxlength="1" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
+                                        <td><input type="number" max="24" maxlength="2"  oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
                                         <th>Mother ART Number</th>
                                         <td><input type="text" class="form-control " id="motherId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
                                     </tr>
@@ -213,7 +217,7 @@ foreach ($fResult as $fDetails) {
                                 <br><br>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <th colspan=4>
+                                        <th colspan=4 style="border-top:#ccc 2px solid;">
                                             <h4>Infant and Mother's Health Information</h4>
                                         </th>
                                     </tr>
@@ -314,7 +318,7 @@ foreach ($fResult as $fDetails) {
                                 <br><br>
                                 <table class="table" style="">
                                     <tr>
-                                        <th colspan=4>
+                                        <th colspan=4 style="border-top:#ccc 2px solid;">
                                             <h4>Sample Information</h4>
                                         </th>
                                     </tr>
@@ -346,7 +350,7 @@ foreach ($fResult as $fDetails) {
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
-                                        <h3 class="box-title">B. Reserved for Laboratory Use </h3>
+                                        <h3 class="box-title">Reserved for Laboratory Use </h3>
                                     </div>
                                     <table class="table" style="width:100%">
                                         <tr>
@@ -402,8 +406,11 @@ foreach ($fResult as $fDetails) {
                         <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
                             <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
+                            <input type="hidden" name="saveNext" id="saveNext" />
+                            <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();$('#saveNext').val('next');return false;">Save and Next</a>
                         <input type="hidden" name="formId" id="formId" value="7" />
                         <input type="hidden" name="eidSampleId" id="eidSampleId" value="" />
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
@@ -496,7 +503,7 @@ foreach ($fResult as $fDetails) {
                     }
                 });
         } else {
-            $("#facilityId").html("<option value=''> -- Sélectionner -- </option>");
+            $("#facilityId").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
     }
