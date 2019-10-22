@@ -199,13 +199,12 @@ try {
     if ($accResult) {
         for ($i = 0; $i < count($accResult); $i++) {
             $data = array(
-                'lab_name' => $accResult[$i]['lab_name'],
-                'lab_contact_person' => $accResult[$i]['lab_contact_person'],
-                'lab_phone_number' => $accResult[$i]['lab_phone_number'],
-                'sample_received_at_vl_lab_datetime' => $accResult[$i]['sample_received_at_vl_lab_datetime'],
-                //'sample_tested_datetime'=>$accResult[$i]['sample_tested_datetime'],
-                'result_dispatched_datetime' => $accResult[$i]['result_dispatched_datetime'],
-                'result_reviewed_datetime' => $accResult[$i]['result_reviewed_datetime'],
+                // 'lab_name' => $accResult[$i]['lab_name'],
+                // 'lab_contact_person' => $accResult[$i]['lab_contact_person'],
+                // 'lab_phone_number' => $accResult[$i]['lab_phone_number'],
+                //'sample_received_at_vl_lab_datetime' => $accResult[$i]['sample_received_at_vl_lab_datetime'],
+                //'result_dispatched_datetime' => $accResult[$i]['result_dispatched_datetime'],
+                //'result_reviewed_datetime' => $accResult[$i]['result_reviewed_datetime'],
                 'result_reviewed_by' => $_POST['reviewedBy'],
                 'approver_comments' => $_POST['comments'],
                 'lot_number' => $accResult[$i]['lot_number'],

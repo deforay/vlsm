@@ -29,7 +29,7 @@ $MYSQLDUMP = '/usr/bin/mysqldump';
 
 
 // VLSTS URL
-$REMOTEURL = '';
+$REMOTEURL = 'http://vlsm-remote';
 
 
 // Enable/Disable Interfacing

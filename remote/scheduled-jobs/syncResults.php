@@ -70,11 +70,14 @@ if (isset($fMapResult) && $fMapResult != '' && $fMapResult != null) {
 
 // VIRAL LOAD TEST RESULTS
 
-$vlQuery = "SELECT vl.*, a.user_name as 'approved_by_name' FROM `vl_request_form` AS vl LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id WHERE remote_sample_code !='' AND remote_sample_code is not null AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
-
+$vlQuery = "SELECT vl.*, a.user_name as 'approved_by_name' FROM `vl_request_form` AS vl LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id WHERE result_status in (4,7) AND sample_code !='' AND sample_code is not null AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+//echo $vlQuery;die;
 $vlLabResult = $db->rawQuery($vlQuery);
 
+
+
 $url = $REMOTEURL . '/remote/remote/testResults.php';
+
 $data = array(
     "result" => $vlLabResult,
     "Key" => "vlsm-lab-Data--",
@@ -110,7 +113,7 @@ if (!empty($result) && count($result) > 0) {
 
 if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
 
-    $eidQuery = "SELECT vl.*, a.user_name as 'approved_by_name' FROM `eid_form` AS vl LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id WHERE remote_sample_code !='' AND remote_sample_code is not null AND data_sync=0 AND $where"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
+    $eidQuery = "SELECT vl.*, a.user_name as 'approved_by_name' FROM `eid_form` AS vl LEFT JOIN `user_details` AS a ON vl.result_approved_by = a.user_id WHERE result_status in (4,7) AND sample_code !='' AND sample_code is not null AND data_sync=0"; // AND `last_modified_datetime` > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." HOUR)";
 
     $vlLabResult = $db->rawQuery($eidQuery);
 
