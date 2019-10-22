@@ -1942,3 +1942,12 @@ ALTER TABLE `vl_request_form` ADD `vldash_sync` INT NOT NULL DEFAULT '0' AFTER `
 ALTER TABLE `eid_form` ADD `mother_surname` VARCHAR(255) NULL DEFAULT NULL AFTER `mother_name`;
 ALTER TABLE `eid_form` ADD `child_surname` VARCHAR(255) NULL DEFAULT NULL AFTER `child_name`;
 ALTER TABLE `eid_form` ADD `mode_of_delivery` VARCHAR(255) NULL DEFAULT NULL AFTER `mother_hiv_status`;
+ALTER TABLE `eid_form` ADD `reason_for_eid_test` INT NULL DEFAULT NULL AFTER `specimen_type`;
+
+
+CREATE TABLE `r_eid_test_reasons` (
+ `test_reason_id` int(11) NOT NULL AUTO_INCREMENT,
+ `test_reason_name` varchar(255) DEFAULT NULL,
+ `test_reason_status` varchar(45) DEFAULT NULL,
+ PRIMARY KEY (`test_reason_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

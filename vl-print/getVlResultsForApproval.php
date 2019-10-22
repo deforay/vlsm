@@ -149,7 +149,7 @@ if (isset($_POST['sSearch']) && $_POST['sSearch'] != "") {
                     if($_POST['statusFilter'] == 'approvedOrRejected'){
                         $sWhere = $sWhere.' AND vl.result_status IN (4,7)';
                     }else if($_POST['statusFilter'] == 'notApprovedOrRejected'){
-                        $sWhere = $sWhere.' AND vl.result_status = 4 NOT IN (4,7)';
+                        $sWhere = $sWhere.' AND vl.result_status NOT IN (4,7)';
                     }
                }
           }else{

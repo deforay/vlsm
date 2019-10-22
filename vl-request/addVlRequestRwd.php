@@ -775,7 +775,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
           var dName = $("#district").val();
           var cName = $("#fName").val();
           if (dName != '') {
-               $.post("../includes/getFacilityForClinic.php", {
+               $.post("/includes/getFacilityForClinic.php", {
                          dName: dName,
                          cliName: cName
                     },

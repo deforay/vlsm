@@ -18,7 +18,7 @@ $PORT = 3306;
 $MYSQLDUMP = '/usr/bin/mysqldump';
 
 // VLSTS URL
-$REMOTEURL = 'http://vldashboard/';
+$REMOTEURL = 'http://vlsm-remote/';
 
 
 // Enable/Disable Interfacing

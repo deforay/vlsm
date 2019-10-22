@@ -88,10 +88,10 @@ try {
 
                 $data = array(
                     
-                    'sample_received_at_vl_lab_datetime' => $rResult[0]['sample_received_at_vl_lab_datetime'],
+                    //'sample_received_at_vl_lab_datetime' => $rResult[0]['sample_received_at_vl_lab_datetime'],
                     //'sample_tested_datetime'=>$rResult[0]['sample_tested_datetime'],
-                    'result_dispatched_datetime' => $rResult[0]['result_dispatched_datetime'],
-                    'result_reviewed_datetime' => $rResult[0]['result_reviewed_datetime'],
+                    //'result_dispatched_datetime' => $rResult[0]['result_dispatched_datetime'],
+                    //'result_reviewed_datetime' => $rResult[0]['result_reviewed_datetime'],
                     'result_reviewed_by' => $_POST['reviewedBy'],
                     'eid_test_platform' => $rResult[0]['vl_test_platform'],
                     'import_machine_name' => $rResult[0]['import_machine_name'],
