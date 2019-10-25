@@ -40,7 +40,7 @@ $statusResult = $db->rawQuery($statusQuery);
 $pdQuery = "SELECT * from province_details";
 $pdResult = $db->query($pdQuery);
 
-$sQuery = "SELECT * from r_sample_type where status='active'";
+$sQuery = "SELECT * from r_vl_sample_type where status='active'";
 $sResult = $db->query($sQuery);
 
 //get vl test reason list

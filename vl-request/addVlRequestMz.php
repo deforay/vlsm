@@ -9,7 +9,7 @@ for ($i = 0; $i < sizeof($cSampleResult); $i++) {
   $arr[$cSampleResult[$i]['name']] = $cSampleResult[$i]['value'];
 }
 //sample type
-$sQuery="SELECT * from r_sample_type where status='active'";
+$sQuery="SELECT * from r_vl_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 //user details
 $userQuery="SELECT * FROM user_details where status='active'";

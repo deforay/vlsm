@@ -13,7 +13,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-$sQuery="SELECT * FROM r_sample_type where status='active'";
+$sQuery="SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -278,9 +278,9 @@ $batResult = $db->rawQuery($batQuery);
 												<div class="tab-pane fade" id="notAvailReport">
 													<table class="table" style="margin-left:1%;margin-top:20px;width:98%;padding: 3%;">
 															<tr>
-																	<td><b>Sample Test Date&nbsp;:</b></td>
+																	<td><b>Sample Collection Date&nbsp;:</b></td>
 																	<td>
-																		<input type="text" id="noResultSampleTestDate" name="noResultSampleTestDate" class="form-control stDate" placeholder="Select Sample Test Date" readonly style="width:220px;background:#fff;" onchange="setSampleTestDate(this)"/>
+																		<input type="text" id="noResultSampleTestDate" name="noResultSampleTestDate" class="form-control stDate" placeholder="Select Sample Collection Date" readonly style="width:220px;background:#fff;" onchange="setSampleTestDate(this)"/>
 																	</td>
 																	<td>&nbsp;<b>Batch Code&nbsp;:</b></td>
 																	<td>

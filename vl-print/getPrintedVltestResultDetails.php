@@ -143,7 +143,7 @@ $sQuery = 	 "SELECT 		vl.vl_sample_id,
 							
 							FROM vl_request_form as vl 
 							LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-							LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+							LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
 							INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
 							LEFT JOIN r_vl_test_reasons as vltr ON vl.reason_for_vl_testing = vltr.test_reason_id 
 							LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
@@ -358,7 +358,7 @@ $rResult = $db->rawQuery($sQuery);
 /* Data set length after filtering */
 
 $aResultFilterTotal = $db->rawQuery("SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
-																		LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+																		LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
 																		INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
 																		LEFT JOIN r_vl_test_reasons as vltr ON vl.reason_for_vl_testing = vltr.test_reason_id 
 																		LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 

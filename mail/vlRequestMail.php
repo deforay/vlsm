@@ -11,7 +11,7 @@ if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
 //main query
 $query="SELECT vl.sample_code,vl.vl_sample_id,vl.facility_id,f.facility_name,f.facility_code FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vlsm_country_id =$formId AND is_request_mail_sent ='no' ORDER BY f.facility_name ASC";
 $result = $db->rawQuery($query);
-$sTypeQuery="SELECT * FROM r_sample_type where status='active'";
+$sTypeQuery="SELECT * FROM r_vl_sample_type where status='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 $facilityQuery="SELECT * FROM facility_details where status='active' and facility_type='2'";
 $facilityResult = $db->rawQuery($facilityQuery);

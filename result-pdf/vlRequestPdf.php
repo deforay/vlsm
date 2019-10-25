@@ -85,7 +85,7 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
     
-$sTypeQuery="SELECT * FROM r_sample_type where status='active'";
+$sTypeQuery="SELECT * FROM r_vl_sample_type where status='active'";
 $sTypeResult = $db->rawQuery($sTypeQuery);
 
 $fQuery="SELECT * from vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl_sample_id=$id";
@@ -155,42 +155,42 @@ $aResult=$db->query($aQuery);
     $aResult[0]['art_code'] = '';
 }
 if(trim($result[0]['sample_type'])!=''){
-  $sampleTypeQuery="SELECT * FROM r_sample_type where ".$result[0]['sample_type'];
+  $sampleTypeQuery="SELECT * FROM r_vl_sample_type where ".$result[0]['sample_type'];
   $sampleTypeResult = $db->rawQuery($sampleTypeQuery);
 }else{
   $sampleTypeResult[0]['sample_name'] = '';
 }
 //routine monitor
 if($result[0]['last_vl_sample_type_routine']!=''){
-$rtQuery="SELECT * FROM r_sample_type where ".$result[0]['last_vl_sample_type_routine'];
+$rtQuery="SELECT * FROM r_vl_sample_type where ".$result[0]['last_vl_sample_type_routine'];
 $rtResult = $db->rawQuery($rtQuery);
 }else{
 $rtResult[0]['sample_name']     = '';
 }
 //Repeat VL
 if($result[0]['last_vl_sample_type_failure_ac']!=''){
-$rVlQuery="SELECT * FROM r_sample_type where ".$result[0]['last_vl_sample_type_failure_ac'];
+$rVlQuery="SELECT * FROM r_vl_sample_type where ".$result[0]['last_vl_sample_type_failure_ac'];
 $rVlresult = $db->rawQuery($rVlQuery);
 }else{
 $rVlresult[0]['sample_name']= '';    
 }
 //Failure VL
 if($result[0]['last_vl_sample_type_failure']!=''){
-$fVlQuery="SELECT * FROM r_sample_type where ".$result[0]['last_vl_sample_type_failure'];
+$fVlQuery="SELECT * FROM r_vl_sample_type where ".$result[0]['last_vl_sample_type_failure'];
 $fVlResult = $db->rawQuery($fVlQuery);
 }else{
 $fVlResult[0]['sample_name']     = '';
 }
 // Missing VL
 if($result[0]['missing_sample_type']!=''){
-$mVlQuery="SELECT * FROM r_sample_type where ".$result[0]['missing_sample_type'];
+$mVlQuery="SELECT * FROM r_vl_sample_type where ".$result[0]['missing_sample_type'];
 $mVlResult = $db->rawQuery($mVlQuery);
 }else{
 $mVlResult[0]['sample_name']     = '';
 }
 //Switch to tdf VL
 if($result[0]['switch_to_tdf_sample_type']!=''){
-$sVlQuery="SELECT * FROM r_sample_type where ".$result[0]['last_vl_sample_type_failure'];
+$sVlQuery="SELECT * FROM r_vl_sample_type where ".$result[0]['last_vl_sample_type_failure'];
 $sVlResult = $db->rawQuery($sVlQuery);
 }else{
 $sVlResult[0]['sample_name']     = '';

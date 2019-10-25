@@ -37,12 +37,12 @@ if ($sarr['user_type'] == 'remoteuser') {
 }
 $pdResult = $db->query($pdQuery);
 $province = "";
-$province .= "<option value=''> -- Sélectionner -- </option>";
+$province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 //$facility = "";
-$facility = "<option value=''> -- Sélectionner -- </option>";
+$facility = "<option value=''> -- Select -- </option>";
 foreach ($fResult as $fDetails) {
     $selected = "";
     if ($eidInfo['facility_id'] == $fDetails['facility_id']) {
@@ -63,7 +63,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
         <h1><i class="fa fa-edit"></i> EARLY INFANT DIAGNOSIS (EID) LABORATORY REQUEST FORM</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Add EID Request</li>
+            <li class="active">Edit EID Request</li>
         </ol>
     </section>
     <!-- Main content -->

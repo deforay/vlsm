@@ -17,7 +17,7 @@ $result = $db->rawQuery($query);
 
 $fQuery = "SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
-$sQuery = "SELECT * FROM r_sample_type where status='active'";
+$sQuery = "SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 
 $start_date = date('Y-m-d');

@@ -373,6 +373,7 @@ foreach ($fResult as $fDetails) {
                                             <th>Reason for Rejection</th>
                                             <td>
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
+                                                    <option value=''> -- Select -- </option>
                                                     <?php echo $rejectionReason; ?>
                                                 </select>
                                             </td>

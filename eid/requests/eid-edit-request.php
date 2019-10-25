@@ -64,6 +64,8 @@ $eidQuery = "SELECT * from eid_form where eid_id=$id";
 $eidInfo = $db->rawQueryOne($eidQuery);
 
 
+$sampleResult = $general->fetchDataFromTable('r_eid_sample_type', "status = 'active'");
+
 $arr = $general->getGlobalConfig();
 
 

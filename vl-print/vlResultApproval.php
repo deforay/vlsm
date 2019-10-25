@@ -5,7 +5,7 @@ include_once(APPLICATION_PATH . '/header.php');
 
 $tsQuery = "SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
-$sQuery = "SELECT * FROM r_sample_type";
+$sQuery = "SELECT * FROM r_vl_sample_type";
 $sResult = $db->rawQuery($sQuery);
 $fQuery = "SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
@@ -74,6 +74,7 @@ foreach ($rejectionTypeResult as $type) {
     <input type="hidden" name="statusDropDownId" id="statusDropDownId" />
     <h3 style="color:red;">Choose Rejection Reason</h3>
     <select name="rejectionReason" id="rejectionReason" class="form-control" title="Please choose reason" onchange="updateRejectionReasonStatus(this);">
+      <option value=''> -- Select -- </option>
       <?php echo $rejectionReason; ?>
     </select>
 
@@ -160,6 +161,7 @@ foreach ($rejectionTypeResult as $type) {
             </div>
             <div style="display:none;" class="col-md-5 col-sm-5 bulkRejectionReason">
               <select class="form-control" id="bulkRejectionReason" name="bulkRejectionReason" title="Please select test status">
+                <!-- <option value=''> -- Select -- </option> -->
                 <?php echo $rejectionReason; ?>
               </select>
             </div>

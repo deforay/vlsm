@@ -109,7 +109,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
          * Get data to display
         */
 	$aWhere = '';
-	$sQuery="SELECT vl.*,f.*,s.*,fd.facility_name as labName,rsrr.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.is_sample_rejected='yes' AND vl.vlsm_country_id='".$arr['vl_form']."'";
+	$sQuery="SELECT vl.*,f.*,s.*,fd.facility_name as labName,rsrr.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.is_sample_rejected='yes' AND vl.vlsm_country_id='".$arr['vl_form']."'";
 	$start_date = '';
 	$end_date = '';
 	if(isset($_POST['rjtBatchCode']) && trim($_POST['rjtBatchCode'])!= ''){
@@ -174,7 +174,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
        // print_r($rResult);
         /* Data set length after filtering */
         
-        $aResultFilterTotal =$db->rawQuery("SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.is_sample_rejected='yes' AND vlsm_country_id='".$arr['vl_form']."' $sWhere group by vl.vl_sample_id order by $sOrder");
+        $aResultFilterTotal =$db->rawQuery("SELECT vl.*,f.*,s.*,fd.facility_name as labName FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as fd ON fd.facility_id=vl.lab_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN r_art_code_details as art ON vl.current_regimen=art.art_id JOIN r_sample_rejection_reasons as rsrr ON rsrr.rejection_reason_id=vl.reason_for_sample_rejection where vl.is_sample_rejected='yes' AND vlsm_country_id='".$arr['vl_form']."' $sWhere group by vl.vl_sample_id order by $sOrder");
         $iFilteredTotal = count($aResultFilterTotal);
 
         /* Total data set length */

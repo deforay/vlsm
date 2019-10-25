@@ -12,7 +12,7 @@ $fQuery="SELECT * FROM facility_details where status='active'";
 $fResult = $db->rawQuery($fQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='zmb'";
 $aResult=$db->query($aQuery);
-$sQuery="SELECT * from r_sample_type where sample_id='".$vlQueryInfo[0]['sample_type']."'";
+$sQuery="SELECT * from r_vl_sample_type where sample_id='".$vlQueryInfo[0]['sample_type']."'";
 $sResult=$db->query($sQuery);
 $pdQuery="SELECT * from province_details";
 $pdResult=$db->query($pdQuery);

@@ -34,6 +34,7 @@ try {
     $_POST['sampleCollectionDate'] = NULL;
   }
 
+
   //Set sample received date
   if (isset($_POST['sampleReceivedDate']) && trim($_POST['sampleReceivedDate']) != "") {
     $sampleReceivedDate = explode(" ", $_POST['sampleReceivedDate']);
@@ -69,6 +70,14 @@ try {
   } else {
     $_POST['mothersDob'] = NULL;
   }
+
+
+  if (isset($_POST['motherTreatmentInitiationDate']) && trim($_POST['motherTreatmentInitiationDate']) != "") {
+    $motherTreatmentInitiationDate = explode(" ", $_POST['motherTreatmentInitiationDate']);
+    $_POST['motherTreatmentInitiationDate'] = $general->dateFormat($motherTreatmentInitiationDate[0]) . " " . $motherTreatmentInitiationDate[1];
+  } else {
+    $_POST['motherTreatmentInitiationDate'] = NULL;
+  }  
 
   if (isset($_POST['previousPCRTestDate']) && trim($_POST['previousPCRTestDate']) != "") {
     $previousPCRTestDate = explode(" ", $_POST['previousPCRTestDate']);
@@ -111,6 +120,7 @@ try {
     'implementing_partner' => isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
     'funding_source' => isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
     'mother_id' => isset($_POST['mothersId']) ? $_POST['mothersId'] : null,
+    'caretaker_contact_consent' => isset($_POST['caretakerConsentForContact']) ? $_POST['caretakerConsentForContact'] : null,
     'caretaker_phone_number' => isset($_POST['caretakerPhoneNumber']) ? $_POST['caretakerPhoneNumber'] : null,
     'caretaker_address' => isset($_POST['caretakerAddress']) ? $_POST['caretakerPhoneNumber'] : null,
     'mother_name' => isset($_POST['mothersName']) ? $_POST['mothersName'] : null,
@@ -118,12 +128,14 @@ try {
     'mother_marital_status' => isset($_POST['mothersMaritalStatus']) ? $_POST['mothersMaritalStatus'] : null,
     'mother_treatment' => isset($_POST['motherTreatment']) ? implode(",", $_POST['motherTreatment']) : null,
     'mother_treatment_other' => isset($_POST['motherTreatmentOther']) ? $_POST['motherTreatmentOther'] : null,
+    'mother_treatment_initiation_date' => isset($_POST['motherTreatmentInitiationDate']) ? $_POST['motherTreatmentInitiationDate'] : null,
     'child_id' => isset($_POST['childId']) ? $_POST['childId'] : null,
     'child_name' => isset($_POST['childName']) ? $_POST['childName'] : null,
     'child_dob' => isset($_POST['childDob']) ? $_POST['childDob'] : null,
     'child_gender' => isset($_POST['childGender']) ? $_POST['childGender'] : null,
     'child_age' => isset($_POST['childAge']) ? $_POST['childAge'] : null,
     'child_treatment' => isset($_POST['childTreatment']) ? implode(",", $_POST['childTreatment']) : null,
+    'child_treatment_other' => isset($_POST['childTreatmentOther']) ? implode(",", $_POST['childTreatmentOther']) : null,
     'mother_cd4' => isset($_POST['mothercd4']) ? $_POST['mothercd4'] : null,
     'mother_vl_result' => $motherVlResult,
     'mother_hiv_status' => isset($_POST['mothersHIVStatus']) ? $_POST['mothersHIVStatus'] : null,
@@ -136,12 +148,14 @@ try {
     //'facility_id'=>$_POST['isInfantStillBeingBreastfed'],
     'choice_of_feeding' => isset($_POST['choiceOfFeeding']) ? $_POST['choiceOfFeeding'] : null,
     'is_cotrimoxazole_being_administered_to_the_infant' => isset($_POST['isCotrimoxazoleBeingAdministered']) ? $_POST['isCotrimoxazoleBeingAdministered'] : null,
+    'specimen_type' => isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
     'sample_collection_date' => isset($_POST['sampleCollectionDate']) ? $_POST['sampleCollectionDate'] : null,
     'sample_requestor_phone' => isset($_POST['sampleRequestorPhone']) ? $_POST['sampleRequestorPhone'] : null,
     'sample_requestor_name' => isset($_POST['sampleRequestorName']) ? $_POST['sampleRequestorName'] : null,
     'rapid_test_performed' => isset($_POST['rapidTestPerformed']) ? $_POST['rapidTestPerformed'] : null,
     'rapid_test_date' => isset($_POST['rapidtestDate']) ? $_POST['rapidtestDate'] : null,
     'rapid_test_result' => isset($_POST['rapidTestResult']) ? $_POST['rapidTestResult'] : null,
+    'lab_reception_person' => isset($_POST['labReceptionPerson']) ? $_POST['labReceptionPerson'] : null,
     'sample_received_at_vl_lab_datetime' => isset($_POST['sampleReceivedDate']) ? $_POST['sampleReceivedDate'] : null,
     'sample_tested_datetime' => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
     'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,

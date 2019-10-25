@@ -38,7 +38,7 @@ $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 
 //get active sample types
 $condition = "status = 'active'";
-$sResult = $general->fetchDataFromTable('r_sample_type', $condition);
+$sResult = $general->fetchDataFromTable('r_vl_sample_type', $condition);
 
 if (isset($vlfmResult[0]['facilityId'])) {
     $condition = $condition . " AND facility_id IN(" . $vlfmResult[0]['facilityId'] . ")";

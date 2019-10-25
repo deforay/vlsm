@@ -40,7 +40,7 @@ try {
                 FROM vl_request_form as vl 
                 LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id 
                 LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id 
-                LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type 
+                LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
                 INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
                 LEFT JOIN r_vl_test_reasons as tr ON tr.test_reason_id=vl.reason_for_vl_testing 
                 LEFT JOIN facility_type as ft ON ft.facility_type_id=f.facility_type 

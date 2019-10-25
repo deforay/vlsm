@@ -5,7 +5,7 @@ require_once('../startup.php');
 include_once(APPLICATION_PATH.'/header.php');
 $tsQuery="SELECT * FROM r_sample_status";
 $tsResult = $db->rawQuery($tsQuery);
-$sQuery="SELECT * FROM r_sample_type where status='active'";
+$sQuery="SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 $lQuery="SELECT * FROM facility_details where status='active' and facility_type=2";
 $lResult = $db->rawQuery($lQuery);
