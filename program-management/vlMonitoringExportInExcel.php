@@ -184,7 +184,7 @@ if (isset($_SESSION['vlMonitoringResultQuery']) && trim($_SESSION['vlMonitoringR
     $checkEmptyResultQuery = $checkEmptyResultQuery . ' ' . $sWhere . ' AND vl.sample_tested_datetime IS NULL AND vl.sample_type!="" AND vl.sample_collection_date < NOW() - INTERVAL 1 MONTH AND vl.vlsm_country_id = "' . $arr['vl_form'] . '"';
     $checkEmptyResult = $db->rawQuery($checkEmptyResultQuery);
     //get all sample type
-    $sampleType = "Select * from r_sample_type where status='active'";
+    $sampleType = "Select * from r_vl_sample_type where status='active'";
     $sampleTypeResult = $db->rawQuery($sampleType);
     if (count($checkEmptyResult) > 0) {
         $sWhere = '';

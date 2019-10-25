@@ -116,8 +116,8 @@ try {
                     $data['import_batch_tracking'] = $_SESSION['controllertrack'];
                     $result = $db->insert($tableName2, $data);
                 } else {
-                    $data['request_created_by'] = $rResult[0]['result_reviewed_by'];
-                    $data['request_created_datetime'] = $general->getDateTime();
+                    //$data['request_created_by'] = $rResult[0]['result_reviewed_by'];
+                    //$data['request_created_datetime'] = $general->getDateTime();
                     $data['last_modified_by'] = $rResult[0]['result_reviewed_by'];
                     $data['last_modified_datetime'] = $general->getDateTime();
                     $data['result_approved_by'] = $_POST['appBy'];
@@ -177,9 +177,9 @@ try {
         for ($i = 0; $i < count($accResult); $i++) {
             $data = array(
                 
-                'sample_received_at_vl_lab_datetime' => $accResult[$i]['sample_received_at_vl_lab_datetime'],
+                //'sample_received_at_vl_lab_datetime' => $accResult[$i]['sample_received_at_vl_lab_datetime'],
                 //'sample_tested_datetime'=>$accResult[$i]['sample_tested_datetime'],
-                'result_dispatched_datetime' => $accResult[$i]['result_dispatched_datetime'],
+                //'result_dispatched_datetime' => $accResult[$i]['result_dispatched_datetime'],
                 'result_reviewed_datetime' => $accResult[$i]['result_reviewed_datetime'],
                 'result_reviewed_by' => $_POST['reviewedBy'],
                 'approver_comments' => $_POST['comments'],
@@ -188,8 +188,8 @@ try {
                 'result' => $accResult[$i]['result'],
                 'sample_tested_datetime' => $accResult[$i]['sample_tested_datetime'],
                 'lab_id' => $accResult[$i]['lab_id'],
-                'request_created_by' => $accResult[$i]['result_reviewed_by'],
-                'request_created_datetime' => $general->getDateTime(),
+                //'request_created_by' => $accResult[$i]['result_reviewed_by'],
+                //'request_created_datetime' => $general->getDateTime(),
                 'last_modified_datetime' => $general->getDateTime(),
                 'result_approved_by' => $_POST['appBy'],
                 'result_approved_datetime' => $general->getDateTime(),
@@ -233,7 +233,7 @@ try {
         }
     }
     $sCode = implode(', ', $printSampleCode);
-    $samplePrintQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_eid_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
+    $samplePrintQuery = "SELECT vl.*,s.sample_name,b.*,ts.*,f.facility_name,l_f.facility_name as labName,f.facility_code,f.facility_state,f.facility_district,acd.art_code,rst.sample_name as routineSampleName,fst.sample_name as failureSampleName,sst.sample_name as suspectedSampleName,u_d.user_name as reviewedBy,a_u_d.user_name as approvedBy ,rs.rejection_reason_name FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN facility_details as l_f ON vl.lab_id=l_f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status LEFT JOIN r_art_code_details as acd ON acd.art_id=vl.current_regimen LEFT JOIN r_vl_sample_type as rst ON rst.sample_id=vl.last_vl_sample_type_routine LEFT JOIN r_vl_sample_type as fst ON fst.sample_id=vl.last_vl_sample_type_failure_ac LEFT JOIN r_vl_sample_type as sst ON sst.sample_id=vl.last_vl_sample_type_failure LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id LEFT JOIN user_details as u_d ON u_d.user_id=vl.result_reviewed_by LEFT JOIN user_details as a_u_d ON a_u_d.user_id=vl.result_approved_by LEFT JOIN r_eid_sample_rejection_reasons as rs ON rs.rejection_reason_id=vl.reason_for_sample_rejection";
     $samplePrintQuery .= ' where vl.sample_code IN ( ' . $sCode . ')'; // Append to condition
     $_SESSION['vlRequestSearchResultQuery'] = $samplePrintQuery;
     $stQuery = "SELECT * FROM temp_sample_import as tsr LEFT JOIN vl_request_form as vl ON vl.sample_code=tsr.sample_code where imported_by ='$importedBy' AND tsr.sample_type='s'";

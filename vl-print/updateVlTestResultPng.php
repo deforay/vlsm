@@ -43,7 +43,7 @@ $lResult = $db->rawQuery($lQuery);
 $aQuery="SELECT * from r_art_code_details where nation_identifier='png'";
 $aResult=$db->query($aQuery);
 
-$sQuery="SELECT * from r_sample_type where status='active'";
+$sQuery="SELECT * from r_vl_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 
 $pdResult=$db->query($pdQuery);

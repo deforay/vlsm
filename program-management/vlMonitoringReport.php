@@ -19,7 +19,7 @@ $arr = array();
 for ($i = 0; $i < sizeof($configResult); $i++) {
   $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
-$sQuery="SELECT * FROM r_sample_type where status='active'";
+$sQuery="SELECT * FROM r_vl_sample_type where status='active'";
 $sResult = $db->rawQuery($sQuery);
 $fQuery="SELECT * FROM facility_details where status='active' and facility_type=2";
 $fResult = $db->rawQuery($fQuery);

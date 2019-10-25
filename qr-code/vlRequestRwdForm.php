@@ -55,7 +55,7 @@ foreach($fResult as $fDetails){
 }
 
 //get active sample types
-$sQuery="SELECT * from r_sample_type where status='active'";
+$sQuery="SELECT * from r_vl_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 
 $aQuery="SELECT * from r_art_code_details where nation_identifier='rwd' AND art_status ='active'";
@@ -105,7 +105,7 @@ if(isset($vlQueryInfo) && count($vlQueryInfo) > 0){
   }
   //sample type
   if(isset($vlQueryInfo[0]['sample_type']) && trim($vlQueryInfo[0]['sample_type'])!= '' && $vlQueryInfo[0]['sample_type']!= null && $vlQueryInfo[0]['sample_type'] >0){
-    $especimenTypeQuery = 'select sample_name from r_sample_type where sample_id = "'.$vlQueryInfo[0]['sample_type'].'"';
+    $especimenTypeQuery = 'select sample_name from r_vl_sample_type where sample_id = "'.$vlQueryInfo[0]['sample_type'].'"';
     $especimenResult = $db->rawQuery($especimenTypeQuery);
   }
   //treatmnet initiation date
@@ -234,7 +234,7 @@ if(isset($qrVal[11]) && trim($qrVal[11])!='' && $qrVal[11]!= null && $qrVal[11]!
 }
 //sample type
 if(isset($qrVal[57]) && trim($qrVal[57])!= '' && $qrVal[57]!= null){
-  $specimenTypeQuery = 'select sample_id from r_sample_type where sample_name = "'.$qrVal[57].'"';
+  $specimenTypeQuery = 'select sample_id from r_vl_sample_type where sample_name = "'.$qrVal[57].'"';
   $specimenResult = $db->rawQuery($specimenTypeQuery);
 }
 //treatment initiated date

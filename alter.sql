@@ -1951,3 +1951,25 @@ CREATE TABLE `r_eid_test_reasons` (
  `test_reason_status` varchar(45) DEFAULT NULL,
  PRIMARY KEY (`test_reason_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+-- Version 3.15
+
+RENAME TABLE `r_sample_type` TO `r_vl_sample_type`;
+
+CREATE TABLE `r_eid_sample_type` (
+ `sample_id` int(11) NOT NULL AUTO_INCREMENT,
+ `sample_name` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+ `status` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+ `data_sync` int(11) NOT NULL DEFAULT '0',
+ PRIMARY KEY (`sample_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `r_eid_sample_type` (`sample_id`, `sample_name`, `status`, `data_sync`) VALUES (NULL, 'DBS', 'active', '0'), (NULL, 'Whole Blood', 'active', '0');
+ALTER TABLE `eid_form` ADD `lab_reception_person` VARCHAR(255) NULL DEFAULT NULL AFTER `lab_technician`;
+ALTER TABLE `eid_form` ADD `child_treatment_other` VARCHAR(1000) NULL DEFAULT NULL AFTER `child_treatment`;
+ALTER TABLE `eid_form` ADD `mother_treatment_initiation_date` DATE NULL DEFAULT NULL AFTER `mother_treatment_other`;
+ALTER TABLE `eid_form` ADD `caretaker_contact_consent` VARCHAR(255) NULL DEFAULT NULL AFTER `mother_surname`;
+
+
+
+

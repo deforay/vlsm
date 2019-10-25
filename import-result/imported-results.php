@@ -47,7 +47,7 @@ if ($module == 'vl') {
 }
 
 
-$rejectionReason = '<option value="">-- Select sample rejection reason --</option>';
+$rejectionReason = '<option value="">-- Select --</option>';
 foreach ($rejectionTypeResult as $type) {
   $rejectionReason .= '<optgroup label="' . ($type['rejection_type']) . '">';
   foreach ($rejectionResult as $reject) {

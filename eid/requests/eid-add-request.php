@@ -43,7 +43,7 @@ $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 $rejectionQuery = "SELECT * FROM r_eid_sample_rejection_reasons where rejection_reason_status = 'active'";
 $rejectionResult = $db->rawQuery($rejectionQuery);
 
-$rejectionReason = '<option value="">-- Select sample rejection reason --</option>';
+
 foreach ($rejectionTypeResult as $type) {
   $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
   foreach ($rejectionResult as $reject) {
@@ -64,6 +64,8 @@ $fResult = $general->fetchDataFromTable('facility_details', $condition);
 $condition = "facility_type='2' AND status='active'";
 $lResult = $general->fetchDataFromTable('facility_details', $condition);
 
+
+$sampleResult = $general->fetchDataFromTable('r_eid_sample_type', "status = 'active'");
 
 $arr = $general->getGlobalConfig();
 

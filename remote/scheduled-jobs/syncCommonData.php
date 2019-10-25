@@ -78,19 +78,19 @@ if(!empty($result['sampleType']) && count($result['sampleType'])>0){
     // this way any additional rows in local that are not on remote
     // become inactive.
 
-    //$db->update('r_sample_type',array('status'=>'inactive'));    
+    //$db->update('r_vl_sample_type',array('status'=>'inactive'));    
 
     foreach($result['sampleType'] as $type){
-        $sTypeQuery = "select * from r_sample_type where sample_id=".$type['sample_id'];
+        $sTypeQuery = "select * from r_vl_sample_type where sample_id=".$type['sample_id'];
         $sTypeLocalResult = $db->query($sTypeQuery);
         $sTypeData = array('sample_name'=>$type['sample_name'],'status'=>$type['status'],'data_sync'=>1);
         $lastId = 0;
         if($sTypeLocalResult){
             $db = $db->where('sample_id',$type['sample_id']);
-            $lastId = $db->update('r_sample_type',$sTypeData);
+            $lastId = $db->update('r_vl_sample_type',$sTypeData);
         }else{
             $sTypeData['sample_id'] = $type['sample_id'];
-            $db->insert('r_sample_type',$sTypeData);
+            $db->insert('r_vl_sample_type',$sTypeData);
             $lastId = $db->getInsertId();
         }
     }

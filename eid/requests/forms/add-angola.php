@@ -43,12 +43,12 @@ if ($sarr['user_type'] == 'remoteuser') {
 }
 $pdResult = $db->query($pdQuery);
 $province = "";
-$province .= "<option value=''> -- Select -- </option>";
+$province .= "<option value=''> -- Selecione -- </option>";
 foreach ($pdResult as $provinceName) {
     $province .= "<option value='" . $provinceName['province_name'] . "##" . (isset($provinceName['province_code']) && !empty($provinceName['province_code']) ? $provinceName['province_code'] : $provinceName['province_name']) . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 //$facility = "";
-$facility = "<option value=''> -- Select -- </option>";
+$facility = "<option value=''> -- Selecione -- </option>";
 foreach ($fResult as $fDetails) {
     $facility .= "<option value='" . $fDetails['facility_id'] . "'>" . ucwords(addslashes($fDetails['facility_name'])) . "</option>";
 }
@@ -58,7 +58,7 @@ foreach ($fResult as $fDetails) {
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1><i class="fa fa-edit"></i> EARLY INFANT DIAGNOSIS (EID) LABORATORY REQUEST FORM</h1>
+        <h1 style="font-size:1.45em;"><i class="fa fa-edit"></i> SOLICITAÇÃO DE QUANTIFICAÇÃO DE DIAGNÓSTICO PRECOCE INFANTIL DO VIH</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
             <li class="active">Add EID Request</li>
@@ -79,7 +79,7 @@ foreach ($fResult as $fDetails) {
                         <div class="box box-default">
                             <div class="box-body">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">A. CHILD and MOTHER INFORMATION</h3>
+                                    <h3 class="box-title">UNIDADE DE SOLICITAÇÃO</h3>
                                 </div>
                                 <div class="box-header with-border">
                                     <h3 class="box-title" style="font-size:1em;">To be filled by requesting Clinician/Nurse</h3>
@@ -87,15 +87,15 @@ foreach ($fResult as $fDetails) {
                                 <table class="table" style="width:100%">
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                                            <td><label for="sampleCode">Sample ID </label></td>
+                                            <td><label for="sampleCode">Nº de amostra </label></td>
                                             <td>
                                                 <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"></span>
                                                 <input type="hidden" id="sampleCode" name="sampleCode" />
                                             </td>
                                         <?php } else { ?>
-                                            <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
+                                            <td><label for="sampleCode">Nº de amostra </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
+                                                <input type="text" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Nº de amostra" title="Please enter sample id" style="width:100%;" onchange="checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>',this.id,null,'The sample id that you entered already exists. Please try another sample id',null)" />
                                             </td>
                                         <?php } ?>
                                         <td></td>
@@ -104,19 +104,19 @@ foreach ($fResult as $fDetails) {
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td><label for="province">Province </label><span class="mandatory">*</span></td>
+                                        <td><label for="province">Província  </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="province" id="province" title="Please choose province" onchange="getfacilityDetails(this);" style="width:100%;">
                                                 <?php echo $province; ?>
                                             </select>
                                         </td>
-                                        <td><label for="district">District </label><span class="mandatory">*</span></td>
+                                        <td><label for="district">Município </label><span class="mandatory">*</span></td>
                                         <td>
-                                            <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
-                                                <option value=""> -- Sélectionner -- </option>
+                                            <select class="form-control isRequired" name="district" id="district" title="Please choose Município" style="width:100%;" onchange="getfacilityDistrictwise(this);">
+                                                <option value=""> -- Selecione -- </option>
                                             </select>
                                         </td>
-                                        <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
+                                        <td><label for="facilityId">Nome da Unidade </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired " name="facilityId" id="facilityId" title="Please choose service provider" style="width:100%;" onchange="getfacilityProvinceDetails(this);">
                                                 <?php echo $facility; ?>
@@ -128,7 +128,7 @@ foreach ($fResult as $fDetails) {
                                         <td>
                                             <!-- <input type="text" class="form-control" id="supportPartner" name="supportPartner" placeholder="Partenaire dappui" title="Please enter partenaire dappui" style="width:100%;"/> -->
                                             <select class="form-control" name="implementingPartner" id="implementingPartner" title="Please choose partenaire de mise en œuvre" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
+                                                <option value=""> -- Selecione -- </option>
                                                 <?php
                                                 foreach ($implementingPartnerList as $implementingPartner) {
                                                     ?>
@@ -139,7 +139,7 @@ foreach ($fResult as $fDetails) {
                                         <td><label for="fundingSource">Funding Partner</label></td>
                                         <td>
                                             <select class="form-control" name="fundingSource" id="fundingSource" title="Please choose source de financement" style="width:100%;">
-                                                <option value=""> -- Select -- </option>
+                                                <option value=""> -- Selecione -- </option>
                                                 <?php
                                                 foreach ($fundingSourceList as $fundingSource) {
                                                     ?>
@@ -147,12 +147,35 @@ foreach ($fResult as $fDetails) {
                                                 <?php } ?>
                                             </select>
                                         </td>
+                                        
+                                            <td><label for="sector">Serviço/Sector </label> </td>
+                                            <td>
+                                            <input type="text" class="form-control" id="sector" name="sector" placeholder="Serviço/Sector" title="Sector" style="width:100%;" onchange="" />
+                                            </td>
+                                            
+                                    </tr>
+                                    <tr>
+                                        <td><label for="sampleRequestorName">Nome do solicitante </label> </td>
+                                        <td>
+                                            <input class="form-control" type="text" name="sampleRequestorName" id="sampleRequestorName" placeholder="Nome do solicitante" />
+                                        </td>
+                                        <td><label for="sampleRequestorPhone">Contacto </label> </td>
+                                        <td>
+                                            <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" placeholder="Contacto" />
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>                                    
+                                    <tr>
+                                        
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <!-- <tr> -->
                                             <td><label for="labId">Lab Name <span class="mandatory">*</span></label> </td>
                                             <td>
                                                 <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
-                                                    <option value=""> -- Select -- </option>
+                                                    <option value=""> -- Selecione -- </option>
                                                     <?php foreach ($lResult as $labName) { ?>
                                                         <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
                                                     <?php } ?>
@@ -160,180 +183,146 @@ foreach ($fResult as $fDetails) {
                                             </td>
                                             <!-- </tr> -->
                                         <?php } ?>
-                                    </tr>
+
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+
+                                    </tr>                                    
                                 </table>
-                                <br><br>
+                                <br><hr style="border: 1px solid #ccc;">
+                                
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">DADOS DO PACIENTE</h3>
+                                </div>                                
                                 <table class="table" style="width:100%">
 
                                     <tr>
-                                        <th style="width:15% !important"><label for="childId">Exposed Infant Identification <span class="mandatory">*</span> </label></th>
+
+                                        <th style="width:15% !important"><label for="childName">Nome da Criança </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Exposed Infant Identification (Patient)" title="Please enter Exposed Infant Identification" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control " id="childName" name="childName" placeholder="Nome da Criança" title="Please enter Infant Name" style="width:100%;" onchange="" />
                                         </td>
-                                        <th style="width:15% !important"><label for="childName">Infant name </label></th>
+                                        <th style="width:15% !important"><label for="childId">Nº Processo Clínico <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control " id="childName" name="childName" placeholder="Infant name" title="Please enter Infant Name" style="width:100%;" onchange="" />
-                                        </td>
+                                            <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Código Criança" title="Please enter Exposed Infant Identification" style="width:100%;" onchange="" />
+                                        </td>                                        
                                     </tr>
                                     <tr>
-                                        <th><label for="childDob">Date of Birth </label></th>
+                                        <th><label for="childDob">Data de Nascimento <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Data de Nascimento" title="Please enter Date of birth" style="width:100%;" onchange="calculateAgeInMonths();" />
                                         </td>
-                                        <th><label for="childGender">Gender </label></th>
+                                        <th><label for="childGender">Género <span class="mandatory">*</span> </label></th>
                                         <td>
-                                            <select class="form-control " name="childGender" id="childGender">
-                                                <option value=''> -- Select -- </option>
-                                                <option value='male'> Male </option>
-                                                <option value='female'> Female </option>
+                                            <select class="form-control isRequired" name="childGender" id="childGender">
+                                                <option value=''> -- Selecione -- </option>
+                                                <option value='male'> Masculino </option>
+                                                <option value='female'> Feminino </option>
 
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Infant Age (months)</th>
-                                        <td><input type="number" max=9 maxlength="1" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
-                                        <th>Mother ART Number</th>
-                                        <td><input type="text" class="form-control " id="motherId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
+                                        <th>Idade da criança (em meses)</th>
+                                        <td><input type="number" max="24" maxlength="2"  oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
+                                        <th>Profilaxia da Criança</th>
+                                        <td>
+                                            <select class="form-control" name="childTreatment[]" id="childTreatment">
+                                                <option value=''> -- Selecione -- </option>
+                                                <option value='NVP por 12 semanas'> NVP por 12 semanas </option>
+                                                <option value='NVP + AZT'> NVP + AZT  </option>
+                                                <option value='Nenhuma'> Nenhuma  </option>
+                                                <option value='Other'> Outra (especifique)  </option>
+                                            </select>                                            
+                                        </td>
+
                                     </tr>
                                     <tr>
-                                        <th>Caretaker phone number</th>
-                                        <td><input type="text" class="form-control " id="caretakerPhoneNumber" name="caretakerPhoneNumber" placeholder="Caretaker Phone Number" title="Caretaker Phone Number" style="width:100%;" onchange="" /></td>
-
-                                        <th>Infant caretaker address</th>
-                                        <td><textarea class="form-control " id="caretakerAddress" name="caretakerAddress" placeholder="Caretaker Address" title="Caretaker Address" style="width:100%;" onchange=""></textarea></td>
+                                        <th>Alimentação da Criança</th>
+                                        <td>
+                                            <select class="form-control" name="choiceOfFeeding" id="choiceOfFeeding">
+                                                <option value=''> -- Selecione -- </option>
+                                                <optgroup label="0-6 meses">
+                                                    <option value='Apenas leite materno'>Apenas leite materno </option>
+                                                    <option value='Apenas leite artificial/substituto'>Apenas leite artificial/substituto</option>
+                                                    <option value='Mista (materno + artificial)'>Mista (materno + artificial)</option>
+                                                </optgroup>
+                                                <optgroup label="> 6 meses">
+                                                    <option value='Com leite materno'>Com leite materno</option>
+                                                    <option value='Sem leite materno'>Sem leite materno</option>
+                                                </optgroup>                                                
+                                            </select>                                            
+                                        </td>
+                                        <th> </th>
+                                        <td></td>
 
                                     </tr>
+                                    <tr>
+                                    <th>Nome da Mãe </th>
+                                        <td><input type="text" class="form-control " id="mothersName" name="motherName" placeholder="Nome da Mãe" title="Nome da Mãe" style="width:100%;" onchange="" /></td>                                        
+                                        <th>Nº Processo Clínico</th>
+                                        <td><input type="text" class="form-control " id="mothersId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
+
+                                       
+
+                                    </tr>
+                                    <tr>
+                                        <th>Mãe da Criança Autoriza Contacto</th>
+                                        <td>
+                                            <select class="form-control" name="caretakerConsentForContact" id="caretakerConsentForContact">
+                                                <option value=''> -- Selecione -- </option>
+                                                <option value='yes'> Sim </option>
+                                                <option value='no'> Não </option>
+                                            </select>                                            
+                                        </td>                                        
+                                        <th>Telemóvel</th>
+                                        <td><input type="text" class="form-control " id="caretakerPhoneNumber" name="caretakerPhoneNumber" placeholder="Telemóvel" title="Caretaker Phone Number" style="width:100%;" onchange="" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tratamento ARV da Mãe</th>
+                                        <td><input type="text" class="form-control " id="motherTreatment" name="motherTreatment[]" placeholder="Tratamento ARV da Mãe" title="Tratamento ARV da Mãe" style="width:100%;" onchange="" /></td>                                  
+                                        <th>Data de início</th>
+                                        <td><input type="text" class="form-control date" id="motherTreatmentInitiationDate" name="motherTreatmentInitiationDate" placeholder="Data de início" title="Data de início" style="width:100%;" onchange="" /></td>
+                                    </tr>                                    
 
 
                                 </table>
 
 
-
-                                <br><br>
-                                <table class="table" style="width:100%">
-                                    <tr>
-                                        <th colspan=4>
-                                            <h4>Infant and Mother's Health Information</h4>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:15% !important">Mother's HIV Status:</th>
-                                        <td style="width:35% !important">
-                                            <select class="form-control" name="mothersHIVStatus" id="mothersHIVStatus">
-                                                <option value=''> -- Select -- </option>
-                                                <option value="positive"> Positive </option>
-                                                <option value="negative" /> Negative </option>
-                                                <option value="unknown" /> Unknown </option>
-                                            </select>
-                                        </td>
-
-                                        <th style="width:15% !important">ART given to the Mother during:</th>
-                                        <td style="width:35% !important">
-                                            <input type="checkbox" name="motherTreatment[]" value="No ART given" /> No ART given <br>
-                                            <input type="checkbox" name="motherTreatment[]" value="Pregnancy" /> Pregnancy <br>
-                                            <input type="checkbox" name="motherTreatment[]" value="Labour/Delivery" /> Labour/Delivery <br>
-                                            <input type="checkbox" name="motherTreatment[]" value="Postnatal" /> Postnatal <br>
-                                            <!-- <input type="checkbox" name="motherTreatment[]" value="Other" onclick="$('#motherTreatmentOther').prop('disabled', function(i, v) { return !v; });" /> Other (Please specify): <input class="form-control" style="max-width:200px;display:inline;" disabled="disabled" placeholder="Other" type="text" name="motherTreatmentOther" id="motherTreatmentOther" /> <br> -->
-                                            <input type="checkbox" name="motherTreatment[]" value="Unknown" /> Unknown
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Infant Rapid HIV Test Done</th>
-                                        <td>
-                                            <select class="form-control" name="rapidTestPerformed" id="rapidTestPerformed">
-                                                <option value=''> -- Select -- </option>
-                                                <option value="yes"> Yes </option>
-                                                <option value="no" /> No </option>
-                                            </select>
-                                        </td>
-
-                                        <th>If yes, test date :</th>
-                                        <td>
-                                            <input class="form-control date" type="text" name="rapidtestDate" id="rapidtestDate" placeholder="if yes, test date" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Rapid Test Result</th>
-                                        <td>
-                                            <select class="form-control" name="rapidTestResult" id="rapidTestResult">
-                                                <option value=''> -- Select -- </option>
-                                                <?php foreach ($eidResults as $eidResultKey => $eidResultValue) { ?>
-                                                    <option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
-                                                <?php } ?>
-
-                                            </select>
-                                        </td>
-
-                                        <th>Infant stopped breastfeeding ?</th>
-                                        <td>
-                                            <select class="form-control" name="hasInfantStoppedBreastfeeding" id="hasInfantStoppedBreastfeeding">
-                                                <option value=''> -- Select -- </option>
-                                                <option value="yes" /> Yes </option>
-                                                <option value="no"> No </option>
-                                                <option value="unknown" /> Unknown </option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Age (months) breastfeeding stopped :</th>
-                                        <td>
-                                            <input type="number" class="form-control" style="max-width:200px;display:inline;" placeholder="Age (months) breastfeeding stopped" type="text" name="ageBreastfeedingStopped" id="ageBreastfeedingStopped" />
-                                        </td>
-
-                                        <th>PCR test performed on child before :</th>
-                                        <td>
-                                            <select class="form-control" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
-                                                <option value=''> -- Select -- </option>
-                                                <option value="yes" /> Yes </option>
-                                                <option value="no"> No </option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Previous PCR test date :</th>
-                                        <td>
-                                            <input class="form-control date" type="text" name="previousPCRTestDate" id="previousPCRTestDate" placeholder="if yes, test date" />
-                                        </td>
-
-                                        <th>Reason for 2nd PCR :</th>
-                                        <td>
-                                            <select class="form-control" name="pcrTestReason" id="pcrTestReason">
-                                                <option value=''> -- Select -- </option>
-                                                <option value="Confirmation of positive first EID PCR test result" /> Confirmation of positive first EID PCR test result </option>
-                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months"> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
-                                                <option value="Other"> Other </option>
-                                            </select>
-                                        </td>
-                                    </tr>
-
-
-                                </table>
 
                                 <br><br>
                                 <table class="table" style="">
                                     <tr>
-                                        <th colspan=4>
+                                        <th colspan=4 style="border-top:#ccc 2px solid;">
                                             <h4>Sample Information</h4>
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
+                                        <th style="width:15% !important">Data da Colheita <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
                                             <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" onchange="sampleCodeGeneration();" />
                                         </td>
-                                        <th style="width:15% !important;"></th>
-                                        <td style="width:35% !important;"></td>
+
+                                        <th style="width:14%;"> Tipo de amostra <span class="mandatory">*</span>  </th>
+                                        <td style="width:35%;">
+                                            <select name="specimenType" id="specimenType" class="form-control isRequired" title="Please choose Tipo de amostra" style="width:100%">
+                                            <option value="">-- Selecione --</option>
+                                            <?php foreach($sampleResult as $name){ ?>
+                                                <option value="<?php echo $name['sample_id'];?>"><?php echo ucwords($name['sample_name']);?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </td>                                        
                                     </tr>
                                     <tr>
-                                        <th>Requesting Officer</th>
+                                        <th>Técnico Responsável pela Colheita </th>
                                         <td>
-                                            <input class="form-control" type="text" name="sampleRequestorName" id="sampleRequestorName" placeholder="Requesting Officer" />
+                                            <input class="form-control" type="text" name="sampleRequestorName" id="sampleRequestorName" placeholder="Técnico Responsável pela Colheita" />
                                         </td>
-                                        <th>Sample Requestor Phone</th>
+                                        <th>Contacto</th>
                                         <td>
-                                            <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" placeholder="Requesting Officer Phone" />
+                                            <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" placeholder="Contacto" />
                                         </td>
                                     </tr>
 
@@ -346,45 +335,47 @@ foreach ($fResult as $fDetails) {
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
-                                        <h3 class="box-title">B. Reserved for Laboratory Use </h3>
+                                        <h3 class="box-title">Informações laboratoriais  </h3>
                                     </div>
                                     <table class="table" style="width:100%">
                                         <tr>
-                                            <th><label for="">Sample Received Date </label></th>
+                                            <th><label for="">Data e Hora da Recepção da Amostra </label></th>
                                             <td>
                                                 <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                             </td>
-                                            <td></td>
-                                            <td></td>
+                                            <th><label for="">Responsável da recepção </label></th>
+                                            <td>
+                                                <input type="text" class="form-control" id="labReceptionPerson" name="labReceptionPerson" placeholder="Responsável da recepção" title="Técnico Responsável pela Recepção da Amostra " <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                            </td>
                                         <tr>
-                                            <th>Is Sample Rejected ?</th>
+                                            <th>Rejeição da amostra ? </th>
                                             <td>
                                                 <select class="form-control" name="isSampleRejected" id="isSampleRejected">
-                                                    <option value=''> -- Select -- </option>
+                                                    <option value=''> -- Selecione -- </option>
                                                     <option value="yes"> Yes </option>
                                                     <option value="no" /> No </option>
                                                 </select>
                                             </td>
 
-                                            <th>Reason for Rejection</th>
+                                            <th>Razão de rejeição</th>
                                             <td>
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
-                                                <option value=''> -- Select -- </option>
+                                                    <option value=''> -- Selecione -- </option>
                                                     <?php echo $rejectionReason; ?>
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="width:25%;"><label for="">Sample Test Date </label></td>
+                                            <td style="width:25%;"><label for="">Data da Quantificação </label></td>
                                             <td style="width:25%;">
-                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Data da Quantificação" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                             </td>
 
 
-                                            <th>Result</th>
+                                            <th>Resultado</th>
                                             <td>
                                                 <select class="form-control" name="result" id="result">
-                                                    <option value=''> -- Select -- </option>
+                                                    <option value=''> -- Selecione -- </option>
                                                     <?php foreach ($eidResults as $eidResultKey => $eidResultValue) { ?>
                                                         <option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
                                                     <?php } ?>
@@ -403,9 +394,12 @@ foreach ($fResult as $fDetails) {
                         <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
                             <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
+                            <input type="hidden" name="saveNext" id="saveNext" />
+                            <!-- <input type="hidden" name="pageURL" id="pageURL" value="<?php echo $_SERVER['PHP_SELF']; ?>" /> -->
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                        <input type="hidden" name="formId" id="formId" value="7" />
+                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();$('#saveNext').val('next');return false;">Save and Next</a>
+                        <input type="hidden" name="formId" id="formId" value="8" />
                         <input type="hidden" name="eidSampleId" id="eidSampleId" value="" />
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
                         <a href="/eid/requests/eid-add-request.php" class="btn btn-default"> Cancel</a>
@@ -458,7 +452,7 @@ foreach ($fResult as $fDetails) {
             $("#province").html("<?php echo $province; ?>");
             $("#facilityId").html("<?php echo $facility; ?>");
             $("#facilityId").select2("val", "");
-            $("#district").html("<option value=''> -- Select -- </option>");
+            $("#district").html("<option value=''> -- Selecione -- </option>");
         }
         $.unblockUI();
     }
@@ -497,7 +491,7 @@ foreach ($fResult as $fDetails) {
                     }
                 });
         } else {
-            $("#facilityId").html("<option value=''> -- Sélectionner -- </option>");
+            $("#facilityId").html("<option value=''> -- Selecione -- </option>");
         }
         $.unblockUI();
     }

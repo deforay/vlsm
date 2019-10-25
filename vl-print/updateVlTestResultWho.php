@@ -11,7 +11,7 @@ $facility.="<option data-code='' value=''> -- Select -- </option>";
 foreach($fResult as $fDetails){
   $facility .= "<option data-code='".$fDetails['facility_code']."' value='".$fDetails['facility_id']."'>".ucwords($fDetails['facility_name'])."</option>";
 }
-$sQuery="SELECT * from r_sample_type where status='active'";
+$sQuery="SELECT * from r_vl_sample_type where status='active'";
 $sResult=$db->query($sQuery);
 
 $aQuery="SELECT * from r_art_code_details where nation_identifier='who'";
