@@ -12,7 +12,7 @@ include_once(APPLICATION_PATH . '/includes/fpdf/fpdf.php');
 $tableName1 = "activity_log";
 $tableName2 = "eid_form";
 $general = new General($db);
-$users = new Users($db);
+$users = new Model_Users($db);
 
 $configQuery = "SELECT * from global_config";
 $configResult = $db->query($configQuery);

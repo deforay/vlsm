@@ -5,6 +5,7 @@ session_start();
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
+include_once(APPLICATION_PATH.'/models/Eid.php');
 $general = new General($db);
 
 // echo "<pre>";
@@ -160,7 +161,8 @@ try {
     if ($_POST['sampleCodeCol'] != '') {
       $eidData['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
     } else {
-      $sampleCodeKeysJson = $general->generateEIDSampleCode($_POST['province'], $_POST['sampleCollectionDate']);
+      $eidModel = new Model_Eid($db);
+      $sampleCodeKeysJson = $eidModel->generateEIDSampleCode($_POST['province'], $_POST['sampleCollectionDate']);
       $sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
       $eidData['sample_code'] = $sampleCodeKeys['sampleCode'];
     }
