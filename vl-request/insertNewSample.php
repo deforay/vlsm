@@ -31,13 +31,13 @@ if ($sarr['user_type'] == 'remoteuser') {
     $sampleCodeKey = 'sample_code_key';
 }
 
-$existSampleQuery = "SELECT " . $sampleCode . "," . $sampleCodeKey . " FROM vl_request_form where " . $sampleCode . " ='" . trim($_POST['sampleCode']) . "'";
+$existSampleQuery = "SELECT $sampleCode, $sampleCodeKey FROM vl_request_form WHERE $sampleCode = '" . trim($_POST['sampleCode']) . "'";
 $existResult = $db->rawQuery($existSampleQuery);
 
 if (isset($_POST['provinceId']) && $_POST['provinceId'] != null && $_POST['provinceId'] != '') {
     if (isset($existResult[0][$sampleCodeKey]) && $existResult[0][$sampleCodeKey] != '') {
         //global config
-        $configQuery = "SELECT * from global_config";
+        $configQuery = "SELECT * FROM global_config";
         $configResult = $db->query($configQuery);
         $arr = array();
         // now we create an associative array so that we can easily create view variables

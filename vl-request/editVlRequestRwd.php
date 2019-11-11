@@ -1,5 +1,8 @@
 <?php
 ob_start();
+
+require_once(APPLICATION_PATH.'/models/Vl.php');
+
 if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric') {
      $sampleClass = '';
      $maxLength = '';
@@ -81,40 +84,19 @@ if (trim($facilityResult[0]['facility_state']) != '') {
      $districtResult = $db->query($districtQuery);
 }
 
+
 //suggest sample id when lab user add request sample
 $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
 if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-     $sExpDT = explode(" ", $sampleCollectionDate);
-     $sExpDate = explode("-", $sExpDT[0]);
-     $start_date = date($sExpDate[0] . '-01-01') . " " . '00:00:00';
-     $end_date = date($sExpDate[0] . '-12-31') . " " . '23:59:59';
-     $mnthYr = substr($sExpDate[0], -2);
-     if ($arr['sample_code'] == 'MMYY') {
-          $mnthYr = $sExpDate[1] . substr($sExpDate[0], -2);
-     } else if ($arr['sample_code'] == 'YY') {
-          $mnthYr = substr($sExpDate[0], -2);
-     }
-     $auto = substr($sExpDate[0], -2) . $sExpDate[1] . $sExpDate[2];
-     $svlQuery = 'SELECT sample_code_key FROM vl_request_form as vl WHERE
-     DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND sample_code!="" ORDER BY sample_code_key DESC LIMIT 1';
-     $svlResult = $db->query($svlQuery);
-     $prefix = $arr['sample_code_prefix'];
-     if (isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key'] != '' && $svlResult[0]['sample_code_key'] != NULL) {
-          $maxId = $svlResult[0]['sample_code_key'] + 1;
-          $strparam = strlen($maxId);
-          $zeros = substr("000", $strparam);
-          $maxId = $zeros . $maxId;
-     } else {
-          $maxId = '001';
-     }
-     if ($arr['sample_code'] == 'auto') {
-          $sampleSuggestion = $auto . $maxId;
-     } else if ($arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') {
-          $sampleSuggestion = $prefix . $mnthYr . $maxId;
-     }
+     $vlObj = new Model_Vl($db);
+     $sampleCollectionDate = explode(" ",$sampleCollectionDate);
+     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);     
+     $sampleSuggestionJson = $vlObj->generateVLSampleID($stateResult[0]['province_code'],$sampleCollectionDate);
+     $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
      $sampleSuggestionDisplay = 'display:block;';
-}
+}    
 
 //set reason for changes history
 $rch = '';

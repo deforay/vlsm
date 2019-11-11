@@ -1950,7 +1950,7 @@ CREATE TABLE `r_eid_test_reasons` (
  `test_reason_name` varchar(255) DEFAULT NULL,
  `test_reason_status` varchar(45) DEFAULT NULL,
  PRIMARY KEY (`test_reason_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Version 3.15
 

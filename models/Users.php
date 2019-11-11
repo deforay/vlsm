@@ -10,7 +10,7 @@ require_once(dirname(__FILE__) . "/../startup.php");
  * @author Amit
  */
 
-class Users
+class Model_Users
 {
 
     protected $db = null;

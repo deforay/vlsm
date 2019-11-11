@@ -1,8 +1,10 @@
 <?php
 session_start();
 ob_start();
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH.'/models/Vl.php');
 $general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
@@ -130,6 +132,18 @@ try {
           }
      }
 
+
+
+     if ($sarr['user_type'] == 'remoteuser' && $_POST['oldStatus'] == 9) {
+          $_POST['status'] = 9;
+      } else if ($_POST['oldStatus'] == 9) {
+          $_POST['status'] = 6;
+      }
+      if ($_POST['status'] == '') {
+          $_POST['status']  = $_POST['oldStatus'];
+      }
+
+
      $vldata=array(
           //'sample_code'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
           //'serial_no'=>(isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL,
@@ -141,6 +155,8 @@ try {
           //'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
           //'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
+          'is_patient_pregnant'=>(isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='') ? $_POST['patientPregnant'] :  NULL,
+          'is_patient_breastfeeding'=>(isset($_POST['breastfeeding']) && $_POST['breastfeeding']!='') ? $_POST['breastfeeding'] :  NULL,          
           'patient_dob'=>$_POST['dob'],
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='') ? $_POST['ageInYears'] :  NULL,
           'patient_age_in_months'=>(isset($_POST['ageInMonths']) && $_POST['ageInMonths']!='') ? $_POST['ageInMonths'] :  NULL,
@@ -173,7 +189,7 @@ try {
           'failed_batch_id'=>(isset($_POST['failedbatchNo']) && $_POST['failedbatchNo']!='' ? $_POST['failedbatchNo'] :  NULL),
           'sample_collection_date'=>$_POST['collectionDate'],
           'sample_collected_by'=>(isset($_POST['collectedBy']) && $_POST['collectedBy']!='' ? $_POST['collectedBy'] :  NULL),
-          'lab_id'=>(isset($_POST['laboratoryId']) && $_POST['laboratoryId']!='' ? $_POST['laboratoryId'] :  NULL),
+          'lab_id'=>(isset($_POST['laboratoryId']) && $_POST['laboratoryId']!='' ? (int) $_POST['laboratoryId'] :  NULL),
           'sample_type'=>(isset($_POST['sampleType']) && $_POST['sampleType']!='' ? $_POST['sampleType'] :  NULL),
           'sample_received_at_vl_lab_datetime'=>$_POST['receivedDate'],
           'tech_name_png'=>(isset($_POST['techName']) && trim($_POST['techName'])!='')? $_POST['techName'] :  NULL,
@@ -182,63 +198,56 @@ try {
           'vl_test_platform'=>(isset($_POST['testingTech']) && trim($_POST['testingTech'])!='') ? $_POST['testingTech'] :  NULL,
           'cphl_vl_result'=>(isset($_POST['cphlvlResult']) && $_POST['cphlvlResult']!='' ? $_POST['cphlvlResult'] :  NULL),
           'result'=>(isset($_POST['finalViralResult']) && trim($_POST['finalViralResult'])!='') ? $_POST['finalViralResult'] :  NULL,
+          'result_status' => (isset($_POST['status']) && $_POST['status'] != '') ? $_POST['status'] : NULL,          
           'qc_tech_name'=>(isset($_POST['qcTechName']) && $_POST['qcTechName']!='' ? $_POST['qcTechName'] :  NULL),
           'qc_tech_sign'=>(isset($_POST['qcTechSign']) && $_POST['qcTechSign']!='' ? $_POST['qcTechSign'] :  NULL),
           'qc_date'=>$_POST['qcDate'],
           'clinic_date'=>$_POST['clinicDate'],
           'report_date'=>$_POST['reportDate'],
-          'last_modified_datetime'=>$general->getDateTime(),
+          'last_modified_by' => $_SESSION['userId'],
+          'last_modified_datetime' => $general->getDateTime(),
+          'data_sync' => 0          
      );
-     if($sarr['user_type']=='remoteuser'){
-          $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode']!='') ? $_POST['sampleCode'] :  NULL;
-     }else {
-          if($_POST['sampleCodeCol']!=''){
-               $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
-               $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol']!='') ? $_POST['sampleCodeCol'] :  NULL;
-          }else{
-               //update sample code generation
-               $sExpDT = explode(" ",$_POST['sampleCollectionDate']);
-               $sExpDate = explode("-",$sExpDT[0]);
-               $start_date = date($sExpDate[0].'-01-01')." ".'00:00:00';
-               $end_date = date($sExpDate[0].'-12-31')." ".'23:59:59';
-               $mnthYr = substr($sExpDate[0],-2);
-               if($arr['sample_code']=='MMYY'){
-                    $mnthYr = $sExpDate[1].substr($sExpDate[0],-2);
-               }else if($arr['sample_code']=='YY'){
-                    $mnthYr = substr($sExpDate[0],-2);
-               }
-               $auto = substr($sExpDate[0],-2).$sExpDate[1].$sExpDate[2];
+     
 
-               $svlQuery='SELECT sample_code_key FROM vl_request_form as vl WHERE DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'" AND sample_code!="" ORDER BY sample_code_key DESC LIMIT 1';
-               $svlResult=$db->query($svlQuery);
-               $prefix = $arr['sample_code_prefix'];
-               if(isset($svlResult[0]['sample_code_key']) && $svlResult[0]['sample_code_key']!='' && $svlResult[0]['sample_code_key']!=NULL){
-                    $maxId = $svlResult[0]['sample_code_key']+1;
-                    $strparam = strlen($maxId);
-                    $zeros = substr("000", $strparam);
-                    $maxId = $zeros.$maxId;
-               }else{
-                    $maxId = '001';
-               }
-               if($arr['sample_code']=='auto'){
-                    $vldata['serial_no'] = $auto.$maxId;
-                    $vldata['sample_code'] = $auto.$maxId;
-                    $vldata['sample_code_key'] = $maxId;
-               }else if($arr['sample_code']=='YY' || $arr['sample_code']=='MMYY'){
-                    $vldata['serial_no'] = $prefix.$mnthYr.$maxId;
-                    $vldata['sample_code'] = $prefix.$mnthYr.$maxId;
-                    $vldata['sample_code_format'] = $prefix.$mnthYr;
-                    $vldata['sample_code_key'] =  $maxId;
-               }
+
+
+     if ($sarr['user_type'] == 'remoteuser') {
+          $vldata['remote_sample_code'] = (isset($_POST['sampleCode']) && $_POST['sampleCode'] != '') ? $_POST['sampleCode'] : NULL;
+      } else {
+          if ($_POST['sampleCodeCol'] != '') {
+              $vldata['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
+              $vldata['serial_no'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
+          } else {
+              //Since Sample Code does not exist, today is the date
+              //sample is being registered at the lab.
+              $vldata['sample_registered_at_lab'] = $general->getDateTime();
+              $province = $_POST['province'];
+              $province = explode("##",$province);
+  
+              $vlObj = new Model_Vl($db);
+              $sampleJson = $vlObj->generateVLSampleID($province[1],$_POST['collectionDate'],'png');
+              $sampleData = json_decode($sampleJson, true);
+              $vldata['serial_no'] = $sampleData['sampleCode'];
+              $vldata['sample_code'] = $sampleData['sampleCode'];
+              $vldata['sample_code_format'] = $sampleData['sampleCodeFormat'];
+              $vldata['sample_code_key'] = $sampleData['sampleCodeKey'];
+
           }
+      }     
+
+     if(isset($_POST['patientFname']) && !empty($_POST['patientFname'])){
+          $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['patient_art_no']);
      }
+     if(isset($_POST['surName']) && !empty($_POST['surName'])){
+          $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['patient_art_no']);
+     }     
+          
 
-     $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['patient_art_no']);
-     $vldata['patient_last_name'] = $general->crypto('encrypt',$_POST['surName'],$vldata['patient_art_no']);
 
-
-     $db=$db->where('vl_sample_id',$_POST['vlSampleId']);
-     $id=$db->update($tableName,$vldata);
+     $db = $db->where('vl_sample_id',$_POST['vlSampleId']);
+     $id = $db->update($tableName,$vldata);
+     
      $_SESSION['alertMsg']="VL request updated successfully";
      //Add event log
      $eventType = 'update-vl-request-png';

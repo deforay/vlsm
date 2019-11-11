@@ -143,6 +143,8 @@ try {
           //'patient_first_name'=>(isset($_POST['patientFname']) && $_POST['patientFname']!='' ? $_POST['patientFname'] :  NULL),
           //'patient_last_name'=>(isset($_POST['surName']) && $_POST['surName']!='' ? $_POST['surName'] :  NULL),
           'patient_gender'=>(isset($_POST['gender']) && $_POST['gender']!='' ? $_POST['gender'] :  NULL),
+          'is_patient_pregnant'=>(isset($_POST['patientPregnant']) && $_POST['patientPregnant']!='') ? $_POST['patientPregnant'] :  NULL,
+          'is_patient_breastfeeding'=>(isset($_POST['breastfeeding']) && $_POST['breastfeeding']!='') ? $_POST['breastfeeding'] :  NULL,
           'patient_dob'=>$_POST['dob'],
           'patient_age_in_years'=>(isset($_POST['ageInYears']) && $_POST['ageInYears']!='') ? $_POST['ageInYears'] :  NULL,
           'patient_age_in_months'=>(isset($_POST['ageInMonths']) && $_POST['ageInMonths']!='') ? $_POST['ageInMonths'] :  NULL,
@@ -194,7 +196,7 @@ try {
           'request_created_datetime'=>$general->getDateTime(),
           'last_modified_by'=>$_SESSION['userId'],
           'last_modified_datetime'=>$general->getDateTime(),
-          'manual_result_entry'=>'yes'
+          'data_sync' => 0        
      );
 
      $vldata['patient_first_name'] = $general->crypto('encrypt',$_POST['patientFname'],$vldata['patient_art_no']);

@@ -45,7 +45,7 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
 $rejectionTypeQuery="SELECT DISTINCT rejection_type FROM r_sample_rejection_reasons WHERE rejection_reason_status ='active'";
 $rejectionTypeResult = $db->rawQuery($rejectionTypeQuery);
 //sample status
-$statusQuery="SELECT * FROM r_sample_status where status = 'active' AND status_id NOT IN(9,8,6)";
+$statusQuery="SELECT * FROM r_sample_status where status = 'active' AND status_id NOT IN(9,8)";
 $statusResult = $db->rawQuery($statusQuery);
 
 $pdQuery="SELECT * from province_details";
