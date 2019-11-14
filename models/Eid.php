@@ -21,7 +21,7 @@ class Model_Eid
         $this->db = $db;
     }
 
-    public function generateEIDSampleCode($province,$sampleCollectionDate, $sampleFrom = null, $provinceId = '', $provinceCode = '')
+    public function generateEIDSampleCode($provinceCode, $sampleCollectionDate, $sampleFrom = null, $provinceId = '')
     {
 
         $general = new General($this->db);
@@ -64,16 +64,24 @@ class Model_Eid
         }
 
         $auto = $samColDate . $sampleColDateArray[1] . $sampleColDateArray[2];
-        if (isset($sampleFrom) && $sampleFrom != null) {
-            $svlQuery = 'SELECT ' . $sampleCodeKey . ' FROM eid_form as vl WHERE DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND province_id=' . $provinceId . ' AND ' . $sampleCode . ' IS NOT NULL AND ' . $sampleCode . '!= "" ORDER BY ' . $sampleCodeKey . ' DESC LIMIT 1';
+        // If it is PNG form
+        if ($arr['vl_form'] == 5) {
+            if (empty($provinceId)) {
+                $provinceId = $general->getProvinceIDFromCode($provinceCode);
+            }
+            $svlQuery = 'SELECT ' . $sampleCodeKey . ' FROM eid_form as vl WHERE DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND province_id=' . $provinceId . ' ORDER BY ' . $sampleCodeKey . ' DESC LIMIT 1';
 
-            $svlResult = $this->db->query($svlQuery);
+            $svlResult = $this->db->rawQueryOne($svlQuery);
+            
+            //var_dump($svlResult);
 
-            if (isset($svlResult[0][$sampleCodeKey]) && $svlResult[0][$sampleCodeKey] != '' && $svlResult[0][$sampleCodeKey] != null) {
-                $maxId = $svlResult[0][$sampleCodeKey] + 1;
+            if (isset($svlResult[$sampleCodeKey]) && $svlResult[$sampleCodeKey] != '' && $svlResult[$sampleCodeKey] != null) {
+                $maxId = $svlResult[$sampleCodeKey] + 1;
                 $strparam = strlen($maxId);
                 $zeros = (isset($arr['sample_code']) && trim($arr['sample_code']) == 'auto2') ? substr("0000", $strparam) : substr("000", $strparam);
                 $maxId = $zeros . $maxId;
+
+                //echo $maxId;die;
             } else {
                 $maxId = (isset($arr['sample_code']) && trim($arr['sample_code']) == 'auto2') ? '0001' : '001';
             }
@@ -107,24 +115,30 @@ class Model_Eid
             }
         }
 
+
         $sCodeKey = (array('maxId' => $maxId, 'mnthYr' => $mnthYr, 'auto' => $auto));
 
+
+        $sCode = $sCodeKey['auto'];
         if ($arr['eid_sample_code'] == 'auto') {
-            $pNameVal = explode("##",$province);
-            $sCode = $sCodeKey['auto'];
-            $sCodeKey['sampleCode'] = $sampleCode = ($rKey . $pNameVal[1] . $sCode . $sCodeKey['maxId']);
-            $sCodeKey['sampleCodeInText'] = $sampleCodeInText = ($rKey . $pNameVal[1] . $sCode . $sCodeKey['maxId']);
-            $sCodeKey['sampleCodeFormat'] = $sampleCodeFormat = ($rKey . $pNameVal[1] . $sCode);
-            $sCodeKey['sampleCodeKey'] = $sampleCodeKey = ($sCodeKey['maxId']);
+            //$pNameVal = explode("##", $provinceCode);
+            $sCodeKey['sampleCode'] = ($rKey . $provinceCode . $sCode . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeInText'] = ($rKey . $provinceCode . $sCode . $sCodeKey['maxId']);
+            $sCodeKey['sampleCodeFormat'] = ($rKey . $provinceCode . $sCode);
+            $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
+        } else if ($arr['eid_sample_code'] == 'auto2') {
+            $sCodeKey['sampleCode'] = $rKey . 'R' . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'EID' . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $rKey . 'R' . date('y', strtotime($sampleCollectionDate)) . $provinceCode . 'EID' . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $rKey . $provinceCode . $sCode;
+            $sCodeKey['sampleCodeKey'] = $sCodeKey['maxId'];
         } else if ($arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {
-            $sCodeKey['sampleCode'] = $sampleCode = $rKey . $arr['eid_sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeInText'] = $sampleCodeInText = $rKey . $arr['eid_sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
-            $sCodeKey['sampleCodeFormat'] = $sampleCodeFormat = $rKey . $arr['eid_sample_code_prefix'] . $sCodeKey['mnthYr'];
-            $sCodeKey['sampleCodeKey'] = $sampleCodeKey = ($sCodeKey['maxId']);
-        }        
+            $sCodeKey['sampleCode'] = $rKey . $arr['eid_sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeInText'] = $rKey . $arr['eid_sample_code_prefix'] . $sCodeKey['mnthYr'] . $sCodeKey['maxId'];
+            $sCodeKey['sampleCodeFormat'] = $rKey . $arr['eid_sample_code_prefix'] . $sCodeKey['mnthYr'];
+            $sCodeKey['sampleCodeKey'] = ($sCodeKey['maxId']);
+        }
 
         return json_encode($sCodeKey);
-        
     }
 
 
@@ -137,6 +151,4 @@ class Model_Eid
         }
         return $response;
     }
-
-
 }

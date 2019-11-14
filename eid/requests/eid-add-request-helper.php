@@ -107,6 +107,16 @@ try {
     $motherVlResult = null;
   }
 
+  $status = 6;
+  if ($sarr['user_type'] == 'remoteuser') {
+       $status = 9;
+  }
+
+
+  if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
+    $_POST['result'] = null;
+    $status = 4;
+  }  
 
 
 
@@ -116,6 +126,7 @@ try {
     'sample_code_key' => isset($_POST['sampleCodeKey']) ? $_POST['sampleCodeKey'] : null,
     'sample_code_format' => isset($_POST['sampleCodeFormat']) ? $_POST['sampleCodeFormat'] : null,
     'facility_id' => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
+    'province_id' => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
     'lab_id' => isset($_POST['labId']) ? $_POST['labId'] : null,
     'implementing_partner' => isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
     'funding_source' => isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
@@ -160,7 +171,7 @@ try {
     'sample_tested_datetime' => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
     'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
     'result' => isset($_POST['result']) ? $_POST['result'] : null,
-    'result_status' => 6,
+    'result_status' => $status,
     'data_sync' => 0,
     'reason_for_sample_rejection' => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
     'request_created_by' => $_SESSION['userId'],
@@ -170,10 +181,6 @@ try {
     'last_modified_datetime' => $general->getDateTime()
   );
 
-  if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
-    $eidData['result'] = null;
-    $eidData['result_status'] = 4;
-  }
 
   //echo "<pre>";
   //var_dump($eidData);die;

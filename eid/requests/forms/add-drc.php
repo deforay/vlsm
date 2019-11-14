@@ -43,7 +43,7 @@ $pdResult = $db->query($pdQuery);
 $province = "";
 $province .= "<option value=''> -- Sélectionner -- </option>";
 foreach ($pdResult as $provinceName) {
-    $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
+  $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 //$facility = "";
 $facility = "<option value=''> -- Sélectionner -- </option>";
@@ -505,6 +505,7 @@ foreach ($fundingSourceList as $fundingSource) {
                 <input type="hidden" name="formId" id="formId" value="3"/>
                 <input type="hidden" name="eidSampleId" id="eidSampleId" value=""/>
                 <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>"/>
+                <input type="hidden" name="provinceId" id="provinceId" />
                 <a href="/eid/requests/eid-add-request.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -568,6 +569,7 @@ foreach ($fundingSourceList as $fundingSource) {
         $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
         $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
         $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
+        $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
       });
     }
   }
@@ -619,13 +621,15 @@ foreach ($fundingSourceList as $fundingSource) {
   
 
   function validateNow(){
+    var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '') ? $("#province").find(":selected").attr("data-name") : $("#province").find(":selected").attr("data-code");
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
     flag = deforayValidator.init({
       formId: 'addEIDRequestForm'
     });
     if(flag){
       //$.blockUI();
       <?php if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {?>
-              insertSampleCode('addEIDRequestForm','eidSampleId','sampleCode','sampleCodeKey','sampleCodeFormat',3,'sampleCollectionDate');
+        insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', $("#formId").val(), 'sampleCollectionDate', provinceCode);
       <?php } else {?>
               document.getElementById('addEIDRequestForm').submit();
       <?php }?>

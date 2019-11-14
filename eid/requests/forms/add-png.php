@@ -45,7 +45,7 @@ $pdResult = $db->query($pdQuery);
 $province = "";
 $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
-    $province .= "<option value='" . $provinceName['province_name'] . "##" . (isset($provinceName['province_code']) && !empty($provinceName['province_code']) ? $provinceName['province_code'] : $provinceName['province_name']) . "'>" . ucwords($provinceName['province_name']) . "</option>";
+    $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 //$facility = "";
 $facility = "<option value=''> -- Select -- </option>";
@@ -113,7 +113,7 @@ foreach ($fResult as $fDetails) {
                                         <td><label for="district">District </label><span class="mandatory">*</span></td>
                                         <td>
                                             <select class="form-control isRequired" name="district" id="district" title="Please choose district" style="width:100%;" onchange="getfacilityDistrictwise(this);">
-                                                <option value=""> -- Sélectionner -- </option>
+                                                <option value=""> -- Select -- </option>
                                             </select>
                                         </td>
                                         <td><label for="facilityId">Health Facility </label><span class="mandatory">*</span></td>
@@ -194,7 +194,7 @@ foreach ($fResult as $fDetails) {
                                         <th>Infant Age (months)</th>
                                         <td><input type="number" max=9 maxlength="1" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" /></td>
                                         <th>Mother ART Number</th>
-                                        <td><input type="text" class="form-control " id="motherId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
+                                        <td><input type="text" class="form-control " id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
                                     </tr>
                                     <tr>
                                         <th>Caretaker phone number</th>
@@ -369,7 +369,7 @@ foreach ($fResult as $fDetails) {
                                             <th>Reason for Rejection</th>
                                             <td>
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
-                                                <option value=''> -- Select -- </option>
+                                                    <option value=''> -- Select -- </option>
                                                     <?php echo $rejectionReason; ?>
                                                 </select>
                                             </td>
@@ -400,14 +400,15 @@ foreach ($fResult as $fDetails) {
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
+                        <?php if (isset($arr['eid_sample_code'])) { ?>
                             <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                        <input type="hidden" name="formId" id="formId" value="7" />
+                        <input type="hidden" name="formId" id="formId" value="5" />
                         <input type="hidden" name="eidSampleId" id="eidSampleId" value="" />
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+                        <input type="hidden" name="provinceId" id="provinceId" />
                         <a href="/eid/requests/eid-add-request.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
@@ -430,7 +431,7 @@ foreach ($fResult as $fDetails) {
     machineName = true;
 
     function getfacilityDetails(obj) {
-        
+
         $.blockUI();
         var cName = $("#facilityId").val();
         var pName = $("#province").val();
@@ -439,17 +440,17 @@ foreach ($fResult as $fDetails) {
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            //$("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        //$("#clinicianName").val(details[2]);
+                    }
+                });
             //}
             sampleCodeGeneration();
         } else if (pName == '') {
@@ -464,12 +465,15 @@ foreach ($fResult as $fDetails) {
     }
 
     function sampleCodeGeneration() {
-        var pName = $("#province").val();
+        var pName = $("#province").find(":selected").attr("data-code");
         var sDate = $("#sampleCollectionDate").val();
         if (pName != '' && sDate != '') {
             $.post("/eid/requests/generateSampleCode.php", {
                     sDate: sDate,
-                    pName: pName
+                    pName: pName,
+                    autoTyp: 'auto2',
+                    //provinceCode: $("#province").find(":selected").attr("data-code"),
+                    sampleFrom: 'png'
                 },
                 function(data) {
                     var sCodeKey = JSON.parse(data);
@@ -477,6 +481,7 @@ foreach ($fResult as $fDetails) {
                     $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
                     $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
                     $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
+                    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
                 });
         }
     }
@@ -533,19 +538,21 @@ foreach ($fResult as $fDetails) {
 
 
     function validateNow() {
+        var provinceCode = ($("#province").find(":selected").attr("data-code") == null || $("#province").find(":selected").attr("data-code") == '') ? $("#province").find(":selected").attr("data-name") : $("#province").find(":selected").attr("data-code");
+        $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
         flag = deforayValidator.init({
             formId: 'addEIDRequestForm'
         });
         if (flag) {
             //$.blockUI();
             <?php
-            if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'YY' || $arr['eid_sample_code'] == 'MMYY') {
-            ?>
-                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', 3, 'sampleCollectionDate'); 
+            if (isset($arr['eid_sample_code'])) {
+                ?>
+                insertSampleCode('addEIDRequestForm', 'eidSampleId', 'sampleCode', 'sampleCodeKey', 'sampleCodeFormat', $("#formId").val(), 'sampleCollectionDate', provinceCode);
             <?php
             } else {
-            ?>
-                document.getElementById('addEIDRequestForm').submit(); 
+                ?>
+                document.getElementById('addEIDRequestForm').submit();
             <?php
             } ?>
         }

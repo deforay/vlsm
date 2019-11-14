@@ -816,6 +816,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
       $('.ui-datepicker-calendar').show();
     });
     $('.date').mask('99-aaa-9999');
+    
     $('#collectionDate,#receivedDate,#testDate,#failedTestDate').mask('99-aaa-9999 99:99');
 
     $('#collectionDate,#receivedDate,#testDate,#failedTestDate').datetimepicker({
