@@ -1977,3 +1977,6 @@ ALTER TABLE `eid_form` ADD `caretaker_contact_consent` VARCHAR(255) NULL DEFAULT
 -- Amit 14 Nov 2019
 
 ALTER TABLE `eid_form` ADD `province_id` INT NULL DEFAULT NULL AFTER `facility_id`;
+
+
+-- Version 3.17 ---- Amit Nov 14 2019
