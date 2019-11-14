@@ -4,6 +4,9 @@
 
 ob_start();
 
+require_once(APPLICATION_PATH . '/models/Eid.php');
+
+
 //Funding source list
 $fundingSourceQry = "SELECT * FROM r_funding_sources WHERE funding_source_status='active' ORDER BY funding_source_name ASC";
 $fundingSourceList = $db->query($fundingSourceQry);
@@ -13,23 +16,28 @@ $implementingPartnerQry = "SELECT * FROM r_implementation_partners WHERE i_partn
 $implementingPartnerList = $db->query($implementingPartnerQry);
 
 
-$eidResults = $general->getEidResults();
-
+// $configQuery = "SELECT * from global_config";
+// $configResult = $db->query($configQuery);
+// $arr = array();
+// $prefix = $arr['sample_code_prefix'];
 
 // Getting the list of Provinces, Districts and Facilities
 
+$eidResults = $general->getEidResults();
+
+
 $rKey = '';
+$sKey = '';
+$sFormat = '';
 $pdQuery = "SELECT * from province_details";
-
-
 if ($sarr['user_type'] == 'remoteuser') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
     //check user exist in user_facility_map table
-    $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
+    $chkUserFcMapQry = "SELECT user_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
     $chkUserFcMapResult = $db->query($chkUserFcMapQry);
     if ($chkUserFcMapResult) {
-        $pdQuery = "SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "' group by province_name";
+        $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "' group by province_name";
     }
     $rKey = 'R';
 } else {
@@ -37,6 +45,34 @@ if ($sarr['user_type'] == 'remoteuser') {
     $sampleCode = 'sample_code';
     $rKey = '';
 }
+
+
+
+//set province
+if (isset($eidInfo['province_id']) && !empty($eidInfo['province_id'])) {
+    $stateQuery = "SELECT * from province_details where province_id= " . $eidInfo['province_id'];
+    $stateResult = $db->query($stateQuery);
+}
+if (!isset($stateResult[0]['province_code'])) {
+    $provinceCode = '';
+} else {
+    $provinceCode = $stateResult[0]['province_code'];
+}
+
+//suggest sample id when lab user add request sample
+$sampleSuggestion = '';
+$sampleSuggestionDisplay = 'display:none;';
+$sCode = $_GET['c'];
+if ($sarr['user_type'] == 'vluser' && $sCode != '') {
+    $vlObj = new Model_Eid($db);
+    $sampleCollectionDate = explode(" ", $sampleCollectionDate);
+    $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+    $sampleSuggestionJson = $vlObj->generateEIDSampleCode($provinceCode, $sampleCollectionDate, 'png');
+    $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+    $sampleSuggestion = $sampleCodeKeys['sampleCode'];
+    $sampleSuggestionDisplay = 'display:block;';
+}
+
 $pdResult = $db->query($pdQuery);
 $province = "";
 $province .= "<option value=''> -- Select -- </option>";
@@ -54,23 +90,9 @@ foreach ($fResult as $fDetails) {
 }
 
 $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(",", $eidInfo['mother_treatment']) : array();
-
-//suggest sample id when lab user add request sample
-$sampleSuggestion = '';
-$sampleSuggestionDisplay = 'display:none;';
-$sCode = $_GET['c'];
-if ($sarr['user_type'] == 'vluser' && $sCode != '') {
-     $vlObj = new Model_Eid($db);
-     $sampleCollectionDate = explode(" ",$sampleCollectionDate);
-     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
-     $sampleSuggestionJson = $vlObj->generateEIDSampleCode($stateResult[0]['province_code'],$sampleCollectionDate,'png');
-     $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
-     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
-     $sampleSuggestionDisplay = 'display:block;';
-}    
+//$eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", $eidInfo['child_treatment']) : array();
 
 ?>
-
 
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -78,7 +100,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         <h1><i class="fa fa-edit"></i> EARLY INFANT DIAGNOSIS (EID) LABORATORY REQUEST FORM</h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Add EID Request</li>
+            <li class="active">Edit EID Request</li>
         </ol>
     </section>
     <!-- Main content -->
@@ -91,28 +113,42 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             <!-- /.box-header -->
             <div class="box-body">
                 <!-- form start -->
-                <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-edit-request-helper.php">
+                <div class="disabledForm">
                     <div class="box-body">
                         <div class="box box-default">
                             <div class="box-body">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">SITE INFORMATION</h3>
+                                    <h3 class="box-title">A. CHILD and MOTHER INFORMATION</h3>
                                 </div>
                                 <div class="box-header with-border">
                                     <h3 class="box-title" style="font-size:1em;">To be filled by requesting Clinician/Nurse</h3>
+                                </div>
+
+                                <div class="col-xs-12 col-md-12 col-lg-12" style="<?php echo $sampleSuggestionDisplay; ?>">
+                                    <?php
+                                    if ($eidInfo['sample_code'] != '') {
+                                        ?>
+                                        <label for="sampleSuggest" class="text-danger">Please note that this Remote Sample has already been imported with VLSM Sample ID <?php echo $eidInfo['sample_code']; ?></label>
+                                    <?php
+                                    } else {
+                                        ?>
+                                        <label for="sampleSuggest">Sample ID (might change while submitting the form) - </label>
+                                        <?php echo $sampleSuggestion; ?>
+                                    <?php } ?>
+                                    <br><br>
                                 </div>
                                 <table class="table" style="width:100%">
                                     <tr>
                                         <?php if ($sarr['user_type'] == 'remoteuser') { ?>
                                             <td><label for="sampleCode">Sample ID </label></td>
                                             <td>
-                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $eidInfo['sample_code'] ?></span>
-                                                <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $eidInfo['sample_code'] ?>" />
+                                                <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $eidInfo[$sampleCode] ?></span>
+                                                <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $eidInfo[$sampleCode] ?>" />
                                             </td>
                                         <?php } else { ?>
                                             <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
                                             <td>
-                                                <input type="text" readonly value="<?php echo $eidInfo['sample_code'] ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Échantillon ID" title="Please enter échantillon id" style="width:100%;" onchange="" />
+                                                <input type="text" readonly value="<?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?>" class="form-control isRequired" id="sampleCode" name="sampleCode" placeholder="Sample ID" title="Please enter sample id" style="width:100%;" onchange="" />
                                             </td>
                                         <?php } ?>
                                         <td></td>
@@ -171,7 +207,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                                 <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
                                                     <option value=""> -- Select -- </option>
                                                     <?php foreach ($lResult as $labName) { ?>
-                                                        <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
+                                                        <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($eidInfo['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </td>
@@ -179,31 +215,27 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                         <?php } ?>
                                     </tr>
                                 </table>
-                                <br><hr style="border: 1px solid #ccc;">
-
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">CHILD and MOTHER INFORMATION</h3>
-                                </div>                                
+                                <br><br>
                                 <table class="table" style="width:100%">
 
                                     <tr>
-                                        <th style="width:15% !important"><label for="childId">Infant Code <span class="mandatory">*</span> </label></th>
+                                        <th style="width:15% !important"><label for="childId">Exposed Infant Identification <span class="mandatory">*</span> </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Infant Identification (Patient)" title="Please enter Exposed Infant Identification" style="width:100%;" value="<?php echo $eidInfo['child_id']; ?>" onchange="" />
+                                            <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Exposed Infant Identification (Patient)" title="Please enter Exposed Infant Identification" style="width:100%;" onchange="" value="<?php echo $eidInfo['child_id']; ?>" />
                                         </td>
                                         <th style="width:15% !important"><label for="childName">Infant name </label></th>
                                         <td style="width:35% !important">
-                                            <input type="text" class="form-control " id="childName" name="childName" placeholder="Infant name" title="Please enter Infant Name" style="width:100%;" value="<?php echo $eidInfo['child_name']; ?>" onchange="" />
+                                            <input type="text" class="form-control " id="childName" name="childName" placeholder="Infant name" title="Please enter Infant Name" style="width:100%;" value="<?php echo $eidInfo['child_name']; ?>" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th><label for="childDob">Date of Birth <span class="mandatory">*</span> </label></th>
+                                        <th><label for="childDob">Date of Birth </label></th>
                                         <td>
-                                            <input type="text" class="form-control isRequired" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>"  onchange="calculateAgeInMonths();" />
+                                            <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date of birth" title="Please enter Date of birth" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>" onchange="calculateAgeInMonths();" />
                                         </td>
-                                        <th><label for="childGender">Gender <span class="mandatory">*</span> </label></th>
+                                        <th><label for="childGender">Gender </label></th>
                                         <td>
-                                            <select class="form-control isRequired" name="childGender" id="childGender">
+                                            <select class="form-control " name="childGender" id="childGender">
                                                 <option value=''> -- Select -- </option>
                                                 <option value='male' <?php echo ($eidInfo['child_gender'] == 'male') ? "selected='selected'" : ""; ?>> Male </option>
                                                 <option value='female' <?php echo ($eidInfo['child_gender'] == 'female') ? "selected='selected'" : ""; ?>> Female </option>
@@ -213,16 +245,16 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     </tr>
                                     <tr>
                                         <th>Infant Age (months)</th>
-                                        <td><input type="number" max=24 maxlength="2" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="" value="<?php echo $eidInfo['child_age']; ?>" /></td>
+                                        <td><input type="number" max=9 maxlength="1" value="<?php echo $eidInfo['child_age']; ?>" oninput="this.value=this.value.slice(0,$(this).attr('maxlength'))" class="form-control " id="childAge" name="childAge" placeholder="Age" title="Age" style="width:100%;" onchange="$('#childDob').val('')" /></td>
                                         <th>Mother ART Number</th>
-                                        <td><input type="text" class="form-control " id="motherId" name="motherId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" value="<?php echo $eidInfo['mother_id'] ?>" onchange="" /></td>
+                                        <td><input type="text" class="form-control " value="<?php echo $eidInfo['mother_id']; ?>" id="mothersId" name="mothersId" placeholder="Mother ART Number" title="Mother ART Number" style="width:100%;" onchange="" /></td>
                                     </tr>
                                     <tr>
                                         <th>Caretaker phone number</th>
-                                        <td><input type="text" class="form-control " id="caretakerPhoneNumber" name="caretakerPhoneNumber" placeholder="Caretaker Phone Number" title="Caretaker Phone Number" style="width:100%;" value="<?php echo $eidInfo['caretaker_phone_number'] ?>" onchange="" /></td>
+                                        <td><input type="text" class="form-control " value="<?php echo $eidInfo['caretaker_phone_number']; ?>" id="caretakerPhoneNumber" name="caretakerPhoneNumber" placeholder="Caretaker Phone Number" title="Caretaker Phone Number" style="width:100%;" onchange="" /></td>
 
                                         <th>Infant caretaker address</th>
-                                        <td><textarea class="form-control " id="caretakerAddress" name="caretakerAddress" placeholder="Caretaker Address" title="Caretaker Address" style="width:100%;" onchange=""><?php echo $eidInfo['caretaker_address'] ?></textarea></td>
+                                        <td><textarea class="form-control " id="caretakerAddress" name="caretakerAddress" placeholder="Caretaker Address" title="Caretaker Address" style="width:100%;" onchange=""><?php echo $eidInfo['caretaker_address']; ?></textarea></td>
 
                                     </tr>
 
@@ -234,7 +266,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 <br><br>
                                 <table class="table" style="width:100%">
                                     <tr>
-                                        <th colspan=4 style="border-top:#ccc 2px solid;">
+                                        <th colspan=4>
                                             <h4>Infant and Mother's Health Information</h4>
                                         </th>
                                     </tr>
@@ -251,12 +283,12 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
                                         <th style="width:15% !important">ART given to the Mother during:</th>
                                         <td style="width:35% !important">
-                                            <input type="checkbox" name="motherTreatment[]" value="No ART given" <?php echo in_array('No ART given', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?> /> No ART given <br>
-                                            <input type="checkbox" name="motherTreatment[]" value="Pregnancy" <?php echo in_array('Pregnancy', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?> /> Pregnancy <br>
-                                            <input type="checkbox" name="motherTreatment[]" value="Labour/Delivery" <?php echo in_array('Labour/Delivery', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?> /> Labour/Delivery <br>
-                                            <input type="checkbox" name="motherTreatment[]" value="Postnatal" <?php echo in_array('Postnatal', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?> /> Postnatal <br>
-                                            <!-- <input type="checkbox" name="motherTreatment[]" value="Other" <?php echo in_array('Other', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?>  onclick="$('#motherTreatmentOther').prop('disabled', function(i, v) { return !v; });" /> Other (Please specify): <input class="form-control" style="max-width:200px;display:inline;" disabled="disabled" placeholder="Other" type="text" name="motherTreatmentOther" id="motherTreatmentOther" /> <br> -->
-                                            <input type="checkbox" name="motherTreatment[]" value="Unknown" <?php echo in_array('Unknown', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?> /> Unknown
+                                            <input type="checkbox" name="motherTreatment[]" value="No ART given" <?php echo in_array('No ART given', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?>> No ART given <br>
+                                            <input type="checkbox" name="motherTreatment[]" value="Pregnancy" <?php echo in_array('Pregnancy', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?>> Pregnancy <br>
+                                            <input type="checkbox" name="motherTreatment[]" value="Labour/Delivery" <?php echo in_array('Labour/Delivery', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?>> Labour/Delivery <br>
+                                            <input type="checkbox" name="motherTreatment[]" value="Postnatal" <?php echo in_array('Postnatal', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?>> Postnatal <br>
+                                            <!-- <input type="checkbox" name="motherTreatment[]" value="Other" onclick="$('#motherTreatmentOther').prop('disabled', function(i, v) { return !v; });" /> Other (Please specify): <input class="form-control" style="max-width:200px;display:inline;" disabled="disabled" placeholder="Other" type="text" name="motherTreatmentOther" id="motherTreatmentOther" /> <br> -->
+                                            <input type="checkbox" name="motherTreatment[]" value="Unknown" <?php echo in_array('Unknown', $eidInfo['mother_treatment']) ? "checked='checked'" : ""; ?>> Unknown
                                         </td>
                                     </tr>
 
@@ -272,7 +304,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
                                         <th>If yes, test date :</th>
                                         <td>
-                                            <input class="form-control date" type="text" name="rapidtestDate" id="rapidtestDate" placeholder="if yes, test date" value="<?php echo $general->humanDateFormat($eidInfo['rapid_test_date']); ?>">
+                                            <input class="form-control date" type="text" name="rapidtestDate" id="rapidtestDate" placeholder="if yes, test date" value="<?php echo $general->humanDateFormat($eidInfo['rapid_test_date']); ?>" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -300,15 +332,15 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th>Age (months) breastfeeding stopped :</th>
                                         <td>
-                                            <input type="number" class="form-control" style="max-width:200px;display:inline;" placeholder="Age (months) breastfeeding stopped" type="text" name="ageBreastfeedingStopped" id="ageBreastfeedingStopped" value="<?php echo $eidInfo['age_breastfeeding_stopped_in_months'] ?>" />
+                                            <input type="number" class="form-control" value="<?php echo $eidInfo['age_breastfeeding_stopped_in_months'] ?>" style="max-width:200px;display:inline;" placeholder="Age (months) breastfeeding stopped" type="text" name="ageBreastfeedingStopped" id="ageBreastfeedingStopped" />
                                         </td>
 
                                         <th>PCR test performed on child before :</th>
                                         <td>
                                             <select class="form-control" name="pcrTestPerformedBefore" id="pcrTestPerformedBefore">
                                                 <option value=''> -- Select -- </option>
-                                                <option value="yes"> Yes </option>
-                                                <option value="no"> No </option>
+                                                <option value="yes" <?php echo ($eidInfo['has_infant_stopped_breastfeeding'] == 'unknown') ? "selected='selected'" : ""; ?>> Yes </option>
+                                                <option value="no" <?php echo ($eidInfo['has_infant_stopped_breastfeeding'] == 'unknown') ? "selected='selected'" : ""; ?>> No </option>
                                             </select>
                                         </td>
                                     </tr>
@@ -335,14 +367,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                 <br><br>
                                 <table class="table" style="">
                                     <tr>
-                                        <th colspan=4 style="border-top:#000 1px solid;">
+                                        <th colspan=4>
                                             <h4>Sample Information</h4>
                                         </th>
                                     </tr>
                                     <tr>
                                         <th style="width:15% !important">Sample Collection Date <span class="mandatory">*</span> </th>
                                         <td style="width:35% !important;">
-                                            <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo $general->humanDateFormat($eidInfo['sample_collection_date']); ?>" />
+                                            <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Sample Collection Date" value="<?php echo ($eidInfo['sample_collection_date']); ?>" />
                                         </td>
                                         <th style="width:15% !important;"></th>
                                         <td style="width:35% !important;"></td>
@@ -350,11 +382,11 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                     <tr>
                                         <th>Requesting Officer</th>
                                         <td>
-                                            <input class="form-control" type="text" name="sampleRequestorName" id="sampleRequestorName" placeholder="Requesting Officer" value="<?php echo $eidInfo['sample_requestor_name']; ?>" />
+                                            <input class="form-control" type="text" name="sampleRequestorName" id="sampleRequestorName" value="<?php echo $eidInfo['sample_requestor_name'] ?>" placeholder="Requesting Officer" />
                                         </td>
                                         <th>Sample Requestor Phone</th>
                                         <td>
-                                            <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" placeholder="Requesting Officer Phone" value="<?php echo $eidInfo['sample_requestor_phone']; ?>" />
+                                            <input class="form-control" type="text" name="sampleRequestorPhone" id="sampleRequestorPhone" value="<?php echo $eidInfo['sample_requestor_phone'] ?>" placeholder="Requesting Officer Phone" />
                                         </td>
                                     </tr>
 
@@ -363,90 +395,84 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
 
                             </div>
                         </div>
-                        <?php if ($sarr['user_type'] != 'remoteuser') { ?>
-                            <div class="box box-primary">
-                                <div class="box-body">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">Reserved for Laboratory Use </h3>
-                                    </div>
-                                    <table class="table" style="width:100%">
-                                        <tr>
-                                            <th><label for="">Sample Received Date </label></th>
-                                            <td>
-                                                <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($eidInfo['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                        <tr>
-                                            <th>Is Sample Rejected ?</th>
-                                            <td>
-                                                <select class="form-control" name="isSampleRejected" id="isSampleRejected">
-                                                    <option value=''> -- Select -- </option>
-                                                    <option value="yes" <?php echo ($eidInfo['is_sample_rejected'] == 'yes') ? "selected='selected'" : ""; ?>> Yes </option>
-                                                    <option value="no" <?php echo ($eidInfo['is_sample_rejected'] == 'no') ? "selected='selected'" : ""; ?>> No </option>
-                                                </select>
-                                            </td>
-
-                                            <th>Reason for Rejection</th>
-                                            <td>
-                                                <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
-                                                    <option value="">-- Select --</option>
-                                                    <?php foreach ($rejectionTypeResult as $type) { ?>
-                                                        <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
-                                                            <?php
-                                                            foreach ($rejectionResult as $reject) {
-                                                                if ($type['rejection_type'] == $reject['rejection_type']) { ?>
-                                                                    <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                                <?php }
-                                                        } ?>
-                                                        </optgroup>
-                                                    <?php }  ?>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:25%;"><label for="">Sample Test Date </label></td>
-                                            <td style="width:25%;">
-                                                <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" value="<?php echo $general->humanDateFormat($eidInfo['sample_tested_datetime']) ?>" style="width:100%;" />
-                                            </td>
-
-
-                                            <th>Result</th>
-                                            <td>
-                                                <select class="form-control" name="result" id="result">
-                                                    <option value=''> -- Select -- </option>
-                                                    <?php foreach ($eidResults as $eidResultKey => $eidResultValue) { ?>
-                                                        <option value="<?php echo $eidResultKey; ?>" <?php echo ($eidInfo['result'] == $eidResultKey) ? "selected='selected'" : ""; ?>> <?php echo $eidResultValue; ?> </option>
-                                                    <?php } ?>
-                                                </select>
-                                            </td>
-                                        </tr>
-
-                                    </table>
-                                </div>
+                    </div>
+                </div>
+                <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-update-result-helper.php">
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">B. Reserved for Laboratory Use </h3>
                             </div>
-                        <?php } ?>
+                            <table class="table" style="width:100%">
+                                <tr>
+                                    <th><label for="">Sample Received Date </label></th>
+                                    <td>
+                                        <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                <tr>
+                                    <th>Is Sample Rejected ?</th>
+                                    <td>
+                                        <select class="form-control" name="isSampleRejected" id="isSampleRejected">
+                                            <option value=''> -- Select -- </option>
+                                            <option value="yes"> Yes </option>
+                                            <option value="no" /> No </option>
+                                        </select>
+                                    </td>
 
+                                    <th>Reason for Rejection</th>
+                                    <td>
+                                        <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
+                                            <option value=''> -- Select -- </option>
+                                            <?php echo $rejectionReason; ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:25%;"><label for="">Sample Test Date </label></td>
+                                    <td style="width:25%;">
+                                        <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                    </td>
+
+
+                                    <th>Result</th>
+                                    <td>
+                                        <select class="form-control" name="result" id="result">
+                                            <option value=''> -- Select -- </option>
+                                            <?php foreach ($eidResults as $eidResultKey => $eidResultValue) { ?>
+                                                <option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
+                                            <?php } ?>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
                     </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <?php if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'YY' || $arr['sample_code'] == 'MMYY') { ?>
-                            <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
-                            <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
-                        <?php } ?>
-                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
-                        <input type="hidden" name="formId" id="formId" value="7" />
-                        <input type="hidden" name="eidSampleId" id="eidSampleId"  value="<?php echo $eidInfo['eid_id']; ?>" />
-                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        
-                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />                        
-                        <input type="hidden" name="provinceCode" id="provinceCode" />
-                        <input type="hidden" name="provinceId" id="provinceId" />
-                        <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
-                    </div>
-                    <!-- /.box-footer -->
+                    <input type="hidden" name="formId" id="formId" value="5" />
+                    <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo $eidInfo['eid_id']; ?>" />
+                    <input type="hidden" name="sampleCodeCol" id="sampleCodeCol" value="<?php echo $eidInfo['sample_code']; ?>" />
+                    <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+                    <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />
+                    <input type="hidden" name="provinceId" id="provinceId" />
+                    <input type="hidden" name="provinceCode" id="provinceCode" />
+                    <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
+
+                    <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
                 </form>
+
+
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <?php if (isset($arr['eid_sample_code'])) { ?>
+                        <input type="hidden" name="sampleCodeFormat" id="sampleCodeFormat" value="<?php echo $sFormat; ?>" />
+                        <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
+                    <?php } ?>
+
+                </div>
+                <!-- /.box-footer -->
+
                 <!-- /.row -->
             </div>
         </div>
@@ -465,6 +491,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     machineName = true;
 
     function getfacilityDetails(obj) {
+
         $.blockUI();
         var cName = $("#facilityId").val();
         var pName = $("#province").val();
@@ -473,18 +500,19 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         }
         if ($.trim(pName) != '') {
             //if (provinceName) {
-                $.post("/includes/getFacilityForClinic.php", {
-                        pName: pName
-                    },
-                    function(data) {
-                        if (data != "") {
-                            details = data.split("###");
-                            $("#facilityId").html(details[0]);
-                            $("#district").html(details[1]);
-                            $("#clinicianName").val(details[2]);
-                        }
-                    });
+            $.post("/includes/getFacilityForClinic.php", {
+                    pName: pName
+                },
+                function(data) {
+                    if (data != "") {
+                        details = data.split("###");
+                        $("#facilityId").html(details[0]);
+                        $("#district").html(details[1]);
+                        //$("#clinicianName").val(details[2]);
+                    }
+                });
             //}
+            sampleCodeGeneration();
         } else if (pName == '') {
             provinceName = true;
             facilityName = true;
@@ -494,6 +522,28 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             $("#district").html("<option value=''> -- Select -- </option>");
         }
         $.unblockUI();
+    }
+
+    function sampleCodeGeneration() {
+        var pName = $("#province").val();
+        var sDate = $("#sampleCollectionDate").val();
+        if (pName != '' && sDate != '') {
+            $.post("/eid/requests/generateSampleCode.php", {
+                    sDate: sDate,
+                    pName: pName,
+                    autoTyp: 'auto2',
+                    provinceCode: $("#province").find(":selected").attr("data-code"),
+                    'sampleFrom': 'png'
+                },
+                function(data) {
+                    var sCodeKey = JSON.parse(data);
+                    $("#sampleCode").val(sCodeKey.sampleCode);
+                    $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
+                    $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
+                    $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
+                    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
+                });
+        }
     }
 
     function getfacilityDistrictwise(obj) {
@@ -512,7 +562,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                     }
                 });
         } else {
-            $("#facilityId").html("<option value=''> -- Select -- </option>");
+            $("#facilityId").html("<option value=''> -- Sélectionner -- </option>");
         }
         $.unblockUI();
     }
@@ -546,6 +596,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
         $.unblockUI();
     }
 
+
     function validateNow() {
         $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
         $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
@@ -558,18 +609,17 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
     }
 
     function updateMotherViralLoad() {
-        var motherVl = $("#motherViralLoadCopiesPerMl").val();
+        //var motherVl = $("#motherViralLoadCopiesPerMl").val();
         var motherVlText = $("#motherViralLoadText").val();
         if (motherVlText != '') {
             $("#motherViralLoadCopiesPerMl").val('');
         }
     }
 
-
-
     $(document).ready(function() {
 
 
+        $('.disabledForm input, .disabledForm select , .disabledForm textarea ').attr('disabled', true);
         $('#facilityId').select2({
             placeholder: "Select Clinic/Health Center"
         });
@@ -580,14 +630,6 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             placeholder: "Province"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-        <?php if (isset($eidInfo['mother_treatment']) && in_array('Other', $eidInfo['mother_treatment'])) { ?>
-            $('#motherTreatmentOther').prop('disabled', false);
-        <?php } ?>
-
-        <?php if (isset($eidInfo['mother_vl_result']) && !empty($eidInfo['mother_vl_result'])) { ?>
-            updateMotherViralLoad();
-        <?php } ?>
-
         $("#motherViralLoadCopiesPerMl").on("change keyup paste", function() {
             var motherVl = $("#motherViralLoadCopiesPerMl").val();
             //var motherVlText = $("#motherViralLoadText").val();
@@ -595,6 +637,26 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                 $("#motherViralLoadText").val('');
             }
         });
+
+
+
+        $('#sampleCollectionDate, #sampleReceivedDate').mask('99-aaa-9999 99:99');
+
+        $('#sampleCollectionDate, #sampleReceivedDate').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
 
     });
 </script>

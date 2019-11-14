@@ -569,7 +569,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
           <!-- /.box-body -->
           <div class="box-footer">
             <input type="hidden" name="formId" id="formId" value="3" />
-            <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>" />
+            <input type="hidden" name="eidSampleId" id="eidSampleId"  value="<?php echo $eidInfo['eid_id']; ?>" />
             <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
 
             <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />

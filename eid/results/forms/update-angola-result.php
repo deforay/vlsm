@@ -309,7 +309,7 @@ foreach ($fResult as $fDetails) {
 
                             </div>
                         </div>
-                        <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-edit-request-helper.php">
+                        <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-update-result-helper.php">                
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="box-header with-border">
