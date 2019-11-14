@@ -73,16 +73,26 @@ if ($arr['eid_sample_code'] == 'auto' || $arr['eid_sample_code'] == 'auto2' || $
     $sampleClass = '';
     $maxLength = '';
     if ($arr['eid_max_length'] != '' && $arr['eid_sample_code'] == 'alphanumeric') {
-         $maxLength = $arr['eid_max_length'];
-         $maxLength = "maxlength=" . $maxLength;
+        $maxLength = $arr['eid_max_length'];
+        $maxLength = "maxlength=" . $maxLength;
     }
 } else {
     $sampleClass = 'checkNum';
     $maxLength = '';
     if ($arr['eid_max_length'] != '') {
-         $maxLength = $arr['eid_max_length'];
-         $maxLength = "maxlength=" . $maxLength;
+        $maxLength = $arr['eid_max_length'];
+        $maxLength = "maxlength=" . $maxLength;
     }
+}
+
+
+if(isset($eidInfo['sample_collection_date']) && trim($eidInfo['sample_collection_date'])!='' && $eidInfo['sample_collection_date']!='0000-00-00 00:00:00'){
+    $sampleCollectionDate = $eidInfo['sample_collection_date'];
+    $expStr=explode(" ",$eidInfo['sample_collection_date']);
+    $eidInfo['sample_collection_date']=$general->humanDateFormat($expStr[0])." ".$expStr[1];
+}else{
+    $sampleCollectionDate = '';
+    $eidInfo['sample_collection_date']='';
 }
 
 
@@ -146,9 +156,9 @@ require_once($fileArray[$arr['vl_form']]);
             dateFormat: 'dd-M-yy',
             minDate: "-48m",
             maxDate: "Today",
-            onSelect: function(dateText, inst){
-                $("#sampleCollectionDate").datepicker("option","minDate",$("#childDob").datepicker("getDate"));
-            }            
+            onSelect: function(dateText, inst) {
+                $("#sampleCollectionDate").datepicker("option", "minDate", $("#childDob").datepicker("getDate"));
+            }
         }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
@@ -174,10 +184,10 @@ require_once($fileArray[$arr['vl_form']]);
     });
 
 
-    function calculateAgeInMonths(){
-        var dateOfBirth  = moment($("#childDob").val(), "DD-MMM-YYYY");
+    function calculateAgeInMonths() {
+        var dateOfBirth = moment($("#childDob").val(), "DD-MMM-YYYY");
         $("#childAge").val(moment().diff(dateOfBirth, 'months'));
-    }    
+    }
 </script>
 
 

@@ -141,20 +141,20 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                 </div>
                 <table class="table" style="width:100%">
                   <tr>
-                    
-                      <?php if ($sarr['user_type'] == 'remoteuser') { ?>
-                        <td><label for="sampleCode">Échantillon ID  <span class="mandatory">*</span> </label></td>
-                        <td>
-                          <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?></span>
-                          <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?>" />
-                        </td>
-                      <?php } else { ?>
-                        <td><label for="sampleCode">Échantillon ID <span class="mandatory">*</span></label></td>
-                        <td>
+
+                    <?php if ($sarr['user_type'] == 'remoteuser') { ?>
+                      <td><label for="sampleCode">Échantillon ID <span class="mandatory">*</span> </label></td>
+                      <td>
+                        <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?></span>
+                        <input type="hidden" class="<?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" value="<?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?>" />
+                      </td>
+                    <?php } else { ?>
+                      <td><label for="sampleCode">Échantillon ID <span class="mandatory">*</span></label></td>
+                      <td>
                         <input type="text" class="form-control isRequired <?php echo $sampleClass; ?>" id="sampleCode" name="sampleCode" <?php echo $maxLength; ?> placeholder="Enter Sample ID" title="Please enter sample id" value="<?php echo ($sCode != '') ? $sCode : $eidInfo[$sampleCode]; ?>" style="width:100%;" readonly="readonly" onchange="checkSampleNameValidation('eid_form','<?php echo $sampleCode; ?>',this.id,'<?php echo "eid_id##" . $eidInfo["eid_id"]; ?>','This sample number already exists.Try another number',null)" />
                         <input type="hidden" name="sampleCodeCol" value="<?php echo $eidInfo['sample_code']; ?>" />
                       </td>
-                      <?php } ?>
+                    <?php } ?>
                     </td>
                     <td></td>
                     <td></td>
@@ -212,7 +212,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                         <select name="labId" id="labId" class="form-control isRequired" title="Nom du Laboratoire" style="width:100%;">
                           <option value=""> -- Sélectionner -- </option>
                           <?php foreach ($lResult as $labName) { ?>
-                            <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
+                            <option value="<?php echo $labName['facility_id']; ?>" <?php echo ($eidInfo['lab_id'] == $labName['facility_id']) ? "selected='selected'" : ""; ?>><?php echo ucwords($labName['facility_name']); ?></option>
                           <?php } ?>
                         </select>
                       </td>
@@ -263,7 +263,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                     </th>
                   </tr>
                   <tr>
-                    <th><label for="childId">Code de l’enfant (Patient)  <span class="mandatory">*</span></label></th>
+                    <th><label for="childId">Code de l’enfant (Patient) <span class="mandatory">*</span></label></th>
                     <td>
                       <input type="text" class="form-control isRequired" id="childId" name="childId" placeholder="Code (Patient)" title="Please enter code du enfant" style="width:100%;" value="<?php echo $eidInfo['child_id']; ?>" onchange="" />
                     </td>
@@ -273,7 +273,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                     </td>
                     <th><label for="childDob">Date de naissance </label></th>
                     <td>
-                      <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>"   onchange="calculateAgeInMonths();"/>
+                      <input type="text" class="form-control date" id="childDob" name="childDob" placeholder="Date de naissance" title="Please enter Date de naissance" style="width:100%;" value="<?php echo $general->humanDateFormat($eidInfo['child_dob']) ?>" onchange="calculateAgeInMonths();" />
                     </td>
                     <th><label for="childGender">Gender </label></th>
                     <td>
@@ -531,11 +531,11 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                           <?php foreach ($rejectionTypeResult as $type) { ?>
                             <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
                               <?php
-                              foreach ($rejectionResult as $reject) {
-                                if ($type['rejection_type'] == $reject['rejection_type']) { ?>
+                                  foreach ($rejectionResult as $reject) {
+                                    if ($type['rejection_type'] == $reject['rejection_type']) { ?>
                                   <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                <?php }
-                              } ?>
+                              <?php }
+                                  } ?>
                             </optgroup>
                           <?php }  ?>
                         </select>
@@ -570,6 +570,12 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
           <div class="box-footer">
             <input type="hidden" name="formId" id="formId" value="3" />
             <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>" />
+            <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+
+            <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+            <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />
+            <input type="hidden" name="provinceCode" id="provinceCode" />
+            <input type="hidden" name="provinceId" id="provinceId" />
 
             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
             <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
@@ -602,17 +608,17 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
     }
     if ($.trim(pName) != '') {
       //if (provinceName) {
-        $.post("/includes/getFacilityForClinic.php", {
-            pName: pName
-          },
-          function(data) {
-            if (data != "") {
-              details = data.split("###");
-              $("#facilityId").html(details[0]);
-              $("#district").html(details[1]);
-              //$("#clinicianName").val(details[2]);
-            }
-          });
+      $.post("/includes/getFacilityForClinic.php", {
+          pName: pName
+        },
+        function(data) {
+          if (data != "") {
+            details = data.split("###");
+            $("#facilityId").html(details[0]);
+            $("#district").html(details[1]);
+            //$("#clinicianName").val(details[2]);
+          }
+        });
       //}
     } else if (pName == '') {
       provinceName = true;
@@ -676,6 +682,8 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
   }
 
   function validateNow() {
+    $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
     flag = deforayValidator.init({
       formId: 'editEIDRequestForm'
     });
@@ -706,20 +714,20 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
     $('#province').select2({
       placeholder: "Province"
     });
-    getfacilityProvinceDetails($("#facilityId").val()); 
+    getfacilityProvinceDetails($("#facilityId").val());
     <?php
     if (isset($eidInfo['mother_treatment']) && in_array('Other', $eidInfo['mother_treatment'])) {
       ?>
-      $('#motherTreatmentOther').prop('disabled', false); 
-      <?php
-    } 
+      $('#motherTreatmentOther').prop('disabled', false);
+    <?php
+    }
     ?>
 
     <?php
     if (isset($eidInfo['mother_vl_result']) && !empty($eidInfo['mother_vl_result'])) {
-    ?>
-      updateMotherViralLoad(); 
-      <?php
+      ?>
+      updateMotherViralLoad();
+    <?php
     } ?>
 
     $("#motherViralLoadCopiesPerMl").on("change keyup paste", function() {

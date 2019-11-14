@@ -20,6 +20,8 @@ $eidResults = $general->getEidResults();
 
 $rKey = '';
 $pdQuery = "SELECT * from province_details";
+
+
 if ($sarr['user_type'] == 'remoteuser') {
     $sampleCodeKey = 'remote_sample_code_key';
     $sampleCode = 'remote_sample_code';
@@ -39,7 +41,7 @@ $pdResult = $db->query($pdQuery);
 $province = "";
 $province .= "<option value=''> -- Select -- </option>";
 foreach ($pdResult as $provinceName) {
-    $province .= "<option value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
+    $province .= "<option data-code='" . $provinceName['province_code'] . "' data-province-id='" . $provinceName['province_id'] . "' data-name='" . $provinceName['province_name'] . "' value='" . $provinceName['province_name'] . "##" . $provinceName['province_code'] . "'>" . ucwords($provinceName['province_name']) . "</option>";
 }
 //$facility = "";
 $facility = "<option value=''> -- Select -- </option>";
@@ -53,6 +55,19 @@ foreach ($fResult as $fDetails) {
 
 $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(",", $eidInfo['mother_treatment']) : array();
 
+//suggest sample id when lab user add request sample
+$sampleSuggestion = '';
+$sampleSuggestionDisplay = 'display:none;';
+$sCode = $_GET['c'];
+if ($sarr['user_type'] == 'vluser' && $sCode != '') {
+     $vlObj = new Model_Eid($db);
+     $sampleCollectionDate = explode(" ",$sampleCollectionDate);
+     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+     $sampleSuggestionJson = $vlObj->generateEIDSampleCode($stateResult[0]['province_code'],$sampleCollectionDate,'png');
+     $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
+     $sampleSuggestion = $sampleCodeKeys['sampleCode'];
+     $sampleSuggestionDisplay = 'display:block;';
+}    
 
 ?>
 
@@ -423,6 +438,11 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                         <input type="hidden" name="formId" id="formId" value="7" />
                         <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>"/>
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+                        
+                        <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
+                        <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />                        
+                        <input type="hidden" name="provinceCode" id="provinceCode" />
+                        <input type="hidden" name="provinceId" id="provinceId" />
                         <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
@@ -527,6 +547,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
     }
 
     function validateNow() {
+        $("#provinceCode").val($("#province").find(":selected").attr("data-code"));
+        $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
         flag = deforayValidator.init({
             formId: 'editEIDRequestForm'
         });

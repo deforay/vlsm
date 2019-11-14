@@ -4,7 +4,7 @@ $rKey = '';
 $sampleCodeKey = 'sample_code_key';
 $sampleCode = 'sample_code';
 $prefix = $arr['sample_code_prefix'];
-$pdQuery = "SELECT * from province_details";
+$pdQuery = "SELECT * FROM province_details";
 if ($sarr['user_type'] == 'remoteuser') {
   $rKey = 'R';
   $sampleCodeKey = 'remote_sample_code_key';
@@ -13,7 +13,7 @@ if ($sarr['user_type'] == 'remoteuser') {
   $chkUserFcMapQry = "Select user_id from vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
   $chkUserFcMapResult = $db->query($chkUserFcMapQry);
   if ($chkUserFcMapResult) {
-    $pdQuery = "SELECT * from province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
+    $pdQuery = "SELECT * FROM province_details as pd JOIN facility_details as fd ON fd.facility_state=pd.province_name JOIN vl_user_facility_map as vlfm ON vlfm.facility_id=fd.facility_id where user_id='" . $_SESSION['userId'] . "'";
   }
 }
 $bQuery = "SELECT * FROM batch_details";
@@ -41,7 +41,7 @@ foreach ($fResult as $fDetails) {
     <h1><i class="fa fa-edit"></i> VIRAL LOAD LABORATORY REQUEST FORM </h1>
     <ol class="breadcrumb">
       <li><a href="../dashboard/index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li class="active">Add Vl Request</li>
+      <li class="active">Add VL Request</li>
     </ol>
   </section>
 

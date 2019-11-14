@@ -5,7 +5,7 @@ session_start();
 include_once '../../startup.php';
 include_once APPLICATION_PATH . '/includes/MysqliDb.php';
 include_once(APPLICATION_PATH . '/models/General.php');
-include_once(APPLICATION_PATH.'/models/Eid.php');
+include_once(APPLICATION_PATH . '/models/Eid.php');
 $general = new General($db);
 
 // echo "<pre>";
@@ -78,7 +78,7 @@ try {
     $_POST['motherTreatmentInitiationDate'] = $general->dateFormat($motherTreatmentInitiationDate[0]) . " " . $motherTreatmentInitiationDate[1];
   } else {
     $_POST['motherTreatmentInitiationDate'] = NULL;
-  }    
+  }
 
 
   if ($sarr['user_type'] == 'remoteuser') {
@@ -99,8 +99,39 @@ try {
   }
 
 
+
+  if ($sarr['user_type'] == 'remoteuser') {
+    $status = 9;
+  }
+
+  if (isset($_POST['oldStatus']) && !empty($_POST['oldStatus'])) {
+    $status = $_POST['oldStatus'];
+  }
+
+  if ($sarr['user_type'] == 'vluser' && $_POST['oldStatus'] == 9) {
+    $status = 6;
+  }
+
+  if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
+    $_POST['result'] = null;
+    $status = 4;
+  }
+
+
+  if ($sarr['user_type'] == 'remoteuser' && $_POST['oldStatus'] == 9) {
+    $_POST['status'] = 9;
+  } else if ($sarr['user_type'] == 'vluser' && $_POST['oldStatus'] == 9) {
+    $_POST['status'] = 6;
+  }
+  if ($_POST['status'] == '') {
+    $_POST['status']  = $_POST['oldStatus'];
+  }
+
+
   $eidData = array(
     'facility_id' => isset($_POST['facilityId']) ? $_POST['facilityId'] : null,
+    'province_id' => isset($_POST['provinceId']) ? $_POST['provinceId'] : null,
+    'lab_id' => isset($_POST['labId']) ? $_POST['labId'] : null,
     'implementing_partner' => isset($_POST['implementingPartner']) ? $_POST['implementingPartner'] : null,
     'funding_source' => isset($_POST['fundingSource']) ? $_POST['fundingSource'] : null,
     'mother_id' => isset($_POST['mothersId']) ? $_POST['mothersId'] : null,
@@ -129,7 +160,6 @@ try {
     'sample_requestor_phone' => isset($_POST['sampleRequestorPhone']) ? $_POST['sampleRequestorPhone'] : null,
     'has_infant_stopped_breastfeeding' => isset($_POST['hasInfantStoppedBreastfeeding']) ? $_POST['hasInfantStoppedBreastfeeding'] : null,
     'age_breastfeeding_stopped_in_months' => isset($_POST['ageBreastfeedingStopped']) ? $_POST['ageBreastfeedingStopped'] : null,
-    //'facility_id'=>$_POST['isInfantStillBeingBreastfed'],
     'choice_of_feeding' => isset($_POST['choiceOfFeeding']) ? $_POST['choiceOfFeeding'] : null,
     'is_cotrimoxazole_being_administered_to_the_infant' => isset($_POST['isCotrimoxazoleBeingAdministered']) ? $_POST['isCotrimoxazoleBeingAdministered'] : null,
     'specimen_type' => isset($_POST['specimenType']) ? $_POST['specimenType'] : null,
@@ -144,7 +174,7 @@ try {
     'sample_tested_datetime' => isset($_POST['sampleTestedDateTime']) ? $_POST['sampleTestedDateTime'] : null,
     'is_sample_rejected' => isset($_POST['isSampleRejected']) ? $_POST['isSampleRejected'] : null,
     'result' => isset($_POST['result']) ? $_POST['result'] : null,
-    'result_status' => 6,
+    'result_status' => $status,
     'data_sync' => 0,
     'reason_for_sample_rejection' => isset($_POST['sampleRejectionReason']) ? $_POST['sampleRejectionReason'] : null,
     'request_created_by' => $_SESSION['userId'],
@@ -162,25 +192,26 @@ try {
       $eidData['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
     } else {
       $eidModel = new Model_Eid($db);
-      $sampleCodeKeysJson = $eidModel->generateEIDSampleCode($_POST['province'], $_POST['sampleCollectionDate']);
+      
+      
+      
+      $sampleCodeKeysJson = $eidModel->generateEIDSampleCode($_POST['provinceCode'], $_POST['sampleCollectionDate']);
       $sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
       $eidData['sample_code'] = $sampleCodeKeys['sampleCode'];
+      $eidData['sample_code_key'] = $sampleCodeKeys['sampleCodeKey'];
+      $eidData['sample_code_format'] = $sampleCodeKeys['sampleCodeFormat'];
     }
   }
 
 
-  if (isset($_POST['isSampleRejected']) && $_POST['isSampleRejected'] == 'yes') {
-    $eidData['result'] = null;
-    $eidData['result_status'] = 4;
-  }
 
-  // echo "<pre>";
-  // var_dump($eidData);die;
 
   if (isset($_POST['eidSampleId']) && $_POST['eidSampleId'] != '') {
     $db = $db->where('eid_id', $_POST['eidSampleId']);
     $id = $db->update($tableName, $eidData);
   }
+
+
 
   if ($id > 0) {
     $_SESSION['alertMsg'] = "EID request updated successfully";

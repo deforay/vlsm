@@ -42,7 +42,8 @@ if (isset($_POST['cName']) && !empty($_POST['cName'])) {
       if($facilityInfo[0]['facility_state'] == $pdRow['province_name'] ){
         $selected = "selected='selected'";
       }  
-      $state .= "<option value='" . $pdRow['province_name'] . "##" . (isset($pdRow['province_code']) && !empty($pdRow['province_code']) ? : $pdRow['province_name'] ) . "' $selected>" . ($pdRow['province_name']) . "</option>";
+      $state .= "<option data-code='" . $pdRow['province_code'] . "' data-province-id='" . $pdRow['province_id'] . "' data-name='" . $pdRow['province_name'] . "' value='" . $pdRow['province_name'] . "##" . $pdRow['province_code'] . "' $selected>" . ucwords($pdRow['province_name']) . "</option>";
+      
     }
     
     $district = '';
