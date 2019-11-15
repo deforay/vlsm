@@ -405,16 +405,16 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
-                                    <th><label for="">Sample Received Date </label></th>
+                                    <th><label for="">Sample Received Date <span class="mandatory">*</span>  </label></th>
                                     <td>
-                                        <input type="text" class="form-control dateTime" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                        <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                     </td>
                                     <td></td>
                                     <td></td>
                                 <tr>
-                                    <th>Is Sample Rejected ?</th>
+                                    <th>Is Sample Rejected ? <span class="mandatory">*</span> </th>
                                     <td>
-                                        <select class="form-control" name="isSampleRejected" id="isSampleRejected">
+                                        <select class="form-control isRequired" name="isSampleRejected" id="isSampleRejected"  onchange="sampleRejection();">
                                             <option value=''> -- Select -- </option>
                                             <option value="yes"> Yes </option>
                                             <option value="no" /> No </option>
@@ -423,7 +423,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
 
                                     <th>Reason for Rejection</th>
                                     <td>
-                                        <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
+                                        <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Please select the reason for Sample Rejection">
                                             <option value=''> -- Select -- </option>
                                             <?php echo $rejectionReason; ?>
                                         </select>
@@ -432,13 +432,13 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                 <tr>
                                     <td style="width:25%;"><label for="">Sample Test Date </label></td>
                                     <td style="width:25%;">
-                                        <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Test effectué le" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
+                                        <input type="text" class="form-control dateTime" id="sampleTestedDateTime" name="sampleTestedDateTime" placeholder="e.g 09-Jan-1992 05:30" title="Please enter the Sample Test Date" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                     </td>
 
 
                                     <th>Result</th>
                                     <td>
-                                        <select class="form-control" name="result" id="result">
+                                        <select class="form-control" name="result" id="result" title="Please choose the EID result">
                                             <option value=''> -- Select -- </option>
                                             <?php foreach ($eidResults as $eidResultKey => $eidResultValue) { ?>
                                                 <option value="<?php echo $eidResultKey; ?>"> <?php echo $eidResultValue; ?> </option>
@@ -459,7 +459,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                     <input type="hidden" name="provinceCode" id="provinceCode" />
                     <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
 
-                    <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
+                    <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $eidInfo['sample_code'] ?>" />
+                    <a href="/eid/requests/eid-manual-results.php" class="btn btn-default"> Cancel</a>
                 </form>
 
 
@@ -490,82 +491,6 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
     facilityName = true;
     machineName = true;
 
-    function getfacilityDetails(obj) {
-
-        $.blockUI();
-        var cName = $("#facilityId").val();
-        var pName = $("#province").val();
-        if (pName != '' && provinceName && facilityName) {
-            facilityName = false;
-        }
-        if ($.trim(pName) != '') {
-            //if (provinceName) {
-            $.post("/includes/getFacilityForClinic.php", {
-                    pName: pName
-                },
-                function(data) {
-                    if (data != "") {
-                        details = data.split("###");
-                        $("#facilityId").html(details[0]);
-                        $("#district").html(details[1]);
-                        //$("#clinicianName").val(details[2]);
-                    }
-                });
-            //}
-            sampleCodeGeneration();
-        } else if (pName == '') {
-            provinceName = true;
-            facilityName = true;
-            $("#province").html("<?php echo $province; ?>");
-            $("#facilityId").html("<?php echo $facility; ?>");
-            $("#facilityId").select2("val", "");
-            $("#district").html("<option value=''> -- Select -- </option>");
-        }
-        $.unblockUI();
-    }
-
-    function sampleCodeGeneration() {
-        var pName = $("#province").val();
-        var sDate = $("#sampleCollectionDate").val();
-        if (pName != '' && sDate != '') {
-            $.post("/eid/requests/generateSampleCode.php", {
-                    sDate: sDate,
-                    pName: pName,
-                    autoTyp: 'auto2',
-                    provinceCode: $("#province").find(":selected").attr("data-code"),
-                    'sampleFrom': 'png'
-                },
-                function(data) {
-                    var sCodeKey = JSON.parse(data);
-                    $("#sampleCode").val(sCodeKey.sampleCode);
-                    $("#sampleCodeInText").html(sCodeKey.sampleCodeInText);
-                    $("#sampleCodeFormat").val(sCodeKey.sampleCodeFormat);
-                    $("#sampleCodeKey").val(sCodeKey.sampleCodeKey);
-                    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
-                });
-        }
-    }
-
-    function getfacilityDistrictwise(obj) {
-        $.blockUI();
-        var dName = $("#district").val();
-        var cName = $("#facilityId").val();
-        if (dName != '') {
-            $.post("/includes/getFacilityForClinic.php", {
-                    dName: dName,
-                    cliName: cName
-                },
-                function(data) {
-                    if (data != "") {
-                        details = data.split("###");
-                        $("#facilityId").html(details[0]);
-                    }
-                });
-        } else {
-            $("#facilityId").html("<option value=''> -- Sélectionner -- </option>");
-        }
-        $.unblockUI();
-    }
 
     function getfacilityProvinceDetails(obj) {
         $.blockUI();
@@ -608,13 +533,24 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
         }
     }
 
-    function updateMotherViralLoad() {
-        //var motherVl = $("#motherViralLoadCopiesPerMl").val();
-        var motherVlText = $("#motherViralLoadText").val();
-        if (motherVlText != '') {
-            $("#motherViralLoadCopiesPerMl").val('');
-        }
+    
+  function sampleRejection(){
+    if($("#isSampleRejected").val() == 'yes'){
+      $("#sampleRejectionReason").addClass('isRequired');
+      $("#sampleRejectionReason").prop('disabled', false);
+      $("#result").removeClass('isRequired');
+      $("#sampleTestedDateTime").removeClass('isRequired');
+      $("#result").prop('disabled', true);
+      $("#sampleTestedDateTime").prop('disabled', true);
+    }else{
+      $("#sampleRejectionReason").removeClass('isRequired');
+      $("#sampleRejectionReason").prop('disabled', true);
+      $("#result").addClass('isRequired');
+      $("#sampleTestedDateTime").addClass('isRequired');
+      $("#result").prop('disabled', false);      
+      $("#sampleTestedDateTime").prop('disabled', false);      
     }
+  }
 
     $(document).ready(function() {
 
