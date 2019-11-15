@@ -330,9 +330,7 @@ foreach ($rResult as $aRow) {
           $print = '<a href="eid-update-result.php?id=' . base64_encode($aRow['eid_id']) . '" class="btn btn-success btn-xs" style="margin-right: 2px;" title="Result"><i class="fa fa-pencil-square-o"></i> Enter Result</a>';
      }
 
-     $patientFname = $general->crypto('decrypt', $aRow['patient_first_name'], $aRow['patient_art_no']);
-     $patientMname = $general->crypto('decrypt', $aRow['patient_middle_name'], $aRow['patient_art_no']);
-     $patientLname = $general->crypto('decrypt', $aRow['patient_last_name'], $aRow['patient_art_no']);
+
 
      $row[] = $aRow['sample_code'];
      if ($sarr['user_type'] != 'standalone') {

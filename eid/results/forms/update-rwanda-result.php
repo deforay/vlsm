@@ -92,7 +92,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                         <td><label for="sampleCode">Sample ID </label></td>
                                         <td>
                                             <span id="sampleCodeInText" style="width:100%;border-bottom:1px solid #333;"><?php echo $eidInfo['sample_code'] ?></span>
-                                            <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $eidInfo['sample_code'] ?>" />
+                                            
                                         </td>
                                     <?php } else { ?>
                                         <td><label for="sampleCode">Sample ID </label><span class="mandatory">*</span></td>
@@ -420,7 +420,8 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                     <input type="hidden" name="formId" id="formId" value="7" />
                     <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>"/>
                     <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                    <a href="/eid/requests/eid-add-request.php" class="btn btn-default"> Cancel</a>
+                    <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $eidInfo['sample_code'] ?>" />
+                    <a href="/eid/requests/eid-manual-results.php" class="btn btn-default"> Cancel</a>
                 </div>
                 <!-- /.box-footer -->
                 </form>

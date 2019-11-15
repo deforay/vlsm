@@ -386,7 +386,8 @@ foreach ($fResult as $fDetails) {
                         <input type="hidden" name="formId" id="formId" value="8" />
                         <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo ($eidInfo['eid_id']); ?>"/>
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
-                        <a href="/eid/requests/eid-requests.php" class="btn btn-default"> Cancel</a>
+                        <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $eidInfo['sample_code'] ?>" />
+                        <a href="/eid/requests/eid-manual-results.php" class="btn btn-default"> Cancel</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>
