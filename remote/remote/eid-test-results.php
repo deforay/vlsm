@@ -66,7 +66,6 @@ if (count($data['result']) > 0) {
         unset($lab['request_created_by']);
         unset($lab['last_modified_by']);
         unset($lab['request_created_datetime']);
-        unset($lab['sample_package_id']);
 
         if ($lab['result_status'] != 7 && $lab['result_status'] != 4) {
             unset($lab['result']);
