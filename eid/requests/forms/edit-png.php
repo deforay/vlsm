@@ -423,7 +423,16 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                             <td>
                                                 <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason">
                                                     <option value=''> -- Select -- </option>
-                                                    <?php echo $rejectionReason; ?>
+                                                    <?php foreach ($rejectionTypeResult as $type) { ?>
+                                                        <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
+                                                            <?php
+                                                                    foreach ($rejectionResult as $reject) {
+                                                                        if ($type['rejection_type'] == $reject['rejection_type']) { ?>
+                                                                    <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
+                                                            <?php }
+                                                                    } ?>
+                                                        </optgroup>
+                                                    <?php } ?>
                                                 </select>
                                             </td>
                                         </tr>
@@ -459,7 +468,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                         <?php } ?>
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                         <input type="hidden" name="formId" id="formId" value="5" />
-                        <input type="hidden" name="eidSampleId" id="eidSampleId"  value="<?php echo $eidInfo['eid_id']; ?>" />
+                        <input type="hidden" name="eidSampleId" id="eidSampleId" value="<?php echo $eidInfo['eid_id']; ?>" />
                         <input type="hidden" name="sampleCodeCol" id="sampleCodeCol" value="<?php echo $eidInfo['sample_code']; ?>" />
                         <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
                         <input type="hidden" name="oldStatus" id="oldStatus" value="<?php echo $eidInfo['result_status']; ?>" />
