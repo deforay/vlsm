@@ -405,7 +405,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                             </div>
                             <table class="table" style="width:100%">
                                 <tr>
-                                    <th><label for="">Sample Received Date <span class="mandatory">*</span>  </label></th>
+                                    <th><label for="">Sample Received Date <span class="mandatory">*</span> </label></th>
                                     <td>
                                         <input type="text" class="form-control dateTime isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter date de réception de léchantillon" <?php echo $labFieldDisabled; ?> onchange="" style="width:100%;" />
                                     </td>
@@ -414,7 +414,7 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                 <tr>
                                     <th>Is Sample Rejected ? <span class="mandatory">*</span> </th>
                                     <td>
-                                        <select class="form-control isRequired" name="isSampleRejected" id="isSampleRejected"  onchange="sampleRejection();">
+                                        <select class="form-control isRequired" name="isSampleRejected" id="isSampleRejected" onchange="sampleRejection();">
                                             <option value=''> -- Select -- </option>
                                             <option value="yes"> Yes </option>
                                             <option value="no" /> No </option>
@@ -425,7 +425,16 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
                                     <td>
                                         <select class="form-control" name="sampleRejectionReason" id="sampleRejectionReason" title="Please select the reason for Sample Rejection">
                                             <option value=''> -- Select -- </option>
-                                            <?php echo $rejectionReason; ?>
+                                            <?php foreach ($rejectionTypeResult as $type) { ?>
+                                                <optgroup label="<?php echo ucwords($type['rejection_type']); ?>">
+                                                    <?php
+                                                        foreach ($rejectionResult as $reject) {
+                                                            if ($type['rejection_type'] == $reject['rejection_type']) { ?>
+                                                            <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($eidInfo['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
+                                                    <?php }
+                                                        } ?>
+                                                </optgroup>
+                                            <?php } ?>
                                         </select>
                                     </td>
                                 </tr>
@@ -533,24 +542,24 @@ $eidInfo['mother_treatment'] = isset($eidInfo['mother_treatment']) ? explode(","
         }
     }
 
-    
-  function sampleRejection(){
-    if($("#isSampleRejected").val() == 'yes'){
-      $("#sampleRejectionReason").addClass('isRequired');
-      $("#sampleRejectionReason").prop('disabled', false);
-      $("#result").removeClass('isRequired');
-      $("#sampleTestedDateTime").removeClass('isRequired');
-      $("#result").prop('disabled', true);
-      $("#sampleTestedDateTime").prop('disabled', true);
-    }else{
-      $("#sampleRejectionReason").removeClass('isRequired');
-      $("#sampleRejectionReason").prop('disabled', true);
-      $("#result").addClass('isRequired');
-      $("#sampleTestedDateTime").addClass('isRequired');
-      $("#result").prop('disabled', false);      
-      $("#sampleTestedDateTime").prop('disabled', false);      
+
+    function sampleRejection() {
+        if ($("#isSampleRejected").val() == 'yes') {
+            $("#sampleRejectionReason").addClass('isRequired');
+            $("#sampleRejectionReason").prop('disabled', false);
+            $("#result").removeClass('isRequired');
+            $("#sampleTestedDateTime").removeClass('isRequired');
+            $("#result").prop('disabled', true);
+            $("#sampleTestedDateTime").prop('disabled', true);
+        } else {
+            $("#sampleRejectionReason").removeClass('isRequired');
+            $("#sampleRejectionReason").prop('disabled', true);
+            $("#result").addClass('isRequired');
+            $("#sampleTestedDateTime").addClass('isRequired');
+            $("#result").prop('disabled', false);
+            $("#sampleTestedDateTime").prop('disabled', false);
+        }
     }
-  }
 
     $(document).ready(function() {
 
