@@ -237,7 +237,7 @@ $disable = "disabled = 'disabled'";
 </style>
 <?php
 if ($arr['vl_form'] == 1) {
-  require_once('forms/update-ssudan-result.php');
+  require_once('forms/update-southsudan-result.php');
 } else if ($arr['vl_form'] == 2) {
   require_once('forms/update-zimbabwe-result.php');
 } else if ($arr['vl_form'] == 3) {
