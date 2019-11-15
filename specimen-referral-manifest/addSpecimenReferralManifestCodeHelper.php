@@ -20,7 +20,9 @@ try {
         $lastId = $db->getInsertId();
         if ($lastId > 0) {
             for ($j = 0; $j < count($_POST['sampleCode']); $j++) {
-                $value = array('sample_package_id' => $lastId);
+                $value = array('sample_package_id' => $lastId,
+                                'sample_package_code' => $_POST['packageCode'],
+                                'data_sync' => 0);
                 if($_POST['module'] == 'vl'){
                     $db = $db->where('vl_sample_id', $_POST['sampleCode'][$j]);
                     $db->update('vl_request_form', $value);

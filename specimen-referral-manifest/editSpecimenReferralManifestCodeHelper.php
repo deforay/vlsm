@@ -13,8 +13,8 @@ try {
         $db->update($packageTable, array('package_status' => $_POST['packageStatus']));
 
         if ($lastId > 0) {
-            $value = array('sample_package_id' => NULL);
-
+            $value = array('sample_package_id'   => null,
+                           'sample_package_code' => null);
 
             if ($_POST['module'] == 'vl') {
                 $db = $db->where('sample_package_id', $lastId);
@@ -24,8 +24,9 @@ try {
                 $db->update('eid_form', $value);
             }
             for ($j = 0; $j < count($_POST['sampleCode']); $j++) {
-                $value = array('sample_package_id' => $lastId);
-
+                $value = array('sample_package_id'   => $lastId,
+                               'sample_package_code' => $_POST['packageCode'],
+                                'data_sync' => 0);
                 if ($_POST['module'] == 'vl') {
                     $db = $db->where('vl_sample_id', $_POST['sampleCode'][$j]);
                     $db->update('vl_request_form', $value);

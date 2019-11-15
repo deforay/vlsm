@@ -1980,3 +1980,18 @@ ALTER TABLE `eid_form` ADD `province_id` INT NULL DEFAULT NULL AFTER `facility_i
 
 
 -- Version 3.17 ---- Amit Nov 14 2019
+
+-- Amit 15 Nov 2019
+
+ALTER TABLE `vl_request_form` ADD `sample_package_code` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_package_id`;
+ALTER TABLE `eid_form` ADD `sample_package_code` VARCHAR(255) NULL DEFAULT NULL AFTER `sample_package_id`;
+
+UPDATE vl_request_form INNER JOIN package_details
+    ON vl_request_form.sample_package_id = package_details.package_id
+SET vl_request_form.sample_package_code = package_details.package_code 
+WHERE vl_request_form.sample_package_code is NULL;
+
+UPDATE eid_form INNER JOIN package_details
+    ON eid_form.sample_package_id = package_details.package_id
+SET eid_form.sample_package_code = package_details.package_code
+WHERE eid_form.sample_package_code is NULL;
