@@ -205,6 +205,9 @@ $formConfigResult = $db->query($formConfigQuery);
   <script src="/assets/js/jquery.fastconfirm.js"></script>
   <!--<script type="text/javascript" src="assets/js/jquery-ui-sliderAccess.js"></script>-->
   <style>
+    .dataTables_empty{
+      text-align: center;
+    }
     .dataTables_wrapper {
       position: relative;
       clear: both;
@@ -397,23 +400,22 @@ $formConfigResult = $db->query($formConfigQuery);
                     <a href="/vl-request/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
                   </li>
                 <?php }
-              if (isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])) { ?>
+                if (isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu batchCodeMenu">
                     <a href="/batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
                   </li>
                 <?php }
-              if (isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])) { ?>
+                if (isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu vlRequestMailMenu">
                     <a href="/mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
                   </li>
                 <?php }
-
-              if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+                if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <li class="allMenu specimenReferralManifestListMenu">
                     <a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> VL Specimen Manifest</a>
                   </li>
                 <?php }
-              if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+                if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
                   <!-- <li class="allMenu sampleListMenu">
                                             <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
                                           </li> -->
@@ -529,6 +531,11 @@ $formConfigResult = $db->query($formConfigQuery);
                 <li class="allMenu addEidRequestMenu">
                   <a href="/eid/requests/eid-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
                 </li>
+                <?php if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu addSamplesFromManifestEidMenu">
+                    <a href="/eid/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+                  </li>
+                <?php }?>
                 <li class="allMenu eidBatchCodeMenu">
                   <a href="/eid/batch/eid-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
                 </li>

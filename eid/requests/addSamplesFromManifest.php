@@ -1,6 +1,6 @@
 <?php
 $title = "View All Requests";
-require_once('../startup.php');
+require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
 $tsQuery = "SELECT * FROM r_sample_status";
@@ -26,7 +26,7 @@ $batResult = $db->rawQuery($batQuery);
 		<h1><i class="fa fa-plus"></i> Add Samples from Manifest</h1>
 		<ol class="breadcrumb">
 			<li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Test Request</li>
+			<li class="active">EID Test Request</li>
 		</ol>
 	</section>
 
@@ -52,7 +52,7 @@ $batResult = $db->rawQuery($batQuery);
                     </table>
 					<!-- /.box-header -->
 					<div class="box-body table-responsive">
-						<table id="vlManifestDataTable" class="table table-bordered table-striped table-vcenter">
+						<table id="eidManifestDataTable" class="table table-bordered table-striped table-vcenter">
 							<thead>
 								<tr>
 									<th>Sample Code</th>
@@ -114,9 +114,9 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 <script type="text/javascript">
 	var oTable = null;
 
-	function loadVlRequestData() {
+	function loadEIDRequestData() {
 		$.blockUI();
-		oTable = $('#vlManifestDataTable').dataTable({
+		oTable = $('#eidManifestDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
 			},
@@ -149,7 +149,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			},
 			"bProcessing": true,
 			"bServerSide": true,
-			"sAjaxSource": "getManifestInGridHelper.php",
+			"sAjaxSource": "/eid/requests/getManifestInGridHelper.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
 				aoData.push({"name": "samplePackageCode","value": $("#samplePackageCode").val()});
 				$.ajax({
@@ -167,8 +167,8 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	function getSampleCode() {
         if($("#samplePackageCode").val() != ""){
             $.blockUI();
-            loadVlRequestData();
-            $.post("getRemoteManifestHelper.php", {samplePackageCode: $("#samplePackageCode").val()},
+            loadEIDRequestData();
+            $.post("/eid/requests/getRemoteManifestHelper.php", {samplePackageCode: $("#samplePackageCode").val()},
             function(data) {
                 $.unblockUI();
                 if(data != ""){
@@ -183,7 +183,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	
     function activeSampleCode() {
 		$.blockUI();
-		$.post("addSamplesByPackageHelper.php", {sampleId: $("#sampleId").val()},
+		$.post("/eid/requests/addSamplesByPackageHelper.php", {sampleId: $("#sampleId").val()},
         function(data) {
             if(data > 0){
                 alert('Sample was updated successfully!');
