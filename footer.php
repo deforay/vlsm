@@ -266,6 +266,10 @@
       $(".request").addClass('active');
       $(".allMenu").removeClass('active');
       $(".addVlRequestMenu").addClass('active');
+    } else if (splitsUrl == 'addSamplesFromManifest.php') {
+      $(".request").addClass('active');
+      $(".allMenu").removeClass('active');
+      $(".addSamplesFromManifestMenu").addClass('active');
     } else if (splitsUrl == 'addVlRequestZm.php' || splitsUrl == 'editVlRequestZm.php') {
       $(".request").addClass('active');
       $(".allMenu").removeClass('active');
