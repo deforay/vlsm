@@ -387,9 +387,14 @@ $formConfigResult = $db->query($formConfigQuery);
                     <a href="/vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
                   </li>
                 <?php }
-              if (isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])) { ?>
+                if (isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])) { ?>
                   <li class="allMenu addVlRequestMenu">
                     <a href="/vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+                  </li>
+                <?php }
+                if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+                  <li class="allMenu addSamplesFromManifestMenu">
+                    <a href="/vl-request/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
                   </li>
                 <?php }
               if (isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])) { ?>

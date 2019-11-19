@@ -1995,3 +1995,6 @@ UPDATE eid_form INNER JOIN package_details
     ON eid_form.sample_package_id = package_details.package_id
 SET eid_form.sample_package_code = package_details.package_code
 WHERE eid_form.sample_package_code is NULL;
+
+-- Thanaseelan 19-Nov-2019 for Add Samples from Manifest
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'addSamplesFromManifest.php', 'Add Samples from Manifest');
