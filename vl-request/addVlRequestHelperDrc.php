@@ -244,6 +244,7 @@ try {
                   
                   // 'sample_code_key'=>(isset($_POST['sampleCodeKey']) && $_POST['sampleCodeKey']!='' ? $_POST['sampleCodeKey'] :  NULL),
                   'facility_id'=>$_POST['clinicName'],
+                  'province_id'=>(isset($_POST['provinceId']) && !empty($_POST['provinceId'])) ? $_POST['provinceId'] :  NULL,
                   'request_clinician_name'=>$_POST['clinicianName'],
                   'request_clinician_phone_number'=>$_POST['clinicanTelephone'],
                   'facility_support_partner'=>$_POST['supportPartner'],

@@ -592,6 +592,7 @@ $sFormat = '';
             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
             <input type="hidden" name="formId" id="formId" value="3" />
             <input type="hidden" name="vlSampleId" id="vlSampleId" value="" />
+            <input type="hidden" name="provinceId" id="provinceId" />
             <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
             <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
           </div>
@@ -646,6 +647,7 @@ $sFormat = '';
 
   function sampleCodeGeneration() {
     var pName = $("#province").val();
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
     var sDate = $("#sampleCollectionDate").val();
     if (pName != '' && sDate != '') {
       $.post("/vl-request/sampleCodeGeneration.php", {
@@ -831,6 +833,7 @@ $sFormat = '';
   }
 
   function validateNow() {
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
     flag = deforayValidator.init({
       formId: 'addVlRequestForm'
     });
