@@ -140,9 +140,8 @@ if (trim($id) != '') {
         $pdf->AddPage();
         $tbl = '';
 
-        $packageCodeBarCode = $pdf->serializeTCPDFtagParameters(array($result[0]['package_code'], 'C39', '', '', '', 10, 0.8, array('border' => false, 'align' => 'L', 'padding' => 0, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 10, 'stretchtext' => 2), 'N'));        
-        $tbl .= '<h1> ' . $result[0]['package_code'] .'</h1>';
-        //$tbl .= '<h1> ' . $result[0]['package_code'] . '<tcpdf method="write1DBarcode" params="' . $packageCodeBarCode . '" /> </h1>';
+        $packageCodeBarCode = $pdf->serializeTCPDFtagParameters(array($result[0]['package_code'], 'C39', '', '', 0,8, 0.25, array('border' => false, 'align' => 'L', 'padding' => 0, 'fgcolor' => array(0, 0, 0), 'bgcolor' => array(255, 255, 255), 'text' => false, 'font' => 'helvetica', 'fontsize' => 8, 'stretchtext' => 2), 'N'));        
+        $tbl .= '<span style="font-size:1.7em;"> ' . $result[0]['package_code'] .' <tcpdf method="write1DBarcode" params="' . $packageCodeBarCode . '" /> </span>';
         $tbl .= '<table nobr="true" style="width:100%;" border="1" cellpadding="2">
             
                 <tr nobr="true">
