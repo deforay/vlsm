@@ -1,5 +1,5 @@
 <?php
-$title = "View All Requests";
+$title = "Add Samples from Manifest";
 require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 
@@ -35,21 +35,23 @@ $batResult = $db->rawQuery($batQuery);
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="box">
-                    <table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;display: block;">
-                        <tr>
-                            <td><b>Enter Sample Manifest Code :</b></td>
-                            <td>
-                                <input type="text" id="samplePackageCode" name="samplePackageCode" class="form-control" placeholder="Sample manifest code" title="Please enter the sample manifest code" style="background:#fff;" />
-                                <input type="hidden" id="sampleId" name="sampleId"/>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="getSampleCode('sampleManifestCode');return false;"><span>Submit</span></button>
-                            </td>
-                            <td style="width:500px;">
-                                <a class="btn btn-success btn-sm pull-right activateSample" style="display:none;margin-right:5px;" href="javascript:void(0);" onclick="activeSampleCode();"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> Activate Samples</a>
-                            </td>
-                        </tr>
-                    </table>
+					<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:20px;width: 98%;margin-bottom: 0px;display: block;">
+						<tr>
+							<td style="width:20%;vertical-align:middle;"><b>Enter Sample Manifest Code :</b></td>
+							<td>
+								<input type="text" id="samplePackageCode" name="samplePackageCode" class="form-control" placeholder="Sample Manifest Code" title="Please enter the sample manifest code" style="background:#fff;" />
+								<input type="hidden" id="sampleId" name="sampleId" />
+							</td>
+							<td>
+								<button class="btn btn-primary btn-sm pull-right" style="margin-right:5px;" onclick="getSampleCode('sampleManifestCode');return false;"><span>Submit</span></button>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:100%;" colspan="3">
+								<a class="btn btn-success btn-sm pull-right activateSample" style="display:none;margin-right:5px;" href="javascript:void(0);" onclick="activeSampleCode();"><i class="fa fa-fw fa-check-square-o" aria-hidden="true"></i> Activate Samples</a>
+							</td>
+						</tr>
+					</table>
 					<!-- /.box-header -->
 					<div class="box-body table-responsive">
 						<table id="vlManifestDataTable" class="table table-bordered table-striped table-vcenter">
@@ -101,13 +103,13 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 		<script src="../configs/dymo-format.js"></script>
 		<script src="../assets/js/dymo-print.js"></script>
 	<?php
-} else if ($global['bar_code_printing'] == 'zebra-printer') {
-	?>
+		} else if ($global['bar_code_printing'] == 'zebra-printer') {
+			?>
 		<script src="../assets/js/zebra-browserprint.js.js"></script>
 		<script src="../configs/zebra-format.js"></script>
 		<script src="../assets/js/zebra-print.js"></script>
-	<?php
-}
+<?php
+	}
 }
 ?>
 
@@ -124,16 +126,35 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"bAutoWidth": false,
 			"bInfo": true,
 			"bScrollCollapse": true,
-			"bStateSave" : true,
+			"bStateSave": true,
 			"bRetrieve": true,
-			"aoColumns": [
-				{
+			"aoColumns": [{
 					"sClass": "center"
 				},
 				<?php if ($sarr['user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
-				<?php } ?> {"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"}
+				<?php } ?> {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}, {
+					"sClass": "center"
+				}
 			],
 			"aaSorting": [
 				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 11 : 10 ?>, "desc"]
@@ -151,7 +172,10 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"bServerSide": true,
 			"sAjaxSource": "getManifestInGridHelper.php",
 			"fnServerData": function(sSource, aoData, fnCallback) {
-				aoData.push({"name": "samplePackageCode","value": $("#samplePackageCode").val()});
+				aoData.push({
+					"name": "samplePackageCode",
+					"value": $("#samplePackageCode").val()
+				});
 				$.ajax({
 					"dataType": 'json',
 					"type": "POST",
@@ -165,33 +189,37 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	}
 
 	function getSampleCode() {
-        if($("#samplePackageCode").val() != ""){
-            $.blockUI();
-            loadVlRequestData();
-            $.post("getRemoteManifestHelper.php", {samplePackageCode: $("#samplePackageCode").val()},
-            function(data) {
-                $.unblockUI();
-                if(data != ""){
-                    $('.activateSample').show(500);
-                    $('#sampleId').val(data);
-                }
-            });
-        }else{
-            alert('Please enter the manifest code then submit!');
-        }
+		if ($("#samplePackageCode").val() != "") {
+			$.blockUI();
+			loadVlRequestData();
+			$.post("getRemoteManifestHelper.php", {
+					samplePackageCode: $("#samplePackageCode").val()
+				},
+				function(data) {
+					$.unblockUI();
+					if (data != "") {
+						$('.activateSample').show(500);
+						$('#sampleId').val(data);
+					}
+				});
+		} else {
+			alert('Please enter the manifest code then submit!');
+		}
 	}
-	
-    function activeSampleCode() {
+
+	function activeSampleCode() {
 		$.blockUI();
-		$.post("addSamplesByPackageHelper.php", {sampleId: $("#sampleId").val()},
-        function(data) {
-            if(data > 0){
-                alert('Sample was updated successfully!');
-                $('.activateSample').hide(500);
-            }
-            oTable.fnDraw();
-            $.unblockUI();
-        });
+		$.post("addSamplesByPackageHelper.php", {
+				sampleId: $("#sampleId").val()
+			},
+			function(data) {
+				if (data > 0) {
+					alert('Sample was updated successfully!');
+					$('.activateSample').hide(500);
+				}
+				oTable.fnDraw();
+				$.unblockUI();
+			});
 	}
 </script>
 <?php
