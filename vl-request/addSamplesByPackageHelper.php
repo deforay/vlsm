@@ -16,6 +16,13 @@ $status = 0;
 foreach($sampleResult as $sampleRow){
 
     $provinceCode = null;
+
+    if (isset($sampleRow['province_id']) && !empty($sampleRow['province_id'])) {
+        $provinceQuery = "SELECT * FROM province_details WHERE province_id = " . $sampleRow['province_id'];
+        $provinceResult = $db->rawQueryOne($stateQuery);
+        $provinceCode = $provinceResult['province_code'];
+    }
+
     // ONLY IF SAMPLE CODE IS NOT ALREADY GENERATED
     if ($sampleRow['sample_code'] == null || $sampleRow['sample_code'] == '' || $sampleRow['sample_code'] == 'null') {
 
