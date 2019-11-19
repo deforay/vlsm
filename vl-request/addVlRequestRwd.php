@@ -648,6 +648,7 @@ $sFormat = '';
                                                             <input type="hidden" name="sampleCodeKey" id="sampleCodeKey" value="<?php echo $sKey; ?>" />
                                                        <?php } ?>
                                                        <input type="hidden" name="vlSampleId" id="vlSampleId" value="" />
+                                                       <input type="hidden" name="provinceId" id="provinceId" />
                                                        <a class="btn btn-primary" href="javascript:void(0);" onclick="validateSaveNow();return false;">Save and Next</a>
                                                        <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
                                                   </div>
@@ -745,12 +746,14 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      function sampleCodeGeneration() {
           var pName = $("#province").val();
           var sDate = $("#sampleCollectionDate").val();
+          $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
           if (pName != '' && sDate != '') {
                $.post("/vl-request/sampleCodeGeneration.php", {
                          sDate: sDate
                     },
                     function(data) {
                          var sCodeKey = JSON.parse(data);
+                         
                          <?php if ($arr['sample_code'] == 'auto') { ?>
                               pNameVal = pName.split("##");
                               sCode = sCodeKey.auto;
@@ -990,6 +993,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
      }
 
      function validateNow() {
+          $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
           var format = '<?php echo $arr['sample_code']; ?>';
           var sCodeLentgh = $("#sampleCode").val();
           var minLength = '<?php echo $arr['min_length']; ?>';

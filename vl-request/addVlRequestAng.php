@@ -550,6 +550,7 @@
                 <input type="hidden" name="vlSampleId" id="vlSampleId" value=""/>
                 <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Save</a>
                 <input type="hidden" name="formId" id="formId" value="8"/>
+                <input type="hidden" name="provinceId" id="provinceId" />
                 <a href="vlRequest.php" class="btn btn-default"> Cancel</a>
               </div>
               <!-- /.box-footer -->
@@ -676,6 +677,7 @@
     }
   }
   function validateNow(){
+    $("#provinceId").val($("#province").find(":selected").attr("data-province-id"));
     flag = deforayValidator.init({
       formId: 'addVlRequestForm'
     });
