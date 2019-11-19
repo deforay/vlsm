@@ -395,7 +395,7 @@ $formConfigResult = $db->query($formConfigQuery);
                     <a href="/vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
                   </li>
                 <?php }
-                if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+                if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
                   <li class="allMenu addSamplesFromManifestMenu">
                     <a href="/vl-request/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
                   </li>
@@ -531,7 +531,7 @@ $formConfigResult = $db->query($formConfigQuery);
                 <li class="allMenu addEidRequestMenu">
                   <a href="/eid/requests/eid-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
                 </li>
-                <?php if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges'])) { ?>
+                <?php if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
                   <li class="allMenu addSamplesFromManifestEidMenu">
                     <a href="/eid/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
                   </li>
