@@ -221,7 +221,8 @@
     });
     str = $(location).attr('pathname');
     splitsUrl = str.substr(str.lastIndexOf('/') + 1);
-
+    splitsUrlCheck =str.split("/",4);
+    
     if (splitsUrl == 'users.php' || splitsUrl == 'addUser.php' || splitsUrl == 'editUser.php') {
       $(".manage").addClass('active');
       $(".allMenu").removeClass('active');
@@ -266,7 +267,7 @@
       $(".request").addClass('active');
       $(".allMenu").removeClass('active');
       $(".addVlRequestMenu").addClass('active');
-    } else if (splitsUrl == 'addSamplesFromManifest.php') {
+    } else if (splitsUrl == 'addSamplesFromManifest.php' && splitsUrlCheck[1] != "eid") {
       $(".request").addClass('active');
       $(".allMenu").removeClass('active');
       $(".addSamplesFromManifestMenu").addClass('active');
@@ -365,6 +366,10 @@
       $(".allMenu").removeClass('active');
       $(".eidRequest").addClass('active');
       $(".eidBatchCodeMenu").addClass('active');
+    } else if (splitsUrl == 'addSamplesFromManifest.php' && splitsUrlCheck[1] == "eid") {
+      $(".allMenu").removeClass('active');
+      $(".eidRequest").addClass('active');
+      $(".addSamplesFromManifestEidMenu").addClass('active');
     } else if (splitsUrl == 'eid-manual-results.php' || splitsUrl == 'eid-update-result.php') {
       $(".allMenu").removeClass('active');
       $(".eidResults").addClass('active');
