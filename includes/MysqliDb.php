@@ -2290,4 +2290,4 @@ class MysqliDb
 
 require_once(APPLICATION_PATH."/configs/config.".APPLICATION_ENV.".php");
 
-$db = new MysqliDb($HOST, $USER, $PASSWORD, $DBNAME, $PORT);
+$db = new MysqliDb($systemConfig['dbHost'], $systemConfig['dbUser'], $systemConfig['dbPassword'], $systemConfig['dbName'], $systemConfig['dbPort']);

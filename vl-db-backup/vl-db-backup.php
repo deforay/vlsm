@@ -11,10 +11,10 @@ if(APPLICATION_ENV == 'production'){
 }
 define("BACKUP_PATH", "../db-backup");
 
-$dbUsername = $USER;
-$dbPassword = $PASSWORD;
-$dbName = $DBNAME;
-$dbHost = $HOST;
+$dbUsername = $systemConfig['dbUser'];
+$dbPassword = $systemConfig['dbPassword'];
+$dbName = $systemConfig['dbName'];
+$dbHost = $systemConfig['dbHost'];
 
 $folderPath = BACKUP_PATH . DIRECTORY_SEPARATOR;
 

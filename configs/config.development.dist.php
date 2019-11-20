@@ -3,10 +3,10 @@
 require_once(__DIR__ . '/config.production.php');
 
 $systemConfig = array();
-$systemConfig['dbHost']     = '127.0.0.1';
-$systemConfig['dbUser']     = 'root';
-$systemConfig['dbPassword'] = 'zaq12345';
-$systemConfig['dbName']     = 'vlsm';
+$systemConfig['dbHost']     = '';
+$systemConfig['dbUser']     = '';
+$systemConfig['dbPassword'] = '';
+$systemConfig['dbName']     = '';
 $systemConfig['dbPort']     = 3306;
 
 //Please use only GMAIL ID AND PASSWORD
@@ -28,7 +28,7 @@ $systemConfig['mysqlDump'] = '/usr/bin/mysqldump';
 
 
 // VLSTS URL
-$systemConfig['remoteURL'] = 'http://vlsm-remote';
+$systemConfig['remoteURL'] = '';
 
 
 $interfaceConfig = array();
@@ -38,10 +38,10 @@ $interfaceConfig = array();
 $interfaceConfig['enabled'] = false;
 
 // Interfacing Database Details (not needed if above feature set to false)
-$interfaceConfig['dbHost'] = '127.0.0.1';
-$interfaceConfig['dbUser'] = 'root';
-$interfaceConfig['dbPassword'] = 'zaq12345';
-$interfaceConfig['dbName'] = 'interfacing';
+$interfaceConfig['dbHost'] = '';
+$interfaceConfig['dbUser'] = '';
+$interfaceConfig['dbPassword'] = '';
+$interfaceConfig['dbName'] = '';
 $interfaceConfig['dbPort'] = 3306;
 
 
@@ -55,7 +55,7 @@ $eidConfig['enabled'] = true;
 $recencyConfig = array();
 
 // Domain URL of the Recency Web Application
-$recencyConfig['url'] = "http://recency/";
+$recencyConfig['url'] = '';
 $recencyConfig['crossloginSalt'] = "0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later";
 
 // Enable/Disable Recency Sync 

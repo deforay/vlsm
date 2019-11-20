@@ -18,8 +18,8 @@ if($_SESSION['roleId'] != 1){
 
 $filename = 'vlsm-bkp-' . date("dmYHis") .'-'. rand(). '.sql';
 
-if(file_exists($MYSQLDUMP)){
- exec($MYSQLDUMP.' --user='.$USER.' --password="'.$PASSWORD.'" --host='.$HOST.' --port='.$PORT.' --databases '.$DBNAME.'  > '. $filename); 
+if(file_exists($systemConfig['mysqlDump'])){
+ exec($systemConfig['mysqlDump'].' --user='.$systemConfig['dbUser'].' --password="'.$systemConfig['dbPassword'].'" --host='.$systemConfig['dbHost'].' --port='.$systemConfig['dbPort'].' --databases '.$systemConfig['dbName'].'  > '. $filename); 
 }else{
  echo "mysqldump path needs to be configured correctly.";
  die;exit;

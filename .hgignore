@@ -13,3 +13,5 @@ Thumbs.db.orig
 .git
 .gitattributes
 .gitignore
+^configs/config.production.php
+^configs/config.development.php

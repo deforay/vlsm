@@ -4,14 +4,14 @@
 include(dirname(__FILE__) . "/../../startup.php");
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 
-if (!isset($REMOTEURL) || $REMOTEURL == '') {
+if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     echo "Please check your remote url";
     die;
 }
 
-$REMOTEURL = rtrim($REMOTEURL, "/");
+$systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
-$url = $REMOTEURL . '/remote/remote/facilityMap.php';
+$url = $systemConfig['remoteURL'] . '/remote/remote/facilityMap.php';
 $data = array(
     "Key" => "vlsm-lab-Data--",
 );
@@ -76,7 +76,7 @@ $vlLabResult = $db->rawQuery($vlQuery);
 
 
 
-$url = $REMOTEURL . '/remote/remote/testResults.php';
+$url = $systemConfig['remoteURL'] . '/remote/remote/testResults.php';
 
 $data = array(
     "result" => $vlLabResult,
@@ -117,7 +117,7 @@ if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
 
     $vlLabResult = $db->rawQuery($eidQuery);
 
-    $url = $REMOTEURL . '/remote/remote/eid-test-results.php';
+    $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-results.php';
     $data = array(
         "result" => $vlLabResult,
         "Key" => "vlsm-lab-Data--",
