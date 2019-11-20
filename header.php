@@ -1,9 +1,10 @@
 <?php
 
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+/* Crosss Login Block Start */
 $crossLoginQuery = "SELECT login_id,password,user_name FROM user_details WHERE user_id = '".$_SESSION['userId']."'";
 $crossLoginResult = $db->rawQueryOne($crossLoginQuery);
-
+/* Crosss Login Block End */
 $gQuery = "SELECT * FROM global_config";
 $gResult = $db->query($gQuery);
 $global = array();
@@ -268,7 +269,7 @@ $formConfigResult = $db->query($formConfigQuery);
           <ul class="nav navbar-nav">
             <?php if($recencyConfig['crosslogin']){?>
               <li class="user-menu">
-                <a target="_blank" href="<?php echo $recencyConfig['url'].'login?user='.base64_encode($crossLoginResult['login_id']).'&token='.base64_encode($crossLoginResult['password']).'&name='.base64_encode($crossLoginResult['user_name']);?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
+                <a target="_blank" href="<?php echo $recencyConfig['url'].'login?u='.base64_encode($crossLoginResult['login_id']).'&t='.base64_encode($crossLoginResult['password']).'&name='.base64_encode($crossLoginResult['user_name']);?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
               </li>
             <?php }?>
             <li class="dropdown user user-menu">
