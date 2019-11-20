@@ -339,11 +339,11 @@ $facilityName = ucwords($qResult[0]['instance_facility_name']);
     $mail->SMTPAuth = true;
     $mail->SMTPKeepAlive = true; 
     //Username to use for SMTP authentication - use full email address for gmail
-    $mail->Username = $emailUserName;
+    $mail->Username = $systemConfig['adminEmailUserName'];
     //Password to use for SMTP authentication
-    $mail->Password = $emailPassword;
+    $mail->Password = $systemConfig['adminEmailPassword'];
     //Set who the message is to be sent from
-    $mail->setFrom($emailUserName);
+    $mail->setFrom($systemConfig['adminEmailUserName']);
    
    if(trim($facilityName)!=""){
 		$facilityName=" - ".$facilityName;

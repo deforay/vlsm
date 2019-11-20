@@ -7,12 +7,12 @@ include_once(APPLICATION_PATH . '/models/General.php');
 
 
 $general = new General($db);
-if (!isset($REMOTEURL) || $REMOTEURL == '') {
+if (!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL'] == '') {
     echo "Please check your Remote URL";
     die;
 }
 
-$REMOTEURL = rtrim($REMOTEURL, "/");
+$systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
 //system config
 $systemConfigQuery = "SELECT * from system_config";
@@ -38,7 +38,7 @@ if (trim($sarr['lab_name']) == '') {
 
 // VIRAL LOAD REQUESTS
 
-$url = $REMOTEURL . '/remote/remote/getRequests.php';
+$url = $systemConfig['remoteURL'] . '/remote/remote/getRequests.php';
 $data = array(
     'labName' => $sarr['lab_name'],
     "Key" => "vlsm-lab-Data--",
@@ -64,7 +64,7 @@ $curl_response = curl_exec($ch);
 curl_close($ch);
 $result = json_decode($curl_response, true);
 if (count($result) > 0) {
-    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='vl_request_form'";
+    $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '".$systemConfig['dbName']."' AND table_name='vl_request_form'";
     $allColResult = $db->rawQuery($allColumns);
     $oneDimensionalArray = array_map('current', $allColResult);
     foreach ($result as $key => $remoteData) {
@@ -131,7 +131,7 @@ if (count($result) > 0) {
 // EID TEST REQUESTS
 
 if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
-    $url = $REMOTEURL . '/remote/remote/eid-test-requests.php';
+    $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-requests.php';
     $data = array(
         'labName' => $sarr['lab_name'],
         "Key" => "vlsm-lab-Data--",
@@ -158,7 +158,7 @@ if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
     $result = json_decode($curl_response, true);
 
     if (count($result) > 0) {
-        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='eid_form'";
+        $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '".$systemConfig['dbName']."' AND table_name='eid_form'";
         $allColResult = $db->rawQuery($allColumns);
         $oneDimensionalArray = array_map('current', $allColResult);
         foreach ($result as $key => $remoteData) {

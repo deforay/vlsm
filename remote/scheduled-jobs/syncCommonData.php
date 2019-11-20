@@ -4,12 +4,12 @@ require_once(dirname(__FILE__) . "/../../startup.php");
 require_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 require_once(APPLICATION_PATH. '/models/General.php');
 
-if(!isset($REMOTEURL) || $REMOTEURL==''){
+if(!isset($systemConfig['remoteURL']) || $systemConfig['remoteURL']==''){
     echo "Please check your remote url";
     die;
 }
 
-$REMOTEURL = rtrim($REMOTEURL, "/");
+$systemConfig['remoteURL'] = rtrim($systemConfig['remoteURL'], "/");
 
 $general=new General($db);
 $globalConfigQuery ="SELECT * from system_config";
@@ -46,7 +46,7 @@ $facilityLResult = $db->query($facilityLQuery);
 if(isset($facilityLResult[0]['updated_datetime']) && $facilityLResult[0]['updated_datetime']!='' && $facilityLResult[0]['updated_datetime']!=NULL && $facilityLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $fDateTime = $facilityLResult[0]['updated_datetime'];
 }
-$url = $REMOTEURL.'/remote/remote/commonData.php';
+$url = $systemConfig['remoteURL'].'/remote/remote/commonData.php';
 
 
 

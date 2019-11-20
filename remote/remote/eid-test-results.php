@@ -16,7 +16,7 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 
 $general = new General($db);
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '$DBNAME' AND table_name='eid_form'";
+$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '".$systemConfig['dbName']."' AND table_name='eid_form'";
 $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 $sampleCode = array();

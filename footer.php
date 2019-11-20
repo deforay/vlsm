@@ -86,7 +86,7 @@
       ?>
 
       var remoteSync = true;
-      var remoteUrl = '<?php echo $REMOTEURL; ?>';
+      var remoteUrl = '<?php echo $systemConfig['remoteURL']; ?>';
 
 
       function forceRemoteSync() {
