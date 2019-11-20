@@ -76,7 +76,7 @@ $batResult = $db->rawQuery($batQuery);
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="13" class="dataTables_empty" style="text-align:center;">Please enter the sample manifest and submit!</td>
+									<td colspan="13" class="dataTables_empty" style="text-align:center;">Please enter the manifest code then submit!</td>
 								</tr>
 							</tbody>
 						</table>

@@ -152,7 +152,6 @@ $batResult = $db->rawQuery($batQuery);
 									<th>Result</th>
 									<th>Last Modified On</th>
 									<th>Status</th>
-
 									<?php if (isset($_SESSION['privileges']) && (in_array("eid-edit-request.php", $_SESSION['privileges'])) || (in_array("eid-view-request.php", $_SESSION['privileges']))) { ?>
 										<th>Action</th>
 									<?php } ?>
@@ -160,7 +159,7 @@ $batResult = $db->rawQuery($batQuery);
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="16" class="dataTables_empty">Loading data from server</td>
+									<td colspan="15" class="dataTables_empty">Loading data from server</td>
 								</tr>
 							</tbody>
 						</table>
@@ -298,42 +297,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php if ($sarr['user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
-				<?php } ?> {
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
-				{
-					"sClass": "center"
-				},
+				<?php } ?> {"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},
 				<?php if (isset($_SESSION['privileges']) && (in_array("editVlRequest.php", $_SESSION['privileges'])) || (in_array("viewVlRequest.php", $_SESSION['privileges']))) { ?> {
 						"sClass": "center",
 						"bSortable": false
