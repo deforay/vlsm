@@ -15,11 +15,21 @@ if($systemInfo != false){
 }
 
 $dashboardUrl = $general->getGlobalConfig('vldashboard_url');
-
+/* Crosss Login Block Start */
+if(isset($_GET['u']) && trim($_GET['u'])!="" && isset($_GET['t']) && trim($_GET['t'])!=""){
+    $_POST['username'] = base64_decode($_GET['u']);
+    $_POST['password'] = base64_decode($_GET['t']);
+    $password = base64_decode($_GET['t']);
+}
+/* Crosss Login Block End */
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
         $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
-        $password = sha1($_POST['password'].$passwordSalt);
+        /* Crosss Login Block Start */
+        if(!isset($_GET['u']) && trim($_GET['u'])=="" && !isset($_GET['t']) && trim($_GET['t'])==""){
+            $password = sha1($_POST['password'].$passwordSalt);
+        }
+        /* Crosss Login Block End */
         $adminUsername=$db->escape($_POST['username']);
         $adminPassword=$db->escape($password);
         $params = array($adminUsername,$adminPassword,'active');
