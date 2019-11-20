@@ -63,20 +63,21 @@ $batResult = $db->rawQuery($batQuery);
 									<?php } ?>
 									<th>Sample Collection<br /> Date</th>
 									<th>Batch Code</th>
-									<th>Unique ART No</th>
-									<th>Patient's Name</th>
 									<th>Facility Name</th>
+									<th>Child's ID</th>
+									<th>Child's Name</th>
+									<th>Mother's ID</th>
+									<th>Mother's Name</th>
 									<th>Province/State</th>
 									<th>District/County</th>
-									<th>Sample Type</th>
 									<th>Result</th>
-									<th>Last Modified Date</th>
+									<th>Last Modified On</th>
 									<th>Status</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td colspan="13" class="dataTables_empty" style="text-align:center;">Please enter the sample manifest and submit!</td>
+									<td colspan="14" class="dataTables_empty" style="text-align:center;">Please enter the manifest code then submit!</td>
 								</tr>
 							</tbody>
 						</table>
@@ -134,40 +135,12 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 				<?php if ($sarr['user_type'] != 'standalone') { ?> {
 						"sClass": "center"
 					},
-				<?php } ?> {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}, {
-					"sClass": "center"
-				}
+				<?php } ?> {"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"},{"sClass": "center"}
 			],
 			"aaSorting": [
 				[<?php echo ($sarr['user_type'] == 'remoteuser' || $sarr['user_type'] == 'vluser') ? 11 : 10 ?>, "desc"]
 			],
-			"fnDrawCallback": function() {
-				var checkBoxes = document.getElementsByName("chk[]");
-				len = checkBoxes.length;
-				for (c = 0; c < len; c++) {
-					if (jQuery.inArray(checkBoxes[c].id, selectedTestsId) != -1) {
-						checkBoxes[c].setAttribute("checked", true);
-					}
-				}
-			},
+			"fnDrawCallback": function() {},
 			"bProcessing": true,
 			"bServerSide": true,
 			"sAjaxSource": "/eid/requests/getManifestInGridHelper.php",

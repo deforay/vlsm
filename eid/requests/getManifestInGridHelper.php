@@ -193,20 +193,23 @@ foreach ($rResult as $aRow) {
 
      $row = array();
      $row[] = $aRow['sample_code'];
-     if ($sarr['user_type'] != 'standalone') {
+     if($sarr['user_type']!='standalone'){
           $row[] = $aRow['remote_sample_code'];
      }
      $row[] = $aRow['sample_collection_date'];
      $row[] = $aRow['batch_code'];
-     $row[] = $aRow['patient_art_no'];
-     $row[] = ucwords($patientFname . " " . $patientMname . " " . $patientLname);
      $row[] = ucwords($aRow['facility_name']);
+     $row[] = $aRow['child_id'];
+     $row[] = $aRow['child_name'];
+     $row[] = $aRow['mother_id'];
+     $row[] = $aRow['mother_name'];
+     
      $row[] = ucwords($aRow['facility_state']);
      $row[] = ucwords($aRow['facility_district']);
-     $row[] = ucwords($aRow['sample_name']);
      $row[] = $aRow['result'];
      $row[] = $aRow['last_modified_datetime'];
      $row[] = ucwords($aRow['status_name']);
+     
      $output['aaData'][] = $row;
 }
 echo json_encode($output);
