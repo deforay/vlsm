@@ -18,8 +18,20 @@ $dashboardUrl = $general->getGlobalConfig('vldashboard_url');
 /* Crosss Login Block Start */
 if(isset($_GET['u']) && trim($_GET['u'])!="" && isset($_GET['t']) && trim($_GET['t'])!=""){
     $_POST['username'] = base64_decode($_GET['u']);
-    $_POST['password'] = base64_decode($_GET['t']);
-    $password = base64_decode($_GET['t']);
+    $crossLoginQuery = "SELECT login_id,password,user_name FROM user_details WHERE login_id = '".$_POST['username']."'";
+    $check = $db->rawQueryOne($crossLoginQuery);
+    if($check){
+        $passwordCrossLoginSalt = $check['password'].$recencyConfig['crossloginSalt'];
+        $_POST['password'] = hash('sha256',$passwordCrossLoginSalt);
+        if($_POST['password'] == $_GET['t']){
+            $password = $check['password'];
+        }else{
+            $password = "";
+            $_POST['password'] = "";
+        }
+    }else{
+        $_POST['password'] = "";
+    }
 }
 /* Crosss Login Block End */
 try {
