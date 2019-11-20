@@ -1,6 +1,8 @@
 <?php
 
 include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+$crossLoginQuery = "SELECT login_id,password,user_name FROM user_details WHERE user_id = '".$_SESSION['userId']."'";
+$crossLoginResult = $db->rawQueryOne($crossLoginQuery);
 
 $gQuery = "SELECT * FROM global_config";
 $gResult = $db->query($gQuery);
@@ -264,6 +266,11 @@ $formConfigResult = $db->query($formConfigQuery);
         </ul>
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
+            <?php if($allowRecencyCrossLogin){?>
+              <li class="user-menu">
+                <a target="_blank" href="<?php echo $recencyUrl.'login?user='.base64_encode($crossLoginResult['login_id']).'&token='.base64_encode($crossLoginResult['password']).'&name='.base64_encode($crossLoginResult['user_name']);?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
+              </li>
+            <?php }?>
             <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="/assets/img/default-user.png" class="user-image" alt="User Image">

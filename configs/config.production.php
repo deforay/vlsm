@@ -46,3 +46,7 @@ $eidConfig['enabled'] = true;
 // Enable/Disable Recency Sync 
 $recencyConfig['enabled'] = false;
 $recencyConfig['url'] = "";
+// Cross Login Future
+$allowRecencyCrossLogin = true;
+// Recency URL
+$recencyUrl = 'http://recency-web/';
