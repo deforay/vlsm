@@ -8,7 +8,7 @@ include_once '../startup.php';
 include_once APPLICATION_PATH . '/header.php';
 include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
-$packageNo = strtoupper($module).'-'.$general->generateRandomString(8);
+$packageNo = strtoupper($module) . date('ymd') .  $general->generateRandomString(6);
 ?>
 <link href="/assets/css/multi-select.css" rel="stylesheet" />
 <style>
@@ -71,43 +71,43 @@ $packageNo = strtoupper($module).'-'.$general->generateRandomString(8);
                   <label for="packageCode" class="col-lg-4 control-label">Manifest Code <span class="mandatory">*</span></label>
                   <div class="col-lg-7" style="margin-left:3%;">
                     <input type="text" class="form-control isRequired" id="packageCode" name="packageCode" placeholder="Manifest Code" title="Please enter manifest code" readonly value="<?php echo strtoupper($packageNo); ?>" />
-                    <input type="hidden" class="form-control isRequired" id="module" name="module" placeholder="" title="" readonly value="<?php echo $module; ?>"/>
+                    <input type="hidden" class="form-control isRequired" id="module" name="module" placeholder="" title="" readonly value="<?php echo $module; ?>" />
                   </div>
                 </div>
-                
-                </div>
+
               </div>
             </div>
-            <br>
-            <div class="row" id="sampleDetails">
-              <div class="col-md-8">
-                <div class="form-group">
+          </div>
+          <br>
+          <div class="row" id="sampleDetails">
+            <div class="col-md-8">
+              <div class="form-group">
+                <div class="col-md-12">
                   <div class="col-md-12">
-                    <div class="col-md-12">
-                      <div style="width:60%;margin:0 auto;clear:both;">
-                        <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a> <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
-                      </div><br /><br />
-                      <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search"></select>
-                    </div>
+                    <div style="width:60%;margin:0 auto;clear:both;">
+                      <a href='#' id='select-all-samplecode' style="float:left" class="btn btn-info btn-xs">Select All&nbsp;&nbsp;<i class="icon-chevron-right"></i></a> <a href='#' id='deselect-all-samplecode' style="float:right" class="btn btn-danger btn-xs"><i class="icon-chevron-left"></i>&nbsp;Deselect All</a>
+                    </div><br /><br />
+                    <select id='sampleCode' name="sampleCode[]" multiple='multiple' class="search"></select>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row" id="alertText" style="font-size:18px;"></div>
           </div>
-          <!-- /.box-body -->
-          <div class="box-footer">
-            <a id="packageSubmit" class="btn btn-primary" href="javascript:void(0);" title="Please select machine" onclick="validateNow();return false;" style="pointer-events:none;" disabled>Save </a>
-            <a href="specimenReferralManifestList.php" class="btn btn-default"> Cancel</a>
-          </div>
-          <!-- /.box-footer -->
-        </form>
-        <!-- /.row -->
+          <div class="row" id="alertText" style="font-size:18px;"></div>
       </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <a id="packageSubmit" class="btn btn-primary" href="javascript:void(0);" title="Please select machine" onclick="validateNow();return false;" style="pointer-events:none;" disabled>Save </a>
+        <a href="specimenReferralManifestList.php" class="btn btn-default"> Cancel</a>
+      </div>
+      <!-- /.box-footer -->
+      </form>
+      <!-- /.row -->
     </div>
-    <!-- /.box -->
-  </section>
-  <!-- /.content -->
+</div>
+<!-- /.box -->
+</section>
+<!-- /.content -->
 </div>
 <script src="/assets/js/jquery.multi-select.js"></script>
 <script src="/assets/js/jquery.quicksearch.js"></script>

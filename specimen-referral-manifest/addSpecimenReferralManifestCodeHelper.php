@@ -20,22 +20,23 @@ try {
         $lastId = $db->getInsertId();
         if ($lastId > 0) {
             for ($j = 0; $j < count($_POST['sampleCode']); $j++) {
-                $value = array('sample_package_id' => $lastId,
-                                'sample_package_code' => $_POST['packageCode'],
-                                'data_sync' => 0);
-                if($_POST['module'] == 'vl'){
+                $value = array(
+                    'sample_package_id' => $lastId,
+                    'sample_package_code' => $_POST['packageCode'],
+                    'data_sync' => 0
+                );
+                if ($_POST['module'] == 'vl') {
                     $db = $db->where('vl_sample_id', $_POST['sampleCode'][$j]);
                     $db->update('vl_request_form', $value);
-                }else if($_POST['module'] == 'eid'){
+                } else if ($_POST['module'] == 'eid') {
                     $db = $db->where('eid_id', $_POST['sampleCode'][$j]);
                     $db->update('eid_form', $value);
                 }
-                
             }
             $_SESSION['alertMsg'] = "Manifest added successfully";
         }
     }
-    header("location:specimenReferralManifestList.php?t=".base64_encode($_POST['module']));
+    header("location:specimenReferralManifestList.php?t=" . base64_encode($_POST['module']));
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());

@@ -19,9 +19,9 @@ class General
     public static function generateRandomString($length = 8, $seeds = 'alphanum')
     {
         // Possible seeds
-        $seedings['alpha'] = 'abcdefghijklmnopqrstuvwqyz';
-        $seedings['numeric'] = '0123456789';
-        $seedings['alphanum'] = 'abcdefghijklmnopqrstuvwqyz0123456789';
+        $seedings['alpha'] = 'abcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyzabcdefghijklmnopqrstuvwqyz';
+        $seedings['numeric'] = '012345678901234567890123456789';
+        $seedings['alphanum'] = 'abcdefghijklmnopqrstuvwqyz0123456789abcdefghijklmnopqrstuvwqyz0123456789abcdefghijklmnopqrstuvwqyz0123456789';
         $seedings['hexidec'] = '0123456789abcdef';
 
         // Choose seed

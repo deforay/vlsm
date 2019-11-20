@@ -18,11 +18,16 @@ $PORT = 3306;
 $MYSQLDUMP = '/usr/bin/mysqldump';
 
 // VLSTS URL
-$REMOTEURL = 'http://vlsm-remote/';
+$REMOTEURL = '';
 
 
 // Enable/Disable Interfacing
-$interfaceConfig['enabled'] = true;
+// true => Enabled
+// false => Disabled
+$interfaceConfig['enabled'] = false;
+
+
+// Interfacing Database Details (not needed if above feature set to false)
 $interfaceConfig['dbHost'] = '127.0.0.1';
 $interfaceConfig['dbUser'] = 'root';
 $interfaceConfig['dbPassword'] = 'zaq12345';
@@ -30,8 +35,19 @@ $interfaceConfig['dbName'] = 'interfacing';
 $interfaceConfig['dbPort'] = 3306;
 
 // Enable/Disable EID 
+// true => Enabled
+// false => Disabled
 $eidConfig['enabled'] = true;
 
-// Enable/Disable Recency Sync 
-$recencyConfig['enabled'] = true;
-$recencyConfig['url'] = "http://recency/";
+// Domain URL of the Recency Web Application
+$recencyConfig['url'] = "";
+
+// Enable/Disable Recency Web Application Sync 
+// true => Enabled
+// false => Disabled
+$recencyConfig['vlsync'] = false;
+
+// Enable/Disable Cross Login with Recency Web Application
+// true => Enabled
+// false => Disabled
+$recencyConfig['crosslogin'] = false;
