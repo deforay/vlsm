@@ -266,9 +266,9 @@ $formConfigResult = $db->query($formConfigQuery);
         </ul>
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
-            <?php if($allowRecencyCrossLogin){?>
+            <?php if($recencyConfig['crosslogin']){?>
               <li class="user-menu">
-                <a target="_blank" href="<?php echo $recencyUrl.'login?user='.base64_encode($crossLoginResult['login_id']).'&token='.base64_encode($crossLoginResult['password']).'&name='.base64_encode($crossLoginResult['user_name']);?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
+                <a target="_blank" href="<?php echo $recencyConfig['url'].'login?user='.base64_encode($crossLoginResult['login_id']).'&token='.base64_encode($crossLoginResult['password']).'&name='.base64_encode($crossLoginResult['user_name']);?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
               </li>
             <?php }?>
             <li class="dropdown user user-menu">

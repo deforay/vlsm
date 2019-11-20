@@ -33,7 +33,11 @@ $REMOTEURL = 'http://vlsm-remote';
 
 
 // Enable/Disable Interfacing
+// true => Enabled
+// false => Disabled
 $interfaceConfig['enabled'] = false;
+
+// Interfacing Database Details (not needed if above feature set to false)
 $interfaceConfig['dbHost'] = '127.0.0.1';
 $interfaceConfig['dbUser'] = 'root';
 $interfaceConfig['dbPassword'] = 'zaq12345';
@@ -41,12 +45,19 @@ $interfaceConfig['dbName'] = 'interfacing';
 $interfaceConfig['dbPort'] = 3306;
 
 // Enable/Disable EID 
+// true => Enabled
+// false => Disabled
 $eidConfig['enabled'] = true;
 
-// Enable/Disable Recency Sync 
-$recencyConfig['enabled'] = false;
+// Domain URL of the Recency Web Application
 $recencyConfig['url'] = "";
-// Cross Login Future
-$allowRecencyCrossLogin = true;
-// Recency URL
-$recencyUrl = 'http://recency-web/';
+
+// Enable/Disable Recency Sync 
+// true => Enabled
+// false => Disabled
+$recencyConfig['vlsync'] = false;
+
+// Enable/Disable Cross Login with Recency
+// true => Enabled
+// false => Disabled
+$recencyConfig['crosslogin'] = false;
