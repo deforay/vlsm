@@ -10,7 +10,7 @@ $tableName = "user_details";
 $upId = 0;
 /* To check the password update from the API */
 $fromApiFalse = !isset($_POST['u']) && trim($_POST['u']) == "" && !isset($_POST['t']) && trim($_POST['t']) == "";
-$fromApiTrue = isset($_POST['u']) && trim($_POST['u']) != "" && isset($_POST['t']) && trim($_POST['t']) != "";
+$fromApiTrue = isset($_POST['u']) && trim($_POST['u']) != "" && isset($_POST['t']) && trim($_POST['t']) != "" && $recencyConfig['crosslogin'];
 
 if($fromApiTrue){
     $_POST['userName'] = $_POST['u'];
