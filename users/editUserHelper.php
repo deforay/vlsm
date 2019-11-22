@@ -5,7 +5,8 @@ require_once('../startup.php');
 include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 include_once APPLICATION_PATH .'/includes/ImageResize.php';
-//require_once('../startup.php'); include_once(APPLICATION_PATH.'/header.php');
+// Define path to guzzle directory
+require_once(APPLICATION_PATH.'/guzzle/autoload.php');
 
 $general = new General($db);
 $tableName="user_details";
@@ -49,6 +50,21 @@ try {
         }
 
         if(isset($_POST['password']) && trim($_POST['password'])!=""){
+            $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
+            if($recencyConfig['crosslogin']){
+                $client = new \GuzzleHttp\Client();
+                $url = $recencyConfig['url'];
+                $result = $client->post($url.'api/update-password', [
+                    'form_params' => [
+                        'u' => $_POST['loginId'],
+                        't' => sha1($_POST['password'] . $passwordSalt)
+                    ]
+                ]);
+                $response = json_decode($result->getBody()->getContents());
+                if($response->status == 'fail'){
+                    error_log('Recency profile not updated! for the user->'.$_POST['userName']);
+                }
+            }
             $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
             $data['password'] = sha1($_POST['password'].$passwordSalt);
         }
