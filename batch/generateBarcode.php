@@ -182,7 +182,7 @@ if ($id > 0) {
                     }
                     $lotDetails = $sampleResult[0]['lot_number'] . $lotExpirationDate;
                     $tbl .= '<table nobr="true" cellspacing="0" cellpadding="2" style="width:100%;">';
-                    $tbl .= '<tr nobr="true" style="border-bottom:1px solid #333; style="width:100%;">';
+                    $tbl .= '<tr nobr="true" style="border-bottom:1px solid #333;" style="width:100%;">';
                     $tbl .= '<td  align="center" width="6%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $sampleCounter . '.</td>';
                     $tbl .= '<td  align="center" width="18%" style="vertical-align:middle;border-bottom:1px solid #333;">' . $sampleResult[0]['sample_code'] . '</td>';
                     $tbl .= '<td  align="center" width="35%" style="vertical-align:middle !important;border-bottom:1px solid #333;"><tcpdf method="write1DBarcode" params="' . $params . '" /></td>';
