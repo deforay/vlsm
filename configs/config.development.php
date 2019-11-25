@@ -68,4 +68,4 @@ $recencyConfig['vlsync'] = false;
 // Enable/Disable Cross Login with Recency
 // true => Enabled
 // false => Disabled
-$recencyConfig['crosslogin'] = false;
+$recencyConfig['crosslogin'] = true;
