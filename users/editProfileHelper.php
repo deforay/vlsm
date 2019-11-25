@@ -1,31 +1,79 @@
 <?php
 ob_start();
 session_start();
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+require_once('../startup.php');
+include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+// Define path to guzzle directory
+require_once(APPLICATION_PATH.'/guzzle/autoload.php');
 
-$tableName="user_details";
-$userId=base64_decode($_POST['userId']);
+$tableName = "user_details";
+$upId = 0;
+/* To check the password update from the API */
+$fromApiFalse = !isset($_POST['u']) && trim($_POST['u']) == "" && !isset($_POST['t']) && trim($_POST['t']) == "";
+$fromApiTrue = isset($_POST['u']) && trim($_POST['u']) != "" && isset($_POST['t']) && trim($_POST['t']) != "" && $recencyConfig['crosslogin'];
+
+if($fromApiTrue){
+    $_POST['userName'] = $_POST['u'];
+    $_POST['password'] = $_POST['t'];
+}else{
+    $userId = base64_decode($_POST['userId']);
+}
 
 try {
-    if(trim($_POST['userName'])!=''){
-    $data=array(
-    'user_name'=>$_POST['userName'],
-    'email'=>$_POST['email'],
-    'phone_number'=>$_POST['phoneNo'],
-    );
-    
-    if(isset($_POST['password']) && trim($_POST['password'])!=""){
-        $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
-        $data['password'] = sha1($_POST['password'].$passwordSalt);
+    if (trim($_POST['userName']) != '') {
+        if ($fromApiFalse) {
+            $data = array(
+                'user_name' => $_POST['userName'],
+                'email' => $_POST['email'],
+                'phone_number' => $_POST['phoneNo'],
+            );
+        }
+        if($fromApiTrue){
+            $data['user_name'] = $_POST['userName'];
+            $data['password'] = $_POST['password'];
+            $db = $db->where('user_name', $data['user_name']);
+        }else{
+            if (isset($_POST['password']) && trim($_POST['password']) != "") {
+                $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
+                if($recencyConfig['crosslogin']){
+                    $client = new \GuzzleHttp\Client();
+                    $url = $recencyConfig['url'];
+                    $result = $client->post($url.'api/update-password', [
+                        'form_params' => [
+                            'u' => $_POST['loginId'],
+                            't' => sha1($_POST['password'] . $passwordSalt)
+                        ]
+                    ]);
+                    $response = json_decode($result->getBody()->getContents());
+                    if($response->status == 'fail'){
+                        error_log('Recency profile not updated! for the user->'.$_POST['userName']);
+                    }
+                }
+                $data['password'] = sha1($_POST['password'] . $passwordSalt);
+            }
+            $db = $db->where('user_id', $userId);
+        }
+        $upId = $db->update($tableName, $data);
+        if($fromApiTrue){
+            $response = array(); 
+            if($upId > 0){
+                $response['status'] = "success";
+                $response['message'] = "Profile updated successfully!";
+                print_r(json_encode($response));
+            }else{
+                $response['status'] = "fail";
+                $response['message'] = "Profile not updated!";
+                print_r(json_encode($response));
+            }
+        }
+
+        if ($fromApiFalse) {
+            $_SESSION['alertMsg'] = "Your profile changes have been saved. You can continue using VLSM";
+        }
     }
-    
-    $db=$db->where('user_id',$userId);
-    $db->update($tableName,$data);
-    
-    $_SESSION['alertMsg']="Your profile changes have been saved. You can continue using VLSM";
+    if ($fromApiFalse) {
+        header("location:editProfile.php");
     }
-    header("location:editProfile.php");
-  
 } catch (Exception $exc) {
     error_log($exc->getMessage());
     error_log($exc->getTraceAsString());
