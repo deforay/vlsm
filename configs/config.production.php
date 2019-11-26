@@ -55,7 +55,9 @@ $eidConfig['enabled'] = true;
 $recencyConfig = array();
 
 // Domain URL of the Recency Web Application
-$recencyConfig['url'] = "http://recency-web/";
+$recencyConfig['url'] = "";
+
+// This Salt should match the Salt on Recency Web app 
 $recencyConfig['crossloginSalt'] = "0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later";
 
 // Enable/Disable Recency Sync 
