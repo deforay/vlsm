@@ -31,4 +31,10 @@ include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
             }
         }
     }
+
+    if($data > 0){
+        $data = '1';
+    }else{
+        $data = '0';
+    }
 echo $data;

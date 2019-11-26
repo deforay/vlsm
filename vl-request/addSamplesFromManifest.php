@@ -118,6 +118,10 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 
 	function loadVlRequestData() {
 		$.blockUI();
+		if(oTable){
+			$("#vlManifestDataTable").dataTable().fnDestroy();
+		}
+		
 		oTable = $('#vlManifestDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
@@ -126,6 +130,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"bAutoWidth": false,
 			"bInfo": true,
 			"bScrollCollapse": true,
+			//"bDestroy": true,
 			"bStateSave": true,
 			"bRetrieve": true,
 			"aoColumns": [{

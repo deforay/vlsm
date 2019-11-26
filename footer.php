@@ -39,7 +39,7 @@
     function checkCrossLogin(){
 		<?php if($recencyConfig['crosslogin']){?>
 			if(sessionStorage.getItem("crosslogin") == "true"){
-				window.open('<?php echo $recencyConfig['url'].'logout';?>', '_blank');
+				window.open('<?php echo rtrim($recencyConfig['url'], "/") . '/logout';?>', '_blank');
 				sessionStorage.setItem("crosslogin", "false");
 			}
 		<?php }?>
