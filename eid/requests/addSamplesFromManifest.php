@@ -119,6 +119,9 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 
 	function loadEIDRequestData() {
 		$.blockUI();
+		if(oTable){
+			$("#vlManifestDataTable").dataTable().fnDestroy();
+		}		
 		oTable = $('#eidManifestDataTable').dataTable({
 			"oLanguage": {
 				"sLengthMenu": "_MENU_ records per page"
@@ -128,6 +131,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			"bInfo": true,
 			"bScrollCollapse": true,
 			"bStateSave": true,
+			//"bDestroy": true,
 			"bRetrieve": true,
 			"aoColumns": [{
 					"sClass": "center"
