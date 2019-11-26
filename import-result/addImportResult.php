@@ -5,10 +5,10 @@ require_once('../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general = new General($db);
-$query = "SELECT config_id,machine_name,import_machine_file_name FROM import_config where status='active'";
+$query = "SELECT config_id,machine_name,import_machine_file_name FROM import_config WHERE status='active'";
 $iResult = $db->rawQuery($query);
 
-$fQuery = "SELECT * FROM facility_details where facility_type=2";
+$fQuery = "SELECT * FROM facility_details WHERE facility_type=2";
 $fResult = $db->rawQuery($fQuery);
 
 $lastQuery = "SELECT * FROM vl_request_form ORDER BY vl_sample_id DESC LIMIT 1";
@@ -126,7 +126,7 @@ $type = base64_decode($_GET['t']);
                         <input type="hidden" id="vltestPlatform" name="vltestPlatform" value="" />
                         <input type="hidden" id="type" name="type" value="<?php echo $type; ?>" />
                         <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-                        <a href="../dashboard/index.php" class="btn btn-default"> Cancel</a>
+                        <a href="/dashboard/index.php" class="btn btn-default"> Cancel</a>
                       </div>
                     </div>
                   </div>
