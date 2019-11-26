@@ -30,8 +30,7 @@ try {
             }
         }        
 
-        $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
-        $password = sha1($_POST['password'] . $passwordSalt);
+        $password = sha1($_POST['password'] . $systemConfig['passwordSalt']);
         $idOne = $general->generateRandomString(8);
         $idTwo = $general->generateRandomString(4);
         $idThree = $general->generateRandomString(4);
