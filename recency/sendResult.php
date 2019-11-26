@@ -3,18 +3,17 @@ try {
     ob_start();
     require_once('../startup.php');  
     include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-    include_once(APPLICATION_PATH.'/General.php');
+    include_once(APPLICATION_PATH.'/models/General.php');
     $general=new General($db);
     // Define path to guzzle directory
     /** Zend_Application */
     // require_once APPLICATION_PATH.'/includes/Zend/Application.php';
-    require APPLICATION_PATH.'/includes/guzzle/autoload.php';
+    require APPLICATION_PATH.'/vendor/guzzle/autoload.php';
 
     $vlTestResultQuery ="SELECT remote_sample_code,result,sample_tested_datetime,recency_vl,recency_sync from vl_request_form WHERE recency_vl ='yes' AND recency_sync = '0' AND result != '' and result is NOT NULL";
     $vlTestResult=$db->query($vlTestResultQuery);
     $client = new \GuzzleHttp\Client();
-    
-    
+
     $domain = rtrim($recencyConfig['url'], "/");
     $urlCart = $domain.'/api/vl-test-result';
 

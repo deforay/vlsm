@@ -20,7 +20,6 @@ if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
 try{
     require_once('../startup.php');  
     include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-    // include_once(APPLICATION_PATH.'/General.php');
     include_once(APPLICATION_PATH.'/models/General.php');
 
     $general=new General($db);
