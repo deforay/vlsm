@@ -8,6 +8,7 @@ $systemConfig['dbUser']     = '';
 $systemConfig['dbPassword'] = '';
 $systemConfig['dbName']     = '';
 $systemConfig['dbPort']     = 3306;
+$systemConfig['passwordSalt']= '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
 
 //Please use only GMAIL ID AND PASSWORD
 $systemConfig['adminEmailUserName'] = '';

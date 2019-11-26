@@ -50,14 +50,13 @@ try {
         }
 
         if(isset($_POST['password']) && trim($_POST['password'])!=""){
-            $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
             if($recencyConfig['crosslogin']){
                 $client = new \GuzzleHttp\Client();
                 $url = rtrim($recencyConfig['url'], "/");
                 $result = $client->post($url.'/api/update-password', [
                     'form_params' => [
                         'u' => $_POST['loginId'],
-                        't' => sha1($_POST['password'] . $passwordSalt)
+                        't' => sha1($_POST['password'] . $systemConfig['passwordSalt'])
                     ]
                 ]);
                 $response = json_decode($result->getBody()->getContents());
@@ -65,8 +64,7 @@ try {
                     error_log('Recency profile not updated! for the user->'.$_POST['userName']);
                 }
             }
-            $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
-            $data['password'] = sha1($_POST['password'].$passwordSalt);
+            $data['password'] = sha1($_POST['password'].$systemConfig['passwordSalt']);
         }
         
         $db=$db->where('user_id',$userId);

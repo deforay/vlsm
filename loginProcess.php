@@ -36,10 +36,9 @@ if(isset($_GET['u']) && trim($_GET['u'])!="" && isset($_GET['t']) && trim($_GET[
 /* Crosss Login Block End */
 try {
     if(isset($_POST['username']) && trim($_POST['username'])!="" && isset($_POST['password']) && trim($_POST['password'])!=""){
-        $passwordSalt = '0This1Is2A3Real4Complex5And6Safe7Salt8With9Some10Dynamic11Stuff12Attched13later';
         /* Crosss Login Block Start */
         if(!isset($_GET['u']) && trim($_GET['u'])=="" && !isset($_GET['t']) && trim($_GET['t'])==""){
-            $password = sha1($_POST['password'].$passwordSalt);
+            $password = sha1($_POST['password'].$systemConfig['passwordSalt']);
         }
         /* Crosss Login Block End */
         $adminUsername=$db->escape($_POST['username']);
