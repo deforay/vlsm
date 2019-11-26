@@ -120,7 +120,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 	function loadEIDRequestData() {
 		$.blockUI();
 		if(oTable){
-			$("#vlManifestDataTable").dataTable().fnDestroy();
+			$("#eidManifestDataTable").dataTable().fnDestroy();
 		}		
 		oTable = $('#eidManifestDataTable').dataTable({
 			"oLanguage": {
