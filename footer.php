@@ -35,16 +35,7 @@
 			sessionStorage.setItem("crosslogin", "false");
 		}
     }
-    
-    function checkCrossLogin(){
-		<?php if($recencyConfig['crosslogin']){?>
-			if(sessionStorage.getItem("crosslogin") == "true"){
-				window.open('<?php echo rtrim($recencyConfig['url'], "/") . '/logout';?>', '_blank');
-				sessionStorage.setItem("crosslogin", "false");
-			}
-		<?php }?>
-    }
-  	<?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) {?>
+    <?php if (isset($_SESSION['vldashboard_url']) && $_SESSION['vldashboard_url'] != '' && $_SESSION['vldashboard_url'] != null) {?>
   		var vldashSync = true;
   		var vldashUrl = '<?php echo $_SESSION['vldashboard_url']; ?>';
 

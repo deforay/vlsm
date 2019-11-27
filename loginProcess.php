@@ -16,7 +16,7 @@ if($systemInfo != false){
 
 $dashboardUrl = $general->getGlobalConfig('vldashboard_url');
 /* Crosss Login Block Start */
-if(isset($_GET['u']) && trim($_GET['u'])!="" && isset($_GET['t']) && trim($_GET['t'])!=""){
+if(isset($_GET['u']) && trim($_GET['u'])!="" && isset($_GET['t']) && trim($_GET['t'])!="" && $recencyConfig['crosslogin']){
     $_POST['username'] = base64_decode($_GET['u']);
     $crossLoginQuery = "SELECT login_id,password,user_name FROM user_details WHERE login_id = '".$_POST['username']."'";
     $check = $db->rawQueryOne($crossLoginQuery);
@@ -31,6 +31,10 @@ if(isset($_GET['u']) && trim($_GET['u'])!="" && isset($_GET['t']) && trim($_GET[
         }
     }else{
         $_POST['password'] = "";
+    }
+}else{
+    if(!$recencyConfig['crosslogin']){
+        $_SESSION['alertMsg']="Cross login not activated in VLSM!";
     }
 }
 /* Crosss Login Block End */

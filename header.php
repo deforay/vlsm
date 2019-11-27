@@ -290,7 +290,7 @@ $formConfigResult = $db->query($formConfigQuery);
 									<a href="/users/editProfile.php" class="">Edit Profile</a>
 								</li>
 								<li class="user-footer <?php echo $alignRight; ?>">
-									<a href="/logout.php" onclick="checkCrossLogin();">Sign out</a>
+									<a href="/logout.php">Sign out</a>
 								</li>
 
 							</ul>

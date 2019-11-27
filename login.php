@@ -163,6 +163,12 @@ if ($sarr['user_type'] == 'remoteuser') {
       }
     }
     $(document).ready(function() {
+      <?php if($recencyConfig['crosslogin']){?>
+          if(sessionStorage.getItem("crosslogin") == "true"){
+              window.location.href = '<?php echo rtrim($recencyConfig['url'], "/") . '/logout';?>';
+              sessionStorage.setItem("crosslogin", "false");
+          }
+      <?php }?>
       <?php
       if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") {
         ?>
