@@ -33,7 +33,7 @@ if(isset($_GET['u']) && trim($_GET['u'])!="" && isset($_GET['t']) && trim($_GET[
         $_POST['password'] = "";
     }
 }else{
-    if(!$recencyConfig['crosslogin']){
+    if(!$recencyConfig['crosslogin'] && !isset($_POST['username']) && trim($_POST['username'])==""){
         $_SESSION['alertMsg']="Cross login not activated in VLSM!";
     }
 }
