@@ -28,7 +28,7 @@ foreach ($sampleResult as $sampleRow) {
 
         $sampleJson = $eidObj->generateEIDSampleCode($provinceCode, $general->humanDateFormat($sampleRow['sample_collection_date']));
         $sampleData = json_decode($sampleJson, true);
-        $eidData['serial_no'] = $sampleData['sampleCode'];
+        
         $eidData['sample_code'] = $sampleData['sampleCode'];
         $eidData['sample_code_format'] = $sampleData['sampleCodeFormat'];
         $eidData['sample_code_key'] = $sampleData['sampleCodeKey'];

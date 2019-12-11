@@ -97,7 +97,7 @@ if (count($result) > 0) {
         if ($lab['sample_code'] != '' && $lab['sample_code'] != 0 && $lab['sample_code'] != null) {
             $sQuery = "SELECT vl_sample_id FROM vl_request_form WHERE sample_code='" . $lab['sample_code'] . "'";
             $sResult = $db->rawQuery($sQuery);
-            $lab['data_sync'] = 1; //column data sync value is 1 equal to data sync done.value 0 is not done.
+            $lab['data_sync'] = 0; //column data sync value is 1 equal to data sync done.value 0 is not done.
             unset($lab['request_created_by']);
             unset($lab['last_modified_by']);
             unset($lab['request_created_datetime']);
@@ -119,7 +119,7 @@ if (count($result) > 0) {
                     //$lab['sample_registered_at_lab'] = $general->getDateTime();
                     $lab['last_modified_datetime'] = $general->getDateTime();
                     //$lab['result_status'] = 6;
-                    $lab['data_sync'] = 1; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                    $lab['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
                     $id = $db->insert('vl_request_form', $lab);
                 }
             }
@@ -129,7 +129,7 @@ if (count($result) > 0) {
 
 
 // EID TEST REQUESTS
-
+$lab = array();
 if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
     $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-requests.php';
     $data = array(
@@ -183,11 +183,11 @@ if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
             foreach ($removeKeys as $keys) {
                 unset($lab[$keys]);
             }
-            //check wheather sample code empty or not
+            //check whether sample code empty or not
             if ($lab['sample_code'] != '' && $lab['sample_code'] != 0 && $lab['sample_code'] != null) {
                 $sQuery = "SELECT eid_id FROM eid_form WHERE sample_code='" . $lab['sample_code'] . "'";
                 $sResult = $db->rawQuery($sQuery);
-                $lab['data_sync'] = 1; //column data sync value is 1 equal to data sync done.value 0 is not done.
+                $lab['data_sync'] = 0; //column data sync value is 1 equal to data sync done.value 0 is not done.
 
                 unset($lab['request_created_by']);
                 unset($lab['last_modified_by']);
@@ -212,7 +212,7 @@ if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
                         //$lab['sample_registered_at_lab'] = $general->getDateTime();
                         $lab['last_modified_datetime'] = $general->getDateTime();
                         //$lab['result_status'] = 6;
-                        $lab['data_sync'] = 1; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                        $lab['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
                         $id = $db->insert('eid_form', $lab);
                     }
                 }
