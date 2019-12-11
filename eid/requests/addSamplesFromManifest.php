@@ -180,7 +180,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 					}
 				});
 		} else {
-			alert('Please enter the manifest code then submit!');
+			alert('Please enter the Sample Manifest Code then hit submit');
 		}
 	}
 
@@ -191,7 +191,7 @@ if (isset($global['bar_code_printing']) && $global['bar_code_printing'] != "off"
 			},
 			function(data) {
 				if (data > 0) {
-					alert('Sample was updated successfully!');
+					alert('Samples from this Manifest have been activated');
 					$('.activateSample').hide(500);
 				}
 				oTable.fnDraw();
