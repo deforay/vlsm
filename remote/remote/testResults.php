@@ -16,26 +16,33 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 
 $general = new General($db);
 
+function var_error_log( $object=null ){
+    ob_start();
+    var_dump($object);
+    error_log(ob_get_clean());    
+}
 
 
 $allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '".$systemConfig['dbName']."' AND table_name='vl_request_form'";
 $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
+
 $sampleCode = array();
 if (count($data['result']) > 0) {
-    $lab = array();
+    
     foreach ($data['result'] as $key => $remoteData) {
-        foreach ($oneDimensionalArray as $result) {
-            if (isset($remoteData[$result])) {
-                $lab[$result] = $remoteData[$result];
+        $lab = array();
+        foreach ($oneDimensionalArray as $columnName) {
+            if (isset($remoteData[$columnName])) {
+                $lab[$columnName] = $remoteData[$columnName];
             } else {
-                $lab[$result] = null;
+                $lab[$columnName] = null;
             }
         }
-        //remove result value
-        $removeKeys = array('vl_sample_id');
-        foreach ($removeKeys as $keys) {
-            unset($lab[$keys]);
+        //remove unwanted columns
+        $unwantedColumns = array('vl_sample_id');
+        foreach ($unwantedColumns as $removeColumn) {
+           unset($lab[$removeColumn]);
         }
 
 
@@ -81,11 +88,13 @@ if (count($data['result']) > 0) {
 
         // Checking if Remote Sample Code is set, if not set we will check if Sample Code is set
         if (isset($lab['remote_sample_code']) && $lab['remote_sample_code'] != '') {
+            error_log("INSIDE REMOTE");
             $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE remote_sample_code='" . $lab['remote_sample_code'] . "'";
         } else if (isset($lab['sample_code']) && $lab['sample_code'] != '') {
+            error_log("INSIDE LOCAL");
             $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE sample_code='" . $lab['sample_code'] . "' AND facility_id = " . $lab['facility_id'];
         }
-
+        
         $sResult = $db->rawQuery($sQuery);
 
         //$lab['result_printed_datetime'] = null;            
