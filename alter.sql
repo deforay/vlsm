@@ -1999,3 +1999,5 @@ WHERE eid_form.sample_package_code is NULL;
 -- Thanaseelan 19-Nov-2019 for Add Samples from Manifest
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '6', 'addSamplesFromManifest.php', 'Add Samples from Manifest');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) VALUES (NULL, '25', 'addSamplesFromManifest.php', 'Add Samples from Manifest');
+
+-- Version 3.18 ---- Amit Dec 11 2019
