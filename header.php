@@ -270,7 +270,7 @@ $formConfigResult = $db->query($formConfigQuery);
 						<?php if ($recencyConfig['crosslogin']) {
 							$password = $crossLoginResult['password'] . $recencyConfig['crossloginSalt']; ?>
 							<li class="user-menu">
-								<a target="_blank" onclick="setCrossLogin();" href="<?php echo rtrim($recencyConfig['url'], "/") . '/login?u=' . base64_encode($crossLoginResult['login_id']) . '&t=' . hash('sha256', $password) . '&name=' . base64_encode($crossLoginResult['user_name']); ?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
+								<a onclick="setCrossLogin();" href="<?php echo rtrim($recencyConfig['url'], "/") . '/login?u=' . base64_encode($crossLoginResult['login_id']) . '&t=' . hash('sha256', $password) . '&name=' . base64_encode($crossLoginResult['user_name']); ?>" class="btn btn-link"><i class="fa fa-fw fa-external-link"></i> Recency</a>
 							</li>
 						<?php } ?>
 						<li class="dropdown user user-menu">

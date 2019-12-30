@@ -21,19 +21,34 @@ for ($i = 0; $i < sizeof($configResult); $i++) {
     $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 //ar code last update time
-$artCodeTime = '';$rjtDateTime = '';$provinceDateTime = '';$fDateTime = '';
+$artCodeTime = '';
+$rjtDateTime = '';
+$eidRejectionReasonsUpdateTime = '';
+$provinceDateTime = '';
+$fDateTime = '';
 
 $artCodeLQuery = "select * from r_art_code_details order by updated_datetime DESC limit 1";
 $artCodeLResult = $db->query($artCodeLQuery);
 if(isset($artCodeLResult[0]['updated_datetime']) && $artCodeLResult[0]['updated_datetime']!='' && $artCodeLResult[0]['updated_datetime']!=NULL && $artCodeLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $artCodeTime = $artCodeLResult[0]['updated_datetime'];
 }
+
 //rejection reason last update time
 $rejectLQuery = "select * from r_sample_rejection_reasons order by updated_datetime DESC limit 1";
 $rejectLResult = $db->query($rejectLQuery);
 if(isset($rejectLResult[0]['updated_datetime']) && $rejectLResult[0]['updated_datetime']!='' && $rejectLResult[0]['updated_datetime']!=NULL && $rejectLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $rjtDateTime = $rejectLResult[0]['updated_datetime'];
 }
+
+
+//rejection reason last update time
+$rejectLQuery = "select * from r_eid_sample_rejection_reasons order by updated_datetime DESC limit 1";
+$rejectLResult = $db->query($rejectLQuery);
+if(isset($rejectLResult[0]['updated_datetime']) && $rejectLResult[0]['updated_datetime']!='' && $rejectLResult[0]['updated_datetime']!=NULL && $rejectLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
+    $eidRejectionReasonsUpdateTime = $rejectLResult[0]['updated_datetime'];
+}
+
+
 //prvince data last update time
 $provinceLQuery = "select * from province_details order by updated_datetime DESC limit 1";
 $provinceLResult = $db->query($provinceLQuery);
@@ -46,6 +61,7 @@ $facilityLResult = $db->query($facilityLQuery);
 if(isset($facilityLResult[0]['updated_datetime']) && $facilityLResult[0]['updated_datetime']!='' && $facilityLResult[0]['updated_datetime']!=NULL && $facilityLResult[0]['updated_datetime']!='0000-00-00 00:00:00'){
     $fDateTime = $facilityLResult[0]['updated_datetime'];
 }
+
 $url = $systemConfig['remoteURL'].'/remote/remote/commonData.php';
 
 
@@ -53,6 +69,7 @@ $url = $systemConfig['remoteURL'].'/remote/remote/commonData.php';
 $data = array(
     'artCodeUpdateTime'=>$artCodeTime,
     'rjtUpdateTime'=>$rjtDateTime,
+    'eidRejectionReasonsUpdateTime'=>$eidRejectionReasonsUpdateTime,
     'provinceUpdateTime'=>$provinceDateTime,
     'facilityUpdateTime'=>$fDateTime,
     "Key"=>"vlsm-get-remote",
@@ -144,6 +161,33 @@ if(!empty($result['rejectReason']) && count($result['rejectReason'])>0){
         }else{
             $rejectResultData['rejection_reason_id'] = $reason['rejection_reason_id'];
             $db->insert('r_sample_rejection_reasons',$rejectResultData);
+            $lastId = $db->getInsertId();
+        }
+    }
+}
+
+//update or insert rejected reason
+if(!empty($result['eidRejectionReason']) && count($result['eidRejectionReason'])>0){
+    
+    // making all local rows inactive 
+    // this way any additional rows in local that are not on remote
+    // become inactive.
+
+    //$db->update('r_eid_sample_rejection_reasons',array('rejection_reason_status'=>'inactive'));    
+
+    foreach($result['eidRejectionReason'] as $reason){
+        $rejectQuery = "select * from r_eid_sample_rejection_reasons where rejection_reason_id=".$reason['rejection_reason_id'];
+        $rejectLocalResult = $db->query($rejectQuery);
+        $rejectResultData = array('rejection_reason_name'=>$reason['rejection_reason_name'],'rejection_type'=>$reason['rejection_type'],
+                             'rejection_reason_status'=>$reason['rejection_reason_status'],'rejection_reason_code'=>$reason['rejection_reason_code'],
+                             'data_sync'=>1,'updated_datetime'=>$reason['updated_datetime']);
+        $lastId = 0;
+        if($rejectLocalResult){
+            $db = $db->where('rejection_reason_id',$reason['rejection_reason_id']);
+            $lastId = $db->update('r_eid_sample_rejection_reasons',$rejectResultData);
+        }else{
+            $rejectResultData['rejection_reason_id'] = $reason['rejection_reason_id'];
+            $db->insert('r_eid_sample_rejection_reasons',$rejectResultData);
             $lastId = $db->getInsertId();
         }
     }
