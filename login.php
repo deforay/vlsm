@@ -81,21 +81,21 @@ if ($sarr['user_type'] == 'remoteuser') {
 
 
     if (isset($configResult[0]['value']) && trim($configResult[0]['value']) != "" && file_exists('uploads' . DIRECTORY_SEPARATOR . "logo" . DIRECTORY_SEPARATOR . $configResult[0]['value'])) {
-      ?>
+    ?>
       <div style="margin-top:15px;float:left;">
         <img src="/uploads/logo/<?php echo $configResult[0]['value']; ?>" alt="Logo image" style="max-width:120px;">
       </div>
     <?php
-  }
-
-  if (is_dir($filePath) && count(scandir($filePath)) > 2) {
-    $dir = scandir($filePath);
-    $loginLogoFiles = array();
-    foreach ($dir as $fileName) {
-      if ($fileName != '.' && $fileName != '..') {
-        $loginLogoFiles[] = $fileName;
-      }
     }
+
+    if (is_dir($filePath) && count(scandir($filePath)) > 2) {
+      $dir = scandir($filePath);
+      $loginLogoFiles = array();
+      foreach ($dir as $fileName) {
+        if ($fileName != '.' && $fileName != '..') {
+          $loginLogoFiles[] = $fileName;
+        }
+      }
     ?>
       <div style="margin-top:15px;float:left;">
         <?php foreach ($loginLogoFiles as $fileName) { ?>
@@ -103,9 +103,9 @@ if ($sarr['user_type'] == 'remoteuser') {
         <?php }  ?>
       </div>
     <?php
-  }
+    }
 
-  ?>
+    ?>
     <div id="loginbox" style="margin-top:20px;margin-bottom:70px;float:right;margin-right:10px;" class="mainbox col-md-3 col-sm-8 ">
       <div class="panel panel-default" style="opacity: 0.93;">
         <div class="panel-heading">
@@ -163,21 +163,18 @@ if ($sarr['user_type'] == 'remoteuser') {
       }
     }
     $(document).ready(function() {
-      <?php if($recencyConfig['crosslogin']){?>
-          if(sessionStorage.getItem("crosslogin") == "true"){
-              window.location.href = '<?php echo rtrim($recencyConfig['url'], "/") . '/logout';?>';
-              sessionStorage.setItem("crosslogin", "false");
-          }
-      <?php }?>
-      <?php
-      if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") {
-        ?>
+      <?php if ($recencyConfig['crosslogin']) { ?>
+        if (sessionStorage.getItem("crosslogin") == "true") {
+          <?php $_SESSION['logged'] = false; ?>
+          sessionStorage.setItem("crosslogin", "false");
+          window.location.href = '<?php echo rtrim($recencyConfig['url'], "/") . '/logout'; ?>';
+        }
+      <?php }
+      if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") { ?>
         alert('<?php echo $_SESSION['alertMsg']; ?>');
-        <?php
-        $_SESSION['alertMsg'] = '';
+      <?php $_SESSION['alertMsg'] = '';
         unset($_SESSION['alertMsg']);
-      }
-      ?>
+      } ?>
     });
 
     $('#download-form').click(function() {
