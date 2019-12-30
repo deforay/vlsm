@@ -167,7 +167,7 @@ if ($sarr['user_type'] == 'remoteuser') {
         if (sessionStorage.getItem("crosslogin") == "true") {
           <?php $_SESSION['logged'] = false; ?>
           sessionStorage.setItem("crosslogin", "false");
-          window.location.href = '<?php echo rtrim($recencyConfig['url'], "/") . '/logout'; ?>';
+          $('<iframe src="<?php echo rtrim($recencyConfig['url'], "/") . '/logout'; ?>" frameborder="0" scrolling="no" id="myFrame"></iframe>').appendTo('body');
         }
       <?php }
       if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") { ?>
