@@ -162,12 +162,13 @@ if ($sarr['user_type'] == 'remoteuser') {
         document.getElementById('loginForm').submit();
       }
     }
+
     $(document).ready(function() {
       <?php if ($recencyConfig['crosslogin']) { ?>
         if (sessionStorage.getItem("crosslogin") == "true") {
           <?php $_SESSION['logged'] = false; ?>
           sessionStorage.setItem("crosslogin", "false");
-          $('<iframe src="<?php echo rtrim($recencyConfig['url'], "/") . '/logout'; ?>" frameborder="0" scrolling="no" id="myFrame"></iframe>').appendTo('body');
+          $('<iframe src="<?php echo rtrim($recencyConfig['url'], "/") . '/logout'; ?>" frameborder="0" scrolling="no" id="myFrame" style="display:none;"></iframe>').appendTo('body');
         }
       <?php }
       if (isset($_SESSION['alertMsg']) && trim($_SESSION['alertMsg']) != "") { ?>
