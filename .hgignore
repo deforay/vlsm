@@ -4,6 +4,9 @@ syntax: regexp
 ^temporary/(?!index.php)
 ^instrument-interfacing/files/roche/new/(?!index.php)
 ^instrument-interfacing/files/roche/imported/(?!index.php)
+
+
+syntax: glob
 error_log
 npm-debug.log
 Thumbs.db
@@ -11,7 +14,10 @@ Thumbs.db.orig
 .DS_Store
 .DS_Store.orig
 .git
+.git/*
 .gitattributes
 .gitignore
-^configs/config.production.php
-^configs/config.development.php
+configs/config.production.php
+configs/config.development.php
+
+
