@@ -1,40 +1,45 @@
 <?php
 session_start();
 ob_start();
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+require_once('../startup.php');
+include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 
-$general=new General($db); // passing $db which is coming from MysqliDb.php
+$general = new General($db); // passing $db which is coming from MysqliDb.php
 
-$configFormQuery="SELECT * FROM global_config WHERE name ='vl_form'";
+$configFormQuery = "SELECT * FROM global_config WHERE name ='vl_form'";
 $configFormResult = $db->rawQuery($configFormQuery);
 $cDate = date('Y-m-d');
 $lastSevenDay = date('Y-m-d', strtotime('-7 days'));
 
 $u = $general->getSystemConfig('user_type');
 
-if($u != 'remoteuser'){
+if ($u != 'remoteuser') {
     $whereCondition = "result_status!=9 AND ";
-}else{
+} else {
     $whereCondition = "";
     //get user facility map ids
-    $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='".$_SESSION['userId']."'";
+    $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT facility_id ORDER BY facility_id SEPARATOR ',') as facility_id FROM vl_user_facility_map where user_id='" . $_SESSION['userId'] . "'";
     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
-    if($userfacilityMapresult[0]['facility_id']!=null && $userfacilityMapresult[0]['facility_id']!=''){
-        $whereCondition = "vl.facility_id IN (".$userfacilityMapresult[0]['facility_id'].")  AND remote_sample='yes' AND";
+    if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
+        if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
+            $whereCondition = "eid.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND remote_sample='yes' AND";
+        } else {
+            $whereCondition = "vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")  AND remote_sample='yes' AND";
+        }
     }
 }
 
 
-if(isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate'])!= ''){
-   $s_c_date = explode("to", $_POST['sampleCollectionDate']);
-   //print_r($s_c_date);die;
-   if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
-     $lastSevenDay = $general->dateFormat(trim($s_c_date[0]));
-   }
-   if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
-     $cDate = $general->dateFormat(trim($s_c_date[1]));
-   }
+if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
+    $s_c_date = explode("to", $_POST['sampleCollectionDate']);
+    //print_r($s_c_date);die;
+    if (isset($s_c_date[0]) && trim($s_c_date[0]) != "") {
+        $lastSevenDay = $general->dateFormat(trim($s_c_date[0]));
+    }
+    if (isset($s_c_date[1]) && trim($s_c_date[1]) != "") {
+        $cDate = $general->dateFormat(trim($s_c_date[1]));
+    }
 }
 $sWhere = '';
 
@@ -46,51 +51,81 @@ $dFormat = '';
 $waitingDate = '';
 $rejectedDate = '';
 $i = 0;
-
-//get waiting data
-$waitingQuery="SELECT COUNT(vl_sample_id) as total FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '".$configFormResult[0]['value']."' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
-
-$waitingResult[$i] = $db->rawQuery($waitingQuery);//waiting result
-if($waitingResult[$i][0]['total']!= 0){
-  $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
-  $waitingResult[$i]['date'] = $dFormat;
-  $waitingDate = $dFormat;
-}else{
-  unset($waitingResult[$i]);
+if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
+    $table = "eid_form";
+    $samplesReceivedChart   = "eidSamplesReceivedChart";
+    $samplesTestedChart     = "eidSamplesTestedChart";
+    $samplesRejectedChart   = "eidSamplesRejectedChart";
+    $samplesWaitingChart    = "eidSamplesWaitingChart";
+} else {
+    $table = "vl_request_form";
+    $samplesReceivedChart   = "vlSamplesReceivedChart";
+    $samplesTestedChart     = "vlSamplesTestedChart";
+    $samplesRejectedChart   = "vlSamplesRejectedChart";
+    $samplesWaitingChart    = "vlSamplesWaitingChart";
 }
 
+//get waiting data
+if ($table == "eid_form") {
+    $waitingQuery = "SELECT COUNT(eid_id) as total FROM " . $table . " as eid JOIN facility_details as f ON f.facility_id=eid.facility_id WHERE $whereCondition eid.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (eid.result is null or eid.result = '') AND (eid.is_sample_rejected like 'no' or eid.is_sample_rejected is null or eid.is_sample_rejected = '')";
+} else {
+    $waitingQuery = "SELECT COUNT(vl_sample_id) as total FROM " . $table . " as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
+}
+/* echo print_r($_POST);
+echo "<br>";
+echo $waitingQuery;die; */
+$waitingResult[$i] = $db->rawQuery($waitingQuery); //waiting result
+if ($waitingResult[$i][0]['total'] != 0) {
+    $waitingTotal = $waitingTotal + $waitingResult[$i][0]['total'];
+    $waitingResult[$i]['date'] = $dFormat;
+    $waitingDate = $dFormat;
+} else {
+    unset($waitingResult[$i]);
+}
 
 // Samples Accession
-$accessionQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where '.$whereCondition.' DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" group by `collection_date` order by `collection_date`';
-$tRes = $db->rawQuery($accessionQuery);//overall result
+if ($table == "eid_form") {
+    $accessionQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+} else {
+    $accessionQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+}
+$tRes = $db->rawQuery($accessionQuery); //overall result
 $tResult = array();
-foreach($tRes as $tRow){
+foreach ($tRes as $tRow) {
     $receivedTotal += $tRow['count'];
     $tResult[] = array('total' => $tRow['count'], 'date' => $tRow['collection_date']);
 }
 
 //Samples Tested
-$sampleTestedQuery = 'SELECT DATE(vl.sample_tested_datetime) as `test_date`, COUNT(vl_sample_id) as `count` FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where '.$whereCondition.' DATE(vl.sample_tested_datetime) <= "'.$cDate.'" AND DATE(vl.sample_tested_datetime) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" group by `test_date` order by `test_date`';
-$tRes = $db->rawQuery($sampleTestedQuery);//overall result
+if ($table == "eid_form") {
+    $sampleTestedQuery = 'SELECT DATE(eid.sample_tested_datetime) as `test_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' DATE(eid.sample_tested_datetime) <= "' . $cDate . '" AND DATE(eid.sample_tested_datetime) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
+} else {
+    $sampleTestedQuery = 'SELECT DATE(vl.sample_tested_datetime) as `test_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' DATE(vl.sample_tested_datetime) <= "' . $cDate . '" AND DATE(vl.sample_tested_datetime) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
+}
+$tRes = $db->rawQuery($sampleTestedQuery); //overall result
 $acceptedResult = array();
 $acceptedTotal = 0;
-foreach($tRes as $tRow){
+foreach ($tRes as $tRow) {
     $acceptedTotal += $tRow['count'];
     $acceptedResult[] = array('total' => $tRow['count'], 'date' => $tRow['test_date']);
 }
 
 //Rejected Samples
-$sampleRejectedQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM vl_request_form as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where '.$whereCondition.' vl.is_sample_rejected="yes" AND DATE(vl.sample_collection_date) <= "'.$cDate.'" AND DATE(vl.sample_collection_date) >= "'.$lastSevenDay.'" AND vl.vlsm_country_id = "'.$configFormResult[0]['value'].'" group by `collection_date` order by `collection_date`';
-$tRes = $db->rawQuery($sampleRejectedQuery);//overall result
+if ($table == "eid_form") {
+    $sampleRejectedQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' eid.is_sample_rejected="yes" AND DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+} else {
+    $sampleRejectedQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' vl.is_sample_rejected="yes" AND DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+}
+$tRes = $db->rawQuery($sampleRejectedQuery); //overall result
 $rejectedResult = array();
-foreach($tRes as $tRow){
+foreach ($tRes as $tRow) {
     $rejectedTotal += $tRow['count'];
     $rejectedResult[] = array('total' => $tRow['count'], 'date' => $tRow['collection_date']);
 }
 
 ?>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-    <div class="dashboard-stat2 bluebox" style="cursor:pointer;" >
+    <div class="dashboard-stat2 bluebox" style="cursor:pointer;">
         <div class="display">
             <div class="number">
                 <h3 class="font-green-sharp">
@@ -103,29 +138,29 @@ foreach($tRes as $tRow){
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesReceivedChart" width="210" height="150" style="min-height:150px;"></div>
+        <div id="<?php echo $samplesReceivedChart; ?>" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-    <div class="dashboard-stat2 " style="cursor:pointer;" >
+    <div class="dashboard-stat2 " style="cursor:pointer;">
         <div class="display">
             <div class="number">
                 <h3 class="font-blue-sharp">
                     <span data-counter="counterup" data-value="<?php echo $acceptedTotal; ?>"><?php echo $acceptedTotal; ?></span>
                 </h3>
                 <small class="font-blue-sharp">SAMPLES TESTED</small><br>
-                <small class="font-blue-sharp"  style="font-size:0.75em;">In Selected Range</small>
+                <small class="font-blue-sharp" style="font-size:0.75em;">In Selected Range</small>
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesTestedChart" width="210" height="150" style="min-height:150px;"></div>
+        <div id="<?php echo $samplesTestedChart; ?>" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 
 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
-    <div class="dashboard-stat2 " style="cursor:pointer;" >
+    <div class="dashboard-stat2 " style="cursor:pointer;">
         <div class="display">
             <div class="number">
                 <h3 class="font-red-haze">
@@ -133,13 +168,13 @@ foreach($tRes as $tRow){
                 </h3>
                 <small class="font-red-haze">SAMPLES REJECTED</small><br>
                 <small class="font-red-haze" style="font-size:0.75em;">In Selected Range</small>
-                <!--<small class="font-red-haze"><?php echo $rejectedDate;?></small>-->
+                <!--<small class="font-red-haze"><?php echo $rejectedDate; ?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesRejectedChart" width="210" height="150" style="min-height:150px;"></div>
+        <div id="<?php echo $samplesRejectedChart; ?>" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 
@@ -151,276 +186,272 @@ foreach($tRes as $tRow){
                     <span data-counter="counterup" data-value="<?php echo $waitingTotal; ?>"><?php echo $waitingTotal; ?></span>
                 </h3>
                 <small class="font-purple-soft">SAMPLES WITH NO RESULTS</small><br>
-                <small class="font-purple-soft"  style="font-size:0.75em;">(LAST 6 MONTHS)</small>
-                <!--<small class="font-purple-soft"><?php echo $waitingDate;?></small>-->
+                <small class="font-purple-soft" style="font-size:0.75em;">(LAST 6 MONTHS)</small>
+                <!--<small class="font-purple-soft"><?php echo $waitingDate; ?></small>-->
             </div>
             <div class="icon">
                 <i class="icon-pie-chart"></i>
             </div>
         </div>
-        <div id="samplesWaitingChart" width="210" height="150" style="min-height:150px;"></div>
+        <div id="<?php echo $samplesWaitingChart; ?>" width="210" height="150" style="min-height:150px;"></div>
     </div>
 </div>
 
 <script>
     <?php
     //if(isset($tResult) && count($tResult)>0){
-        if($receivedTotal>0){
-        ?>
-      
-    $('#samplesReceivedChart').highcharts({
-        chart: {
-            type: 'column',
-            height: 150
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-         },
-        xAxis: {
-            categories: [
-            <?php
-            foreach($tResult as $tRow){
-                echo '"'.ucwords($tRow['date']).'",';
-            }
-            ?>],
-            crosshair: true,          
-            scrollbar: {
-                enabled: true
-            },            
-        },
-        yAxis: {
-            min: 0,
+    if ($receivedTotal > 0) { ?>
+        $('#<?php echo $samplesReceivedChart; ?>').highcharts({
+            chart: {
+                type: 'column',
+                height: 150
+            },
             title: {
-                text: null
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0,
-                cursor: 'pointer',
-                //point: {
-                //    events: {
-                //        click: function () {
-                //            window.location.href='/labs/samples-accession';
-                //        }
-                //    }
-                //}                
-            }
-        },
-        series: [{
-            showInLegend: false,  
-            name: 'Samples',
-            data: [<?php
-            foreach($tResult as $tRow){
-                echo ucwords($tRow['total']).",";
-            }
-            ?>]
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: [
+                    <?php
+                    foreach ($tResult as $tRow) {
+                        echo '"' . ucwords($tRow['date']) . '",';
+                    }
+                    ?>
+                ],
+                crosshair: true,
+                scrollbar: {
+                    enabled: true
+                },
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                    cursor: 'pointer',
+                    //point: {
+                    //    events: {
+                    //        click: function () {
+                    //            window.location.href='/labs/samples-accession';
+                    //        }
+                    //    }
+                    //}                
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Samples',
+                data: [<?php
+                        foreach ($tResult as $tRow) {
+                            echo ucwords($tRow['total']) . ",";
+                        }
+                        ?>]
 
-        }],
-        colors : ['#2ab4c0'],
-    });
-    <?php } 
-    //waiting result
-    if($waitingTotal>0){ ?>
-    $('#samplesWaitingChart').highcharts({
-        chart: {
-            type: 'column',
-            height: 150
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-         },
-        xAxis: {
-            categories: [<?php
-            foreach($waitingResult as $total){
-                echo "'".ucwords($total['date'])."',";
-            }
-            ?>],
-            crosshair: true,
-            scrollbar: {
-                enabled: true
-            },              
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: null
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0,
-                cursor: 'pointer',
-            }
-        },
-        series: [{
-            showInLegend: false,  
-            name: 'Samples',
-            data: [<?php
-            foreach($waitingResult as $total){
-                echo ucwords($total[0]['total']).",";
-            }
-            ?>]
-
-        }],
-        colors : ['#8877a9']
-    });
+            }],
+            colors: ['#2ab4c0'],
+        });
     <?php }
-    if($acceptedTotal>0){
+    //waiting result
+    if ($waitingTotal > 0) { ?>
+        $('#<?php echo $samplesWaitingChart; ?>').highcharts({
+            chart: {
+                type: 'column',
+                height: 150
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: [<?php
+                                foreach ($waitingResult as $total) {
+                                    echo "'" . ucwords($total['date']) . "',";
+                                }
+                                ?>],
+                crosshair: true,
+                scrollbar: {
+                    enabled: true
+                },
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                    cursor: 'pointer',
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Samples',
+                data: [<?php
+                        foreach ($waitingResult as $total) {
+                            echo ucwords($total[0]['total']) . ",";
+                        }
+                        ?>]
+
+            }],
+            colors: ['#8877a9']
+        });
+    <?php }
+    if ($acceptedTotal > 0) {
     ?>
-      
-$('#samplesTestedChart').highcharts({
-        chart: {
-            type: 'column',
-            height: 150
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-         },
-        xAxis: {
-            categories: [<?php
-            foreach($acceptedResult as $tRow){
-                echo "'".ucwords($tRow['date'])."',";
-            }
-            ?>],
-            crosshair: true,
-            scrollbar: {
-                enabled: true
-            },              
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: null
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0,
-                cursor: 'pointer',
-            }
-        },
-        series: [{
-            showInLegend: false,  
-            name: 'Samples',
-            data: [<?php
-            foreach($acceptedResult as $tRow){
-                echo ucwords($tRow['total']).",";
-            }
-            ?>]
 
-        }],
-        colors : ['#f36a5a']
-    });        
-<?php }
-if($rejectedTotal>0){
-?>
-    
-    
-$('#samplesRejectedChart').highcharts({
-        chart: {
-            type: 'column',
-            height: 150
-        },
-        title: {
-            text: ''
-        },
-        subtitle: {
-            text: ''
-        },
-        credits: {
-            enabled: false
-         },
-        xAxis: {
-            categories: [<?php
-            foreach($rejectedResult as $tRow){
-                echo "'".ucwords($tRow['date'])."',";
-            }
-            ?>],
-            crosshair: true,
-            scrollbar: {
-                enabled: true
-            },              
-        },
-        yAxis: {
-            min: 0,
+        $('#<?php echo $samplesTestedChart; ?>').highcharts({
+            chart: {
+                type: 'column',
+                height: 150
+            },
             title: {
-                text: null
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0,
-                cursor: 'pointer',
-            }
-        },
-        series: [{
-            showInLegend: false,  
-            name: 'Samples',
-            data: [<?php
-            foreach($rejectedResult as $tRow){
-                echo ucwords($tRow['total']).",";
-            }
-            ?>]
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: [<?php
+                                foreach ($acceptedResult as $tRow) {
+                                    echo "'" . ucwords($tRow['date']) . "',";
+                                }
+                                ?>],
+                crosshair: true,
+                scrollbar: {
+                    enabled: true
+                },
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                    cursor: 'pointer',
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Samples',
+                data: [<?php
+                        foreach ($acceptedResult as $tRow) {
+                            echo ucwords($tRow['total']) . ",";
+                        }
+                        ?>]
 
-        }],
-        colors : ['#5C9BD1']
-    });   
-    <?php } 
+            }],
+            colors: ['#f36a5a']
+        });
+    <?php }
+    if ($rejectedTotal > 0) {?>
+    $('#<?php echo $samplesRejectedChart; ?>').highcharts({
+            chart: {
+                type: 'column',
+                height: 150
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: [<?php
+                                foreach ($rejectedResult as $tRow) {
+                                    echo "'" . ucwords($tRow['date']) . "',";
+                                }
+                                ?>],
+                crosshair: true,
+                scrollbar: {
+                    enabled: true
+                },
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                    cursor: 'pointer',
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Samples',
+                data: [<?php
+                        foreach ($rejectedResult as $tRow) {
+                            echo ucwords($tRow['total']) . ",";
+                        }
+                        ?>]
+
+            }],
+            colors: ['#5C9BD1']
+        });
+    <?php }
     //}
     ?>
 </script>
