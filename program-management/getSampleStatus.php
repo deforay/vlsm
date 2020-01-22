@@ -21,7 +21,23 @@ if ($userType == 'remoteuser') {
         $whereCondition = " AND vl.facility_id IN (" . $userfacilityMapresult[0]['facility_id'] . ")   AND remote_sample='yes'";
     }
 }
-
+if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
+    $table = "eid_form";
+    $sampleStatusOverviewContainer  = "eidSampleStatusOverviewContainer";
+    $samplesVlOverview              = "eidSmplesVlOverview";
+    $labAverageTat                  = "eidLabAverageTat";
+    $highVL                         = "Positive";
+    $lowVL                          = "Negative";
+    $suppression                    = "EID Suppression";
+} else {
+    $table = "vl_request_form";
+    $sampleStatusOverviewContainer  = "vlSampleStatusOverviewContainer";
+    $samplesVlOverview              = "vlSmplesVlOverview";
+    $labAverageTat                  = "vlLabAverageTat";
+    $highVL                         = "High Viral Load";
+    $lowVL                          = "Low Viral Load";
+    $suppression                    = "VL Suppression";
+}
 $tsQuery = "SELECT * FROM `r_sample_status` ORDER BY `status_id`";
 $tsResult = $db->rawQuery($tsQuery);
 // $sampleStatusArray = array();
@@ -55,32 +71,57 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
         $end_date = $general->dateFormat(trim($s_c_date[1]));
     }
 }
-
-$tQuery = "SELECT COUNT(vl_sample_id) as total,status_id,status_name 
-                FROM vl_request_form as vl 
-                JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
-                JOIN facility_details as f ON vl.facility_id=f.facility_id 
-                LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type 
-                LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
-                WHERE vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
-
-//filter
-$sWhere = '';
-if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
-    $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
+if($table = "eid_form"){
+    $tQuery = "SELECT COUNT(eid_id) as total,status_id,status_name 
+    FROM ".$table." as eid 
+    JOIN r_sample_status as ts ON ts.status_id=eid.result_status 
+    JOIN facility_details as f ON eid.facility_id=f.facility_id 
+    LEFT JOIN batch_details as b ON b.batch_id=eid.sample_batch_id 
+    WHERE eid.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
+    
+    //filter
+    $sWhere = '';
+    if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
+        $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
+    }
+    if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
+        $sWhere .= ' AND DATE(eid.sample_collection_date) >= "' . $start_date . '" AND DATE(eid.sample_collection_date) <= "' . $end_date . '"';
+    }
+    /* if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
+        $sWhere .= ' AND s.sample_id = "' . $_POST['sampleType'] . '"';
+    } */
+    if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
+        $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
+    }
+    $tQuery .= " " . $sWhere;
+    
+    $tQuery .= " " . "GROUP BY eid.result_status ORDER BY status_id";
+}else{
+    $tQuery = "SELECT COUNT(vl_sample_id) as total,status_id,status_name 
+    FROM ".$table." as vl 
+    JOIN r_sample_status as ts ON ts.status_id=vl.result_status 
+    JOIN facility_details as f ON vl.facility_id=f.facility_id 
+    LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id 
+    WHERE vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
+    
+    //filter
+    $sWhere = '';
+    if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
+        $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
+    }
+    if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
+        $sWhere .= ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
+    }
+   /*  if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
+        $sWhere .= ' AND s.sample_id = "' . $_POST['sampleType'] . '"';
+    } */
+    if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
+        $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
+    }
+    $tQuery .= " " . $sWhere;
+    
+    $tQuery .= " " . "GROUP BY vl.result_status ORDER BY status_id";
 }
-if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-    $sWhere .= ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
-}
-if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
-    $sWhere .= ' AND s.sample_id = "' . $_POST['sampleType'] . '"';
-}
-if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
-    $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
-}
-$tQuery .= " " . $sWhere;
-
-$tQuery .= " " . "GROUP BY vl.result_status ORDER BY status_id";
 
 //echo $tQuery;die;
 
@@ -88,37 +129,58 @@ $tResult = $db->rawQuery($tQuery);
 
 
 //HVL and LVL Samples
-
-$vlSuppressionQuery = "SELECT   COUNT(vl_sample_id) as total,
-                                SUM(CASE
-                                        WHEN (vl.result > 1000) THEN 1
-                                            ELSE 0
-                                        END) AS highVL,
-                                (SUM(CASE
-                                        WHEN (vl.result <= 1000 OR vl.result REGEXP '^[^0-9]+$') THEN 1
-                                            ELSE 0
-                                        END)) AS lowVL,                                        
-                                status_id,
-                                status_name 
-                                
-                                FROM vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
-
-$sWhere = " AND (vl.result!='' and vl.result is not null) ";
-
-if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
-    $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
+if($table = "eid_form"){
+    $vlSuppressionQuery = "SELECT   COUNT(eid_id) as total,
+        SUM(CASE
+                WHEN (eid.result > 1000 OR eid.result ='positive') THEN 1
+                    ELSE 0
+                END) AS highVL,
+        (SUM(CASE
+                WHEN (eid.result <= 1000 OR eid.result ='positive') THEN 1
+                    ELSE 0
+                END)) AS lowVL,
+        status_id,
+        status_name
+        
+        FROM ".$table." as eid INNER JOIN r_sample_status as ts ON ts.status_id=eid.result_status JOIN facility_details as f ON eid.facility_id=f.facility_id LEFT JOIN batch_details as b ON b.batch_id=eid.sample_batch_id where eid.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
+    
+    $sWhere = " AND (eid.result!='' and eid.result is not null) ";
+    if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
+        $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
+    }
+    if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
+        $sWhere .= ' AND DATE(eid.sample_collection_date) >= "' . $start_date . '" AND DATE(eid.sample_collection_date) <= "' . $end_date . '"';
+    }
+}else{
+    $vlSuppressionQuery = "SELECT COUNT(vl_sample_id) as total,
+        SUM(CASE
+                WHEN (vl.result > 1000) THEN 1
+                    ELSE 0
+                END) AS highVL,
+        (SUM(CASE
+                WHEN (vl.result <= 1000 OR vl.result REGEXP '^[^0-9]+$') THEN 1
+                    ELSE 0
+                END)) AS lowVL,                                        
+        status_id,
+        status_name 
+        
+        FROM ".$table." as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition";
+    
+    $sWhere = " AND (vl.result!='' and vl.result is not null) ";
+    if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
+        $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
+    }
+    if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
+        $sWhere .= ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
+    }
 }
-if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
-    $sWhere .= ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
-}
-if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
+/* if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
     $sWhere .= ' AND s.sample_id = "' . $_POST['sampleType'] . '"';
-}
+} */
 if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
     $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
 }
 $vlSuppressionQuery = $vlSuppressionQuery . ' ' . $sWhere;
-
 $vlSuppressionResult = $db->rawQueryOne($vlSuppressionQuery);
 
 //get LAB TAT
@@ -127,20 +189,37 @@ if ($start_date == '' && $end_date == '') {
     $start_date = date('Y-m-d', $date);
     $end_date = date('Y-m-d');
 }
-$tatSampleQuery = "select
-                        DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,
-                        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgTestedDiff,
-                        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
-                        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
-
-                        from vl_request_form as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
-                        AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR
-                        (vl.result_printed_datetime is not null AND vl.result_printed_datetime != '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR
-                        (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime != '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
-                        AND vl.result is not null
-                        AND vl.result != ''
-                        AND DATE(vl.sample_collection_date) >= '" . $start_date . "'
-                        AND DATE(vl.sample_collection_date) <= '" . $end_date . "' AND vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition group by MONTH(vl.sample_collection_date) ORDER BY (vl.sample_collection_date)";
+if($table = "eid_form"){
+    $tatSampleQuery = "select
+        DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,
+        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgTestedDiff,
+        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
+        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
+    
+        from ".$table." as eid INNER JOIN r_sample_status as ts ON ts.status_id=eid.result_status JOIN facility_details as f ON eid.facility_id=f.facility_id LEFT JOIN batch_details as b ON b.batch_id=eid.sample_batch_id where (eid.sample_collection_date is not null AND eid.sample_collection_date != '' AND DATE(eid.sample_collection_date) !='1970-01-01' AND DATE(eid.sample_collection_date) !='0000-00-00')
+        AND ((eid.sample_tested_datetime is not null AND eid.sample_tested_datetime != '' AND DATE(eid.sample_tested_datetime) !='1970-01-01' AND DATE(eid.sample_tested_datetime) !='0000-00-00') OR
+        (eid.result_printed_datetime is not null AND eid.result_printed_datetime != '' AND DATE(eid.result_printed_datetime) !='1970-01-01' AND DATE(eid.result_printed_datetime) !='0000-00-00') OR
+        (eid.sample_received_at_vl_lab_datetime is not null AND eid.sample_received_at_vl_lab_datetime != '' AND DATE(eid.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(eid.sample_received_at_vl_lab_datetime) !='0000-00-00'))
+        AND eid.result is not null
+        AND eid.result != ''
+        AND DATE(eid.sample_collection_date) >= '" . $start_date . "'
+        AND DATE(eid.sample_collection_date) <= '" . $end_date . "' AND eid.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition group by MONTH(eid.sample_collection_date) ORDER BY (eid.sample_collection_date)";
+}else{
+    $tatSampleQuery = "select
+        DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,
+        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgTestedDiff,
+        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
+        CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
+    
+        from ".$table." as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
+        AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR
+        (vl.result_printed_datetime is not null AND vl.result_printed_datetime != '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR
+        (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime != '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
+        AND vl.result is not null
+        AND vl.result != ''
+        AND DATE(vl.sample_collection_date) >= '" . $start_date . "'
+        AND DATE(vl.sample_collection_date) <= '" . $end_date . "' AND vl.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition group by MONTH(vl.sample_collection_date) ORDER BY (vl.sample_collection_date)";
+}
 $sWhere = '';
 if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
     $sWhere .= ' AND b.batch_code = "' . $_POST['batchCode'] . '"';
@@ -148,9 +227,9 @@ if (isset($_POST['batchCode']) && trim($_POST['batchCode']) != '') {
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {
     //$sWhere.= ' AND DATE(vl.sample_collection_date) >= "'.$start_date.'" AND DATE(vl.sample_collection_date) <= "'.$end_date.'"';
 }
-if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
+/* if (isset($_POST['sampleType']) && trim($_POST['sampleType']) != '') {
     $sWhere .= ' AND s.sample_id = "' . $_POST['sampleType'] . '"';
-}
+} */
 if (isset($_POST['facilityName']) && is_array($_POST['facilityName']) && count($_POST['facilityName']) > 0) {
     $sWhere .= ' AND f.facility_id IN (' . implode(",", $_POST['facilityName']) . ')';
 }
@@ -174,12 +253,12 @@ foreach ($tatResult as $sRow) {
 <div class="col-xs-12">
     <div class="box">
         <div class="box-body" >
-            <div id="sampleStatusOverviewContainer" style="float:left;width:100%; margin: 0 auto;"></div>
+            <div id="<?php echo $sampleStatusOverviewContainer;?>" style="float:left;width:100%; margin: 0 auto;"></div>
         </div>
     </div>
     <div class="box">
         <div class="box-body" >
-            <div id="samplesVlOverview" style="float:right;width:100%;margin: 0 auto;"></div>
+            <div id="<?php echo $samplesVlOverview;?>" style="float:right;width:100%;margin: 0 auto;"></div>
         </div>
     </div>
 </div>
@@ -187,7 +266,7 @@ foreach ($tatResult as $sRow) {
 <div class="col-xs-12 labAverageTatDiv">
     <div class="box">
     <div class="box-body" >
-        <div id="labAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
+        <div id="<?php echo $labAverageTat;?>" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
     </div>
     </div>
 </div>
@@ -195,7 +274,7 @@ foreach ($tatResult as $sRow) {
     <?php
 if (isset($tResult) && count($tResult) > 0) {
     ?>
-      $('#sampleStatusOverviewContainer').highcharts({
+      $('#<?php echo $sampleStatusOverviewContainer;?>').highcharts({
                 chart: {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
@@ -243,18 +322,14 @@ if (isset($tResult) && count($tResult) > 0) {
                 }
 	        },
             data: [
-            <?php
-                foreach ($tResult as $tRow) {
-            ?>
+            <?php foreach ($tResult as $tRow) { ?>
                     {
                         name : '<?php echo ($tRow['status_name']); ?>',
                         y    : <?php echo ($tRow['total']); ?>,
                         color : '<?php echo $sampleStatusColors[$tRow['status_id']]; ?>',
                         url  : '../dashboard/vlTestResultStatus.php?id=<?php echo base64_encode($tRow['status_id']); ?>'
                     },
-            <?php
-                }
-            ?>
+            <?php } ?>
             ]
         }]
       });
@@ -269,7 +344,7 @@ if (isset($tResult) && count($tResult) > 0) {
 	  Highcharts.setOptions({
         colors: ['#FF0000', '#50B432']
         });
-      $('#samplesVlOverview').highcharts({
+      $('#<?php echo $samplesVlOverview;?>').highcharts({
                 chart: {
                     plotBackgroundColor: null,
                     plotBorderWidth: null,
@@ -277,7 +352,7 @@ if (isset($tResult) && count($tResult) > 0) {
                     type: 'pie'
                 },
                 title: {
-                    text: 'VL Suppression'
+                    text: '<?php echo $suppression;?>'
                 },
                 credits: {
                   enabled: false
@@ -305,15 +380,15 @@ if (isset($tResult) && count($tResult) > 0) {
         series: [{
             colorByPoint: true,
             data: [
-			   {name:'High Viral Load',y:<?php echo (isset($vlSuppressionResult['highVL']) && $vlSuppressionResult['highVL'] > 0) > 0 ? $vlSuppressionResult['highVL'] : 0; ?>},
-			   {name:'Low Viral Load',y:<?php echo (isset($vlSuppressionResult['lowVL']) && $vlSuppressionResult['lowVL'] > 0) > 0 ? $vlSuppressionResult['lowVL'] : 0; ?>},
+			   {name:'<?php echo $highVL;?>',y:<?php echo (isset($vlSuppressionResult['highVL']) && $vlSuppressionResult['highVL'] > 0) > 0 ? $vlSuppressionResult['highVL'] : 0; ?>},
+			   {name:'<?php echo $lowVL;?>',y:<?php echo (isset($vlSuppressionResult['lowVL']) && $vlSuppressionResult['lowVL'] > 0) > 0 ? $vlSuppressionResult['lowVL'] : 0; ?>},
             ]
         }]
       });
     <?php 
         }  if (isset($result) && count($result) > 0) {
     ?>
-    $('#labAverageTat').highcharts({
+    $('#<?php echo $labAverageTat;?>').highcharts({
         chart: {
             type: 'line'
         },
