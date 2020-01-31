@@ -21,7 +21,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
 
- $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant","Is Patient Breastfeeding","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Is Sample Rejected?","Sample Tested On","Result (cp/ml)","Result (log)","Date Result Dispatched","TAT Result Dispatch(days)","Comments","Funding Source","Implementing Partner");
+ $headings = array("No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Unique ART No.","Patient Name","Date of Birth","Age","Gender","Date of Sample Collection","Sample Type","Date of Treatment Initiation","Current Regimen","Date of Initiation of Current Regimen","Is Patient Pregnant?","Is Patient Breastfeeding?","ARV Adherence","Indication for Viral Load Testing","Requesting Clinican","Request Date","Is Sample Rejected?","Sample Tested On","Result (cp/ml)","Result (log)","Date Result Dispatched","TAT Result Dispatch(days)","Comments","Funding Source","Implementing Partner");
 
  $colNo = 1;
 
@@ -231,4 +231,3 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $writer->save(TEMP_PATH. DIRECTORY_SEPARATOR . $filename);
  echo $filename;
 }
-?>
