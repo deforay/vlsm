@@ -433,7 +433,7 @@ $eidInfo['child_treatment'] = isset($eidInfo['child_treatment']) ? explode(",", 
                   <tr>
                     <th>Date de collecte</th>
                     <td>
-                      <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de collecte" value="<?php echo $general->humanDateFormat($eidInfo['sample_collection_date']); ?>" />
+                      <input class="form-control dateTime isRequired" type="text" name="sampleCollectionDate" id="sampleCollectionDate" placeholder="Date de collecte" value="<?php echo ($eidInfo['sample_collection_date']); ?>" />
                     </td>
                   </tr>
                   <tr>
