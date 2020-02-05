@@ -58,6 +58,7 @@ class Model_Eid
         $mnthYr = $samColDate[0];
         // Checking if eid_sample_code is empty then we set by default 'MMYY'
         $arr['eid_sample_code'] = isset($arr['eid_sample_code']) ? $arr['eid_sample_code'] : 'MMYY';
+        
         if ($arr['eid_sample_code'] == 'MMYY') {
             $mnthYr = $sampleColDateArray[1] . $samColDate;
         } else if ($arr['eid_sample_code'] == 'YY') {
