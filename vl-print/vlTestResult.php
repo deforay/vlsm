@@ -300,6 +300,9 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
       //"bStateSave" : true,
       "iDisplayLength": 100,
       "bRetrieve": true,
+      "drawCallback": function( settings ) {
+        $.unblockUI();
+      },
       "aoColumns": [{
           "sClass": "center"
         },
@@ -383,7 +386,7 @@ if ($lastUrl1 != '' || $lastUrl2 != '') {
         });
       }
     });
-    $.unblockUI();
+    
   }
 
   function searchVlRequestData() {

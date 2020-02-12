@@ -72,7 +72,7 @@ class Model_Eid
             $svlQuery = 'SELECT ' . $sampleCodeKey . ' FROM eid_form as vl WHERE DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '" AND province_id=' . $provinceId . ' ORDER BY ' . $sampleCodeKey . ' DESC LIMIT 1';
 
             $svlResult = $this->db->rawQueryOne($svlQuery);
-            
+
             //var_dump($svlResult);
 
             if (isset($svlResult[$sampleCodeKey]) && $svlResult[$sampleCodeKey] != '' && $svlResult[$sampleCodeKey] != null) {
