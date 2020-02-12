@@ -192,9 +192,9 @@ try {
       //$eidData['sample_code'] = (isset($_POST['sampleCodeCol']) && $_POST['sampleCodeCol'] != '') ? $_POST['sampleCodeCol'] : NULL;
     } else {
       $eidModel = new Model_Eid($db);
-      
-      
-      
+
+
+
       $sampleCodeKeysJson = $eidModel->generateEIDSampleCode($_POST['provinceCode'], $_POST['sampleCollectionDate']);
       $sampleCodeKeys = json_decode($sampleCodeKeysJson, true);
       $eidData['sample_code'] = $sampleCodeKeys['sampleCode'];
