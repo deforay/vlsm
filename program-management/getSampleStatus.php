@@ -71,7 +71,7 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
         $end_date = $general->dateFormat(trim($s_c_date[1]));
     }
 }
-if($table = "eid_form"){
+if($table == "eid_form"){
     $tQuery = "SELECT COUNT(eid_id) as total,status_id,status_name 
     FROM ".$table." as eid 
     JOIN r_sample_status as ts ON ts.status_id=eid.result_status 
@@ -129,7 +129,7 @@ $tResult = $db->rawQuery($tQuery);
 
 
 //HVL and LVL Samples
-if($table = "eid_form"){
+if($table == "eid_form"){
     $vlSuppressionQuery = "SELECT   COUNT(eid_id) as total,
         SUM(CASE
                 WHEN (eid.result > 1000 OR eid.result ='positive') THEN 1
@@ -189,8 +189,8 @@ if ($start_date == '' && $end_date == '') {
     $start_date = date('Y-m-d', $date);
     $end_date = date('Y-m-d');
 }
-if($table = "eid_form"){
-    $tatSampleQuery = "select
+if($table == "eid_form"){
+    $tatSampleQuery = "SELECT
         DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,
         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgTestedDiff,
         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
@@ -205,7 +205,7 @@ if($table = "eid_form"){
         AND DATE(eid.sample_collection_date) >= '" . $start_date . "'
         AND DATE(eid.sample_collection_date) <= '" . $end_date . "' AND eid.vlsm_country_id='" . $configFormResult[0]['value'] . "' $whereCondition group by MONTH(eid.sample_collection_date) ORDER BY (eid.sample_collection_date)";
 }else{
-    $tatSampleQuery = "select
+    $tatSampleQuery = "SELECT
         DATE_FORMAT(DATE(sample_collection_date), '%b-%Y') as monthDate,
         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_tested_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgTestedDiff,
         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
