@@ -40,7 +40,12 @@ if (count($data['result']) > 0) {
             }
         }
         //remove unwanted columns
-        $unwantedColumns = array('vl_sample_id');
+        $unwantedColumns = array('vl_sample_id',
+                                 'sample_package_id',
+                                 'sample_package_code',
+                                 //'last_modified_by',
+                                 'request_created_by',
+                                );
         foreach ($unwantedColumns as $removeColumn) {
            unset($lab[$removeColumn]);
         }
@@ -72,9 +77,9 @@ if (count($data['result']) > 0) {
         $lab['data_sync'] = 1; //data_sync = 1 means data sync done. data_sync = 0 means sync is not yet done.
         $lab['last_modified_datetime'] = $general->getDateTime();
 
-        unset($lab['request_created_by']);
-        unset($lab['last_modified_by']);
-        unset($lab['request_created_datetime']);
+        // unset($lab['request_created_by']);
+        // unset($lab['last_modified_by']);
+        // unset($lab['request_created_datetime']);
 
         if ($lab['result_status'] != 7 && $lab['result_status'] != 4) {
             unset($lab['result']);
