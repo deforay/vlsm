@@ -95,7 +95,7 @@ $hcResult = $db->rawQuery($hcQuery);
     </section>
     <!-- /.content -->
   </div>
-  <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+  <script type="text/javascript" src="/assets/js/multiselect.min.js"></script>
 
   <script type="text/javascript">
     jQuery(document).ready(function($) {

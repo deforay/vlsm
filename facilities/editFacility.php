@@ -327,7 +327,7 @@ $selectedResult = $db->rawQuery($selectedQuery);
     </section>
     <!-- /.content -->
   </div>
-  <script type="text/javascript" src="//crlcu.github.io/multiselect/dist/js/multiselect.min.js"></script>
+  <script type="text/javascript" src="../assets/js/multiselect.min.js"></script>
   <script type="text/javascript" src="../assets/js/jasny-bootstrap.js"></script>
 
   <script type="text/javascript">
