@@ -69,9 +69,9 @@ if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
 
 //get waiting data
 if ($table == "eid_form") {
-    $waitingQuery = "SELECT COUNT(eid_id) as total FROM " . $table . " as eid JOIN facility_details as f ON f.facility_id=eid.facility_id WHERE $whereCondition AND eid.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (eid.result is null or eid.result = '') AND (eid.is_sample_rejected like 'no' or eid.is_sample_rejected is null or eid.is_sample_rejected = '')";
+    $waitingQuery = "SELECT COUNT(eid_id) as total FROM " . $table . " as eid JOIN facility_details as f ON f.facility_id=eid.facility_id WHERE $whereCondition eid.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (eid.result is null or eid.result = '') AND (eid.is_sample_rejected like 'no' or eid.is_sample_rejected is null or eid.is_sample_rejected = '')";
 } else {
-    $waitingQuery = "SELECT COUNT(vl_sample_id) as total FROM " . $table . " as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition AND vl.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
+    $waitingQuery = "SELECT COUNT(vl_sample_id) as total FROM " . $table . " as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
 }
 //echo print_r($_POST);
 //echo "<br>";
@@ -87,9 +87,9 @@ if ($waitingResult[$i][0]['total'] != 0) {
 
 // Samples Accession
 if ($table == "eid_form") {
-    $accessionQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' AND DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+    $accessionQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 } else {
-    $accessionQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' AND DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+    $accessionQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 }
 $tRes = $db->rawQuery($accessionQuery); //overall result
 $tResult = array();
@@ -100,9 +100,9 @@ foreach ($tRes as $tRow) {
 
 //Samples Tested
 if ($table == "eid_form") {
-    $sampleTestedQuery = 'SELECT DATE(eid.sample_tested_datetime) as `test_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' AND DATE(eid.sample_tested_datetime) <= "' . $cDate . '" AND DATE(eid.sample_tested_datetime) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
+    $sampleTestedQuery = 'SELECT DATE(eid.sample_tested_datetime) as `test_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' DATE(eid.sample_tested_datetime) <= "' . $cDate . '" AND DATE(eid.sample_tested_datetime) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
 } else {
-    $sampleTestedQuery = 'SELECT DATE(vl.sample_tested_datetime) as `test_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' AND DATE(vl.sample_tested_datetime) <= "' . $cDate . '" AND DATE(vl.sample_tested_datetime) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
+    $sampleTestedQuery = 'SELECT DATE(vl.sample_tested_datetime) as `test_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' DATE(vl.sample_tested_datetime) <= "' . $cDate . '" AND DATE(vl.sample_tested_datetime) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
 }
 $tRes = $db->rawQuery($sampleTestedQuery); //overall result
 $acceptedResult = array();
@@ -114,9 +114,9 @@ foreach ($tRes as $tRow) {
 
 //Rejected Samples
 if ($table == "eid_form") {
-    $sampleRejectedQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' AND eid.is_sample_rejected="yes" AND DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+    $sampleRejectedQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' eid.is_sample_rejected="yes" AND DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 } else {
-    $sampleRejectedQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' AND vl.is_sample_rejected="yes" AND DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
+    $sampleRejectedQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' vl.is_sample_rejected="yes" AND DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 }
 $tRes = $db->rawQuery($sampleRejectedQuery); //overall result
 $rejectedResult = array();
