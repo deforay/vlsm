@@ -2002,4 +2002,6 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 
 -- Version 3.18 ---- Amit Dec 11 2019
 
+INSERT INTO `r_vl_test_reasons` (`test_reason_id`, `test_reason_name`, `test_reason_status`) VALUES ('9999', 'recency', 'active');
+
 -- Version 3.19 ---- Amit Feb 24 2020

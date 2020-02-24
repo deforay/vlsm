@@ -29,7 +29,7 @@ if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
     $labAverageTat                  = "eidLabAverageTat";
     $highVL                         = "Positive";
     $lowVL                          = "Negative";
-    $suppression                    = "EID Suppression";
+    $suppression                    = "EID Results";
 } else {
     $table = "vl_request_form";
     $sampleStatusOverviewContainer  = "vlSampleStatusOverviewContainer";
