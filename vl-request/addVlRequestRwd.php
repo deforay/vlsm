@@ -362,7 +362,7 @@ $sFormat = '';
                                                        </div>
                                                        <div class="box box-primary">
                                                             <div class="box-header with-border">
-                                                                 <h3 class="box-title">Indication for Viral Load Testing <span class="mandatory">*</span></h3><small> (Please tick one):(To be completed by clinician)</small>
+                                                                 <h3 class="box-title">Indication for Viral Load Testing <span class="mandatory">*</span></h3><small> (Please pick one): (To be completed by clinician)</small>
                                                             </div>
                                                             <div class="box-body">
                                                                  <div class="row">
@@ -377,7 +377,7 @@ $sFormat = '';
                                                                            </div>
                                                                       </div>
                                                                  </div>
-                                                                 <div class="row rmTesting hideTestData" style="display:none;">
+                                                                 <div class="row rmTesting hideTestData well" style="display:none;">
                                                                       <div class="col-md-6">
                                                                            <label class="col-lg-5 control-label">Date of last viral load test</label>
                                                                            <div class="col-lg-7">
@@ -407,7 +407,7 @@ $sFormat = '';
                                                                            </div>
                                                                       </div>
                                                                  </div>
-                                                                 <div class="row repeatTesting hideTestData" style="display:none;">
+                                                                 <div class="row repeatTesting hideTestData well" style="display:none;">
                                                                       <div class="col-md-6">
                                                                            <label class="col-lg-5 control-label">Date of last viral load test</label>
                                                                            <div class="col-lg-7">
@@ -437,7 +437,7 @@ $sFormat = '';
                                                                            </div>
                                                                       </div>
                                                                  </div>
-                                                                 <div class="row suspendTreatment hideTestData" style="display: none;margin-bottom:20px;">
+                                                                 <div class="row suspendTreatment hideTestData well" style="display: none;margin-bottom:20px;">
                                                                       <div class="col-md-6">
                                                                            <label class="col-lg-5 control-label">Date of last viral load test</label>
                                                                            <div class="col-lg-7">
@@ -455,6 +455,20 @@ $sFormat = '';
                                                                            </div>
                                                                       </div>
                                                                  </div>
+
+                                                                 <div class="row">
+                                                                      <div class="col-md-6">
+                                                                           <div class="form-group">
+                                                                                <div class="col-lg-12">
+                                                                                     <label class="radio-inline">
+                                                                                          <input type="radio" class="" id="recencyTest" name="stViralTesting" value="recency" title="Please check viral load indication testing type" onclick="showTesting('recency')">
+                                                                                          <strong>Confirmation Test for Recency</strong>
+                                                                                     </label>
+                                                                                </div>
+                                                                           </div>
+                                                                      </div>
+                                                                 </div>
+                                                                 <hr>                                                    
                                                                  <div class="row">
                                                                       <div class="col-md-4">
                                                                            <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <?php echo ($sarr['user_type'] == 'remoteuser') ? "<span class='mandatory'>*</span>" : ''; ?></label>

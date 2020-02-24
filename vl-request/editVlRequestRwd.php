@@ -1,7 +1,7 @@
 <?php
 ob_start();
 
-require_once(APPLICATION_PATH.'/models/Vl.php');
+require_once(APPLICATION_PATH . '/models/Vl.php');
 
 if ($arr['sample_code'] == 'auto' || $arr['sample_code'] == 'alphanumeric') {
      $sampleClass = '';
@@ -90,13 +90,13 @@ $sampleSuggestion = '';
 $sampleSuggestionDisplay = 'display:none;';
 if ($sarr['user_type'] == 'vluser' && $sCode != '') {
      $vlObj = new Model_Vl($db);
-     $sampleCollectionDate = explode(" ",$sampleCollectionDate);
-     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);     
-     $sampleSuggestionJson = $vlObj->generateVLSampleID($stateResult[0]['province_code'],$sampleCollectionDate);
+     $sampleCollectionDate = explode(" ", $sampleCollectionDate);
+     $sampleCollectionDate = $general->humanDateFormat($sampleCollectionDate[0]);
+     $sampleSuggestionJson = $vlObj->generateVLSampleID($stateResult[0]['province_code'], $sampleCollectionDate);
      $sampleCodeKeys = json_decode($sampleSuggestionJson, true);
      $sampleSuggestion = $sampleCodeKeys['sampleCode'];
      $sampleSuggestionDisplay = 'display:block;';
-}    
+}
 
 //set reason for changes history
 $rch = '';
@@ -162,10 +162,10 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                         <div class="" style="<?php echo $sampleSuggestionDisplay; ?>">
                                              <?php
                                              if ($vlQueryInfo[0]['sample_code'] != '') {
-                                                  ?>
+                                             ?>
                                                   <label for="sampleSuggest" class="text-danger">&nbsp;&nbsp;&nbsp;Please note that this Remote Sample has already been imported with VLSM Sample ID <?php echo $vlQueryInfo[0]['sample_code']; ?></label>
                                              <?php
-                                        } else {
+                                             } else {
                                              ?>
                                                   <label for="sampleSuggest">&nbsp;&nbsp;&nbsp;Sample ID (might change while submitting the form) - </label>
                                                   <?php echo $sampleSuggestion; ?>
@@ -377,11 +377,11 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                      foreach ($aResult as $regimen) {
                                                                                           if ($heading['headings'] == $regimen['headings']) { ?>
                                                                                                <option value="<?php echo $regimen['art_code']; ?>" <?php echo ($vlQueryInfo[0]['current_regimen'] == $regimen['art_code']) ? "selected='selected'" : "" ?>><?php echo $regimen['art_code']; ?></option>
-                                                                                          <?php }
-                                                                                } ?>
+                                                                                     <?php }
+                                                                                     } ?>
                                                                                 </optgroup>
                                                                            <?php }
-                                                                      if ($sarr['user_type'] != 'vluser') {  ?>
+                                                                           if ($sarr['user_type'] != 'vluser') {  ?>
                                                                                 <!-- <option value="other">Other</option> -->
                                                                            <?php } ?>
                                                                       </select>
@@ -460,7 +460,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                 </div>
                                                                            </div>
                                                                       </div>
-                                                                      <div class="row rmTesting hideTestData" style="display:<?php echo $display; ?>;">
+                                                                      <div class="row rmTesting hideTestData well" style="display:<?php echo $display; ?>;">
                                                                            <div class="col-md-6">
                                                                                 <label class="col-lg-5 control-label">Date of last viral load test</label>
                                                                                 <div class="col-lg-7">
@@ -505,7 +505,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                 </div>
                                                                            </div>
                                                                       </div>
-                                                                      <div class="row repeatTesting hideTestData" style="display: <?php echo $display; ?>;">
+                                                                      <div class="row repeatTesting hideTestData well" style="display: <?php echo $display; ?>;">
                                                                            <div class="col-md-6">
                                                                                 <label class="col-lg-5 control-label">Date of last viral load test</label>
                                                                                 <div class="col-lg-7">
@@ -550,7 +550,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                 </div>
                                                                            </div>
                                                                       </div>
-                                                                      <div class="row suspendTreatment hideTestData" style="display: <?php echo $display; ?>;">
+                                                                      <div class="row suspendTreatment hideTestData well" style="display: <?php echo $display; ?>;">
                                                                            <div class="col-md-6">
                                                                                 <label class="col-lg-5 control-label">Date of last viral load test</label>
                                                                                 <div class="col-lg-7">
@@ -568,6 +568,19 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                 </div>
                                                                            </div>
                                                                       </div>
+                                                                      <div class="row">
+                                                                           <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                     <div class="col-lg-12">
+                                                                                          <label class="radio-inline">
+                                                                                               <input type="radio" class="" id="recencyTest" name="stViralTesting" value="recency" title="Please check viral load indication testing type" <?php echo trim($vlQueryInfo[0]['reason_for_vl_testing']) == '9999' ? "checked='checked'" : ""; ?>  onclick="showTesting('recency')">
+                                                                                               <strong>Confirmation Test for Recency</strong>
+                                                                                          </label>
+                                                                                     </div>
+                                                                                </div>
+                                                                           </div>
+                                                                      </div>
+                                                                      <hr>
                                                                       <div class="row">
                                                                            <div class="col-md-4">
                                                                                 <label for="reqClinician" class="col-lg-5 control-label">Request Clinician <?php echo ($sarr['user_type'] == 'remoteuser') ? "<span class='mandatory'>*</span>" : ''; ?></label>
@@ -683,11 +696,11 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                                          foreach ($rejectionResult as $reject) {
                                                                                                               if ($type['rejection_type'] == $reject['rejection_type']) { ?>
                                                                                                                    <option value="<?php echo $reject['rejection_reason_id']; ?>" <?php echo ($vlQueryInfo[0]['reason_for_sample_rejection'] == $reject['rejection_reason_id']) ? 'selected="selected"' : ''; ?>><?php echo ucwords($reject['rejection_reason_name']); ?></option>
-                                                                                                              <?php }
-                                                                                                    } ?>
+                                                                                                         <?php }
+                                                                                                         } ?>
                                                                                                     </optgroup>
                                                                                                <?php }
-                                                                                          if ($sarr['user_type'] != 'vluser') {  ?>
+                                                                                               if ($sarr['user_type'] != 'vluser') {  ?>
                                                                                                     <option value="other">Other (Please Specify) </option>
                                                                                                <?php } ?>
                                                                                           </select>
@@ -812,20 +825,20 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
           }
           if (pName != '') {
                //if (provinceName) {
-                    $.post("../includes/getFacilityForClinic.php", {
-                              pName: pName
-                         },
-                         function(data) {
-                              if (data != "") {
-                                   details = data.split("###");
-                                   $("#district").html(details[1]);
-                                   $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
-                                   $(".facilityDetails").hide();
-                                   $(".facilityEmails").html('');
-                                   $(".facilityMobileNumbers").html('');
-                                   $(".facilityContactPerson").html('');
-                              }
-                         });
+               $.post("../includes/getFacilityForClinic.php", {
+                         pName: pName
+                    },
+                    function(data) {
+                         if (data != "") {
+                              details = data.split("###");
+                              $("#district").html(details[1]);
+                              $("#fName").html("<option data-code='' data-emails='' data-mobile-nos='' data-contact-person='' value=''> -- Select -- </option>");
+                              $(".facilityDetails").hide();
+                              $(".facilityEmails").html('');
+                              $(".facilityMobileNumbers").html('');
+                              $(".facilityContactPerson").html('');
+                         }
+                    });
                //}
 
           } else if (pName == '') {
