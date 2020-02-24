@@ -32,9 +32,9 @@ if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
   $condition = "lab_id =".$labId;
 }
 
-//$vlQuery="SELECT * FROM vl_request_form WHERE $condition AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." DAY)";
+$vlQuery="SELECT * FROM vl_request_form WHERE $condition AND last_modified_datetime > SUBDATE( NOW(), INTERVAL 30 DAY) AND data_sync=0";
 
-$vlQuery="SELECT * FROM vl_request_form WHERE $condition AND data_sync=0";
+//$vlQuery="SELECT * FROM vl_request_form WHERE $condition AND data_sync=0";
 
 $vlRemoteResult = $db->rawQuery($vlQuery);
 
