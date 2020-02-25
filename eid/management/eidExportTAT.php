@@ -15,7 +15,7 @@ if(isset($_SESSION['eidTATQuery']) && trim($_SESSION['eidTATQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
  
- $headings = array("Sample Id","Sample Collection Date","Sample Received Date in Lab","Sample Test Date","Sample Print Date","Sample Email Date");
+ $headings = array("EID Sample Id","Sample Collection Date","Sample Received Date in Lab","Sample Test Date","Sample Print Date","Sample Email Date");
  
  $colNo = 1;
  

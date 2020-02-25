@@ -568,6 +568,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                 </div>
                                                                            </div>
                                                                       </div>
+                                                                      <?php if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
                                                                       <div class="row">
                                                                            <div class="col-md-6">
                                                                                 <div class="form-group">
@@ -580,6 +581,7 @@ if (isset($vlQueryInfo[0]['reason_for_vl_result_changes']) && $vlQueryInfo[0]['r
                                                                                 </div>
                                                                            </div>
                                                                       </div>
+                                                                      <?php }  ?>
                                                                       <hr>
                                                                       <div class="row">
                                                                            <div class="col-md-4">

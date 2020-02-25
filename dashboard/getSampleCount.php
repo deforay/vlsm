@@ -18,10 +18,23 @@ $u = $general->getSystemConfig('user_type');
 if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
     $table = "eid_form";
     $requestCountDataTable = "eidRequestCountDataTable";
-} else {
+} else if (isset($_POST['type']) && trim($_POST['type']) == 'vl') {
+
+    $recencyWhere = " AND reason_for_vl_testing != 9999";
     $table = "vl_request_form";
     $requestCountDataTable = "vlRequestCountDataTable";
 }
+
+// For VL Tab we do not want to show Recency Counts
+
+else if (isset($_POST['type']) && trim($_POST['type']) == 'recency') {
+    $recencyWhere = " AND reason_for_vl_testing = 9999";
+    $table = "vl_request_form";
+    $requestCountDataTable = "recencyRequestCountDataTable";
+}
+
+
+
 if ($u != 'remoteuser') {
     if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
         $whereCondition = " AND eid.result_status != 9 ";
@@ -133,7 +146,7 @@ if ($table == "eid_form") {
 		FROM " . $table . " as vl JOIN facility_details as f ON f.facility_id=vl.facility_id
 		where  vl.vlsm_country_id =" . $country;
     $sQuery = $sQuery . ' AND DATE(vl.sample_collection_date) >= "' . $start_date . '" AND DATE(vl.sample_collection_date) <= "' . $end_date . '"';
-    $sQuery = $sQuery . $whereCondition;
+    $sQuery = $sQuery . $whereCondition . $recencyWhere;
     $sQuery = $sQuery . ' GROUP BY vl.facility_id';
 }
 //echo $sQuery; die;
@@ -141,14 +154,14 @@ $tableResult = $db->rawQuery($sQuery);
 ?>
 
 <style>
-    #<?php echo $requestCountDataTable;?> thead th {
+    #<?php echo $requestCountDataTable; ?>thead th {
         vertical-align: middle;
     }
 </style>
 <div class="col-xs-12">
     <div class="box">
         <div class="box-body">
-            <table id="<?php echo $requestCountDataTable;?>" class="table table-bordered table-striped table-hover">
+            <table id="<?php echo $requestCountDataTable; ?>" class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Facility Name</th>
@@ -202,13 +215,13 @@ $tableResult = $db->rawQuery($sQuery);
 </div>
 <script>
     $(function() {
-        var table = $("#<?php echo $requestCountDataTable;?>").DataTable({
+        var table = $("#<?php echo $requestCountDataTable; ?>").DataTable({
             "initComplete": function(settings, json) {
                 var api = this.api();
                 CalculateTableSummary(this, 'all');
             },
             "footerCallback": function(row, data, start, end, display) {
-                var filter = $("#<?php echo $requestCountDataTable;?>_filter .input-sm").val();
+                var filter = $("#<?php echo $requestCountDataTable; ?>_filter .input-sm").val();
                 if (filter != '') {
                     var page = 'current';
                 } else {
