@@ -16,20 +16,21 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 
 $general = new General($db);
 
-function var_error_log( $object=null ){
+function var_error_log($object = null)
+{
     ob_start();
     var_dump($object);
-    error_log(ob_get_clean());    
+    error_log(ob_get_clean());
 }
 
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '".$systemConfig['dbName']."' AND table_name='vl_request_form'";
+$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='vl_request_form'";
 $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 
 $sampleCode = array();
 if (count($data['result']) > 0) {
-    
+
     foreach ($data['result'] as $key => $remoteData) {
         $lab = array();
         foreach ($oneDimensionalArray as $columnName) {
@@ -40,14 +41,15 @@ if (count($data['result']) > 0) {
             }
         }
         //remove unwanted columns
-        $unwantedColumns = array('vl_sample_id',
-                                 'sample_package_id',
-                                 'sample_package_code',
-                                 //'last_modified_by',
-                                 'request_created_by',
-                                );
+        $unwantedColumns = array(
+            'vl_sample_id',
+            'sample_package_id',
+            'sample_package_code',
+            //'last_modified_by',
+            'request_created_by',
+        );
         foreach ($unwantedColumns as $removeColumn) {
-           unset($lab[$removeColumn]);
+            unset($lab[$removeColumn]);
         }
 
 
@@ -74,7 +76,8 @@ if (count($data['result']) > 0) {
         }
 
 
-        $lab['data_sync'] = 1; //data_sync = 1 means data sync done. data_sync = 0 means sync is not yet done.
+        //data_sync = 1 means data sync done. data_sync = 0 means sync is not yet done.
+        $lab['data_sync'] = 1; 
         $lab['last_modified_datetime'] = $general->getDateTime();
 
         // unset($lab['request_created_by']);
@@ -99,7 +102,7 @@ if (count($data['result']) > 0) {
             error_log("INSIDE LOCAL");
             $sQuery = "SELECT vl_sample_id,sample_code,remote_sample_code,remote_sample_code_key FROM vl_request_form WHERE sample_code='" . $lab['sample_code'] . "' AND facility_id = " . $lab['facility_id'];
         }
-        
+
         $sResult = $db->rawQuery($sQuery);
 
         //$lab['result_printed_datetime'] = null;            

@@ -9,12 +9,14 @@ if(APPLICATION_ENV == 'production'){
 }else{
 	require_once('../includes/config.development.php');
 }
+
 define("BACKUP_PATH", "../db-backup");
 
 $dbUsername = $systemConfig['dbUser'];
 $dbPassword = $systemConfig['dbPassword'];
 $dbName = $systemConfig['dbName'];
 $dbHost = $systemConfig['dbHost'];
+$mysqlDumpPath = $systemConfig['mysqlDump'];
 
 $folderPath = BACKUP_PATH . DIRECTORY_SEPARATOR;
 
@@ -22,8 +24,8 @@ if (!file_exists($folderPath) && !is_dir($folderPath)) {
     mkdir($folderPath);
 }
 $currentDate = date("d-m-Y-H-i-s");
-$file = $folderPath . 'vl-dbdump-' . $currentDate . '.sql';
-$command = sprintf("mysqldump -h %s -u %s --password='%s' -d %s --skip-no-data > %s", $dbHost, $dbUsername, $dbPassword, $dbName, $file);
+$file = $folderPath . 'vlsm-db-backup-' . $currentDate . '.sql';
+$command = sprintf("$mysqlDumpPath -h %s -u %s --password='%s' -d %s --skip-no-data > %s", $dbHost, $dbUsername, $dbPassword, $dbName, $file);
 exec($command);
 
 $days = 30;
