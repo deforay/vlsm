@@ -7,15 +7,20 @@ include_once(APPLICATION_PATH.'/models/General.php');
 
 $labId = $data['labName'];
 
-//$general=new General($db);
-//global config
-$cQuery="SELECT * FROM global_config";
-$cResult=$db->query($cQuery);
-$arr = array();
-// now we create an associative array so that we can easily create view variables
-for ($i = 0; $i < sizeof($cResult); $i++) {
-  $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
-}
+
+// //global config
+// $cQuery="SELECT * FROM global_config";
+// $cResult=$db->query($cQuery);
+// $arr = array();
+// // now we create an associative array so that we can easily create view variables
+// for ($i = 0; $i < sizeof($cResult); $i++) {
+//   $arr[$cResult[$i]['name']] = $cResult[$i]['value'];
+// }
+
+$general=new General($db);
+$dataSyncInterval = $general->getGlobalConfig('data_sync_interval');
+$dataSyncInterval = (isset($dataSyncInterval) && !empty($dataSyncInterval)) ? $dataSyncInterval : 30;
+
 //get facility map id
 $facilityMapQuery = "SELECT facility_id FROM vl_facility_map where vl_lab_id=".$labId;
 $fMapResult=$db->query($facilityMapQuery);
@@ -34,7 +39,11 @@ if(isset($fMapResult) && $fMapResult != '' && $fMapResult != null){
 
 //$vlQuery="SELECT * FROM eid_form WHERE $condition AND last_modified_datetime > SUBDATE( NOW(), INTERVAL ". $arr['data_sync_interval']." DAY)";
 
-$vlQuery="SELECT * FROM eid_form WHERE $condition AND data_sync=0";
+//$vlQuery="SELECT * FROM eid_form WHERE $condition AND data_sync=0";
+
+$vlQuery="SELECT * FROM eid_form WHERE $condition 
+          AND last_modified_datetime > SUBDATE( NOW(), INTERVAL $dataSyncInterval DAY) 
+          AND data_sync=0";
 
 $eidRemoteResult = $db->rawQuery($vlQuery);
 

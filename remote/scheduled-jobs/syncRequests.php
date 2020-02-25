@@ -41,7 +41,7 @@ if (trim($sarr['lab_name']) == '') {
 $url = $systemConfig['remoteURL'] . '/remote/remote/getRequests.php';
 $data = array(
     'labName' => $sarr['lab_name'],
-    "Key" => "vlsm-lab-Data--",
+    "Key" => "vlsm-lab-data--",
 );
 //open connection
 $ch = curl_init($url);
@@ -123,6 +123,7 @@ if (count($apiResult) > 0) {
         if ($exsvlResult) {
 
             $dataToUpdate = array();
+
             $dataToUpdate['sample_package_code'] = $request['sample_package_code'];
             $dataToUpdate['sample_package_id'] = $request['sample_package_id'];
 
@@ -133,7 +134,8 @@ if (count($apiResult) > 0) {
                 $request['request_created_by'] = 0;
                 $request['last_modified_by'] = 0;
                 $request['request_created_datetime'] = $general->getDateTime();
-                $request['data_sync'] = 0; //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                //column data_sync value is 1 equal to data_sync done.value 0 is not done.
+                $request['data_sync'] = 0; 
                 $id = $db->insert('vl_request_form', $request);
             }
         }
@@ -153,7 +155,7 @@ if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
     $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-requests.php';
     $data = array(
         'labName' => $sarr['lab_name'],
-        "Key" => "vlsm-lab-Data--",
+        "Key" => "vlsm-lab-data--",
     );
     //open connection
     $ch = curl_init($url);

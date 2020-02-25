@@ -16,7 +16,7 @@ for ($i = 0; $i < sizeof($cResult); $i++) {
 
 $general = new General($db);
 
-$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '".$systemConfig['dbName']."' AND table_name='eid_form'";
+$allColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA = '" . $systemConfig['dbName'] . "' AND table_name='eid_form'";
 $allColResult = $db->rawQuery($allColumns);
 $oneDimensionalArray = array_map('current', $allColResult);
 $sampleCode = array();
@@ -31,7 +31,14 @@ if (count($data['result']) > 0) {
             }
         }
         //remove result value
-        $removeKeys = array('eid_id');
+
+        $removeKeys = array(
+            'eid_id',
+            'sample_package_id',
+            'sample_package_code',
+            //'last_modified_by',
+            'request_created_by',
+        );
         foreach ($removeKeys as $keys) {
             unset($lab[$keys]);
         }
@@ -78,8 +85,8 @@ if (count($data['result']) > 0) {
             $sQuery = "SELECT eid_id,sample_code,remote_sample_code,remote_sample_code_key FROM eid_form WHERE remote_sample_code='" . $lab['remote_sample_code'] . "'";
         } else if (isset($lab['sample_code']) && $lab['sample_code'] != '' && !empty($lab['facility_id'])) {
             $sQuery = "SELECT eid_id,sample_code,remote_sample_code,remote_sample_code_key FROM eid_form WHERE sample_code='" . $lab['sample_code'] . "' AND facility_id = " . $lab['facility_id'];
-        } else{
-            
+        } else {
+
             $sampleCode[] = $lab['sample_code'];
             continue;
         }
