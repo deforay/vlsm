@@ -484,6 +484,7 @@ $disable = "disabled = 'disabled'";
                             </div>
                           </div>
                         </div>
+                        <?php if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
@@ -496,6 +497,7 @@ $disable = "disabled = 'disabled'";
                             </div>
                           </div>
                         </div>
+                        <?php }  ?>
                         <hr>
                         <div class="row">
                           <div class="col-md-4">

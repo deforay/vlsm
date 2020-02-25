@@ -12,6 +12,41 @@ $configFormResult = $db->rawQuery($configFormQuery);
 $cDate = date('Y-m-d');
 $lastSevenDay = date('Y-m-d', strtotime('-7 days'));
 
+
+
+$waitingTotal = 0;
+$rejectedTotal = 0;
+$receivedTotal = 0;
+$dFormat = '';
+$waitingDate = '';
+$rejectedDate = '';
+$i = 0;
+if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
+    $table = "eid_form";
+    $samplesReceivedChart   = "eidSamplesReceivedChart";
+    $samplesTestedChart     = "eidSamplesTestedChart";
+    $samplesRejectedChart   = "eidSamplesRejectedChart";
+    $samplesWaitingChart    = "eidSamplesWaitingChart";
+} else if (isset($_POST['type']) && trim($_POST['type']) == 'vl') {
+    
+    $recencyWhere = " reason_for_vl_testing != 9999 ";
+
+    $table = "vl_request_form";
+    $samplesReceivedChart   = "vlSamplesReceivedChart";
+    $samplesTestedChart     = "vlSamplesTestedChart";
+    $samplesRejectedChart   = "vlSamplesRejectedChart";
+    $samplesWaitingChart    = "vlSamplesWaitingChart";
+    
+} else if (isset($_POST['type']) && trim($_POST['type']) == 'recency') {
+    $recencyWhere = " reason_for_vl_testing = 9999 ";
+    $table = "vl_request_form";
+    $samplesReceivedChart   = "recencySamplesReceivedChart";
+    $samplesTestedChart     = "recencySamplesTestedChart";
+    $samplesRejectedChart   = "recencySamplesRejectedChart";
+    $samplesWaitingChart    = "recencySamplesWaitingChart";
+}
+
+
 $u = $general->getSystemConfig('user_type');
 
 if ($u != 'remoteuser') {
@@ -46,31 +81,16 @@ if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']
 $sWhere = '';
 
 
-$waitingTotal = 0;
-$rejectedTotal = 0;
-$receivedTotal = 0;
-$dFormat = '';
-$waitingDate = '';
-$rejectedDate = '';
-$i = 0;
-if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
-    $table = "eid_form";
-    $samplesReceivedChart   = "eidSamplesReceivedChart";
-    $samplesTestedChart     = "eidSamplesTestedChart";
-    $samplesRejectedChart   = "eidSamplesRejectedChart";
-    $samplesWaitingChart    = "eidSamplesWaitingChart";
-} else {
-    $table = "vl_request_form";
-    $samplesReceivedChart   = "vlSamplesReceivedChart";
-    $samplesTestedChart     = "vlSamplesTestedChart";
-    $samplesRejectedChart   = "vlSamplesRejectedChart";
-    $samplesWaitingChart    = "vlSamplesWaitingChart";
-}
-
 //get waiting data
 if ($table == "eid_form") {
     $waitingQuery = "SELECT COUNT(eid_id) as total FROM " . $table . " as eid JOIN facility_details as f ON f.facility_id=eid.facility_id WHERE $whereCondition eid.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (eid.result is null or eid.result = '') AND (eid.is_sample_rejected like 'no' or eid.is_sample_rejected is null or eid.is_sample_rejected = '')";
 } else {
+    if($whereCondition == ""){
+        $whereCondition = $recencyWhere . " AND ";
+    }else{
+        $whereCondition = $recencyWhere . " AND " .$whereCondition;
+    }
+    
     $waitingQuery = "SELECT COUNT(vl_sample_id) as total FROM " . $table . " as vl JOIN facility_details as f ON f.facility_id=vl.facility_id WHERE $whereCondition vl.vlsm_country_id = '" . $configFormResult[0]['value'] . "' " . " AND (sample_collection_date < DATE_SUB(NOW(), INTERVAL 6 MONTH)) AND (vl.result is null or vl.result = '') AND (vl.is_sample_rejected like 'no' or vl.is_sample_rejected is null or vl.is_sample_rejected = '')";
 }
 //echo print_r($_POST);
@@ -89,6 +109,11 @@ if ($waitingResult[$i][0]['total'] != 0) {
 if ($table == "eid_form") {
     $accessionQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 } else {
+    if($whereCondition == ""){
+        $whereCondition = $recencyWhere . " AND ";
+    }else{
+        $whereCondition = $recencyWhere . " AND " .$whereCondition;
+    }
     $accessionQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 }
 $tRes = $db->rawQuery($accessionQuery); //overall result
@@ -102,6 +127,11 @@ foreach ($tRes as $tRow) {
 if ($table == "eid_form") {
     $sampleTestedQuery = 'SELECT DATE(eid.sample_tested_datetime) as `test_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' DATE(eid.sample_tested_datetime) <= "' . $cDate . '" AND DATE(eid.sample_tested_datetime) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
 } else {
+    if($whereCondition == ""){
+        $whereCondition = $recencyWhere . " AND ";
+    }else{
+        $whereCondition = $recencyWhere . " AND " .$whereCondition;
+    }
     $sampleTestedQuery = 'SELECT DATE(vl.sample_tested_datetime) as `test_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' DATE(vl.sample_tested_datetime) <= "' . $cDate . '" AND DATE(vl.sample_tested_datetime) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `test_date` order by `test_date`';
 }
 $tRes = $db->rawQuery($sampleTestedQuery); //overall result
@@ -116,6 +146,11 @@ foreach ($tRes as $tRow) {
 if ($table == "eid_form") {
     $sampleRejectedQuery = 'SELECT DATE(eid.sample_collection_date) as `collection_date`, COUNT(eid_id) as `count` FROM ' . $table . ' as eid JOIN facility_details as f ON f.facility_id=eid.facility_id where ' . $whereCondition . ' eid.is_sample_rejected="yes" AND DATE(eid.sample_collection_date) <= "' . $cDate . '" AND DATE(eid.sample_collection_date) >= "' . $lastSevenDay . '" AND eid.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 } else {
+    if($whereCondition == ""){
+        $whereCondition = $recencyWhere . " AND ";
+    }else{
+        $whereCondition = $recencyWhere . " AND " .$whereCondition;
+    }
     $sampleRejectedQuery = 'SELECT DATE(vl.sample_collection_date) as `collection_date`, COUNT(vl_sample_id) as `count` FROM ' . $table . ' as vl JOIN facility_details as f ON f.facility_id=vl.facility_id where ' . $whereCondition . ' vl.is_sample_rejected="yes" AND DATE(vl.sample_collection_date) <= "' . $cDate . '" AND DATE(vl.sample_collection_date) >= "' . $lastSevenDay . '" AND vl.vlsm_country_id = "' . $configFormResult[0]['value'] . '" group by `collection_date` order by `collection_date`';
 }
 $tRes = $db->rawQuery($sampleRejectedQuery); //overall result
@@ -394,8 +429,8 @@ foreach ($tRes as $tRow) {
             colors: ['#f36a5a']
         });
     <?php }
-    if ($rejectedTotal > 0) {?>
-    $('#<?php echo $samplesRejectedChart; ?>').highcharts({
+    if ($rejectedTotal > 0) { ?>
+        $('#<?php echo $samplesRejectedChart; ?>').highcharts({
             chart: {
                 type: 'column',
                 height: 150

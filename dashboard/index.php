@@ -39,7 +39,12 @@ $facilityCount = $facilityTotal[0]['total'];
 		<div class="bs-example bs-example-tabs">
 			<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
 				<li class="active"><a href="#vlDashboard" data-toggle="tab">VL Dashboard</a></li>
-				<li><a href="#eidDashboard" data-toggle="tab">EID Dashboard</a></li>
+				<?php if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
+					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Dashboard</a></li>
+				<?php }
+				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
+					<li><a href="#recencyDashboard" data-toggle="tab" onclick="generateDashboard('recency')">Recency Dashboard</a></li>
+				<?php }  ?>
 			</ul>
 			<div id="myTabContent" class="tab-content">
 				<div class="tab-pane fade in active" id="vlDashboard">
@@ -55,8 +60,8 @@ $facilityCount = $facilityTotal[0]['total'];
 											<td>
 												<input type="text" id="vlSampleCollectionDate" name="vlSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
 											</td>
-											<td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
-												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData();"><span>Reset</span></button>
+											<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('vl');" value="Search" class="btn btn-success btn-sm">
+												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('vl');"><span>Reset</span></button>
 											</td>
 										</tr>
 									</table>
@@ -65,33 +70,42 @@ $facilityCount = $facilityTotal[0]['total'];
 						</div>
 						<div class="row">
 							<div id="vlSampleResultDetails"></div>
-							<!--<div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-aqua">
-                  <div class="inner">
-                    <h3>< ?php echo $facilityCount;?></h3>
-                    <p>Facilities</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="facilities.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-              </div>
-              <div class="col-lg-3 col-xs-6">
-                <div class="small-box bg-green">
-                  <div class="inner">
-                    <h3>< ?php echo $labCount; ?></h3>
-
-                    <p>Lab Requests</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                  </div>
-                  <a href="vlRequest.php" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-              </div>-->
 							<div class="box-body" id="vlNoOfSampleCount"></div>
 							<div id="vlPieChartDiv"></div>
+						</div>
+
+						<!-- /.row -->
+						<!-- Main row -->
+						<!-- /.row (main row) -->
+
+					</section>
+					<!-- /. VL content -->
+				</div>
+				<div class="tab-pane fade in" id="recencyDashboard">
+					<!-- VL content -->
+					<section class="content">
+						<!-- Small boxes (Stat box) -->
+						<div class="row" style="padding-top:10px;padding-bottom:20px;">
+							<div class="col-lg-7">
+								<form autocomplete="off">
+									<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
+										<tr>
+											<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
+											<td>
+												<input type="text" id="recencySampleCollectionDate" name="recencySampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
+											</td>
+											<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('recency')" value="Search" class="btn btn-success btn-sm">
+												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('recency');"><span>Reset</span></button>
+											</td>
+										</tr>
+									</table>
+								</form>
+							</div>
+						</div>
+						<div class="row">
+							<div id="recencySampleResultDetails"></div>
+							<div class="box-body" id="recencyNoOfSampleCount"></div>
+							<div id="recencyPieChartDiv"></div>
 						</div>
 
 						<!-- /.row -->
@@ -114,8 +128,8 @@ $facilityCount = $facilityTotal[0]['total'];
 											<td>
 												<input type="text" id="eidSampleCollectionDate" name="eidSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
 											</td>
-											<td colspan="3">&nbsp;<input type="button" onclick="searchVlRequestData();" value="Search" class="btn btn-success btn-sm">
-												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData();"><span>Reset</span></button>
+											<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('eid')" value="Search" class="btn btn-success btn-sm">
+												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('eid');"><span>Reset</span></button>
 											</td>
 										</tr>
 									</table>
@@ -144,10 +158,10 @@ $facilityCount = $facilityTotal[0]['total'];
 	$(function() {
 
 
-		$('#vlSampleCollectionDate,#eidSampleCollectionDate').daterangepicker({
+		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#recencySampleCollectionDate').daterangepicker({
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
-				startDate: moment().subtract(6, 'days'),
+				startDate: moment().subtract(30, 'days'),
 				endDate: moment(),
 				maxDate: moment(),
 				ranges: {
@@ -163,104 +177,159 @@ $facilityCount = $facilityTotal[0]['total'];
 				startDate = start.format('YYYY-MM-DD');
 				endDate = end.format('YYYY-MM-DD');
 			});
-		searchVlRequestData();
+
+		// by default we pass 'vl' because that is first tab
+		generateDashboard('vl');
 	});
 
-	function searchVlRequestData() {
-		$.blockUI();
-		$.post("getSampleResult.php", {
-			sampleCollectionDate: $("#vlSampleCollectionDate").val()
-		},
-		function(data) {
-			if (data != '') {
-				$("#vlSampleResultDetails").html(data);
-			}
-		});
-		$.post("getSampleResult.php", {
-			sampleCollectionDate: $("#eidSampleCollectionDate").val(), type : 'eid'
-		},
-		function(data) {
-			if (data != '') {
-				$("#eidSampleResultDetails").html(data);
-			}
-		});
-		$.unblockUI();
-		getNoOfSampleCount();
-		getSamplesOverview();
+	function generateDashboard(requestType) {
+		searchVlRequestData(requestType);
+		getNoOfSampleCount(requestType);
+		getSamplesOverview(requestType);
 	}
 
-	function getNoOfSampleCount() {
+	function searchVlRequestData(requestType) {
 		$.blockUI();
-		$.post("getSampleCount.php", {
-			sampleCollectionDate: $("#vlSampleCollectionDate").val()
-		},
-		function(data) {
-			if (data != '') {
-				$("#vlNoOfSampleCount").html(data);
-			}
-		});
-		$.post("getSampleCount.php", {
-			sampleCollectionDate: $("#eidSampleCollectionDate").val(), type : 'eid'
-		},
-		function(data) {
-			if (data != '') {
-				$("#eidNoOfSampleCount").html(data);
-			}
-		});
+		if (requestType == 'vl') {
+			$.post("getSampleResult.php", {
+					sampleCollectionDate: $("#vlSampleCollectionDate").val(),
+					type: 'vl'
+				},
+				function(data) {
+					if (data != '') {
+						$("#vlSampleResultDetails").html(data);
+					}
+				});
+		} else if (requestType == 'recency') {
+			$.post("getSampleResult.php", {
+					sampleCollectionDate: $("#recencySampleCollectionDate").val(),
+					type: 'recency'
+				},
+				function(data) {
+					if (data != '') {
+						$("#recencySampleResultDetails").html(data);
+					}
+				});
+		} else if (requestType == 'eid') {
+			$.post("getSampleResult.php", {
+					sampleCollectionDate: $("#eidSampleCollectionDate").val(),
+					type: 'eid'
+				},
+				function(data) {
+					if (data != '') {
+						$("#eidSampleResultDetails").html(data);
+					}
+				});
+		}
+		$.unblockUI();
+
+	}
+
+	function getNoOfSampleCount(requestType) {
+		$.blockUI();
+		if (requestType == 'vl') {
+			$.post("getSampleCount.php", {
+					sampleCollectionDate: $("#vlSampleCollectionDate").val(),
+					type: 'vl'
+				},
+				function(data) {
+					if (data != '') {
+						$("#vlNoOfSampleCount").html(data);
+					}
+				});
+		} else if (requestType == 'recency') {
+			$.post("getSampleCount.php", {
+					sampleCollectionDate: $("#recencySampleCollectionDate").val(),
+					type: 'recency'
+				},
+				function(data) {
+					if (data != '') {
+						$("#recencyNoOfSampleCount").html(data);
+					}
+				});
+		} else if (requestType == 'eid') {
+			$.post("getSampleCount.php", {
+					sampleCollectionDate: $("#eidSampleCollectionDate").val(),
+					type: 'eid'
+				},
+				function(data) {
+					if (data != '') {
+						$("#eidNoOfSampleCount").html(data);
+					}
+				});
+		}
 		$.unblockUI();
 	}
 
-	function getSamplesOverview() {
+	function getSamplesOverview(requestType) {
 		$.blockUI();
-		$.post("/program-management/getSampleStatus.php", {
-			sampleCollectionDate: $("#vlSampleCollectionDate").val(),
-			batchCode: '',
-			facilityName: '',
-			sampleType: ''
-		},
-		function(data) {
-			if ($.trim(data) != '') {
-				$("#vlPieChartDiv").html(data);
-				$(".labAverageTatDiv").css("display", "none");
-			}
-		});
-		$.post("/program-management/getSampleStatus.php", {
-			sampleCollectionDate: $("#eidSampleCollectionDate").val(),
-			batchCode: '',
-			facilityName: '',
-			sampleType: '',
-			type : 'eid'
-		},
-		function(data) {
-			if ($.trim(data) != '') {
-				$("#eidPieChartDiv").html(data);
-				$(".labAverageTatDiv").css("display", "none");
-			}
-		});
+		if (requestType == 'vl') {
+			$.post("/program-management/getSampleStatus.php", {
+					sampleCollectionDate: $("#vlSampleCollectionDate").val(),
+					batchCode: '',
+					facilityName: '',
+					sampleType: '',
+					type: 'vl'
+				},
+				function(data) {
+					if ($.trim(data) != '') {
+						$("#vlPieChartDiv").html(data);
+						$(".labAverageTatDiv").css("display", "none");
+					}
+				});
+		} else if (requestType == 'recency') {
+			$.post("/program-management/getSampleStatus.php", {
+					sampleCollectionDate: $("#recencySampleCollectionDate").val(),
+					batchCode: '',
+					facilityName: '',
+					sampleType: '',
+					type: 'recency'
+				},
+				function(data) {
+					if ($.trim(data) != '') {
+						$("#recencyPieChartDiv").html(data);
+						$(".labAverageTatDiv").css("display", "none");
+					}
+				});
+		} else if (requestType == 'eid') {
+			$.post("/eid/management/getSampleStatus.php", {
+					sampleCollectionDate: $("#eidSampleCollectionDate").val(),
+					batchCode: '',
+					facilityName: '',
+					sampleType: '',
+					type: 'eid'
+				},
+				function(data) {
+					if ($.trim(data) != '') {
+						$("#eidPieChartDiv").html(data);
+						$(".labAverageTatDiv").css("display", "none");
+					}
+				});
+		}
 		$.unblockUI();
 	}
 
-	function resetSearchVlRequestData() {
-		$('#vlSampleCollectionDate,#eidSampleCollectionDate').daterangepicker({
-			format: 'DD-MMM-YYYY',
-			separator: ' to ',
-			startDate: moment().subtract(6, 'days'),
-			endDate: moment(),
-			maxDate: moment(),
-			ranges: {
-				'Today': [moment(), moment()],
-				'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-				'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-				'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-				'This Month': [moment().startOf('month'), moment().endOf('month')],
-				'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-			}
-		},
-		function(start, end) {
-			startDate = start.format('YYYY-MM-DD');
-			endDate = end.format('YYYY-MM-DD');
-		});
-		searchVlRequestData();
+	function resetSearchVlRequestData(requestType) {
+		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#recencySampleCollectionDate').daterangepicker({
+				format: 'DD-MMM-YYYY',
+				separator: ' to ',
+				startDate: moment().subtract(30, 'days'),
+				endDate: moment(),
+				maxDate: moment(),
+				ranges: {
+					'Today': [moment(), moment()],
+					'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+					'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+					'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+					'This Month': [moment().startOf('month'), moment().endOf('month')],
+					'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+				}
+			},
+			function(start, end) {
+				startDate = start.format('YYYY-MM-DD');
+				endDate = end.format('YYYY-MM-DD');
+			});
+		generateDashboard(requestType);
 	}
 </script>
 <?php

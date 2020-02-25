@@ -1,9 +1,9 @@
 <?php
 session_start();
 ob_start();
-require_once('../../startup.php');  
-include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+require_once('../../startup.php');
+include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 
 $general = new General($db); // passing $db which is coming from MysqliDb.php
 $whereCondition = '';
@@ -14,7 +14,7 @@ $userType = $general->getSystemConfig('user_type');
 
 $whereCondition = '';
 
-if ($userType == 'remoteuser') {    
+if ($userType == 'remoteuser') {
     $userfacilityMapQuery = "SELECT GROUP_CONCAT(DISTINCT `facility_id` ORDER BY `facility_id` SEPARATOR ',') as `facility_id` FROM vl_user_facility_map WHERE user_id='" . $_SESSION['userId'] . "'";
     $userfacilityMapresult = $db->rawQuery($userfacilityMapQuery);
     if ($userfacilityMapresult[0]['facility_id'] != null && $userfacilityMapresult[0]['facility_id'] != '') {
@@ -90,11 +90,11 @@ $vlSuppressionQuery = "SELECT   COUNT(eid_id) as total,
                                 SUM(CASE
                                         WHEN (vl.result = 'positive') THEN 1
                                             ELSE 0
-                                        END) AS highVL,
+                                        END) AS positiveResult,
                                 (SUM(CASE
                                         WHEN (vl.result = 'negative') THEN 1
                                             ELSE 0
-                                        END)) AS lowVL,
+                                        END)) AS negativeResult,
                                 status_id,
                                 status_name 
                                 
@@ -167,237 +167,243 @@ foreach ($tatResult as $sRow) {
 ?>
 <div class="col-xs-12">
     <div class="box">
-        <div class="box-body" >
-            <div id="sampleStatusOverviewContainer" style="float:left;width:100%; margin: 0 auto;"></div>
+        <div class="box-body">
+            <div id="eidSampleStatusOverviewContainer" style="float:left;width:100%; margin: 0 auto;"></div>
         </div>
     </div>
     <div class="box">
-        <div class="box-body" >
-            <div id="samplesVlOverview" style="float:right;width:100%;margin: 0 auto;"></div>
+        <div class="box-body">
+            <div id="eidSamplesOverview" style="float:right;width:100%;margin: 0 auto;"></div>
         </div>
     </div>
 </div>
 </div>
 <div class="col-xs-12 labAverageTatDiv">
     <div class="box">
-    <div class="box-body" >
-        <div id="labAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
-    </div>
+        <div class="box-body">
+            <div id="eidLabAverageTat" style="padding:15px 0px 5px 0px;float:left;width:100%;"></div>
+        </div>
     </div>
 </div>
 <script>
     <?php
-if (isset($tResult) && count($tResult) > 0) {
+    if (isset($tResult) && count($tResult) > 0) {
     ?>
-      $('#sampleStatusOverviewContainer').highcharts({
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    text: 'Samples Status Overview'
-                },
-                credits: {
-                  enabled: false
-               },
-                tooltip: {
-                    pointFormat: 'Samples :<b>{point.y}</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        size:'100%',
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            useHTML: true,
-                            format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
-                            style: {
+        $('#eidSampleStatusOverviewContainer').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'EID Samples Status Overview'
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: 'EID Samples :<b>{point.y}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    size: '100%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        useHTML: true,
+                        format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
+                        style: {
 
-                              //crop:false,
-                              //overflow:'none',
-                              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            },
-                            distance:10
+                            //crop:false,
+                            //overflow:'none',
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                         },
-                        showInLegend: true
-                    }
-                },
-        series: [{
-            colorByPoint: false,
-            point: {
-                events: {
-                            click: function(e) {
-                                //console.log(e.point.url);
-                                window.open(e.point.url, '_blank');
-                                e.preventDefault();
-                            }
-                }
-	        },
-            data: [
-            <?php
-                foreach ($tResult as $tRow) {
-            ?>
-                    {
-                        name : '<?php echo ($tRow['status_name']); ?>',
-                        y    : <?php echo ($tRow['total']); ?>,
-                        color : '<?php echo $sampleStatusColors[$tRow['status_id']]; ?>',
-                        url  : '../dashboard/vlTestResultStatus.php?id=<?php echo base64_encode($tRow['status_id']); ?>'
+                        distance: 10
                     },
-            <?php
+                    showInLegend: true
                 }
-            ?>
-            ]
-        }]
-      });
-
- <?php 
- 
-    } 
- 
-    if(isset($vlSuppressionResult) && (isset($vlSuppressionResult['highVL']) || isset($vlSuppressionResult['lowVL']))  ){     
-     
-     ?>
-	  Highcharts.setOptions({
-        colors: ['#FF0000', '#50B432']
-        });
-      $('#samplesVlOverview').highcharts({
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    text: 'VL Suppression'
-                },
-                credits: {
-                  enabled: false
-               },
-                tooltip: {
-                    pointFormat: 'Samples :<b>{point.y}</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        size:'100%',
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            useHTML: true,
-                            format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
-                            style: {
-                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            },
-                            distance:10
-                        },
-                        showInLegend: true
-                    }
-                },
-        series: [{
-            colorByPoint: true,
-            data: [
-			   {name:'High Viral Load',y:<?php echo (isset($vlSuppressionResult['highVL']) && $vlSuppressionResult['highVL'] > 0) > 0 ? $vlSuppressionResult['highVL'] : 0; ?>},
-			   {name:'Low Viral Load',y:<?php echo (isset($vlSuppressionResult['lowVL']) && $vlSuppressionResult['lowVL'] > 0) > 0 ? $vlSuppressionResult['lowVL'] : 0; ?>},
-            ]
-        }]
-      });
-    <?php 
-        }  if (isset($result) && count($result) > 0) {
-    ?>
-    $('#labAverageTat').highcharts({
-        chart: {
-            type: 'line'
-        },
-        title: {
-            text: 'Laboratory Turnaround Time'
-        },
-        exporting:{
-            chartOptions:{
-                subtitle: {
-                    text:'Laboratory Turnaround Time',
-                }
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        xAxis: {
-            //categories: ["21 Mar", "22 Mar", "23 Mar", "24 Mar", "25 Mar", "26 Mar", "27 Mar"]
-            categories: [<?php
-                    if (isset($result['date']) && count($result['date']) > 0) {
-                        foreach ($result['date'] as $date) {
-                            echo "'" . $date . "',";
+            },
+            series: [{
+                colorByPoint: false,
+                point: {
+                    events: {
+                        click: function(e) {
+                            //console.log(e.point.url);
+                            window.open(e.point.url, '_blank');
+                            e.preventDefault();
                         }
                     }
-    ?>]
-        },
-        yAxis: {
-            title: {
-                text: 'Average TAT in Days'
+                },
+                data: [
+                    <?php
+                    foreach ($tResult as $tRow) {
+                    ?> {
+                            name: '<?php echo ($tRow['status_name']); ?>',
+                            y: <?php echo ($tRow['total']); ?>,
+                            color: '<?php echo $sampleStatusColors[$tRow['status_id']]; ?>',
+                            url: '../dashboard/vlTestResultStatus.php?id=<?php echo base64_encode($tRow['status_id']); ?>'
+                        },
+                    <?php
+                    }
+                    ?>
+                ]
+            }]
+        });
+
+    <?php
+
+    }
+
+    if (isset($vlSuppressionResult) && (isset($vlSuppressionResult['positiveResult']) || isset($vlSuppressionResult['negativeResult']))) {
+
+    ?>
+        Highcharts.setOptions({
+            colors: ['#FF0000', '#50B432']
+        });
+        $('#eidSamplesOverview').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
             },
-            labels: { formatter: function() { return this.value; } },
-            plotLines: [{
+            title: {
+                text: 'EID Results'
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: 'Samples :<b>{point.y}</b>'
+            },
+            plotOptions: {
+                pie: {
+                    size: '100%',
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        useHTML: true,
+                        format: '<div style="padding-bottom:10px;"><b>{point.name}</b>: {point.y}</div>',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        },
+                        distance: 10
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                colorByPoint: true,
+                data: [{
+                        name: 'Positive',
+                        y: <?php echo (isset($vlSuppressionResult['positiveResult']) && $vlSuppressionResult['positiveResult'] > 0) > 0 ? $vlSuppressionResult['positiveResult'] : 0; ?>
+                    },
+                    {
+                        name: 'Negative',
+                        y: <?php echo (isset($vlSuppressionResult['negativeResult']) && $vlSuppressionResult['negativeResult'] > 0) > 0 ? $vlSuppressionResult['negativeResult'] : 0; ?>
+                    },
+                ]
+            }]
+        });
+    <?php
+    }
+    if (isset($result) && count($result) > 0) {
+    ?>
+        $('#eidLabAverageTat').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'EID Laboratory Turnaround Time'
+            },
+            exporting: {
+                chartOptions: {
+                    subtitle: {
+                        text: 'EID Laboratory Turnaround Time',
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                //categories: ["21 Mar", "22 Mar", "23 Mar", "24 Mar", "25 Mar", "26 Mar", "27 Mar"]
+                categories: [<?php
+                                if (isset($result['date']) && count($result['date']) > 0) {
+                                    foreach ($result['date'] as $date) {
+                                        echo "'" . $date . "',";
+                                    }
+                                }
+                                ?>]
+            },
+            yAxis: {
+                title: {
+                    text: 'Average TAT in Days'
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                },
+                plotLines: [{
                     value: 16,
                     color: 'red',
                     width: 2
                 }]
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                cursor: 'pointer',
-                point: {
-                    events: {
-                        click: function (e) {
-                          //doLabTATRedirect(e.point.category);
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function(e) {
+                                //doLabTATRedirect(e.point.category);
+                            }
                         }
                     }
                 }
-            }
-        },
+            },
 
-        series: [
-            <?php
-            if (isset($result['sampleTestedDiff'])) {
+            series: [
+                <?php
+                if (isset($result['sampleTestedDiff'])) {
+                ?> {
+                        connectNulls: false,
+                        showInLegend: true,
+                        name: 'Collected - Tested',
+                        data: [<?php echo implode(",", $result['sampleTestedDiff']); ?>],
+                        color: '#000',
+                    },
+                <?php
+                }
+                if (isset($result['sampleReceivedDiff'])) {
+                ?> {
+                        connectNulls: false,
+                        showInLegend: true,
+                        name: 'Collected - Received at Lab',
+                        data: [<?php echo implode(",", $result['sampleReceivedDiff']); ?>],
+                        color: '#4BC0D9',
+                    },
+                <?php
+                }
+                if (isset($result['samplePrintedDiff'])) {
+                ?> {
+                        connectNulls: false,
+                        showInLegend: true,
+                        name: 'Collected - Result Printed',
+                        data: [<?php echo implode(",", $result['samplePrintedDiff']); ?>],
+                        color: '#FF4500',
+                    },
+                <?php
+                }
                 ?>
-                {
-                    connectNulls : false,
-                    showInLegend: true,
-                    name: 'Collected - Tested',
-                    data: [<?php echo implode(",", $result['sampleTestedDiff']); ?>],
-                    color : '#000',
-                },
-            <?php
-            }
-            if (isset($result['sampleReceivedDiff'])) {
-            ?>
-                {
-                    connectNulls : false,
-                    showInLegend: true,
-                    name: 'Collected - Received at Lab',
-                    data: [<?php echo implode(",", $result['sampleReceivedDiff']); ?>],
-                    color : '#4BC0D9',
-                },
-            <?php
-            }
-            if (isset($result['samplePrintedDiff'])) {
-            ?>
-                {
-                    connectNulls : false,
-                    showInLegend: true,
-                    name: 'Collected - Result Printed',
-                    data: [<?php echo implode(",", $result['samplePrintedDiff']); ?>],
-                    color : '#FF4500',
-                },
-            <?php
-            }
-            ?>
-        ],
-    });
-    <?php }?>
+            ],
+        });
+    <?php } ?>
 </script>

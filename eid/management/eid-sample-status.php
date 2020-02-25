@@ -101,10 +101,10 @@ $batResult = $db->rawQuery($batQuery);
         <div class="box">
           <div class="box-body">
             <button class="btn btn-success pull-right" type="button" onclick="eidExportTAT()"><i class="fa fa-cloud-download" aria-hidden="true"></i> Export to excel</button>
-            <table id="vlRequestDataTable" class="table table-bordered table-striped">
+            <table id="eidRequestDataTable" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Sample ID</th>
+                  <th>EID Sample ID</th>
                   <th>Sample Collection Date</th>
                   <th>Sample Received Date in Lab</th>
                   <th>Sample Test Date</th>
@@ -187,7 +187,7 @@ $batResult = $db->rawQuery($batQuery);
 
   function loadVlTATData() {
     $.blockUI();
-    oTable = $('#vlRequestDataTable').dataTable({
+    oTable = $('#eidRequestDataTable').dataTable({
       "oLanguage": {
         "sLengthMenu": "_MENU_ records per page"
       },
