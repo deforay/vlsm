@@ -50,7 +50,7 @@ if (isset($_POST['type']) && trim($_POST['type']) == 'eid') {
 $u = $general->getSystemConfig('user_type');
 
 if ($u != 'remoteuser') {
-    $whereCondition = "result_status!=9  ";
+    $whereCondition = " result_status!=9  AND ";
 } else {
     $whereCondition = "";
     //get user facility map ids
