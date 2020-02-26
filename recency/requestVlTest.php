@@ -67,7 +67,8 @@ try {
         $data['sample_type'] = 2;
         $data['request_created_by'] = $result[8];
         $data['lab_id'] = $result[7];
-        $data['sample_tested_datetime'] = $general->getDateTime();
+        $data['request_created_datetime'] = $general->getDateTime();
+        $data['last_modified_datetime'] = $general->getDateTime();
         $data['result_status'] = 6;
         $data['data_sync'] = 0;
         $data['recency_vl'] = 'yes';
