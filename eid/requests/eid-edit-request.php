@@ -142,6 +142,9 @@ require_once($fileArray[$arr['vl_form']]);
         $('.date').datepicker({
             changeMonth: true,
             changeYear: true,
+            onSelect: function() {
+                $(this).change();
+            },
             dateFormat: 'dd-M-yy',
             timeFormat: "hh:mm TT",
             maxDate: "Today",
@@ -159,6 +162,7 @@ require_once($fileArray[$arr['vl_form']]);
             maxDate: "Today",
             onSelect: function(dateText, inst) {
                 $("#sampleCollectionDate").datepicker("option", "minDate", $("#childDob").datepicker("getDate"));
+                $(this).change();
             }
         }).click(function() {
             $('.ui-datepicker-calendar').show();

@@ -3,16 +3,16 @@ ob_start();
 $title = "EID | Add New Request";
 require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 ?>
 <style>
     .ui_tpicker_second_label,
     .ui_tpicker_second_slider,
-    .ui_tpicker_millisec_label, 
-    .ui_tpicker_millisec_slider, 
-    .ui_tpicker_microsec_label, 
-    .ui_tpicker_microsec_slider, 
-    .ui_tpicker_timezone_label, 
+    .ui_tpicker_millisec_label,
+    .ui_tpicker_millisec_slider,
+    .ui_tpicker_microsec_label,
+    .ui_tpicker_microsec_slider,
+    .ui_tpicker_timezone_label,
     .ui_tpicker_timezone {
         display: none !important;
     }
@@ -45,13 +45,13 @@ $rejectionResult = $db->rawQuery($rejectionQuery);
 
 
 foreach ($rejectionTypeResult as $type) {
-  $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
-  foreach ($rejectionResult as $reject) {
-    if ($type['rejection_type'] == $reject['rejection_type']) {
-      $rejectionReason .= '<option value="' . $reject['rejection_reason_id'] . '">' . ucwords($reject['rejection_reason_name']) . '</option>';
+    $rejectionReason .= '<optgroup label="' . ucwords($type['rejection_type']) . '">';
+    foreach ($rejectionResult as $reject) {
+        if ($type['rejection_type'] == $reject['rejection_type']) {
+            $rejectionReason .= '<option value="' . $reject['rejection_reason_id'] . '">' . ucwords($reject['rejection_reason_name']) . '</option>';
+        }
     }
-  }
-  $rejectionReason .= '</optgroup>';
+    $rejectionReason .= '</optgroup>';
 }
 
 $condition = "status = 'active'";
@@ -89,6 +89,9 @@ require_once($fileArray[$arr['vl_form']]);
         $('.date').datepicker({
             changeMonth: true,
             changeYear: true,
+            onSelect: function() {
+                $(this).change();
+            },
             dateFormat: 'dd-M-yy',
             timeFormat: "hh:mm TT",
             maxDate: "Today",
@@ -103,9 +106,10 @@ require_once($fileArray[$arr['vl_form']]);
             dateFormat: 'dd-M-yy',
             minDate: "-48m",
             maxDate: "Today",
-            onSelect: function(dateText, inst){
-                $("#sampleCollectionDate").datepicker("option","minDate",$("#childDob").datepicker("getDate"));
-            }            
+            onSelect: function(dateText, inst) {
+                $("#sampleCollectionDate").datepicker("option", "minDate", $("#childDob").datepicker("getDate"));
+                $(this).change();
+            }
         }).click(function() {
             $('.ui-datepicker-calendar').show();
         });
@@ -132,7 +136,7 @@ require_once($fileArray[$arr['vl_form']]);
 
 
     function checkSampleNameValidation(tableName, fieldName, id, fnct, alrt) {
-        
+
         if ($.trim($("#" + id).val()) != '') {
             $.blockUI();
             $.post("/eid/requests/check-sample-duplicate.php", {
@@ -150,7 +154,7 @@ require_once($fileArray[$arr['vl_form']]);
                             <?php if ($arr['vl_form'] == '3') { ?>
                                 $("#sampleCodeValue").html('').hide();
                             <?php }
-                                } else { ?>
+                        } else { ?>
                             data = data.split("##");
                             document.location.href = "/eid/requests/eid-edit-request.php?id=" + data[0] + "&c=" + data[1];
                         <?php } ?>
@@ -185,8 +189,8 @@ require_once($fileArray[$arr['vl_form']]);
             });
     }
 
-    function calculateAgeInMonths(){
-        var dateOfBirth  = moment($("#childDob").val(), "DD-MMM-YYYY");
+    function calculateAgeInMonths() {
+        var dateOfBirth = moment($("#childDob").val(), "DD-MMM-YYYY");
         $("#childAge").val(moment().diff(dateOfBirth, 'months'));
     }
 </script>
