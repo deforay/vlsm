@@ -95,7 +95,7 @@ try {
                 // echo 'Something went wrong try after some time..!';
             }
         } else {
-            echo 'Testing request already send for this sample id';
+            echo 'Testing request already sent for this sample id';
         }
     } else {
         // echo 'Something went wrong try after some time..!';
