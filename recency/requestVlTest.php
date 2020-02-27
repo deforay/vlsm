@@ -26,17 +26,20 @@ try {
 
     // Takes raw data from the request
     $json = file_get_contents('php://input');
-
     $result = explode('&', $json);
 
-    if ($result[0]['sampleId'] == "s") {
+    /* While it coming from the recency service we change the params */
+    if ($result[9] == "service=") {
         $sam    = explode('=', $result[0]);
         $pat    = explode('=', $result[1]);
         $fac    = explode('=', $result[2]);
         $scd    = str_replace("sCDate=", "", $result[3]);
         $lab    = explode('=', $result[4]);
         $by     = explode('=', $result[5]);
-
+        $dob    = explode('=', $result[6]);
+        $age    = explode('=', $result[7]);
+        $gender = explode('=', $result[8]);
+        $result = array();
         $result[0] = $sam[1];
         $result[1] = $pat[1];
         $result[2] = $fac[1];
@@ -45,11 +48,14 @@ try {
         $result[8] = $by[1];
         $result[3] = null;
         $result[4] = null;
+        $result[9] = $dob[1];
+        $result[10] = $age[1];
+        $result[11] = $gender[1];
     }
 
     $data = array();
     $vlReqFromTable = "vl_request_form";
-    // print_r($result);die;
+    
     if (isset($result) && count($result) > 0 && $result[0] != "") {
 
         /* To get province and district from facility id */
