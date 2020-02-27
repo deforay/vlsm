@@ -49,6 +49,7 @@ try {
 
     $data = array();
     $vlReqFromTable = "vl_request_form";
+    // print_r($result);die;
     if (isset($result) && count($result) > 0 && $result[0] != "") {
 
         /* To get province and district from facility id */
@@ -75,6 +76,9 @@ try {
         $data['reason_for_vl_testing'] = 9999; // 9999 is Recency Test in r_vl_test_reasons table
         $data['vlsm_country_id'] = $general->getGlobalConfig('vl_form');;
         $data['result_status'] = 9;
+        $data['patient_dob'] = date('Y-m-d',strtotime($result[9]));
+        $data['patient_age_in_years'] = $result[10];
+        $data['patient_gender'] = $result[11];
 
         /* Check if request data already placed or not */
         // $vlFormReqQuery ="SELECT vl_sample_id from vl_request_form WHERE remote_sample_code ='".$result[0]."' AND patient_art_no ='".$result[1]."' AND facility_id ='".$result[2]."' AND patient_province ='".$facilityResult[0]['facility_state']."' AND patient_district ='".$facilityResult[0]['facility_district']."' AND sample_collection_date ='".date('Y-m-d',strtotime($result[5]))."' AND sample_type ='".$result[6]."'";
