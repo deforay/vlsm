@@ -59,14 +59,14 @@ try {
     if (isset($result) && count($result) > 0 && $result[0] != "") {
 
         /* To get province and district from facility id */
-        $facilityQuery = "SELECT facility_state, facility_district from facility_details WHERE facility_id =" . $result[2];
+        $facilityQuery = "SELECT facility_id, facility_state, facility_district from facility_details WHERE other_id =" . $result[2];
         $facilityResult = $db->query($facilityQuery);
 
         /* Prepare the values to insert */
         $data['remote_sample_code'] = $result[0];
         $data['sample_code'] = null;
         $data['patient_art_no'] = $result[1];
-        $data['facility_id'] = $result[2];
+        $data['facility_id'] = $facilityResult[0]['facility_id'];
         $data['patient_province'] = $facilityResult[0]['facility_state'];
         $data['patient_district'] = $facilityResult[0]['facility_district'];
         $data['sample_collection_date'] = date('Y-m-d', strtotime($result[5]));
