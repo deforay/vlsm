@@ -171,11 +171,11 @@ if(sizeof($requestResult)> 0){
                     $vlResult = $result['result'];
                     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="'.DOMAIN.'/assets/img/smiley_smile.png" alt="smile_face"/>';
                     //$showMessage = 'Value outside machine detection limit';
-               }else if(trim($result['result'])=='<20'){
+               }else if(trim($result['result'])=='<20' || trim($result['result'])=='< 20'){
                     $vlResult = '&lt;20';
                     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="'.DOMAIN.'/assets/img/smiley_smile.png" alt="smile_face"/>';
                     $showMessage = ucfirst($arr['l_vl_msg']);
-               }else if(trim($result['result'])=='>10000000'){
+               }else if(trim($result['result'])=='>10000000' || trim($result['result'])=='> 10000000'){
                     $vlResult = $result['result'];
                     $smileyContent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="'.DOMAIN.'/assets/img/smiley_frown.png" alt="frown_face"/>';
                     $showMessage = ucfirst($arr['h_vl_msg']);
