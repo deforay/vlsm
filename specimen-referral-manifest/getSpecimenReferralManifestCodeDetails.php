@@ -164,7 +164,7 @@ foreach ($rResult as $aRow) {
         $disable = "disabled";
     }
     $row = array();
-    $row[] = '<input type="checkbox" name="chkPackage[]" class="chkPackage" id="chkPackage' . $aRow['package_id'] . '"  value="' . $aRow['package_id'] . '" onclick="checkPackage(this);"  />';
+    //$row[] = '<input type="checkbox" name="chkPackage[]" class="chkPackage" id="chkPackage' . $aRow['package_id'] . '"  value="' . $aRow['package_id'] . '" onclick="checkPackage(this);"  />';
     $row[] = $aRow['package_code'];
     $row[] = strtoupper($aRow['module']);
     $row[] = $aRow['sample_code'];
