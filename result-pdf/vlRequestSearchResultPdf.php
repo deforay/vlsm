@@ -128,22 +128,22 @@ class MYPDF extends TCPDF
         $this->SetFont('helvetica', '', 16);
         //        $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
         $this->writeHTMLCell(0, 0, 10, 12, strtoupper($this->text), 0, 0, 0, true, 'C', true);
-        $thirdHeading = '23';
+        $thirdHeading = '21';
         $fourthHeading = '28';
         $hrLine = '36';
         $marginTop = '14';
       } else {
-        $thirdHeading = '17';
+        $thirdHeading = '14';
         $fourthHeading = '23';
         $hrLine = '30';
-        $marginTop = '9';
+        $marginTop = '9'; 
       }
       if (trim($this->lab) != '') {
         $this->SetFont('helvetica', '', 10);
         $this->writeHTMLCell(0, 0, 8, $thirdHeading, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 12);
-      $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'HIV VIRAL LOAD TEST REPORT', 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'VIRAL LOAD TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
       $this->writeHTMLCell(0, 0, 15, $hrLine, '<hr>', 0, 0, 0, true, 'C', true);
     }
   }

@@ -38,9 +38,9 @@ $facilityCount = $facilityTotal[0]['total'];
 	<section class="content-header">
 		<div class="bs-example bs-example-tabs">
 			<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
-				<li class="active"><a href="#vlDashboard" data-toggle="tab">VL Dashboard</a></li>
+				<li class="active"><a href="#vlDashboard" data-toggle="tab">Viral Load Tests</a></li>
 				<?php if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
-					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Dashboard</a></li>
+					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
 				<?php }
 				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
 					<li><a href="#recencyDashboard" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
