@@ -122,12 +122,12 @@ class MYPDF extends TCPDF
 
       // $this->SetFont('helvetica', 'B', 7);
       // $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);(this two lines comment out for drc)
-      $this->SetFont('helvetica', '', 14);
-      $this->writeHTMLCell(0, 0, 10, 9, 'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
+      //$this->SetFont('helvetica', '', 14);
+      // $this->writeHTMLCell(0, 0, 10, 9, 'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
       if ($this->text != '') {
-        $this->SetFont('helvetica', '', 12);
+        $this->SetFont('helvetica', '', 14);
         //        $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
-        $this->writeHTMLCell(0, 0, 10, 16, strtoupper($this->text), 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0, 0, 10, 12, strtoupper($this->text), 0, 0, 0, true, 'C', true);
         $thirdHeading = '23';
         $fourthHeading = '28';
         $hrLine = '36';
@@ -139,11 +139,11 @@ class MYPDF extends TCPDF
         $marginTop = '9';
       }
       if (trim($this->lab) != '') {
-        $this->SetFont('helvetica', '', 9);
+        $this->SetFont('helvetica', '', 10);
         $this->writeHTMLCell(0, 0, 10, $thirdHeading, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 12);
-      $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'EID TEST REPORT', 0, 0, 0, true, 'C', true);
       $this->writeHTMLCell(0, 0, 15, $hrLine, '<hr>', 0, 0, 0, true, 'C', true);
     }
   }
