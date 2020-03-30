@@ -43,7 +43,7 @@ $facilityCount = $facilityTotal[0]['total'];
 					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Dashboard</a></li>
 				<?php }
 				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
-					<li><a href="#recencyDashboard" data-toggle="tab" onclick="generateDashboard('recency')">Recency Dashboard</a></li>
+					<li><a href="#recencyDashboard" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
 				<?php }  ?>
 			</ul>
 			<div id="myTabContent" class="tab-content">
