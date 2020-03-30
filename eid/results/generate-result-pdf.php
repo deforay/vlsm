@@ -95,16 +95,16 @@ class MYPDF extends TCPDF
           $this->Image($image_file, 95, 5, 15, '', '', '', 'T', false, 300, '', false, false, 0, false, false, false);
         }
       }
-      $this->SetFont('helvetica', 'B', 7);
-      $this->writeHTMLCell(0, 0, 10, 22, $this->text, 0, 0, 0, true, 'C', true);
+      $this->SetFont('helvetica', 'B', 16);
+      $this->writeHTMLCell(0, 0, 10, 12, $this->text, 0, 0, 0, true, 'C', true);
       if (trim($this->lab) != '') {
-        $this->SetFont('helvetica', '', 9);
-        $this->writeHTMLCell(0, 0, 10, 26, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+        $this->SetFont('helvetica', '', 10);
+        $this->writeHTMLCell(0, 0, 10, 22, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
-      $this->SetFont('helvetica', '', 18);
-      $this->writeHTMLCell(0, 0, 10, 30, 'EARLY INFANT DIAGNOSIS PATIENT REPORT', 0, 0, 0, true, 'C', true);
-
+      $this->SetFont('helvetica', '', 12);
+      $this->writeHTMLCell(0, 0, 10, 30, 'EARLY INFANT DIAGNOSIS TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
       $this->writeHTMLCell(0, 0, 15, 38, '<hr>', 0, 0, 0, true, 'C', true);
+
     } else {
       if (trim($this->logo) != '') {
         if (file_exists(UPLOAD_PATH . DIRECTORY_SEPARATOR . "facility-logo" . DIRECTORY_SEPARATOR . $this->labFacilityId . DIRECTORY_SEPARATOR . $this->logo)) {
@@ -122,12 +122,12 @@ class MYPDF extends TCPDF
 
       // $this->SetFont('helvetica', 'B', 7);
       // $this->writeHTMLCell(30,0,16,28,$this->text, 0, 0, 0, true, 'A', true);(this two lines comment out for drc)
-      //$this->SetFont('helvetica', '', 14);
-      // $this->writeHTMLCell(0, 0, 10, 9, 'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
+      $this->SetFont('helvetica', '', 14);
+      $this->writeHTMLCell(0, 0, 10, 9, 'MINISTERE DE LA SANTE PUBLIQUE', 0, 0, 0, true, 'C', true);
       if ($this->text != '') {
-        $this->SetFont('helvetica', '', 14);
+        $this->SetFont('helvetica', '', 12);
         //        $this->writeHTMLCell(0,0,10,16,'PROGRAMME NATIONAL DE LUTTE CONTRE LE SIDA ET IST', 0, 0, 0, true, 'C', true);
-        $this->writeHTMLCell(0, 0, 10, 12, strtoupper($this->text), 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0, 0, 10, 16, strtoupper($this->text), 0, 0, 0, true, 'C', true);
         $thirdHeading = '23';
         $fourthHeading = '28';
         $hrLine = '36';
@@ -139,11 +139,11 @@ class MYPDF extends TCPDF
         $marginTop = '9';
       }
       if (trim($this->lab) != '') {
-        $this->SetFont('helvetica', '', 10);
+        $this->SetFont('helvetica', '', 9);
         $this->writeHTMLCell(0, 0, 10, $thirdHeading, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 12);
-      $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'EID TEST REPORT', 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 10, $fourthHeading, 'RESULTATS CHARGE VIRALE', 0, 0, 0, true, 'C', true);
       $this->writeHTMLCell(0, 0, 15, $hrLine, '<hr>', 0, 0, 0, true, 'C', true);
     }
   }
