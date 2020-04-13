@@ -302,7 +302,16 @@ foreach ($fResult as $fDetails) {
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="Confirmation of positive first EID PCR test result" /> Confirmation of positive first EID PCR test result </option>
-                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months"> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
+                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months"> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> 
+                                                <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
+                                                <option value="1st Test Positive"> 1st Test Positive </option>
+                                                <option value="DBS Invalid"> DBS Invalid </option>
+                                                <option value="Indeterminate"> Indeterminate </option>
+                                                <option value="Infant Still breastfeeding"> Infant Still breastfeeding </option>
+                                                <option value="Infact <2 months post cessation of breastfeeding"> Infact <2 months post cessation of breastfeeding </option>
+                                                <option value="Infants less than 6 weeks"> Infants less than 6 weeks </option>
+                                                <option value="Inadequate feeding history"> Inadequate feeding history </option>
+                                                
                                                 <option value="Other"> Other </option>
                                             </select>
                                         </td>

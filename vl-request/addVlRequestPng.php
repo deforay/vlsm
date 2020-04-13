@@ -161,7 +161,7 @@ foreach ($fResult as $fDetails) {
                     <label for="gender">Gender &nbsp;&nbsp;</label>
                           </td>
                   <td colspan="1">
-                  <select class="form-control" name="patientPregnant" id="patientPregnant" title="Please choose if patient is pregnant" style="width:100%;" onchange="">
+                  <select class="form-control" name="gender" id="gender" title="Please choose patient gender" style="width:100%;" onchange="">
                       <option value="">-- Select --</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
