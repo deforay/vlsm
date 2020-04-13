@@ -47,6 +47,7 @@ if (count($data['result']) > 0) {
             'sample_package_code',
             //'last_modified_by',
             'request_created_by',
+            'result_printed_datetime'
         );
         foreach ($unwantedColumns as $removeColumn) {
             unset($lab[$removeColumn]);
