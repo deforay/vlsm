@@ -2005,3 +2005,206 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
 INSERT INTO `r_vl_test_reasons` (`test_reason_id`, `test_reason_name`, `test_reason_status`) VALUES ('9999', 'recency', 'active');
 
 -- Version 3.19 ---- Amit Feb 24 2020
+
+
+-- Amit 14 Apr 2020
+
+INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) 
+          VALUES (29, 'covid-19', 'covid-19-requests', 'Covid-19 Request Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+          VALUES (NULL, '29', 'covid-19-add-request.php', 'Add Request');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+          VALUES (NULL, '29', 'covid-19-edit-request.php', 'Edit Request');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+          VALUES (NULL, '29', 'covid-19-requests.php', 'View Requests');
+
+
+INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) 
+      VALUES ('Covid-19 Maximum Length', 'covid19_max_length', '', 'active'), 
+      ('Covid-19 Minimum Length', 'covid19_min_length', '', 'active'), 
+      ('Covid-19 Sample Code Format', 'covid19_sample_code', 'MMYY', 'active'), 
+      ('Covid-19 Sample Code Prefix', 'covid19_sample_code_prefix', 'C19', 'active');
+INSERT INTO `global_config` (`display_name`,`name`, `value`) 
+        VALUES ('Covid-19 Positive','covid19_positive', 'Positive');
+INSERT INTO `global_config` (`display_name`,`name`, `value`) 
+        VALUES ('Covid-19 Negative','covid19_negative', 'Negative');
+INSERT INTO `global_config` (`display_name`,`name`, `value`) 
+        VALUES ('Covid-19 Indeterminate','covid19_indeterminate', 'Indeterminate');
+
+
+CREATE TABLE `r_covid19_results` (
+  `result_id` varchar(255) NOT NULL,
+  `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'active',
+  `data_sync` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `r_covid19_results` (`result_id`, `result`, `status`, `data_sync`) VALUES
+('indeterminate', 'Indeterminate', 'active', 0),
+('negative', 'Negative', 'active', 0),
+('positive', 'Positive', 'active', 0);
+
+ALTER TABLE `r_covid19_results`
+  ADD PRIMARY KEY (`result_id`);
+
+
+
+CREATE TABLE `r_covid19_sample_type` (
+  `sample_id` int(11) NOT NULL,
+  `sample_name` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `status` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
+  `data_sync` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `r_covid19_sample_type` (`sample_id`, `sample_name`, `status`, `data_sync`) VALUES
+(1, 'Nasopharyngeal and oropharyngeal swab', 'active', 0),
+(2, 'Bronchoalveolar lavage', 'active', 0),
+(3, 'Endotracheal aspirate', 'active', 0),
+(4, 'Nasopharyngeal aspirate', 'active', 0),
+(5, 'Nasal wash', 'active', 0),
+(6, 'Sputum', 'active', 0),
+(7, 'Lung tissue', 'active', 0),
+(8, 'Serum', 'active', 0),
+(9, 'Whole blood', 'active', 0),
+(10, 'Urine', 'active', 0),
+(11, 'Stool', 'active', 0);
+
+ALTER TABLE `r_covid19_sample_type`
+  ADD PRIMARY KEY (`sample_id`);
+
+ALTER TABLE `r_covid19_sample_type`
+  MODIFY `sample_id` int(11) NOT NULL AUTO_INCREMENT;  
+
+
+  ---
+
+CREATE TABLE `form_covid19` (
+  `covid19_id` int(11) NOT NULL,
+  `vlsm_instance_id` varchar(255) DEFAULT NULL,
+  `vlsm_country_id` int(11) NOT NULL,
+  `sample_code_key` int(11) NOT NULL,
+  `sample_code_format` varchar(255) DEFAULT NULL,
+  `sample_code` varchar(255) DEFAULT NULL,
+  `remote_sample` varchar(255) NOT NULL DEFAULT 'no',
+  `remote_sample_code_key` int(11) DEFAULT NULL,
+  `remote_sample_code_format` varchar(255) DEFAULT NULL,
+  `remote_sample_code` varchar(255) DEFAULT NULL,
+  `sample_collection_date` datetime NOT NULL,
+  `sample_received_at_hub_datetime` datetime DEFAULT NULL,
+  `sample_received_at_vl_lab_datetime` datetime DEFAULT NULL,
+  `sample_tested_datetime` datetime DEFAULT NULL,
+  `funding_source` int(11) DEFAULT NULL,
+  `implementing_partner` int(11) DEFAULT NULL,
+  `facility_id` int(11) DEFAULT NULL,
+  `province_id` int(11) DEFAULT NULL,
+  `patient_id` varchar(255) DEFAULT NULL,
+  `patient_name` varchar(255) DEFAULT NULL,
+  `patient_surname` varchar(255) DEFAULT NULL,
+  `patient_dob` date DEFAULT NULL,
+  `patient_age` varchar(255) DEFAULT NULL,
+  `patient_gender` varchar(255) DEFAULT NULL,
+  `patient_phone_number` varchar(255) DEFAULT NULL,
+  `patient_address` varchar(1000) DEFAULT NULL,
+  `specimen_type` varchar(255) DEFAULT NULL,
+  `is_sample_post_mortem` varchar(255) DEFAULT NULL,
+  `priority_status` varchar(255) DEFAULT NULL,
+  `date_of_symptom_onset` date DEFAULT NULL,
+  `contact_with_confirmed_case` varchar(255) DEFAULT NULL,
+  `has_recent_travel_history` varchar(255) DEFAULT NULL,
+  `travel_country_names` varchar(255) DEFAULT NULL,
+  `travel_return_date` date DEFAULT NULL,
+  `lab_id` int(11) DEFAULT NULL,
+  `lab_technician` varchar(255) DEFAULT NULL,
+  `lab_reception_person` varchar(255) DEFAULT NULL,
+  `covid19_test_platform` varchar(255) DEFAULT NULL,
+  `result_status` int(11) DEFAULT NULL,
+  `is_sample_rejected` varchar(255) NOT NULL DEFAULT 'no',
+  `reason_for_sample_rejection` varchar(500) DEFAULT NULL,
+  `result` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `result_reviewed_datetime` datetime DEFAULT NULL,
+  `result_reviewed_by` varchar(255) DEFAULT NULL,
+  `result_approved_datetime` datetime DEFAULT NULL,
+  `result_approved_by` varchar(255) DEFAULT NULL,
+  `approver_comments` varchar(1000) DEFAULT NULL,
+  `result_dispatched_datetime` datetime DEFAULT NULL,
+  `result_mail_datetime` datetime DEFAULT NULL,
+  `manual_result_entry` varchar(255) DEFAULT 'no',
+  `import_machine_name` varchar(255) DEFAULT NULL,
+  `import_machine_file_name` varchar(255) DEFAULT NULL,
+  `result_printed_datetime` datetime DEFAULT NULL,
+  `request_created_datetime` datetime DEFAULT NULL,
+  `request_created_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `sample_registered_at_lab` datetime DEFAULT NULL,
+  `sample_batch_id` int(11) DEFAULT NULL,
+  `sample_package_id` varchar(255) DEFAULT NULL,
+  `sample_package_code` varchar(255) DEFAULT NULL,
+  `lot_number` varchar(255) DEFAULT NULL,
+  `lot_expiration_date` date DEFAULT NULL,
+  `last_modified_datetime` datetime DEFAULT NULL,
+  `last_modified_by` varchar(255) CHARACTER SET utf8 DEFAULT NULL,  
+  `data_sync` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+ALTER TABLE `form_covid19`
+  ADD PRIMARY KEY (`covid19_id`);
+
+ALTER TABLE `form_covid19`
+  MODIFY `covid19_id` int(11) NOT NULL AUTO_INCREMENT;
+
+-- REJECTION REASONS TABLE  
+
+CREATE TABLE `r_covid19_sample_rejection_reasons` (
+  `rejection_reason_id` int(11) NOT NULL,
+  `rejection_reason_name` varchar(255) DEFAULT NULL,
+  `rejection_type` varchar(255) NOT NULL DEFAULT 'general',
+  `rejection_reason_status` varchar(255) DEFAULT NULL,
+  `rejection_reason_code` varchar(255) DEFAULT NULL,
+  `updated_datetime` datetime DEFAULT NULL,
+  `data_sync` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+INSERT INTO `r_covid19_sample_rejection_reasons` (`rejection_reason_id`, `rejection_reason_name`, `rejection_type`, `rejection_reason_status`, `rejection_reason_code`, `updated_datetime`, `data_sync`) VALUES
+(1, 'Poorly labelled specimen', 'general', 'active', 'Gen_PLSP', '2019-12-17 12:44:29', 0),
+(2, 'Mismatched sample and form labeling', 'general', 'active', 'Gen_MMSP', '2019-12-17 12:44:29', 0),
+(3, 'Missing labels on container or tracking form', 'general', 'active', 'Gen_MLTS', '2019-12-17 12:44:29', 0),
+(4, 'Sample without request forms/Tracking forms', 'general', 'active', 'Gen_SMRT', '2019-12-17 12:44:29', 0),
+(5, 'Name/Information of requester is missing', 'general', 'active', 'Gen_NIRM', '2019-12-17 12:44:29', 0),
+(6, 'Missing information on request form - Age', 'general', 'active', 'Gen_MIRA', '2019-12-17 12:44:29', 0),
+(7, 'Missing information on request form - Sex', 'general', 'active', 'Gen_MIRS', '2019-12-17 12:44:29', 0),
+(8, 'Missing information on request form - Sample Collection Date', 'general', 'active', 'Gen_MIRD', '2019-12-17 12:44:29', 0),
+(9, 'Missing information on request form - ART No', 'general', 'active', 'Gen_MIAN', '2019-12-17 12:44:29', 0),
+(10, 'Inappropriate specimen packing', 'general', 'active', 'Gen_ISPK', '2019-12-17 12:44:29', 0),
+(11, 'Inappropriate specimen for test request', 'general', 'active', 'Gen_ISTR', '2019-12-17 12:44:29', 0),
+(12, 'Form received without Sample', 'general', 'active', 'Gen_NoSample', '2019-12-17 12:44:29', 0),
+(13, 'VL Machine Flag', 'testing', 'active', 'FLG_', '2019-12-17 12:44:29', 0),
+(14, 'CNTRL_FAIL', 'testing', 'active', 'FLG_AL00', '2019-12-17 12:44:29', 0),
+(15, 'SYS_ERROR', 'testing', 'active', 'FLG_TM00', '2019-12-17 12:44:29', 0),
+(16, 'A/D_ABORT', 'testing', 'active', 'FLG_TM17', '2019-12-17 12:44:29', 0),
+(17, 'KIT_EXPIRY', 'testing', 'active', 'FLG_TMAP', '2019-12-17 12:44:29', 0),
+(18, 'RUN_EXPIRY', 'testing', 'active', 'FLG_TM19', '2019-12-17 12:44:29', 0),
+(19, 'DATA_ERROR', 'testing', 'active', 'FLG_TM20', '2019-12-17 12:44:29', 0),
+(20, 'NC_INVALID', 'testing', 'active', 'FLG_TM24', '2019-12-17 12:44:29', 0),
+(21, 'LPCINVALID', 'testing', 'active', 'FLG_TM25', '2019-12-17 12:44:29', 0),
+(22, 'MPCINVALID', 'testing', 'active', 'FLG_TM26', '2019-12-17 12:44:29', 0),
+(23, 'HPCINVALID', 'testing', 'active', 'FLG_TM27', '2019-12-17 12:44:29', 0),
+(24, 'S_INVALID', 'testing', 'active', 'FLG_TM29', '2019-12-17 12:44:29', 0),
+(25, 'MATH_ERROR', 'testing', 'active', 'FLG_TM31', '2019-12-17 12:44:29', 0),
+(26, 'PRECHECK', 'testing', 'active', 'FLG_TM44 ', '2019-12-17 12:44:29', 0),
+(27, 'QS_INVALID', 'testing', 'active', 'FLG_TM50', '2019-12-17 12:44:29', 0),
+(28, 'POSTCHECK', 'testing', 'active', 'FLG_TM51', '2019-12-17 12:44:29', 0),
+(29, 'REAG_ERROR', 'testing', 'active', 'FLG_AP02 ', '2019-12-17 12:44:29', 0),
+(30, 'NO_SAMPLE', 'testing', 'active', 'FLG_AP12', '2019-12-17 12:44:29', 0),
+(31, 'DISP_ERROR', 'testing', 'active', 'FLG_AP13 ', '2019-12-17 12:44:29', 0),
+(32, 'TEMP_RANGE', 'testing', 'active', 'FLG_AP19 ', '2019-12-17 12:44:29', 0),
+(33, 'PREP_ABORT', 'testing', 'active', 'FLG_AP24', '2019-12-17 12:44:29', 0),
+(34, 'SAMPLECLOT', 'testing', 'active', 'FLG_AP25', '2019-12-17 12:44:29', 0);
+
+
+ALTER TABLE `r_covid19_sample_rejection_reasons`
+  ADD PRIMARY KEY (`rejection_reason_id`);
+
+
+ALTER TABLE `r_covid19_sample_rejection_reasons`
+  MODIFY `rejection_reason_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;

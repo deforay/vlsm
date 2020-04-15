@@ -142,7 +142,7 @@ try {
 
             if ($VLAnalysisResult == 'NULL' || $VLAnalysisResult == '') {
                 $DashVL_Abs = 0;
-                $DashVL_AnalysisResult = '';
+                $DashVL_AnalysisResult = null;
             } else if ($VLAnalysisResult < 1000) {
                 $DashVL_AnalysisResult = 'Suppressed';
                 $DashVL_Abs = $VLAnalysisResult;
@@ -245,7 +245,7 @@ try {
 
         //Base URL
         $apiUrl = $vldashboardUrl . "/api/import-viral-load";
-        error_log($apiUrl);
+        //error_log($apiUrl);
         //$apiUrl.="/files";
         //$apiUrl.="?key_identity=XXX&key_credential=YYY";
 

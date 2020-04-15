@@ -70,3 +70,11 @@ $recencyConfig['vlsync'] = false;
 // true => Enabled
 // false => Disabled
 $recencyConfig['crosslogin'] = false;
+
+
+
+$covid19Config = array();
+// Enable/Disable Covid-19 Module 
+// true => Enabled
+// false => Disabled
+$covid19Config['enabled'] = false;
