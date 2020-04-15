@@ -25,7 +25,7 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
  $output = array();
  $sheet = $excel->getActiveSheet();
 
- $headings = array("S.No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Child ID","Child Name","Mother ID","Child Date of Birth","Child Age","Child Gender","Sample Collection Date","Is Sample Rejected?","Sample Tested On","Result","Date Result Dispatched","TAT Result Dispatch(days)","Comments","Funding Source","Implementing Partner");
+ $headings = array("S.No.","Sample Code","Health Facility Name","Health Facility Code","District/County","Province/State","Child ID","Child Name","Mother ID","Child Date of Birth","Child Age","Child Gender","Sample Collection Date","Is Sample Rejected?","Sample Tested On","Result","Sample Received On","Date Result Dispatched","Comments","Funding Source","Implementing Partner");
 
  $colNo = 1;
 
@@ -116,18 +116,18 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   }
   //result dispatched date
   $resultDispatchedDate = '';
-  if($aRow['result_dispatched_datetime']!= NULL && trim($aRow['result_dispatched_datetime'])!='' && $aRow['result_dispatched_datetime']!='0000-00-00 00:00:00'){
-   $expStr = explode(" ",$aRow['result_dispatched_datetime']);
+  if($aRow['result_printed_datetime']!= NULL && trim($aRow['result_printed_datetime'])!='' && $aRow['result_dispatched_datetime']!='0000-00-00 00:00:00'){
+   $expStr = explode(" ",$aRow['result_printed_datetime']);
    $resultDispatchedDate =  date("d-m-Y", strtotime($expStr[0]));
   }
   //TAT result dispatched(in days)
-  $tatdays = '';
-  if(trim($sampleCollectionDate)!= '' && trim($resultDispatchedDate)!= ''){
-    $sample_collection_date = strtotime($sampleCollectionDate);
-    $result_dispatched_date = strtotime($resultDispatchedDate);
-    $dayDiff = $result_dispatched_date - $sample_collection_date;
-    $tatdays = (int)floor($dayDiff / (60 * 60 * 24));
-  }
+  // $tatdays = '';
+  // if(trim($sampleCollectionDate)!= '' && trim($resultDispatchedDate)!= ''){
+  //   $sample_collection_date = strtotime($sampleCollectionDate);
+  //   $result_dispatched_date = strtotime($resultDispatchedDate);
+  //   $dayDiff = $result_dispatched_date - $sample_collection_date;
+  //   $tatdays = (int)floor($dayDiff / (60 * 60 * 24));
+  // }
   //set result log value
   $logVal = '0.0';
   if($aRow['result_value_log']!= NULL && trim($aRow['result_value_log'])!= ''){
@@ -173,8 +173,8 @@ if(isset($_SESSION['vlResultQuery']) && trim($_SESSION['vlResultQuery'])!=""){
   $row[] = $sampleRejection;
   $row[] = $sampleTestedOn;
   $row[] = $eidResults[$aRow['result']];
+  $row[] = $sampleReceivedOn;
   $row[] = $resultDispatchedDate;
-  $row[] = $tatdays;
   $row[] = ucfirst($aRow['approver_comments']);
   $row[] = (isset($aRow['funding_source_name']) && trim($aRow['funding_source_name'])!= '')?ucwords($aRow['funding_source_name']):'';
   $row[] = (isset($aRow['i_partner_name']) && trim($aRow['i_partner_name'])!= '')?ucwords($aRow['i_partner_name']):'';
