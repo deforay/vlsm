@@ -135,10 +135,12 @@ $sQuery = 	 "SELECT 		vl.vl_sample_id,
 							imp.i_partner_name,
 							u_d.user_name as reviewedBy,
             				a_u_d.user_name as approvedBy,
-							vl.result_dispatched_datetime,
+							vl.sample_received_at_hub_datetime,							
+							vl.sample_received_at_vl_lab_datetime,
 							vl.result_approved_datetime,
 							vl.result_reviewed_datetime,
 							vl.result_dispatched_datetime,							
+							vl.result_printed_datetime,							
             				rs.rejection_reason_name 
 							
 							FROM vl_request_form as vl 
