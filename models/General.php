@@ -395,4 +395,14 @@ public function getProvinceIDFromCode($code)
         }
         return $response;
     }
+
+    public function getCovid19Results()
+    {
+        $results = $this->db->rawQuery("SELECT * FROM r_covid19_results where status='active' ORDER BY result_id DESC");
+        $response = array();
+        foreach ($results as $row) {
+            $response[$row['result_id']] = $row['result'];
+        }
+        return $response;
+    }
 }

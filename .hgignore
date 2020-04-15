@@ -1,6 +1,7 @@
 syntax: regexp
 ^.idea
 ^uploads/(?!index.php)
+^covid-19/(?!index.php)
 ^temporary/(?!index.php)
 ^instrument-interfacing/files/roche/new/(?!index.php)
 ^instrument-interfacing/files/roche/imported/(?!index.php)
@@ -19,5 +20,7 @@ Thumbs.db.orig
 .gitignore
 config.production.php
 config.development.php
+vldashboard-sync.php
+Covid19.php
 
 
