@@ -157,10 +157,10 @@ $tatSampleQuery = "SELECT
         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,sample_received_at_vl_lab_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgReceivedDiff,
         CAST(ABS(AVG(TIMESTAMPDIFF(DAY,result_printed_datetime,sample_collection_date))) AS DECIMAL (10,2)) as AvgPrintedDiff
     
-        from " . $table . " as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date != '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
-        AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime != '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR
-        (vl.result_printed_datetime is not null AND vl.result_printed_datetime != '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR
-        (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime != '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
+        from " . $table . " as vl INNER JOIN r_sample_status as ts ON ts.status_id=vl.result_status JOIN facility_details as f ON vl.facility_id=f.facility_id LEFT JOIN r_vl_sample_type as s ON s.sample_id=vl.sample_type LEFT JOIN batch_details as b ON b.batch_id=vl.sample_batch_id where (vl.sample_collection_date is not null AND vl.sample_collection_date not like '' AND DATE(vl.sample_collection_date) !='1970-01-01' AND DATE(vl.sample_collection_date) !='0000-00-00')
+        AND ((vl.sample_tested_datetime is not null AND vl.sample_tested_datetime not like '' AND DATE(vl.sample_tested_datetime) !='1970-01-01' AND DATE(vl.sample_tested_datetime) !='0000-00-00') OR
+        (vl.result_printed_datetime is not null AND vl.result_printed_datetime not like '' AND DATE(vl.result_printed_datetime) !='1970-01-01' AND DATE(vl.result_printed_datetime) !='0000-00-00') OR
+        (vl.sample_received_at_vl_lab_datetime is not null AND vl.sample_received_at_vl_lab_datetime not like '' AND DATE(vl.sample_received_at_vl_lab_datetime) !='1970-01-01' AND DATE(vl.sample_received_at_vl_lab_datetime) !='0000-00-00'))
         AND vl.result is not null
         AND vl.result != ''
         AND DATE(vl.sample_collection_date) >= '" . $start_date . "'

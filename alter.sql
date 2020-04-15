@@ -2076,8 +2076,6 @@ ALTER TABLE `r_covid19_sample_type`
   MODIFY `sample_id` int(11) NOT NULL AUTO_INCREMENT;  
 
 
-  ---
-
 CREATE TABLE `form_covid19` (
   `covid19_id` int(11) NOT NULL,
   `vlsm_instance_id` varchar(255) DEFAULT NULL,

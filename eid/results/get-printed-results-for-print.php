@@ -246,13 +246,13 @@ $dWhere = '';
 if (isset($_POST['vlPrint']) && $_POST['vlPrint'] == 'print') {
 	if (!isset($_POST['status']) || trim($_POST['status']) == '') {
 		if (trim($sWhere) != '') {
-			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime!= ''";
+			$sWhere = $sWhere . " AND ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		} else {
-			$sWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime!= ''";
+			$sWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 		}
 	}
 	$sWhere = $sWhere . " AND vl.vlsm_country_id='" . $arr['vl_form'] . "'";
-	$dWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime!= ''";
+	$dWhere = "WHERE ((vl.result_status = 7 AND vl.result is NOT NULL AND vl.result !='') OR (vl.result_status = 4 AND (vl.result is NULL OR vl.result = ''))) AND vl.vlsm_country_id='" . $arr['vl_form'] . "' AND result_printed_datetime is NOT NULL AND result_printed_datetime not like ''";
 }
 if ($sarr['user_type'] == 'remoteuser') {
 	//$sWhere = $sWhere." AND request_created_by='".$_SESSION['userId']."'";
