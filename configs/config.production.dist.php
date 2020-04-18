@@ -3,6 +3,17 @@ require_once(__DIR__ . '/../system/system.php');
 
 
 $systemConfig = array();
+
+
+// Enable/Disable Modules
+// true => Enabled
+// false => Disabled
+$systemConfig['modules']['vl'] = true;
+$systemConfig['modules']['eid'] = true;
+$systemConfig['modules']['covid19'] = false;
+
+
+// Database Settings
 $systemConfig['dbHost']     = '';
 $systemConfig['dbUser']     = '';
 $systemConfig['dbPassword'] = '';
@@ -45,14 +56,6 @@ $interfaceConfig['dbPassword'] = '';
 $interfaceConfig['dbName'] = '';
 $interfaceConfig['dbPort'] = 3306;
 
-
-$eidConfig = array();
-// Enable/Disable EID 
-// true => Enabled
-// false => Disabled
-$eidConfig['enabled'] = true;
-
-
 $recencyConfig = array();
 
 // Domain URL of the Recency Web Application
@@ -70,11 +73,3 @@ $recencyConfig['vlsync'] = false;
 // true => Enabled
 // false => Disabled
 $recencyConfig['crosslogin'] = false;
-
-
-
-$covid19Config = array();
-// Enable/Disable Covid-19 Module 
-// true => Enabled
-// false => Disabled
-$covid19Config['enabled'] = false;

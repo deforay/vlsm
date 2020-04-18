@@ -24,6 +24,8 @@ if($type == 'vl'){
     include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."vl".DIRECTORY_SEPARATOR.$confFileName);
 }else if($type == 'eid'){
     include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."eid".DIRECTORY_SEPARATOR.$confFileName);
+}else if($type == 'covid-19'){
+    include_once(APPLICATION_PATH.DIRECTORY_SEPARATOR."import-configs".DIRECTORY_SEPARATOR."covid-19".DIRECTORY_SEPARATOR.$confFileName);
 }
 
 

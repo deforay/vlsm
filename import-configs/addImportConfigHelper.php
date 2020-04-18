@@ -35,6 +35,7 @@ try {
         $configDir = __DIR__;
         $configFileVL = $configDir.DIRECTORY_SEPARATOR."vl".DIRECTORY_SEPARATOR.$_POST['configurationFile'];
         $configFileEID = $configDir.DIRECTORY_SEPARATOR."eid".DIRECTORY_SEPARATOR.$_POST['configurationFile'];
+        $configFileCovid19 = $configDir.DIRECTORY_SEPARATOR."covid-19".DIRECTORY_SEPARATOR.$_POST['configurationFile'];
         
         
         if (!file_exists($configDir)) {
@@ -49,6 +50,12 @@ try {
 
         if (!file_exists($configFileEID)) {
             $fp=fopen($configFileEID,'w');
+            fwrite($fp, '');
+            fclose($fp);
+        }
+
+        if (!file_exists($configFileCovid19)) {
+            $fp=fopen($configFileCovid19,'w');
             fwrite($fp, '');
             fclose($fp);
         }

@@ -151,7 +151,7 @@ if (count($apiResult) > 0) {
 
 $request = array();
 //$remoteSampleCodeList = array();
-if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
+if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
     $url = $systemConfig['remoteURL'] . '/remote/remote/eid-test-requests.php';
     $data = array(
         'labName' => $sarr['lab_name'],
