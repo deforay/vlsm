@@ -43,7 +43,11 @@ $facilityCount = $facilityTotal[0]['total'];
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
 					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
-				<?php }
+				<?php } ?>
+				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {  ?>
+					<li><a href="#covid19Dashboard" data-toggle="tab" onclick="generateDashboard('covid19');">Covid-19 Tests</a></li>
+				<?php } ?>
+				<?php
 				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
 					<li><a href="#recencyDashboard" data-toggle="tab" onclick="generateDashboard('recency')">Confirmation Tests for Recency</a></li>
 				<?php }  ?>
@@ -58,13 +62,13 @@ $facilityCount = $facilityTotal[0]['total'];
 							<div class="row" style="padding-top:10px;padding-bottom:20px;">
 								<div class="col-lg-7">
 									<form autocomplete="off">
-										<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
+										<table class="table searchTable" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
 											<tr>
 												<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
 												<td>
 													<input type="text" id="vlSampleCollectionDate" name="vlSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
 												</td>
-												<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('vl');" value="Search" class="btn btn-success btn-sm">
+												<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('vl');" value="Search" class="searchBtn btn btn-success btn-sm">
 													&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('vl');"><span>Reset</span></button>
 												</td>
 											</tr>
@@ -88,78 +92,118 @@ $facilityCount = $facilityTotal[0]['total'];
 
 				<?php } ?>
 
-				<div class="tab-pane fade in" id="recencyDashboard">
-					<!-- VL content -->
-					<section class="content">
-						<!-- Small boxes (Stat box) -->
-						<div class="row" style="padding-top:10px;padding-bottom:20px;">
-							<div class="col-lg-7">
-								<form autocomplete="off">
-									<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
-										<tr>
-											<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
-											<td>
-												<input type="text" id="recencySampleCollectionDate" name="recencySampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
-											</td>
-											<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('recency')" value="Search" class="btn btn-success btn-sm">
-												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('recency');"><span>Reset</span></button>
-											</td>
-										</tr>
-									</table>
-								</form>
+				<?php if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
+					<div class="tab-pane fade in" id="recencyDashboard">
+						<!-- VL content -->
+						<section class="content">
+							<!-- Small boxes (Stat box) -->
+							<div class="row" style="padding-top:10px;padding-bottom:20px;">
+								<div class="col-lg-7">
+									<form autocomplete="off">
+										<table class="table searchTable" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
+											<tr>
+												<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
+												<td>
+													<input type="text" id="recencySampleCollectionDate" name="recencySampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
+												</td>
+												<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('recency')" value="Search" class="searchBtn btn btn-success btn-sm">
+													&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('recency');"><span>Reset</span></button>
+												</td>
+											</tr>
+										</table>
+									</form>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div id="recencySampleResultDetails"></div>
-							<div class="box-body" id="recencyNoOfSampleCount"></div>
-							<div id="recencyPieChartDiv"></div>
-						</div>
+							<div class="row">
+								<div id="recencySampleResultDetails"></div>
+								<div class="box-body" id="recencyNoOfSampleCount"></div>
+								<div id="recencyPieChartDiv"></div>
+							</div>
 
-						<!-- /.row -->
-						<!-- Main row -->
-						<!-- /.row (main row) -->
+							<!-- /.row -->
+							<!-- Main row -->
+							<!-- /.row (main row) -->
 
-					</section>
-					<!-- /. VL content -->
-				</div>
-
+						</section>
+						<!-- /. VL content -->
+					</div>
+				<?php } ?>
+				<!-- EID START-->
 				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
 
-				<div class="tab-pane fade in" id="eidDashboard">
-					<!-- EID content -->
-					<section class="content">
-						<!-- Small boxes (Stat box) -->
-						<div class="row" style="padding-top:10px;padding-bottom:20px;">
-							<div class="col-lg-7">
-								<form autocomplete="off">
-									<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
-										<tr>
-											<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
-											<td>
-												<input type="text" id="eidSampleCollectionDate" name="eidSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
-											</td>
-											<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('eid')" value="Search" class="btn btn-success btn-sm">
-												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('eid');"><span>Reset</span></button>
-											</td>
-										</tr>
-									</table>
-								</form>
+					<div class="tab-pane fade in" id="eidDashboard">
+						<!-- EID content -->
+						<section class="content">
+							<!-- Small boxes (Stat box) -->
+							<div class="row" style="padding-top:10px;padding-bottom:20px;">
+								<div class="col-lg-7">
+									<form autocomplete="off">
+										<table class="table searchTable" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
+											<tr>
+												<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
+												<td>
+													<input type="text" id="eidSampleCollectionDate" name="eidSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
+												</td>
+												<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('eid')" value="Search" class="searchBtn btn btn-success btn-sm">
+													&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('eid');"><span>Reset</span></button>
+												</td>
+											</tr>
+										</table>
+									</form>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div id="eidSampleResultDetails"></div>
-							<div class="box-body" id="eidNoOfSampleCount"></div>
-							<div id="eidPieChartDiv"></div>
-						</div>
-						<!-- /.row -->
-						<!-- Main row -->
-						<!-- /.row (main row) -->
-					</section>
-					<!-- /. EID content -->
-				</div>
+							<div class="row">
+								<div id="eidSampleResultDetails"></div>
+								<div class="box-body" id="eidNoOfSampleCount"></div>
+								<div id="eidPieChartDiv"></div>
+							</div>
+							<!-- /.row -->
+							<!-- Main row -->
+							<!-- /.row (main row) -->
+						</section>
+						<!-- /. EID content -->
+					</div>
 
 				<?php } ?>
+				<!-- EID END -->
+				<!-- COVID-19 START-->
+				<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {  ?>
 
+					<div class="tab-pane fade in" id="covid19Dashboard">
+						<!-- COVID-19 content -->
+						<section class="content">
+							<!-- Small boxes (Stat box) -->
+							<div class="row" style="padding-top:10px;padding-bottom:20px;">
+								<div class="col-lg-7">
+									<form autocomplete="off">
+										<table class="table searchTable" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
+											<tr>
+												<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
+												<td>
+													<input type="text" id="covid19SampleCollectionDate" name="covid19SampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
+												</td>
+												<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('covid19')" value="Search" class="searchBtn btn btn-success btn-sm">
+													&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('covid19');"><span>Reset</span></button>
+												</td>
+											</tr>
+										</table>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div id="covid19SampleResultDetails"></div>
+								<div class="box-body" id="covid19NoOfSampleCount"></div>
+								<div id="covid19PieChartDiv"></div>
+							</div>
+							<!-- /.row -->
+							<!-- Main row -->
+							<!-- /.row (main row) -->
+						</section>
+						<!-- /. COVID-19 content -->
+					</div>
+
+				<?php } ?>
+				<!-- COVID-19 END -->
 			</div>
 		</div>
 	</section>
@@ -170,8 +214,12 @@ $facilityCount = $facilityTotal[0]['total'];
 <script>
 	$(function() {
 
+		$("#myTab li:first-child").addClass("active");
+		$("#myTabContent div:first-child").addClass("active");
+		$("#myTabContent div:first-child table.searchTable .searchBtn").trigger( "click" );
 
-		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#recencySampleCollectionDate').daterangepicker({
+
+		$('#vlSampleCollectionDate,#eidSampleCollectionDate,#covid19SampleCollectionDate,#recencySampleCollectionDate').daterangepicker({
 				format: 'DD-MMM-YYYY',
 				separator: ' to ',
 				startDate: moment().subtract(30, 'days'),
@@ -192,7 +240,7 @@ $facilityCount = $facilityTotal[0]['total'];
 			});
 
 		// by default we pass 'vl' because that is first tab
-		generateDashboard('vl');
+		//generateDashboard('vl');
 	});
 
 	function generateDashboard(requestType) {
@@ -231,6 +279,16 @@ $facilityCount = $facilityTotal[0]['total'];
 				function(data) {
 					if (data != '') {
 						$("#eidSampleResultDetails").html(data);
+					}
+				});
+		} else if (requestType == 'covid19') {
+			$.post("getSampleResult.php", {
+					sampleCollectionDate: $("#covid19SampleCollectionDate").val(),
+					type: 'covid19'
+				},
+				function(data) {
+					if (data != '') {
+						$("#covid19SampleResultDetails").html(data);
 					}
 				});
 		}
@@ -315,6 +373,20 @@ $facilityCount = $facilityTotal[0]['total'];
 				function(data) {
 					if ($.trim(data) != '') {
 						$("#eidPieChartDiv").html(data);
+						$(".labAverageTatDiv").css("display", "none");
+					}
+				});
+		} else if (requestType == 'covid19') {
+			$.post("/covid-19/management/getSampleStatus.php", {
+					sampleCollectionDate: $("#covid19SampleCollectionDate").val(),
+					batchCode: '',
+					facilityName: '',
+					sampleType: '',
+					type: 'covid19'
+				},
+				function(data) {
+					if ($.trim(data) != '') {
+						$("#covid19PieChartDiv").html(data);
 						$(".labAverageTatDiv").css("display", "none");
 					}
 				});
