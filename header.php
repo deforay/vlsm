@@ -70,12 +70,16 @@ $sharedPrivileges = array(
 	'eid-add-batch-position.php'  => 'eid-add-batch.php',
 	'eid-edit-batch-position.php' => 'eid-edit-batch.php',
 	'eid-update-result.php'       => 'eid-manual-results.php',
+	'covid-19-add-batch-position.php'  => 'covid-19-add-batch.php',
+	'covid-19-edit-batch-position.php' => 'covid-19-edit-batch.php',
+	'covid-19-update-result.php'       => 'covid-19-manual-results.php',
 	'imported-results.php'        => 'addImportResult.php',
 	'importedStatistics.php'      => 'addImportResult.php',
 );
 
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
+
 
 
 if (!in_array($currentFileName, $skipPrivilegeCheckFiles)) {
@@ -132,6 +136,16 @@ if (isset($_SESSION['privileges']) && in_array(('index.php'), $_SESSION['privile
 
 // EID MENUS
 
+
+// COVID-19 Menu start
+
+if (isset($_SESSION['privileges']) && array_intersect($_SESSION['privileges'], array('covid-19-export-data.php', 'covid-19-sample-rejection-report.php', 'covid-19-sample-status.php', 'covid-19-print-results.php'))) {
+	$covid19ManagementMenuAccess = true;
+} else {
+	$covid19ManagementMenuAccess = false;
+}
+
+// COVID-19 Menu end
 
 
 $formConfigQuery = "SELECT * from global_config where name='vl_form'";
@@ -276,7 +290,9 @@ $formConfigResult = $db->query($formConfigQuery);
 						<li class="dropdown user user-menu">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<img src="/assets/img/default-user.png" class="user-image" alt="User Image">
-								<span class="hidden-xs"><?php if (isset($_SESSION['userName'])) {echo $_SESSION['userName'];} ?></span>
+								<span class="hidden-xs"><?php if (isset($_SESSION['userName'])) {
+															echo $_SESSION['userName'];
+														} ?></span>
 							</a>
 							<ul class="dropdown-menu">
 								<!-- Menu Footer-->
@@ -335,37 +351,37 @@ $formConfigResult = $db->query($formConfigQuery);
 										<a href="/roles/roles.php"><i class="fa fa-circle-o"></i> Roles</a>
 									</li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("users.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu userMenu">
 										<a href="/users/users.php"><i class="fa fa-circle-o"></i> Users</a>
 									</li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("facilities.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu facilityMenu">
 										<a href="/facilities/facilities.php"><i class="fa fa-circle-o"></i> Facilities</a>
 									</li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("facilityMap.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+								if (isset($_SESSION['privileges']) && in_array("facilityMap.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
 									<li class="allMenu facilityMapMenu">
 										<a href="/facilities/facilityMap.php"><i class="fa fa-circle-o"></i>Facility Map</a>
 									</li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("globalConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu globalConfigMenu">
 										<a href="/global-config/globalConfig.php"><i class="fa fa-circle-o"></i> General Configuration</a>
 									</li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("importConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu importConfigMenu">
 										<a href="/import-configs/importConfig.php"><i class="fa fa-circle-o"></i> Import Configuration</a>
 									</li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("testRequestEmailConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu requestEmailConfigMenu">
 										<a href="/request-mail/testRequestEmailConfig.php"><i class="fa fa-circle-o"></i>Test Request Email/SMS <br>Configuration</a>
 									</li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("testResultEmailConfig.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu resultEmailConfigMenu">
 										<a href="/result-mail/testResultEmailConfig.php"><i class="fa fa-circle-o"></i>Test Result Email/SMS <br>Configuration</a>
 									</li>
@@ -376,149 +392,154 @@ $formConfigResult = $db->query($formConfigQuery);
 
 					<?php } ?>
 
-					<li class="header">VIRAL LOAD</li>
+					<?php
+					if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) { ?>
 
-					<?php if ($requestMenuAccess == true) { ?>
-						<li class="treeview request" style="<?php echo $hideRequest; ?>">
-							<a href="#">
-								<i class="fa fa-edit"></i>
-								<span>Request Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php
+						<li class="header">VIRAL LOAD</li>
+
+						<?php if ($requestMenuAccess == true) { ?>
+							<li class="treeview request" style="<?php echo $hideRequest; ?>">
+								<a href="#">
+									<i class="fa fa-edit"></i>
+									<span>Request Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php
 									if (isset($_SESSION['privileges']) && in_array("vlRequest.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlRequestMenu">
-										<a href="/vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
-									</li>
-								<?php }
+										<li class="allMenu vlRequestMenu">
+											<a href="/vl-request/vlRequest.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+										</li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("addVlRequest.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu addVlRequestMenu">
-										<a href="/vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
-									</li>
-								<?php }
+										<li class="allMenu addVlRequestMenu">
+											<a href="/vl-request/addVlRequest.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+										</li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
-									<li class="allMenu addSamplesFromManifestMenu">
-										<a href="/vl-request/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
-									</li>
-								<?php }
+										<li class="allMenu addSamplesFromManifestMenu">
+											<a href="/vl-request/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+										</li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("batchcode.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu batchCodeMenu">
-										<a href="/batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
-									</li>
-								<?php }
+										<li class="allMenu batchCodeMenu">
+											<a href="/batch/batchcode.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+										</li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlRequestMail.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlRequestMailMenu">
-										<a href="/mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
-									</li>
-								<?php }
+										<li class="allMenu vlRequestMailMenu">
+											<a href="/mail/vlRequestMail.php"><i class="fa fa-circle-o"></i> E-mail Test Request</a>
+										</li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
-									<li class="allMenu specimenReferralManifestListMenu">
-										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> VL Specimen Manifest</a>
-									</li>
-								<?php }
+										<li class="allMenu specimenReferralManifestListMenu">
+											<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> VL Specimen Manifest</a>
+										</li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("sampleList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
-									<!-- <li class="allMenu sampleListMenu">
+										<!-- <li class="allMenu sampleListMenu">
                                             <a href="/move-samples/sampleList.php"><i class="fa fa-circle-o"></i> Move Samples</a>
                                           </li> -->
-								<?php } ?>
-							</ul>
-						</li>
-					<?php }
-					if ($testResultMenuAccess == true) { ?>
-						<li class="treeview test" style="<?php echo $hideResult; ?>">
-							<a href="#">
-								<i class="fa fa-tasks"></i>
-								<span>Test Result Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu importResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
-								<?php }
+									<?php } ?>
+								</ul>
+							</li>
+						<?php }
+						if ($testResultMenuAccess == true) { ?>
+							<li class="treeview test" style="<?php echo $hideResult; ?>">
+								<a href="#">
+									<i class="fa fa-tasks"></i>
+									<span>Test Result Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu importResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('vl'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlTestResult.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlTestResultMenu"><a href="/vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
-								<?php }
+										<li class="allMenu vlTestResultMenu"><a href="/vl-print/vlTestResult.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlResultApproval.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlResultApprovalMenu"><a href="/vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
-								<?php }
+										<li class="allMenu vlResultApprovalMenu"><a href="/vl-print/vlResultApproval.php"><i class="fa fa-circle-o"></i> Approve Results</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlResultMail.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlResultMailMenu"><a href="/mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
-								<?php }  ?>
-							</ul>
-						</li>
-					<?php } ?>
+										<li class="allMenu vlResultMailMenu"><a href="/mail/vlResultMail.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+									<?php }  ?>
+								</ul>
+							</li>
+						<?php } ?>
 
-					<?php
-					if ($managementMenuAccess == true) { ?>
-						<li class="treeview program">
-							<a href="#">
-								<i class="fa fa-book"></i>
-								<span>Management</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("vl-sample-status.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu missingResultMenu"><a href="/program-management/vl-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
-								<?php }
+						<?php
+						if ($managementMenuAccess == true) { ?>
+							<li class="treeview program">
+								<a href="#">
+									<i class="fa fa-book"></i>
+									<span>Management</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("vl-sample-status.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu missingResultMenu"><a href="/program-management/vl-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlControlReport.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlControlReport"><a href="/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
-								<?php } ?>
-								<!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
+										<li class="allMenu vlControlReport"><a href="/program-management/vlControlReport.php"><i class="fa fa-circle-o"></i> Control Report</a></li>
+									<?php } ?>
+									<!--<li><a href="#"><i class="fa fa-circle-o"></i> TOT Report</a></li>
                                 <li><a href="#"><i class="fa fa-circle-o"></i> VL Suppression Report</a></li>-->
-								<?php if (isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlResultMenu"><a href="/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
-								<?php }
+									<?php if (isset($_SESSION['privileges']) && in_array("vlResult.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu vlResultMenu"><a href="/program-management/vlResult.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlPrintResult.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlPrintResultMenu"><a href="/vl-print/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
-								<?php }
+										<li class="allMenu vlPrintResultMenu"><a href="/vl-print/vlPrintResult.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("highViralLoad.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlHighMenu"><a href="/program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>
-								<?php }
+										<li class="allMenu vlHighMenu"><a href="/program-management/highViralLoad.php"><i class="fa fa-circle-o"></i> Clinic Reports</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("patientList.php", $_SESSION['privileges'])) { ?>
-									<!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
-								<?php }
+										<!--<li class="allMenu patientList"><a href="patientList.php"><i class="fa fa-circle-o"></i> Export Patient List</a></li>-->
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlWeeklyReport.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlWeeklyReport"><a href="/program-management/vlWeeklyReport.php"><i class="fa fa-circle-o"></i> VL Lab Weekly Report</a></li>
-								<?php }
+										<li class="allMenu vlWeeklyReport"><a href="/program-management/vlWeeklyReport.php"><i class="fa fa-circle-o"></i> VL Lab Weekly Report</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("sampleRejectionReport.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu sampleRejectionReport"><a href="/program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
-								<?php }
+										<li class="allMenu sampleRejectionReport"><a href="/program-management/sampleRejectionReport.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("vlMonitoringReport.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu vlMonitoringReport"><a href="/program-management/vlMonitoringReport.php"><i class="fa fa-circle-o"></i> Sample Monitoring Report</a></li>
-								<?php } ?>
-							</ul>
-						</li>
-					<?php
-					} ?>
+										<li class="allMenu vlMonitoringReport"><a href="/program-management/vlMonitoringReport.php"><i class="fa fa-circle-o"></i> Sample Monitoring Report</a></li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php
+						} ?>
 
-					<?php
-					if (isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true) { ?>
-						<li class="treeview qr">
-							<a href="#">
-								<i class="fa fa-qrcode"></i>
-								<span>QR Code</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-left pull-right"></i>
-								</span>
-							</a>
-							<ul class="treeview-menu">
-								<?php if (isset($_SESSION['privileges']) && in_array("generate.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu generateQRCode"><a href="/qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
-								<?php }
+						<?php
+						if (isset($global['enable_qr_mechanism']) && trim($global['enable_qr_mechanism']) == 'yes' && $grCodeMenuAccess == true) { ?>
+							<li class="treeview qr">
+								<a href="#">
+									<i class="fa fa-qrcode"></i>
+									<span>QR Code</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<?php if (isset($_SESSION['privileges']) && in_array("generate.php", $_SESSION['privileges'])) { ?>
+										<li class="allMenu generateQRCode"><a href="/qr-code/generate.php"><i class="fa fa-circle-o"></i> Generate QR Code</a></li>
+									<?php }
 									if (isset($_SESSION['privileges']) && in_array("readQRCode.php", $_SESSION['privileges'])) { ?>
-									<li class="allMenu readQRCode"><a href="/qr-code/readQRCode.php"><i class="fa fa-circle-o"></i> Read QR Code</a></li>
-								<?php } ?>
-							</ul>
-						</li>
+										<li class="allMenu readQRCode"><a href="/qr-code/readQRCode.php"><i class="fa fa-circle-o"></i> Read QR Code</a></li>
+									<?php } ?>
+								</ul>
+							</li>
+						<?php } ?>
 					<?php } ?>
-					<?php if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
+
+					<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
 						<li class="header">EARLY INFANT DIAGNOSIS (EID)</li>
 						<li class="treeview eidRequest" style="<?php echo $hideRequest; ?>">
 							<a href="#">
@@ -544,7 +565,7 @@ $formConfigResult = $db->query($formConfigQuery);
 									<a href="/eid/batch/eid-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
 								</li>
 								<?php
-									if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+								if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
 									<li class="allMenu specimenReferralManifestListMenu">
 										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
 									</li>
@@ -557,7 +578,7 @@ $formConfigResult = $db->query($formConfigQuery);
 
 
 					<?php
-					if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true && $testResultMenuAccess == true) { ?>
+					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $testResultMenuAccess == true) { ?>
 						<li class="treeview eidResults" style="<?php echo $hideResult; ?>">
 							<a href="#">
 								<i class="fa fa-tasks"></i>
@@ -570,10 +591,10 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("eid-manual-results.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("eid-manual-results.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidResultsMenu"><a href="/eid/results/eid-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("eid-result-status.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("eid-result-status.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidResultStatus"><a href="/eid/results/eid-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
 								<?php } ?>
 							</ul>
@@ -582,7 +603,7 @@ $formConfigResult = $db->query($formConfigQuery);
 
 
 					<?php
-					if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true && $eidManagementMenuAccess == true) { ?>
+					if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true && $eidManagementMenuAccess == true) { ?>
 						<li class="treeview eidProgramMenu">
 							<a href="#">
 								<i class="fa fa-book"></i>
@@ -595,19 +616,116 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php if (isset($_SESSION['privileges']) && in_array("eid-sample-status.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidSampleStatus"><a href="/eid/management/eid-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("eid-export-data.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("eid-export-data.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidExportResult"><a href="/eid/management/eid-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("eid-print-results.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("eid-print-results.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidPrintResults"><a href="/eid/results/eid-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
 								<?php }
-									if (isset($_SESSION['privileges']) && in_array("eid-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
+								if (isset($_SESSION['privileges']) && in_array("eid-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu eidSampleRejectionReport"><a href="/eid/management/eid-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
 								<?php } ?>
 							</ul>
 						</li>
 					<?php
 					} ?>
+
+
+					<!-- COVID-19 START -->
+
+					<?php if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true) {  ?>
+						<li class="header">COVID-19</li>
+						<li class="treeview covid19Request" style="<?php echo $hideRequest; ?>">
+							<a href="#">
+								<i class="fa fa-edit"></i>
+								<span>Request Management</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<li class="allMenu covid19RequestMenu">
+									<a href="/covid-19/requests/covid-19-requests.php"><i class="fa fa-circle-o"></i> View Test Requests</a>
+								</li>
+								<li class="allMenu addCovid19RequestMenu">
+									<a href="/covid-19/requests/covid-19-add-request.php"><i class="fa fa-circle-o"></i> Add New Request</a>
+								</li>
+								<?php if (isset($_SESSION['privileges']) && in_array("addSamplesFromManifest.php", $_SESSION['privileges']) && ($sarr['user_type'] != 'remoteuser')) { ?>
+									<li class="allMenu addSamplesFromManifestCovid19Menu">
+										<a href="/covid-19/requests/addSamplesFromManifest.php"><i class="fa fa-circle-o"></i> Add Samples from Manifest</a>
+									</li>
+								<?php } ?>
+								<li class="allMenu covid19BatchCodeMenu">
+									<a href="/covid-19/batch/covid-19-batches.php"><i class="fa fa-circle-o"></i> Manage Batch</a>
+								</li>
+								<?php
+								if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
+									<li class="allMenu specimenReferralManifestListMenu">
+										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
+									</li>
+								<?php } ?>
+							</ul>
+						</li>
+
+					<?php }
+					?>
+
+
+					<?php
+					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $testResultMenuAccess == true) { ?>
+						<li class="treeview eidResults" style="<?php echo $hideResult; ?>">
+							<a href="#">
+								<i class="fa fa-tasks"></i>
+								<span>Test Result Management</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<?php if (isset($_SESSION['privileges']) && in_array("addImportResult.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19ImportResultMenu"><a href="/import-result/addImportResult.php?t=<?php echo base64_encode('covid-19'); ?>"><i class="fa fa-circle-o"></i> Import Result From File</a></li>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid-19-manual-results.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19ResultsMenu"><a href="/covid-19/results/covid-19-manual-results.php"><i class="fa fa-circle-o"></i> Enter Result Manually</a></li>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid-19-result-status.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19ResultStatus"><a href="/covid-19/results/covid-19-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
+								<?php } ?>
+							</ul>
+						</li>
+					<?php } ?>
+
+
+					<?php
+					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19ManagementMenuAccess == true) { ?>
+						<li class="treeview eidProgramMenu">
+							<a href="#">
+								<i class="fa fa-book"></i>
+								<span>Management</span>
+								<span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+								</span>
+							</a>
+							<ul class="treeview-menu">
+								<?php if (isset($_SESSION['privileges']) && in_array("covid-19-sample-status.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19SampleStatus"><a href="/covid-19/management/covid-19-sample-status.php"><i class="fa fa-circle-o"></i> Sample Status Report</a></li>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid-19-export-data.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19ExportResult"><a href="/covid-19/management/covid-19-export-data.php"><i class="fa fa-circle-o"></i> Export Results</a></li>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid-19-print-results.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19PrintResults"><a href="/covid-19/results/covid-19-print-results.php"><i class="fa fa-circle-o"></i> Print Result</a></li>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid-19-sample-rejection-report.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19SampleRejectionReport"><a href="/covid-19/management/covid-19-sample-rejection-report.php"><i class="fa fa-circle-o"></i> Sample Rejection Report</a></li>
+								<?php } ?>
+							</ul>
+						</li>
+					<?php
+					} ?>
+
+
+					<!-- COVID-19 END -->
 
 					<!---->
 				</ul>

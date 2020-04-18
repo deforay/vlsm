@@ -118,7 +118,7 @@ if (!empty($result) && count($result) > 0) {
 
 // EID TEST RESULTS
 
-if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {
+if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {
 
     $eidQuery = "SELECT vl.*, a.user_name as 'approved_by_name' 
                  FROM `eid_form` AS vl 

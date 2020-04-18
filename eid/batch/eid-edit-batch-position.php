@@ -113,7 +113,7 @@ if (isset($batchInfo[0]['label_order']) && trim($batchInfo[0]['label_order']) !=
             <input type="hidden" name="sortOrders" id="sortOrders" value="<?php echo implode(",", $displayOrder); ?>" />
             <input type="hidden" name="batchId" id="batchId" value="<?php echo $id; ?>" />
             <a class="btn btn-primary" href="javascript:void(0);" onclick="validateNow();return false;">Submit</a>
-            <a href="batchcode.php" class="btn btn-default"> Cancel</a>
+            <a href="/eid/batch/eid-batches.php" class="btn btn-default"> Cancel</a>
           </div>
           <!-- /.box-footer -->
         </form>

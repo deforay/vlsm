@@ -38,8 +38,10 @@ $facilityCount = $facilityTotal[0]['total'];
 	<section class="content-header">
 		<div class="bs-example bs-example-tabs">
 			<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
-				<li class="active"><a href="#vlDashboard" data-toggle="tab">Viral Load Tests</a></li>
-				<?php if (isset($eidConfig['enabled']) && $eidConfig['enabled'] == true) {  ?>
+				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {  ?>
+					<li class="active"><a href="#vlDashboard" data-toggle="tab">Viral Load Tests</a></li>
+				<?php } ?>
+				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
 					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>
 				<?php }
 				if (isset($recencyConfig['vlsync']) && $recencyConfig['vlsync'] == true) {  ?>
@@ -47,40 +49,45 @@ $facilityCount = $facilityTotal[0]['total'];
 				<?php }  ?>
 			</ul>
 			<div id="myTabContent" class="tab-content">
-				<div class="tab-pane fade in active" id="vlDashboard">
-					<!-- VL content -->
-					<section class="content">
-						<!-- Small boxes (Stat box) -->
-						<div class="row" style="padding-top:10px;padding-bottom:20px;">
-							<div class="col-lg-7">
-								<form autocomplete="off">
-									<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
-										<tr>
-											<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
-											<td>
-												<input type="text" id="vlSampleCollectionDate" name="vlSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
-											</td>
-											<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('vl');" value="Search" class="btn btn-success btn-sm">
-												&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('vl');"><span>Reset</span></button>
-											</td>
-										</tr>
-									</table>
-								</form>
+
+				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {  ?>
+					<div class="tab-pane fade in active" id="vlDashboard">
+						<!-- VL content -->
+						<section class="content">
+							<!-- Small boxes (Stat box) -->
+							<div class="row" style="padding-top:10px;padding-bottom:20px;">
+								<div class="col-lg-7">
+									<form autocomplete="off">
+										<table class="table" cellpadding="1" cellspacing="3" style="margin-left:1%;margin-top:0px;width: 98%;margin-bottom: 0px;">
+											<tr>
+												<td style="vertical-align:middle;"><b>Date Range&nbsp;:</b></td>
+												<td>
+													<input type="text" id="vlSampleCollectionDate" name="vlSampleCollectionDate" class="form-control" placeholder="Select Collection Date" style="width:220px;background:#fff;" />
+												</td>
+												<td colspan="3">&nbsp;<input type="button" onclick="generateDashboard('vl');" value="Search" class="btn btn-success btn-sm">
+													&nbsp;<button class="btn btn-danger btn-sm" onclick="resetSearchVlRequestData('vl');"><span>Reset</span></button>
+												</td>
+											</tr>
+										</table>
+									</form>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div id="vlSampleResultDetails"></div>
-							<div class="box-body" id="vlNoOfSampleCount"></div>
-							<div id="vlPieChartDiv"></div>
-						</div>
+							<div class="row">
+								<div id="vlSampleResultDetails"></div>
+								<div class="box-body" id="vlNoOfSampleCount"></div>
+								<div id="vlPieChartDiv"></div>
+							</div>
 
-						<!-- /.row -->
-						<!-- Main row -->
-						<!-- /.row (main row) -->
+							<!-- /.row -->
+							<!-- Main row -->
+							<!-- /.row (main row) -->
 
-					</section>
-					<!-- /. VL content -->
-				</div>
+						</section>
+						<!-- /. VL content -->
+					</div>
+
+				<?php } ?>
+
 				<div class="tab-pane fade in" id="recencyDashboard">
 					<!-- VL content -->
 					<section class="content">
@@ -115,6 +122,9 @@ $facilityCount = $facilityTotal[0]['total'];
 					</section>
 					<!-- /. VL content -->
 				</div>
+
+				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
+
 				<div class="tab-pane fade in" id="eidDashboard">
 					<!-- EID content -->
 					<section class="content">
@@ -147,6 +157,9 @@ $facilityCount = $facilityTotal[0]['total'];
 					</section>
 					<!-- /. EID content -->
 				</div>
+
+				<?php } ?>
+
 			</div>
 		</div>
 	</section>

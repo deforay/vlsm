@@ -2017,6 +2017,39 @@ INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `disp
           VALUES (NULL, '29', 'covid-19-edit-request.php', 'Edit Request');
 INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
           VALUES (NULL, '29', 'covid-19-requests.php', 'View Requests');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+              VALUES (NULL, '29', 'covid-19-result-status.php', 'Manage Result Status');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+              VALUES (NULL, '29', 'covid-19-print-results.php', 'Print Results');
+
+
+INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) 
+  VALUES (30, 'covid-19', 'covid-19-batches', 'Covid-19 Batch Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+  VALUES (NULL, 30, 'covid-19-batches.php', 'View Batches');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+  VALUES (NULL, 30, 'covid-19-add-batch.php', 'Add Batch');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+  VALUES (NULL, 30, 'covid-19-edit-batch.php', 'Edit Batch');
+
+  INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) 
+          VALUES (31, 'covid-19', 'covid-19-results', 'Covid-19 Result Management');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+        VALUES (NULL, 31, 'covid-19-manual-results.php', 'Enter Result Manually');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+        VALUES (NULL, 31, 'covid-19-import-result.php', 'Import Result File');
+
+
+
+
+INSERT INTO `resources` (`resource_id`, `module`, `resource_name`, `display_name`) 
+          VALUES (32, 'eid', 'covid-19-management', 'Covid-19 Reports');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+        VALUES (NULL, 32, 'covid-19-export-data.php', 'Export Data');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+      VALUES (NULL, 32, 'covid-19-sample-rejection-report.php', 'Sample Rejection Report');
+INSERT INTO `privileges` (`privilege_id`, `resource_id`, `privilege_name`, `display_name`) 
+      VALUES (NULL, 32, 'covid-19-sample-status.php', 'Sample Status Report');
 
 
 INSERT INTO `global_config` (`display_name`, `name`, `value`, `status`) 
@@ -2206,3 +2239,28 @@ ALTER TABLE `r_covid19_sample_rejection_reasons`
 
 ALTER TABLE `r_covid19_sample_rejection_reasons`
   MODIFY `rejection_reason_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+
+CREATE TABLE `covid19_imported_controls` (
+ `control_id` int(11) NOT NULL AUTO_INCREMENT,
+ `control_code` varchar(255) NOT NULL,
+ `lab_id` int(11) DEFAULT NULL,
+ `batch_id` int(11) DEFAULT NULL,
+ `control_type` varchar(255) DEFAULT NULL,
+ `lot_number` varchar(255) DEFAULT NULL,
+ `lot_expiration_date` date DEFAULT NULL,
+ `sample_tested_datetime` datetime DEFAULT NULL,
+ `is_sample_rejected` varchar(255) DEFAULT NULL,
+ `reason_for_sample_rejection` varchar(255) DEFAULT NULL,
+ `result` varchar(255) DEFAULT NULL,
+ `approver_comments` varchar(255) DEFAULT NULL,
+ `result_approved_by` varchar(255) DEFAULT NULL,
+ `result_approved_datetime` datetime DEFAULT NULL,
+ `result_reviewed_by` varchar(1000) DEFAULT NULL,
+ `result_reviewed_datetime` datetime DEFAULT NULL,
+ `status` varchar(255) DEFAULT NULL,
+ `vlsm_country_id` varchar(10) DEFAULT NULL,
+ `file_name` varchar(255) DEFAULT NULL,
+ `imported_date_time` datetime DEFAULT NULL,
+ PRIMARY KEY (`control_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;  

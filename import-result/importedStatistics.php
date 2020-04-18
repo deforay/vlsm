@@ -17,7 +17,7 @@ $importedBy = $_SESSION['userId'];
 $import_decided = (isset($arr['import_non_matching_sample']) && $arr['import_non_matching_sample'] == 'no')?'INNER JOIN':'LEFT JOIN';
 
 
-$tQuery = "select module from temp_sample_import where imported_by ='" . $_SESSION['userId'] . "' limit 0,1";
+$tQuery = "SELECT module FROM temp_sample_import where imported_by ='" . $_SESSION['userId'] . "' limit 0,1";
 
 $tResult = $db->rawQueryOne($tQuery);
 $module = $tResult['module'];
@@ -28,6 +28,8 @@ if($module == 'vl'){
   require_once('import-stats-vl.php');
 }else if($module == 'eid'){
   require_once('import-stats-eid.php');
+}else if($module == 'covid-19'){
+  require_once('import-stats-covid-19.php');
 }
 
 
