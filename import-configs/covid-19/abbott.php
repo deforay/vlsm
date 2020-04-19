@@ -185,7 +185,7 @@ try {
                 $d['sampleCode'] = '';
             }
             $data = array(
-                'module' => 'covid-19',
+                'module' => 'covid19',
                 'lab_id' => base64_decode($_POST['labId']),
                 'vl_test_platform' => $_POST['vltestPlatform'],
                 'import_machine_name' => $_POST['configMachineName'],

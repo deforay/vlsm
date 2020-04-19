@@ -28,7 +28,7 @@ if($module == 'vl'){
   require_once('import-stats-vl.php');
 }else if($module == 'eid'){
   require_once('import-stats-eid.php');
-}else if($module == 'covid-19'){
+}else if($module == 'covid19'){
   require_once('import-stats-covid-19.php');
 }
 

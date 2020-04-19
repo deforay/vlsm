@@ -17,7 +17,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
     $refTable = "eid_form";
     $refPrimaryColumn = "eid_id";
     $patientIdColumn = 'child_id';
-}else if (isset($_POST['type']) && $_POST['type'] == 'covid-19') {
+}else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
     $refTable = "form_covid19";
     $refPrimaryColumn = "covid19_id";
     $patientIdColumn = 'patient_id';

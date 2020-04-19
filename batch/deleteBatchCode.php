@@ -15,7 +15,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
 } else if (isset($_POST['type']) && $_POST['type'] == 'eid') {
     $tableName2 = "eid_form";
     $table2PrimaryColumn = "eid_id";
-} else if (isset($_POST['type']) && $_POST['type'] == 'covid-19') {
+} else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
     $tableName2 = "form_covid19";
     $table2PrimaryColumn = "covid19_id";
 }

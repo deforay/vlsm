@@ -16,7 +16,7 @@ try {
                             'machine'=>$_POST['platform'],
                             'batch_code'=>$_POST['batchCode'],
                             'batch_code_key'=>$_POST['batchCodeKey'],
-                            'test_type'=>'covid-19',
+                            'test_type'=>'covid19',
                             'request_created_datetime'=>$general->getDateTime()
                             );
                             
