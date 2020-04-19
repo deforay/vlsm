@@ -45,145 +45,140 @@ try {
         $newBatchCode = date('Ymd') . $maxBatchCodeKey;
 
         $m = 1;
-        $skipTillRow = 4;
+        $skipTillRow = 5;
 
-        $sampleIdCol = 1;
-        $sampleTypeCol = 2;
-        $resultCol = 5;
-        $txtValCol = 6;
+        $testDateCol = "B";
+        $sampleIdCol = "C";
+        $sampleTypeCol = "D";
+        $batchCodeVal = "E";
+        $resultCol = "G";
 
-        $batchCodeVal = "";
+        
         $flagCol = 10;
-        $testDateCol = 11;
+        
 
         $lotNumberCol = 12;
         $reviewByCol = '';
         $lotExpirationDateCol = 13;
-echo TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName;die;
+
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName);
+        $sheetData   = $spreadsheet->getActiveSheet();
+        $sheetData   = $sheetData->toArray(null, true, true, true);
 
-        var_dump($spreadsheet);die;
+        // echo "<pre>";
+        // var_dump($sheetData);
+        // die;
 
+        $infoFromFile = array();
+        $testDateRow = "";
+        
 
-        if (strpos($mime_type, 'text/plain') !== false) {
-            $infoFromFile = array();
-            $testDateRow = "";
-            $skip = 23;
+        $row = 1;
 
-            $row = 1;
-            if (($handle = fopen(TEMP_PATH . DIRECTORY_SEPARATOR . "import-result" . DIRECTORY_SEPARATOR . $fileName, "r")) !== false) {
-                while (($sheetData = fgetcsv($handle, 10000, "\t")) !== false) {
+        foreach ($sheetData as $rowIndex => $rowData) {
 
-                    var_dump($sheetData);die;
-                    $num = count($sheetData);
-                    $row++;
-                    if ($row < $skip) {
-                        if ($row == 8) {
-                            $timestamp = DateTime::createFromFormat('!m/d/Y h:i:s A', $sheetData[1]);
-                            if (!empty($timestamp)) {
-                                $timestamp = $timestamp->getTimestamp();
-                                $testingDate = date('Y-m-d H:i', ($timestamp));
-                            } else {
-                                $testingDate = null;
-                            }
-                        }
-                        continue;
-                    }
-                    $sampleCode = "";
-                    $batchCode = "";
-                    $sampleType = "";
-                    $absDecimalVal = "";
-                    $absVal = "";
-                    $logVal = "";
-                    $txtVal = "";
-                    $resultFlag = "";
-
-                    $sampleCode = $sheetData[$sampleIdCol];
-
-                    if ($sampleCode == "SAMPLE ID" || $sampleCode == "") {
-                        continue;
-                    }
-
-                    $sampleType = $sheetData[$sampleTypeCol];
-
-                    $batchCode = $sheetData[$batchCodeCol];
-                    $resultFlag = $sheetData[$flagCol];
-                    //$reviewBy = $sheetData[$reviewByCol];
-
-                    // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
-                    // $sheetData[$testDateCol] = str_replace("/", "-", $sheetData[$testDateCol]);
-                    // $testingDate = date('Y-m-d H:i', strtotime($sheetData[$testDateCol]));
-                    $result = $absVal = $logVal = $absDecimalVal = $txtVal = '';
-
-                    if (strpos(strtolower($sheetData[$resultCol]), 'not detected') !== false) {
-                        $result = 'negative';
-                    } else if ((strpos(strtolower($sheetData[$resultCol]), 'detected') !== false) || (strpos(strtolower($sheetData[$resultCol]), 'passed') !== false)) {
-                        $result = 'positive';
-                    } else {
-                        $result = 'indeterminate';
-                    }
+            if ($rowIndex < $skipTillRow)
+              continue;
 
 
-                    $lotNumberVal = $sheetData[$lotNumberCol];
-                    if (trim($sheetData[$lotExpirationDateCol]) != '') {
-                        $timestamp = DateTime::createFromFormat('!m/d/Y', $sheetData[$lotExpirationDateCol]);
-                        if (!empty($timestamp)) {
-                            $timestamp = $timestamp->getTimestamp();
-                            $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
-                        } else {
-                            $lotExpirationDateVal = null;
-                        }
-                    }
+            $num = count($rowData);
+            $row++;
+            
+            $sampleCode = "";
+            $batchCode = "";
+            $sampleType = "";
+            $absDecimalVal = "";
+            $absVal = "";
+            $logVal = "";
+            $txtVal = "";
+            $resultFlag = "";
 
-                    $sampleType = $sheetData[$sampleTypeCol];
-                    if ($sampleType == 'Patient') {
-                        $sampleType = 'S';
-                    } else if ($sampleType == 'Control') {
+            $sampleCode = $rowData[$sampleIdCol];
 
-                        if ($sampleCode == 'HIV_HIPOS') {
-                            $sampleType = 'HPC';
-                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
-                        } else if ($sampleCode == 'HIV_LOPOS') {
-                            $sampleType = 'LPC';
-                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
-                        } else if ($sampleCode == 'HIV_NEG') {
-                            $sampleType = 'NC';
-                            $sampleCode = $sampleCode . '-' . $lotNumberVal;
-                        }
-                    }
+            if ($sampleCode == "SAMPLE ID" || $sampleCode == "") {
+                continue;
+            }
 
-                    $batchCode = "";
+            $sampleType = $rowData[$sampleTypeCol];
+
+            $batchCode = $rowData[$batchCodeCol];
+            $resultFlag = $rowData[$flagCol];
+            //$reviewBy = $rowData[$reviewByCol];
+
+            // //Changing date to European format for strtotime - https://stackoverflow.com/a/5736255
+            // $rowData[$testDateCol] = str_replace("/", "-", $rowData[$testDateCol]);
+            // $testingDate = date('Y-m-d H:i', strtotime($rowData[$testDateCol]));
+            $result = $absVal = $logVal = $absDecimalVal = $txtVal = '';
+
+            if (strpos(strtolower($rowData[$resultCol]), 'not detected') !== false) {
+                $result = 'negative';
+            } else if ((strpos(strtolower($rowData[$resultCol]), 'detected') !== false) || (strpos(strtolower($rowData[$resultCol]), 'passed') !== false)) {
+                $result = 'positive';
+            } else {
+                $result = 'indeterminate';
+            }
 
 
-                    if ($sampleCode == "") {
-                        $sampleCode = $sampleType . $m;
-                    }
-
-                    if (!isset($infoFromFile[$sampleCode])) {
-                        $infoFromFile[$sampleCode] = array(
-                            "sampleCode" => $sampleCode,
-                            "logVal" => ($logVal),
-                            "absVal" => $absVal,
-                            "absDecimalVal" => $absDecimalVal,
-                            "txtVal" => $txtVal,
-                            "resultFlag" => $resultFlag,
-                            "testingDate" => $testingDate,
-                            "sampleType" => $sampleType,
-                            "batchCode" => $batchCode,
-                            "lotNumber" => $lotNumberVal,
-                            "result" => $result,
-                            "lotExpirationDate" => $lotExpirationDateVal,
-                        );
-                    } else {
-                        if (isset($logVal) && trim($logVal) != "") {
-                            $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
-                        }
-                    }
-
-                    $m++;
+            $lotNumberVal = $rowData[$lotNumberCol];
+            if (trim($rowData[$lotExpirationDateCol]) != '') {
+                $timestamp = DateTime::createFromFormat('!m/d/Y', $rowData[$lotExpirationDateCol]);
+                if (!empty($timestamp)) {
+                    $timestamp = $timestamp->getTimestamp();
+                    $lotExpirationDateVal = date('Y-m-d H:i', $timestamp);
+                } else {
+                    $lotExpirationDateVal = null;
                 }
             }
+
+            $sampleType = $rowData[$sampleTypeCol];
+            if ($sampleType == 'Patient') {
+                $sampleType = 'S';
+            } else if ($sampleType == 'Control') {
+
+                if ($sampleCode == 'HIV_HIPOS') {
+                    $sampleType = 'HPC';
+                    $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                } else if ($sampleCode == 'HIV_LOPOS') {
+                    $sampleType = 'LPC';
+                    $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                } else if ($sampleCode == 'HIV_NEG') {
+                    $sampleType = 'NC';
+                    $sampleCode = $sampleCode . '-' . $lotNumberVal;
+                }
+            }
+
+            $batchCode = "";
+
+
+            if ($sampleCode == "") {
+                $sampleCode = $sampleType . $m;
+            }
+
+            if (!isset($infoFromFile[$sampleCode])) {
+                $infoFromFile[$sampleCode] = array(
+                    "sampleCode" => $sampleCode,
+                    "logVal" => ($logVal),
+                    "absVal" => $absVal,
+                    "absDecimalVal" => $absDecimalVal,
+                    "txtVal" => $txtVal,
+                    "resultFlag" => $resultFlag,
+                    "testingDate" => $testingDate,
+                    "sampleType" => $sampleType,
+                    "batchCode" => $batchCode,
+                    "lotNumber" => $lotNumberVal,
+                    "result" => $result,
+                    "lotExpirationDate" => $lotExpirationDateVal,
+                );
+            } else {
+                if (isset($logVal) && trim($logVal) != "") {
+                    $infoFromFile[$sampleCode]['logVal'] = trim($logVal);
+                }
+            }
+
+            $m++;
         }
+
+
 
         $inc = 0;
         foreach ($infoFromFile as $sampleCode => $d) {

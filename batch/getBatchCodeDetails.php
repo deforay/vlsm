@@ -17,7 +17,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
     $refPrimaryColumn = "eid_id";
     $editFileName = 'eid-edit-batch.php';
     $editPositionFileName = 'eid-edit-batch-position.php';
-}else if (isset($_POST['type']) && $_POST['type'] == 'covid-19') {
+}else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
     $refTable = "form_covid19";
     $refPrimaryColumn = "covid19_id";
     $editFileName = 'covid-19-edit-batch.php';

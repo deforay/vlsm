@@ -39,7 +39,7 @@ $facilityCount = $facilityTotal[0]['total'];
 		<div class="bs-example bs-example-tabs">
 			<ul id="myTab" class="nav nav-tabs" style="font-size:1.4em;">
 				<?php if (isset($systemConfig['modules']['vl']) && $systemConfig['modules']['vl'] == true) {  ?>
-					<li class="active"><a href="#vlDashboard" data-toggle="tab">Viral Load Tests</a></li>
+					<li class="active"><a href="#vlDashboard" data-toggle="tab" onclick="generateDashboard('vl');">Viral Load Tests</a></li>
 				<?php } ?>
 				<?php if (isset($systemConfig['modules']['eid']) && $systemConfig['modules']['eid'] == true) {  ?>
 					<li><a href="#eidDashboard" data-toggle="tab" onclick="generateDashboard('eid');">EID Tests</a></li>

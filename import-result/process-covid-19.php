@@ -139,7 +139,7 @@ try {
                     if ($bvlResult) {
                         $data['sample_batch_id'] = $bvlResult[0]['batch_id'];
                     } else {
-                        $batchResult = $db->insert('batch_details', array('test_type' => 'covid-19','batch_code' => $rResult[0]['batch_code'], 'batch_code_key' => $rResult[0]['batch_code_key'], 'sent_mail' => 'no', 'request_created_datetime' => $general->getDateTime()));
+                        $batchResult = $db->insert('batch_details', array('test_type' => 'covid19','batch_code' => $rResult[0]['batch_code'], 'batch_code_key' => $rResult[0]['batch_code_key'], 'sent_mail' => 'no', 'request_created_datetime' => $general->getDateTime()));
                         $data['sample_batch_id'] = $db->getInsertId();
                     }
 

@@ -112,7 +112,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
             "bServerSide": true,
             "sAjaxSource": "/batch/getBatchCodeDetails.php",
             "fnServerData": function ( sSource, aoData, fnCallback ) {
-              aoData.push({"name": "type", "value": "covid-19"});
+              aoData.push({"name": "type", "value": "covid19"});
               $.ajax({
                   "dataType": 'json',
                   "type": "POST",
@@ -127,7 +127,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
   } );
   
   function generateBarcode(bId){
-    $.post("/batch/generateBarcode.php",{id:bId,type:'covid-19'},
+    $.post("/batch/generateBarcode.php",{id:bId,type:'covid19'},
       function(data){
 	  if(data == "" || data == null || data == undefined){
 	      alert('Unable to generate barcode');
@@ -155,7 +155,7 @@ include_once(APPLICATION_PATH.'/models/General.php');
   {
     var conf = confirm("Are you sure you want to delete Batch : "+batchCode+"?\nThis action cannot be undone.");
     if(conf){
-      $.post("/batch/deleteBatchCode.php",{id:bId, type: 'covid-19'},
+      $.post("/batch/deleteBatchCode.php",{id:bId, type: 'covid19'},
       function(data){
         if(data==1){
           alert("Batch deleted");
