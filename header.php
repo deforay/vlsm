@@ -29,6 +29,10 @@ if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') {
 	$shortName = "VLSTS";
 }
 
+if(isset($systemConfig['instanceName']) && !empty($systemConfig['instanceName'])){
+	$systemType = $systemConfig['instanceName'];
+}
+
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($gResult); $i++) {
 	$global[$gResult[$i]['name']] = $gResult[$i]['value'];
@@ -673,7 +677,7 @@ $formConfigResult = $db->query($formConfigQuery);
 
 					<?php
 					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $testResultMenuAccess == true) { ?>
-						<li class="treeview eidResults" style="<?php echo $hideResult; ?>">
+						<li class="treeview covid19Results" style="<?php echo $hideResult; ?>">
 							<a href="#">
 								<i class="fa fa-tasks"></i>
 								<span>Test Result Management</span>
@@ -698,7 +702,7 @@ $formConfigResult = $db->query($formConfigQuery);
 
 					<?php
 					if (isset($systemConfig['modules']['covid19']) && $systemConfig['modules']['covid19'] == true && $covid19ManagementMenuAccess == true) { ?>
-						<li class="treeview eidProgramMenu">
+						<li class="treeview covid19ProgramMenu">
 							<a href="#">
 								<i class="fa fa-book"></i>
 								<span>Management</span>

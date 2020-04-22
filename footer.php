@@ -239,7 +239,7 @@
 		$(".request").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".addVlRequestMenu").addClass('active');
-	} else if (splitsUrl == 'addSamplesFromManifest.php' && splitsUrlCheck[1] != "eid") {
+	} else if (splitsUrl == 'addSamplesFromManifest.php' && splitsUrlCheck[1] != "eid" && splitsUrlCheck[1] != "covid-19") {
 		$(".request").addClass('active');
 		$(".allMenu").removeClass('active');
 		$(".addSamplesFromManifestMenu").addClass('active');
@@ -269,6 +269,10 @@
 			$(".test").addClass('active');
 			$(".allMenu").removeClass('active');
 			$(".importResultMenu").addClass('active');
+		} else if (searchStr == '?t=Y292aWQxOQ==') { // Covid-19
+			$(".allMenu").removeClass('active');
+			$(".covid19Results").addClass('active');
+			$(".covid19ImportResultMenu").addClass('active');
 		} else { // EID
 			$(".eidResults").addClass('active');
 			$(".allMenu").removeClass('active');
@@ -362,6 +366,46 @@
 		$(".allMenu").removeClass('active');
 		$(".eidProgramMenu").addClass('active');
 		$(".eidSampleRejectionReport").addClass('active');
+	}else if (splitsUrl == 'covid-19-requests.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19Request").addClass('active');
+		$(".covid19RequestMenu").addClass('active');
+	} else if (splitsUrl == 'covid-19-add-request.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19Request").addClass('active');
+		$(".addCovid19RequestMenu").addClass('active');
+	} else if (splitsUrl == 'covid-19-batches.php' || splitsUrl == 'covid-19-add-batch.php' || splitsUrl == 'covid-19-edit-batch.php' || splitsUrl == 'covid-19-add-batch-position.php' || splitsUrl == 'covid-19-edit-batch-position.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19Request").addClass('active');
+		$(".covid19BatchCodeMenu").addClass('active');
+	} else if (splitsUrl == 'addSamplesFromManifest.php' && splitsUrlCheck[1] == "covid-19") {
+		$(".allMenu").removeClass('active');
+		$(".covid19Request").addClass('active');
+		$(".addSamplesFromManifestCovid19Menu").addClass('active');
+	} else if (splitsUrl == 'covid-19-manual-results.php' || splitsUrl == 'covid-19-update-result.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19Results").addClass('active');
+		$(".covid19ResultsMenu").addClass('active');
+	} else if (splitsUrl == 'covid-19-result-status.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19Results").addClass('active');
+		$(".covid19ResultStatus").addClass('active');
+	} else if (splitsUrl == 'covid-19-sample-status.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19ProgramMenu").addClass('active');
+		$(".covid19SampleStatus").addClass('active');
+	} else if (splitsUrl == 'covid-19-print-results.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19ProgramMenu").addClass('active');
+		$(".covid19PrintResults").addClass('active');
+	}else if (splitsUrl == 'covid-19-export-data.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19ProgramMenu").addClass('active');
+		$(".covid19ExportResult").addClass('active');
+	} else if (splitsUrl == 'covid-19-sample-rejection-report.php') {
+		$(".allMenu").removeClass('active');
+		$(".covid19ProgramMenu").addClass('active');
+		$(".covid19SampleRejectionReport").addClass('active');
 	} else {
 		$(".allMenu").removeClass('active');
 		$(".dashboardMenu").addClass('active');

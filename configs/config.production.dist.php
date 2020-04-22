@@ -12,6 +12,8 @@ $systemConfig['modules']['vl'] = true;
 $systemConfig['modules']['eid'] = true;
 $systemConfig['modules']['covid19'] = false;
 
+$systemConfig['instanceName'] = '';
+
 
 // Database Settings
 $systemConfig['dbHost']     = '';
