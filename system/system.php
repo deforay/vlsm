@@ -1,6 +1,6 @@
 <?php
 
-define('VERSION', '3.19');
+define('VERSION', '3.20');
 
 
 /**********/
