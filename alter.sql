@@ -2264,3 +2264,7 @@ CREATE TABLE `covid19_imported_controls` (
  `imported_date_time` datetime DEFAULT NULL,
  PRIMARY KEY (`control_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;  
+
+
+
+ALTER TABLE `form_covid19` ADD `is_result_mail_sent` VARCHAR(255) NULL DEFAULT 'no' AFTER `lot_expiration_date`;

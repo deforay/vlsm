@@ -6,7 +6,7 @@ $general = new General($db);
 $start_date = '';
 $end_date = '';
 //global config
-$configQuery = "SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
 $country = $configResult[0]['value'];
 if (isset($_POST['sampleCollectionDate']) && trim($_POST['sampleCollectionDate']) != '') {

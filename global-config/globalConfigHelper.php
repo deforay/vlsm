@@ -10,9 +10,9 @@ $general = new General($db);
 $tableName = "global_config";
 $instanceTableName = "s_vlsm_instance";
 try {
-    $configQuery = "SELECT value FROM global_config where name='sample_code'";
+    $configQuery = "SELECT `value` FROM global_config where name='sample_code'";
     $configResult = $db->rawQuery($configQuery);
-    $configFormQuery = "SELECT value FROM global_config where name='vl_form'";
+    $configFormQuery = "SELECT `value` FROM global_config where name='vl_form'";
     $configFormResult = $db->rawQuery($configFormQuery);
 
     //remove instance table data

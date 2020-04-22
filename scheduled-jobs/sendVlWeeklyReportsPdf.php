@@ -41,7 +41,7 @@ $mail->setFrom($systemConfig['adminEmailUserName']);
 $subject="VLSM - Weekly Report - ".$_POST['reportedDate'];
 $mail->Subject = $subject;
 //Set to emailid(s)
-$configQuery ="SELECT value from global_config where name='manager_email'";
+$configQuery ="SELECT `value` FROM global_config where name='manager_email'";
 $configResult=$db->query($configQuery);
 if(isset($configResult[0]['value']) && trim($configResult[0]['value'])!= ''){
    $xplodAddress = explode(",",$configResult[0]['value']);

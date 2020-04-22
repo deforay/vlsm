@@ -1,15 +1,16 @@
 <?php
 ob_start();
 session_start();
-require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
-require '../includes/mail/PHPMailerAutoload.php';
+require_once('../../startup.php');  
+include_once(APPLICATION_PATH.'/includes/MysqliDb.php');
+include_once(APPLICATION_PATH.'/includes/mail/PHPMailerAutoload.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $general=new General($db);
-$tableName="vl_request_form";
+$tableName="form_covid19";
 $configSyncQuery ="SELECT `value` FROM global_config where name='sync_path'";
 $configSyncResult = $db->rawQuery($configSyncQuery);
 //get vl result mail sent list
-$resultmailSentQuery ="SELECT result_mail_datetime FROM vl_request_form where MONTH(result_mail_datetime) = MONTH(CURRENT_DATE())";
+$resultmailSentQuery ="SELECT result_mail_datetime FROM form_covid19 where MONTH(result_mail_datetime) = MONTH(CURRENT_DATE())";
 $resultmailSentResult = $db->rawQuery($resultmailSentQuery);
 $sourcecode = sprintf("%02d",(count($resultmailSentResult)+1));
 //get instance facility code
@@ -97,9 +98,9 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
            //update result mail sent flag
            $_POST['sample'] = explode(',',$_POST['sample']);
            for($s=0;$s<count($_POST['sample']);$s++){
-               $sampleQuery="SELECT vl_sample_id FROM vl_request_form as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.vl_sample_id = '".$_POST['sample'][$s]."'";
+               $sampleQuery="SELECT covid19_id FROM form_covid19 as vl LEFT JOIN facility_details as f ON vl.facility_id=f.facility_id where vl.covid19_id = '".$_POST['sample'][$s]."'";
                $sampleResult = $db->rawQuery($sampleQuery);
-               $db=$db->where('vl_sample_id',$sampleResult[0]['vl_sample_id']);
+               $db=$db->where('covid19_id',$sampleResult[0]['covid19_id']);
                $db->update($tableName,array('is_result_mail_sent'=>'yes','result_mail_datetime'=>$general->getDateTime())); 
             }
             //put file in sync path
@@ -111,17 +112,17 @@ if(isset($_POST['toEmail']) && trim($_POST['toEmail'])!=''){
                copy($pathFront. DIRECTORY_SEPARATOR. $_POST['pdfFile2'], $configSyncResult[0]['value']. DIRECTORY_SEPARATOR ."result-email" . DIRECTORY_SEPARATOR . $_POST['pdfFile2']);
             }
            $_SESSION['alertMsg']='Email sent successfully';
-           header('location:vlResultMail.php');
+           header('location:/covid-19/mail/mail-covid-19-results.php');
       }else{
            $_SESSION['alertMsg']='Unable to send mail. Please try later.';
            error_log("Mailer Error: " . $mail->ErrorInfo);
-           header('location:vlResultMail.php');
+           header('location:/covid-19/mail/mail-covid-19-results.php');
       }
    }else{
       $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-      header('location:vlResultMail.php');
+      header('location:/covid-19/mail/mail-covid-19-results.php');
    }
 }else{
    $_SESSION['alertMsg']='Unable to send mail. Please try later.';
-  header('location:vlResultMail.php');
+  header('location:/covid-19/mail/mail-covid-19-results.php');
 }

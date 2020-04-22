@@ -6,7 +6,7 @@ include_once(APPLICATION_PATH . '/header.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 
 //global config
-$configQuery = "SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
 $showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2) ? true : false;
 //Get active machines

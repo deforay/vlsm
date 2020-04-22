@@ -4,7 +4,7 @@ $title = "Add New Batch";
 require_once('../startup.php'); 
 include_once(APPLICATION_PATH.'/header.php');
 //global config
-$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery="SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
 $showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2)?true:false;
 //Get active machines

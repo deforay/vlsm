@@ -13,7 +13,7 @@ $importedBy = $_SESSION['userId'];
 $eidResults = $general->getEidResults();
 
 
-$configQuery = "SELECT value FROM global_config WHERE name ='import_non_matching_sample'";
+$configQuery = "SELECT `value` FROM global_config WHERE name ='import_non_matching_sample'";
 $configResult = $db->query($configQuery);
 //$import_decided = (isset($configResult[0]['value']) && $configResult[0]['value'] == 'no')?'INNER JOIN':'LEFT JOIN';
 $import_decided = 'LEFT JOIN';

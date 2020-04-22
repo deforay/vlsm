@@ -29,7 +29,7 @@ if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') {
 	$shortName = "VLSTS";
 }
 
-if(isset($systemConfig['instanceName']) && !empty($systemConfig['instanceName'])){
+if (isset($systemConfig['instanceName']) && !empty($systemConfig['instanceName'])) {
 	$systemType = $systemConfig['instanceName'];
 }
 
@@ -75,6 +75,8 @@ $sharedPrivileges = array(
 	'eid-edit-batch-position.php' => 'eid-edit-batch.php',
 	'eid-update-result.php'       => 'eid-manual-results.php',
 	'covid-19-add-batch-position.php'  => 'covid-19-add-batch.php',
+	'mail-covid-19-results.php'  => 'covid-19-print-results.php',
+	'covid-19-result-mail-confirm.php'  => 'covid-19-print-results.php',
 	'covid-19-edit-batch-position.php' => 'covid-19-edit-batch.php',
 	'covid-19-update-result.php'       => 'covid-19-manual-results.php',
 	'imported-results.php'        => 'addImportResult.php',
@@ -83,7 +85,6 @@ $sharedPrivileges = array(
 
 // Does the current file share privileges with another privilege ?
 $currentFileName = isset($sharedPrivileges[$currentFileName]) ? $sharedPrivileges[$currentFileName] : $currentFileName;
-
 
 
 if (!in_array($currentFileName, $skipPrivilegeCheckFiles)) {
@@ -665,7 +666,7 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
 									<li class="allMenu specimenReferralManifestListMenu">
-										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('eid'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
+										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
 									</li>
 								<?php } ?>
 							</ul>
@@ -694,7 +695,10 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php }
 								if (isset($_SESSION['privileges']) && in_array("covid-19-result-status.php", $_SESSION['privileges'])) { ?>
 									<li class="allMenu covid19ResultStatus"><a href="/covid-19/results/covid-19-result-status.php"><i class="fa fa-circle-o"></i> Manage Results Status</a></li>
-								<?php } ?>
+								<?php }
+								if (isset($_SESSION['privileges']) && in_array("covid-19-print-results.php", $_SESSION['privileges'])) { ?>
+									<li class="allMenu covid19ResultMailMenu"><a href="/covid-19/mail/mail-covid-19-results.php"><i class="fa fa-circle-o"></i> E-mail Test Result</a></li>
+								<?php }  ?>
 							</ul>
 						</li>
 					<?php } ?>
