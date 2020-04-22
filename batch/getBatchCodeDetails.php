@@ -4,7 +4,7 @@ include_once(APPLICATION_PATH . '/includes/MysqliDb.php');
 include_once(APPLICATION_PATH.'/models/General.php');
 $tableName = "batch_details";
 $primaryKey = "batch_id";
-$configQuery = "SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
 
 if (isset($_POST['type']) && $_POST['type'] == 'vl') {

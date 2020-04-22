@@ -20,7 +20,7 @@ $pdResult=$db->query($pdQuery);
 $batchQuery="SELECT * FROM batch_details";
 $batchResult = $db->rawQuery($batchQuery);
 ?>
-<link href="../assets/css/multi-select.css" rel="stylesheet" />
+<link href="/assets/css/multi-select.css" rel="stylesheet" />
 <style>
     .ms-container{
       width:100%;

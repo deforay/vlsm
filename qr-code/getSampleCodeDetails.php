@@ -4,7 +4,7 @@ require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/Mysqli
 include_once(APPLICATION_PATH.'/models/General.php');
 $tableName="vl_request_form";
 $primaryKey="vl_sample_id";
-$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery="SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
 //system config
     $systemConfigQuery ="SELECT * from system_config";

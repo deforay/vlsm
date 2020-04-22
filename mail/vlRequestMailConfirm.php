@@ -11,7 +11,7 @@ $mailconf = array();
 foreach($geResult as $row){
    $mailconf[$row['name']] = $row['value'];
 }
-$configSyncQuery ="SELECT value FROM global_config where name='sync_path'";
+$configSyncQuery ="SELECT `value` FROM global_config where name='sync_path'";
 $configSyncResult = $db->rawQuery($configSyncQuery);
 $filename = '';
 $downloadFile = '';

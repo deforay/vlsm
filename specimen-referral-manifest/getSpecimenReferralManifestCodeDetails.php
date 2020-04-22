@@ -20,7 +20,7 @@ if ($sarr['user_type'] == 'remoteuser') {
 } else if ($sarr['user_type'] == 'vluser' || $sarr['user_type'] == 'standalone') {
     $sCode = 'sample_code';
 }
-$configQuery = "SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
 $general = new General($db);
 /* Array of database columns which should be read and sent back to DataTables. Use a space where

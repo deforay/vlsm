@@ -7,7 +7,7 @@ require_once('../../startup.php');
 include_once(APPLICATION_PATH.'/header.php');
 $id=base64_decode($_GET['id']);
 //global config
-$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery="SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
 $showUrgency = ($configResult[0]['value'] == 1 || $configResult[0]['value'] == 2)?true:false;
 $batchQuery="SELECT * from batch_details as b_d LEFT JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";

@@ -10,7 +10,7 @@ $fName = $_POST['fName'];
 $iName = $_POST['iName'];
 
 //global config
-$configQuery="SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery="SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult=$db->query($configQuery);
 $country = $configResult[0]['value'];
 

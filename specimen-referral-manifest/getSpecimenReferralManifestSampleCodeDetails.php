@@ -13,7 +13,7 @@ for ($i = 0; $i < sizeof($systemConfigResult); $i++) {
   $sarr[$systemConfigResult[$i]['name']] = $systemConfigResult[$i]['value'];
 }
 //global config
-$configQuery = "SELECT value FROM global_config WHERE name ='vl_form'";
+$configQuery = "SELECT `value` FROM global_config WHERE name ='vl_form'";
 $configResult = $db->query($configQuery);
 $country = $configResult[0]['value'];
 

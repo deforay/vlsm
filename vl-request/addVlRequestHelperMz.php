@@ -7,7 +7,7 @@ $general=new General($db);
 $tableName="vl_request_form";
 $tableName1="activity_log";
 try {
-     $configQuery ="SELECT value FROM global_config where name='auto_approval'";
+     $configQuery ="SELECT `value` FROM global_config where name='auto_approval'";
      $configResult = $db->rawQuery($configQuery);
      $status = 6;
      //var_dump($_POST);die;
