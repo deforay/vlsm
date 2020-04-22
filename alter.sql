@@ -2268,3 +2268,6 @@ CREATE TABLE `covid19_imported_controls` (
 
 
 ALTER TABLE `form_covid19` ADD `is_result_mail_sent` VARCHAR(255) NULL DEFAULT 'no' AFTER `lot_expiration_date`;
+
+
+-- Version 3.20 ---- Amit April 22 2020
