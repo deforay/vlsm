@@ -198,11 +198,12 @@ require_once($fileArray[$arr['vl_form']]);
         changeHistory($('#hasRecentTravelHistory').val());
     });
     function changeHistory(val){
-        if(val == 'no'){
+        if(val == 'no' || val == 'unknown'){
             $('.historyfield').hide(500);
-            $('.historyfield').removeClass('isRequired');
-        }else if(val == 'yes' || val == 'unknown'){
+            $('#countryName,#returnDate').removeClass('isRequired');
+        }else if(val == 'yes'){
             $('.historyfield').show(500);
+            $('#countryName,#returnDate').addClass('isRequired');
         }
     }
     function changeReject(val){

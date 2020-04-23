@@ -152,11 +152,12 @@ require_once($fileArray[$arr['vl_form']]);
             }
         });
         $('#hasRecentTravelHistory').change(function(e){
-            if(this.value == 'no'){
+            if(this.value == 'no' || this.value == 'unknown'){
                 $('.historyfield').hide(500);
-                $('.historyfield').removeClass('isRequired');
-            }else if(this.value == 'yes' || this.value == 'unknown'){
+                $('#countryName,#returnDate').removeClass('isRequired');
+            }else if(this.value == 'yes'){
                 $('.historyfield').show(500);
+                $('#countryName,#returnDate').addClass('isRequired');
             }
         });
     });
