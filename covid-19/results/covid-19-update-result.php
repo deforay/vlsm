@@ -159,11 +159,12 @@ if ($arr['vl_form'] == 1) {
 		//$('.dateTime').mask('99-aaa-9999 99:99');
 	});
 	function changeHistory(val){
-        if(val == 'no'){
+        if(val == 'no' || val == 'unknown'){
             $('.historyfield').hide(500);
-            $('.historyfield').removeClass('isRequired');
-        }else if(val == 'yes' || val == 'unknown'){
+            $('#countryName,#returnDate').removeClass('isRequired');
+        }else if(val == 'yes'){
             $('.historyfield').show(500);
+            $('#countryName,#returnDate').addClass('isRequired');
         }
     }
 	function changeReject(val){
