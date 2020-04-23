@@ -187,7 +187,27 @@ require_once($fileArray[$arr['vl_form']]);
         });
         //$('.date').mask('99-aaa-9999');
         //$('.dateTime').mask('99-aaa-9999 99:99');
+
+        $('#isSampleRejected').change(function(e) {
+			changeReject(this.value);
+		});
+		changeReject($('#isSampleRejected').val());
+        
     });
+
+    function changeReject(val){
+		if (val == 'yes') {
+			$('#sampleRejectionReason').addClass('isRequired');
+			$('#sampleTestedDateTime,#result').removeClass('isRequired');
+			$('#result').prop('disabled', true);
+			$('#sampleRejectionReason').prop('disabled', false);
+		} else if (val == 'no') {
+			$('#sampleRejectionReason').removeClass('isRequired');
+			$('#sampleTestedDateTime,#result').addClass('isRequired');
+			$('#result').prop('disabled', false);
+			$('#sampleRejectionReason').prop('disabled', true);
+		}
+	}
 
 
     function calculateAgeInYears() {

@@ -3,7 +3,7 @@ ob_start();
 $title = "Enter Covid-19 Result";
 require_once('../../startup.php');
 include_once(APPLICATION_PATH . '/header.php');
-include_once(APPLICATION_PATH.'/models/General.php');
+include_once(APPLICATION_PATH . '/models/General.php');
 $general = new General($db);
 $id = base64_decode($_GET['id']);
 $configQuery = "SELECT * from global_config";
@@ -11,7 +11,7 @@ $configResult = $db->query($configQuery);
 $arr = array();
 // now we create an associative array so that we can easily create view variables
 for ($i = 0; $i < sizeof($configResult); $i++) {
-  $arr[$configResult[$i]['name']] = $configResult[$i]['value'];
+	$arr[$configResult[$i]['name']] = $configResult[$i]['value'];
 }
 
 //get import config
@@ -54,102 +54,120 @@ $disable = "disabled = 'disabled'";
 
 ?>
 <style>
-  .disabledForm {
-    background: #efefef;
-  }
+	.disabledForm {
+		background: #efefef;
+	}
 
-  :disabled,
-  .disabledForm .input-group-addon {
-    background: none !important;
-    border: none !important;
-  }
+	:disabled,
+	.disabledForm .input-group-addon {
+		background: none !important;
+		border: none !important;
+	}
 
-  .ui_tpicker_second_label {
-    display: none !important;
-  }
+	.ui_tpicker_second_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_second_slider {
-    display: none !important;
-  }
+	.ui_tpicker_second_slider {
+		display: none !important;
+	}
 
-  .ui_tpicker_millisec_label {
-    display: none !important;
-  }
+	.ui_tpicker_millisec_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_millisec_slider {
-    display: none !important;
-  }
+	.ui_tpicker_millisec_slider {
+		display: none !important;
+	}
 
-  .ui_tpicker_microsec_label {
-    display: none !important;
-  }
+	.ui_tpicker_microsec_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_microsec_slider {
-    display: none !important;
-  }
+	.ui_tpicker_microsec_slider {
+		display: none !important;
+	}
 
-  .ui_tpicker_timezone_label {
-    display: none !important;
-  }
+	.ui_tpicker_timezone_label {
+		display: none !important;
+	}
 
-  .ui_tpicker_timezone {
-    display: none !important;
-  }
+	.ui_tpicker_timezone {
+		display: none !important;
+	}
 
-  .ui_tpicker_time_input {
-    width: 100%;
-  }
+	.ui_tpicker_time_input {
+		width: 100%;
+	}
 </style>
 <?php
 if ($arr['vl_form'] == 1) {
-  require_once('forms/update-southsudan-result.php');
+	require_once('forms/update-southsudan-result.php');
 } else if ($arr['vl_form'] == 2) {
-  require_once('forms/update-zimbabwe-result.php');
+	require_once('forms/update-zimbabwe-result.php');
 } else if ($arr['vl_form'] == 3) {
-  require_once('forms/update-drc-result.php');
+	require_once('forms/update-drc-result.php');
 } else if ($arr['vl_form'] == 4) {
-  require_once('forms/update-zambia-result.php');
+	require_once('forms/update-zambia-result.php');
 } else if ($arr['vl_form'] == 5) {
-  require_once('forms/update-png-result.php');
+	require_once('forms/update-png-result.php');
 } else if ($arr['vl_form'] == 6) {
-  require_once('forms/update-who-result.php');
+	require_once('forms/update-who-result.php');
 } else if ($arr['vl_form'] == 7) {
-  require_once('forms/update-rwanda-result.php');
+	require_once('forms/update-rwanda-result.php');
 } else if ($arr['vl_form'] == 8) {
-  require_once('forms/update-angola-result.php');
+	require_once('forms/update-angola-result.php');
 }
 ?>
 
 <script>
-  $(document).ready(function() {
-    $('.date').datepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'dd-M-yy',
-      timeFormat: "hh:mm TT",
-      maxDate: "Today",
-      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function() {
-      $('.ui-datepicker-calendar').show();
-    });
-    $('.dateTime').datetimepicker({
-      changeMonth: true,
-      changeYear: true,
-      dateFormat: 'dd-M-yy',
-      timeFormat: "HH:mm",
-      maxDate: "Today",
-      onChangeMonthYear: function(year, month, widget) {
-        setTimeout(function() {
-          $('.ui-datepicker-calendar').show();
-        });
-      },
-      yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
-    }).click(function() {
-      $('.ui-datepicker-calendar').show();
-    });
-    //$('.date').mask('99-aaa-9999');
-    //$('.dateTime').mask('99-aaa-9999 99:99');
-  });
+	$(document).ready(function() {
+		$('#isSampleRejected').change(function(e) {
+			changeReject(this.value);
+		});
+		changeReject($('#isSampleRejected').val());
+		$('.date').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: 'dd-M-yy',
+			timeFormat: "hh:mm TT",
+			maxDate: "Today",
+			yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+		}).click(function() {
+			$('.ui-datepicker-calendar').show();
+		});
+		$('.dateTime').datetimepicker({
+			changeMonth: true,
+			changeYear: true,
+			dateFormat: 'dd-M-yy',
+			timeFormat: "HH:mm",
+			maxDate: "Today",
+			onChangeMonthYear: function(year, month, widget) {
+				setTimeout(function() {
+					$('.ui-datepicker-calendar').show();
+				});
+			},
+			yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+		}).click(function() {
+			$('.ui-datepicker-calendar').show();
+		});
+		//$('.date').mask('99-aaa-9999');
+		//$('.dateTime').mask('99-aaa-9999 99:99');
+	});
+
+	function changeReject(val){
+		if (val == 'yes') {
+			$('#sampleRejectionReason').addClass('isRequired');
+			$('#sampleTestedDateTime,#result').removeClass('isRequired');
+			$('#result').prop('disabled', true);
+			$('#sampleRejectionReason').prop('disabled', false);
+		} else if (val == 'no') {
+			$('#sampleRejectionReason').removeClass('isRequired');
+			$('#sampleTestedDateTime,#result').addClass('isRequired');
+			$('#result').prop('disabled', false);
+			$('#sampleRejectionReason').prop('disabled', true);
+		}
+	}
 </script>
 
 
