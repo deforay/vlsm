@@ -191,10 +191,20 @@ require_once($fileArray[$arr['vl_form']]);
         $('#isSampleRejected').change(function(e) {
 			changeReject(this.value);
 		});
+        $('#hasRecentTravelHistory').change(function(e){
+            changeHistory(this.value);
+        });
 		changeReject($('#isSampleRejected').val());
-        
+        changeHistory($('#hasRecentTravelHistory').val());
     });
-
+    function changeHistory(val){
+        if(val == 'no'){
+            $('.historyfield').hide(500);
+            $('.historyfield').removeClass('isRequired');
+        }else if(val == 'yes' || val == 'unknown'){
+            $('.historyfield').show(500);
+        }
+    }
     function changeReject(val){
 		if (val == 'yes') {
 			$('#sampleRejectionReason').addClass('isRequired');

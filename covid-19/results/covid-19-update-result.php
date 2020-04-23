@@ -125,6 +125,10 @@ if ($arr['vl_form'] == 1) {
 		$('#isSampleRejected').change(function(e) {
 			changeReject(this.value);
 		});
+		$('#hasRecentTravelHistory').change(function(e){
+            changeHistory(this.value);
+        });
+		changeReject($('#isSampleRejected').val());
 		changeReject($('#isSampleRejected').val());
 		$('.date').datepicker({
 			changeMonth: true,
@@ -154,7 +158,14 @@ if ($arr['vl_form'] == 1) {
 		//$('.date').mask('99-aaa-9999');
 		//$('.dateTime').mask('99-aaa-9999 99:99');
 	});
-
+	function changeHistory(val){
+        if(val == 'no'){
+            $('.historyfield').hide(500);
+            $('.historyfield').removeClass('isRequired');
+        }else if(val == 'yes' || val == 'unknown'){
+            $('.historyfield').show(500);
+        }
+    }
 	function changeReject(val){
 		if (val == 'yes') {
 			$('#sampleRejectionReason').addClass('isRequired');
