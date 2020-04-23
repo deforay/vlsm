@@ -151,6 +151,14 @@ require_once($fileArray[$arr['vl_form']]);
                 $('#sampleRejectionReason').prop('disabled',true);
             }
         });
+        $('#hasRecentTravelHistory').change(function(e){
+            if(this.value == 'no'){
+                $('.historyfield').hide(500);
+                $('.historyfield').removeClass('isRequired');
+            }else if(this.value == 'yes' || this.value == 'unknown'){
+                $('.historyfield').show(500);
+            }
+        });
     });
 
 

@@ -323,14 +323,14 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             </select>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr class="historyfield">
                                         <th>If Yes, Country Name(s)</th>
                                         <td>
-                                            <input class="form-control" type="text" name="countryName" id="countryName" placeholder="Country Name(s)" value="<?php echo $covid19Info['travel_country_names']; ?>"/>
+                                            <input class="historyfield form-control" type="text" name="countryName" id="countryName" placeholder="Country Name(s)" value="<?php echo $covid19Info['travel_country_names']; ?>"/>
                                         </td>
                                         <th>Return Date</th>
                                         <td>
-                                            <input class="form-control date" type="text" name="returnDate" id="returnDate" placeholder="Return Date" value="<?php echo $general->humanDateFormat($covid19Info['travel_return_date']); ?>" />
+                                            <input class="historyfield form-control date" type="text" name="returnDate" id="returnDate" placeholder="Return Date" value="<?php echo $general->humanDateFormat($covid19Info['travel_return_date']); ?>" />
                                         </td>
                                     </tr>
 

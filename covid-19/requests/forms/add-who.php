@@ -310,14 +310,14 @@ foreach ($fResult as $fDetails) {
                                             </select>
                                         </td>
                                         </tr>
-                                    <tr>   
+                                    <tr class="historyfield">   
                                         <th>If Yes, Country Name(s)</th>
                                         <td>
-                                        <input class="form-control" type="text" name="countryName" id="countryName" placeholder="Country Name(s)"  />
+                                        <input class="historyfield form-control" type="text" name="countryName" id="countryName" placeholder="Country Name(s)"  />
                                         </td>
                                         <th>Return Date</th>
                                         <td>
-                                        <input class="form-control date" type="text" name="returnDate" id="returnDate" placeholder="Return Date"  />
+                                        <input class="historyfield form-control date" type="text" name="returnDate" id="returnDate" placeholder="Return Date"  />
                                         </td>
                                     </tr>
 
