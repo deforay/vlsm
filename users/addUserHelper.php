@@ -47,6 +47,7 @@ try {
             'role_id' => $_POST['role'],
             'status' => 'active',
         );
+        $data['user_signature'] = $imageName;
         $id = $db->insert($tableName, $data);
         if ($id > 0 && trim($_POST['selectedFacility']) != '') {
             if ($id > 0 && trim($_POST['selectedFacility']) != '') {

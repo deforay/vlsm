@@ -20,7 +20,9 @@ include_once(APPLICATION_PATH . '/models/General.php');
     .ui_tpicker_time_input {
         width: 100%;
     }
-    .table td, .table th{
+
+    .table td,
+    .table th {
         vertical-align: middle !important;
     }
 </style>
@@ -135,6 +137,20 @@ require_once($fileArray[$arr['vl_form']]);
         });
         $('.date').mask('99-aaa-9999');
         $('.dateTime').mask('99-aaa-9999 99:99');
+
+        $('#isSampleRejected').change(function(e){
+            if(this.value == 'yes'){
+                $('#sampleRejectionReason').addClass('isRequired');
+                $('#sampleTestedDateTime,#result').removeClass('isRequired');
+                $('#result').prop('disabled',true);
+                $('#sampleRejectionReason').prop('disabled',false);
+            }else if(this.value == 'no'){
+                $('#sampleRejectionReason').removeClass('isRequired');
+                $('#sampleTestedDateTime,#result').addClass('isRequired');
+                $('#result').prop('disabled',false);
+                $('#sampleRejectionReason').prop('disabled',true);
+            }
+        });
     });
 
 
@@ -197,9 +213,4 @@ require_once($fileArray[$arr['vl_form']]);
         $("#patientAge").val(moment().diff(dateOfBirth, 'years'));
     }
 </script>
-
-
-
-<?php
-
-include_once(APPLICATION_PATH . '/footer.php');
+<?php include_once(APPLICATION_PATH . '/footer.php');
