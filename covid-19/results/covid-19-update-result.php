@@ -155,6 +155,47 @@ if ($arr['vl_form'] == 1) {
 		}).click(function() {
 			$('.ui-datepicker-calendar').show();
 		});
+
+		$('#sampleCollectionDate').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            onSelect:function(e){
+				$('#sampleReceivedDate').val('');
+                $('#sampleReceivedDate').datetimepicker('option', 'minDate', e);
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
+        $('#sampleReceivedDate').datetimepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-M-yy',
+            timeFormat: "HH:mm",
+            maxDate: "Today",
+            onChangeMonthYear: function(year, month, widget) {
+                setTimeout(function() {
+                    $('.ui-datepicker-calendar').show();
+                });
+            },
+            onSelect:function(e){
+				$('#sampleTestedDateTime').val('');
+                $('#sampleTestedDateTime').datetimepicker('option', 'minDate', e);
+            },
+            yearRange: <?php echo (date('Y') - 100); ?> + ":" + "<?php echo (date('Y')) ?>"
+        }).click(function() {
+            $('.ui-datepicker-calendar').show();
+        });
+
 		//$('.date').mask('99-aaa-9999');
 		//$('.dateTime').mask('99-aaa-9999 99:99');
 	});
