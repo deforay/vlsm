@@ -19,11 +19,11 @@ $skin = "skin-blue";
 
 $logoName = "<img src='/assets/img/flask.png' style='margin-top:-5px;max-width:22px;'> <span style=''>VLSM</span>";
 $smallLogoName = "<img src='/assets/img/flask.png'>";
-$systemType = "Viral Load Sample Management";
+$systemType = "Lab Sample Management Module";
 $shortName = "VLSM";
 if (isset($sarr['user_type']) && $sarr['user_type'] == 'remoteuser') {
 	$skin = "skin-red";
-	$systemType = "VL Sample Tracking System";
+	$systemType = "Remote Sample Tracking Module";
 	$logoName = "<i class='fa fa-medkit'></i> VLSTS";
 	$smallLogoName = "<i class='fa fa-medkit'></i>";
 	$shortName = "VLSTS";
