@@ -3,6 +3,8 @@ ob_start();
 
 $module = isset($_GET['t']) ? base64_decode($_GET['t']) : 'vl';
 
+$module = ($module == 'covid19') ? 'C19' : $module;
+
 $title = "Add New Specimen Referral Manifest";
 include_once '../startup.php';
 include_once APPLICATION_PATH . '/header.php';

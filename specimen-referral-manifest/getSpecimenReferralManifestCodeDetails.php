@@ -103,6 +103,8 @@ if($_POST['module'] =='vl'){
     $sQuery = "select p.request_created_datetime, p.package_code, p.package_status, p.module, p.package_id,count(vl." . $sCode . ") as sample_code from vl_request_form vl right join package_details p on vl.sample_package_id = p.package_id";
 }else if($_POST['module'] =='eid'){
     $sQuery = "select p.request_created_datetime, p.package_code, p.package_status, p.module, p.package_id,count(vl." . $sCode . ") as sample_code from eid_form vl right join package_details p on vl.sample_package_id = p.package_id";
+}else if($_POST['module'] =='covid19'){
+    $sQuery = "select p.request_created_datetime, p.package_code, p.package_status, p.module, p.package_id,count(vl." . $sCode . ") as sample_code from form_covid19 vl right join package_details p on vl.sample_package_id = p.package_id";
 }
 
 

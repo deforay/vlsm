@@ -96,10 +96,10 @@ class MYPDF extends TCPDF
         }
       }
       $this->SetFont('helvetica', 'B', 16);
-      $this->writeHTMLCell(0, 0, 10, 12, $this->text, 0, 0, 0, true, 'C', true);
+      $this->writeHTMLCell(0, 0, 10, 18, $this->text, 0, 0, 0, true, 'C', true);
       if (trim($this->lab) != '') {
         $this->SetFont('helvetica', '', 10);
-        $this->writeHTMLCell(0, 0, 10, 22, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
+        $this->writeHTMLCell(0, 0, 10, 28, strtoupper($this->lab), 0, 0, 0, true, 'C', true);
       }
       $this->SetFont('helvetica', '', 12);
       $this->writeHTMLCell(0, 0, 10, 30, 'COVID-19 TEST - PATIENT REPORT', 0, 0, 0, true, 'C', true);
