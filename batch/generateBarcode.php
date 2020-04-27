@@ -13,14 +13,17 @@ if (isset($_POST['type']) && $_POST['type'] == 'vl') {
     $refTable = "vl_request_form";
     $refPrimaryColumn = "vl_sample_id";
     $patientIdColumn = 'patient_art_no';
+    $worksheetName = 'Viral Load Test Worksheet';
 } else if (isset($_POST['type']) && $_POST['type'] == 'eid') {
     $refTable = "eid_form";
     $refPrimaryColumn = "eid_id";
     $patientIdColumn = 'child_id';
+    $worksheetName = 'EID Test Worksheet';
 }else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
     $refTable = "form_covid19";
     $refPrimaryColumn = "covid19_id";
     $patientIdColumn = 'patient_id';
+    $worksheetName = 'Covid-19 Test Worksheet';
 }
 
 
@@ -83,7 +86,7 @@ if ($id > 0) {
                 $this->writeHTMLCell(30, 0, 10, 26, $this->text, 0, 0, 0, true, 'A', true);
                 $this->SetFont('helvetica', '', 13);
                 $this->writeHTMLCell(0, 0, 0, 10, 'Batch Number/Code : ' . $this->batch, 0, 0, 0, true, 'C', true);
-                $this->writeHTMLCell(0, 0, 0, 20, 'VLSM Batch Worksheet', 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0, 0, 0, 20, $worksheetName, 0, 0, 0, true, 'C', true);
                 $this->SetFont('helvetica', '', 9);
                 $this->writeHTMLCell(0, 0, 144, 10, 'Result On : ' . $this->resulted, 0, 0, 0, true, 'C', true);
                 $this->writeHTMLCell(0, 0, 144, 16, 'Reviewed On : ' . $this->reviewed, 0, 0, 0, true, 'C', true);
