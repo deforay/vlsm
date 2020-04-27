@@ -41,7 +41,7 @@ if (sizeof($requestResult) > 0) {
         $pdf->setHeading($arr['logo'], $arr['header'], $result['labName'], $title = 'EARLY INFANT DIAGNOSIS PATIENT REPORT');
         // set document information
         $pdf->SetCreator('VLSM');
-        $pdf->SetTitle('Early Infant Diagnosis Patient Report');
+        $pdf->SetTitle('Covid-19 Patient Report');
         //$pdf->SetSubject('TCPDF Tutorial');
         //$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 

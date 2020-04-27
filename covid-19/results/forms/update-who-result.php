@@ -334,8 +334,15 @@ foreach ($fResult as $fDetails) {
                                         <td>
                                             <input type="text" class="form-control isRequired" id="sampleReceivedDate" name="sampleReceivedDate" placeholder="e.g 09-Jan-1992 05:30" title="Please enter sample receipt date" value="<?php echo $general->humanDateFormat($covid19Info['sample_received_at_vl_lab_datetime']) ?>" onchange="" style="width:100%;" />
                                         </td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>Testing Lab <span class="mandatory">*</span></td>
+                                        <td>
+                                            <select name="labId" id="labId" class="form-control isRequired" title="Lab Name" style="width:100%;">
+                                                <option value=""> -- Select -- </option>
+                                                <?php foreach ($lResult as $labName) { ?>
+                                                    <option value="<?php echo $labName['facility_id']; ?>"><?php echo ucwords($labName['facility_name']); ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </td>
                                     <tr>
                                         <th>Is Sample Rejected ? <span class="mandatory">*</span></th>
                                         <td>
@@ -535,7 +542,7 @@ foreach ($fResult as $fDetails) {
             placeholder: "Province"
         });
         getfacilityProvinceDetails($("#facilityId").val());
-      
+
 
     });
 </script>

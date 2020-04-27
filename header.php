@@ -666,7 +666,7 @@ $formConfigResult = $db->query($formConfigQuery);
 								<?php
 								if (isset($_SESSION['privileges']) && in_array("specimenReferralManifestList.php", $_SESSION['privileges']) && ($sarr['user_type'] == 'remoteuser')) { ?>
 									<li class="allMenu specimenReferralManifestListMenu">
-										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> EID Specimen Manifest</a>
+										<a href="/specimen-referral-manifest/specimenReferralManifestList.php?t=<?php echo base64_encode('covid19'); ?>"><i class="fa fa-circle-o"></i> Covid-19 Specimen Manifest</a>
 									</li>
 								<?php } ?>
 							</ul>

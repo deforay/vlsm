@@ -137,6 +137,8 @@ include_once(APPLICATION_PATH . '/header.php');
       manifestFileName = "generateVLManifest.php";
     } else if (module == 'eid') {
       manifestFileName = "generateEIDManifest.php";
+    }else if (module == 'covid19') {
+      manifestFileName = "generateCovid19Manifest.php";
     }
     $.post(manifestFileName, {
         id: pId,
