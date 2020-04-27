@@ -61,13 +61,14 @@ if ($id > 0) {
         // Extend the TCPDF class to create custom Header and Footer
         class MYPDF extends TCPDF
         {
-            public function setHeading($logo, $text, $batch, $resulted, $reviewed)
+            public function setHeading($logo, $text, $batch, $resulted, $reviewed,$worksheetName)
             {
                 $this->logo = $logo;
                 $this->text = $text;
                 $this->batch = $batch;
                 $this->resulted = $resulted;
                 $this->reviewed = $reviewed;
+                $this->worksheetName = $worksheetName;
             }
             //Page header
             public function Header()
@@ -86,7 +87,7 @@ if ($id > 0) {
                 $this->writeHTMLCell(30, 0, 10, 26, $this->text, 0, 0, 0, true, 'A', true);
                 $this->SetFont('helvetica', '', 13);
                 $this->writeHTMLCell(0, 0, 0, 10, 'Batch Number/Code : ' . $this->batch, 0, 0, 0, true, 'C', true);
-                $this->writeHTMLCell(0, 0, 0, 20, $worksheetName, 0, 0, 0, true, 'C', true);
+                $this->writeHTMLCell(0, 0, 0, 20, $this->worksheetName, 0, 0, 0, true, 'C', true);
                 $this->SetFont('helvetica', '', 9);
                 $this->writeHTMLCell(0, 0, 144, 10, 'Result On : ' . $this->resulted, 0, 0, 0, true, 'C', true);
                 $this->writeHTMLCell(0, 0, 144, 16, 'Reviewed On : ' . $this->reviewed, 0, 0, 0, true, 'C', true);
@@ -109,7 +110,7 @@ if ($id > 0) {
         // create new PDF document
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-        $pdf->setHeading($lResult[0]['value'], $tResult[0]['value'], $bResult[0]['batch_code'], $resulted, $reviewed);
+        $pdf->setHeading($lResult[0]['value'], $tResult[0]['value'], $bResult[0]['batch_code'], $resulted, $reviewed, $worksheetName);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
