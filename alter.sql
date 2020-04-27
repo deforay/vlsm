@@ -2271,3 +2271,13 @@ ALTER TABLE `form_covid19` ADD `is_result_mail_sent` VARCHAR(255) NULL DEFAULT '
 
 
 -- Version 3.20 ---- Amit April 22 2020
+
+-- Thanaseelan April 27, 2020
+CREATE TABLE `import_config_controls` (
+ `test_type` varchar(255) NOT NULL,
+ `config_id` int(11) NOT NULL,
+ `number_of_in_house_controls` int(11) DEFAULT NULL,
+ `number_of_manufacturer_controls` int(11) DEFAULT NULL,
+ `number_of_calibrators` int(11) DEFAULT NULL,
+ PRIMARY KEY (`test_type`,`config_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
