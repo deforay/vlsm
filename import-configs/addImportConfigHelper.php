@@ -5,7 +5,8 @@ require_once('../startup.php');  include_once(APPLICATION_PATH.'/includes/Mysqli
 
 $tableName="import_config";
 $importMachineTable="import_config_machines";
-
+$importControlTable="import_config_controls";
+// print_r($_POST);die;
 try {
     if(trim($_POST['configurationName'])!=""){
         $data=array(
@@ -14,9 +15,6 @@ try {
         'lower_limit'=>$_POST['lowerLimit'],
         'higher_limit'=>$_POST['higherLimit'],
         'max_no_of_samples_in_a_batch'=>$_POST['maxNOfSamplesInBatch'],
-        'number_of_in_house_controls'=>$_POST['noOfInHouseControls'],
-        'number_of_manufacturer_controls'=>$_POST['noOfManufacturerControls'],
-        'number_of_calibrators'=>$_POST['numberOfCalibrators'],
         'low_vl_result_text'=>$_POST['lowVlResultText'],
         'status' => 'active'
         );
@@ -27,6 +25,14 @@ try {
                 if(trim($_POST['configMachineName'][$c])!=''){
                     $configMachineData = array('config_id'=>$id,'config_machine_name'=>$_POST['configMachineName'][$c]);
                     $db->insert($importMachineTable,$configMachineData);
+                }
+            }
+        }
+        if($id>0 && isset($_POST['testType']) && count($_POST['testType']) > 0){
+            foreach($_POST['testType'] as $key=>$val){
+                if(trim($val)!=''){
+                    $configControlData = array('test_type'=>$val,'config_id'=>$id,'number_of_in_house_controls'=>$_POST['noHouseCtrl'][$key],'number_of_manufacturer_controls'=>$_POST['noManufacturerCtrl'][$key],'number_of_calibrators'=>$_POST['noCalibrators'][$key]);
+                    $db->insert($importControlTable,$configControlData);
                 }
             }
         }
