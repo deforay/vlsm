@@ -38,7 +38,7 @@ foreach($configControlInfo as $info){
 			<!-- /.box-header -->
 			<div class="box-body">
 				<!-- form start -->
-				<pre><?php print_r($configControl); ?></pre>
+				<!-- <pre><?php print_r($configControl); ?></pre> -->
 				<form class="form-horizontal" method='post' name='editImportConfigForm' id='editImportConfigForm' autocomplete="off" action="editImportConfigHelper.php">
 					<div class="box-body">
 						<div class="row">
