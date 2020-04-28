@@ -91,6 +91,7 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+                <pre><?php print_r($eidInfo);?></pre>
                 <!-- form start -->
                 <form class="form-horizontal" method="post" name="editEIDRequestForm" id="editEIDRequestForm" autocomplete="off" action="eid-edit-request-helper.php">
                     <div class="box-body">
@@ -324,7 +325,8 @@ if ($sarr['user_type'] == 'vluser' && $sCode != '') {
                                             <select class="form-control" name="pcrTestReason" id="pcrTestReason">
                                                 <option value=''> -- Select -- </option>
                                                 <option value="Confirmation of positive first EID PCR test result" <?php echo ($eidInfo['reason_for_pcr'] == 'Confirmation of positive first EID PCR test result') ? "selected='selected'" : ""; ?>> Confirmation of positive first EID PCR test result </option>
-                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option> <option value="Positive HIV rapid test result at 9 months or later"> Positive HIV rapid test result at 9 months or later </option>
+                                                <option value="Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months" <?php echo ($eidInfo['reason_for_pcr'] == 'Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months') ? "selected='selected'" : ""; ?>> Repeat EID PCR test 6 weeks after stopping breastfeeding for children < 9 months </option>
+                                                <option value="Positive HIV rapid test result at 9 months or later" <?php echo ($eidInfo['reason_for_pcr'] == 'Positive HIV rapid test result at 9 months or later') ? "selected='selected'" : ""; ?>> Positive HIV rapid test result at 9 months or later </option>
                                                 <option value="Other" <?php echo ($eidInfo['reason_for_pcr'] == 'Other') ? "selected='selected'" : ""; ?>> Other </option>
                                             </select>
                                         </td>

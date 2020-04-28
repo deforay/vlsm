@@ -398,7 +398,7 @@ foreach ($fResult as $fDetails) {
                     <input type="hidden" name="covid19SampleId" id="covid19SampleId" value="<?php echo ($covid19Info['covid19_id']); ?>" />
                     <input type="hidden" name="sampleCodeTitle" id="sampleCodeTitle" value="<?php echo $arr['sample_code']; ?>" />
                     <input type="hidden" id="sampleCode" name="sampleCode" value="<?php echo $covid19Info['sample_code'] ?>" />
-                    <a href="/covid-10/requests/covid-19-manual-results.php" class="btn btn-default"> Cancel</a>
+                    <a href="/covid-19/results/covid-19-manual-results.php" class="btn btn-default"> Cancel</a>
                 </div>
                 <!-- /.box-footer -->
                 </form>

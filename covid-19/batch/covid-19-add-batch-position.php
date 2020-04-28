@@ -12,22 +12,34 @@ $newContent = '';
 $displayOrder = array();
 $batchQuery="SELECT * from batch_details as b_d INNER JOIN import_config as i_c ON i_c.config_id=b_d.machine where batch_id=$id";
 $batchInfo=$db->query($batchQuery);
+// Config control
+$configControlQuery = "SELECT * from import_config_controls where config_id=".$batchInfo[0]['config_id'];
+$configControlInfo = $db->query($configControlQuery);
+$configControl = array();
+foreach($configControlInfo as $info){
+	if($info['test_type'] == 'covid-19'){
+		$configControl[$info['test_type']]['noHouseCtrl'] = $info['number_of_in_house_controls'];
+		$configControl[$info['test_type']]['noManufacturerCtrl'] = $info['number_of_manufacturer_controls'];
+		$configControl[$info['test_type']]['noCalibrators'] = $info['number_of_calibrators'];
+	}
+}
+
 if(!isset($batchInfo) || count($batchInfo) == 0){
 	header("location:covid-19-batches.php");
 }
 //Get batch controls order
 $newJsonToArray = array();
-if(isset($batchInfo[0]['number_of_in_house_controls']) && trim($batchInfo[0]['number_of_in_house_controls'])!='' && $batchInfo[0]['number_of_in_house_controls']>0){
-	for($h=0;$h<$batchInfo[0]['number_of_in_house_controls'];$h++){
-	   $newJsonToArray[] = "no_of_in_house_controls_".($h+1);
+if(isset($configControl['covid-19']['noHouseCtrl']) && trim($configControl['covid-19']['noHouseCtrl'])!='' && $configControl['covid-19']['noHouseCtrl']>0){
+	foreach(range(1,$configControl['covid-19']['noHouseCtrl']) as $h){
+		$newJsonToArray[] = "no_of_in_house_controls_".$h;	
 	}
-}if(isset($batchInfo[0]['number_of_manufacturer_controls']) && trim($batchInfo[0]['number_of_manufacturer_controls'])!='' && $batchInfo[0]['number_of_manufacturer_controls']>0){
-	for($m=0;$m<$batchInfo[0]['number_of_manufacturer_controls'];$m++){
-	   $newJsonToArray[] = "no_of_manufacturer_controls_".($m+1);
+}if(isset($configControl['covid-19']['noManufacturerCtrl']) && trim($configControl['covid-19']['noManufacturerCtrl'])!='' && $configControl['covid-19']['noManufacturerCtrl']>0){
+	foreach(range(1,$configControl['covid-19']['noManufacturerCtrl']) as $m){
+		$newJsonToArray[] = "no_of_manufacturer_controls_".$m;	
 	}
-}if(isset($batchInfo[0]['number_of_calibrators']) && trim($batchInfo[0]['number_of_calibrators'])!='' && $batchInfo[0]['number_of_calibrators']>0){
-	for($c=0;$c<$batchInfo[0]['number_of_calibrators'];$c++){
-	   $newJsonToArray[] = "no_of_calibrators_".($c+1);	
+}if(isset($configControl['covid-19']['noCalibrators']) && trim($configControl['covid-19']['noCalibrators'])!='' && $configControl['covid-19']['noCalibrators']>0){
+	foreach(range(1,$configControl['covid-19']['noCalibrators']) as $c){
+		$newJsonToArray[] = "no_of_calibrators_".$c;	
 	}
 }
 //Get machine's prev. label order
@@ -99,7 +111,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 		$newContent.='<li class="ui-state-default" id="s_'.$remainSampleNewArray[$ns].'">'.$label.'</li>';
 	}
 }else{
-	if(isset($batchInfo[0]['number_of_in_house_controls']) && trim($batchInfo[0]['number_of_in_house_controls'])!='' && $batchInfo[0]['number_of_in_house_controls']>0){
+	/* if(isset($batchInfo[0]['number_of_in_house_controls']) && trim($batchInfo[0]['number_of_in_house_controls'])!='' && $batchInfo[0]['number_of_in_house_controls']>0){
 		for($h=0;$h<$batchInfo[0]['number_of_in_house_controls'];$h++){
 		   $displayOrder[] = "no_of_in_house_controls_".($h+1);
 		   $content.='<li class="ui-state-default" id="no_of_in_house_controls_'.($h+1).'">In-House Controls '.($h+1).'</li>';
@@ -113,6 +125,23 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
 		for($c=0;$c<$batchInfo[0]['number_of_calibrators'];$c++){
 		   $displayOrder[] = "no_of_calibrators_".($c+1);	 	
 		   $content.='<li class="ui-state-default" id="no_of_calibrators_'.($c+1).'">Calibrators '.($c+1).'</li>';
+		}
+	} */
+	
+	if(isset($configControl['covid-19']['noHouseCtrl']) && trim($configControl['covid-19']['noHouseCtrl'])!='' && $configControl['covid-19']['noHouseCtrl']>0){
+		foreach(range(1,$configControl['covid-19']['noHouseCtrl']) as $h){
+			$displayOrder[] = "no_of_in_house_controls_".$h;
+			$content.='<li class="ui-state-default" id="no_of_in_house_controls_'.$h.'">In-House Controls '.$h.'</li>';
+		}
+	}if(isset($configControl['covid-19']['noManufacturerCtrl']) && trim($configControl['covid-19']['noManufacturerCtrl'])!='' && $configControl['covid-19']['noManufacturerCtrl']>0){
+		foreach(range(1,$configControl['covid-19']['noManufacturerCtrl']) as $m){
+			$displayOrder[] = "no_of_manufacturer_controls_".$m;
+		   	$content.='<li class="ui-state-default" id="no_of_manufacturer_controls_'.$m.'">Manufacturer Controls '.$m.'</li>';	
+		}
+	}if(isset($configControl['covid-19']['noCalibrators']) && trim($configControl['covid-19']['noCalibrators'])!='' && $configControl['covid-19']['noCalibrators']>0){
+		foreach(range(1,$configControl['covid-19']['noCalibrators']) as $c){
+			$displayOrder[] = "no_of_calibrators_".$c;	 	
+		   	$content.='<li class="ui-state-default" id="no_of_calibrators_'.$c.'">Calibrators '.$c.'</li>';
 		}
 	}
 	$samplesQuery="SELECT covid19_id,sample_code from form_covid19 where sample_batch_id=$id ORDER BY sample_code ASC";
@@ -158,6 +187,7 @@ if(isset($prevlabelInfo[0]['label_order']) && trim($prevlabelInfo[0]['label_orde
         </div>
         <!-- /.box-header -->
         <div class="box-body">
+		<!-- <pre><?php print_r($configControl); ?></pre> -->
           <!-- form start -->
             <form class="form-horizontal" method='post'  name='addBatchControlsPosition' id='addBatchControlsPosition' autocomplete="off" action="covid-19-add-batch-position-helper.php">
               <div class="box-body">
