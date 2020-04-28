@@ -6,18 +6,18 @@ include_once(APPLICATION_PATH . '/includes/tcpdf/tcpdf.php');
 include_once(APPLICATION_PATH . '/models/General.php');
 
 $general = new General($db);
-$id = base64_decode($_POST['id']);
+$id = base64_decode($_GET['id']);
+// print_r($_GET);die;
 
-
-if (isset($_POST['type']) && $_POST['type'] == 'vl') {
+if (isset($_GET['type']) && $_GET['type'] == 'vl') {
     $refTable = "vl_request_form";
     $refPrimaryColumn = "vl_sample_id";
     $patientIdColumn = 'patient_art_no';
-} else if (isset($_POST['type']) && $_POST['type'] == 'eid') {
+} else if (isset($_GET['type']) && $_GET['type'] == 'eid') {
     $refTable = "eid_form";
     $refPrimaryColumn = "eid_id";
     $patientIdColumn = 'child_id';
-}else if (isset($_POST['type']) && $_POST['type'] == 'covid19') {
+}else if (isset($_GET['type']) && $_GET['type'] == 'covid19') {
     $refTable = "form_covid19";
     $refPrimaryColumn = "covid19_id";
     $patientIdColumn = 'patient_id';
@@ -300,7 +300,9 @@ if ($id > 0) {
         $pdf->writeHTML($tbl, true, false, false, false, '');
         //$pdf->writeHTMLCell('', '', 12,$pdf->getY(),$tbl, 0, 1, 0, true, 'C', true);
         $filename = "VLSM-" . trim($bResult[0]['batch_code']) . '-' . date('d-m-Y-h-i-s') . '.pdf';
-        $pdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'barcode' . DIRECTORY_SEPARATOR . $filename, "F");
-        echo $filename;
+        $pdf->Output($filename, 'I');
+        exit;
+        /* $pdf->Output(UPLOAD_PATH . DIRECTORY_SEPARATOR . 'barcode' . DIRECTORY_SEPARATOR . $filename, "F");
+        echo $filename; */
     }
 }
